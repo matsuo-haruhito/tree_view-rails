@@ -19,6 +19,6 @@ class ItemsController < ApplicationController
   # TurboStreamをキックする。
   def remove_descendants
     @item = Item.find(params[:id])
-    @children_id = @item.descendants.pluck(:id)
+    @children = @item.descendants
   end
 end
