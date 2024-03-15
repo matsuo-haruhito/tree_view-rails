@@ -1,0 +1,41 @@
+- content_for :title, 'お知らせ一覧'
+- breadcrumb :settings_notices
+
+.d-flex.justify-content-between.align-items-baseline
+  form.flex-fill.form-group.search-form.mb-3
+    .form-row
+      .col-10.col-md-5.p-0.mr-2
+        = search_field_tag 'q', params[:q]
+      = submit_tag '検索', class: 'btn btn-info'
+
+  div
+    = new_link_to '新規', new_settings_notice_path
+
+= render_with_pagination @notices do |notices|
+  .table-sticky.max-vh-70
+    table.table.table-striped.table-hover.table-bordered
+      thead
+        tr
+          th
+            = sort_link_to :title
+              span タイトル
+          th
+            = sort_link_to :body
+              span 本文
+          th
+            = sort_link_to :publish_start_datetime
+              span 公開開始日時
+          th
+            = sort_link_to :updated_at
+              span 更新日時
+          th colspan=2
+      tbody
+        - notices.each do |notice|
+          tr
+            td= notice.title&.truncate 30
+            td= notice.body&.truncate 30
+            td= format_datetime notice.publish_start_datetime
+            td= format_datetime notice.updated_at
+            td.btn-cell
+              = edit_link_to '編集', edit_settings_notice_path(notice)
+              = delete_link_to '削除', settings_notice_path(notice)

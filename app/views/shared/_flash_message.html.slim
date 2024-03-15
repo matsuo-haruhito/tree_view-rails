@@ -1,0 +1,21 @@
+- if notice
+  - Array.wrap(notice).each do |notice|
+    .alert.alert-success.alert-dismissible.fade.show role='alert'
+      = notice
+      button.close type='button' data-dismiss='alert'
+        span aria-hidden='true' &times;
+
+- if alert
+  - if alert.instance_of? ActiveModel::Errors
+    - alert.full_messages.each do |full_message|
+      .alert.alert-danger.alert-dismissible.fade.show role='alert'
+        = full_message
+        button.close type='button' data-dismiss='alert'
+          span aria-hidden='true' &times;
+  - else
+    - Array.wrap(alert).each do |alert|
+      .alert.alert-danger.alert-dismissible.fade.show role='alert'
+        = alert
+        button.close type='button' data-dismiss='alert'
+          span aria-hidden='true' &times;
+

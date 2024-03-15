@@ -1,0 +1,7 @@
+.notice-item
+  .notice-title
+    = notice.title
+  = simple_format notice.body, {class: 'notice-body'}, wrapper_tag: :div
+  .notice-footer
+    = far 'clock', format_datetime(notice.publish_start_datetime)
+    span.ml-2= notice.update_user_name

@@ -1,0 +1,18 @@
+- if page.empty?
+  - if page.model.count == 0
+    .alert.alert-info データがまだ登録されていません
+  - else
+    .alert.alert-info 条件に該当するデータが見つかりませんでした
+- else
+  ruby:
+    offset = (page.current_page - 1) * page.limit_value
+    count = page.count
+
+    # groupを使うとcountの結果がHashで返ってくる
+    if count.is_a?(Hash)
+      count = count.count
+    end
+
+  div
+    span= "#{format_number page.total_count}件中、"
+    span= "#{format_number offset + 1}〜#{format_number offset + count}件を表示"

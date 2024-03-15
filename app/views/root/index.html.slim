@@ -1,0 +1,29 @@
+.row
+
+  .col-sm
+
+    h3 メニュー
+
+    ul
+      li= link_to 'TreeView Test', items_path
+
+    h3 設定メニュー
+
+    ul
+      li= link_to 'ユーザ', settings_users_path
+      li= link_to 'お知らせ', settings_notices_path
+
+  .col-sm
+
+    h3 お知らせ
+
+    - if @notices.empty?
+      .alert.alert-info お知らせがまだ登録されていません
+    - else
+
+      .notice.vh-80 style='overflow-y: scroll;'
+
+        = render @notices.includes(:update_user)
+
+        - if @notices.next_page.present?
+          .notice-more= link_to 'もっと見る', notices_path(page: @notices.next_page)

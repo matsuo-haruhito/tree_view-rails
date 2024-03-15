@@ -1,0 +1,6 @@
+- crumbs = breadcrumbs(autoroot: true).tap do |links|
+  - if links.any?
+    nav
+      ol.breadcrumb
+        - links.each_with_index do |link, index|
+          li.breadcrumb-item= link_to_unless link.current?, link.text, link.url

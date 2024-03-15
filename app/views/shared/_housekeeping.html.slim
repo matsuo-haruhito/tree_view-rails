@@ -1,0 +1,13 @@
+dl.attributes.attributes-small
+  div
+    dt 作成者
+    dd= record.create_user_name
+  div
+    dt 作成日時
+    dd= format_datetime record.created_at
+  div
+    dt 更新者
+    dd= record.update_user_name
+  div
+    dt 更新日時
+    dd= format_datetime record.updated_at

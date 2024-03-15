@@ -1,0 +1,11 @@
+@import './bootstrap/desktop';
+@import './bootstrap/form';
+@import './bootstrap/table';
+
+ul.nav.nav-tabs{
+  li.nav-item{
+    .nav-link:not(.active){
+      cursor: pointer;
+    }
+  }
+}

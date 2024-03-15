@@ -1,0 +1,14 @@
+/ items_controllerのremove_descendantsメソッドから実行される。
+
+- if params[:depth].present?
+  - @depth = params[:depth].to_i
+
+= @children_id.each do |child_id|
+  = turbo_stream.remove("item_#{child_id}")
+
+= turbo_stream.update "button_box_#{@item.id}" do
+  = raw("&ensp; &ensp; &ensp;" * (@depth - 1))
+  = link_to show_descendants_item_path(@item, depth: @depth), remote: true, class: 'btn btn-primary show-button', id: "show_button_#{@item.id}" do
+    = @depth = @depth - 1
+  = raw("：")
+  = @item.descendants.length

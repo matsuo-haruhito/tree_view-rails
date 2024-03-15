@@ -1,0 +1,45 @@
+.attributes{
+  display: flex;
+  flex-wrap: wrap;
+  margin: -4px -8px;
+  word-break: break-word;
+
+  & > div{
+    margin: 4px 8px;
+
+    dt{
+      font-size: 80%;
+    }
+
+    dd{
+      margin-bottom: 0;
+    }
+
+  }
+
+  &.attributes-box{
+    & > div{
+      border: 1px solid #ccc;
+      box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+      padding: 0.5rem;
+    }
+  }
+
+  &.attributes-row{
+    & > div{
+      display: flex;
+      align-items: baseline;
+      padding: 0;
+
+      dt{
+        margin-right: 0.5em;
+      }
+
+    }
+  }
+
+  &.attributes-small{
+    font-size: 90%;
+  }
+
+}

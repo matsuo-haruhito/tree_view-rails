@@ -1,0 +1,36 @@
+.notice{
+
+  border: 1px solid #dee2e6;
+
+  h2{
+    font-size: 1.5em;
+    padding: 1rem;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .notice-item{
+    padding: 1rem;
+    &:not(:last-child){
+      border-bottom: 1px solid #dee2e6;
+    }
+  }
+
+  .notice-title{
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .notice-body{
+    margin-bottom: 0.5rem;
+  }
+
+  .notice-footer{
+    font-size: 0.8em;
+  }
+
+  .notice-more{
+    margin: 0.5rem;
+  }
+
+}

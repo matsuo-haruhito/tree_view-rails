@@ -1,0 +1,42 @@
+scss:
+  .dropdown-menu{
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+
+ruby:
+  navbar_class = ['navbar', 'navbar-expand-lg', 'navbar-dark']
+
+  if ENV['NAVBAR_COLOR'].present?
+    navbar_style = "background-color:#{ENV['NAVBAR_COLOR']};"
+  else
+    navbar_class << 'bg-dark'
+  end
+
+nav class=navbar_class style=navbar_style
+  a.navbar-brand href='/' = t 'views.title'
+  button.navbar-toggler type='button' data-target='#navbarToggler' data-toggle='collapse'
+    span.navbar-toggler-icon
+  #navbarToggler.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto.mt-2.mt-lg-0
+      / li.nav-item
+      /   a.nav-link href='#' Link
+      / li.nav-item.active
+      /   a.nav-link href='#' Active Link
+      / li.nav-item
+      /   a.nav-link.disabled href='#' tabindex='-1' Disabled
+    .navbar-nav
+      - if user_signed_in?
+        / ↓なぜか、明示的に呼び出さないとundefined method 'fas'と言われる。
+        - extend FontAwesome5Helper
+        .dropdown
+          button.btn.btn-md.btn-secondary.dropdown-toggle type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'
+            | #{fas 'user'}
+            | #{current_user.username}
+          .dropdown-menu.dropdown-menu-right
+            = link_to 'ユーザー情報変更', edit_profile_path, class: 'dropdown-item'
+            = link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: 'dropdown-item'
+      - else
+        ul.navbar-nav
+          li.nav-item
+            = link_to 'ログイン', new_user_session_path, class: 'nav-link'
