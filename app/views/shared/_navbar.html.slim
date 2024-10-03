@@ -27,8 +27,6 @@ nav class=navbar_class style=navbar_style
       /   a.nav-link.disabled href='#' tabindex='-1' Disabled
     .navbar-nav
       - if user_signed_in?
-        / ↓なぜか、明示的に呼び出さないとundefined method 'fas'と言われる。
-        - extend FontAwesome5Helper
         .dropdown
           button.btn.btn-md.btn-secondary.dropdown-toggle type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'
             | #{fas 'user'}
