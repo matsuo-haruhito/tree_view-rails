@@ -14,4 +14,4 @@ div.table-sticky.max-vh-70
         th 商品名
         th コメント
     tbody
-      = render partial: 'item', collection: @root_items.sort_by { |item| item.descendants.length }, as: :item
+      = render partial: 'item', collection: @root_items, as: :item, locals: { items_by_parent_id: @items_by_parent_id, descendant_counts: @descendant_counts }

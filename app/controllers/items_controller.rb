@@ -5,9 +5,10 @@ class ItemsController < ApplicationController
 
   # 親アイテム取ってくるだけ。
   def index
-    @root_items = Item
-      .includes(:children)
-      .where(parent_item_id: nil)
+    items = Item.select(:id, :parent_item_id, :name, :comment).to_a
+    @items_by_parent_id = items.group_by(&:parent_item_id)
+    @descendant_counts = Item.descendant_counts(@items_by_parent_id)
+    @root_items = (@items_by_parent_id[nil] || []).sort_by { |item| @descendant_counts[item.id] }
   end
 
   # TurboStreamをキックする。
@@ -19,6 +20,7 @@ class ItemsController < ApplicationController
   # TurboStreamをキックする。
   def remove_descendants
     @item = Item.find(params[:id])
-    @children = @item.descendants
+    @descendant_ids = @item.descendant_ids
+    @descendant_count = @descendant_ids.size
   end
 end
