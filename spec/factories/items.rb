@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :item do
-    item_id { "MyString" }
-    name { "MyString" }
-    comment { "MyString" }
+    sequence(:name) { |i| "item#{i}" }
+    comment { 'comment' }
+    parent_item_id { nil }
   end
 end
