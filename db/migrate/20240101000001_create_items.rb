@@ -1,7 +1,7 @@
 class CreateItems < ActiveRecord::Migration[7.1]
   def change
     create_table :items, comment: '商品' do |t|
-      t.string :parent_item_id, comment: '親商品id'
+      t.bigint :parent_item_id, comment: '親商品id'
       t.string :name, comment: '商品名'
       t.string :comment, comment: 'コメント'
       t.date :usage_start_date, comment: "使用開始日"
@@ -11,5 +11,7 @@ class CreateItems < ActiveRecord::Migration[7.1]
       t.references :update_user, comment: '更新者id'
       t.timestamps
     end
+    add_index :items, :parent_item_id
+    add_foreign_key :items, :items, column: :parent_item_id
   end
 end

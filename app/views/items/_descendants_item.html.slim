@@ -10,8 +10,7 @@
     - if children.any?
       td id="button_box_#{item.id}"
         = raw('&ensp; &ensp; &ensp;' * current_depth)
-        = link_to remove_descendants_item_path(item, depth: current_depth + 1), data: { turbo_stream: true }, class: 'btn btn-danger remove-button' do
-          = current_depth
+        = remove_descendants_link(item, current_depth)
     - else
       td
         = raw('&ensp; &ensp; &ensp;' * current_depth)

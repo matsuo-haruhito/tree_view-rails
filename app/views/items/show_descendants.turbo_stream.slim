@@ -1,14 +1,13 @@
 / items_controllerのshow_descendantsメソッドから実行される。
 
-- if params[:depth].present?
-  - depth = params[:depth].to_i - 1
+- request_depth = params[:depth].to_i
+- display_depth = request_depth - 1
 
 = turbo_stream.remove "show_button_#{params[:id]}"
 
 = turbo_stream.update "button_box_#{@item.id}" do
-  = raw("&ensp; &ensp; &ensp;" * depth)
-  = link_to remove_descendants_item_path(@item, depth: depth + 1), data: { turbo_stream: true }, class: 'btn btn-danger remove-button' do
-    = depth
+  = raw('&ensp; &ensp; &ensp;' * display_depth)
+  = remove_descendants_link(@item, display_depth)
 
 = turbo_stream.after "item_#{@item.id}" do
-  = render 'descendants_item', items: @children, depth: depth
+  = render 'descendants_item', items: @children, depth: display_depth, items_by_parent_id: @items_by_parent_id, descendant_counts: @descendant_counts

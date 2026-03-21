@@ -1,4 +1,4 @@
-FROM ruby:3.0.6-alpine3.16
+FROM ruby:3.2.3-alpine
 
 RUN echo 'Set disable_coredump false' >> /etc/sudo.conf
 

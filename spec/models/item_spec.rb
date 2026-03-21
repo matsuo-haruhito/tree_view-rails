@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Item, type: :model do
   describe '.descendant_counts' do
-    it 'returns descendant size for each node in the tree' do
+    it 'ツリー内の各ノードに対する子孫数を返す' do
       root = create(:item, name: 'root')
-      child1 = create(:item, parent_item_id: root.id.to_s, name: 'child1')
-      child2 = create(:item, parent_item_id: root.id.to_s, name: 'child2')
-      grandchild = create(:item, parent_item_id: child1.id.to_s, name: 'grandchild')
+      child1 = create(:item, parent_item_id: root.id, name: 'child1')
+      child2 = create(:item, parent_item_id: root.id, name: 'child2')
+      grandchild = create(:item, parent_item_id: child1.id, name: 'grandchild')
 
       items_by_parent_id = Item.all.group_by(&:parent_item_id)
 
@@ -20,33 +20,47 @@ RSpec.describe Item, type: :model do
   end
 
   describe '.child_ids_by_parent_id' do
-    it 'builds parent to child id map in one pass' do
+    it '親IDから子ID一覧へのマップを1回の走査で構築する' do
       root = create(:item, name: 'root')
-      child = create(:item, parent_item_id: root.id.to_s, name: 'child')
+      child = create(:item, parent_item_id: root.id, name: 'child')
 
       map = described_class.child_ids_by_parent_id
 
       expect(map[nil]).to include(root.id)
-      expect(map[root.id.to_s]).to include(child.id)
+      expect(map[root.id]).to include(child.id)
+    end
+  end
+
+  describe '.tree_snapshot' do
+    it '一覧描画に必要なスナップショットを返す' do
+      root = create(:item, name: 'root')
+      child = create(:item, parent_item_id: root.id, name: 'child')
+
+      snapshot = described_class.tree_snapshot
+
+      expect(snapshot.items_by_parent_id[nil]).to include(root)
+      expect(snapshot.items_by_parent_id[root.id]).to include(child)
+      expect(snapshot.descendant_counts[root.id]).to eq(1)
+      expect(snapshot.root_items).to include(root)
     end
   end
 
   describe '#descendant_ids' do
-    it 'returns all descendant ids recursively' do
+    it '子孫IDを再帰的にすべて返す' do
       root = create(:item, name: 'root')
-      child = create(:item, parent_item_id: root.id.to_s, name: 'child')
-      grandchild = create(:item, parent_item_id: child.id.to_s, name: 'grandchild')
+      child = create(:item, parent_item_id: root.id, name: 'child')
+      grandchild = create(:item, parent_item_id: child.id, name: 'grandchild')
 
       expect(root.descendant_ids).to contain_exactly(child.id, grandchild.id)
       expect(child.descendant_ids).to contain_exactly(grandchild.id)
       expect(grandchild.descendant_ids).to eq([])
     end
 
-    it 'can reuse a precomputed map to avoid extra queries and support deep nesting' do
+    it '事前計算済みマップを再利用して深い階層でも取得できる' do
       root = create(:item, name: 'root')
       current = root
       30.times do |i|
-        current = create(:item, parent_item_id: current.id.to_s, name: "depth-#{i}")
+        current = create(:item, parent_item_id: current.id, name: "depth-#{i}")
       end
 
       child_ids_by_parent_id = described_class.child_ids_by_parent_id

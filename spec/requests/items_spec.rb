@@ -6,7 +6,7 @@ RSpec.describe 'Items', type: :request do
   before { sign_in user }
 
   describe 'GET /items/new' do
-    it 'returns http success' do
+    it '正常に表示できる' do
       get '/items/new'
 
       expect(response).to have_http_status(:success)
@@ -14,10 +14,10 @@ RSpec.describe 'Items', type: :request do
   end
 
   describe 'GET /items/:id/remove_descendants.turbo_stream' do
-    it 'returns turbo stream response that removes descendants' do
+    it '子孫行を削除するTurbo Streamレスポンスを返す' do
       root = create(:item, name: 'root')
-      child = create(:item, parent_item_id: root.id.to_s, name: 'child')
-      grandchild = create(:item, parent_item_id: child.id.to_s, name: 'grandchild')
+      child = create(:item, parent_item_id: root.id, name: 'child')
+      grandchild = create(:item, parent_item_id: child.id, name: 'grandchild')
 
       get remove_descendants_item_path(root, depth: 1), headers: { 'ACCEPT' => 'text/vnd.turbo-stream.html' }
 
