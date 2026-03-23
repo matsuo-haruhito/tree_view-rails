@@ -35,10 +35,58 @@ $border-color: #dee2e6;
   min-width: 0;
 }
 
-.tree-toggle__indent-spacer{
-  flex: 0 1 calc(var(--tree-level-offset) * 1.6rem);
-  width: calc(var(--tree-level-offset) * 1.6rem);
-  min-width: 0;
+.tree-toggle__branches{
+  display: inline-flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  min-height: 1.8rem;
+}
+
+.tree-toggle__branch-slot{
+  position: relative;
+  width: 1.35rem;
+  min-width: 1.35rem;
+}
+
+.tree-toggle__branch-slot.has-line::before{
+  content: "";
+  position: absolute;
+  top: -0.35rem;
+  bottom: -0.35rem;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background-color: rgba(108, 117, 125, 0.4);
+}
+
+.tree-toggle__branch-slot.is-current::before{
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background-color: rgba(108, 117, 125, 0.5);
+}
+
+.tree-toggle__branch-slot.is-current.is-middle::before{
+  top: -0.35rem;
+  bottom: -0.35rem;
+}
+
+.tree-toggle__branch-slot.is-current.is-last::before{
+  top: -0.35rem;
+  bottom: 50%;
+}
+
+.tree-toggle__branch-slot.is-current::after{
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: 0;
+  height: 1px;
+  transform: translateY(-50%);
+  background-color: rgba(108, 117, 125, 0.5);
 }
 
 .tree-toggle__control{

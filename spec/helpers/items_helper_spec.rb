@@ -22,4 +22,20 @@ RSpec.describe ItemsHelper, type: :helper do
       expect(helper.tree_show_descendants_path(item, 1, scope: 'children', ui: ui_config)).to eq('/show?scope=children')
     end
   end
+
+  describe 'tree_branch_info' do
+    it '祖先が末尾かどうかを含む枝情報を返す' do
+      root_a = build_stubbed(:item, id: 1, parent_item_id: nil, name: 'root-a')
+      root_b = build_stubbed(:item, id: 2, parent_item_id: nil, name: 'root-b')
+      child_a1 = build_stubbed(:item, id: 3, parent_item_id: 1, name: 'child-a1')
+      child_a2 = build_stubbed(:item, id: 4, parent_item_id: 1, name: 'child-a2')
+      grandchild_a1 = build_stubbed(:item, id: 5, parent_item_id: 3, name: 'grandchild-a1')
+      tree = TreeView::Tree.new(records: [root_a, root_b, child_a1, child_a2, grandchild_a1], parent_id_method: :parent_item_id)
+
+      expect(helper.tree_branch_info(root_a, tree)).to eq(depth: 0, ancestor_last_states: [], is_last: true)
+      expect(helper.tree_branch_info(child_a1, tree)).to eq(depth: 1, ancestor_last_states: [], is_last: true)
+      expect(helper.tree_branch_info(grandchild_a1, tree)).to eq(depth: 2, ancestor_last_states: [true], is_last: true)
+      expect(helper.tree_branch_info(root_b, tree)).to eq(depth: 0, ancestor_last_states: [], is_last: false)
+    end
+  end
 end

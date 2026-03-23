@@ -20,6 +20,7 @@ RSpec.describe 'items/index', type: :view do
     expect(rendered).to include('child-comment')
     expect(rendered).to include('総ノード数')
     expect(rendered).to include('子ノードを畳む')
+    expect(rendered).to include('tree-toggle__branch-slot')
     expect(rendered).to include('turbo-cable-stream-source')
   end
 end

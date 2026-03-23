@@ -31,6 +31,14 @@ module ItemsHelper
     depth.to_i >= 10 ? depth.to_i.to_s : "Lv#{depth}"
   end
 
+  def tree_branch_info(item, tree = @tree)
+    tree_branch_map(tree).fetch(tree.node_key_for(item), {
+      depth: 0,
+      ancestor_last_states: [],
+      is_last: true
+    })
+  end
+
   def tree_hide_descendants_path(item, display_depth, scope: 'all', ui: @tree_ui)
     resolved_ui(ui).hide_descendants_path(item, display_depth, scope: scope)
   end
@@ -69,5 +77,34 @@ module ItemsHelper
     end
 
     tree.root_items.map { |root| walk.call(root, 0) }.max.to_i
+  end
+
+  def tree_branch_map(tree)
+    @tree_branch_maps ||= {}
+    @tree_branch_maps[tree.object_id] ||= begin
+      branch_map = {}
+
+      walk = lambda do |nodes, depth, ancestor_last_states|
+        sorted_nodes = nodes.sort_by { |node| tree.descendant_counts[tree.node_key_for(node)].to_i }
+
+        sorted_nodes.each_with_index do |node, index|
+          is_last = index == sorted_nodes.length - 1
+          branch_map[tree.node_key_for(node)] = {
+            depth: depth,
+            ancestor_last_states: ancestor_last_states.dup,
+            is_last: is_last
+          }
+
+          children = tree.children_for(node)
+          next if children.empty?
+
+          next_ancestor_last_states = depth.zero? ? ancestor_last_states : ancestor_last_states + [is_last]
+          walk.call(children, depth + 1, next_ancestor_last_states)
+        end
+      end
+
+      walk.call(tree.root_items, 0, [])
+      branch_map
+    end
   end
 end
