@@ -25,8 +25,11 @@ html lang='ja'
       - container_class = %w(container mt-3)
 
     = tag.div(class: container_class)
-      = render 'shared/flash_message'
+      #flash_messages
+        = render 'shared/flash_message'
       = render 'shared/breadcrumb'
       = yield
       div style='height: 2rem;'
       / safari ignore the last margin-bottom
+
+    = turbo_frame_tag 'modal'

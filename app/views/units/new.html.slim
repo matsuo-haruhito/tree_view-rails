@@ -1,0 +1,5 @@
+- content_for :title, 'Unit作成'
+- breadcrumb :items
+
+= render 'shared/modal_frame', title: 'Unit作成' do
+  = render 'form', unit: @unit

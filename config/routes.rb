@@ -24,6 +24,16 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :machines, except: [:show] do
+    collection do
+      get 'show_descendants', defaults: { format: :turbo_stream }
+      get 'remove_descendants', defaults: { format: :turbo_stream }
+    end
+  end
+  resources :units, except: [:index, :show]
+  resources :parts, except: [:index, :show]
+  resources :materials, except: [:index, :show]
+
   namespace :settings do
     resources :users, except: [:show]
     resources :notices, except: [:show]

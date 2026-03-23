@@ -1,0 +1,16 @@
+- hidden_count = local_assigns[:hidden_count]
+- children ||= tree.children_for(item)
+
+.tree-toggle style=("--tree-level-offset: #{depth}")
+  .tree-toggle__indent-spacer aria-hidden="true"
+  .tree-toggle__control
+    - if hidden_count
+      = link_to tree_show_descendants_path(item, depth + 1), data: { turbo_stream: true }, class: 'btn btn-primary show-button tree-toggle__action', id: tree_show_button_dom_id(item) do
+        = tree_toggle_label(depth)
+    - elsif children.any?
+      = link_to tree_hide_descendants_path(item, depth), data: { turbo_stream: true }, class: 'btn btn-danger remove-button tree-toggle__action' do
+        = tree_toggle_label(depth)
+    - else
+      span.tree-toggle__level = tree_toggle_label(depth)
+    - if hidden_count
+      span.tree-toggle__hidden-count = hidden_count

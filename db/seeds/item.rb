@@ -1,53 +1,98 @@
+ITEM_CSV_HEADERS = %w[親商品名 商品名 コメント].freeze
+
 def item
-  # CSVファイルのパス
+  rows = read_item_rows
+  validate_item_rows!(rows)
+  import_item_rows!(rows)
+end
+
+def read_item_rows
   csv_file_path = File.expand_path('../data/item.csv', __FILE__)
+  csv = CSV.read(csv_file_path, headers: true)
 
-  # 親商品が登録されていない商品のみを保持するための配列
-  unassociated_items = []
+  unless (ITEM_CSV_HEADERS - csv.headers).empty?
+    missing = ITEM_CSV_HEADERS - csv.headers
+    raise "item.csv のヘッダが不足しています: #{missing.join(', ')}"
+  end
 
-  # CSVファイルを読み込んで処理を行う
-  #loop do
-    csv_data = CSV.read(csv_file_path, headers: true)
-    p csv_data
-    #break if csv_data.empty? # CSVファイルが空の場合は処理を終了する
+  csv.map.with_index(2) do |row, line_no|
+    {
+      line_no: line_no,
+      parent_name: normalize_seed_value(row['親商品名']),
+      name: normalize_seed_value(row['商品名']),
+      comment: normalize_seed_value(row['コメント'])
+    }
+  end
+end
 
-    csv_data.each do |row|
-      p row
-      parent_item_name = row['親商品名']
-      item_name = row['商品名']
-      comment = row['コメント']
+def validate_item_rows!(rows)
+  blank_name_rows = rows.select { |row| row[:name].nil? }
+  raise "item.csv に商品名が空の行があります: #{blank_name_rows.map { |r| r[:line_no] }.join(', ')}" if blank_name_rows.any?
 
-      # 同じ商品名とコメントを持つ商品がすでに登録されているかを確認する
-      existing_item = Item.find_by(name: item_name, comment: comment)
+  self_parent_rows = rows.select { |row| row[:parent_name].present? && row[:parent_name] == row[:name] }
+  raise "item.csv に自己参照行があります: #{self_parent_rows.map { |r| r[:line_no] }.join(', ')}" if self_parent_rows.any?
 
-      if existing_item
-        # すでに登録されている場合はスキップする
+  duplicate_name_rows = rows.group_by { |row| row[:name] }.select { |_name, group| group.size > 1 }
+  if duplicate_name_rows.any?
+    lines = duplicate_name_rows.values.flat_map { |group| group.map { |row| row[:line_no] } }.sort
+    raise "item.csv に同名の商品があります: #{lines.join(', ')}"
+  end
+
+  duplicates = rows.group_by { |row| [row[:parent_name], row[:name], row[:comment]] }.select { |_k, v| v.size > 1 }
+  if duplicates.any?
+    lines = duplicates.values.flat_map { |group| group.map { |row| row[:line_no] } }.sort
+    raise "item.csv に重複行があります: #{lines.join(', ')}"
+  end
+end
+
+def import_item_rows!(rows)
+  items_by_name = Item.all.index_by(&:name)
+
+  pending = rows.dup
+  attempts = 0
+
+  while pending.any?
+    attempts += 1
+    progressed = false
+    next_pending = []
+
+    pending.each do |row|
+      parent = resolve_parent_item(row[:parent_name], items_by_name)
+      if row[:parent_name].present? && parent.nil?
+        next_pending << row
         next
       end
 
-      if parent_item_name.nil?
-        # 親商品が指定されていない場合は、新しい商品を作成する
-        p "nil"
-        p parent_item_name
-        item = Item.create(name: item_name, comment: comment)
-        unassociated_items << item
-      else
-        p "not nil"
-        p parent_item_name
-        # 親商品が指定されている場合は、親商品を検索して関連付けを行う
-        parent_item = Item.find_by(name: parent_item_name)
-        if parent_item
-          # 親商品が見つかった場合は、子商品を作成し、親子関係を構築する
-          item = parent_item.children.create(name: item_name, comment: comment)
-          unassociated_items.delete(item) # 親子関係が成立したので、unassociated_itemsから削除する
-        else
-          # 親商品が見つからなかった場合は、子商品を一時的にunassociated_itemsに追加する
-          unassociated_items << Item.create(name: item_name, comment: comment)
-        end
-      end
+      item_record = upsert_item_row(row, parent, items_by_name)
+      items_by_name[item_record.name] = item_record
+      progressed = true
     end
 
-    # 全てのデータが取り込み終わったか、親商品が登録されていない商品のみになったかをチェックする
-    #break if unassociated_items.empty?
+    if !progressed
+      unresolved = next_pending.map { |row| "#{row[:line_no]}行目(parent=#{row[:parent_name]})" }
+      raise "item.csv の親参照を解決できません: #{unresolved.take(10).join(', ')}"
+    end
+
+    pending = next_pending
+    raise 'item.csv の読み込み試行回数が上限に達しました' if attempts > rows.size + 2
   end
-#end
+end
+
+def resolve_parent_item(parent_name, items_by_name)
+  return nil if parent_name.blank?
+
+  items_by_name[parent_name]
+end
+
+def upsert_item_row(row, parent, items_by_name)
+  item_record = items_by_name[row[:name]] || Item.new(name: row[:name])
+  item_record.comment = row[:comment]
+  item_record.parent_item_id = parent&.id
+  item_record.save! if item_record.new_record? || item_record.changed?
+  item_record
+end
+
+def normalize_seed_value(value)
+  text = value.to_s.strip
+  text.present? ? text : nil
+end

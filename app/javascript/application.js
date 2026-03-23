@@ -6,7 +6,7 @@ import "controllers";
 document.addEventListener("turbo:before-fetch-request", (event) => {
   const target = event.target;
   if (!(target instanceof HTMLAnchorElement)) return;
-  if (!target.matches("a.show-button, a.remove-button")) return;
+  if (target.dataset.turboStream !== "true") return;
 
   const accept = "text/vnd.turbo-stream.html, text/html;q=0.9";
   const headers = event.detail.fetchOptions.headers;
