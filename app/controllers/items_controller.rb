@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
     end
   end
 
-  # 親アイテム取ってくるだけ。
+  # 一覧の初回表示。通常の HTML 描画に使う。
   def index
     render_state = build_render_state
     @tree = render_state.tree
@@ -52,10 +52,10 @@ class ItemsController < ApplicationController
     @row_partial = render_state.row_partial
     @tree_ui = render_state.ui_config
     @node_counts = item_counts
-    @collapsed_all = params[:collapsed] == 'all'
+    @collapsed_all = collapsed_all?(render_state)
   end
 
-  # TurboStreamをキックする。
+  # 画面全体を再読み込みせず、このノードの直下行だけを差し込むためのレスポンスを返す。
   def show_descendants
     @item = Item.find(params[:id])
     render_state = build_render_state
@@ -67,7 +67,7 @@ class ItemsController < ApplicationController
     @expanded_nodes = expanded_nodes_for_scope(@item, @tree, @expand_scope)
   end
 
-  # TurboStreamをキックする。
+  # 画面全体を再読み込みせず、このノード配下の行だけを取り除くためのレスポンスを返す。
   def remove_descendants
     render_state = build_render_state
     @tree = render_state.tree
@@ -94,12 +94,20 @@ class ItemsController < ApplicationController
   def build_render_state
     tree = TreeView::Tree.new(records: tree_records, parent_id_method: :parent_item_id)
     ui_config = TreeView::UiConfigBuilder.new(context: self).build_for_items
+
+    # sample app では、画面固有の初期状態を RenderState で上書きできる形を見せる。
     TreeView::RenderState.new(
       tree: tree,
       root_items: tree.root_items,
       row_partial: tree_row_partial,
-      ui_config: ui_config
+      ui_config: ui_config,
+      initial_state: params[:collapsed] == 'all' ? :collapsed : nil
     )
+  end
+
+  def collapsed_all?(render_state)
+    # query param による明示指定があればそれを優先し、なければ TreeView の既定値へ委譲する。
+    params[:collapsed] == 'all' || render_state.effective_initial_state == :collapsed
   end
 
   def item_counts
@@ -181,6 +189,8 @@ class ItemsController < ApplicationController
 
   def render_crud_success(message)
     flash.now[:notice] = message
+    # Turbo Stream で flash 部分と modal 部分だけを差し替える。
+    # これにより CRUD 後も一覧ページ自体は遷移しない。
     render turbo_stream: [
       turbo_stream.update('flash_messages', partial: 'shared/flash_message'),
       turbo_stream.update('modal', '')

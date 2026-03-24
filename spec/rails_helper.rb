@@ -91,6 +91,10 @@ RSpec.configure do |config|
   # FactoryBot
   config.include FactoryBot::Syntax::Methods
 
+  config.before do
+    TreeView.reset_configuration!
+  end
+
   config.before(:suite) do
     Warden.test_mode!
   end

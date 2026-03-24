@@ -51,6 +51,19 @@ module ItemsHelper
     item.respond_to?(:name) ? item.name : item.to_s
   end
 
+  # view からは path の作り方を知らずに全体開閉を呼べるようにする。
+  def tree_toggle_all_path(state:, ui: @tree_ui)
+    resolved_ui(ui).toggle_all_path(state: state)
+  end
+
+  def tree_expand_all_path(ui: @tree_ui)
+    tree_toggle_all_path(state: :expanded, ui: ui)
+  end
+
+  def tree_collapse_all_path(ui: @tree_ui)
+    tree_toggle_all_path(state: :collapsed, ui: ui)
+  end
+
   private
 
   def resolved_ui(ui)

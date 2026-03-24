@@ -7,6 +7,7 @@
 
 - breadcrumb :items
 
+/ Item の create/update/destroy を購読し、別操作の変更もこの画面へ反映する。
 = turbo_stream_from 'items'
 
 h5.mb-2 自己参照のみ版（Item.parent_item_id）
@@ -22,10 +23,11 @@ h5.mb-2 自己参照のみ版（Item.parent_item_id）
   .col-auto
     span.badge.badge-success 葉ノード数 #{@node_counts[:leaves]}
   .col-auto.ml-auto
-    = link_to 'すべて広げる', items_path, class: 'btn btn-sm btn-outline-secondary'
+    = link_to 'すべて広げる', tree_expand_all_path, class: 'btn btn-sm btn-outline-secondary'
   .col-auto
-    = link_to 'すべて畳む', items_path(collapsed: 'all'), class: 'btn btn-sm btn-outline-secondary'
+    = link_to 'すべて畳む', tree_collapse_all_path, class: 'btn btn-sm btn-outline-secondary'
   .col-auto.ml-auto
+    / Turbo Frame の modal に form を読み込むので、別ページへ遷移しない。
     = link_to 'ルートItem追加', new_item_path, data: { turbo_frame: 'modal' }, class: 'btn btn-sm btn-primary'
 
 div.table-sticky.max-vh-70
