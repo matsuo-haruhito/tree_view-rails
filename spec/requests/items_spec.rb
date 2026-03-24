@@ -76,6 +76,24 @@ RSpec.describe 'Items', type: :request do
     end
   end
 
+  describe 'GET /items with global initial_state' do
+    it 'global config が collapsed なら collapsed=all なしでもルートだけ表示する' do
+      root = create(:item, name: 'root')
+      child = create(:item, parent_item_id: root.id, name: 'child')
+
+      TreeView.configure do |config|
+        config.initial_state = :collapsed
+      end
+
+      get items_path
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include(%(item_#{root.id}))
+      expect(response.body).not_to include(%(item_#{child.id}))
+      expect(response.body).to include('tree-toggle__hidden-count')
+    end
+  end
+
   describe 'GET /items?page=2' do
     it 'root 単位でページネーションされ、子は親と同じページに残る' do
       10.times { |i| create(:item, name: "root#{i}") }

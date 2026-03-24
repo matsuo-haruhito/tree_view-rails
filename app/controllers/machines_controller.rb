@@ -18,7 +18,7 @@ class MachinesController < ApplicationController
     @row_partial = render_state.row_partial
     @tree_ui = render_state.ui_config
     @node_counts = node_counts
-    @collapsed_all = params[:collapsed] == 'all'
+    @collapsed_all = collapsed_all?(render_state)
   end
 
   def new
@@ -63,6 +63,7 @@ class MachinesController < ApplicationController
   end
 
   def show_descendants
+    # 画面全体を再読み込みせず、このノードの直下行だけを差し込むためのレスポンスを返す。
     render_state = build_render_state
     @tree = render_state.tree
     @node = find_node!
@@ -74,6 +75,7 @@ class MachinesController < ApplicationController
   end
 
   def remove_descendants
+    # 画面全体を再読み込みせず、このノード配下の行だけを取り除くためのレスポンスを返す。
     render_state = build_render_state
     @tree = render_state.tree
     @node = find_node!
@@ -95,11 +97,14 @@ class MachinesController < ApplicationController
       node_key_resolver: method(:node_key)
     )
     tree = TreeView::Tree.new(adapter: adapter)
+
+    # sample app では、GraphAdapter を使う画面でも RenderState の入口は同じに揃える。
     TreeView::RenderState.new(
       tree: tree,
       root_items: tree.root_items,
       row_partial: DEFAULT_ROW_PARTIAL,
-      ui_config: build_ui_config
+      ui_config: build_ui_config,
+      initial_state: params[:collapsed] == 'all' ? :collapsed : nil
     )
   end
 
@@ -137,6 +142,7 @@ class MachinesController < ApplicationController
   end
 
   def build_ui_config
+    # path helper の差分だけをここで注入し、view 側は共通 helper を呼ぶだけにする。
     TreeView::UiConfigBuilder.new(
       context: self,
       node_prefix: 'node',
@@ -159,6 +165,16 @@ class MachinesController < ApplicationController
           scope: scope,
           format: :turbo_stream
         )
+      end,
+      toggle_all_path_builder: lambda do |state|
+        case state.to_sym
+        when :expanded
+          machines_path
+        when :collapsed
+          machines_path(collapsed: 'all')
+        else
+          raise ArgumentError, 'state must be one of: expanded, collapsed'
+        end
       end
     )
   end
@@ -207,6 +223,11 @@ class MachinesController < ApplicationController
       parts: Part.count,
       materials: Material.count
     }
+  end
+
+  def collapsed_all?(render_state)
+    # query param による明示指定があればそれを優先し、なければ TreeView の既定値へ委譲する。
+    params[:collapsed] == 'all' || render_state.effective_initial_state == :collapsed
   end
 
   def collapse_scope
@@ -276,6 +297,8 @@ class MachinesController < ApplicationController
 
   def render_crud_success(message)
     flash.now[:notice] = message
+    # Turbo Stream で flash 部分と modal 部分だけを差し替える。
+    # これにより CRUD 後も一覧ページ自体は遷移しない。
     render turbo_stream: [
       turbo_stream.update('flash_messages', partial: 'shared/flash_message'),
       turbo_stream.update('modal', '')

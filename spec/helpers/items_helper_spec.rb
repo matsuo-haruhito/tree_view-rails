@@ -9,7 +9,8 @@ RSpec.describe ItemsHelper, type: :helper do
         button_dom_id_builder: ->(item_or_id) { "item_button_box_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
         show_button_dom_id_builder: ->(item_or_id) { "item_show_button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
         hide_descendants_path_builder: ->(_item, _depth, scope) { "/hide?scope=#{scope}" },
-        show_descendants_path_builder: ->(_item, _depth, scope) { "/show?scope=#{scope}" }
+        show_descendants_path_builder: ->(_item, _depth, scope) { "/show?scope=#{scope}" },
+        toggle_all_path_builder: ->(state) { "/toggle?state=#{state}" }
       )
 
       expect(helper.tree_node_dom_id(item, ui: ui_config)).to eq('item_42')
@@ -20,6 +21,9 @@ RSpec.describe ItemsHelper, type: :helper do
       expect(helper.tree_hide_descendants_path(item, 1, scope: 'grandchildren', ui: ui_config)).to eq('/hide?scope=grandchildren')
       expect(helper.tree_show_descendants_path(item, 1, ui: ui_config)).to eq('/show?scope=all')
       expect(helper.tree_show_descendants_path(item, 1, scope: 'children', ui: ui_config)).to eq('/show?scope=children')
+      expect(helper.tree_toggle_all_path(state: :collapsed, ui: ui_config)).to eq('/toggle?state=collapsed')
+      expect(helper.tree_expand_all_path(ui: ui_config)).to eq('/toggle?state=expanded')
+      expect(helper.tree_collapse_all_path(ui: ui_config)).to eq('/toggle?state=collapsed')
     end
   end
 

@@ -10,6 +10,8 @@ RSpec.describe TreeView::UiConfigBuilder do
       allow(context).to receive(:remove_descendants_item_path).with(item, depth: 3, scope: 'grandchildren', format: :turbo_stream).and_return('/items/8/remove_descendants?depth=3&scope=grandchildren')
       allow(context).to receive(:show_descendants_item_path).with(item, depth: 2, scope: 'all', format: :turbo_stream).and_return('/items/8/show_descendants?depth=2&scope=all')
       allow(context).to receive(:show_descendants_item_path).with(item, depth: 2, scope: 'children', format: :turbo_stream).and_return('/items/8/show_descendants?depth=2&scope=children')
+      allow(context).to receive(:items_path).and_return('/items')
+      allow(context).to receive(:items_path).with(collapsed: 'all').and_return('/items?collapsed=all')
 
       config = described_class.new(context: context).build_for_items
 
@@ -20,6 +22,8 @@ RSpec.describe TreeView::UiConfigBuilder do
       expect(config.hide_descendants_path(item, 2, scope: 'grandchildren')).to eq('/items/8/remove_descendants?depth=3&scope=grandchildren')
       expect(config.show_descendants_path(item, 2)).to eq('/items/8/show_descendants?depth=2&scope=all')
       expect(config.show_descendants_path(item, 2, scope: 'children')).to eq('/items/8/show_descendants?depth=2&scope=children')
+      expect(config.toggle_all_path(state: :expanded)).to eq('/items')
+      expect(config.toggle_all_path(state: :collapsed)).to eq('/items?collapsed=all')
     end
   end
 end

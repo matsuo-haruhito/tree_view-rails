@@ -68,6 +68,24 @@ RSpec.describe 'Machines', type: :request do
     end
   end
 
+  describe 'GET /machines with global initial_state' do
+    it 'global config が collapsed なら collapsed=all なしでもルートだけ表示する' do
+      machine = create(:machine, name: '機械A')
+      unit = create(:unit, machine: machine, name: 'ユニットA')
+
+      TreeView.configure do |config|
+        config.initial_state = :collapsed
+      end
+
+      get machines_path
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include(%(node_machine_#{machine.id}))
+      expect(response.body).not_to include(%(node_unit_#{unit.id}))
+      expect(response.body).to include('tree-toggle__hidden-count')
+    end
+  end
+
   describe 'GET /machines?page=2' do
     it 'machine root 単位でページネーションされ、配下ノードは同じページに残る' do
       10.times { |i| create(:machine, name: "機械#{i}") }
