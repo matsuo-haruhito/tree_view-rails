@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   DEFAULT_ROW_PARTIAL = 'items/tree_columns'
+  ROOTS_PER_PAGE = 10
 
   def new
     @item = Item.new(parent_item_id: params[:parent_item_id])
@@ -46,10 +47,12 @@ class ItemsController < ApplicationController
   def index
     render_state = build_render_state
     @tree = render_state.tree
-    @root_items = render_state.root_items
+    @root_page = Kaminari.paginate_array(render_state.root_items).page(params[:page]).per(ROOTS_PER_PAGE)
+    @root_items = @root_page.to_a
     @row_partial = render_state.row_partial
     @tree_ui = render_state.ui_config
     @node_counts = item_counts
+    @collapsed_all = params[:collapsed] == 'all'
   end
 
   # TurboStreamをキックする。

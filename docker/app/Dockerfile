@@ -17,7 +17,12 @@ RUN apk update && \
     git \
     vim \
     bash \
-    sudo
+    sudo \
+    # system spec / screenshots
+    chromium \
+    chromium-chromedriver \
+    font-noto-cjk \
+    ttf-freefont
 
 ARG uid
 ARG gid

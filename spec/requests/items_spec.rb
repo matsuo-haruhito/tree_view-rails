@@ -60,6 +60,38 @@ RSpec.describe 'Items', type: :request do
     end
   end
 
+  describe 'GET /items?collapsed=all' do
+    it 'ルートだけを表示して子孫数を隠れ件数として出す' do
+      root = create(:item, name: 'root')
+      child = create(:item, parent_item_id: root.id, name: 'child')
+
+      get items_path(collapsed: 'all')
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('すべて広げる')
+      expect(response.body).to include('すべて畳む')
+      expect(response.body).to include(%(item_#{root.id}))
+      expect(response.body).not_to include(%(item_#{child.id}))
+      expect(response.body).to include('tree-toggle__hidden-count')
+    end
+  end
+
+  describe 'GET /items?page=2' do
+    it 'root 単位でページネーションされ、子は親と同じページに残る' do
+      10.times { |i| create(:item, name: "root#{i}") }
+      target_root = create(:item, name: 'root10')
+      child = create(:item, parent_item_id: target_root.id, name: 'child10')
+
+      get items_path(page: 2)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('root10')
+      expect(response.body).to include('child10')
+      expect(response.body).not_to include('root0')
+      expect(response.body).to include('前へ')
+    end
+  end
+
   describe 'GET /items/:id/remove_descendants.turbo_stream' do
     it '子孫行を削除するTurbo Streamレスポンスを返す' do
       root = create(:item, name: 'root')

@@ -22,6 +22,10 @@ h5.mb-2 Adapter/BOM版（異種ノード混在ツリー）
   .col-auto
     span.badge.badge-dark 材料 #{@node_counts[:materials]}
   .col-auto.ml-auto
+    = link_to 'すべて広げる', machines_path, class: 'btn btn-sm btn-outline-secondary'
+  .col-auto
+    = link_to 'すべて畳む', machines_path(collapsed: 'all'), class: 'btn btn-sm btn-outline-secondary'
+  .col-auto.ml-auto
     = link_to 'ルートMachine追加', new_machine_path, data: { turbo_frame: 'modal' }, class: 'btn btn-sm btn-primary'
 
 div.table-sticky.max-vh-70
@@ -40,4 +44,9 @@ div.table-sticky.max-vh-70
           th 子孫数
           th 操作
       tbody
-        = render partial: 'items/tree_row', collection: @root_items, as: :item, locals: { tree: @tree, row_partial: @row_partial }
+        = render partial: 'items/tree_row', collection: @root_items, as: :item, locals: { tree: @tree, row_partial: @row_partial, collapsed: @collapsed_all }
+
+- if @root_page.present?
+  .mt-2
+    = page_entries_info(@root_page)
+    = simple_page_nav(@root_page)

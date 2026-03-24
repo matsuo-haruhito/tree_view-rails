@@ -52,6 +52,38 @@ RSpec.describe 'Machines', type: :request do
     end
   end
 
+  describe 'GET /machines?collapsed=all' do
+    it 'ルートだけを表示して子孫数を隠れ件数として出す' do
+      machine = create(:machine, name: '機械A')
+      unit = create(:unit, machine: machine, name: 'ユニットA')
+
+      get machines_path(collapsed: 'all')
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('すべて広げる')
+      expect(response.body).to include('すべて畳む')
+      expect(response.body).to include(%(node_machine_#{machine.id}))
+      expect(response.body).not_to include(%(node_unit_#{unit.id}))
+      expect(response.body).to include('tree-toggle__hidden-count')
+    end
+  end
+
+  describe 'GET /machines?page=2' do
+    it 'machine root 単位でページネーションされ、配下ノードは同じページに残る' do
+      10.times { |i| create(:machine, name: "機械#{i}") }
+      target_machine = create(:machine, name: '機械10')
+      unit = create(:unit, machine: target_machine, name: 'ユニット10')
+
+      get machines_path(page: 2)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('機械10')
+      expect(response.body).to include('ユニット10')
+      expect(response.body).not_to include('機械0')
+      expect(response.body).to include('前へ')
+    end
+  end
+
   describe 'GET /machines/show_descendants.turbo_stream' do
     it '子ノードを描画するTurbo Streamレスポンスを返す' do
       machine = create(:machine, name: '機械A')

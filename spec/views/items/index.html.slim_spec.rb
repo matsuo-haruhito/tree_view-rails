@@ -8,6 +8,7 @@ RSpec.describe 'items/index', type: :view do
 
     assign(:tree, tree)
     assign(:root_items, [root])
+    assign(:root_page, Kaminari.paginate_array([root]).page(1).per(10))
     assign(:row_partial, 'items/tree_columns')
     assign(:tree_ui, TreeView::UiConfigBuilder.new(context: view).build_for_items)
     assign(:node_counts, { total: 2, roots: 1, leaves: 1 })
@@ -21,6 +22,7 @@ RSpec.describe 'items/index', type: :view do
     expect(rendered).to include('総ノード数')
     expect(rendered).to include('子ノードを畳む')
     expect(rendered).to include('tree-toggle__branch-slot')
+    expect(rendered).to include('1件中')
     expect(rendered).to include('turbo-cable-stream-source')
   end
 end
