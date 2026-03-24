@@ -1,6 +1,7 @@
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import '@hotwired/turbo-rails';
 import "controllers";
+import "tree_view";
 
 // Ensure open/close links always request Turbo Stream responses.
 document.addEventListener("turbo:before-fetch-request", (event) => {

@@ -14,6 +14,7 @@
 
 
 @import './bootstrap';
+@import './tree_view';
 @import './attributes';
 @import './button';
 @import './checkbox';
@@ -22,6 +23,7 @@
 @import './notice';
 @import './popover';
 @import './radio';
+@import './sample_crud';
 
 html{
   height: 100%;
