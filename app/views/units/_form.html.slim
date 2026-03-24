@@ -1,0 +1,20 @@
+= form_with model: unit, local: true do |f|
+  - if unit.errors.any?
+    .alert.alert-danger
+      = unit.errors.full_messages.join(' / ')
+
+  .form-group
+    = f.label :name, 'Unit名'
+    = f.text_field :name, class: 'form-control'
+
+  .form-group
+    = f.label :machine_id, '所属Machine'
+    = f.collection_select :machine_id, Machine.order(:name), :id, :name, { include_blank: false }, class: 'form-control'
+
+  .form-group
+    = f.label :parent_unit_id, '親Unit'
+    = f.collection_select :parent_unit_id, Unit.order(:name), :id, :name, { include_blank: 'なし' }, class: 'form-control'
+
+  .mt-3
+    = f.submit class: 'btn btn-primary'
+    = link_to '一覧へ戻る', machines_path, class: 'btn btn-link'

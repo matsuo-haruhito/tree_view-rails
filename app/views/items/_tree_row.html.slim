@@ -1,0 +1,14 @@
+- branch_info = tree_branch_info(item, tree)
+- depth = local_assigns.fetch(:depth, branch_info[:depth])
+- row_partial ||= 'items/tree_columns'
+- collapsed = local_assigns.fetch(:collapsed, false)
+- children = tree.children_for(item)
+- descendant_count = tree.descendant_counts[tree.node_key_for(item)].to_i
+- hidden_count = collapsed && descendant_count.positive? ? descendant_count : nil
+- children_toggle_available = children.any? { |child| tree.children_for(child).any? }
+- grandchildren_toggle_available = children.any? { |child| tree.children_for(child).any? { |grandchild| tree.children_for(grandchild).any? } }
+tr id=tree_node_dom_id(item) data-tree-depth=depth data-tree-context-row="" data-tree-context-label=tree_context_menu_label(item) data-tree-context-children-hide-path=(children_toggle_available ? tree_hide_descendants_path(item, depth, scope: 'children') : nil) data-tree-context-children-show-path=(children_toggle_available ? tree_show_descendants_path(item, depth + 1, scope: 'children') : nil) data-tree-context-grandchildren-hide-path=(grandchildren_toggle_available ? tree_hide_descendants_path(item, depth, scope: 'grandchildren') : nil) data-tree-context-grandchildren-show-path=(grandchildren_toggle_available ? tree_show_descendants_path(item, depth + 1, scope: 'grandchildren') : nil)
+  = render 'items/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count
+  = render row_partial, item: item
+- unless collapsed
+  = render 'items/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial

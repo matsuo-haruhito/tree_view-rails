@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_01_000001) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_22_000002) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -43,7 +43,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_000001) do
   end
 
   create_table "items", comment: "商品", force: :cascade do |t|
-    t.string "parent_item_id", comment: "親商品id"
     t.string "name", comment: "商品名"
     t.string "comment", comment: "コメント"
     t.date "usage_start_date", comment: "使用開始日"
@@ -52,8 +51,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_000001) do
     t.bigint "update_user_id", comment: "更新者id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "parent_item_id"
     t.index ["create_user_id"], name: "index_items_on_create_user_id"
+    t.index ["parent_item_id"], name: "index_items_on_parent_item_id"
     t.index ["update_user_id"], name: "index_items_on_update_user_id"
+  end
+
+  create_table "machines", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "parent_machine_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_machine_id"], name: "index_machines_on_parent_machine_id"
+  end
+
+  create_table "materials", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "part_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["part_id"], name: "index_materials_on_part_id"
   end
 
   create_table "notices", comment: "お知らせ", force: :cascade do |t|
@@ -69,6 +86,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_000001) do
     t.index ["update_user_id"], name: "index_notices_on_update_user_id"
   end
 
+  create_table "parts", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "machine_id"
+    t.bigint "unit_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["machine_id"], name: "index_parts_on_machine_id"
+    t.index ["unit_id"], name: "index_parts_on_unit_id"
+  end
+
   create_table "rparam_memories", force: :cascade do |t|
     t.string "user_type"
     t.bigint "user_id"
@@ -77,6 +104,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_000001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_type", "user_id"], name: "index_rparam_memories_on_user_type_and_user_id"
+  end
+
+  create_table "units", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "machine_id", null: false
+    t.bigint "parent_unit_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["machine_id"], name: "index_units_on_machine_id"
+    t.index ["parent_unit_id"], name: "index_units_on_parent_unit_id"
   end
 
   create_table "users", comment: "ユーザ", force: :cascade do |t|
@@ -107,4 +144,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_000001) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "items", "items", column: "parent_item_id"
+  add_foreign_key "machines", "machines", column: "parent_machine_id"
+  add_foreign_key "materials", "parts"
+  add_foreign_key "parts", "machines"
+  add_foreign_key "parts", "units"
+  add_foreign_key "units", "machines"
+  add_foreign_key "units", "units", column: "parent_unit_id"
 end

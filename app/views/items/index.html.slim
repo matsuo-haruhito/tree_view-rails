@@ -1,17 +1,52 @@
 / 見出しのみ。中身はパーシャルにしてる。
 
-- content_for :title, 'items'
+- content_for :container_class do
+  = 'container mt-3 max-vw-90'
+
+- content_for :title, 'items (自己参照のみ版)'
 
 - breadcrumb :items
 
+/ Item の create/update/destroy を購読し、別操作の変更もこの画面へ反映する。
+= turbo_stream_from 'items'
+
+h5.mb-2 自己参照のみ版（Item.parent_item_id）
+
+.alert.alert-info.py-2
+  | Item の自己参照ツリーです。開閉ボタンは Turbo Stream で更新されます。
+
+.row.mb-2
+  .col-auto
+    span.badge.badge-primary 総ノード数 #{@node_counts[:total]}
+  .col-auto
+    span.badge.badge-secondary ルート数 #{@node_counts[:roots]}
+  .col-auto
+    span.badge.badge-success 葉ノード数 #{@node_counts[:leaves]}
+  .col-auto.ml-auto
+    = link_to 'すべて広げる', tree_expand_all_path, class: 'btn btn-sm btn-outline-secondary'
+  .col-auto
+    = link_to 'すべて畳む', tree_collapse_all_path, class: 'btn btn-sm btn-outline-secondary'
+  .col-auto.ml-auto
+    / Turbo Frame の modal に form を読み込むので、別ページへ遷移しない。
+    = link_to 'ルートItem追加', new_item_path, data: { turbo_frame: 'modal' }, class: 'btn btn-sm btn-primary'
+
 div.table-sticky.max-vh-70
-  table.table.table-striped.table-hover.table-bordered.text-nowrap
-    thead
-      tr
-        th レベル / 子アイテムの開閉：隠れている子アイテムの数
-        th id
-        th 親id
-        th 商品名
-        th コメント
-    tbody
-      = render partial: 'item', collection: @root_items, as: :item, locals: { items_by_parent_id: @items_by_parent_id, descendant_counts: @descendant_counts }
+  div data-controller="tree-context-menu" data-action="contextmenu->tree-context-menu#open click@window->tree-context-menu#close keydown.esc@window->tree-context-menu#close resize@window->tree-context-menu#close scroll@window->tree-context-menu#close"
+    = render 'items/tree_context_menu'
+    table.table.table-striped.table-hover.table-bordered.text-nowrap.w-100.tree-view-table
+      thead
+        tr
+          th レベル / 開閉 / 隠れ件数
+          th id
+          th ノードキー
+          th 親id
+          th 商品名
+          th コメント
+          th 操作
+      tbody
+        = render partial: 'items/tree_row', collection: @root_items, as: :item, locals: { tree: @tree, row_partial: @row_partial, collapsed: @collapsed_all }
+
+- if @root_page.present?
+  .mt-2
+    = page_entries_info(@root_page)
+    = simple_page_nav(@root_page)

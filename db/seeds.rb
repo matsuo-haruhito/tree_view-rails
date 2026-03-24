@@ -39,4 +39,5 @@ seeds do
   seed(:user){ user }
   seed(:notice){ notice }
   seed(:item){ item }
+  seed(:machine_demo){ machine_demo }
 end

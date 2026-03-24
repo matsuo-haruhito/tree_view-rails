@@ -1,4 +1,5 @@
 require "active_support/core_ext/integer/time"
+require "securerandom"
 
 # The test environment is used exclusively to run your application's
 # test suite. You never need to work with it otherwise. Remember that
@@ -7,6 +8,16 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  if ENV["SECRET_KEY_BASE"].present?
+    config.secret_key_base = ENV["SECRET_KEY_BASE"]
+  else
+    secret_file = Rails.root.join("tmp/local_secret_key_base_test")
+    config.secret_key_base = if secret_file.exist?
+      secret_file.read.strip
+    else
+      SecureRandom.hex(64).tap { |secret| secret_file.write(secret) }
+    end
+  end
 
   # While tests run files are not watched, reloading is not necessary.
   config.enable_reloading = false

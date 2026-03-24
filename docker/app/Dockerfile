@@ -1,4 +1,4 @@
-FROM ruby:3.0.6-alpine3.16
+FROM ruby:3.2.3-alpine
 
 RUN echo 'Set disable_coredump false' >> /etc/sudo.conf
 
@@ -17,7 +17,12 @@ RUN apk update && \
     git \
     vim \
     bash \
-    sudo
+    sudo \
+    # system spec / screenshots
+    chromium \
+    chromium-chromedriver \
+    font-noto-cjk \
+    ttf-freefont
 
 ARG uid
 ARG gid

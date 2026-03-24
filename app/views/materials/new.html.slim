@@ -1,0 +1,5 @@
+- content_for :title, 'Material作成'
+- breadcrumb :items
+
+= render 'shared/modal_frame', title: 'Material作成' do
+  = render 'form', material: @material

@@ -1,7 +1,18 @@
 require "active_support/core_ext/integer/time"
+require "securerandom"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  if ENV["SECRET_KEY_BASE"].present?
+    config.secret_key_base = ENV["SECRET_KEY_BASE"]
+  else
+    secret_file = Rails.root.join("tmp/local_secret_key_base")
+    config.secret_key_base = if secret_file.exist?
+      secret_file.read.strip
+    else
+      SecureRandom.hex(64).tap { |secret| secret_file.write(secret) }
+    end
+  end
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development

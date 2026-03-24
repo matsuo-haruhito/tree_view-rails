@@ -1,73 +1,108 @@
-## development
+# TurboStream TreeView Test
+
+Rails + Turbo Stream でツリー表示 UI を試作しているサンプルアプリです。  
+将来的な GEM 化を見据えつつ、まずはアプリ内で `TreeView` の責務分離を整えることを目的にしています。
+
+![TreeView demo](./docs/images/machines-tree.png)
+
+## デモ画面について
+
+このリポジトリには、以下の 2 つのサンプル画面があります。
+
+### `items`
+- 自己参照モデル `Item.parent_item_id` をそのままツリー表示する画面
+- Turbo Stream による開閉
+- 右クリックメニューによる子系統の開閉
+- Turbo Frame ベースの簡素 CRUD
+- `すべて広げる` / `すべて畳む`
+- root 単位のページネーション
+
+### `machines`
+- `Machine / Unit / Part / Material` を 1 本のツリーとして表示する画面
+- `TreeView::GraphAdapter` を使った異種ノード混在デモ
+- Turbo Stream による開閉
+- Turbo Frame ベースの簡素 CRUD
+- `すべて広げる` / `すべて畳む`
+- root 単位のページネーション
+
+## GEM の骨幹になるもの
+
+このリポジトリは sample app 付きですが、GEM 化の中心として育てているのは次の部分です。
+
+- `TreeView::Tree`
+  - 親子解決、子孫数集計、ルート並び替え
+- `TreeView::Traversal`
+  - 子孫 ID 収集など、ツリー走査の補助
+- `TreeView::GraphAdapter`
+  - 異種ノードを 1 本のツリーとして扱うための接続層
+- `TreeView::RenderState`
+  - 画面ごとの描画状態をまとめるオブジェクト
+- `TreeView::UiConfig`
+  - DOM ID や path helper など、画面統合に必要な設定
+- `TreeView.configure`
+  - GEM 全体の既定値を置く入口
+
+つまり、このリポジトリの本体は「デモ画面」ではなく、
+
+- 木構造をどう解決するか
+- 画面ごとの描画状態をどう持つか
+- Rails の view / helper とどうつなぐか
+
+を整理している `TreeView` コア部分です。デモ画面は、その使い方を確認するための sample app です。
+
+## ドキュメント
+
+- [Architecture](./docs/architecture.md)
+  - `TreeView` コアと sample app の責務分離、GEM 候補とアプリ専用機能の境界を書いています。
+- [GEM API Draft](./docs/gem-api.md)
+  - `TreeView` が何を提供するか、`TreeView.configure`、`RenderState`、全体開閉 helper など、GEM 化に向けた公開 API 方針を書いています。
+- [Setup](./docs/setup.md)
+  - Docker を使った初期セットアップ、seed、ログイン情報、テスト、スクリーンショット生成手順を書いています。
+- [Release](./docs/release.md)
+  - production 用の起動手順と HTTPS 対応のメモを書いています。
+
+## Quick Start
 
 ```bash
-git clone <url>
-cd <name>
+git clone <repository-url>
+cd TurboStream-TreeViewTest
 cp .env.example .env
-docker-compose build
-docker-compose run --rm app bash
-/app$ bundle install
-/app$ yarn
-/app$ rails db:create
-/app$ rails db:migrate
-docker-compose up
+docker compose build
+docker compose run --rm app bash
+bundle install
+yarn
+bin/rails db:create
+bin/rails db:migrate
+bin/rails db:seed
+exit
+docker compose up -d
 ```
 
-## production
+詳細は [docs/setup.md](./docs/setup.md) を参照してください。
 
-```bash
-git clone <url>
-cd <name>
-cp .env.example .env
-sed -i -e 's/COMPOSE_FILE=.*/COMPOSE_FILE=docker-compose.production.yml/' .env
-sed -i -e 's/RAILS_ENV=.*/RAILS_ENV=production/' .env
-sed -i -e "s/SECRET_KEY_BASE=.*/SECRET_KEY_BASE=$(cat /dev/urandom | tr -dc 'a-f0-9' | head -c 128)/" .env
-sed -i -e "s/APP_UID=.*/APP_UID=$(id -u)/" .env
-sed -i -e "s/APP_GID=.*/APP_GID=$(id -g)/" .env
-docker-compose build
-docker-compose run --rm app bash
-/app$ bundle install --without test development
-/app$ yarn
-/app$ rails db:create
-/app$ rails db:migrate
-/app$ rails assets:precompile
-docker-compose up -d
-```
+## 画面で試せること
 
-## https対応
+### 共通
+- ツリーの展開 / 折りたたみ
+- `すべて広げる` / `すべて畳む`
+- 枝付きの階層表示
+- 右クリックメニューによる子系統の開閉
+- Turbo Stream による画面 refresh サンプル
+- root 単位のページネーション
 
-```bash
-mkdir https-portal
-cd https-portal
-vim docker-compose.yml
-docker-compose up -d
-```
+### CRUD
+- `Item`, `Machine`, `Unit`, `Part`, `Material` の新規作成
+- 既存ノードに対する子追加
+- 編集
+- 削除
+- フォームは Turbo Frame ベースのモーダル表示
 
-```yml
-version: '3'
-services:
-  https-portal:
-    image: steveltn/https-portal:1.21.1
-    ports:
-      - '80:80'
-      - '443:443'
-    environment:
-      STAGE: production
-      DOMAINS: 'sakaikouki-fego.work -> http://web'
-    volumes:
-      - https-portal:/var/lib/https-portal
-    networks:
-      - sakaikouki-order-server_default
-    restart: always
-volumes:
-  https-portal:
-networks:
-  sakaikouki-order-server_default:
-    external: true
-```
+## 現時点の注意
 
-## Editorconfig
+- `Kaminari` は全ノードではなく root collection にだけ適用する方針です
+- README へのスクリーンショット掲載手順はまだ整理途中です
+- 現状は sample app を土台にしつつ、`initial_state` と全体開閉 helper までは公開 API 方針を実装済みです
 
-https://editorconfig.org/
+## ライセンス
 
-環境によって改行コードやインデントがばらばらになるのを防ぐ効果があるので必ず導入する
+未整理です。GEM 化時に合わせて明記してください。

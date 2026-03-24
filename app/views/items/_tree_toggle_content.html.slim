@@ -1,0 +1,23 @@
+- hidden_count = local_assigns[:hidden_count]
+- children ||= tree.children_for(item)
+- branch_info = tree_branch_info(item, tree)
+- ancestor_last_states = branch_info[:ancestor_last_states]
+- is_last = branch_info[:is_last]
+
+.tree-toggle
+  .tree-toggle__branches aria-hidden="true"
+    - ancestor_last_states.each do |ancestor_is_last|
+      span class=["tree-toggle__branch-slot", ("is-empty" if ancestor_is_last), ("has-line" unless ancestor_is_last)]
+    - if depth.positive?
+      span class=["tree-toggle__branch-slot", "is-current", ("is-last" if is_last), ("is-middle" unless is_last)]
+  .tree-toggle__control
+    - if hidden_count
+      = link_to tree_show_descendants_path(item, depth + 1), data: { turbo_stream: true }, class: 'btn btn-primary show-button tree-toggle__action', id: tree_show_button_dom_id(item) do
+        = tree_toggle_label(depth)
+    - elsif children.any?
+      = link_to tree_hide_descendants_path(item, depth), data: { turbo_stream: true }, class: 'btn btn-danger remove-button tree-toggle__action' do
+        = tree_toggle_label(depth)
+    - else
+      span.tree-toggle__level = tree_toggle_label(depth)
+    - if hidden_count
+      span.tree-toggle__hidden-count = hidden_count

@@ -1,0 +1,6 @@
+- counts = tree.descendant_counts
+- sorted_items = items.sort_by { |child_item| counts[tree.node_key_for(child_item)].to_i }
+
+- sorted_items.each_with_index do |child_item, index|
+  - current_depth = depth + 1
+  = render 'items/tree_row', item: child_item, depth: current_depth, tree: tree, row_partial: row_partial

@@ -1,14 +1,15 @@
 / items_controllerのremove_descendantsメソッドから実行される。
 
-- if params[:depth].present?
-  - depth = params[:depth].to_i
+- toggle_depth = params[:depth].to_i
+- display_depth = toggle_depth - 1
 
 - @descendant_ids.each do |item_id|
-  = turbo_stream.remove "item_#{item_id}"
+  = turbo_stream.remove tree_node_dom_id(item_id)
 
-= turbo_stream.update "button_box_#{@item.id}" do
-  = raw("&ensp; &ensp; &ensp;" * (depth - 1))
-  = link_to show_descendants_item_path(@item, depth: depth), data: { turbo_stream: true }, class: 'btn btn-primary show-button', id: "show_button_#{@item.id}" do
-    = depth = depth - 1
-  = raw("：")
-  = @descendant_count
+- if @collapse_scope != 'all'
+  - @collapsed_children.each do |child_state|
+    = turbo_stream.update tree_button_dom_id(child_state[:item]) do
+      = render 'items/tree_toggle_content', item: child_state[:item], depth: child_state[:depth], tree: @tree, hidden_count: child_state[:hidden_count]
+- else
+  = turbo_stream.update tree_button_dom_id(@item) do
+    = render 'items/tree_toggle_content', item: @item, depth: display_depth, tree: @tree, hidden_count: @descendant_count

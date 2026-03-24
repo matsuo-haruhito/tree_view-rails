@@ -7,7 +7,27 @@ require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+require 'capybara/rspec'
 # Add additional requires below this line. Rails is not loaded until this point!
+
+Capybara.register_driver :selenium_chromium_headless do |app|
+  chrome_options = Selenium::WebDriver::Chrome::Options.new
+  %w[headless no-sandbox disable-dev-shm-usage window-size=1600,1200].each do |argument|
+    chrome_options.add_argument(argument)
+  end
+
+  chrome_binary = %w[
+    /usr/bin/chromium-browser
+    /usr/bin/chromium
+    /usr/bin/google-chrome-stable
+    /usr/bin/google-chrome
+  ].find { |path| File.exist?(path) }
+  chrome_options.binary = chrome_binary if chrome_binary
+
+  service = Selenium::WebDriver::Service.chrome(path: ENV.fetch('CHROMEDRIVER_PATH', '/usr/bin/chromedriver'))
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: chrome_options, service: service)
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -34,7 +54,7 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{Rails.root.join('spec/fixtures')}"
+  config.fixture_paths = [Rails.root.join('spec/fixtures').to_s]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -66,7 +86,42 @@ RSpec.configure do |config|
   # config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
   config.include Warden::Test::Helpers
+  config.include Warden::Test::Helpers, type: :system
 
   # FactoryBot
   config.include FactoryBot::Syntax::Methods
+
+  config.before do
+    TreeView.reset_configuration!
+  end
+
+  config.before(:suite) do
+    Warden.test_mode!
+  end
+
+  config.before(type: :system) do |example|
+    if example.metadata[:js]
+      driven_by :selenium_chromium_headless
+    else
+      driven_by :rack_test
+    end
+  end
+
+  config.before(type: :system) do
+    Capybara.save_path = Rails.root.join('tmp/screenshots')
+  end
+
+  config.after(type: :system) do |example|
+    if page&.current_window && page.driver.respond_to?(:save_screenshot)
+      FileUtils.mkdir_p(Capybara.save_path)
+      screenshot_name = example.full_description.parameterize(separator: '_')
+      page.save_screenshot(Rails.root.join('tmp/screenshots', "#{screenshot_name}.png"))
+    end
+
+    Warden.test_reset!
+  end
+
+  config.after(:suite) do
+    Warden.test_reset!
+  end
 end

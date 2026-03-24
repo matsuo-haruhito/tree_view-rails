@@ -1,0 +1,9 @@
+= turbo_frame_tag 'modal' do
+  .crud-modal data-controller="modal-frame" data-action="click->modal-frame#backdrop keydown.esc@window->modal-frame#close"
+    .crud-modal__dialog
+      .crud-modal__header
+        h5.mb-0 = title
+        button.close type='button' aria-label='Close' data-action='click->modal-frame#close'
+          span aria-hidden='true' &times;
+      .crud-modal__body
+        = yield

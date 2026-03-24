@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe Estimates::WorkRecords::WorkInstructionsController, type: :request do
+# NOTE:
+# Estimates関連機能は現行アプリから削除済みのため、回帰用specとしてskipして残す。
+RSpec.describe 'Estimates::WorkRecords::WorkInstructionsController', type: :request, skip: 'Estimates機能は現行スコープ外' do
   describe 'GET /estimates/:estimate_id/work_records/:work_record_id/work_instruction' do
     before do
       sign_in create(:user)
