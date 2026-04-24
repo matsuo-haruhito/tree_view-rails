@@ -22,4 +22,20 @@ RSpec.describe TreeView::UiConfig do
     expect(config.show_descendants_path(item, 3, scope: "children")).to eq("/show/7?depth=3&scope=children")
     expect(config.toggle_all_path(state: :collapsed)).to eq("/toggle?state=collapsed")
   end
+
+  it "permits static configs without path builders" do
+    config = described_class.new(
+      node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
+      button_dom_id_builder: ->(item_or_id) { "button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
+      show_button_dom_id_builder: ->(item_or_id) { "show_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" }
+    )
+
+    item = Struct.new(:id).new(7)
+
+    expect(config.node_dom_id(item)).to eq("node_7")
+    expect(config.hide_descendants_path(item, 2)).to be_nil
+    expect(config.show_descendants_path(item, 3)).to be_nil
+    expect(config.toggle_all_path(state: :collapsed)).to be_nil
+    expect(config.static?).to eq(true)
+  end
 end

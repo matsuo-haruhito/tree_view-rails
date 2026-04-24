@@ -43,6 +43,22 @@ RSpec.describe TreeViewHelper do
     end
   end
 
+  describe "static ui" do
+    it "returns nil for optional toggle paths" do
+      static_ui = TreeView::UiConfig.new(
+        node_dom_id_builder: ->(item_or_id) { "item_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
+        button_dom_id_builder: ->(item_or_id) { "item_button_box_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
+        show_button_dom_id_builder: ->(item_or_id) { "item_show_button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" }
+      )
+      helper = helper_host_class.new(tree_ui: static_ui)
+      item = TestNode.new(id: 42, parent_item_id: nil, name: "sample")
+
+      expect(helper.tree_hide_descendants_path(item, 1)).to be_nil
+      expect(helper.tree_show_descendants_path(item, 1)).to be_nil
+      expect(helper.tree_toggle_all_path(state: :collapsed)).to be_nil
+    end
+  end
+
   describe "tree_branch_info" do
     it "returns branch information for each node" do
       root_a = TestNode.new(id: 1, parent_item_id: nil, name: "root-a")

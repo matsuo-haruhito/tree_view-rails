@@ -53,6 +53,24 @@ host app 側で TreeView 用の stylesheet を読み込みます。
 pin "tree_view", to: "tree_view/index.js"
 ```
 
+### Propshaft
+
+Rails 8 + Propshaft でも使えます。最低限、host app 側で stylesheet と importmap を読み込めれば十分です。
+
+`app/assets/stylesheets/application.scss`:
+
+```scss
+@import "tree_view";
+```
+
+`config/importmap.rb`:
+
+```ruby
+pin "tree_view", to: "tree_view/index.js"
+```
+
+現在の engine 側 asset hook は Sprockets 互換も残していますが、導入の中心は「host app 側から CSS / importmap を明示的に読む」前提です。
+
 ## Usage
 
 ### Tree
@@ -80,6 +98,15 @@ tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "ite
 )
 ```
 
+静的表示だけなら `build_static` を使えます。
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "project"
+).build_static
+```
+
 ### RenderState
 
 ```ruby
@@ -91,6 +118,58 @@ render_state = TreeView::RenderState.new(
   initial_state: :collapsed
 )
 ```
+
+### 完成例
+
+controller:
+
+```ruby
+tree = TreeView::Tree.new(
+  records: @projects,
+  parent_id_method: :parent_project_id
+)
+
+@tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "project"
+).build_static
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "projects/tree_columns",
+  ui_config: @tree_ui
+)
+```
+
+view:
+
+```slim
+table.tree-view-table
+  thead
+    tr
+      th level
+      th name
+      th owner
+  tbody
+    = render partial: "tree_view/tree_row",
+      collection: @render_state.root_items,
+      as: :item,
+      locals: {
+        tree: @render_state.tree,
+        row_partial: @render_state.row_partial
+      }
+```
+
+row partial:
+
+```slim
+/ app/views/projects/_tree_columns.html.slim
+td = item.name
+td = item.owner_name
+```
+
+Turbo Stream で開閉したい場合は、`build` に path builder を渡し、同じ `tree_row` を render します。`@tree_ui` が static でなければ既定で turbo toggle partial を使います。
 
 ### Global config
 

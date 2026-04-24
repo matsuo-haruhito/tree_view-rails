@@ -14,9 +14,9 @@ module TreeView
     def initialize(node_dom_id_builder:,
                    button_dom_id_builder:,
                    show_button_dom_id_builder:,
-                   hide_descendants_path_builder:,
-                   show_descendants_path_builder:,
-                   toggle_all_path_builder:,
+                   hide_descendants_path_builder: nil,
+                   show_descendants_path_builder: nil,
+                   toggle_all_path_builder: nil,
                    indent_unit: '&ensp; &ensp; &ensp;')
       @node_dom_id_builder = node_dom_id_builder
       @button_dom_id_builder = button_dom_id_builder
@@ -40,15 +40,27 @@ module TreeView
     end
 
     def hide_descendants_path(item, display_depth, scope: 'all')
+      return nil unless hide_descendants_path_builder
+
       hide_descendants_path_builder.call(item, display_depth, scope)
     end
 
     def show_descendants_path(item, toggle_depth, scope: 'all')
+      return nil unless show_descendants_path_builder
+
       show_descendants_path_builder.call(item, toggle_depth, scope)
     end
 
     def toggle_all_path(state:)
+      return nil unless toggle_all_path_builder
+
       toggle_all_path_builder.call(state.to_sym)
+    end
+
+    def static?
+      hide_descendants_path_builder.nil? &&
+        show_descendants_path_builder.nil? &&
+        toggle_all_path_builder.nil?
     end
   end
 end

@@ -19,5 +19,14 @@ module TreeView
         indent_unit: indent_unit
       )
     end
+
+    def build_static(indent_unit: "&ensp; &ensp; &ensp;")
+      UiConfig.new(
+        node_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_#{@key_resolver.call(item_or_id)}" },
+        button_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_button_box_#{@key_resolver.call(item_or_id)}" },
+        show_button_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_show_button_#{@key_resolver.call(item_or_id)}" },
+        indent_unit: indent_unit
+      )
+    end
   end
 end

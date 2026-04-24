@@ -10,6 +10,7 @@
 - host app 固有の route 名、文言、Turbo Stream 更新、CRUD はこの repo に含めない。
 - `UiConfig` / `UiConfigBuilder` は generic な builder に留め、特定画面向け sugar は持ち込まない。
 - row partial 差し替えを公開拡張ポイントとして維持する。
+- host app が静的表示だけで使えるように、Turbo 開閉前提を必須にしない。
 
 ## GEM 本体に含めるもの
 - `lib/tree_view*`
@@ -54,8 +55,13 @@
 - 全体開閉の対象範囲は当面 `all` のみとする。
 - 枝表現は helper 側で tree 全体から計算する。
 - `row_partial` は host app 側で渡す前提にし、gem 側で sample app 名を既定値にしない。
+- `UiConfig` の開閉 path builder は optional とし、static tree では未指定を許容する。
+- toggle UI は `mode: :turbo | :static` で切り替え、既定値は後方互換のため `:turbo` とする。
+- README には Rails 8 + Propshaft を含む host app 導入例と、`render "tree_view/tree_row"` の完成例を載せる。
 
 ## 現在の作業
 - [ ] 外部 host app から install して動作確認する
-- [ ] importmap / asset 読み込み手順を README 上で過不足なく整理する
+- [x] importmap / asset 読み込み手順を README 上で過不足なく整理する
+- [x] static tree 用の API / partial を追加する
+- [x] gem に無関係な sample app view 残骸を取り除く
 - [ ] 必要なら dummy app か integration spec を追加する

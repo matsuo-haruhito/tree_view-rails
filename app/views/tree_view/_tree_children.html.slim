@@ -3,4 +3,4 @@
 
 - sorted_items.each_with_index do |child_item, index|
   - current_depth = depth + 1
-  = render 'tree_view/tree_row', item: child_item, depth: current_depth, tree: tree, row_partial: row_partial
+  = render 'tree_view/tree_row', item: child_item, depth: current_depth, tree: tree, row_partial: row_partial, mode: local_assigns.fetch(:mode, (@tree_ui&.static? ? :static : :turbo))
