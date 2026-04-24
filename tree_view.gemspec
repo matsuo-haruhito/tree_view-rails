@@ -5,19 +5,19 @@ require_relative "lib/tree_view/version"
 Gem::Specification.new do |spec|
   spec.name = "tree_view"
   spec.version = TreeView::VERSION
-  spec.authors = ["TurboStream-TreeViewTest contributors"]
+  spec.authors = ["Haruhito Matsuo"]
   spec.email = ["noreply@example.com"]
 
   spec.summary = "Tree rendering primitives for Rails applications"
-  spec.description = "TreeView extracts tree traversal, render state, and Rails integration points from the sample app toward a reusable gem."
-  spec.homepage = "https://example.com/tree_view"
+  spec.description = "Reusable tree traversal, render state, helpers, partials, and Rails integration points for tree-style UIs."
+  spec.homepage = "https://github.com/matsuo-haruhito/tree_view-rails"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
-  spec.metadata["changelog_uri"] = spec.homepage
+  spec.metadata["changelog_uri"] = "#{spec.homepage}/releases"
 
   spec.files = Dir.chdir(__dir__) do
     Dir[
@@ -27,9 +27,13 @@ Gem::Specification.new do |spec|
       "app/views/tree_view/**/*",
       "config/importmap.tree_view.rb",
       "lib/**/*",
-      "tree_view.gemspec",
+      "spec/**/*",
+      ".rspec",
+      "Gemfile",
+      "Rakefile",
       "README.md",
-      "LICENSE*"
+      "LICENSE*",
+      "tree_view.gemspec"
     ]
   end
 
@@ -37,4 +41,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "rails", ">= 7.0"
   spec.add_dependency "slim"
+
+  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
 end

@@ -1,9 +1,0 @@
-td = item.id
-td = item_node_key(item)
-td = item.parent_item_id
-td = item.name
-td = item.comment
-td.text-nowrap
-  = link_to '子追加', new_item_path(parent_item_id: item.id), data: { turbo_frame: 'modal' }, class: 'btn btn-sm btn-outline-primary'
-  = link_to '編集', edit_item_path(item), data: { turbo_frame: 'modal' }, class: 'btn btn-sm btn-outline-secondary'
-  = link_to '削除', item_path(item), data: { turbo_method: :delete, turbo_confirm: 'このItemを削除しますか？' }, class: 'btn btn-sm btn-outline-danger'

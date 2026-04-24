@@ -11,7 +11,6 @@ module TreeView
       app.config.assets.precompile += %w[
         tree_view.css
         tree_view/index.js
-        tree_view/controllers/tree_context_menu_controller.js
       ]
     end
 

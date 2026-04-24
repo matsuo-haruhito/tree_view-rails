@@ -1,11 +1,12 @@
-require 'rails_helper'
+require "spec_helper"
 
 RSpec.describe TreeView::RenderState do
-  it '描画に必要な tree/root_items/row_partial を保持する' do
-    tree = instance_double(TreeView::Tree)
-    ui_config = instance_double(TreeView::UiConfig)
-    root_items = [double(:item)]
-    row_partial = 'items/tree_columns'
+  let(:tree) { instance_double(TreeView::Tree) }
+  let(:ui_config) { instance_double(TreeView::UiConfig) }
+
+  it "stores tree, root_items, row_partial, and ui_config" do
+    root_items = [double(:node)]
+    row_partial = "items/tree_columns"
 
     state = described_class.new(tree: tree, root_items: root_items, row_partial: row_partial, ui_config: ui_config)
 
@@ -15,12 +16,12 @@ RSpec.describe TreeView::RenderState do
     expect(state.ui_config).to eq(ui_config)
   end
 
-  it 'initial_state を保持できる' do
+  it "stores initial_state when given" do
     state = described_class.new(
-      tree: instance_double(TreeView::Tree),
+      tree: tree,
       root_items: [],
-      row_partial: 'items/tree_columns',
-      ui_config: instance_double(TreeView::UiConfig),
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
       initial_state: :collapsed
     )
 
@@ -28,45 +29,45 @@ RSpec.describe TreeView::RenderState do
     expect(state.effective_initial_state).to eq(:collapsed)
   end
 
-  it 'initial_state が未指定なら global config を使う' do
+  it "falls back to global config when initial_state is omitted" do
     TreeView.configure do |config|
       config.initial_state = :collapsed
     end
 
     state = described_class.new(
-      tree: instance_double(TreeView::Tree),
+      tree: tree,
       root_items: [],
-      row_partial: 'items/tree_columns',
-      ui_config: instance_double(TreeView::UiConfig)
+      row_partial: "items/tree_columns",
+      ui_config: ui_config
     )
 
     expect(state.initial_state).to be_nil
     expect(state.effective_initial_state).to eq(:collapsed)
   end
 
-  it 'RenderState の initial_state が global config より優先される' do
+  it "prefers render state over global config" do
     TreeView.configure do |config|
       config.initial_state = :expanded
     end
 
     state = described_class.new(
-      tree: instance_double(TreeView::Tree),
+      tree: tree,
       root_items: [],
-      row_partial: 'items/tree_columns',
-      ui_config: instance_double(TreeView::UiConfig),
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
       initial_state: :collapsed
     )
 
     expect(state.effective_initial_state).to eq(:collapsed)
   end
 
-  it '不正な initial_state は受け付けない' do
+  it "rejects invalid initial_state" do
     expect do
       described_class.new(
-        tree: instance_double(TreeView::Tree),
+        tree: tree,
         root_items: [],
-        row_partial: 'items/tree_columns',
-        ui_config: instance_double(TreeView::UiConfig),
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
         initial_state: :invalid
       )
     end.to raise_error(ArgumentError, /initial_state/)
