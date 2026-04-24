@@ -7,7 +7,7 @@
 - if @collapse_scope != 'all'
   - @collapsed_children.each do |child_state|
     = turbo_stream.update tree_button_dom_id(child_state[:item]) do
-      = render 'items/tree_toggle_content', item: child_state[:item], depth: child_state[:depth], tree: @tree, hidden_count: child_state[:hidden_count]
+      = render 'tree_view/tree_toggle_content', item: child_state[:item], depth: child_state[:depth], tree: @tree, hidden_count: child_state[:hidden_count]
 - else
   = turbo_stream.update tree_button_dom_id(@node) do
-    = render 'items/tree_toggle_content', item: @node, depth: display_depth, tree: @tree, hidden_count: @descendant_count
+    = render 'tree_view/tree_toggle_content', item: @node, depth: display_depth, tree: @tree, hidden_count: @descendant_count

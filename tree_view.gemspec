@@ -22,7 +22,10 @@ Gem::Specification.new do |spec|
   spec.files = Dir.chdir(__dir__) do
     Dir[
       "app/assets/**/*",
+      "app/helpers/**/*",
       "app/javascript/tree_view/**/*",
+      "app/views/tree_view/**/*",
+      "config/importmap.tree_view.rb",
       "lib/**/*",
       "tree_view.gemspec",
       "README.md",
@@ -33,4 +36,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "rails", ">= 7.0"
+  spec.add_dependency "slim"
 end

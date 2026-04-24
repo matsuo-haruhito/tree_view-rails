@@ -346,6 +346,10 @@ GEM 利用者が主に触ることになるファイルや層は次です。
 - `TreeView::UiConfig`
 - `TreeView::UiConfigBuilder`
 - `TreeView.configure`
+- `TreeViewHelper`
+- `app/views/tree_view/*`
+- `tree_view.scss`
+- `app/javascript/tree_view/*`
 
 ## Example Mapping In This Repository
 
@@ -364,15 +368,52 @@ GEM 利用者が主に触ることになるファイルや層は次です。
 - 異種ノード混在サンプルの組み立て
   - `app/controllers/machines_controller.rb`
 - helper の公開面
+  - `app/helpers/tree_view_helper.rb`
   - `app/helpers/items_helper.rb`
+
+## Planned Split Into Two Repositories
+
+次の段階では、このリポジトリをそのまま育て続けるのではなく、次の 2 つへ分ける前提で進めます。
+
+### 1. `tree_view-rails`
+
+GEM 本体として持っていくもの:
+
+- `lib/tree_view*`
+- `tree_view.gemspec`
+- `app/helpers/tree_view_helper.rb`
+- `app/views/tree_view/*`
+- `app/assets/stylesheets/tree_view.scss`
+- `app/javascript/tree_view/*`
+- `config/importmap.tree_view.rb`
+
+つまり、TreeView のコアロジック、TreeView 固有 helper、TreeView 固有 partial、TreeView 固有 asset をまとめて持っていきます。
+
+### 2. `tree_view-rails-demo`
+
+sample app として残すもの:
+
+- `items` / `machines` / `units` / `parts` / `materials` の controller / view / form
+- Turbo refresh の購読
+- CRUD
+- Turbo Frame modal
+- `sample_crud.scss`
+- `modal_frame_controller.js`
+- seed / demo data / screenshots
+- Docker / 認証 / その他アプリ運用まわり
+
+つまり demo repo は、「GEM をどう使うかを見せる Rails アプリ」として整理します。
 
 ## Current Boundaries
 
 GEM 候補:
 
 - `lib/tree_view/*`
+- `app/helpers/tree_view_helper.rb`
+- `app/views/tree_view/*`
 - `app/assets/stylesheets/tree_view.scss`
 - `app/javascript/tree_view/*`
+- `config/importmap.tree_view.rb`
 
 sample app 専用:
 

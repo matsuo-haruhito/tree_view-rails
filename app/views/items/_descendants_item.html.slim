@@ -1,0 +1,24 @@
+/ 子孫アイテム用のパーシャル
+
+- counts = local_assigns[:descendant_counts]
+- sorted_items = items.sort_by { |item| counts ? counts[item.id].to_i : item.descendants.length }
+
+- sorted_items.each do |item|
+  - current_depth = depth + 1
+  - children = local_assigns[:items_by_parent_id] ? (local_assigns[:items_by_parent_id][item.id] || []) : item.children
+  tr id="item_#{item.id}"
+    - if children.any?
+      td id="button_box_#{item.id}"
+        = raw('&ensp; &ensp; &ensp;' * current_depth)
+        = link_to remove_descendants_item_path(item, depth: current_depth + 1), data: { turbo_stream: true }, class: 'btn btn-danger remove-button' do
+          = current_depth
+    - else
+      td
+        = raw('&ensp; &ensp; &ensp;' * current_depth)
+        = raw('&thinsp;')
+        = current_depth
+    td = item.id
+    td = item.parent_item_id
+    td = item.name
+    td = item.comment
+  = render 'descendants_item', items: children, depth: current_depth, items_by_parent_id: local_assigns[:items_by_parent_id], descendant_counts: counts

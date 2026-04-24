@@ -56,3 +56,25 @@ yarn-debug.log*
 # others
 .DS_Store
 Thumbs.db
+.gitignore
+AGENTS.md
+context.md
+docker-compose.gce.yml
+docker-compose.production.yml
+docker-compose.yml
+README.md
+app/controllers/items_controller.rb
+app/controllers/machines_controller.rb
+app/helpers/pagination_helper.rb
+app/views/items/_tree_row.html.slim
+app/views/items/index.html.slim
+app/views/machines/index.html.slim
+bin/capture_tree_view_screenshots
+docker/app/Dockerfile
+docker/web/Dockerfile
+docker/web/nginx/nginx.conf
+spec/rails_helper.rb
+spec/requests/items_spec.rb
+spec/requests/machines_spec.rb
+spec/system/tree_view_screenshots_spec.rb
+spec/views/items/index.html.slim_spec.rb

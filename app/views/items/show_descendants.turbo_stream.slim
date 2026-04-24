@@ -7,13 +7,13 @@
   = turbo_stream.remove tree_show_button_dom_id(@item)
 
   = turbo_stream.update tree_button_dom_id(@item) do
-    = render 'items/tree_toggle_content', item: @item, depth: display_depth, tree: @tree, children: @children
+    = render 'tree_view/tree_toggle_content', item: @item, depth: display_depth, tree: @tree, children: @children
 
   = turbo_stream.after tree_node_dom_id(@item) do
-    = render 'items/tree_children', items: @children, depth: display_depth, tree: @tree, row_partial: @row_partial
+    = render 'tree_view/tree_children', items: @children, depth: display_depth, tree: @tree, row_partial: @row_partial
 - else
   - @expanded_nodes.each do |node_state|
     = turbo_stream.update tree_button_dom_id(node_state[:item]) do
-      = render 'items/tree_toggle_content', item: node_state[:item], depth: node_state[:depth], tree: @tree, children: node_state[:children]
+      = render 'tree_view/tree_toggle_content', item: node_state[:item], depth: node_state[:depth], tree: @tree, children: node_state[:children]
     = turbo_stream.after tree_node_dom_id(node_state[:item]) do
-      = render 'items/tree_children', items: node_state[:children], depth: node_state[:depth], tree: @tree, row_partial: @row_partial
+      = render 'tree_view/tree_children', items: node_state[:children], depth: node_state[:depth], tree: @tree, row_partial: @row_partial

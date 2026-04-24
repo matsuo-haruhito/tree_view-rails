@@ -32,7 +32,7 @@ h5.mb-2 自己参照のみ版（Item.parent_item_id）
 
 div.table-sticky.max-vh-70
   div data-controller="tree-context-menu" data-action="contextmenu->tree-context-menu#open click@window->tree-context-menu#close keydown.esc@window->tree-context-menu#close resize@window->tree-context-menu#close scroll@window->tree-context-menu#close"
-    = render 'items/tree_context_menu'
+    = render 'tree_view/tree_context_menu'
     table.table.table-striped.table-hover.table-bordered.text-nowrap.w-100.tree-view-table
       thead
         tr
@@ -44,7 +44,7 @@ div.table-sticky.max-vh-70
           th コメント
           th 操作
       tbody
-        = render partial: 'items/tree_row', collection: @root_items, as: :item, locals: { tree: @tree, row_partial: @row_partial, collapsed: @collapsed_all }
+        = render partial: 'tree_view/tree_row', collection: @root_items, as: :item, locals: { tree: @tree, row_partial: @row_partial, collapsed: @collapsed_all }
 
 - if @root_page.present?
   .mt-2

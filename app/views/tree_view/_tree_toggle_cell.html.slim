@@ -2,4 +2,4 @@
 - children ||= tree.children_for(item)
 
 td.btn-cell.tree-toggle-cell id=tree_button_dom_id(item)
-  = render 'items/tree_toggle_content', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count
+  = render 'tree_view/tree_toggle_content', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count

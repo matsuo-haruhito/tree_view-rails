@@ -20,5 +20,11 @@ module TreeView
 
       app.config.importmap.paths << root.join("config/importmap.tree_view.rb").to_s
     end
+
+    initializer "tree_view.helpers" do
+      ActiveSupport.on_load(:action_controller_base) do
+        helper TreeViewHelper
+      end
+    end
   end
 end
