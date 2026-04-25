@@ -6,9 +6,11 @@ services:
     working_dir: /workspace
     volumes:
       - .:/workspace
-      - bundle_cache:/usr/local/bundle
+      - bundle_cache:${TREE_VIEW_GEM_BUNDLE_PATH:-/usr/local/bundle}
     tty: true
     stdin_open: true
+    environment:
+      BUNDLE_PATH: ${TREE_VIEW_GEM_BUNDLE_PATH:-/usr/local/bundle}
 
 volumes:
   bundle_cache:

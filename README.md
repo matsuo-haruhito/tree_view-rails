@@ -192,6 +192,7 @@ bundle exec rake build
 ローカル Ruby を入れずに試す場合は Docker を使えます。
 
 ```bash
+cp .env.example .env
 docker compose build
 docker compose run --rm app bundle install
 docker compose run --rm app bundle exec rspec
