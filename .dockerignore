@@ -1,0 +1,7 @@
+.git
+.gitignore
+.devcontainer
+pkg
+tmp
+vendor/bundle
+.rspec_status

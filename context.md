@@ -64,4 +64,5 @@
 - [x] importmap / asset 読み込み手順を README 上で過不足なく整理する
 - [x] static tree 用の API / partial を追加する
 - [x] gem に無関係な sample app view 残骸を取り除く
+- [x] container 上で `bundle exec rspec` を回せる最小 Docker 構成を追加する
 - [ ] 必要なら dummy app か integration spec を追加する

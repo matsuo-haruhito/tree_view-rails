@@ -1,0 +1,15 @@
+{
+  "name": "tree_view-rails",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rebornix.Ruby",
+        "Shopify.ruby-lsp"
+      ]
+    }
+  },
+  "postCreateCommand": "bundle install"
+}

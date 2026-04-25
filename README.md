@@ -187,6 +187,19 @@ bundle exec rspec
 bundle exec rake build
 ```
 
+### Container
+
+ローカル Ruby を入れずに試す場合は Docker を使えます。
+
+```bash
+docker compose build
+docker compose run --rm app bundle install
+docker compose run --rm app bundle exec rspec
+docker compose run --rm app bundle exec rake build
+```
+
+VS Code Dev Containers を使う場合は `.devcontainer/devcontainer.json` をそのまま使えます。
+
 ## License
 
 MIT

@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /workspace
+    volumes:
+      - .:/workspace
+      - bundle_cache:/usr/local/bundle
+    tty: true
+    stdin_open: true
+
+volumes:
+  bundle_cache:
