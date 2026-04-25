@@ -17,7 +17,8 @@ module TreeView
     initializer "tree_view.importmap", after: "importmap" do |app|
       next unless app.config.respond_to?(:importmap)
 
-      app.config.importmap.paths << root.join("config/importmap.tree_view.rb").to_s
+      app.config.importmap.paths =
+        app.config.importmap.paths + [root.join("config/importmap.tree_view.rb").to_s]
     end
 
     initializer "tree_view.helpers" do
