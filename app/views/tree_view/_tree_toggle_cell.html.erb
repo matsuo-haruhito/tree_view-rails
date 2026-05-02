@@ -1,0 +1,7 @@
+<% hidden_count = local_assigns[:hidden_count] %>
+<% children ||= tree.children_for(item) %>
+<% mode = local_assigns.fetch(:mode, (@tree_ui&.static? ? :static : :turbo)) %>
+
+<td class="btn-cell tree-toggle-cell" id="<%= tree_button_dom_id(item) %>">
+  <%= render 'tree_view/tree_toggle_content', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, mode: mode %>
+</td>
