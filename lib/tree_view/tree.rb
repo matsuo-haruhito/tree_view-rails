@@ -253,9 +253,15 @@ module TreeView
     end
 
     def normalize_orphan_strategy(value)
+      raise_invalid_orphan_strategy! unless value.respond_to?(:to_sym)
+
       normalized_value = value.to_sym
       return normalized_value if VALID_ORPHAN_STRATEGIES.include?(normalized_value)
 
+      raise_invalid_orphan_strategy!
+    end
+
+    def raise_invalid_orphan_strategy!
       raise ArgumentError, "orphan_strategy must be one of: #{VALID_ORPHAN_STRATEGIES.join(', ')}"
     end
 
