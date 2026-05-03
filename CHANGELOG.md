@@ -1,5 +1,15 @@
 # Changelog
 
+This changelog uses the following categories when applicable:
+
+- `Added` for new features.
+- `Changed` for changes in existing behavior.
+- `Fixed` for bug fixes.
+- `Deprecated` for features planned for removal.
+- `Removed` for removed features.
+
+Breaking changes and required migration notes should be called out explicitly in the relevant version section.
+
 ## 0.1.0 - Initial release
 
 ### Added
