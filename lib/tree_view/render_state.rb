@@ -6,7 +6,8 @@ module TreeView
     VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys collapsed_keys].freeze
     VALID_RENDER_SCOPE_KEYS = %i[max_depth max_leaf_distance].freeze
     VALID_TOGGLE_SCOPE_KEYS = %i[max_depth_from_root max_leaf_distance].freeze
-    VALID_SELECTION_KEYS = %i[enabled payload_builder checkbox_name disabled_builder disabled_reason_builder selected_keys].freeze
+    VALID_SELECTION_KEYS = %i[enabled visibility payload_builder checkbox_name disabled_builder disabled_reason_builder selected_keys].freeze
+    VALID_SELECTION_VISIBILITIES = %i[all roots leaves none].freeze
     DEFAULT_SELECTION_CHECKBOX_NAME = "selected_nodes[]"
 
     attr_reader :tree,
@@ -22,6 +23,7 @@ module TreeView
                 :expanded_keys,
                 :collapsed_keys,
                 :selection_enabled,
+                :selection_visibility,
                 :selection_payload_builder,
                 :selection_checkbox_name,
                 :selection_disabled_builder,
@@ -73,6 +75,7 @@ module TreeView
       @expanded_keys = Array(resolve_option(expanded_keys, initial_expansion_options[:expanded_keys])).freeze
       @collapsed_keys = Array(resolve_option(collapsed_keys, initial_expansion_options[:collapsed_keys])).freeze
       @selection_enabled = normalize_boolean(resolve_option(selectable, selection_options[:enabled]), :selectable)
+      @selection_visibility = normalize_selection_visibility(selection_options[:visibility])
       @selection_payload_builder = resolve_option(selection_payload_builder, selection_options[:payload_builder])
       @selection_checkbox_name = resolve_option(selection_checkbox_name, selection_options[:checkbox_name]) || DEFAULT_SELECTION_CHECKBOX_NAME
       @selection_disabled_builder = resolve_option(selection_disabled_builder, selection_options[:disabled_builder])
@@ -124,6 +127,20 @@ module TreeView
       return normalized_value if VALID_INITIAL_STATES.include?(normalized_value)
 
       raise ArgumentError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(', ')}"
+    end
+
+    def normalize_selection_visibility(value)
+      return :all if value.nil?
+      raise_invalid_selection_visibility! unless value.respond_to?(:to_sym)
+
+      normalized_value = value.to_sym
+      return normalized_value if VALID_SELECTION_VISIBILITIES.include?(normalized_value)
+
+      raise_invalid_selection_visibility!
+    end
+
+    def raise_invalid_selection_visibility!
+      raise ArgumentError, "selection visibility must be one of: #{VALID_SELECTION_VISIBILITIES.join(', ')}"
     end
 
     def normalize_non_negative_integer(value, name)
