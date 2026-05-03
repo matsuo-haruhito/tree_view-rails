@@ -1,0 +1,10 @@
+<td class="tree-selection-cell">
+  <%= check_box_tag selection_checkbox_name,
+                    tree_selection_value(item, tree, selection_payload_builder),
+                    false,
+                    id: tree_selection_checkbox_dom_id(item),
+                    class: "tree-selection-checkbox",
+                    data: {
+                      tree_selection_payload: tree_selection_payload(item, tree, selection_payload_builder)
+                    } %>
+</td>
