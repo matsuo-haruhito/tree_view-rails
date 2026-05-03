@@ -1,4 +1,23 @@
 module TreeViewHelper
+  def tree_view_rows(render_state, mode: nil, collapsed: nil)
+    previous_tree_ui = @tree_ui
+    @tree_ui = render_state.ui_config
+
+    render(
+      partial: "tree_view/tree_row",
+      collection: render_state.root_items,
+      as: :item,
+      locals: {
+        tree: render_state.tree,
+        row_partial: render_state.row_partial,
+        mode: mode,
+        collapsed: collapsed.nil? ? render_state.effective_initial_state == :collapsed : collapsed
+      }
+    )
+  ensure
+    @tree_ui = previous_tree_ui
+  end
+
   def tree_node_dom_id(item_or_id, ui: @tree_ui)
     resolved_ui(ui).node_dom_id(item_or_id)
   end
