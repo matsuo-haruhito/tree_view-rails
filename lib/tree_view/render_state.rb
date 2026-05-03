@@ -30,9 +30,9 @@ module TreeView
                 :selection_disabled_reason_builder,
                 :selection_selected_keys,
                 :row_class_builder,
-                :row_data_builder
+                :row_data_builder,
+                :depth_label_builder
 
-    # RenderState は「この画面ではどう描くか」を束ねる。
     def initialize(tree:,
                    root_items:,
                    row_partial:,
@@ -56,7 +56,8 @@ module TreeView
                    selection_selected_keys: nil,
                    selection: nil,
                    row_class_builder: nil,
-                   row_data_builder: nil)
+                   row_data_builder: nil,
+                   depth_label_builder: nil)
       initial_expansion_options = normalize_options(initial_expansion, :initial_expansion, VALID_INITIAL_EXPANSION_KEYS)
       render_scope_options = normalize_options(render_scope, :render_scope, VALID_RENDER_SCOPE_KEYS)
       toggle_scope_options = normalize_options(toggle_scope, :toggle_scope, VALID_TOGGLE_SCOPE_KEYS)
@@ -83,9 +84,11 @@ module TreeView
       @selection_selected_keys = Array(resolve_option(selection_selected_keys, selection_options[:selected_keys])).freeze
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
+      @depth_label_builder = depth_label_builder
 
       validate_builder!(row_class_builder, :row_class_builder)
       validate_builder!(row_data_builder, :row_data_builder)
+      validate_builder!(depth_label_builder, :depth_label_builder)
       validate_builder!(@selection_payload_builder, :selection_payload_builder)
       validate_builder!(@selection_disabled_builder, :selection_disabled_builder)
       validate_builder!(@selection_disabled_reason_builder, :selection_disabled_reason_builder)
@@ -96,7 +99,6 @@ module TreeView
       selection_enabled == true
     end
 
-    # 画面固有指定があればそれを優先し、なければ global config を使う。
     def effective_initial_state
       initial_state || TreeView.configuration.initial_state
     end
