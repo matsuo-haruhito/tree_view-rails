@@ -69,6 +69,24 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include("project_2:child")
     end
 
+    it "renders an empty state row when root items are empty and empty_message is given" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      empty_tree = TreeView::Tree.new(records: [], parent_id_method: :parent_item_id)
+      render_state = TreeView::RenderState.new(
+        tree: empty_tree,
+        root_items: [],
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        empty_message: "表示できるノードがありません"
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('class="tree-view-empty-row"')
+      expect(rendered).to include("表示できるノードがありません")
+    end
+
     it "renders current and highlighted row classes with host row classes" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       render_state = TreeView::RenderState.new(
@@ -175,6 +193,24 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('tree-toggle__hidden-count')
       expect(rendered).to include('visually-hidden')
       expect(rendered).to include(' descendants')
+    end
+
+    it "customizes hidden count messages" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        max_initial_depth: 1,
+        hidden_message_builder: ->(count) { "#{count}件省略" }
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include("2件省略")
+      expect(rendered).not_to include('>2<span class="visually-hidden">')
     end
 
     it "limits rendered rows with max_render_depth without hidden count" do
