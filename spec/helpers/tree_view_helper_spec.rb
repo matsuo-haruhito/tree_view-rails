@@ -87,6 +87,20 @@ RSpec.describe TreeViewHelper do
     end
   end
 
+  describe "tree render caches" do
+    it "clears cached leaf distance and branch maps" do
+      helper = helper_host_class.new(tree_ui: ui_config)
+
+      helper.instance_variable_set(:@tree_leaf_distance_maps, { 1 => { stale: true } })
+      helper.instance_variable_set(:@tree_branch_maps, { 1 => { stale: true } })
+
+      helper.send(:clear_tree_view_render_caches!)
+
+      expect(helper.instance_variable_get(:@tree_leaf_distance_maps)).to eq({})
+      expect(helper.instance_variable_get(:@tree_branch_maps)).to eq({})
+    end
+  end
+
   describe "tree_branch_info" do
     it "returns branch information for each node" do
       root_a = TestNode.new(id: 1, parent_item_id: nil, name: "root-a")

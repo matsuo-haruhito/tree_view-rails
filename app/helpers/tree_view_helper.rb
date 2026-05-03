@@ -4,6 +4,7 @@ module TreeViewHelper
   def tree_view_rows(render_state, mode: nil, collapsed: nil)
     previous_tree_ui = @tree_ui
     @tree_ui = render_state.ui_config
+    clear_tree_view_render_caches!
 
     render(
       partial: "tree_view/tree_row",
@@ -32,6 +33,7 @@ module TreeViewHelper
       }
     )
   ensure
+    clear_tree_view_render_caches!
     @tree_ui = previous_tree_ui
   end
 
@@ -185,6 +187,11 @@ module TreeViewHelper
   end
 
   private
+
+  def clear_tree_view_render_caches!
+    @tree_leaf_distance_maps = {}
+    @tree_branch_maps = {}
+  end
 
   def resolved_ui(ui)
     resolved = ui || @tree_ui || default_tree_ui
