@@ -334,7 +334,30 @@ selected_ids = selected_nodes.map { |node| node["id"] }
 
 TreeView gem は、checkboxの描画と選択payloadの受け渡しまでを担当します。
 削除・移動・関連付けなどの業務処理やAPI呼び出しはhost app側で実装します。
-親子連動選択、indeterminate表示、disabled状態、選択状態の永続化は初期実装の対象外です。
+親子連動選択、indeterminate表示、選択状態の永続化は初期実装の対象外です。
+
+### nodeごとにcheckboxをdisabledにする
+
+選択できないnodeがある場合は、`disabled_builder` を使います。
+理由を表示したい場合は `disabled_reason_builder` も指定できます。
+
+```ruby
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  selection: {
+    enabled: true,
+    disabled_builder: ->(document) { document.archived? },
+    disabled_reason_builder: ->(document) {
+      document.archived? ? "アーカイブ済みのため選択できません" : nil
+    }
+  }
+)
+```
+
+`disabled_reason_builder` の戻り値は、checkboxの `title` と `data-tree-selection-disabled-reason` に出力されます。
 
 ### 初期状態を折りたたみにする
 
