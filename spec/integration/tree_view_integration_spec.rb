@@ -153,6 +153,8 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('id="project_2"')
       expect(rendered).not_to include('id="project_3"')
       expect(rendered).to include('tree-toggle__hidden-count')
+      expect(rendered).to include('visually-hidden')
+      expect(rendered).to include(' descendants')
     end
 
     it "limits rendered rows with max_render_depth without hidden count" do
@@ -331,6 +333,8 @@ RSpec.describe "TreeView integration" do
       )
 
       expect(rendered).to include('/projects/1/hide?depth=0&amp;scope=all')
+      expect(rendered).to include('aria-expanded="true"')
+      expect(rendered).to include('aria-controls="project_1"')
     end
 
     it "passes object toggle scope when scope_format is object" do
