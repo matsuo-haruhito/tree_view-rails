@@ -28,11 +28,7 @@ Gem::Specification.new do |spec|
       "config/importmap.tree_view.rb",
       "docs/**/*",
       "lib/**/*",
-      "spec/**/*",
-      ".rspec",
       "CHANGELOG.md",
-      "Gemfile",
-      "Rakefile",
       "README.md",
       "LICENSE*",
       "tree_view.gemspec"
