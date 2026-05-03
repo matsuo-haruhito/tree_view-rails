@@ -2,8 +2,9 @@
 <% row_class_builder = local_assigns[:row_class_builder] %>
 <% row_data_builder = local_assigns[:row_data_builder] %>
 <% max_initial_depth = local_assigns[:max_initial_depth] %>
+<% expanded_keys = local_assigns[:expanded_keys] %>
 
 <% sorted_items.each do |child_item| %>
   <% current_depth = depth + 1 %>
-  <%= render 'tree_view/tree_row', item: child_item, depth: current_depth, tree: tree, row_partial: row_partial, mode: tree_toggle_mode(local_assigns[:mode]), max_initial_depth: max_initial_depth, row_class_builder: row_class_builder, row_data_builder: row_data_builder %>
+  <%= render 'tree_view/tree_row', item: child_item, depth: current_depth, tree: tree, row_partial: row_partial, mode: tree_toggle_mode(local_assigns[:mode]), max_initial_depth: max_initial_depth, expanded_keys: expanded_keys, row_class_builder: row_class_builder, row_data_builder: row_data_builder %>
 <% end %>
