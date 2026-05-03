@@ -4,6 +4,7 @@ require "tree_view/version"
 require "tree_view/configuration"
 require "tree_view/graph_adapter"
 require "tree_view/render_state"
+require "tree_view/selection_params"
 require "tree_view/toggle_scope"
 require "tree_view/traversal"
 require "tree_view/tree"
@@ -25,6 +26,10 @@ module TreeView
 
     def reset_configuration!
       @configuration = Configuration.new
+    end
+
+    def parse_selection_params(value)
+      SelectionParams.parse(value)
     end
   end
 end
