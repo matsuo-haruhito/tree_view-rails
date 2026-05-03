@@ -62,6 +62,7 @@ tree = TreeView::Tree.new(adapter: adapter)
 | `descendant_counts` | node_keyごとの子孫数を返す |
 | `node_key_for(record)` | nodeを識別するkeyを返す |
 | `sort_items(items)` | sorterに従ってitemsを並び替える |
+| `validate_unique_node_keys!` | node_key の重複を検出する開発時向けチェック |
 
 ### 並び順
 
@@ -78,6 +79,19 @@ TreeView::Tree.new(
 `sorter` は `call(items, tree)` できるオブジェクトを指定します。
 `sorter` の戻り値は `to_a` に応答する配列相当のオブジェクトにしてください。
 `nil` など配列相当ではない値を返した場合は、誤実装に気づきやすいよう `ArgumentError` を発生させます。
+
+### node_key の重複検出
+
+`validate_unique_node_keys!` は、開発時・テスト時に node_key の重複を明示的に検出するための optional API です。
+
+```ruby
+tree.validate_unique_node_keys!
+```
+
+node_key が重複している場合は、対象キーが分かる `ArgumentError` を発生させます。
+本番描画時に常に検証するものではなく、必要な画面やテストで明示的に呼び出す想定です。
+
+このAPIは node_key の重複検出のみを扱います。DOM ID の衝突検出は今後の拡張対象です。
 
 ## TreeView::GraphAdapter
 
@@ -160,6 +174,7 @@ viewから使う補助helperです。
 
 | メソッド | 説明 |
 |---|---|
+| `tree_view_rows(render_state)` | `RenderState` からroot行を描画する |
 | `tree_node_dom_id(item_or_id)` | nodeのDOM IDを返す |
 | `tree_button_dom_id(item)` | toggle cell用DOM IDを返す |
 | `tree_show_button_dom_id(item)` | show button用DOM IDを返す |
