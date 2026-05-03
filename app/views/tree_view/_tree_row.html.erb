@@ -18,6 +18,7 @@
 <% selection_disabled_reason_builder = local_assigns[:selection_disabled_reason_builder] %>
 <% selection_selected_keys = local_assigns[:selection_selected_keys] %>
 <% hidden_message_builder = local_assigns[:hidden_message_builder] %>
+<% depth_label_builder = local_assigns[:depth_label_builder] %>
 <% explicitly_expanded = tree_expanded_key?(item, tree, expanded_keys) %>
 <% explicitly_collapsed = tree_collapsed_key?(item, tree, collapsed_keys) %>
 <% depth_boundary = tree_initial_depth_boundary?(depth, max_initial_depth) %>
@@ -36,6 +37,7 @@
 <% row_aria[:current] = "page" if current_key == tree.node_key_for(item) %>
 <% descendant_count = tree.descendant_counts[tree.node_key_for(item)].to_i %>
 <% hidden_count = render_children && effectively_collapsed && descendant_count.positive? && render_self ? descendant_count : nil %>
+<% depth_label = tree_depth_label(item, depth, depth_label_builder) %>
 <% if render_self %>
   <%= tag.tr(id: tree_node_dom_id(item), class: row_classes.presence, data: row_data, aria: row_aria) do %>
     <% if selection_enabled %>
@@ -43,9 +45,12 @@
       <%= render 'tree_view/tree_selection_cell', item: item, tree: tree, selection_visible: selection_visible, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys %>
     <% end %>
     <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: hidden_message_builder, mode: mode, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance %>
+    <% if depth_label %>
+      <td class="tree-depth-label-cell"><span class="tree-depth-label"><%= depth_label %></span></td>
+    <% end %>
     <%= render row_partial, item: item %>
   <% end %>
 <% end %>
 <% if render_children && !effectively_collapsed %>
-  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, mode: mode, max_initial_depth: max_initial_depth, max_render_depth: max_render_depth, max_leaf_distance: max_leaf_distance, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, expanded_keys: expanded_keys, collapsed_keys: collapsed_keys, current_key: current_key, selection_enabled: selection_enabled, selection_visibility: selection_visibility, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys, hidden_message_builder: hidden_message_builder, row_class_builder: row_class_builder, row_data_builder: row_data_builder %>
+  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, mode: mode, max_initial_depth: max_initial_depth, max_render_depth: max_render_depth, max_leaf_distance: max_leaf_distance, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, expanded_keys: expanded_keys, collapsed_keys: collapsed_keys, current_key: current_key, selection_enabled: selection_enabled, selection_visibility: selection_visibility, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys, hidden_message_builder: hidden_message_builder, row_class_builder: row_class_builder, row_data_builder: row_data_builder, depth_label_builder: depth_label_builder %>
 <% end %>
