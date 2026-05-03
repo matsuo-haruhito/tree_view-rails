@@ -66,6 +66,7 @@ tree = TreeView::Tree.new(adapter: adapter)
 | `path_for(record)` | root側から指定nodeまでのpath配列を返す。records modeのみ |
 | `paths_for(items)` | 複数nodeのpath配列を返す。records modeのみ |
 | `path_tree_for(items)` | 複数nodeから親階層を補完した通常向きTreeを返す。records modeのみ |
+| `reverse_tree_for(items)` | 複数nodeを起点に親方向へ辿る逆向きTreeを返す。records modeのみ |
 | `descendant_counts` | node_keyごとの子孫数を返す |
 | `node_key_for(record)` | nodeを識別するkeyを返す |
 | `sort_items(items)` | sorterに従ってitemsを並び替える |
@@ -109,6 +110,7 @@ expanded_keys = paths.flatten.map { |item| tree.node_key_for(item) }.uniq
 | `path_for(item)` | root側から `item` までの配列 |
 | `paths_for(items)` | 複数itemに対する `path_for` の配列 |
 | `path_tree_for(items)` | 複数itemに対するpathを通常向きTreeとしてまとめた `TreeView::PathTree` |
+| `reverse_tree_for(items)` | 複数itemに対するpathを子 → 親方向のTreeとしてまとめた `TreeView::ReverseTree` |
 
 親がrecords内に存在しない orphan node の場合、`parent_for` は `nil`、`ancestors_for` は空配列、`path_for` は対象nodeのみを返します。
 親方向の循環参照を検出した場合は `ArgumentError` を発生させます。
@@ -123,6 +125,20 @@ path_tree = tree.path_tree_for(matched_documents)
 render_state = TreeView::RenderState.new(
   tree: path_tree,
   root_items: path_tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_state: :expanded
+)
+```
+
+`reverse_tree_for` は、検索結果などを起点に matched item → parent → root の逆向きTreeを作ります。
+
+```ruby
+reverse_tree = tree.reverse_tree_for(matched_documents)
+
+render_state = TreeView::RenderState.new(
+  tree: reverse_tree,
+  root_items: reverse_tree.root_items,
   row_partial: "documents/tree_columns",
   ui_config: tree_ui,
   initial_state: :expanded
@@ -144,6 +160,34 @@ render_state = TreeView::RenderState.new(
 | `sort_items(items)` | base treeの `sort_items` に委譲する |
 
 `PathTree` は、base tree 全体ではなく、指定itemへ至るpath上のnodeだけを描画対象にします。
+表示方向は通常Treeと同じ root → parent → matched item です。
+
+## TreeView::ReverseTree
+
+`TreeView::ReverseTree` は、`TreeView::Tree#reverse_tree_for(items)` から生成される、子ノード起点の逆向きTreeです。
+
+既存の `RenderState` / `tree_view_rows` と接続できるよう、通常Treeに近いインターフェースを持ちます。
+
+| メソッド | 説明 |
+|---|---|
+| `root_items(root_parent_id = nil)` | 起点となる matched item を返す |
+| `children_for(record)` | ReverseTree内で指定nodeの親方向nodeを返す |
+| `descendant_counts` | ReverseTree内の子孫数を返す。ここでの子孫は表示上の子、つまり親方向node |
+| `node_key_for(record)` | base treeの `node_key_for` に委譲する |
+| `sort_items(items)` | base treeの `sort_items` に委譲する |
+
+`ReverseTree` は matched item → parent → root の向きで表示します。
+通常向きの親階層補完Treeとは用途が異なります。
+
+| API | 表示方向 | 主な用途 |
+|---|---|---|
+| `path_tree_for(items)` | root → parent → matched item | 検索結果を通常の階層構造内で確認する |
+| `reverse_tree_for(items)` | matched item → parent → root | 子ノード一覧を起点に親方向へ辿る |
+
+複数の起点nodeが同じ親・祖先を共有する場合、同じnodeを複数箇所に描画するとDOM IDが重複します。
+そのため `ReverseTree` では、共有された親方向nodeは最初に現れたreverse pathにのみ接続します。
+後続の起点nodeから同じ共有祖先へは接続しません。
+同じ祖先を各起点node配下に重複表示したい場合は、DOM ID生成やnode_keyを分離する別設計が必要です。
 
 ### orphan node の扱い
 

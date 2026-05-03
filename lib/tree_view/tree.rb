@@ -137,6 +137,10 @@ module TreeView
       TreeView::PathTree.new(base_tree: self, paths: paths_for(items))
     end
 
+    def reverse_tree_for(items)
+      TreeView::ReverseTree.new(base_tree: self, paths: paths_for(items))
+    end
+
     def node_key_for(record)
       if adapter_mode?
         adapter.node_key_for(record, id_method: id_method)
