@@ -29,6 +29,9 @@ module TreeViewHelper
         selection_disabled_builder: render_state.selection_disabled_builder,
         selection_disabled_reason_builder: render_state.selection_disabled_reason_builder,
         selection_selected_keys: render_state.selection_selected_keys,
+        current_key: render_state.current_key,
+        active_keys: render_state.active_keys,
+        highlighted_keys: render_state.highlighted_keys,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder
       }
@@ -54,8 +57,15 @@ module TreeViewHelper
     "#{tree_node_dom_id(item, ui: ui)}_selection"
   end
 
-  def tree_row_classes(item, builder = nil)
-    Array(builder&.call(item)).flatten.compact_blank
+  def tree_row_classes(item, builder = nil, tree: nil, current_key: nil, active_keys: nil, highlighted_keys: nil)
+    classes = Array(builder&.call(item)).flatten.compact_blank
+    return classes if tree.nil?
+
+    node_key = tree.node_key_for(item)
+    classes << "is-current" if !current_key.nil? && node_key == current_key
+    classes << "is-active" if Array(active_keys).include?(node_key)
+    classes << "is-highlighted" if Array(highlighted_keys).include?(node_key)
+    classes
   end
 
   def tree_row_data(item, builder = nil)
