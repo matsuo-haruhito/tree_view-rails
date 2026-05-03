@@ -295,6 +295,47 @@ reverse_tree = base_tree.reverse_tree_for(matched_documents)
 | `path_tree_for(items)` | root → parent → matched item | 通常の階層構造内で検索結果を確認する |
 | `reverse_tree_for(items)` | matched item → parent → root | 子node一覧から親方向へ辿る |
 
+### 複数nodeをcheckboxで選択する
+
+TreeView上で複数nodeを選択し、host app側のcontrollerで一括処理したい場合は `selection:` を指定します。
+
+```ruby
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  selection: {
+    enabled: true,
+    checkbox_name: "selected_nodes[]",
+    payload_builder: ->(document) {
+      {
+        key: tree.node_key_for(document),
+        id: document.id,
+        type: document.class.name
+      }
+    }
+  }
+)
+```
+
+選択checkboxの `value` にはJSON文字列が入ります。
+
+```json
+{"key":1,"id":1,"type":"Document"}
+```
+
+host app側では、通常のformやTurbo formから送られた `params[:selected_nodes]` をparseして一括処理します。
+
+```ruby
+selected_nodes = Array(params[:selected_nodes]).map { |value| JSON.parse(value) }
+selected_ids = selected_nodes.map { |node| node["id"] }
+```
+
+TreeView gem は、checkboxの描画と選択payloadの受け渡しまでを担当します。
+削除・移動・関連付けなどの業務処理やAPI呼び出しはhost app側で実装します。
+親子連動選択、indeterminate表示、disabled状態、選択状態の永続化は初期実装の対象外です。
+
 ### 初期状態を折りたたみにする
 
 最初はrootだけ表示し、ユーザー操作で展開したい場合は `initial_state: :collapsed` を指定します。
