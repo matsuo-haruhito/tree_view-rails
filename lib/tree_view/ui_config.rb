@@ -22,6 +22,13 @@ module TreeView
                    toggle_all_path_builder: nil,
                    indent_unit: '&ensp; &ensp; &ensp;',
                    scope_format: :string)
+      validate_builder!(node_dom_id_builder, :node_dom_id_builder)
+      validate_builder!(button_dom_id_builder, :button_dom_id_builder)
+      validate_builder!(show_button_dom_id_builder, :show_button_dom_id_builder)
+      validate_optional_builder!(hide_descendants_path_builder, :hide_descendants_path_builder)
+      validate_optional_builder!(show_descendants_path_builder, :show_descendants_path_builder)
+      validate_optional_builder!(toggle_all_path_builder, :toggle_all_path_builder)
+
       @node_dom_id_builder = node_dom_id_builder
       @button_dom_id_builder = button_dom_id_builder
       @show_button_dom_id_builder = show_button_dom_id_builder
@@ -73,6 +80,18 @@ module TreeView
     end
 
     private
+
+    def validate_builder!(builder, name)
+      return if builder.respond_to?(:call)
+
+      raise ArgumentError, "#{name} must respond to call"
+    end
+
+    def validate_optional_builder!(builder, name)
+      return if builder.nil?
+
+      validate_builder!(builder, name)
+    end
 
     def normalize_scope_format(value)
       normalized_value = value.to_sym
