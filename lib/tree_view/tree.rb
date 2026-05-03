@@ -94,6 +94,45 @@ module TreeView
       Array(items_by_parent_id[record.public_send(id_method)])
     end
 
+    def parent_for(record)
+      ensure_records_path_helpers!
+
+      parent_id = record.public_send(parent_id_method)
+      return nil if parent_id.nil?
+
+      items_by_id[parent_id]
+    end
+
+    def ancestors_for(record)
+      ensure_records_path_helpers!
+
+      ancestors = []
+      visiting = {}
+      current = record
+
+      loop do
+        current_key = node_key_for(current)
+        raise ArgumentError, "cycle detected in parent path for node #{current_key.inspect}" if visiting[current_key]
+
+        visiting[current_key] = true
+        parent = parent_for(current)
+        break unless parent
+
+        ancestors.unshift(parent)
+        current = parent
+      end
+
+      ancestors
+    end
+
+    def path_for(record)
+      ancestors_for(record) + [record]
+    end
+
+    def paths_for(items)
+      Array(items).map { |item| path_for(item) }
+    end
+
     def node_key_for(record)
       if adapter_mode?
         adapter.node_key_for(record, id_method: id_method)
@@ -156,6 +195,12 @@ module TreeView
 
     def records_mode?
       !adapter_mode? && !resolver_mode?
+    end
+
+    def ensure_records_path_helpers!
+      return if records_mode?
+
+      raise ArgumentError, "parent path helpers are only supported in records mode"
     end
 
     def each_root_candidate

@@ -61,6 +61,10 @@ tree = TreeView::Tree.new(adapter: adapter)
 |---|---|
 | `root_items(root_parent_id = nil)` | root node を返す |
 | `children_for(record)` | 指定nodeのchildrenを返す |
+| `parent_for(record)` | 指定nodeの親を返す。records modeのみ |
+| `ancestors_for(record)` | root側から親までの祖先配列を返す。records modeのみ |
+| `path_for(record)` | root側から指定nodeまでのpath配列を返す。records modeのみ |
+| `paths_for(items)` | 複数nodeのpath配列を返す。records modeのみ |
 | `descendant_counts` | node_keyごとの子孫数を返す |
 | `node_key_for(record)` | nodeを識別するkeyを返す |
 | `sort_items(items)` | sorterに従ってitemsを並び替える |
@@ -82,6 +86,33 @@ TreeView::Tree.new(
 `sorter` は `call(items, tree)` できるオブジェクトを指定します。
 `sorter` の戻り値は `to_a` に応答する配列相当のオブジェクトにしてください。
 `nil` など配列相当ではない値を返した場合は、誤実装に気づきやすいよう `ArgumentError` を発生させます。
+
+### 親方向 path helper
+
+records mode では、検索結果や子ノード一覧から親階層を確認するための補助APIを使えます。
+
+```ruby
+tree = TreeView::Tree.new(
+  records: documents,
+  parent_id_method: :parent_document_id
+)
+
+paths = tree.paths_for(matched_documents)
+expanded_keys = paths.flatten.map { |item| tree.node_key_for(item) }.uniq
+```
+
+| メソッド | 戻り値 |
+|---|---|
+| `parent_for(item)` | `item` の親。親IDが `nil`、または親がrecords内に存在しない場合は `nil` |
+| `ancestors_for(item)` | root側から親までの祖先配列 |
+| `path_for(item)` | root側から `item` までの配列 |
+| `paths_for(items)` | 複数itemに対する `path_for` の配列 |
+
+親がrecords内に存在しない orphan node の場合、`parent_for` は `nil`、`ancestors_for` は空配列、`path_for` は対象nodeのみを返します。
+親方向の循環参照を検出した場合は `ArgumentError` を発生させます。
+resolver mode / adapter mode では、これらの親方向helperは未対応です。
+
+親階層を補完した通常向きTreeをそのまま描画する `path_tree_for` 相当の機能は、後続Issue #40 で扱います。
 
 ### orphan node の扱い
 
