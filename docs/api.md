@@ -76,6 +76,8 @@ TreeView::Tree.new(
 ```
 
 `sorter` は `call(items, tree)` できるオブジェクトを指定します。
+`sorter` の戻り値は `to_a` に応答する配列相当のオブジェクトにしてください。
+`nil` など配列相当ではない値を返した場合は、誤実装に気づきやすいよう `ArgumentError` を発生させます。
 
 ## TreeView::GraphAdapter
 

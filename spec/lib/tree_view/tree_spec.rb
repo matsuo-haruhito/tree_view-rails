@@ -107,6 +107,35 @@ RSpec.describe TreeView::Tree do
 
       expect(tree.sort_items(tree.children_for(root))).to eq([child_a, child_b])
     end
+
+    it "raises a clear error when sorter returns nil" do
+      root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
+      tree = described_class.new(
+        records: [root],
+        parent_id_method: :parent_item_id,
+        sorter: ->(_items, _tree) { nil }
+      )
+
+      expect do
+        tree.sort_items([root])
+      end.to raise_error(ArgumentError, /sorter must return an Array-like object/)
+    end
+
+    it "accepts array-like sorter return values" do
+      root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
+      array_like_items = Struct.new(:items) do
+        def to_a
+          items
+        end
+      end
+      tree = described_class.new(
+        records: [root],
+        parent_id_method: :parent_item_id,
+        sorter: ->(items, _tree) { array_like_items.new(items) }
+      )
+
+      expect(tree.sort_items([root])).to eq([root])
+    end
   end
 
   describe "#node_key_for" do
