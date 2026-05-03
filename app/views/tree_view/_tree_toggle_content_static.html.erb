@@ -16,7 +16,7 @@
   <div class="tree-toggle__control">
     <span class="tree-toggle__level"><%= tree_toggle_label(depth) %></span>
     <% if hidden_count %>
-      <span class="tree-toggle__hidden-count"><%= hidden_count %></span>
+      <span class="tree-toggle__hidden-count"><%= hidden_count %><span class="visually-hidden"> descendants</span></span>
     <% end %>
   </div>
 </div>
