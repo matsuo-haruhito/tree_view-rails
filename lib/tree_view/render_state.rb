@@ -6,7 +6,7 @@ module TreeView
     VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys].freeze
     VALID_RENDER_SCOPE_KEYS = %i[max_depth max_leaf_distance].freeze
     VALID_TOGGLE_SCOPE_KEYS = %i[max_depth_from_root max_leaf_distance].freeze
-    VALID_SELECTION_KEYS = %i[enabled payload_builder checkbox_name disabled_builder disabled_reason_builder].freeze
+    VALID_SELECTION_KEYS = %i[enabled payload_builder checkbox_name disabled_builder disabled_reason_builder selected_keys].freeze
     DEFAULT_SELECTION_CHECKBOX_NAME = "selected_nodes[]"
 
     attr_reader :tree,
@@ -25,6 +25,7 @@ module TreeView
                 :selection_checkbox_name,
                 :selection_disabled_builder,
                 :selection_disabled_reason_builder,
+                :selection_selected_keys,
                 :row_class_builder,
                 :row_data_builder
 
@@ -48,6 +49,7 @@ module TreeView
                    selection_checkbox_name: nil,
                    selection_disabled_builder: nil,
                    selection_disabled_reason_builder: nil,
+                   selection_selected_keys: nil,
                    selection: nil,
                    row_class_builder: nil,
                    row_data_builder: nil)
@@ -72,6 +74,7 @@ module TreeView
       @selection_checkbox_name = resolve_option(selection_checkbox_name, selection_options[:checkbox_name]) || DEFAULT_SELECTION_CHECKBOX_NAME
       @selection_disabled_builder = resolve_option(selection_disabled_builder, selection_options[:disabled_builder])
       @selection_disabled_reason_builder = resolve_option(selection_disabled_reason_builder, selection_options[:disabled_reason_builder])
+      @selection_selected_keys = Array(resolve_option(selection_selected_keys, selection_options[:selected_keys])).freeze
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
 
