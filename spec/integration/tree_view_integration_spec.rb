@@ -69,6 +69,26 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include("project_2:child")
     end
 
+    it "renders current and highlighted row classes with host row classes" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        current_key: tree.node_key_for(child),
+        highlighted_keys: [tree.node_key_for(grandchild)],
+        row_class_builder: ->(item) { "host-#{item.name}" }
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('class="host-child is-current"')
+      expect(rendered).to include('class="host-grandchild is-highlighted"')
+      expect(rendered).to include('class="host-root"')
+    end
+
     it "renders a PathTree through tree_view_rows helper" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       path_tree = tree.path_tree_for([grandchild])
