@@ -203,6 +203,32 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('/projects/1/hide?depth=0&amp;scope=all')
     end
 
+    it "passes object toggle scope when scope_format is object" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build(
+        hide_descendants_path_builder: ->(item, depth, scope) {
+          "/projects/#{item.id}/hide?depth=#{depth}&toggle_depth=#{scope.toggle_depth}&within_scope=#{scope.within_scope?}"
+        },
+        show_descendants_path_builder: ->(item, depth, scope) {
+          "/projects/#{item.id}/show?depth=#{depth}&toggle_depth=#{scope.toggle_depth}&within_scope=#{scope.within_scope?}"
+        },
+        toggle_all_path_builder: ->(state) { "/projects/toggle_all?state=#{state}" },
+        scope_format: :object
+      )
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        max_toggle_depth_from_root: 2
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('/projects/1/hide?depth=0&amp;toggle_depth=2&amp;within_scope=true')
+      expect(rendered).to include('/projects/2/hide?depth=1&amp;toggle_depth=2&amp;within_scope=true')
+    end
+
     it "raises a clear error for invalid toggle modes" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       view = build_view(tree_ui: tree_ui)

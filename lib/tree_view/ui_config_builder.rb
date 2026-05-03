@@ -8,7 +8,11 @@ module TreeView
       @key_resolver = key_resolver || ->(item_or_id) { item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id }
     end
 
-    def build(show_descendants_path_builder:, hide_descendants_path_builder:, toggle_all_path_builder:, indent_unit: "&ensp; &ensp; &ensp;")
+    def build(show_descendants_path_builder:,
+              hide_descendants_path_builder:,
+              toggle_all_path_builder:,
+              indent_unit: "&ensp; &ensp; &ensp;",
+              scope_format: :string)
       UiConfig.new(
         node_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_#{@key_resolver.call(item_or_id)}" },
         button_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_button_box_#{@key_resolver.call(item_or_id)}" },
@@ -16,7 +20,8 @@ module TreeView
         hide_descendants_path_builder: hide_descendants_path_builder,
         show_descendants_path_builder: show_descendants_path_builder,
         toggle_all_path_builder: toggle_all_path_builder,
-        indent_unit: indent_unit
+        indent_unit: indent_unit,
+        scope_format: scope_format
       )
     end
 

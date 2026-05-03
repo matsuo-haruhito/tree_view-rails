@@ -14,6 +14,7 @@ module TreeViewHelper
         collapsed: collapsed.nil? ? render_state.effective_initial_state == :collapsed : collapsed,
         max_initial_depth: render_state.max_initial_depth,
         max_render_depth: render_state.max_render_depth,
+        max_toggle_depth_from_root: render_state.max_toggle_depth_from_root,
         expanded_keys: render_state.expanded_keys,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder
@@ -53,6 +54,17 @@ module TreeViewHelper
 
   def tree_render_children?(depth, max_render_depth)
     max_render_depth.nil? || depth < max_render_depth
+  end
+
+  def tree_toggle_scope(depth:, max_toggle_depth_from_root:, mode: :all, ui: @tree_ui)
+    resolved = resolved_ui(ui)
+    return mode.to_s unless resolved.object_scope?
+
+    TreeView::ToggleScope.new(
+      mode: mode,
+      current_depth: depth,
+      max_depth_from_root: max_toggle_depth_from_root
+    )
   end
 
   def tree_expanded_key?(item, tree, expanded_keys)

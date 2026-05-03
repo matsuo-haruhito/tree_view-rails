@@ -2,6 +2,8 @@
 
 module TreeView
   class UiConfig
+    SCOPE_FORMATS = %i[string object].freeze
+
     # DOM ID と path helper 周辺の UI 依存だけを受け持つ。
     attr_reader :node_dom_id_builder,
                 :button_dom_id_builder,
@@ -9,7 +11,8 @@ module TreeView
                 :hide_descendants_path_builder,
                 :show_descendants_path_builder,
                 :toggle_all_path_builder,
-                :indent_unit
+                :indent_unit,
+                :scope_format
 
     def initialize(node_dom_id_builder:,
                    button_dom_id_builder:,
@@ -17,7 +20,8 @@ module TreeView
                    hide_descendants_path_builder: nil,
                    show_descendants_path_builder: nil,
                    toggle_all_path_builder: nil,
-                   indent_unit: '&ensp; &ensp; &ensp;')
+                   indent_unit: '&ensp; &ensp; &ensp;',
+                   scope_format: :string)
       @node_dom_id_builder = node_dom_id_builder
       @button_dom_id_builder = button_dom_id_builder
       @show_button_dom_id_builder = show_button_dom_id_builder
@@ -25,6 +29,7 @@ module TreeView
       @show_descendants_path_builder = show_descendants_path_builder
       @toggle_all_path_builder = toggle_all_path_builder
       @indent_unit = indent_unit
+      @scope_format = normalize_scope_format(scope_format)
     end
 
     def node_dom_id(item_or_id)
@@ -51,6 +56,10 @@ module TreeView
       show_descendants_path_builder.call(item, toggle_depth, scope)
     end
 
+    def object_scope?
+      scope_format == :object
+    end
+
     def toggle_all_path(state:)
       return nil unless toggle_all_path_builder
 
@@ -61,6 +70,15 @@ module TreeView
       hide_descendants_path_builder.nil? &&
         show_descendants_path_builder.nil? &&
         toggle_all_path_builder.nil?
+    end
+
+    private
+
+    def normalize_scope_format(value)
+      normalized_value = value.to_sym
+      return normalized_value if SCOPE_FORMATS.include?(normalized_value)
+
+      raise ArgumentError, "scope_format must be one of: #{SCOPE_FORMATS.join(', ')}"
     end
   end
 end
