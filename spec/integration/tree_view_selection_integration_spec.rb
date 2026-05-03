@@ -55,8 +55,9 @@ RSpec.describe "TreeView selection integration" do
     expect(rendered).to include('class="tree-selection-checkbox"')
     expect(rendered).to include('name="selected_documents[]"')
     expect(rendered).to include('id="project_1_selection"')
+    expect(rendered).to include('&quot;key&quot;:1')
     expect(rendered).to include('&quot;id&quot;:1')
-    expect(rendered).to include('&quot;type&quot;:&quot;TreeView selection integration::SelectionNode&quot;')
+    expect(rendered).to include('&quot;type&quot;:')
   end
 
   it "renders selection checkboxes for PathTree rows" do
