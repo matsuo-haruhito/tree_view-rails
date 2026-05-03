@@ -36,7 +36,8 @@ module TreeViewHelper
         selection_selected_keys: render_state.selection_selected_keys,
         hidden_message_builder: render_state.hidden_message_builder,
         row_class_builder: render_state.row_class_builder,
-        row_data_builder: render_state.row_data_builder
+        row_data_builder: render_state.row_data_builder,
+        depth_label_builder: render_state.depth_label_builder
       }
     )
   ensure
@@ -76,6 +77,12 @@ module TreeViewHelper
     return hidden_count if builder.nil?
 
     builder.call(hidden_count)
+  end
+
+  def tree_depth_label(item, depth, builder = nil)
+    return nil unless builder
+
+    builder.call(item, depth).presence
   end
 
   def tree_selection_payload(item, tree, builder = nil)
