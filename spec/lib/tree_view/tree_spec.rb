@@ -123,10 +123,15 @@ RSpec.describe TreeView::Tree do
 
     it "accepts array-like sorter return values" do
       root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
+      array_like_items = Struct.new(:items) do
+        def to_a
+          items
+        end
+      end
       tree = described_class.new(
         records: [root],
         parent_id_method: :parent_item_id,
-        sorter: ->(items, _tree) { Set.new(items) }
+        sorter: ->(items, _tree) { array_like_items.new(items) }
       )
 
       expect(tree.sort_items([root])).to eq([root])
