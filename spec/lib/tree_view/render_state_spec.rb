@@ -40,6 +40,18 @@ RSpec.describe TreeView::RenderState do
     end.to raise_error(ArgumentError, /max_initial_depth/)
   end
 
+  it "stores expanded_keys when given" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      expanded_keys: [1, 2]
+    )
+
+    expect(state.expanded_keys).to eq([1, 2])
+  end
+
   it "stores row attribute builders when given" do
     row_class_builder = ->(item) { item.name }
     row_data_builder = ->(item) { { name: item.name } }

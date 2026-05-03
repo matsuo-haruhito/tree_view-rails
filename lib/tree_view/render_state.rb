@@ -10,6 +10,7 @@ module TreeView
                 :ui_config,
                 :initial_state,
                 :max_initial_depth,
+                :expanded_keys,
                 :row_class_builder,
                 :row_data_builder
 
@@ -20,6 +21,7 @@ module TreeView
                    ui_config:,
                    initial_state: nil,
                    max_initial_depth: nil,
+                   expanded_keys: [],
                    row_class_builder: nil,
                    row_data_builder: nil)
       @tree = tree
@@ -28,6 +30,7 @@ module TreeView
       @ui_config = ui_config
       @initial_state = normalize_initial_state(initial_state)
       @max_initial_depth = normalize_max_initial_depth(max_initial_depth)
+      @expanded_keys = Array(expanded_keys).freeze
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
 
