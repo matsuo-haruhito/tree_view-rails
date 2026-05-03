@@ -16,6 +16,22 @@
 - root / children の並び順は `TreeView::Tree` の sorter で一元化する
 - 既定の並び順は後方互換のため子孫数昇順とする
 
+## deep tree に関する方針
+
+現時点の `TreeView` は、通常の業務アプリで扱う親子階層を主対象とします。
+
+`descendant_counts`、leaf distance、branch map、partial render には再帰的な処理が含まれるため、極端に深いツリーでは Ruby の stack limit や描画コストの影響を受ける可能性があります。
+
+そのため、深い階層を扱う host app では以下を優先します。
+
+- `max_render_depth` で一度に描画する深さを制限する
+- `max_initial_depth` で初期表示時の展開範囲を制限する
+- 必要に応じて `max_leaf_distance` で末端付近だけを表示する
+- `path_tree_for` / `reverse_tree_for` で検索結果や注目ノード周辺に表示範囲を絞る
+- 非常に深いデータをそのまま全展開する UI は避ける
+
+将来的に極端な deep tree を正式にサポートする場合は、再帰 walk の一部を iterative な実装へ置き換える、または最大深度ガードを追加することを検討します。
+
 ## 含めるもの
 
 - `lib/tree_view*`
@@ -61,5 +77,6 @@
 - ノード単位の初期展開状態
 - row class / data属性 builder
 - node_key / DOM ID 衝突検出
+- deep tree 向けの iterative walk または最大深度ガード
 
 これらも、CRUDや業務処理をgemに取り込むのではなく、host app が表示を組み立てるための拡張ポイントとして実装します。
