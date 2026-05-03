@@ -152,6 +152,51 @@ RSpec.describe "TreeView integration" do
       expect(rendered).not_to include('tree-toggle__hidden-count')
     end
 
+    it "limits rendered rows with max_leaf_distance from leaves without hidden count" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        max_leaf_distance: 1
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).not_to include('id="project_1"')
+      expect(rendered).to include('id="project_2"')
+      expect(rendered).to include('id="project_3"')
+      expect(rendered).to include('id="project_4"')
+      expect(rendered).not_to include('tree-toggle__hidden-count')
+    end
+
+    it "uses the shortest distance when a node has multiple leaves" do
+      short_leaf = IntegrationNode.new(id: 5, parent_item_id: 1, name: "short_leaf")
+      long_parent = IntegrationNode.new(id: 6, parent_item_id: 1, name: "long_parent")
+      long_child = IntegrationNode.new(id: 7, parent_item_id: 6, name: "long_child")
+      long_leaf = IntegrationNode.new(id: 8, parent_item_id: 7, name: "long_leaf")
+      mixed_tree = TreeView::Tree.new(records: [root, short_leaf, long_parent, long_child, long_leaf], parent_id_method: :parent_item_id)
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: mixed_tree,
+        root_items: mixed_tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        max_leaf_distance: 1
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('id="project_1"')
+      expect(rendered).to include('id="project_5"')
+      expect(rendered).not_to include('id="project_6"')
+      expect(rendered).to include('id="project_7"')
+      expect(rendered).to include('id="project_8"')
+    end
+
     it "expands nodes listed in expanded_keys" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       render_state = TreeView::RenderState.new(

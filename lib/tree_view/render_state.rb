@@ -11,6 +11,7 @@ module TreeView
                 :initial_state,
                 :max_initial_depth,
                 :max_render_depth,
+                :max_leaf_distance,
                 :max_toggle_depth_from_root,
                 :expanded_keys,
                 :row_class_builder,
@@ -24,6 +25,7 @@ module TreeView
                    initial_state: nil,
                    max_initial_depth: nil,
                    max_render_depth: nil,
+                   max_leaf_distance: nil,
                    max_toggle_depth_from_root: nil,
                    expanded_keys: [],
                    row_class_builder: nil,
@@ -35,6 +37,7 @@ module TreeView
       @initial_state = normalize_initial_state(initial_state)
       @max_initial_depth = normalize_non_negative_integer(max_initial_depth, :max_initial_depth)
       @max_render_depth = normalize_non_negative_integer(max_render_depth, :max_render_depth)
+      @max_leaf_distance = normalize_non_negative_integer(max_leaf_distance, :max_leaf_distance)
       @max_toggle_depth_from_root = normalize_non_negative_integer(max_toggle_depth_from_root, :max_toggle_depth_from_root)
       @expanded_keys = Array(expanded_keys).freeze
       @row_class_builder = row_class_builder

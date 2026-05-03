@@ -14,6 +14,7 @@ module TreeViewHelper
         collapsed: collapsed.nil? ? render_state.effective_initial_state == :collapsed : collapsed,
         max_initial_depth: render_state.max_initial_depth,
         max_render_depth: render_state.max_render_depth,
+        max_leaf_distance: render_state.max_leaf_distance,
         max_toggle_depth_from_root: render_state.max_toggle_depth_from_root,
         expanded_keys: render_state.expanded_keys,
         row_class_builder: render_state.row_class_builder,
@@ -54,6 +55,17 @@ module TreeViewHelper
 
   def tree_render_children?(depth, max_render_depth)
     max_render_depth.nil? || depth < max_render_depth
+  end
+
+  def tree_render_leaf_distance?(item, tree, max_leaf_distance)
+    return true if max_leaf_distance.nil?
+
+    distance = tree_leaf_distance(item, tree)
+    !distance.nil? && distance <= max_leaf_distance
+  end
+
+  def tree_leaf_distance(item, tree)
+    tree_leaf_distances(tree)[tree.node_key_for(item)]
   end
 
   def tree_toggle_scope(depth:, max_toggle_depth_from_root:, mode: :all, ui: @tree_ui)
@@ -156,6 +168,29 @@ module TreeViewHelper
     end
 
     tree.root_items.map { |root| walk.call(root, 0) }.max.to_i
+  end
+
+  def tree_leaf_distances(tree)
+    @tree_leaf_distance_maps ||= {}
+    @tree_leaf_distance_maps[tree.object_id] ||= begin
+      distances = {}
+
+      walk = lambda do |node|
+        node_key = tree.node_key_for(node)
+        return distances[node_key] if distances.key?(node_key)
+
+        children = tree.children_for(node)
+        distances[node_key] = if children.empty?
+                                0
+                              else
+                                child_distances = children.map { |child| walk.call(child) }.compact
+                                child_distances.empty? ? nil : child_distances.min + 1
+                              end
+      end
+
+      tree.root_items.each { |root| walk.call(root) }
+      distances
+    end
   end
 
   def tree_branch_map(tree)

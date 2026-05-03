@@ -215,6 +215,7 @@ render_state = TreeView::RenderState.new(
   initial_state: :expanded,
   max_initial_depth: 2,
   max_render_depth: 2,
+  max_leaf_distance: 2,
   max_toggle_depth_from_root: 2,
   expanded_keys: [root_key, child_key],
   row_class_builder: ->(item) { item.archived? ? "is-archived" : nil },
@@ -231,6 +232,7 @@ render_state = TreeView::RenderState.new(
 | `initial_state:` | no | `:expanded` または `:collapsed` |
 | `max_initial_depth:` | no | 初期表示時に展開描画する最大depth。rootは `0` |
 | `max_render_depth:` | no | 描画対象にする最大depth。rootは `0` |
+| `max_leaf_distance:` | no | 描画対象にする最大leaf距離。leafは `0` |
 | `max_toggle_depth_from_root:` | no | root基準で、開閉操作時にまとめて扱う最大depth |
 | `expanded_keys:` | no | 初期表示時に展開するnode_key配列 |
 | `row_class_builder:` | no | `tr` に付与するCSS classを返すcallable |
@@ -247,6 +249,15 @@ render_state = TreeView::RenderState.new(
 `nil` の場合は描画範囲のdepth制限なし、`0` の場合はrootのみ、`1` の場合はrootとそのchildrenまでを描画対象にします。
 `max_initial_depth` と異なり、`max_render_depth` は描画対象そのものを制限するため、境界より深いnodeは初期HTMLに出ず、`hidden_count` も表示されません。
 後から開閉操作で表示する対象としても扱わない用途を想定しています。
+
+`max_leaf_distance` は `nil` または `0` 以上のIntegerを指定します。
+`nil` の場合はleaf距離による描画範囲制限なし、`0` の場合はleafのみ、`1` の場合はleafとその親までを描画対象にします。
+leaf distance は、leafを `0` として、leaf側からroot方向へ数えた距離です。
+複数leafを持つnodeでは、最短leaf距離を採用します。
+たとえば、あるnodeが一方のleafからは距離 `1`、別のleafからは距離 `3` の場合、そのnodeのleaf distanceは `1` です。
+`max_render_depth` がroot基準であるのに対し、`max_leaf_distance` はleaf基準です。
+`max_render_depth` と同様に描画対象そのものを制限するため、対象外nodeは初期HTMLに出ず、`hidden_count` も表示されません。
+ただし、対象外nodeの子孫に描画対象nodeが存在する場合があるため、行を省略しても子側の探索は継続します。
 
 `max_toggle_depth_from_root` は `nil` または `0` 以上のIntegerを指定します。
 `scope_format: :object` の `UiConfig` と組み合わせると、path builder の第3引数 `scope` に `TreeView::ToggleScope` が渡されます。
