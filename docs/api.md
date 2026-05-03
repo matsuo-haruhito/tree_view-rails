@@ -150,7 +150,9 @@ render_state = TreeView::RenderState.new(
   root_items: tree.root_items,
   row_partial: "projects/tree_columns",
   ui_config: tree_ui,
-  initial_state: :collapsed
+  initial_state: :collapsed,
+  row_class_builder: ->(item) { item.archived? ? "is-archived" : nil },
+  row_data_builder: ->(item) { { status: item.status } }
 )
 ```
 
@@ -161,8 +163,14 @@ render_state = TreeView::RenderState.new(
 | `row_partial:` | yes | host app側の列描画partial |
 | `ui_config:` | yes | `TreeView::UiConfig` |
 | `initial_state:` | no | `:expanded` または `:collapsed` |
+| `row_class_builder:` | no | `tr` に付与するCSS classを返すcallable |
+| `row_data_builder:` | no | `tr` に付与するdata属性Hashを返すcallable |
 
 `effective_initial_state` は、画面固有指定、global config、既定値の順で解決します。
+
+`row_class_builder` は文字列、配列、または `nil` を返せます。
+`row_data_builder` はHash相当の値、または `nil` を返せます。
+既存の `data-tree-depth` は常に維持されます。
 
 ## TreeView::UiConfig
 

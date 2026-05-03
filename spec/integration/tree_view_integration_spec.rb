@@ -67,6 +67,29 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include("project_2:child")
     end
 
+    it "renders row class and data attributes from RenderState builders" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        row_class_builder: ->(item) { ["tree-row", "is-#{item.name}"] },
+        row_data_builder: ->(item) { { node_name: item.name, node_id: item.id } }
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('class="tree-row is-root"')
+      expect(rendered).to include('class="tree-row is-child"')
+      expect(rendered).to include('data-node-name="root"')
+      expect(rendered).to include('data-node-name="child"')
+      expect(rendered).to include('data-node-id="1"')
+      expect(rendered).to include('data-tree-depth="0"')
+      expect(rendered).to include('data-tree-depth="1"')
+    end
+
     it "respects RenderState initial_state when rendering through tree_view_rows" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       render_state = TreeView::RenderState.new(
