@@ -148,6 +148,18 @@ RSpec.describe TreeView::RenderState do
     expect(state.expanded_keys).to eq([1, 2])
   end
 
+  it "stores collapsed_keys when given" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      collapsed_keys: [1, 2]
+    )
+
+    expect(state.collapsed_keys).to eq([1, 2])
+  end
+
   it "stores grouped initial_expansion options" do
     state = described_class.new(
       tree: tree,
@@ -157,13 +169,28 @@ RSpec.describe TreeView::RenderState do
       initial_expansion: {
         default: :collapsed,
         max_depth: 2,
-        expanded_keys: [1, 2]
+        expanded_keys: [1, 2],
+        collapsed_keys: [3]
       }
     )
 
     expect(state.initial_state).to eq(:collapsed)
     expect(state.max_initial_depth).to eq(2)
     expect(state.expanded_keys).to eq([1, 2])
+    expect(state.collapsed_keys).to eq([3])
+  end
+
+  it "rejects conflicting expanded and collapsed keys" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        expanded_keys: [1, 2],
+        collapsed_keys: [2, 3]
+      )
+    end.to raise_error(ArgumentError, /expanded_keys and collapsed_keys/)
   end
 
   it "stores grouped render_scope options" do
@@ -344,10 +371,12 @@ RSpec.describe TreeView::RenderState do
       max_toggle_depth_from_root: 1,
       max_toggle_leaf_distance: 1,
       expanded_keys: [9],
+      collapsed_keys: [8],
       initial_expansion: {
         default: :collapsed,
         max_depth: 2,
-        expanded_keys: [1, 2]
+        expanded_keys: [1, 2],
+        collapsed_keys: [3]
       },
       render_scope: {
         max_depth: 3,
@@ -366,6 +395,7 @@ RSpec.describe TreeView::RenderState do
     expect(state.max_toggle_depth_from_root).to eq(1)
     expect(state.max_toggle_leaf_distance).to eq(1)
     expect(state.expanded_keys).to eq([9])
+    expect(state.collapsed_keys).to eq([8])
   end
 
   it "rejects unknown grouped option keys" do
