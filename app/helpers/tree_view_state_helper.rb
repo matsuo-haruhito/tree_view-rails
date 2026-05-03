@@ -17,3 +17,5 @@ module TreeViewStateHelper
     }
   end
 end
+
+TreeViewHelper.include(TreeViewStateHelper) if defined?(TreeViewHelper)
