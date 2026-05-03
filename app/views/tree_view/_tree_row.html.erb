@@ -3,9 +3,11 @@
 <% row_partial = local_assigns.fetch(:row_partial) %>
 <% collapsed = local_assigns.fetch(:collapsed, false) %>
 <% max_initial_depth = local_assigns[:max_initial_depth] %>
+<% max_render_depth = local_assigns[:max_render_depth] %>
 <% expanded_keys = local_assigns[:expanded_keys] %>
 <% explicitly_expanded = tree_expanded_key?(item, tree, expanded_keys) %>
 <% depth_boundary = tree_initial_depth_boundary?(depth, max_initial_depth) %>
+<% render_children = tree_render_children?(depth, max_render_depth) %>
 <% effectively_collapsed = !explicitly_expanded && (collapsed || depth_boundary) %>
 <% mode = tree_toggle_mode(local_assigns[:mode]) %>
 <% row_class_builder = local_assigns[:row_class_builder] %>
@@ -14,11 +16,11 @@
 <% row_data = tree_row_data(item, row_data_builder).merge(tree_depth: depth) %>
 <% children = tree.children_for(item) %>
 <% descendant_count = tree.descendant_counts[tree.node_key_for(item)].to_i %>
-<% hidden_count = effectively_collapsed && descendant_count.positive? ? descendant_count : nil %>
+<% hidden_count = render_children && effectively_collapsed && descendant_count.positive? ? descendant_count : nil %>
 <%= tag.tr(id: tree_node_dom_id(item), class: row_classes.presence, data: row_data) do %>
   <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, mode: mode %>
   <%= render row_partial, item: item %>
 <% end %>
-<% unless effectively_collapsed %>
-  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, mode: mode, max_initial_depth: max_initial_depth, expanded_keys: expanded_keys, row_class_builder: row_class_builder, row_data_builder: row_data_builder %>
+<% if render_children && !effectively_collapsed %>
+  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, mode: mode, max_initial_depth: max_initial_depth, max_render_depth: max_render_depth, expanded_keys: expanded_keys, row_class_builder: row_class_builder, row_data_builder: row_data_builder %>
 <% end %>
