@@ -31,7 +31,7 @@ RSpec.describe "TreeView selection integration" do
     view
   end
 
-  def render_rows(render_tree, root_items)
+  def render_rows(render_tree, root_items, selection_options = {})
     tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
     render_state = TreeView::RenderState.new(
       tree: render_tree,
@@ -42,7 +42,7 @@ RSpec.describe "TreeView selection integration" do
         enabled: true,
         checkbox_name: "selected_documents[]",
         payload_builder: ->(item) { { key: render_tree.node_key_for(item), id: item.id, type: item.class.name } }
-      }
+      }.merge(selection_options)
     )
 
     build_view.tree_view_rows(render_state)
@@ -58,6 +58,20 @@ RSpec.describe "TreeView selection integration" do
     expect(rendered).to include('&quot;key&quot;:1')
     expect(rendered).to include('&quot;id&quot;:1')
     expect(rendered).to include('&quot;type&quot;:')
+  end
+
+  it "renders disabled selection checkboxes with reason attributes" do
+    rendered = render_rows(
+      tree,
+      tree.root_items,
+      disabled_builder: ->(item) { item.id == 2 },
+      disabled_reason_builder: ->(item) { item.id == 2 ? "Cannot select child" : nil }
+    )
+
+    expect(rendered).to include('id="project_2_selection"')
+    expect(rendered).to include('disabled="disabled"')
+    expect(rendered).to include('title="Cannot select child"')
+    expect(rendered).to include('data-tree-selection-disabled-reason="Cannot select child"')
   end
 
   it "renders selection checkboxes for PathTree rows" do
