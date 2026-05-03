@@ -11,6 +11,15 @@ RSpec.describe TreeView::ToggleScope do
     expect(scope.within_scope?).to eq(false)
   end
 
+  it "keeps mode as metadata without changing boundary decisions" do
+    all_scope = described_class.new(mode: :all, current_depth: 1, max_depth_from_root: 3)
+    child_scope = described_class.new(mode: :children, current_depth: 1, max_depth_from_root: 3)
+
+    expect(child_scope.mode).to eq(:children)
+    expect(child_scope.toggle_depth).to eq(all_scope.toggle_depth)
+    expect(child_scope.within_scope?).to eq(all_scope.within_scope?)
+  end
+
   it "returns max depth while current depth is inside root-based scope" do
     scope = described_class.new(mode: :all, current_depth: 1, max_depth_from_root: 3)
 
