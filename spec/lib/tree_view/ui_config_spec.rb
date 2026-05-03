@@ -53,4 +53,14 @@ RSpec.describe TreeView::UiConfig do
       build_config(hide_descendants_path_builder: "hide")
     end.to raise_error(ArgumentError, /hide_descendants_path_builder must respond to call/)
   end
+
+  it "raises a clear error when scope_format is not symbolizable" do
+    expect do
+      build_config(scope_format: nil)
+    end.to raise_error(ArgumentError, /scope_format must be one of/)
+
+    expect do
+      build_config(scope_format: 1)
+    end.to raise_error(ArgumentError, /scope_format must be one of/)
+  end
 end
