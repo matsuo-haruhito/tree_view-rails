@@ -110,6 +110,44 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('tree-toggle__hidden-count')
     end
 
+    it "expands nodes listed in expanded_keys" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        initial_state: :collapsed,
+        expanded_keys: [tree.node_key_for(root), tree.node_key_for(child)]
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('id="project_1"')
+      expect(rendered).to include('id="project_2"')
+      expect(rendered).to include('id="project_3"')
+    end
+
+    it "does not render descendants when only a hidden descendant is listed in expanded_keys" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        initial_state: :collapsed,
+        expanded_keys: [tree.node_key_for(child)]
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('id="project_1"')
+      expect(rendered).not_to include('id="project_2"')
+      expect(rendered).not_to include('id="project_3"')
+    end
+
     it "respects RenderState initial_state when rendering through tree_view_rows" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       render_state = TreeView::RenderState.new(
