@@ -16,6 +16,35 @@ RSpec.describe TreeView::RenderState do
     expect(state.ui_config).to eq(ui_config)
   end
 
+  it "stores row attribute builders when given" do
+    row_class_builder = ->(item) { item.name }
+    row_data_builder = ->(item) { { name: item.name } }
+
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      row_class_builder: row_class_builder,
+      row_data_builder: row_data_builder
+    )
+
+    expect(state.row_class_builder).to eq(row_class_builder)
+    expect(state.row_data_builder).to eq(row_data_builder)
+  end
+
+  it "rejects invalid row attribute builders" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        row_class_builder: :invalid
+      )
+    end.to raise_error(ArgumentError, /row_class_builder/)
+  end
+
   it "stores initial_state when given" do
     state = described_class.new(
       tree: tree,
