@@ -1,0 +1,82 @@
+require "spec_helper"
+require "action_view"
+require "fileutils"
+require "tmpdir"
+
+RSpec.describe "TreeView selection integration" do
+  SelectionNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+
+  let(:root) { SelectionNode.new(id: 1, parent_item_id: nil, name: "root") }
+  let(:child) { SelectionNode.new(id: 2, parent_item_id: 1, name: "child") }
+  let(:grandchild) { SelectionNode.new(id: 3, parent_item_id: 2, name: "grandchild") }
+  let(:tree) { TreeView::Tree.new(records: [root, child, grandchild], parent_id_method: :parent_item_id) }
+  let(:gem_view_path) { File.expand_path("../../app/views", __dir__) }
+  let(:host_view_dir) { Dir.mktmpdir("tree_view_host_views") }
+
+  before do
+    FileUtils.mkdir_p(File.join(host_view_dir, "projects"))
+    File.write(
+      File.join(host_view_dir, "projects", "_tree_columns.html.erb"),
+      '<td class="project-cell"><%= item.name %></td>'
+    )
+  end
+
+  after do
+    FileUtils.remove_entry(host_view_dir) if Dir.exist?(host_view_dir)
+  end
+
+  def build_view
+    view = ActionView::Base.with_empty_template_cache.with_view_paths([host_view_dir, gem_view_path], {}, nil)
+    view.extend(TreeViewHelper)
+    view
+  end
+
+  def render_rows(render_tree, root_items)
+    tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+    render_state = TreeView::RenderState.new(
+      tree: render_tree,
+      root_items: root_items,
+      row_partial: "projects/tree_columns",
+      ui_config: tree_ui,
+      selection: {
+        enabled: true,
+        checkbox_name: "selected_documents[]",
+        payload_builder: ->(item) { { key: render_tree.node_key_for(item), id: item.id, type: item.class.name } }
+      }
+    )
+
+    build_view.tree_view_rows(render_state)
+  end
+
+  it "renders selection checkboxes with JSON payload values" do
+    rendered = render_rows(tree, tree.root_items)
+
+    expect(rendered).to include('class="tree-selection-cell"')
+    expect(rendered).to include('class="tree-selection-checkbox"')
+    expect(rendered).to include('name="selected_documents[]"')
+    expect(rendered).to include('id="project_1_selection"')
+    expect(rendered).to include('&quot;key&quot;:1')
+    expect(rendered).to include('&quot;id&quot;:1')
+    expect(rendered).to include('&quot;type&quot;:')
+  end
+
+  it "renders selection checkboxes for PathTree rows" do
+    path_tree = tree.path_tree_for([grandchild])
+
+    rendered = render_rows(path_tree, path_tree.root_items)
+
+    expect(rendered).to include('id="project_1_selection"')
+    expect(rendered).to include('id="project_2_selection"')
+    expect(rendered).to include('id="project_3_selection"')
+  end
+
+  it "renders selection checkboxes for ReverseTree rows" do
+    reverse_tree = tree.reverse_tree_for([grandchild])
+
+    rendered = render_rows(reverse_tree, reverse_tree.root_items)
+
+    expect(rendered).to include('id="project_3_selection"')
+    expect(rendered).to include('id="project_2_selection"')
+    expect(rendered).to include('id="project_1_selection"')
+  end
+end

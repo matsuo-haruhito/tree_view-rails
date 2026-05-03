@@ -198,6 +198,92 @@ RSpec.describe TreeView::RenderState do
     expect(state.max_toggle_leaf_distance).to eq(2)
   end
 
+  it "stores selection options" do
+    payload_builder = ->(item) { { id: item.id } }
+
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      selectable: true,
+      selection_payload_builder: payload_builder,
+      selection_checkbox_name: "documents[]"
+    )
+
+    expect(state.selection_enabled?).to eq(true)
+    expect(state.selection_payload_builder).to eq(payload_builder)
+    expect(state.selection_checkbox_name).to eq("documents[]")
+  end
+
+  it "stores grouped selection options" do
+    payload_builder = ->(item) { { id: item.id } }
+
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      selection: {
+        enabled: true,
+        payload_builder: payload_builder,
+        checkbox_name: "documents[]"
+      }
+    )
+
+    expect(state.selection_enabled?).to eq(true)
+    expect(state.selection_payload_builder).to eq(payload_builder)
+    expect(state.selection_checkbox_name).to eq("documents[]")
+  end
+
+  it "uses the default selection checkbox name" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      selectable: true
+    )
+
+    expect(state.selection_checkbox_name).to eq("selected_nodes[]")
+  end
+
+  it "rejects invalid selection options" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        selection: { enabled: true, unknown: true }
+      )
+    end.to raise_error(ArgumentError, /selection contains unknown keys: unknown/)
+  end
+
+  it "rejects invalid selectable values" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        selectable: "true"
+      )
+    end.to raise_error(ArgumentError, /selectable must be true or false/)
+  end
+
+  it "rejects invalid selection payload builders" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        selection: { enabled: true, payload_builder: :invalid }
+      )
+    end.to raise_error(ArgumentError, /selection_payload_builder/)
+  end
+
   it "prefers individual options over grouped options" do
     state = described_class.new(
       tree: tree,

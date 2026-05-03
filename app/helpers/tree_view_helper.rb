@@ -1,3 +1,5 @@
+require "json"
+
 module TreeViewHelper
   def tree_view_rows(render_state, mode: nil, collapsed: nil)
     previous_tree_ui = @tree_ui
@@ -18,6 +20,9 @@ module TreeViewHelper
         max_toggle_depth_from_root: render_state.max_toggle_depth_from_root,
         max_toggle_leaf_distance: render_state.max_toggle_leaf_distance,
         expanded_keys: render_state.expanded_keys,
+        selection_enabled: render_state.selection_enabled?,
+        selection_payload_builder: render_state.selection_payload_builder,
+        selection_checkbox_name: render_state.selection_checkbox_name,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder
       }
@@ -38,6 +43,10 @@ module TreeViewHelper
     resolved_ui(ui).show_button_dom_id(item)
   end
 
+  def tree_selection_checkbox_dom_id(item, ui: @tree_ui)
+    "#{tree_node_dom_id(item, ui: ui)}_selection"
+  end
+
   def tree_row_classes(item, builder = nil)
     Array(builder&.call(item)).flatten.compact_blank
   end
@@ -48,6 +57,17 @@ module TreeViewHelper
     return data.to_h if data.respond_to?(:to_h)
 
     raise ArgumentError, "row_data_builder must return a Hash-like object"
+  end
+
+  def tree_selection_payload(item, tree, builder = nil)
+    payload = builder ? builder.call(item) : default_tree_selection_payload(item, tree)
+    return payload.to_h if payload.respond_to?(:to_h)
+
+    raise ArgumentError, "selection_payload_builder must return a Hash-like object"
+  end
+
+  def tree_selection_value(item, tree, builder = nil)
+    JSON.generate(tree_selection_payload(item, tree, builder))
   end
 
   def tree_initial_depth_boundary?(depth, max_initial_depth)
@@ -153,6 +173,14 @@ module TreeViewHelper
 
   def default_tree_ui
     nil
+  end
+
+  def default_tree_selection_payload(item, tree)
+    {
+      key: tree.node_key_for(item),
+      id: item.respond_to?(:id) ? item.id : tree.node_key_for(item),
+      type: item.class.name
+    }
   end
 
   def tree_max_depth(tree)
