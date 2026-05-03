@@ -60,6 +60,13 @@ RSpec.describe "TreeView selection integration" do
     expect(rendered).to include('&quot;type&quot;:')
   end
 
+  it "renders checked selection checkboxes for selected keys" do
+    rendered = render_rows(tree, tree.root_items, selected_keys: [2])
+
+    expect(rendered).to include('id="project_2_selection"')
+    expect(rendered).to include('checked="checked"')
+  end
+
   it "renders disabled selection checkboxes with reason attributes" do
     rendered = render_rows(
       tree,
@@ -72,6 +79,19 @@ RSpec.describe "TreeView selection integration" do
     expect(rendered).to include('disabled="disabled"')
     expect(rendered).to include('title="Cannot select child"')
     expect(rendered).to include('data-tree-selection-disabled-reason="Cannot select child"')
+  end
+
+  it "renders checked and disabled selection checkboxes together" do
+    rendered = render_rows(
+      tree,
+      tree.root_items,
+      selected_keys: [2],
+      disabled_builder: ->(item) { item.id == 2 }
+    )
+
+    expect(rendered).to include('id="project_2_selection"')
+    expect(rendered).to include('checked="checked"')
+    expect(rendered).to include('disabled="disabled"')
   end
 
   it "renders selection checkboxes for PathTree rows" do
