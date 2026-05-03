@@ -3,10 +3,12 @@ import { Controller } from "@hotwired/stimulus"
 export class TreeViewStateController extends Controller {
   static targets = ["node"]
   static values = {
-    viewKey: String
+    viewKey: String,
+    keyboard: Boolean
   }
 
   connect() {
+    if (this.keyboardValue) this.prepareKeyboardNavigation()
     this.dispatchStateChanged()
   }
 
@@ -26,7 +28,32 @@ export class TreeViewStateController extends Controller {
   }
 
   refresh() {
+    if (this.keyboardValue) this.prepareKeyboardNavigation()
     this.dispatchStateChanged()
+  }
+
+  keydown(event) {
+    if (!this.keyboardValue) return
+
+    const row = this.currentNode(event)
+    if (!row) return
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault()
+      this.focusRelativeNode(row, 1)
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault()
+      this.focusRelativeNode(row, -1)
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault()
+      this.activateToggle(row, "show")
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault()
+      this.activateToggle(row, "hide")
+    } else if (event.key === "Enter") {
+      event.preventDefault()
+      this.activateToggle(row)
+    }
   }
 
   setExpandedFromEvent(event, expanded) {
@@ -51,6 +78,43 @@ export class TreeViewStateController extends Controller {
         expandedKeys: this.expandedKeys()
       }
     })
+  }
+
+  prepareKeyboardNavigation() {
+    if (!this.element.hasAttribute("tabindex")) this.element.tabIndex = 0
+    this.nodeTargets.forEach((node) => {
+      if (!node.hasAttribute("tabindex")) node.tabIndex = -1
+    })
+  }
+
+  currentNode(event) {
+    const target = event.target
+    if (target && target.closest) {
+      const row = target.closest("[data-tree-view-state-target~='node']")
+      if (row) return row
+    }
+
+    return this.visibleNodes()[0] || null
+  }
+
+  visibleNodes() {
+    return this.nodeTargets.filter((node) => node.offsetParent !== null)
+  }
+
+  focusRelativeNode(row, offset) {
+    const nodes = this.visibleNodes()
+    const index = nodes.indexOf(row)
+    if (index === -1) return
+
+    const next = nodes[index + offset]
+    if (next) next.focus()
+  }
+
+  activateToggle(row, preferredAction = null) {
+    const showButton = row.querySelector(".show-button")
+    const hideButton = row.querySelector(".remove-button")
+    const button = preferredAction === "show" ? showButton : preferredAction === "hide" ? hideButton : showButton || hideButton
+    if (button) button.click()
   }
 }
 
