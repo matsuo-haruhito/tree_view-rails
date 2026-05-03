@@ -6,6 +6,8 @@ module TreeView
     VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys].freeze
     VALID_RENDER_SCOPE_KEYS = %i[max_depth max_leaf_distance].freeze
     VALID_TOGGLE_SCOPE_KEYS = %i[max_depth_from_root max_leaf_distance].freeze
+    VALID_SELECTION_KEYS = %i[enabled payload_builder checkbox_name].freeze
+    DEFAULT_SELECTION_CHECKBOX_NAME = "selected_nodes[]"
 
     attr_reader :tree,
                 :root_items,
@@ -18,6 +20,9 @@ module TreeView
                 :max_toggle_depth_from_root,
                 :max_toggle_leaf_distance,
                 :expanded_keys,
+                :selection_enabled,
+                :selection_payload_builder,
+                :selection_checkbox_name,
                 :row_class_builder,
                 :row_data_builder
 
@@ -36,11 +41,16 @@ module TreeView
                    initial_expansion: nil,
                    render_scope: nil,
                    toggle_scope: nil,
+                   selectable: nil,
+                   selection_payload_builder: nil,
+                   selection_checkbox_name: nil,
+                   selection: nil,
                    row_class_builder: nil,
                    row_data_builder: nil)
       initial_expansion_options = normalize_options(initial_expansion, :initial_expansion, VALID_INITIAL_EXPANSION_KEYS)
       render_scope_options = normalize_options(render_scope, :render_scope, VALID_RENDER_SCOPE_KEYS)
       toggle_scope_options = normalize_options(toggle_scope, :toggle_scope, VALID_TOGGLE_SCOPE_KEYS)
+      selection_options = normalize_options(selection, :selection, VALID_SELECTION_KEYS)
 
       @tree = tree
       @root_items = root_items
@@ -53,11 +63,19 @@ module TreeView
       @max_toggle_depth_from_root = normalize_non_negative_integer(resolve_option(max_toggle_depth_from_root, toggle_scope_options[:max_depth_from_root]), :max_toggle_depth_from_root)
       @max_toggle_leaf_distance = normalize_non_negative_integer(resolve_option(max_toggle_leaf_distance, toggle_scope_options[:max_leaf_distance]), :max_toggle_leaf_distance)
       @expanded_keys = Array(resolve_option(expanded_keys, initial_expansion_options[:expanded_keys])).freeze
+      @selection_enabled = normalize_boolean(resolve_option(selectable, selection_options[:enabled]), :selectable)
+      @selection_payload_builder = resolve_option(selection_payload_builder, selection_options[:payload_builder])
+      @selection_checkbox_name = resolve_option(selection_checkbox_name, selection_options[:checkbox_name]) || DEFAULT_SELECTION_CHECKBOX_NAME
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
 
       validate_builder!(row_class_builder, :row_class_builder)
       validate_builder!(row_data_builder, :row_data_builder)
+      validate_builder!(selection_payload_builder, :selection_payload_builder)
+    end
+
+    def selection_enabled?
+      selection_enabled == true
     end
 
     # 画面固有指定があればそれを優先し、なければ global config を使う。
@@ -98,6 +116,13 @@ module TreeView
       return value if value.is_a?(Integer) && value >= 0
 
       raise ArgumentError, "#{name} must be a non-negative Integer"
+    end
+
+    def normalize_boolean(value, name)
+      return false if value.nil?
+      return value if value == true || value == false
+
+      raise ArgumentError, "#{name} must be true or false"
     end
 
     def validate_builder!(builder, name)
