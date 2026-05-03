@@ -29,6 +29,9 @@ module TreeView
                 :selection_disabled_builder,
                 :selection_disabled_reason_builder,
                 :selection_selected_keys,
+                :current_key,
+                :active_keys,
+                :highlighted_keys,
                 :row_class_builder,
                 :row_data_builder
 
@@ -55,6 +58,9 @@ module TreeView
                    selection_disabled_reason_builder: nil,
                    selection_selected_keys: nil,
                    selection: nil,
+                   current_key: nil,
+                   active_keys: nil,
+                   highlighted_keys: nil,
                    row_class_builder: nil,
                    row_data_builder: nil)
       initial_expansion_options = normalize_options(initial_expansion, :initial_expansion, VALID_INITIAL_EXPANSION_KEYS)
@@ -81,6 +87,9 @@ module TreeView
       @selection_disabled_builder = resolve_option(selection_disabled_builder, selection_options[:disabled_builder])
       @selection_disabled_reason_builder = resolve_option(selection_disabled_reason_builder, selection_options[:disabled_reason_builder])
       @selection_selected_keys = Array(resolve_option(selection_selected_keys, selection_options[:selected_keys])).freeze
+      @current_key = current_key
+      @active_keys = Array(active_keys).freeze
+      @highlighted_keys = Array(highlighted_keys).freeze
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
 
