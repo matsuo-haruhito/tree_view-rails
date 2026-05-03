@@ -11,7 +11,9 @@ module TreeViewHelper
         tree: render_state.tree,
         row_partial: render_state.row_partial,
         mode: mode,
-        collapsed: collapsed.nil? ? render_state.effective_initial_state == :collapsed : collapsed
+        collapsed: collapsed.nil? ? render_state.effective_initial_state == :collapsed : collapsed,
+        row_class_builder: render_state.row_class_builder,
+        row_data_builder: render_state.row_data_builder
       }
     )
   ensure
@@ -28,6 +30,18 @@ module TreeViewHelper
 
   def tree_show_button_dom_id(item, ui: @tree_ui)
     resolved_ui(ui).show_button_dom_id(item)
+  end
+
+  def tree_row_classes(item, builder = nil)
+    Array(builder&.call(item)).flatten.compact_blank
+  end
+
+  def tree_row_data(item, builder = nil)
+    data = builder&.call(item)
+    return {} if data.nil?
+    return data.to_h if data.respond_to?(:to_h)
+
+    raise ArgumentError, "row_data_builder must return a Hash-like object"
   end
 
   def tree_depth_slots(depth)
