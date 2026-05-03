@@ -26,6 +26,7 @@ module TreeViewHelper
         max_toggle_leaf_distance: render_state.max_toggle_leaf_distance,
         expanded_keys: render_state.expanded_keys,
         collapsed_keys: render_state.collapsed_keys,
+        current_key: render_state.current_key,
         selection_enabled: render_state.selection_enabled?,
         selection_visibility: render_state.selection_visibility,
         selection_payload_builder: render_state.selection_payload_builder,
