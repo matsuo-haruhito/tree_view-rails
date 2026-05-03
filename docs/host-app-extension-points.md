@@ -7,6 +7,8 @@ Host applications can customize row output with these extension points:
 - `row_partial`
 - `row_class_builder`
 - `row_data_builder`
+- `current_key`
+- `highlighted_keys`
 
 ## Row partial
 
@@ -37,3 +39,33 @@ TreeView::RenderState.new(
 ```
 
 TreeView should not own application-specific row policies. Keep those decisions in the host application and use TreeView only for tree rendering structure.
+
+## Current and highlighted rows
+
+Use `current_key` when one row represents the currently displayed page or selected node.
+Use `highlighted_keys` when one or more rows should be emphasized, such as search hits.
+
+```ruby
+TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  current_key: tree.node_key_for(current_document),
+  highlighted_keys: matched_documents.map { |document| tree.node_key_for(document) },
+  row_class_builder: ->(item) { ["document-row"] }
+)
+```
+
+Current rows receive these classes:
+
+- `is-current`
+- `tree-view-row--current`
+
+Highlighted rows receive these classes:
+
+- `is-highlighted`
+- `tree-view-row--highlighted`
+
+`row_class_builder` classes are preserved and combined with TreeView's current/highlighted row classes.
+Current rows also receive `aria-current="page"` so assistive technologies can identify the active row.
