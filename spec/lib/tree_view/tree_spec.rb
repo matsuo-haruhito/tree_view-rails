@@ -182,6 +182,24 @@ RSpec.describe TreeView::Tree do
         tree.validate_unique_node_keys!
       end.to raise_error(ArgumentError, /duplicate node_key detected/)
     end
+
+    it "validates node keys during initialization when requested" do
+      root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
+      duplicate_root = ItemNode.new(id: 1, parent_item_id: nil, name: "duplicate-root")
+
+      expect do
+        described_class.new(records: [root, duplicate_root], parent_id_method: :parent_item_id, validate_node_keys: true)
+      end.to raise_error(ArgumentError, /duplicate node_key detected: 1/)
+    end
+
+    it "keeps duplicate node keys allowed by default for backward compatibility" do
+      root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
+      duplicate_root = ItemNode.new(id: 1, parent_item_id: nil, name: "duplicate-root")
+
+      expect do
+        described_class.new(records: [root, duplicate_root], parent_id_method: :parent_item_id)
+      end.not_to raise_error
+    end
   end
 
   describe "validation" do
