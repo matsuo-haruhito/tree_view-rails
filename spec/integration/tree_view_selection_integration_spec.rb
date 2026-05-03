@@ -61,6 +61,37 @@ RSpec.describe "TreeView selection integration" do
     expect(rendered).to include('&quot;type&quot;:')
   end
 
+  it "renders selection checkboxes only for roots when visibility is roots" do
+    rendered = render_rows(tree, tree.root_items, visibility: :roots)
+
+    expect(rendered.scan('class="tree-selection-cell"').size).to eq(3)
+    expect(rendered).to include('id="project_1_selection"')
+    expect(rendered).not_to include('id="project_2_selection"')
+    expect(rendered).not_to include('id="project_3_selection"')
+  end
+
+  it "renders selection checkboxes only for leaves when visibility is leaves" do
+    rendered = render_rows(tree, tree.root_items, visibility: :leaves)
+
+    expect(rendered.scan('class="tree-selection-cell"').size).to eq(3)
+    expect(rendered).not_to include('id="project_1_selection"')
+    expect(rendered).not_to include('id="project_2_selection"')
+    expect(rendered).to include('id="project_3_selection"')
+  end
+
+  it "keeps empty selection cells when visibility is none" do
+    rendered = render_rows(tree, tree.root_items, visibility: :none)
+
+    expect(rendered.scan('class="tree-selection-cell"').size).to eq(3)
+    expect(rendered).not_to include('class="tree-selection-checkbox"')
+  end
+
+  it "rejects invalid selection visibility values" do
+    expect do
+      render_rows(tree, tree.root_items, visibility: :middle)
+    end.to raise_error(ArgumentError, /selection visibility must be one of/)
+  end
+
   it "calls the selection payload builder once per rendered checkbox" do
     called_item_ids = []
 
