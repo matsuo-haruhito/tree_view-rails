@@ -310,3 +310,5 @@ module TreeViewHelper
     end
   end
 end
+
+require_relative "tree_view_breadcrumb_helper"
