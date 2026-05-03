@@ -23,6 +23,7 @@ module TreeViewHelper
         expanded_keys: render_state.expanded_keys,
         collapsed_keys: render_state.collapsed_keys,
         selection_enabled: render_state.selection_enabled?,
+        selection_visibility: render_state.selection_visibility,
         selection_payload_builder: render_state.selection_payload_builder,
         selection_checkbox_name: render_state.selection_checkbox_name,
         selection_disabled_builder: render_state.selection_disabled_builder,
@@ -88,6 +89,21 @@ module TreeViewHelper
 
   def tree_selection_checked?(item, tree, selected_keys = nil)
     Array(selected_keys).include?(tree.node_key_for(item))
+  end
+
+  def tree_selection_visible?(item, tree, depth, visibility)
+    case visibility.to_sym
+    when :all
+      true
+    when :roots
+      depth.to_i.zero?
+    when :leaves
+      tree.children_for(item).empty?
+    when :none
+      false
+    else
+      raise ArgumentError, "selection visibility must be one of: all, roots, leaves, none"
+    end
   end
 
   def tree_initial_depth_boundary?(depth, max_initial_depth)
