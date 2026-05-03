@@ -3,8 +3,10 @@
 <% branch_info = tree_branch_info(item, tree) %>
 <% ancestor_last_states = branch_info[:ancestor_last_states] %>
 <% is_last = branch_info[:is_last] %>
-<% show_path = tree_show_descendants_path(item, depth + 1) %>
-<% hide_path = tree_hide_descendants_path(item, depth) %>
+<% max_toggle_depth_from_root = local_assigns[:max_toggle_depth_from_root] %>
+<% toggle_scope = tree_toggle_scope(depth: depth, max_toggle_depth_from_root: max_toggle_depth_from_root) %>
+<% show_path = tree_show_descendants_path(item, depth + 1, scope: toggle_scope) %>
+<% hide_path = tree_hide_descendants_path(item, depth, scope: toggle_scope) %>
 
 <div class="tree-toggle">
   <div class="tree-toggle__branches" aria-hidden="true">
