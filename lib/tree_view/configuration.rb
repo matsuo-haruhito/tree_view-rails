@@ -18,9 +18,15 @@ module TreeView
     private
 
     def normalize_initial_state(value)
+      raise_invalid_initial_state! unless value.respond_to?(:to_sym)
+
       normalized_value = value.to_sym
       return normalized_value if VALID_INITIAL_STATES.include?(normalized_value)
 
+      raise_invalid_initial_state!
+    end
+
+    def raise_invalid_initial_state!
       raise ArgumentError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(', ')}"
     end
   end
