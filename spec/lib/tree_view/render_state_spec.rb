@@ -236,6 +236,21 @@ RSpec.describe TreeView::RenderState do
     expect(state.selection_disabled_reason_builder).to eq(disabled_reason_builder)
   end
 
+  it "stores selection selected keys" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      selection: {
+        enabled: true,
+        selected_keys: [1, 2]
+      }
+    )
+
+    expect(state.selection_selected_keys).to eq([1, 2])
+  end
+
   it "stores grouped selection options" do
     payload_builder = ->(item) { { id: item.id } }
 

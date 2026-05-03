@@ -25,6 +25,7 @@ module TreeViewHelper
         selection_checkbox_name: render_state.selection_checkbox_name,
         selection_disabled_builder: render_state.selection_disabled_builder,
         selection_disabled_reason_builder: render_state.selection_disabled_reason_builder,
+        selection_selected_keys: render_state.selection_selected_keys,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder
       }
@@ -80,6 +81,10 @@ module TreeViewHelper
     return nil unless builder
 
     builder.call(item).presence
+  end
+
+  def tree_selection_checked?(item, tree, selected_keys = nil)
+    Array(selected_keys).include?(tree.node_key_for(item))
   end
 
   def tree_initial_depth_boundary?(depth, max_initial_depth)
