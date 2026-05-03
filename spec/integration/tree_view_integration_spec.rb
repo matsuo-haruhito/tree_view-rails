@@ -47,6 +47,8 @@ RSpec.describe "TreeView integration" do
 
       expect(view.tree_node_dom_id(root)).to eq("project_1")
       expect(rendered).to include('id="project_1"')
+      expect(rendered).to include('aria-level="1"')
+      expect(rendered).to include('aria-expanded="true"')
       expect(rendered).to include("project_1:root")
       expect(rendered).to include("tree-toggle__level")
     end
@@ -105,6 +107,24 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('class="host-child is-current"')
       expect(rendered).to include('class="host-grandchild is-highlighted"')
       expect(rendered).to include('class="host-root"')
+    end
+
+    it "renders aria selection state when checkboxes are selected" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        selectable: true,
+        selection_selected_keys: [tree.node_key_for(child)]
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('id="project_2"')
+      expect(rendered).to include('aria-selected="true"')
     end
 
     it "renders a PathTree through tree_view_rows helper" do
@@ -190,6 +210,7 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('id="project_1"')
       expect(rendered).to include('id="project_2"')
       expect(rendered).not_to include('id="project_3"')
+      expect(rendered).to include('aria-expanded="false"')
       expect(rendered).to include('tree-toggle__hidden-count')
       expect(rendered).to include('visually-hidden')
       expect(rendered).to include(' descendants')
