@@ -153,6 +153,7 @@ render_state = TreeView::RenderState.new(
   initial_state: :expanded,
   max_initial_depth: 2,
   max_render_depth: 2,
+  max_toggle_depth_from_root: 2,
   expanded_keys: [root_key, child_key],
   row_class_builder: ->(item) { item.archived? ? "is-archived" : nil },
   row_data_builder: ->(item) { { status: item.status } }
@@ -168,6 +169,7 @@ render_state = TreeView::RenderState.new(
 | `initial_state:` | no | `:expanded` または `:collapsed` |
 | `max_initial_depth:` | no | 初期表示時に展開描画する最大depth。rootは `0` |
 | `max_render_depth:` | no | 描画対象にする最大depth。rootは `0` |
+| `max_toggle_depth_from_root:` | no | root基準で、開閉操作時にまとめて扱う最大depth |
 | `expanded_keys:` | no | 初期表示時に展開するnode_key配列 |
 | `row_class_builder:` | no | `tr` に付与するCSS classを返すcallable |
 | `row_data_builder:` | no | `tr` に付与するdata属性Hashを返すcallable |
@@ -183,6 +185,12 @@ render_state = TreeView::RenderState.new(
 `nil` の場合は描画範囲のdepth制限なし、`0` の場合はrootのみ、`1` の場合はrootとそのchildrenまでを描画対象にします。
 `max_initial_depth` と異なり、`max_render_depth` は描画対象そのものを制限するため、境界より深いnodeは初期HTMLに出ず、`hidden_count` も表示されません。
 後から開閉操作で表示する対象としても扱わない用途を想定しています。
+
+`max_toggle_depth_from_root` は `nil` または `0` 以上のIntegerを指定します。
+`scope_format: :object` の `UiConfig` と組み合わせると、path builder の第3引数 `scope` に `TreeView::ToggleScope` が渡されます。
+`ToggleScope#toggle_depth` は、`current_depth < max_toggle_depth_from_root` のとき `max_toggle_depth_from_root` を返し、範囲外では `current_depth` を返します。
+これにより、指定範囲内ではroot基準depthまでまとめて開閉し、指定範囲外ではそのnode単体の開閉として扱えます。
+既存互換のため、path builder の第2引数 `depth` は従来どおり現在nodeのdepthです。
 
 `expanded_keys` には `tree.node_key_for(item)` と一致する値を指定します。
 該当nodeは `initial_state: :collapsed` や `max_initial_depth` の境界指定より優先して展開されます。
@@ -216,7 +224,8 @@ staticでは開閉path builderを持ちません。
 tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "item").build(
   hide_descendants_path_builder: ->(item, depth, scope) { ... },
   show_descendants_path_builder: ->(item, depth, scope) { ... },
-  toggle_all_path_builder: ->(state) { ... }
+  toggle_all_path_builder: ->(state) { ... },
+  scope_format: :string
 )
 ```
 
@@ -225,6 +234,49 @@ tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "ite
 | `hide_descendants_path_builder` | 子孫を閉じるpathを返す |
 | `show_descendants_path_builder` | 子孫を開くpathを返す |
 | `toggle_all_path_builder` | 全体開閉pathを返す |
+| `scope_format` | path builder 第3引数のscope形式。`:string` または `:object` |
+
+`scope_format` の既定値は `:string` です。既存どおり path builder の第3引数には `"all"` のような文字列が渡されます。
+
+`scope_format: :object` を指定すると、path builder の第3引数には `TreeView::ToggleScope` が渡されます。
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "item").build(
+  scope_format: :object,
+  hide_descendants_path_builder: ->(item, depth, scope) {
+    view_context.hide_item_path(
+      item,
+      current_depth: depth,
+      toggle_depth: scope.toggle_depth,
+      scope: scope.mode
+    )
+  },
+  show_descendants_path_builder: ->(item, depth, scope) {
+    view_context.show_item_path(
+      item,
+      current_depth: depth,
+      toggle_depth: scope.toggle_depth,
+      scope: scope.mode
+    )
+  },
+  toggle_all_path_builder: ->(state) { view_context.items_path(state: state) }
+)
+```
+
+## TreeView::ToggleScope
+
+root基準の開閉範囲情報をpath builderへ渡すための値オブジェクトです。
+
+| メソッド | 説明 |
+|---|---|
+| `mode` | scope種別。現時点では `:all` |
+| `current_depth` | 現在nodeのdepth |
+| `max_depth_from_root` | root基準の開閉対象最大depth |
+| `toggle_depth` | 実際に開閉対象として扱うdepth |
+| `within_scope?` | 現在nodeがまとめ開閉対象範囲内かどうか |
+
+`within_scope?` は `current_depth < max_depth_from_root` のとき `true` です。
+境界depthとそれより深いnodeでは `false` になり、そのnode単体の開閉として扱う想定です。
 
 ## TreeViewHelper
 
