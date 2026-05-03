@@ -160,6 +160,22 @@ RSpec.describe TreeView::RenderState do
     expect(state.collapsed_keys).to eq([1, 2])
   end
 
+  it "stores row state keys when given" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      current_key: 1,
+      active_keys: [2, 3],
+      highlighted_keys: [4, 5]
+    )
+
+    expect(state.current_key).to eq(1)
+    expect(state.active_keys).to eq([2, 3])
+    expect(state.highlighted_keys).to eq([4, 5])
+  end
+
   it "stores grouped initial_expansion options" do
     state = described_class.new(
       tree: tree,
