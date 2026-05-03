@@ -71,7 +71,7 @@ module TreeView
 
       validate_builder!(row_class_builder, :row_class_builder)
       validate_builder!(row_data_builder, :row_data_builder)
-      validate_builder!(selection_payload_builder, :selection_payload_builder)
+      validate_builder!(@selection_payload_builder, :selection_payload_builder)
     end
 
     def selection_enabled?
