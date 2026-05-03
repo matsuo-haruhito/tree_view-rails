@@ -15,5 +15,12 @@ RSpec.describe TreeView::Configuration do
 
       expect { config.initial_state = :invalid }.to raise_error(ArgumentError, /initial_state/)
     end
+
+    it "rejects non-symbolizable values with a clear error" do
+      config = described_class.new
+
+      expect { config.initial_state = nil }.to raise_error(ArgumentError, /initial_state must be one of/)
+      expect { config.initial_state = 1 }.to raise_error(ArgumentError, /initial_state must be one of/)
+    end
   end
 end
