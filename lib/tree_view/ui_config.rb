@@ -94,9 +94,15 @@ module TreeView
     end
 
     def normalize_scope_format(value)
+      raise_invalid_scope_format! unless value.respond_to?(:to_sym)
+
       normalized_value = value.to_sym
       return normalized_value if SCOPE_FORMATS.include?(normalized_value)
 
+      raise_invalid_scope_format!
+    end
+
+    def raise_invalid_scope_format!
       raise ArgumentError, "scope_format must be one of: #{SCOPE_FORMATS.join(', ')}"
     end
   end
