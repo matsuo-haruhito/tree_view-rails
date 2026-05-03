@@ -102,6 +102,26 @@ module TreeView
       sorted.to_a
     end
 
+    def validate_unique_node_keys!
+      seen = {}
+      duplicated_keys = []
+
+      each_root_candidate do |item|
+        node_key = node_key_for(item)
+        if seen.key?(node_key)
+          duplicated_keys << node_key unless duplicated_keys.include?(node_key)
+        else
+          seen[node_key] = true
+        end
+      end
+
+      if duplicated_keys.any?
+        raise ArgumentError, "duplicate node_key detected: #{duplicated_keys.map(&:inspect).join(', ')}"
+      end
+
+      true
+    end
+
     private
 
     def adapter_mode?
