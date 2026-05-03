@@ -13,6 +13,7 @@ module TreeViewHelper
         mode: mode,
         collapsed: collapsed.nil? ? render_state.effective_initial_state == :collapsed : collapsed,
         max_initial_depth: render_state.max_initial_depth,
+        expanded_keys: render_state.expanded_keys,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder
       }
@@ -47,6 +48,10 @@ module TreeViewHelper
 
   def tree_initial_depth_boundary?(depth, max_initial_depth)
     !max_initial_depth.nil? && depth >= max_initial_depth
+  end
+
+  def tree_expanded_key?(item, tree, expanded_keys)
+    Array(expanded_keys).include?(tree.node_key_for(item))
   end
 
   def tree_depth_slots(depth)
