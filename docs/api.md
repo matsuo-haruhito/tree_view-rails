@@ -281,10 +281,49 @@ render_state = TreeView::RenderState.new(
 | `max_toggle_depth_from_root:` | no | root基準で、開閉操作時にまとめて扱う最大depth |
 | `max_toggle_leaf_distance:` | no | leaf基準で、開閉操作時にまとめて扱う最大leaf距離 |
 | `expanded_keys:` | no | 初期表示時に展開するnode_key配列 |
+| `initial_expansion:` | no | 初期展開状態をまとめるHash相当のオプション |
+| `render_scope:` | no | 描画対象範囲をまとめるHash相当のオプション |
+| `toggle_scope:` | no | 開閉操作範囲をまとめるHash相当のオプション |
 | `row_class_builder:` | no | `tr` に付与するCSS classを返すcallable |
 | `row_data_builder:` | no | `tr` に付与するdata属性Hashを返すcallable |
 
 `effective_initial_state` は、画面固有指定、global config、既定値の順で解決します。
+
+scope / expansion 系の設定は、従来の個別引数に加えて、以下の grouped option でも指定できます。
+個別引数と grouped option を同時に指定した場合は、後方互換性のため個別引数を優先します。
+未知のkeyを含む場合は、設定ミスに気づきやすいよう `ArgumentError` を発生させます。
+
+```ruby
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "projects/tree_columns",
+  ui_config: tree_ui,
+  initial_expansion: {
+    default: :expanded,
+    max_depth: 2,
+    expanded_keys: [root_key, child_key]
+  },
+  render_scope: {
+    max_depth: 3,
+    max_leaf_distance: 2
+  },
+  toggle_scope: {
+    max_depth_from_root: 2,
+    max_leaf_distance: 1
+  }
+)
+```
+
+| grouped option | 許可key | 対応する個別引数 |
+|---|---|---|
+| `initial_expansion:` | `:default` | `initial_state:` |
+| `initial_expansion:` | `:max_depth` | `max_initial_depth:` |
+| `initial_expansion:` | `:expanded_keys` | `expanded_keys:` |
+| `render_scope:` | `:max_depth` | `max_render_depth:` |
+| `render_scope:` | `:max_leaf_distance` | `max_leaf_distance:` |
+| `toggle_scope:` | `:max_depth_from_root` | `max_toggle_depth_from_root:` |
+| `toggle_scope:` | `:max_leaf_distance` | `max_toggle_leaf_distance:` |
 
 `max_initial_depth` は `nil` または `0` 以上のIntegerを指定します。
 `nil` の場合はdepth制限なし、`0` の場合はrootのみ、`1` の場合はrootとそのchildrenまでを初期HTMLに描画します。
