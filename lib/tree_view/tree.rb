@@ -6,7 +6,7 @@ module TreeView
       items.sort_by { |item| tree.descendant_counts[tree.node_key_for(item)].to_i }
     end
 
-    VALID_ORPHAN_STRATEGIES = %i[ignore as_root raise].freeze
+    VALID_ORPHAN_STRATEGIES = %i[ignore as_root raise orphans_only].freeze
 
     attr_reader :records,
                 :id_method,
@@ -183,6 +183,8 @@ module TreeView
       when :raise
         raise_if_orphans!
         regular_roots
+      when :orphans_only
+        orphan_items
       end
     end
 

@@ -37,6 +37,17 @@ RSpec.describe "TreeView::Tree orphan strategy" do
     expect(tree.root_items).to eq([root, orphan])
   end
 
+  it "returns only orphan nodes when orphan_strategy is orphans_only" do
+    root = OrphanNode.new(id: 1, parent_item_id: nil, name: "root")
+    child = OrphanNode.new(id: 2, parent_item_id: 1, name: "child")
+    orphan = OrphanNode.new(id: 3, parent_item_id: 999, name: "orphan")
+    orphan_child = OrphanNode.new(id: 4, parent_item_id: 3, name: "orphan-child")
+    tree = build_tree([root, child, orphan, orphan_child], orphan_strategy: :orphans_only)
+
+    expect(tree.root_items).to eq([orphan])
+    expect(tree.children_for(orphan)).to eq([orphan_child])
+  end
+
   it "does not apply orphan_strategy to explicit parent lookups" do
     root = OrphanNode.new(id: 1, parent_item_id: nil, name: "root")
     child = OrphanNode.new(id: 2, parent_item_id: 1, name: "child")
