@@ -100,13 +100,14 @@ tree = TreeView::Tree.new(
 | `:ignore` | 通常rootのみを返す。既定値で、従来互換の挙動 |
 | `:as_root` | 通常rootに orphan node を加えて返す |
 | `:raise` | orphan node が存在する場合に `ArgumentError` を発生させる |
+| `:orphans_only` | orphan node のみをrootとして返す |
 
 `root_items(parent_id)` のように親IDを明示した場合は、orphan strategy の影響を受けず、従来どおり指定した親IDのchildrenを返します。
 
 `orphan_items` は、strategyに関係なく orphan node の一覧を返します。
 resolver mode / adapter mode では orphan strategy は `:ignore` のみ有効です。
 
-orphan node だけをrootとして表示する `:orphans_only` は、別Issueの後続拡張として扱います。
+`:orphans_only` は、不正データ検出・メンテナンス画面向けに orphan node だけをrootとして表示したい場合に使います。orphan node のchildrenは通常どおり `children_for` で辿れます。
 
 ### node_key の重複検出
 
