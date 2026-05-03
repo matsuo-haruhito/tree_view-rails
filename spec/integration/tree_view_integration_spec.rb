@@ -110,6 +110,25 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('tree-toggle__hidden-count')
     end
 
+    it "limits rendered rows with max_render_depth without hidden count" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        max_render_depth: 1
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('id="project_1"')
+      expect(rendered).to include('id="project_2"')
+      expect(rendered).not_to include('id="project_3"')
+      expect(rendered).not_to include('tree-toggle__hidden-count')
+    end
+
     it "expands nodes listed in expanded_keys" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       render_state = TreeView::RenderState.new(
