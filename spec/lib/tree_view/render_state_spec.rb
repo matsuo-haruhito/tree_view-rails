@@ -64,6 +64,30 @@ RSpec.describe TreeView::RenderState do
     end.to raise_error(ArgumentError, /max_render_depth/)
   end
 
+  it "stores max_leaf_distance when given" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      max_leaf_distance: 2
+    )
+
+    expect(state.max_leaf_distance).to eq(2)
+  end
+
+  it "rejects invalid max_leaf_distance values" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        max_leaf_distance: -1
+      )
+    end.to raise_error(ArgumentError, /max_leaf_distance/)
+  end
+
   it "stores max_toggle_depth_from_root when given" do
     state = described_class.new(
       tree: tree,
