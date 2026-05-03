@@ -21,7 +21,7 @@
   </div>
   <div class="tree-toggle__control">
     <% if hidden_count && show_path %>
-      <%= link_to show_path, data: { turbo_stream: true }, class: 'btn btn-primary show-button tree-toggle__action', id: tree_show_button_dom_id(item) do %>
+      <%= link_to show_path, data: { turbo_stream: true }, class: 'btn btn-primary show-button tree-toggle__action', id: tree_show_button_dom_id(item), aria: { expanded: false, controls: tree_node_dom_id(item) } do %>
         <%= tree_toggle_label(depth) %>
       <% end %>
     <% elsif children.any? && hide_path %>
