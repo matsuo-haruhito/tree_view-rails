@@ -29,6 +29,7 @@
 <% row_data_builder = local_assigns[:row_data_builder] %>
 <% row_classes = tree_row_classes(item, row_class_builder) %>
 <% row_data = tree_row_data(item, row_data_builder).merge(tree_depth: depth).merge(tree_state_row_data(item, tree, expanded: !effectively_collapsed)) %>
+<% row_aria = tree_row_aria(item, tree, depth: depth, expanded: !effectively_collapsed, selected: tree_selection_checked?(item, tree, selection_selected_keys)) %>
 <% children = tree.children_for(item) %>
 <% row_aria = { level: depth + 1, selected: tree_selection_checked?(item, tree, selection_selected_keys) } %>
 <% row_aria[:expanded] = !effectively_collapsed if children.any? %>
