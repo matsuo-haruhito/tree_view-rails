@@ -1,17 +1,19 @@
 <% selection_disabled = tree_selection_disabled?(item, selection_disabled_builder) %>
 <% selection_disabled_reason = tree_selection_disabled_reason(item, selection_disabled_reason_builder) %>
 <% selection_checked = tree_selection_checked?(item, tree, selection_selected_keys) %>
+<% selection_payload = tree_selection_payload(item, tree, selection_payload_builder) %>
+<% selection_value = JSON.generate(selection_payload) %>
 
 <td class="tree-selection-cell">
   <%= check_box_tag selection_checkbox_name,
-                    tree_selection_value(item, tree, selection_payload_builder),
+                    selection_value,
                     selection_checked,
                     id: tree_selection_checkbox_dom_id(item),
                     class: "tree-selection-checkbox",
                     disabled: selection_disabled,
                     title: selection_disabled_reason,
                     data: {
-                      tree_selection_payload: tree_selection_payload(item, tree, selection_payload_builder),
+                      tree_selection_payload: selection_payload,
                       tree_selection_disabled_reason: selection_disabled_reason
                     } %>
 </td>
