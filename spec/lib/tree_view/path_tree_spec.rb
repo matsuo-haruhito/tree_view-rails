@@ -69,4 +69,15 @@ RSpec.describe TreeView::PathTree do
     expect(path_tree.descendant_counts[path_tree.node_key_for(parent)]).to eq(1)
     expect(path_tree.descendant_counts[path_tree.node_key_for(matched_child)]).to eq(0)
   end
+
+  it "raises a clear error when descendant count paths contain a cycle" do
+    node_a = PathTreeNode.new(id: 1, parent_item_id: 2, name: "node-a")
+    node_b = PathTreeNode.new(id: 2, parent_item_id: 1, name: "node-b")
+    base_tree = build_base_tree([node_a, node_b])
+    path_tree = described_class.new(base_tree: base_tree, paths: [[node_a, node_b, node_a]])
+
+    expect do
+      path_tree.descendant_counts
+    end.to raise_error(ArgumentError, /cycle detected in path tree/)
+  end
 end
