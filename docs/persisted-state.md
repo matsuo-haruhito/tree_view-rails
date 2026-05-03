@@ -96,10 +96,10 @@ render_state = TreeView::RenderState.new(
 )
 ```
 
-DB 永続化を使う場合は、generator で host app 側に保存用モデルを追加する想定です。
+DB 永続化を使う場合は、generator で host app 側に保存用モデルを追加します。
 
 ```bash
-rails g tree_view:persistence:install
+rails g tree_view:state:install
 rails db:migrate
 ```
 
