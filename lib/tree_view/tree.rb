@@ -95,7 +95,7 @@ module TreeView
 
     def sort_items(items)
       sorted = sorter.call(Array(items), self)
-      unless sorted.respond_to?(:to_a)
+      if sorted.nil? || !sorted.respond_to?(:to_a)
         raise ArgumentError, "sorter must return an Array-like object, got: #{sorted.class}"
       end
 
