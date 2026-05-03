@@ -48,6 +48,42 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include("project_1:root")
       expect(rendered).to include("tree-toggle__level")
     end
+
+    it "renders root rows through tree_view_rows helper" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('id="project_1"')
+      expect(rendered).to include('id="project_2"')
+      expect(rendered).to include("project_1:root")
+      expect(rendered).to include("project_2:child")
+    end
+
+    it "respects RenderState initial_state when rendering through tree_view_rows" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        initial_state: :collapsed
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('id="project_1"')
+      expect(rendered).not_to include('id="project_2"')
+      expect(rendered).to include('tree-toggle__hidden-count')
+    end
   end
 
   describe "turbo host app usage" do
