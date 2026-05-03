@@ -2,6 +2,9 @@
 
 module TreeView
   module RenderStateRowState
+    CURRENT_ROW_CLASSES = ["is-current", "tree-view-row--current"].freeze
+    HIGHLIGHTED_ROW_CLASSES = ["is-highlighted", "tree-view-row--highlighted"].freeze
+
     attr_reader :current_key, :highlighted_keys
 
     def initialize(**options)
@@ -28,8 +31,8 @@ module TreeView
       lambda do |item|
         node_key = tree.node_key_for(item)
         classes = Array(original_row_class_builder&.call(item)).flatten.compact
-        classes << "is-current" if current_key == node_key
-        classes << "is-highlighted" if highlighted_keys.include?(node_key)
+        classes.concat(CURRENT_ROW_CLASSES) if current_key == node_key
+        classes.concat(HIGHLIGHTED_ROW_CLASSES) if highlighted_keys.include?(node_key)
         classes
       end
     end

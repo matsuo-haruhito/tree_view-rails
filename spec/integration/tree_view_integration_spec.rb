@@ -104,8 +104,9 @@ RSpec.describe "TreeView integration" do
 
       rendered = view.tree_view_rows(render_state)
 
-      expect(rendered).to include('class="host-child is-current"')
-      expect(rendered).to include('class="host-grandchild is-highlighted"')
+      expect(rendered).to include('class="host-child is-current tree-view-row--current"')
+      expect(rendered).to include('aria-current="page"')
+      expect(rendered).to include('class="host-grandchild is-highlighted tree-view-row--highlighted"')
       expect(rendered).to include('class="host-root"')
     end
 
