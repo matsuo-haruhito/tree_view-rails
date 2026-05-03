@@ -16,6 +16,30 @@ RSpec.describe TreeView::RenderState do
     expect(state.ui_config).to eq(ui_config)
   end
 
+  it "stores max_initial_depth when given" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      max_initial_depth: 2
+    )
+
+    expect(state.max_initial_depth).to eq(2)
+  end
+
+  it "rejects invalid max_initial_depth values" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        max_initial_depth: "2"
+      )
+    end.to raise_error(ArgumentError, /max_initial_depth/)
+  end
+
   it "stores row attribute builders when given" do
     row_class_builder = ->(item) { item.name }
     row_data_builder = ->(item) { { name: item.name } }
