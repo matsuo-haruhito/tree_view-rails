@@ -54,6 +54,53 @@ export class TreeViewStateController extends Controller {
   }
 }
 
+export class TreeViewSelectionController extends Controller {
+  selectedPayloads() {
+    return this.selectedCheckboxes()
+      .map((checkbox) => this.parsePayload(checkbox))
+      .filter((payload) => payload !== null)
+  }
+
+  submit(event) {
+    if (event) event.preventDefault()
+
+    this.dispatch("selected", {
+      detail: {
+        payloads: this.selectedPayloads()
+      }
+    })
+  }
+
+  refresh() {
+    this.dispatch("selected", {
+      detail: {
+        payloads: this.selectedPayloads()
+      }
+    })
+  }
+
+  selectedCheckboxes() {
+    return Array.from(
+      this.element.querySelectorAll(".tree-selection-checkbox:checked:not(:disabled)")
+    )
+  }
+
+  parsePayload(checkbox) {
+    try {
+      return JSON.parse(checkbox.value)
+    } catch (_error) {
+      this.dispatch("invalid-payload", {
+        detail: {
+          value: checkbox.value,
+          checkbox
+        }
+      })
+      return null
+    }
+  }
+}
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
+  application.register("tree-view-selection", TreeViewSelectionController)
 }
