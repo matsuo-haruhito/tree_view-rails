@@ -136,7 +136,8 @@ module TreeView
     def expanded_keys_for(item_or_items)
       ensure_records_path_helpers!
 
-      Array(item_or_items).flat_map do |item|
+      items = item_or_items.is_a?(Array) ? item_or_items : [item_or_items]
+      items.flat_map do |item|
         path_for(item).map { |path_item| node_key_for(path_item) }
       end.uniq
     end
