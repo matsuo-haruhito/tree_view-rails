@@ -151,6 +151,39 @@ RSpec.describe TreeView::Tree do
     end
   end
 
+  describe "#validate_unique_node_keys!" do
+    it "returns true when node keys are unique" do
+      root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
+      child = ItemNode.new(id: 2, parent_item_id: 1, name: "child")
+      tree = described_class.new(records: [root, child], parent_id_method: :parent_item_id)
+
+      expect(tree.validate_unique_node_keys!).to eq(true)
+    end
+
+    it "raises a clear error when records mode has duplicate node keys" do
+      root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
+      duplicate_root = ItemNode.new(id: 1, parent_item_id: nil, name: "duplicate-root")
+      tree = described_class.new(records: [root, duplicate_root], parent_id_method: :parent_item_id)
+
+      expect do
+        tree.validate_unique_node_keys!
+      end.to raise_error(ArgumentError, /duplicate node_key detected: 1/)
+    end
+
+    it "raises a clear error when resolver mode has duplicate node keys" do
+      country = CountryNode.new(1, "japan", [])
+      duplicate_country = CountryNode.new(1, "duplicate", [])
+      tree = described_class.new(
+        roots: [country, duplicate_country],
+        children_resolver: ->(node) { node.public_send(node.members.last) }
+      )
+
+      expect do
+        tree.validate_unique_node_keys!
+      end.to raise_error(ArgumentError, /duplicate node_key detected/)
+    end
+  end
+
   describe "validation" do
     it "rejects mixing adapter mode with records mode" do
       adapter = TreeView::GraphAdapter.new(
