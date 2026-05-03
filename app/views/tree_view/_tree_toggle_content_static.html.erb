@@ -1,4 +1,5 @@
 <% hidden_count = local_assigns[:hidden_count] %>
+<% hidden_message_builder = local_assigns[:hidden_message_builder] %>
 <% children ||= tree.children_for(item) %>
 <% branch_info = tree_branch_info(item, tree) %>
 <% ancestor_last_states = branch_info[:ancestor_last_states] %>
@@ -16,7 +17,7 @@
   <div class="tree-toggle__control">
     <span class="tree-toggle__level"><%= tree_toggle_label(depth) %></span>
     <% if hidden_count %>
-      <span class="tree-toggle__hidden-count"><%= hidden_count %><span class="visually-hidden"> descendants</span></span>
+      <span class="tree-toggle__hidden-count"><%= tree_hidden_count_message(hidden_count, hidden_message_builder) %><span class="visually-hidden"> descendants</span></span>
     <% end %>
   </div>
 </div>
