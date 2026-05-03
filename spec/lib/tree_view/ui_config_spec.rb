@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe TreeView::UiConfig do
   def build_config(**overrides)
     described_class.new(
-      {
+      **{
         node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
         button_dom_id_builder: ->(item_or_id) { "button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
         show_button_dom_id_builder: ->(item_or_id) { "show_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" }
