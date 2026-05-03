@@ -3,7 +3,7 @@
 module TreeView
   class RenderState
     VALID_INITIAL_STATES = Configuration::VALID_INITIAL_STATES
-    VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys].freeze
+    VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys collapsed_keys].freeze
     VALID_RENDER_SCOPE_KEYS = %i[max_depth max_leaf_distance].freeze
     VALID_TOGGLE_SCOPE_KEYS = %i[max_depth_from_root max_leaf_distance].freeze
     VALID_SELECTION_KEYS = %i[enabled payload_builder checkbox_name disabled_builder disabled_reason_builder selected_keys].freeze
@@ -20,6 +20,7 @@ module TreeView
                 :max_toggle_depth_from_root,
                 :max_toggle_leaf_distance,
                 :expanded_keys,
+                :collapsed_keys,
                 :selection_enabled,
                 :selection_payload_builder,
                 :selection_checkbox_name,
@@ -41,6 +42,7 @@ module TreeView
                    max_toggle_depth_from_root: nil,
                    max_toggle_leaf_distance: nil,
                    expanded_keys: nil,
+                   collapsed_keys: nil,
                    initial_expansion: nil,
                    render_scope: nil,
                    toggle_scope: nil,
@@ -69,6 +71,7 @@ module TreeView
       @max_toggle_depth_from_root = normalize_non_negative_integer(resolve_option(max_toggle_depth_from_root, toggle_scope_options[:max_depth_from_root]), :max_toggle_depth_from_root)
       @max_toggle_leaf_distance = normalize_non_negative_integer(resolve_option(max_toggle_leaf_distance, toggle_scope_options[:max_leaf_distance]), :max_toggle_leaf_distance)
       @expanded_keys = Array(resolve_option(expanded_keys, initial_expansion_options[:expanded_keys])).freeze
+      @collapsed_keys = Array(resolve_option(collapsed_keys, initial_expansion_options[:collapsed_keys])).freeze
       @selection_enabled = normalize_boolean(resolve_option(selectable, selection_options[:enabled]), :selectable)
       @selection_payload_builder = resolve_option(selection_payload_builder, selection_options[:payload_builder])
       @selection_checkbox_name = resolve_option(selection_checkbox_name, selection_options[:checkbox_name]) || DEFAULT_SELECTION_CHECKBOX_NAME
@@ -83,6 +86,7 @@ module TreeView
       validate_builder!(@selection_payload_builder, :selection_payload_builder)
       validate_builder!(@selection_disabled_builder, :selection_disabled_builder)
       validate_builder!(@selection_disabled_reason_builder, :selection_disabled_reason_builder)
+      validate_expansion_key_conflicts!
     end
 
     def selection_enabled?
@@ -140,6 +144,13 @@ module TreeView
       return if builder.nil? || builder.respond_to?(:call)
 
       raise ArgumentError, "#{name} must respond to call"
+    end
+
+    def validate_expansion_key_conflicts!
+      conflicts = expanded_keys & collapsed_keys
+      return if conflicts.empty?
+
+      raise ArgumentError, "expanded_keys and collapsed_keys cannot include the same keys: #{conflicts.map(&:inspect).join(', ')}"
     end
   end
 end

@@ -20,6 +20,7 @@ module TreeViewHelper
         max_toggle_depth_from_root: render_state.max_toggle_depth_from_root,
         max_toggle_leaf_distance: render_state.max_toggle_leaf_distance,
         expanded_keys: render_state.expanded_keys,
+        collapsed_keys: render_state.collapsed_keys,
         selection_enabled: render_state.selection_enabled?,
         selection_payload_builder: render_state.selection_payload_builder,
         selection_checkbox_name: render_state.selection_checkbox_name,
@@ -121,6 +122,10 @@ module TreeViewHelper
 
   def tree_expanded_key?(item, tree, expanded_keys)
     Array(expanded_keys).include?(tree.node_key_for(item))
+  end
+
+  def tree_collapsed_key?(item, tree, collapsed_keys)
+    Array(collapsed_keys).include?(tree.node_key_for(item))
   end
 
   def tree_depth_slots(depth)
