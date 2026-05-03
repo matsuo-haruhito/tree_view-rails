@@ -12,7 +12,8 @@
 tree = TreeView::Tree.new(
   records: items,
   parent_id_method: :parent_item_id,
-  id_method: :id
+  id_method: :id,
+  orphan_strategy: :ignore
 )
 ```
 
@@ -22,6 +23,7 @@ tree = TreeView::Tree.new(
 | `parent_id_method:` | yes | 親IDを返すメソッド名 |
 | `id_method:` | no | 自身のIDを返すメソッド名。既定値は `:id` |
 | `sorter:` | no | root / children の並び順を決めるcallable |
+| `orphan_strategy:` | no | records内に親が存在しないnodeの扱い。既定値は `:ignore` |
 
 ### resolver mode
 
@@ -62,6 +64,7 @@ tree = TreeView::Tree.new(adapter: adapter)
 | `descendant_counts` | node_keyごとの子孫数を返す |
 | `node_key_for(record)` | nodeを識別するkeyを返す |
 | `sort_items(items)` | sorterに従ってitemsを並び替える |
+| `orphan_items` | records内に親が存在しないnodeを返す |
 | `validate_unique_node_keys!` | node_key の重複を検出する開発時向けチェック |
 
 ### 並び順
@@ -79,6 +82,31 @@ TreeView::Tree.new(
 `sorter` は `call(items, tree)` できるオブジェクトを指定します。
 `sorter` の戻り値は `to_a` に応答する配列相当のオブジェクトにしてください。
 `nil` など配列相当ではない値を返した場合は、誤実装に気づきやすいよう `ArgumentError` を発生させます。
+
+### orphan node の扱い
+
+records mode では、`parent_id_method` が返す親IDが `nil` ではなく、かつ同じ `records` 内に親レコードが存在しないnodeを orphan node として扱います。
+
+```ruby
+tree = TreeView::Tree.new(
+  records: items,
+  parent_id_method: :parent_item_id,
+  orphan_strategy: :as_root
+)
+```
+
+| `orphan_strategy` | `root_items(nil)` の挙動 |
+|---|---|
+| `:ignore` | 通常rootのみを返す。既定値で、従来互換の挙動 |
+| `:as_root` | 通常rootに orphan node を加えて返す |
+| `:raise` | orphan node が存在する場合に `ArgumentError` を発生させる |
+
+`root_items(parent_id)` のように親IDを明示した場合は、orphan strategy の影響を受けず、従来どおり指定した親IDのchildrenを返します。
+
+`orphan_items` は、strategyに関係なく orphan node の一覧を返します。
+resolver mode / adapter mode では orphan strategy は `:ignore` のみ有効です。
+
+orphan node だけをrootとして表示する `:orphans_only` は、別Issueの後続拡張として扱います。
 
 ### node_key の重複検出
 

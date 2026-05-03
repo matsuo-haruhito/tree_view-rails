@@ -6,7 +6,16 @@ module TreeView
       items.sort_by { |item| tree.descendant_counts[tree.node_key_for(item)].to_i }
     end
 
-    attr_reader :records, :id_method, :parent_id_method, :roots, :children_resolver, :adapter, :sorter
+    VALID_ORPHAN_STRATEGIES = %i[ignore as_root raise].freeze
+
+    attr_reader :records,
+                :id_method,
+                :parent_id_method,
+                :roots,
+                :children_resolver,
+                :adapter,
+                :sorter,
+                :orphan_strategy
 
     def initialize(records: nil,
                    parent_id_method: nil,
@@ -15,7 +24,8 @@ module TreeView
                    children_resolver: nil,
                    node_key_resolver: nil,
                    adapter: nil,
-                   sorter: nil)
+                   sorter: nil,
+                   orphan_strategy: :ignore)
       @records = records
       @id_method = id_method
       @parent_id_method = parent_id_method
@@ -24,6 +34,7 @@ module TreeView
       @node_key_resolver = node_key_resolver
       @adapter = adapter
       @sorter = sorter || DEFAULT_SORTER
+      @orphan_strategy = normalize_orphan_strategy(orphan_strategy)
 
       validate_mode!
     end
@@ -67,6 +78,8 @@ module TreeView
         adapter.roots
       elsif resolver_mode?
         roots
+      elsif root_parent_id.nil?
+        root_items_for_nil_parent
       else
         Array(items_by_parent_id[root_parent_id])
       end
@@ -102,6 +115,15 @@ module TreeView
       sorted.to_a
     end
 
+    def orphan_items
+      return [] unless records_mode?
+
+      @orphan_items ||= records.select do |record|
+        parent_id = record.public_send(parent_id_method)
+        parent_id && !items_by_id.key?(parent_id)
+      end
+    end
+
     def validate_unique_node_keys!
       seen = {}
       duplicated_keys = []
@@ -132,6 +154,10 @@ module TreeView
       children_resolver.respond_to?(:call)
     end
 
+    def records_mode?
+      !adapter_mode? && !resolver_mode?
+    end
+
     def each_root_candidate
       return enum_for(:each_root_candidate) unless block_given?
 
@@ -146,14 +172,48 @@ module TreeView
       end
     end
 
+    def root_items_for_nil_parent
+      regular_roots = Array(items_by_parent_id[nil])
+
+      case orphan_strategy
+      when :ignore
+        regular_roots
+      when :as_root
+        regular_roots + orphan_items
+      when :raise
+        raise_if_orphans!
+        regular_roots
+      end
+    end
+
+    def raise_if_orphans!
+      return if orphan_items.empty?
+
+      orphan_keys = orphan_items.map { |item| node_key_for(item).inspect }.join(', ')
+      raise ArgumentError, "orphan nodes detected: #{orphan_keys}"
+    end
+
+    def items_by_id
+      @items_by_id ||= records.to_h { |record| [record.public_send(id_method), record] }
+    end
+
+    def normalize_orphan_strategy(value)
+      normalized_value = value.to_sym
+      return normalized_value if VALID_ORPHAN_STRATEGIES.include?(normalized_value)
+
+      raise ArgumentError, "orphan_strategy must be one of: #{VALID_ORPHAN_STRATEGIES.join(', ')}"
+    end
+
     def validate_mode!
       raise ArgumentError, "sorter must respond to call" unless sorter.respond_to?(:call)
 
       if adapter_mode?
         raise ArgumentError, 'adapter mode cannot be combined with records mode' if records || parent_id_method
         raise ArgumentError, 'adapter mode cannot be combined with roots/children_resolver mode' if roots.any? || children_resolver
+        raise ArgumentError, 'orphan_strategy is only supported in records mode' unless orphan_strategy == :ignore
       elsif resolver_mode?
         raise ArgumentError, 'roots must be provided when children_resolver is used' if roots.empty?
+        raise ArgumentError, 'orphan_strategy is only supported in records mode' unless orphan_strategy == :ignore
       else
         raise ArgumentError, 'records and parent_id_method are required in records mode' if records.nil? || parent_id_method.nil?
       end
