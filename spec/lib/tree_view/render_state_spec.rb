@@ -216,6 +216,26 @@ RSpec.describe TreeView::RenderState do
     expect(state.selection_checkbox_name).to eq("documents[]")
   end
 
+  it "stores selection disabled builders" do
+    disabled_builder = ->(item) { item.disabled? }
+    disabled_reason_builder = ->(item) { item.disabled? ? "disabled" : nil }
+
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      selection: {
+        enabled: true,
+        disabled_builder: disabled_builder,
+        disabled_reason_builder: disabled_reason_builder
+      }
+    )
+
+    expect(state.selection_disabled_builder).to eq(disabled_builder)
+    expect(state.selection_disabled_reason_builder).to eq(disabled_reason_builder)
+  end
+
   it "stores grouped selection options" do
     payload_builder = ->(item) { { id: item.id } }
 
@@ -282,6 +302,18 @@ RSpec.describe TreeView::RenderState do
         selection: { enabled: true, payload_builder: :invalid }
       )
     end.to raise_error(ArgumentError, /selection_payload_builder/)
+  end
+
+  it "rejects invalid selection disabled builders" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        selection: { enabled: true, disabled_builder: :invalid }
+      )
+    end.to raise_error(ArgumentError, /selection_disabled_builder/)
   end
 
   it "prefers individual options over grouped options" do
