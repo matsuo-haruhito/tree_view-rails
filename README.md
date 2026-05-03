@@ -13,6 +13,7 @@
 - Turbo Stream開閉用path builder
 - 異種ノード混在ツリー用 `GraphAdapter`
 - viewから使うDOM ID / toggle path / 枝情報helper
+- `RenderState` からroot行を描画する `tree_view_rows` helper
 - host app側の `row_partial` 差し替え
 
 ## 含まないもの
@@ -81,16 +82,12 @@ view:
 ```erb
 <table class="tree-view-table">
   <tbody>
-    <%= render partial: "tree_view/tree_row",
-      collection: @render_state.root_items,
-      as: :item,
-      locals: {
-        tree: @render_state.tree,
-        row_partial: @render_state.row_partial
-      } %>
+    <%= tree_view_rows(@render_state) %>
   </tbody>
 </table>
 ```
+
+既存どおり `tree_view/tree_row` partial を直接renderすることもできます。
 
 row partial:
 
