@@ -163,6 +163,263 @@ td = item.name
 td = item.owner_name
 ```
 
+## 用途別サンプル
+
+### 通常Treeを `tree_view_rows` で描画する
+
+通常の親子階層をそのまま表示する場合は、`tree.root_items` を `RenderState` に渡します。
+
+```ruby
+tree = TreeView::Tree.new(
+  records: @documents,
+  parent_id_method: :parent_document_id,
+  sorter: ->(nodes, _tree) { nodes.sort_by(&:name) }
+)
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui
+)
+```
+
+### `PathTree` で検索結果の親階層を補完する
+
+検索結果や絞り込み結果を、通常の階層構造の中で見せたい場合は `path_tree_for` を使います。
+
+表示方向は root → parent → matched item です。
+
+```ruby
+matched_documents = Document.search(params[:q]).to_a
+
+base_tree = TreeView::Tree.new(
+  records: Document.order(:name).to_a,
+  parent_id_method: :parent_document_id
+)
+
+path_tree = base_tree.path_tree_for(matched_documents)
+
+@render_state = TreeView::RenderState.new(
+  tree: path_tree,
+  root_items: path_tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  initial_state: :expanded
+)
+```
+
+### `ReverseTree` で子nodeから親方向へ辿る
+
+子node一覧を起点に、所属フォルダや上位階層を逆方向に確認したい場合は `reverse_tree_for` を使います。
+
+表示方向は matched item → parent → root です。
+
+```ruby
+matched_documents = Document.search(params[:q]).to_a
+
+base_tree = TreeView::Tree.new(
+  records: Document.order(:name).to_a,
+  parent_id_method: :parent_document_id
+)
+
+reverse_tree = base_tree.reverse_tree_for(matched_documents)
+
+@render_state = TreeView::RenderState.new(
+  tree: reverse_tree,
+  root_items: reverse_tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  initial_state: :expanded
+)
+```
+
+`PathTree` と `ReverseTree` は似ていますが、表示方向が異なります。
+
+| API | 表示方向 | 用途 |
+|---|---|---|
+| `path_tree_for(items)` | root → parent → matched item | 通常の階層構造内で検索結果を確認する |
+| `reverse_tree_for(items)` | matched item → parent → root | 子node一覧から親方向へ辿る |
+
+### 初期状態を折りたたみにする
+
+最初はrootだけ表示し、ユーザー操作で展開したい場合は `initial_state: :collapsed` を指定します。
+
+```ruby
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  initial_state: :collapsed
+)
+```
+
+### `expanded_keys` で特定nodeまで開く
+
+検索結果や現在選択中のnodeまで初期表示したい場合は、対象nodeだけでなく祖先nodeのkeyも `expanded_keys` に含めます。
+
+```ruby
+current_document = Document.find(params[:id])
+path = tree.path_for(current_document)
+expanded_keys = path.map { |document| tree.node_key_for(document) }
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  initial_state: :collapsed,
+  expanded_keys: expanded_keys
+)
+```
+
+### `max_initial_depth` で初期HTMLの展開範囲を制御する
+
+`max_initial_depth` は、初期HTMLにどこまで展開描画するかを制御します。
+
+境界depthのnodeは表示されますが、子孫は初期HTMLには出ません。子孫がある場合は `hidden_count` が表示されます。
+
+```ruby
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  max_initial_depth: 1
+)
+```
+
+### `max_render_depth` で描画対象そのものを制限する
+
+`max_render_depth` は、root側から何階層までを描画対象にするかを制御します。
+
+`max_initial_depth` と異なり、対象外nodeは `hidden_count` にも含めません。
+
+```ruby
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  max_render_depth: 2
+)
+```
+
+### `max_leaf_distance` でleaf側から描画対象を制限する
+
+末端に近いnodeだけ見たい場合は `max_leaf_distance` を使います。
+
+leafはdistance `0`、leafの親は `1`、leafの祖父は `2` として扱います。
+
+```ruby
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  max_leaf_distance: 2
+)
+```
+
+複数leafを持つnodeでは、最短leaf距離を使います。
+
+### `max_toggle_depth_from_root` でroot基準の開閉範囲を渡す
+
+`scope_format: :object` を指定すると、path builderの第3引数に `TreeView::ToggleScope` が渡されます。
+
+root基準でまとめて開閉したい範囲は `max_toggle_depth_from_root` で指定します。
+
+```ruby
+@tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "document").build(
+  scope_format: :object,
+  hide_descendants_path_builder: ->(item, depth, scope) {
+    hide_document_path(
+      item,
+      current_depth: depth,
+      toggle_depth: scope.toggle_depth,
+      scope: scope.mode
+    )
+  },
+  show_descendants_path_builder: ->(item, depth, scope) {
+    show_document_path(
+      item,
+      current_depth: depth,
+      toggle_depth: scope.toggle_depth,
+      scope: scope.mode
+    )
+  },
+  toggle_all_path_builder: ->(state) { documents_path(state: state) }
+)
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  max_toggle_depth_from_root: 2
+)
+```
+
+### `max_toggle_leaf_distance` でleaf基準の開閉範囲を渡す
+
+leaf側から見た開閉範囲をpath builderに渡したい場合は `max_toggle_leaf_distance` を使います。
+
+```ruby
+@tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "document").build(
+  scope_format: :object,
+  hide_descendants_path_builder: ->(item, depth, scope) {
+    hide_document_path(
+      item,
+      current_depth: depth,
+      toggle_leaf_distance: scope.toggle_leaf_distance,
+      leaf_scope: scope.leaf_distance_within_scope?
+    )
+  },
+  show_descendants_path_builder: ->(item, depth, scope) {
+    show_document_path(
+      item,
+      current_depth: depth,
+      toggle_leaf_distance: scope.toggle_leaf_distance,
+      leaf_scope: scope.leaf_distance_within_scope?
+    )
+  },
+  toggle_all_path_builder: ->(state) { documents_path(state: state) }
+)
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  max_toggle_leaf_distance: 2
+)
+```
+
+### 行にclassやdata属性を付与する
+
+行ごとに状態表示やJavaScript連携用の属性を付けたい場合は、`row_class_builder` と `row_data_builder` を使います。
+
+```ruby
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  row_class_builder: ->(document) {
+    ["document-row", ("is-archived" if document.archived?)]
+  },
+  row_data_builder: ->(document) {
+    {
+      document_id: document.id,
+      status: document.status
+    }
+  }
+)
+```
+
+`data-tree-depth` は常に維持されます。
+
 ## mode指定
 
 `mode:` を明示する場合は、`:static` または `:turbo` のみ指定できます。
