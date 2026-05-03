@@ -16,6 +16,7 @@ module TreeViewHelper
         max_render_depth: render_state.max_render_depth,
         max_leaf_distance: render_state.max_leaf_distance,
         max_toggle_depth_from_root: render_state.max_toggle_depth_from_root,
+        max_toggle_leaf_distance: render_state.max_toggle_leaf_distance,
         expanded_keys: render_state.expanded_keys,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder
@@ -68,14 +69,16 @@ module TreeViewHelper
     tree_leaf_distances(tree)[tree.node_key_for(item)]
   end
 
-  def tree_toggle_scope(depth:, max_toggle_depth_from_root:, mode: :all, ui: @tree_ui)
+  def tree_toggle_scope(depth:, max_toggle_depth_from_root:, max_toggle_leaf_distance: nil, leaf_distance: nil, mode: :all, ui: @tree_ui)
     resolved = resolved_ui(ui)
     return mode.to_s unless resolved.object_scope?
 
     TreeView::ToggleScope.new(
       mode: mode,
       current_depth: depth,
-      max_depth_from_root: max_toggle_depth_from_root
+      max_depth_from_root: max_toggle_depth_from_root,
+      current_leaf_distance: leaf_distance,
+      max_leaf_distance: max_toggle_leaf_distance
     )
   end
 
