@@ -65,6 +65,7 @@ tree = TreeView::Tree.new(adapter: adapter)
 | `ancestors_for(record)` | root側から親までの祖先配列を返す。records modeのみ |
 | `path_for(record)` | root側から指定nodeまでのpath配列を返す。records modeのみ |
 | `paths_for(items)` | 複数nodeのpath配列を返す。records modeのみ |
+| `path_tree_for(items)` | 複数nodeから親階層を補完した通常向きTreeを返す。records modeのみ |
 | `descendant_counts` | node_keyごとの子孫数を返す |
 | `node_key_for(record)` | nodeを識別するkeyを返す |
 | `sort_items(items)` | sorterに従ってitemsを並び替える |
@@ -107,12 +108,42 @@ expanded_keys = paths.flatten.map { |item| tree.node_key_for(item) }.uniq
 | `ancestors_for(item)` | root側から親までの祖先配列 |
 | `path_for(item)` | root側から `item` までの配列 |
 | `paths_for(items)` | 複数itemに対する `path_for` の配列 |
+| `path_tree_for(items)` | 複数itemに対するpathを通常向きTreeとしてまとめた `TreeView::PathTree` |
 
 親がrecords内に存在しない orphan node の場合、`parent_for` は `nil`、`ancestors_for` は空配列、`path_for` は対象nodeのみを返します。
 親方向の循環参照を検出した場合は `ArgumentError` を発生させます。
 resolver mode / adapter mode では、これらの親方向helperは未対応です。
 
-親階層を補完した通常向きTreeをそのまま描画する `path_tree_for` 相当の機能は、後続Issue #40 で扱います。
+`path_tree_for` は、検索結果などを起点に root → ancestor → matched item の通常向きTreeを作ります。
+共通祖先や共通edgeは重複表示されません。
+
+```ruby
+path_tree = tree.path_tree_for(matched_documents)
+
+render_state = TreeView::RenderState.new(
+  tree: path_tree,
+  root_items: path_tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_state: :expanded
+)
+```
+
+## TreeView::PathTree
+
+`TreeView::PathTree` は、`TreeView::Tree#path_tree_for(items)` から生成される、親階層補完済みの通常向きTreeです。
+
+既存の `RenderState` / `tree_view_rows` と接続できるよう、通常Treeに近いインターフェースを持ちます。
+
+| メソッド | 説明 |
+|---|---|
+| `root_items(root_parent_id = nil)` | PathTree内のroot nodeを返す |
+| `children_for(record)` | PathTree内で指定nodeのchildrenを返す |
+| `descendant_counts` | PathTree内の子孫数を返す |
+| `node_key_for(record)` | base treeの `node_key_for` に委譲する |
+| `sort_items(items)` | base treeの `sort_items` に委譲する |
+
+`PathTree` は、base tree 全体ではなく、指定itemへ至るpath上のnodeだけを描画対象にします。
 
 ### orphan node の扱い
 
