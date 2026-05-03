@@ -87,6 +87,44 @@ RSpec.describe TreeViewHelper do
     end
   end
 
+  describe "tree_row_classes" do
+    it "adds current, active, and highlighted classes while preserving builder classes" do
+      helper = helper_host_class.new(tree_ui: ui_config)
+      item = TestNode.new(id: 42, parent_item_id: nil, name: "sample")
+      tree = instance_double(TreeView::Tree)
+      allow(tree).to receive(:node_key_for).with(item).and_return("node-42")
+
+      classes = helper.tree_row_classes(
+        item,
+        ->(_item) { ["custom-row"] },
+        tree: tree,
+        current_key: "node-42",
+        active_keys: ["node-42"],
+        highlighted_keys: ["node-42"]
+      )
+
+      expect(classes).to eq(["custom-row", "is-current", "is-active", "is-highlighted"])
+    end
+
+    it "does not add row state classes when keys do not match" do
+      helper = helper_host_class.new(tree_ui: ui_config)
+      item = TestNode.new(id: 42, parent_item_id: nil, name: "sample")
+      tree = instance_double(TreeView::Tree)
+      allow(tree).to receive(:node_key_for).with(item).and_return("node-42")
+
+      classes = helper.tree_row_classes(
+        item,
+        nil,
+        tree: tree,
+        current_key: "node-1",
+        active_keys: ["node-2"],
+        highlighted_keys: ["node-3"]
+      )
+
+      expect(classes).to eq([])
+    end
+  end
+
   describe "tree render caches" do
     it "clears cached leaf distance and branch maps" do
       helper = helper_host_class.new(tree_ui: ui_config)
