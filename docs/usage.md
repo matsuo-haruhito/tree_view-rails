@@ -85,7 +85,8 @@ tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "ite
   initial_expansion: {
     default: :collapsed,
     max_depth: 2,
-    expanded_keys: expanded_keys
+    expanded_keys: expanded_keys,
+    collapsed_keys: collapsed_keys
   },
   render_scope: {
     max_depth: 3,
@@ -105,6 +106,7 @@ tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "ite
 | `initial_expansion[:default]` | `initial_state` | 初期状態。`:expanded` / `:collapsed` |
 | `initial_expansion[:max_depth]` | `max_initial_depth` | 初期HTMLで展開描画する最大depth |
 | `initial_expansion[:expanded_keys]` | `expanded_keys` | 初期表示時に展開するnode_key配列 |
+| `initial_expansion[:collapsed_keys]` | `collapsed_keys` | 初期表示時に折りたたむnode_key配列 |
 | `render_scope[:max_depth]` | `max_render_depth` | root基準の描画対象最大depth |
 | `render_scope[:max_leaf_distance]` | `max_leaf_distance` | leaf基準の描画対象最大distance |
 | `toggle_scope[:max_depth_from_root]` | `max_toggle_depth_from_root` | root基準の開閉操作範囲 |
@@ -413,6 +415,27 @@ expanded_keys = path.map { |document| tree.node_key_for(document) }
   expanded_keys: expanded_keys
 )
 ```
+
+### `collapsed_keys` で特定nodeだけ初期折りたたみにする
+
+基本は展開しつつ、特定node配下だけ初期表示で閉じたい場合は `collapsed_keys` を指定します。
+
+```ruby
+large_folder = Document.find(params[:large_folder_id])
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  initial_state: :expanded,
+  collapsed_keys: [tree.node_key_for(large_folder)]
+)
+```
+
+`collapsed_keys` は `tree.node_key_for(item)` と照合されます。
+同じnode_keyを `expanded_keys` と `collapsed_keys` の両方に指定した場合は、矛盾として `ArgumentError` になります。
+親nodeが `collapsed_keys` に含まれている場合、その配下の子nodeを `expanded_keys` に入れても初期HTMLには表示されません。
 
 ### `max_initial_depth` で初期HTMLの展開範囲を制御する
 
