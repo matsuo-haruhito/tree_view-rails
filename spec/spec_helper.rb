@@ -4,6 +4,7 @@ require "bundler/setup"
 require "tree_view"
 require_relative "../app/helpers/tree_view_helper"
 require_relative "../app/helpers/tree_view_state_helper"
+require_relative "../app/helpers/tree_view_row_attrs_helper"
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
