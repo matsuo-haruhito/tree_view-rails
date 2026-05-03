@@ -60,10 +60,20 @@ module TreeViewHelper
     tree_toggle_all_path(state: :collapsed, ui: ui)
   end
 
+  def tree_toggle_mode(mode = nil)
+    resolved_mode = (mode || (@tree_ui&.static? ? :static : :turbo)).to_sym
+    return resolved_mode if %i[static turbo].include?(resolved_mode)
+
+    raise ArgumentError, "TreeView toggle mode must be :static or :turbo, got: #{mode.inspect}"
+  end
+
   private
 
   def resolved_ui(ui)
-    ui || @tree_ui || default_tree_ui
+    resolved = ui || @tree_ui || default_tree_ui
+    return resolved if resolved
+
+    raise ArgumentError, "TreeView ui_config is required. Pass ui: or set @tree_ui."
   end
 
   def default_tree_ui
@@ -94,7 +104,7 @@ module TreeViewHelper
       branch_map = {}
 
       walk = lambda do |nodes, depth, ancestor_last_states|
-        sorted_nodes = nodes.sort_by { |node| tree.descendant_counts[tree.node_key_for(node)].to_i }
+        sorted_nodes = tree.sort_items(nodes)
 
         sorted_nodes.each_with_index do |node, index|
           is_last = index == sorted_nodes.length - 1

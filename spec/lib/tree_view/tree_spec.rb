@@ -58,6 +58,16 @@ RSpec.describe TreeView::Tree do
       expect(counts[tree.node_key_for(recipe)]).to eq(1)
       expect(counts[tree.node_key_for(recipe_step)]).to eq(0)
     end
+
+    it "raises a clear error when a cycle is detected in records mode" do
+      node_a = ItemNode.new(id: 1, parent_item_id: 2, name: "a")
+      node_b = ItemNode.new(id: 2, parent_item_id: 1, name: "b")
+      tree = described_class.new(records: [node_a, node_b], parent_id_method: :parent_item_id)
+
+      expect do
+        tree.descendant_counts
+      end.to raise_error(ArgumentError, /cycle detected/)
+    end
   end
 
   describe "#root_items" do
@@ -69,6 +79,33 @@ RSpec.describe TreeView::Tree do
       tree = described_class.new(records: [small_root, large_root, child], parent_id_method: :parent_item_id)
 
       expect(tree.root_items).to eq([small_root, large_root])
+    end
+
+    it "supports a custom sorter for root items" do
+      alpha = ItemNode.new(id: 1, parent_item_id: nil, name: "alpha")
+      beta = ItemNode.new(id: 2, parent_item_id: nil, name: "beta")
+      tree = described_class.new(
+        records: [beta, alpha],
+        parent_id_method: :parent_item_id,
+        sorter: ->(items, _tree) { items.sort_by(&:name).reverse }
+      )
+
+      expect(tree.root_items).to eq([beta, alpha])
+    end
+  end
+
+  describe "#sort_items" do
+    it "applies the configured sorter for children as well" do
+      root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
+      child_a = ItemNode.new(id: 2, parent_item_id: 1, name: "alpha")
+      child_b = ItemNode.new(id: 3, parent_item_id: 1, name: "beta")
+      tree = described_class.new(
+        records: [root, child_b, child_a],
+        parent_id_method: :parent_item_id,
+        sorter: ->(items, _tree) { items.sort_by(&:name) }
+      )
+
+      expect(tree.sort_items(tree.children_for(root))).to eq([child_a, child_b])
     end
   end
 
@@ -95,6 +132,12 @@ RSpec.describe TreeView::Tree do
       expect do
         described_class.new(adapter: adapter, records: [])
       end.to raise_error(ArgumentError, /adapter mode cannot be combined/)
+    end
+
+    it "requires sorter to respond to call" do
+      expect do
+        described_class.new(records: [], parent_id_method: :parent_item_id, sorter: :name)
+      end.to raise_error(ArgumentError, /sorter must respond to call/)
     end
   end
 end

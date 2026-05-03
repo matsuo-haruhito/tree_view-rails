@@ -2,7 +2,11 @@
 
 module TreeView
   class Tree
-    attr_reader :records, :id_method, :parent_id_method, :roots, :children_resolver, :adapter
+    DEFAULT_SORTER = lambda do |items, tree|
+      items.sort_by { |item| tree.descendant_counts[tree.node_key_for(item)].to_i }
+    end
+
+    attr_reader :records, :id_method, :parent_id_method, :roots, :children_resolver, :adapter, :sorter
 
     def initialize(records: nil,
                    parent_id_method: nil,
@@ -10,7 +14,8 @@ module TreeView
                    roots: nil,
                    children_resolver: nil,
                    node_key_resolver: nil,
-                   adapter: nil)
+                   adapter: nil,
+                   sorter: nil)
       @records = records
       @id_method = id_method
       @parent_id_method = parent_id_method
@@ -18,6 +23,7 @@ module TreeView
       @children_resolver = children_resolver
       @node_key_resolver = node_key_resolver
       @adapter = adapter
+      @sorter = sorter || DEFAULT_SORTER
 
       validate_mode!
     end
@@ -31,13 +37,21 @@ module TreeView
     def descendant_counts
       @descendant_counts ||= begin
         memo = {}
+        visiting = {}
 
         count_descendants = lambda do |record|
           node_key = node_key_for(record)
           return memo[node_key] if memo.key?(node_key)
+          raise ArgumentError, "cycle detected in tree for node #{node_key.inspect}" if visiting[node_key]
 
+          visiting[node_key] = true
           children = children_for(record)
           memo[node_key] = children.sum { |child| 1 + count_descendants.call(child) }
+          visiting.delete(node_key)
+          memo[node_key]
+        rescue StandardError
+          visiting.delete(node_key)
+          raise
         end
 
         each_root_candidate do |root_candidate|
@@ -56,7 +70,8 @@ module TreeView
       else
         Array(items_by_parent_id[root_parent_id])
       end
-      candidates.sort_by { |item| descendant_counts[node_key_for(item)] }
+
+      sort_items(candidates)
     end
 
     def children_for(record)
@@ -76,6 +91,10 @@ module TreeView
       else
         record.public_send(id_method)
       end
+    end
+
+    def sort_items(items)
+      Array(sorter.call(Array(items), self))
     end
 
     private
@@ -103,6 +122,8 @@ module TreeView
     end
 
     def validate_mode!
+      raise ArgumentError, "sorter must respond to call" unless sorter.respond_to?(:call)
+
       if adapter_mode?
         raise ArgumentError, 'adapter mode cannot be combined with records mode' if records || parent_id_method
         raise ArgumentError, 'adapter mode cannot be combined with roots/children_resolver mode' if roots.any? || children_resolver

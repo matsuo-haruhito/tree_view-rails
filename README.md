@@ -8,7 +8,7 @@
 - `TreeView::Tree`
   - 親子解決
   - 子孫数集計
-  - ルート並び替え
+  - ルート/子ノード並び替え
 - `TreeView::Traversal`
   - 子孫 ID 収集
 - `TreeView::GraphAdapter`
@@ -79,6 +79,16 @@ pin "tree_view", to: "tree_view/index.js"
 tree = TreeView::Tree.new(
   records: items,
   parent_id_method: :parent_item_id
+)
+```
+
+既定では子孫数の昇順で並びます。必要なら `sorter:` で root / children 共通の並び順を差し替えられます。
+
+```ruby
+tree = TreeView::Tree.new(
+  records: items,
+  parent_id_method: :parent_item_id,
+  sorter: ->(nodes, _tree) { nodes.sort_by(&:name) }
 )
 ```
 
@@ -170,6 +180,8 @@ td = item.owner_name
 ```
 
 Turbo Stream で開閉したい場合は、`build` に path builder を渡し、同じ `tree_row` を render します。`@tree_ui` が static でなければ既定で turbo toggle partial を使います。
+
+`mode:` を明示する場合は `:static` / `:turbo` のみを受け付けます。`ui:` や `@tree_ui` が未設定のまま helper を呼ぶと、設定漏れが分かる `ArgumentError` を返します。
 
 ### Global config
 

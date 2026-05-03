@@ -59,6 +59,34 @@ RSpec.describe TreeViewHelper do
     end
   end
 
+  describe "ui_config resolution" do
+    it "raises a clear error when ui_config is missing" do
+      helper = helper_host_class.new
+      item = TestNode.new(id: 42, parent_item_id: nil, name: "sample")
+
+      expect do
+        helper.tree_node_dom_id(item)
+      end.to raise_error(ArgumentError, /ui_config is required/)
+    end
+  end
+
+  describe "tree_toggle_mode" do
+    it "returns static and turbo as-is" do
+      helper = helper_host_class.new(tree_ui: ui_config)
+
+      expect(helper.tree_toggle_mode(:static)).to eq(:static)
+      expect(helper.tree_toggle_mode(:turbo)).to eq(:turbo)
+    end
+
+    it "raises a clear error for invalid modes" do
+      helper = helper_host_class.new(tree_ui: ui_config)
+
+      expect do
+        helper.tree_toggle_mode(:statc)
+      end.to raise_error(ArgumentError, /must be :static or :turbo/)
+    end
+  end
+
   describe "tree_branch_info" do
     it "returns branch information for each node" do
       root_a = TestNode.new(id: 1, parent_item_id: nil, name: "root-a")
@@ -74,6 +102,21 @@ RSpec.describe TreeViewHelper do
       expect(helper.tree_branch_info(child_a1, tree)).to eq(depth: 1, ancestor_last_states: [], is_last: true)
       expect(helper.tree_branch_info(grandchild_a1, tree)).to eq(depth: 2, ancestor_last_states: [true], is_last: true)
       expect(helper.tree_branch_info(root_b, tree)).to eq(depth: 0, ancestor_last_states: [], is_last: false)
+    end
+
+    it "uses the tree sorter for branch ordering" do
+      root_a = TestNode.new(id: 1, parent_item_id: nil, name: "alpha")
+      root_b = TestNode.new(id: 2, parent_item_id: nil, name: "beta")
+      tree = TreeView::Tree.new(
+        records: [root_a, root_b],
+        parent_id_method: :parent_item_id,
+        sorter: ->(items, _tree) { items.sort_by(&:name).reverse }
+      )
+
+      helper = helper_host_class.new(tree_ui: ui_config)
+
+      expect(helper.tree_branch_info(root_b, tree)).to eq(depth: 0, ancestor_last_states: [], is_last: false)
+      expect(helper.tree_branch_info(root_a, tree)).to eq(depth: 0, ancestor_last_states: [], is_last: true)
     end
   end
 end

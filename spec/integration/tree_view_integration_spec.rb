@@ -1,45 +1,85 @@
 require "spec_helper"
+require "action_view"
+require "bigdecimal"
+require "fileutils"
+require "tmpdir"
 
 RSpec.describe "TreeView integration" do
-  TestNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+  IntegrationNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
-  let(:root) { TestNode.new(id: 1, parent_item_id: nil, name: "root") }
-  let(:child) { TestNode.new(id: 2, parent_item_id: 1, name: "child") }
+  let(:root) { IntegrationNode.new(id: 1, parent_item_id: nil, name: "root") }
+  let(:child) { IntegrationNode.new(id: 2, parent_item_id: 1, name: "child") }
   let(:nodes) { [root, child] }
+  let(:tree) { TreeView::Tree.new(records: nodes, parent_id_method: :parent_item_id) }
+  let(:gem_view_path) { File.expand_path("../../app/views", __dir__) }
+  let(:host_view_dir) { Dir.mktmpdir("tree_view_host_views") }
+
+  before do
+    FileUtils.mkdir_p(File.join(host_view_dir, "projects"))
+    File.write(
+      File.join(host_view_dir, "projects", "_tree_columns.html.erb"),
+      '<td class="project-cell"><%= tree_node_dom_id(item) %>:<%= item.name %></td>'
+    )
+  end
+
+  after do
+    FileUtils.remove_entry(host_view_dir) if Dir.exist?(host_view_dir)
+  end
+
+  def build_view(tree_ui:)
+    view = ActionView::Base.with_empty_template_cache.with_view_paths([host_view_dir, gem_view_path], {}, nil)
+    view.extend(TreeViewHelper)
+    view.instance_variable_set(:@tree_ui, tree_ui)
+    view
+  end
 
   describe "static host app usage" do
-    it "builds static UiConfig and render state without toggle paths" do
-      builder = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project")
-      ui = builder.build_static
-      tree = TreeView::Tree.new(records: nodes, parent_id_method: :parent_item_id)
+    it "renders tree_view/tree_row from a host partial and exposes helper methods" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      view = build_view(tree_ui: tree_ui)
 
-      render_state = TreeView::RenderState.new(
-        tree: tree,
-        root_items: tree.root_items,
-        row_partial: "projects/tree_columns",
-        ui_config: ui
+      rendered = view.render(
+        partial: "tree_view/tree_row",
+        locals: { item: root, tree: tree, row_partial: "projects/tree_columns", mode: :static }
       )
 
-      expect(render_state.effective_initial_state).to eq(:expanded)
-      expect(ui.node_dom_id(root)).to eq("project_1")
-      expect(ui.hide_descendants_path(root, 0)).to be_nil
-      expect(ui.show_descendants_path(root, 0)).to be_nil
-      expect(ui.toggle_all_path(state: :collapsed)).to be_nil
+      expect(view.tree_node_dom_id(root)).to eq("project_1")
+      expect(rendered).to include('id="project_1"')
+      expect(rendered).to include("project_1:root")
+      expect(rendered).to include("tree-toggle__level")
     end
   end
 
   describe "turbo host app usage" do
-    it "builds full UiConfig and exposes toggle paths" do
-      builder = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project")
-      ui = builder.build(
+    it "renders turbo toggle links with the configured path builders" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build(
         hide_descendants_path_builder: ->(item, depth, scope) { "/projects/#{item.id}/hide?depth=#{depth}&scope=#{scope}" },
         show_descendants_path_builder: ->(item, depth, scope) { "/projects/#{item.id}/show?depth=#{depth}&scope=#{scope}" },
         toggle_all_path_builder: ->(state) { "/projects/toggle_all?state=#{state}" }
       )
+      view = build_view(tree_ui: tree_ui)
 
-      expect(ui.hide_descendants_path(root, 2, scope: "all")).to eq("/projects/1/hide?depth=2&scope=all")
-      expect(ui.show_descendants_path(root, 2, scope: "children")).to eq("/projects/1/show?depth=2&scope=children")
-      expect(ui.toggle_all_path(state: :expanded)).to eq("/projects/toggle_all?state=expanded")
+      rendered = view.render(
+        partial: "tree_view/tree_row",
+        locals: { item: root, tree: tree, row_partial: "projects/tree_columns", mode: :turbo }
+      )
+
+      expect(rendered).to include('/projects/1/hide?depth=0&amp;scope=all')
+    end
+
+    it "raises a clear error for invalid toggle modes" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      view = build_view(tree_ui: tree_ui)
+
+      expect do
+        view.render(
+          partial: "tree_view/tree_row",
+          locals: { item: root, tree: tree, row_partial: "projects/tree_columns", mode: :statc }
+        )
+      end.to raise_error(ActionView::Template::Error) { |error|
+        expect(error.cause).to be_a(ArgumentError)
+        expect(error.cause.message).to match(/must be :static or :turbo/)
+      }
     end
   end
 end

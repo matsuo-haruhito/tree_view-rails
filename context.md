@@ -35,7 +35,8 @@
 - `TreeView::Tree`
   - 親子解決
   - 子孫数集計
-  - ルート並び替え
+  - ルート/子ノード並び替え
+  - sorter 拡張ポイント
 - `TreeView::Traversal`
   - 子孫 ID 収集
 - `TreeView::GraphAdapter`
@@ -57,6 +58,7 @@
 - `row_partial` は host app 側で渡す前提にし、gem 側で sample app 名を既定値にしない。
 - `UiConfig` の開閉 path builder は optional とし、static tree では未指定を許容する。
 - toggle UI は `mode: :turbo | :static` で切り替え、既定値は後方互換のため `:turbo` とする。
+- root / children の並び順は `TreeView::Tree` の sorter で一元化し、既定値は子孫数昇順とする。
 - README には Rails 8 + Propshaft を含む host app 導入例と、`render "tree_view/tree_row"` の完成例を載せる。
 
 ## 現在の作業
