@@ -55,6 +55,15 @@ export class TreeViewStateController extends Controller {
 }
 
 export class TreeViewSelectionController extends Controller {
+  static values = {
+    cascade: Boolean,
+    indeterminate: Boolean
+  }
+
+  connect() {
+    this.updateIndeterminateStates()
+  }
+
   selectedPayloads() {
     return this.selectedCheckboxes()
       .map((checkbox) => this.parsePayload(checkbox))
@@ -72,11 +81,21 @@ export class TreeViewSelectionController extends Controller {
   }
 
   refresh() {
+    this.updateIndeterminateStates()
     this.dispatch("selected", {
       detail: {
         payloads: this.selectedPayloads()
       }
     })
+  }
+
+  toggle(event) {
+    const checkbox = event.target
+    if (!checkbox || !checkbox.matches || !checkbox.matches(".tree-selection-checkbox")) return
+
+    if (this.cascadeValue) this.setDescendantChecked(checkbox, checkbox.checked)
+    this.updateIndeterminateStates()
+    this.refresh()
   }
 
   selectedCheckboxes() {
@@ -97,6 +116,75 @@ export class TreeViewSelectionController extends Controller {
       })
       return null
     }
+  }
+
+  setDescendantChecked(checkbox, checked) {
+    this.descendantCheckboxes(checkbox).forEach((descendant) => {
+      if (descendant.disabled) return
+
+      descendant.checked = checked
+      descendant.indeterminate = false
+    })
+  }
+
+  updateIndeterminateStates() {
+    if (!this.indeterminateValue) return
+
+    this.checkboxes()
+      .sort((left, right) => this.depth(right) - this.depth(left))
+      .forEach((checkbox) => this.updateIndeterminateState(checkbox))
+  }
+
+  updateIndeterminateState(checkbox) {
+    const descendants = this.descendantCheckboxes(checkbox).filter((descendant) => !descendant.disabled)
+    if (descendants.length === 0) {
+      checkbox.indeterminate = false
+      return
+    }
+
+    const checkedCount = descendants.filter((descendant) => descendant.checked).length
+    const partialCount = descendants.filter((descendant) => descendant.indeterminate).length
+    const allChecked = checkedCount === descendants.length
+    const partiallyChecked = checkedCount > 0 || partialCount > 0
+
+    checkbox.checked = allChecked
+    checkbox.indeterminate = partiallyChecked && !allChecked
+  }
+
+  descendantCheckboxes(checkbox) {
+    const row = checkbox.closest("tr[data-tree-depth]")
+    if (!row) return []
+
+    const rowDepth = this.depthFromRow(row)
+    const descendants = []
+    let current = row.nextElementSibling
+
+    while (current) {
+      const currentDepth = this.depthFromRow(current)
+      if (currentDepth <= rowDepth) break
+
+      const descendant = current.querySelector(".tree-selection-checkbox")
+      if (descendant) descendants.push(descendant)
+      current = current.nextElementSibling
+    }
+
+    return descendants
+  }
+
+  checkboxes() {
+    return Array.from(this.element.querySelectorAll(".tree-selection-checkbox"))
+  }
+
+  depth(checkbox) {
+    const row = checkbox.closest("tr[data-tree-depth]")
+    return this.depthFromRow(row)
+  }
+
+  depthFromRow(row) {
+    if (!row) return 0
+
+    const depth = Number.parseInt(row.dataset.treeDepth || "0", 10)
+    return Number.isNaN(depth) ? 0 : depth
   }
 }
 
