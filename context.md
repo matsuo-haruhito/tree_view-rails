@@ -60,6 +60,7 @@
 - toggle UI は `mode: :turbo | :static` で切り替え、既定値は後方互換のため `:turbo` とする。
 - root / children の並び順は `TreeView::Tree` の sorter で一元化し、既定値は子孫数昇順とする。
 - README には Rails 8 + Propshaft を含む host app 導入例と、`render "tree_view/tree_row"` の完成例を載せる。
+- GitHub Actions では最小構成として `bundle exec rake` を回し、RSpec 実行を自動化する。
 
 ## 現在の作業
 - [ ] 外部 host app から install して動作確認する

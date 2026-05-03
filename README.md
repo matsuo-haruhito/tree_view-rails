@@ -199,6 +199,8 @@ bundle exec rspec
 bundle exec rake build
 ```
 
+GitHub Actions では `main` への push と Pull Request で `bundle exec rake` を実行します。
+
 ### Container
 
 ローカル Ruby を入れずに試す場合は Docker を使えます。
