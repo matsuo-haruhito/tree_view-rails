@@ -2,7 +2,9 @@
 
 ## 基本構成
 
-`tree_view` は、host app 側で取得したrecordsを `TreeView::Tree` に渡し、`TreeView::RenderState` と `tree_view/tree_row` partial を使って描画します。
+`tree_view` は、host app 側で取得したrecordsを `TreeView::Tree` に渡し、`TreeView::RenderState` と `tree_view_rows` helper を使って描画します。
+
+既存どおり `tree_view/tree_row` partial を直接renderすることもできます。
 
 ## 通常Tree
 
@@ -107,15 +109,27 @@ end
     </tr>
   </thead>
   <tbody>
-    <%= render partial: "tree_view/tree_row",
-      collection: @render_state.root_items,
-      as: :item,
-      locals: {
-        tree: @render_state.tree,
-        row_partial: @render_state.row_partial
-      } %>
+    <%= tree_view_rows(@render_state) %>
   </tbody>
 </table>
+```
+
+`mode:` や `collapsed:` を明示したい場合は、helper引数で上書きできます。
+
+```erb
+<%= tree_view_rows(@render_state, mode: :static, collapsed: false) %>
+```
+
+既存のpartial直接render方式も維持されています。
+
+```erb
+<%= render partial: "tree_view/tree_row",
+  collection: @render_state.root_items,
+  as: :item,
+  locals: {
+    tree: @render_state.tree,
+    row_partial: @render_state.row_partial
+  } %>
 ```
 
 ## Row partial例（ERB）
@@ -140,13 +154,7 @@ table.tree-view-table
       th name
       th owner
   tbody
-    = render partial: "tree_view/tree_row",
-      collection: @render_state.root_items,
-      as: :item,
-      locals: {
-        tree: @render_state.tree,
-        row_partial: @render_state.row_partial
-      }
+    = tree_view_rows(@render_state)
 ```
 
 ```slim
@@ -160,14 +168,7 @@ td = item.owner_name
 `mode:` を明示する場合は、`:static` または `:turbo` のみ指定できます。
 
 ```erb
-<%= render partial: "tree_view/tree_row",
-  collection: @render_state.root_items,
-  as: :item,
-  locals: {
-    tree: @render_state.tree,
-    row_partial: @render_state.row_partial,
-    mode: :static
-  } %>
+<%= tree_view_rows(@render_state, mode: :static) %>
 ```
 
 不正なmodeを指定すると `ArgumentError` になります。
