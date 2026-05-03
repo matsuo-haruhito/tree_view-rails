@@ -10,6 +10,7 @@
 <% expanded_keys = local_assigns[:expanded_keys] %>
 <% collapsed_keys = local_assigns[:collapsed_keys] %>
 <% selection_enabled = local_assigns[:selection_enabled] %>
+<% selection_visibility = local_assigns.fetch(:selection_visibility, :all) %>
 <% selection_payload_builder = local_assigns[:selection_payload_builder] %>
 <% selection_checkbox_name = local_assigns[:selection_checkbox_name] %>
 <% selection_disabled_builder = local_assigns[:selection_disabled_builder] %>
@@ -33,12 +34,13 @@
 <% if render_self %>
   <%= tag.tr(id: tree_node_dom_id(item), class: row_classes.presence, data: row_data) do %>
     <% if selection_enabled %>
-      <%= render 'tree_view/tree_selection_cell', item: item, tree: tree, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys %>
+      <% selection_visible = tree_selection_visible?(item, tree, depth, selection_visibility) %>
+      <%= render 'tree_view/tree_selection_cell', item: item, tree: tree, selection_visible: selection_visible, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys %>
     <% end %>
     <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, mode: mode, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance %>
     <%= render row_partial, item: item %>
   <% end %>
 <% end %>
 <% if render_children && !effectively_collapsed %>
-  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, mode: mode, max_initial_depth: max_initial_depth, max_render_depth: max_render_depth, max_leaf_distance: max_leaf_distance, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, expanded_keys: expanded_keys, collapsed_keys: collapsed_keys, selection_enabled: selection_enabled, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys, row_class_builder: row_class_builder, row_data_builder: row_data_builder %>
+  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, mode: mode, max_initial_depth: max_initial_depth, max_render_depth: max_render_depth, max_leaf_distance: max_leaf_distance, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, expanded_keys: expanded_keys, collapsed_keys: collapsed_keys, selection_enabled: selection_enabled, selection_visibility: selection_visibility, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys, row_class_builder: row_class_builder, row_data_builder: row_data_builder %>
 <% end %>
