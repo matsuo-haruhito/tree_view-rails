@@ -23,6 +23,8 @@ module TreeViewHelper
         selection_enabled: render_state.selection_enabled?,
         selection_payload_builder: render_state.selection_payload_builder,
         selection_checkbox_name: render_state.selection_checkbox_name,
+        selection_disabled_builder: render_state.selection_disabled_builder,
+        selection_disabled_reason_builder: render_state.selection_disabled_reason_builder,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder
       }
@@ -68,6 +70,16 @@ module TreeViewHelper
 
   def tree_selection_value(item, tree, builder = nil)
     JSON.generate(tree_selection_payload(item, tree, builder))
+  end
+
+  def tree_selection_disabled?(item, builder = nil)
+    builder ? builder.call(item) == true : false
+  end
+
+  def tree_selection_disabled_reason(item, builder = nil)
+    return nil unless builder
+
+    builder.call(item).presence
   end
 
   def tree_initial_depth_boundary?(depth, max_initial_depth)
