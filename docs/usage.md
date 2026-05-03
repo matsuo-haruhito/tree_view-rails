@@ -72,6 +72,60 @@ tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "ite
 
 `initial_state` は省略できます。省略した場合は global config、さらに未設定なら `:expanded` が使われます。
 
+### grouped optionで指定する
+
+描画範囲・初期展開・開閉範囲は、個別引数の代わりに概念単位でまとめて指定できます。
+
+```ruby
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  initial_expansion: {
+    default: :collapsed,
+    max_depth: 2,
+    expanded_keys: expanded_keys
+  },
+  render_scope: {
+    max_depth: 3,
+    max_leaf_distance: 2
+  },
+  toggle_scope: {
+    max_depth_from_root: 2,
+    max_leaf_distance: 1
+  }
+)
+```
+
+対応関係は以下です。
+
+| grouped option | 個別引数 | 意味 |
+|---|---|---|
+| `initial_expansion[:default]` | `initial_state` | 初期状態。`:expanded` / `:collapsed` |
+| `initial_expansion[:max_depth]` | `max_initial_depth` | 初期HTMLで展開描画する最大depth |
+| `initial_expansion[:expanded_keys]` | `expanded_keys` | 初期表示時に展開するnode_key配列 |
+| `render_scope[:max_depth]` | `max_render_depth` | root基準の描画対象最大depth |
+| `render_scope[:max_leaf_distance]` | `max_leaf_distance` | leaf基準の描画対象最大distance |
+| `toggle_scope[:max_depth_from_root]` | `max_toggle_depth_from_root` | root基準の開閉操作範囲 |
+| `toggle_scope[:max_leaf_distance]` | `max_toggle_leaf_distance` | leaf基準の開閉操作範囲 |
+
+個別引数とgrouped optionを同時に指定した場合は、後方互換性のため個別引数を優先します。
+
+```ruby
+TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: @tree_ui,
+  max_render_depth: 1,
+  render_scope: { max_depth: 3 }
+)
+# => max_render_depth は 1 として扱われる
+```
+
+未知のkeyを含む場合は、設定ミスに気づきやすいよう `ArgumentError` を発生させます。
+
 ## Controller例
 
 ```ruby
