@@ -13,6 +13,7 @@ module TreeView
                 :max_render_depth,
                 :max_leaf_distance,
                 :max_toggle_depth_from_root,
+                :max_toggle_leaf_distance,
                 :expanded_keys,
                 :row_class_builder,
                 :row_data_builder
@@ -27,6 +28,7 @@ module TreeView
                    max_render_depth: nil,
                    max_leaf_distance: nil,
                    max_toggle_depth_from_root: nil,
+                   max_toggle_leaf_distance: nil,
                    expanded_keys: [],
                    row_class_builder: nil,
                    row_data_builder: nil)
@@ -39,6 +41,7 @@ module TreeView
       @max_render_depth = normalize_non_negative_integer(max_render_depth, :max_render_depth)
       @max_leaf_distance = normalize_non_negative_integer(max_leaf_distance, :max_leaf_distance)
       @max_toggle_depth_from_root = normalize_non_negative_integer(max_toggle_depth_from_root, :max_toggle_depth_from_root)
+      @max_toggle_leaf_distance = normalize_non_negative_integer(max_toggle_leaf_distance, :max_toggle_leaf_distance)
       @expanded_keys = Array(expanded_keys).freeze
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
