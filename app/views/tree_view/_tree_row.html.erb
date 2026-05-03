@@ -28,7 +28,7 @@
 <% row_class_builder = local_assigns[:row_class_builder] %>
 <% row_data_builder = local_assigns[:row_data_builder] %>
 <% row_classes = tree_row_classes(item, row_class_builder) %>
-<% row_data = tree_row_data(item, row_data_builder).merge(tree_depth: depth) %>
+<% row_data = tree_row_data(item, row_data_builder).merge(tree_depth: depth).merge(tree_state_row_data(item, tree, expanded: !effectively_collapsed)) %>
 <% children = tree.children_for(item) %>
 <% descendant_count = tree.descendant_counts[tree.node_key_for(item)].to_i %>
 <% hidden_count = render_children && effectively_collapsed && descendant_count.positive? && render_self ? descendant_count : nil %>
