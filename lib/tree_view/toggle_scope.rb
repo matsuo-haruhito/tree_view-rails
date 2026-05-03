@@ -2,25 +2,46 @@
 
 module TreeView
   class ToggleScope
-    attr_reader :mode, :current_depth, :max_depth_from_root
+    attr_reader :mode,
+                :current_depth,
+                :max_depth_from_root,
+                :current_leaf_distance,
+                :max_leaf_distance
 
-    def initialize(mode:, current_depth:, max_depth_from_root: nil)
+    def initialize(mode:, current_depth:, max_depth_from_root: nil, current_leaf_distance: nil, max_leaf_distance: nil)
       @mode = mode.to_sym
       @current_depth = current_depth
       @max_depth_from_root = max_depth_from_root
+      @current_leaf_distance = current_leaf_distance
+      @max_leaf_distance = max_leaf_distance
     end
 
     def toggle_depth
-      return current_depth if max_depth_from_root.nil?
-      return max_depth_from_root if current_depth < max_depth_from_root
+      return max_depth_from_root if root_depth_within_scope?
 
       current_depth
     end
 
+    def toggle_leaf_distance
+      return max_leaf_distance if leaf_distance_within_scope?
+
+      current_leaf_distance
+    end
+
     def within_scope?
+      root_depth_within_scope? || leaf_distance_within_scope?
+    end
+
+    def root_depth_within_scope?
       return false if max_depth_from_root.nil?
 
       current_depth < max_depth_from_root
+    end
+
+    def leaf_distance_within_scope?
+      return false if max_leaf_distance.nil? || current_leaf_distance.nil?
+
+      current_leaf_distance < max_leaf_distance
     end
   end
 end
