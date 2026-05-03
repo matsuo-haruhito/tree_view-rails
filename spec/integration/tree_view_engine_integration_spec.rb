@@ -14,10 +14,13 @@ RSpec.describe TreeView::Engine do
     engine.initializers.find { |initializer| initializer.name == "tree_view.importmap" }
   end
 
-  it "registers TreeViewHelper on ActionController::Base via engine initializer" do
+  it "makes TreeViewHelper available through controller helpers via engine initializer" do
     helper_initializer.run(Object.new)
+    controller_class = Class.new(ActionController::Base)
+    controller = controller_class.new
 
     expect(ActionController::Base._helpers.included_modules).to include(TreeViewHelper)
+    expect(controller.helpers).to respond_to(:tree_node_dom_id)
   end
 
   it "adds importmap path when importmap config is available" do
