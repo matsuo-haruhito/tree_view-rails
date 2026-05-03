@@ -67,3 +67,19 @@ Only checked and enabled `.tree-selection-checkbox` elements are included.
 Invalid JSON values are skipped and reported through `tree-view-selection:invalid-payload`.
 
 TreeView only collects and exposes the selected payloads. Deleting, moving, relating, or sending them to an API remains the host app's responsibility.
+
+## Linked checkbox behavior
+
+The Stimulus controller can also update rendered child rows and parent mixed states.
+
+```erb
+<tbody
+  data-controller="tree-view-selection"
+  data-action="change->tree-view-selection#toggle"
+  data-tree-view-selection-cascade-value="true"
+  data-tree-view-selection-indeterminate-value="true">
+  <%= tree_view_rows(@render_state) %>
+</tbody>
+```
+
+This behavior is DOM-based. It affects rendered rows only and skips disabled checkboxes.
