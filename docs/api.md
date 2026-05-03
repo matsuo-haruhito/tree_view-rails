@@ -284,6 +284,10 @@ render_state = TreeView::RenderState.new(
 | `initial_expansion:` | no | 初期展開状態をまとめるHash相当のオプション |
 | `render_scope:` | no | 描画対象範囲をまとめるHash相当のオプション |
 | `toggle_scope:` | no | 開閉操作範囲をまとめるHash相当のオプション |
+| `selectable:` | no | checkbox選択を有効にするか。`true` / `false` |
+| `selection_payload_builder:` | no | checkbox valueに入れるpayload Hashを返すcallable |
+| `selection_checkbox_name:` | no | checkboxのname属性。既定値は `selected_nodes[]` |
+| `selection:` | no | checkbox selectionをまとめるHash相当のオプション |
 | `row_class_builder:` | no | `tr` に付与するCSS classを返すcallable |
 | `row_data_builder:` | no | `tr` に付与するdata属性Hashを返すcallable |
 
@@ -324,6 +328,39 @@ render_state = TreeView::RenderState.new(
 | `render_scope:` | `:max_leaf_distance` | `max_leaf_distance:` |
 | `toggle_scope:` | `:max_depth_from_root` | `max_toggle_depth_from_root:` |
 | `toggle_scope:` | `:max_leaf_distance` | `max_toggle_leaf_distance:` |
+
+`selection:` ではcheckbox selectionをまとめて指定できます。
+個別引数と `selection:` を同時に指定した場合は、後方互換性と明示性のため個別引数を優先します。
+
+```ruby
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "projects/tree_columns",
+  ui_config: tree_ui,
+  selection: {
+    enabled: true,
+    checkbox_name: "selected_nodes[]",
+    payload_builder: ->(item) {
+      {
+        key: tree.node_key_for(item),
+        id: item.id,
+        type: item.class.name
+      }
+    }
+  }
+)
+```
+
+| selection key | 対応する個別引数 | 説明 |
+|---|---|---|
+| `:enabled` | `selectable:` | checkbox列を描画するか |
+| `:payload_builder` | `selection_payload_builder:` | checkbox valueに入れるpayload Hashを返すcallable |
+| `:checkbox_name` | `selection_checkbox_name:` | checkboxのname属性 |
+
+`selection_payload_builder` を省略した場合は、`key` / `id` / `type` を持つpayloadを生成します。
+checkboxの `value` にはJSON文字列が入ります。
+TreeView gem はcheckboxの描画と選択payloadの受け渡しまでを担当し、削除・移動・関連付けなどの一括処理はhost app側で実装します。
 
 `max_initial_depth` は `nil` または `0` 以上のIntegerを指定します。
 `nil` の場合はdepth制限なし、`0` の場合はrootのみ、`1` の場合はrootとそのchildrenまでを初期HTMLに描画します。
@@ -462,6 +499,9 @@ viewから使う補助helperです。
 | `tree_node_dom_id(item_or_id)` | nodeのDOM IDを返す |
 | `tree_button_dom_id(item)` | toggle cell用DOM IDを返す |
 | `tree_show_button_dom_id(item)` | show button用DOM IDを返す |
+| `tree_selection_checkbox_dom_id(item)` | selection checkbox用DOM IDを返す |
+| `tree_selection_payload(item, tree, builder = nil)` | selection checkbox用payload Hashを返す |
+| `tree_selection_value(item, tree, builder = nil)` | selection checkboxのvalue用JSON文字列を返す |
 | `tree_hide_descendants_path(item, display_depth, scope: 'all')` | 閉じるpathを返す |
 | `tree_show_descendants_path(item, toggle_depth, scope: 'all')` | 開くpathを返す |
 | `tree_toggle_all_path(state:)` | 全体開閉pathを返す |
@@ -492,6 +532,7 @@ TreeView本体は以下のpartialを提供します。
 
 - `tree_view/tree_row`
 - `tree_view/tree_children`
+- `tree_view/tree_selection_cell`
 - `tree_view/tree_toggle_cell`
 - `tree_view/tree_toggle_content`
 - `tree_view/tree_toggle_content_static`
