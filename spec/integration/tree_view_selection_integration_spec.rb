@@ -60,6 +60,21 @@ RSpec.describe "TreeView selection integration" do
     expect(rendered).to include('&quot;type&quot;:')
   end
 
+  it "calls the selection payload builder once per rendered checkbox" do
+    called_item_ids = []
+
+    render_rows(
+      tree,
+      tree.root_items,
+      payload_builder: lambda do |item|
+        called_item_ids << item.id
+        { key: tree.node_key_for(item), id: item.id, type: item.class.name }
+      end
+    )
+
+    expect(called_item_ids).to eq([1, 2, 3])
+  end
+
   it "renders checked selection checkboxes for selected keys" do
     rendered = render_rows(tree, tree.root_items, selected_keys: [2])
 
