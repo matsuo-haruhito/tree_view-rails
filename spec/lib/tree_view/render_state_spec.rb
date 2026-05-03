@@ -64,6 +64,30 @@ RSpec.describe TreeView::RenderState do
     end.to raise_error(ArgumentError, /max_render_depth/)
   end
 
+  it "stores max_toggle_depth_from_root when given" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      max_toggle_depth_from_root: 2
+    )
+
+    expect(state.max_toggle_depth_from_root).to eq(2)
+  end
+
+  it "rejects invalid max_toggle_depth_from_root values" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        max_toggle_depth_from_root: "2"
+      )
+    end.to raise_error(ArgumentError, /max_toggle_depth_from_root/)
+  end
+
   it "stores expanded_keys when given" do
     state = described_class.new(
       tree: tree,
