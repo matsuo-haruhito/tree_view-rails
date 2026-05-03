@@ -6,6 +6,10 @@ module TreeViewHelper
     @tree_ui = render_state.ui_config
     clear_tree_view_render_caches!
 
+    if render_state.root_items.empty? && render_state.empty_message.present?
+      return render(partial: "tree_view/tree_empty_row", locals: { empty_message: render_state.empty_message })
+    end
+
     render(
       partial: "tree_view/tree_row",
       collection: render_state.root_items,
@@ -29,6 +33,7 @@ module TreeViewHelper
         selection_disabled_builder: render_state.selection_disabled_builder,
         selection_disabled_reason_builder: render_state.selection_disabled_reason_builder,
         selection_selected_keys: render_state.selection_selected_keys,
+        hidden_message_builder: render_state.hidden_message_builder,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder
       }
@@ -64,6 +69,12 @@ module TreeViewHelper
     return data.to_h if data.respond_to?(:to_h)
 
     raise ArgumentError, "row_data_builder must return a Hash-like object"
+  end
+
+  def tree_hidden_count_message(hidden_count, builder = nil)
+    return hidden_count if builder.nil?
+
+    builder.call(hidden_count)
   end
 
   def tree_selection_payload(item, tree, builder = nil)
