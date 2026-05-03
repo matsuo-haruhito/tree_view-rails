@@ -583,6 +583,27 @@ leaf側から見た開閉範囲をpath builderに渡したい場合は `max_togg
 
 `data-tree-depth` は常に維持されます。
 
+### 行イベント連携
+
+`tree-view-transfer` は、行同士の操作を host app にイベントとして渡すための controller です。
+実際の親変更や並び替え保存は host app 側で実装します。
+
+```erb
+<tbody data-controller="tree-view-transfer">
+  <%= tree_view_rows(@render_state) %>
+</tbody>
+```
+
+行には `row_data_builder` で payload を渡します。
+
+```ruby
+row_data_builder: ->(item) {
+  { tree_transfer_payload: { key: tree.node_key_for(item), id: item.id }.to_json }
+}
+```
+
+利用する画面側で、必要な `draggable` 属性や `dragstart->tree-view-transfer#start` などを追加してください。
+
 ## mode指定
 
 `mode:` を明示する場合は、`:static` または `:turbo` のみ指定できます。
