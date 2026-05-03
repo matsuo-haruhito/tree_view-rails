@@ -13,7 +13,7 @@ module TreeView
     # while builders may still need the original mode value when constructing
     # URLs or params for host applications.
     def initialize(mode:, current_depth:, max_depth_from_root: nil, current_leaf_distance: nil, max_leaf_distance: nil)
-      @mode = mode.to_sym
+      @mode = normalize_mode(mode)
       @current_depth = current_depth
       @max_depth_from_root = max_depth_from_root
       @current_leaf_distance = current_leaf_distance
@@ -46,6 +46,14 @@ module TreeView
       return false if max_leaf_distance.nil? || current_leaf_distance.nil?
 
       current_leaf_distance < max_leaf_distance
+    end
+
+    private
+
+    def normalize_mode(value)
+      return value.to_sym if value.respond_to?(:to_sym)
+
+      raise ArgumentError, "mode must be symbol-like"
     end
   end
 end
