@@ -73,6 +73,16 @@ RSpec.describe "TreeView::Tree orphan strategy" do
     end.to raise_error(ArgumentError, /orphan_strategy must be one of/)
   end
 
+  it "rejects non-symbolizable orphan_strategy values with a clear error" do
+    expect do
+      build_tree([], orphan_strategy: nil)
+    end.to raise_error(ArgumentError, /orphan_strategy must be one of/)
+
+    expect do
+      build_tree([], orphan_strategy: 1)
+    end.to raise_error(ArgumentError, /orphan_strategy must be one of/)
+  end
+
   it "rejects orphan_strategy outside records mode" do
     expect do
       TreeView::Tree.new(
