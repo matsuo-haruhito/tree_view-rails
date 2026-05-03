@@ -12,6 +12,8 @@
 - static表示
 - Turbo Stream開閉用path builder
 - 異種ノード混在ツリー用 `GraphAdapter`
+- 検索結果などから親階層を補完する `PathTree`
+- 子ノード起点で親方向へ辿る `ReverseTree`
 - viewから使うDOM ID / toggle path / 枝情報helper
 - `RenderState` からroot行を描画する `tree_view_rows` helper
 - host app側の `row_partial` 差し替え
