@@ -252,7 +252,73 @@ export class TreeViewSelectionController extends Controller {
   }
 }
 
+export class TreeViewTransferController extends Controller {
+  start(event) {
+    const row = this.rowFromEvent(event)
+    if (!row) return
+
+    const payload = this.payloadFromRow(row)
+    if (event.dataTransfer && payload) event.dataTransfer.setData("application/json", JSON.stringify(payload))
+
+    this.dispatch("started", { detail: { payload, row } })
+  }
+
+  over(event) {
+    event.preventDefault()
+    const row = this.rowFromEvent(event)
+    this.dispatch("over", { detail: { payload: this.payloadFromRow(row), row } })
+  }
+
+  drop(event) {
+    event.preventDefault()
+    const targetRow = this.rowFromEvent(event)
+    const sourcePayload = this.payloadFromEvent(event)
+    const targetPayload = this.payloadFromRow(targetRow)
+
+    this.dispatch("dropped", {
+      detail: {
+        source: sourcePayload,
+        target: targetPayload,
+        targetRow
+      }
+    })
+  }
+
+  rowFromEvent(event) {
+    const target = event.target
+    if (!target || !target.closest) return null
+
+    return target.closest("tr[data-tree-depth]")
+  }
+
+  payloadFromRow(row) {
+    if (!row || !row.dataset.treeTransferPayload) return null
+
+    try {
+      return JSON.parse(row.dataset.treeTransferPayload)
+    } catch (_error) {
+      this.dispatch("invalid-payload", { detail: { value: row.dataset.treeTransferPayload, row } })
+      return null
+    }
+  }
+
+  payloadFromEvent(event) {
+    if (!event.dataTransfer) return null
+
+    const value = event.dataTransfer.getData("application/json")
+    if (!value) return null
+
+    try {
+      return JSON.parse(value)
+    } catch (_error) {
+      this.dispatch("invalid-transfer", { detail: { value } })
+      return null
+    }
+  }
+}
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-selection", TreeViewSelectionController)
+  application.register("tree-view-transfer", TreeViewTransferController)
 }
