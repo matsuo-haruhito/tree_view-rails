@@ -133,6 +133,14 @@ module TreeView
       Array(items).map { |item| path_for(item) }
     end
 
+    def expanded_keys_for(item_or_items)
+      ensure_records_path_helpers!
+
+      Array(item_or_items).flat_map do |item|
+        path_for(item).map { |path_item| node_key_for(path_item) }
+      end.uniq
+    end
+
     def path_tree_for(items)
       TreeView::PathTree.new(base_tree: self, paths: paths_for(items))
     end
@@ -169,6 +177,43 @@ module TreeView
         parent_id = record.public_send(parent_id_method)
         parent_id && !items_by_id.key?(parent_id)
       end
+    end
+
+    def orphan_report
+      ensure_records_path_helpers!
+
+      orphan_items.map do |item|
+        {
+          item: item,
+          key: node_key_for(item),
+          missing_parent_id: item.public_send(parent_id_method)
+        }
+      end
+    end
+
+    def stats
+      root_nodes = root_items
+      node_count = 0
+      leaf_count = 0
+      max_depth = 0
+      max_descendant_count = 0
+
+      each_reachable_node(root_nodes) do |item, depth|
+        node_count += 1
+        leaf_count += 1 if children_for(item).empty?
+        max_depth = depth if depth > max_depth
+        descendant_count = descendant_counts[node_key_for(item)].to_i
+        max_descendant_count = descendant_count if descendant_count > max_descendant_count
+      end
+
+      {
+        nodes: node_count,
+        roots: root_nodes.count,
+        leaves: leaf_count,
+        max_depth: max_depth,
+        orphans: orphan_items.count,
+        max_descendant_count: max_descendant_count
+      }
     end
 
     def validate_unique_node_keys!
@@ -221,6 +266,26 @@ module TreeView
       else
         items_by_parent_id.each_value do |items|
           items.each { |item| yield item }
+        end
+      end
+    end
+
+    def each_reachable_node(root_nodes)
+      return enum_for(:each_reachable_node, root_nodes) unless block_given?
+
+      seen = {}
+      stack = Array(root_nodes).reverse.map { |item| [item, 0] }
+
+      until stack.empty?
+        item, depth = stack.pop
+        key = node_key_for(item)
+        next if seen[key]
+
+        seen[key] = true
+        yield item, depth
+
+        children_for(item).reverse_each do |child|
+          stack << [child, depth + 1]
         end
       end
     end
