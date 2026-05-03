@@ -152,6 +152,7 @@ render_state = TreeView::RenderState.new(
   ui_config: tree_ui,
   initial_state: :expanded,
   max_initial_depth: 2,
+  max_render_depth: 2,
   expanded_keys: [root_key, child_key],
   row_class_builder: ->(item) { item.archived? ? "is-archived" : nil },
   row_data_builder: ->(item) { { status: item.status } }
@@ -166,6 +167,7 @@ render_state = TreeView::RenderState.new(
 | `ui_config:` | yes | `TreeView::UiConfig` |
 | `initial_state:` | no | `:expanded` または `:collapsed` |
 | `max_initial_depth:` | no | 初期表示時に展開描画する最大depth。rootは `0` |
+| `max_render_depth:` | no | 描画対象にする最大depth。rootは `0` |
 | `expanded_keys:` | no | 初期表示時に展開するnode_key配列 |
 | `row_class_builder:` | no | `tr` に付与するCSS classを返すcallable |
 | `row_data_builder:` | no | `tr` に付与するdata属性Hashを返すcallable |
@@ -176,6 +178,11 @@ render_state = TreeView::RenderState.new(
 `nil` の場合はdepth制限なし、`0` の場合はrootのみ、`1` の場合はrootとそのchildrenまでを初期HTMLに描画します。
 境界depthのnodeは collapsed 扱いになり、子孫がある場合は `hidden_count` が表示されます。
 `initial_state: :collapsed` の場合は全体collapsedが優先され、rootのみが初期表示されます。
+
+`max_render_depth` は `nil` または `0` 以上のIntegerを指定します。
+`nil` の場合は描画範囲のdepth制限なし、`0` の場合はrootのみ、`1` の場合はrootとそのchildrenまでを描画対象にします。
+`max_initial_depth` と異なり、`max_render_depth` は描画対象そのものを制限するため、境界より深いnodeは初期HTMLに出ず、`hidden_count` も表示されません。
+後から開閉操作で表示する対象としても扱わない用途を想定しています。
 
 `expanded_keys` には `tree.node_key_for(item)` と一致する値を指定します。
 該当nodeは `initial_state: :collapsed` や `max_initial_depth` の境界指定より優先して展開されます。
