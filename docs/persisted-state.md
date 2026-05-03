@@ -110,6 +110,39 @@ owner.tree_view_state_for("documents#index")
 owner.save_tree_view_state!("documents#index", expanded_keys: params[:expanded_keys])
 ```
 
+## DB 永続化の雛形
+
+Generator で作る migration は、owner を polymorphic にして host app 側の user model 名へ依存しない形にします。
+
+```ruby
+create_table :tree_view_states do |t|
+  t.references :owner, polymorphic: true, null: false
+  t.string :view_key, null: false
+  t.json :expanded_keys, null: false, default: []
+  t.timestamps
+end
+
+add_index :tree_view_states, [:owner_type, :owner_id, :view_key], unique: true
+```
+
+生成される model は host app 側に置き、gem 本体の利用には必須にしません。
+
+```ruby
+class TreeViewState < ApplicationRecord
+  belongs_to :owner, polymorphic: true
+
+  validates :view_key, presence: true
+end
+```
+
+owner 側には concern を include して、読み書きの入口を揃えます。
+
+```ruby
+class User < ApplicationRecord
+  include TreeViewStateOwner
+end
+```
+
 ## 保存先ごとの考え方
 
 | 保存先 | 特徴 | gem 側の関与 |
