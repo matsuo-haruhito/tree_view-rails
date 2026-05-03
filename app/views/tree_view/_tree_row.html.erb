@@ -3,8 +3,10 @@
 <% row_partial = local_assigns.fetch(:row_partial) %>
 <% collapsed = local_assigns.fetch(:collapsed, false) %>
 <% max_initial_depth = local_assigns[:max_initial_depth] %>
+<% expanded_keys = local_assigns[:expanded_keys] %>
+<% explicitly_expanded = tree_expanded_key?(item, tree, expanded_keys) %>
 <% depth_boundary = tree_initial_depth_boundary?(depth, max_initial_depth) %>
-<% effectively_collapsed = collapsed || depth_boundary %>
+<% effectively_collapsed = !explicitly_expanded && (collapsed || depth_boundary) %>
 <% mode = tree_toggle_mode(local_assigns[:mode]) %>
 <% row_class_builder = local_assigns[:row_class_builder] %>
 <% row_data_builder = local_assigns[:row_data_builder] %>
@@ -18,5 +20,5 @@
   <%= render row_partial, item: item %>
 <% end %>
 <% unless effectively_collapsed %>
-  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, mode: mode, max_initial_depth: max_initial_depth, row_class_builder: row_class_builder, row_data_builder: row_data_builder %>
+  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, mode: mode, max_initial_depth: max_initial_depth, expanded_keys: expanded_keys, row_class_builder: row_class_builder, row_data_builder: row_data_builder %>
 <% end %>
