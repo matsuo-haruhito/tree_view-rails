@@ -19,6 +19,35 @@ RSpec.describe TreeView::UiConfigBuilder do
     expect(config.show_descendants_path(item, 2)).to eq("/entries/8/show?depth=2&scope=all")
     expect(config.show_descendants_path(item, 2, scope: "children")).to eq("/entries/8/show?depth=2&scope=children")
     expect(config.toggle_all_path(state: :collapsed)).to eq("/entries?state=collapsed")
+    expect(config.scope_format).to eq(:string)
+    expect(config.object_scope?).to eq(false)
+  end
+
+  it "builds config with object scope format" do
+    context = double(:context)
+
+    config = described_class.new(context: context, node_prefix: "entry").build(
+      hide_descendants_path_builder: ->(_candidate, _depth, scope) { scope.toggle_depth },
+      show_descendants_path_builder: ->(_candidate, _depth, scope) { scope.toggle_depth },
+      toggle_all_path_builder: ->(state) { "/entries?state=#{state}" },
+      scope_format: :object
+    )
+
+    expect(config.scope_format).to eq(:object)
+    expect(config.object_scope?).to eq(true)
+  end
+
+  it "rejects invalid scope format" do
+    context = double(:context)
+
+    expect do
+      described_class.new(context: context, node_prefix: "entry").build(
+        hide_descendants_path_builder: ->(_candidate, _depth, _scope) { nil },
+        show_descendants_path_builder: ->(_candidate, _depth, _scope) { nil },
+        toggle_all_path_builder: ->(_state) { nil },
+        scope_format: :invalid
+      )
+    end.to raise_error(ArgumentError, /scope_format/)
   end
 
   it "builds static config without toggle paths" do
