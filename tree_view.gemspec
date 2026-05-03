@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
-  spec.metadata["changelog_uri"] = "#{spec.homepage}/releases"
+  spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/main/CHANGELOG.md"
 
   spec.files = Dir.chdir(__dir__) do
     Dir[
@@ -26,9 +26,11 @@ Gem::Specification.new do |spec|
       "app/javascript/tree_view/**/*",
       "app/views/tree_view/**/*",
       "config/importmap.tree_view.rb",
+      "docs/**/*",
       "lib/**/*",
       "spec/**/*",
       ".rspec",
+      "CHANGELOG.md",
       "Gemfile",
       "Rakefile",
       "README.md",

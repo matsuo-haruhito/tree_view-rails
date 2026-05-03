@@ -17,6 +17,24 @@
 - viewから使うDOM ID / toggle path / 枝情報helper
 - `RenderState` からroot行を描画する `tree_view_rows` helper
 - host app側の `row_partial` 差し替え
+- 初期展開制御
+  - `initial_state`
+  - `expanded_keys`
+  - `collapsed_keys`
+  - `max_initial_depth`
+- 描画範囲制御
+  - `max_render_depth`
+  - `max_leaf_distance`
+- 開閉操作範囲制御
+  - `max_toggle_depth_from_root`
+  - `max_toggle_leaf_distance`
+- 行属性カスタマイズ
+  - `row_class_builder`
+  - `row_data_builder`
+- checkbox selection
+  - JSON payload送信
+  - nodeごとのdisabled制御
+  - `selected_keys` による初期選択
 
 ## 含まないもの
 
@@ -30,6 +48,8 @@
 - 業務固有の文言やroute
 - Turbo Frame modal
 - 右クリックメニュー
+- checkbox selection後の削除・移動・関連付けなどの業務処理
+- 親子連動checkbox / indeterminate表示
 - demo data / seed
 
 ## Installation
@@ -111,6 +131,7 @@ row partial:
 | [docs/api.md](docs/api.md) | API仕様 |
 | [docs/design-policy.md](docs/design-policy.md) | 設計思想と責務範囲 |
 | [docs/development.md](docs/development.md) | 開発・保守方針 |
+| [CHANGELOG.md](CHANGELOG.md) | 変更履歴 |
 
 ## Development
 
@@ -121,6 +142,17 @@ bundle exec rake build
 ```
 
 GitHub Actionsでは、`main` へのpushとPull Requestで `bundle exec rake` を実行します。
+
+## Release
+
+現在の初期リリース想定versionは `0.1.0` です。
+
+リリース前には以下を確認します。
+
+- `bundle exec rspec`
+- `bundle exec rake build`
+- README / docs / CHANGELOG の整合
+- gemspec metadata
 
 ## License
 
