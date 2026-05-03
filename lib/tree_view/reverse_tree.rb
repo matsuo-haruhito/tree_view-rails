@@ -32,12 +32,21 @@ module TreeView
     def descendant_counts
       @descendant_counts ||= begin
         memo = {}
+        visiting = {}
+
         count_descendants = lambda do |record|
           node_key = node_key_for(record)
           return memo[node_key] if memo.key?(node_key)
+          raise ArgumentError, "cycle detected in reverse tree for node #{node_key.inspect}" if visiting[node_key]
 
+          visiting[node_key] = true
           children = children_for(record)
           memo[node_key] = children.sum { |child| 1 + count_descendants.call(child) }
+          visiting.delete(node_key)
+          memo[node_key]
+        rescue StandardError
+          visiting.delete(node_key)
+          raise
         end
 
         root_items.each { |root| count_descendants.call(root) }
