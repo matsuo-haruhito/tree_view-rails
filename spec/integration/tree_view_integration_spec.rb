@@ -10,7 +10,8 @@ RSpec.describe "TreeView integration" do
   let(:root) { IntegrationNode.new(id: 1, parent_item_id: nil, name: "root") }
   let(:child) { IntegrationNode.new(id: 2, parent_item_id: 1, name: "child") }
   let(:grandchild) { IntegrationNode.new(id: 3, parent_item_id: 2, name: "grandchild") }
-  let(:nodes) { [root, child, grandchild] }
+  let(:sibling) { IntegrationNode.new(id: 4, parent_item_id: 2, name: "sibling") }
+  let(:nodes) { [root, child, grandchild, sibling] }
   let(:tree) { TreeView::Tree.new(records: nodes, parent_id_method: :parent_item_id) }
   let(:gem_view_path) { File.expand_path("../../app/views", __dir__) }
   let(:host_view_dir) { Dir.mktmpdir("tree_view_host_views") }
@@ -66,6 +67,28 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('id="project_2"')
       expect(rendered).to include("project_1:root")
       expect(rendered).to include("project_2:child")
+    end
+
+    it "renders a PathTree through tree_view_rows helper" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      path_tree = tree.path_tree_for([grandchild])
+      render_state = TreeView::RenderState.new(
+        tree: path_tree,
+        root_items: path_tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('id="project_1"')
+      expect(rendered).to include('id="project_2"')
+      expect(rendered).to include('id="project_3"')
+      expect(rendered).not_to include('id="project_4"')
+      expect(rendered).to include("project_1:root")
+      expect(rendered).to include("project_2:child")
+      expect(rendered).to include("project_3:grandchild")
     end
 
     it "renders row class and data attributes from RenderState builders" do

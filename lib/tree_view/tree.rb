@@ -133,6 +133,10 @@ module TreeView
       Array(items).map { |item| path_for(item) }
     end
 
+    def path_tree_for(items)
+      TreeView::PathTree.new(base_tree: self, paths: paths_for(items))
+    end
+
     def node_key_for(record)
       if adapter_mode?
         adapter.node_key_for(record, id_method: id_method)
