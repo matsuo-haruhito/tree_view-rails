@@ -148,6 +148,117 @@ RSpec.describe TreeView::RenderState do
     expect(state.expanded_keys).to eq([1, 2])
   end
 
+  it "stores grouped initial_expansion options" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      initial_expansion: {
+        default: :collapsed,
+        max_depth: 2,
+        expanded_keys: [1, 2]
+      }
+    )
+
+    expect(state.initial_state).to eq(:collapsed)
+    expect(state.max_initial_depth).to eq(2)
+    expect(state.expanded_keys).to eq([1, 2])
+  end
+
+  it "stores grouped render_scope options" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      render_scope: {
+        max_depth: 3,
+        max_leaf_distance: 2
+      }
+    )
+
+    expect(state.max_render_depth).to eq(3)
+    expect(state.max_leaf_distance).to eq(2)
+  end
+
+  it "stores grouped toggle_scope options" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      toggle_scope: {
+        max_depth_from_root: 3,
+        max_leaf_distance: 2
+      }
+    )
+
+    expect(state.max_toggle_depth_from_root).to eq(3)
+    expect(state.max_toggle_leaf_distance).to eq(2)
+  end
+
+  it "prefers individual options over grouped options" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      initial_state: :expanded,
+      max_initial_depth: 1,
+      max_render_depth: 1,
+      max_leaf_distance: 1,
+      max_toggle_depth_from_root: 1,
+      max_toggle_leaf_distance: 1,
+      expanded_keys: [9],
+      initial_expansion: {
+        default: :collapsed,
+        max_depth: 2,
+        expanded_keys: [1, 2]
+      },
+      render_scope: {
+        max_depth: 3,
+        max_leaf_distance: 2
+      },
+      toggle_scope: {
+        max_depth_from_root: 3,
+        max_leaf_distance: 2
+      }
+    )
+
+    expect(state.initial_state).to eq(:expanded)
+    expect(state.max_initial_depth).to eq(1)
+    expect(state.max_render_depth).to eq(1)
+    expect(state.max_leaf_distance).to eq(1)
+    expect(state.max_toggle_depth_from_root).to eq(1)
+    expect(state.max_toggle_leaf_distance).to eq(1)
+    expect(state.expanded_keys).to eq([9])
+  end
+
+  it "rejects unknown grouped option keys" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        render_scope: { max_depth: 2, unknown: true }
+      )
+    end.to raise_error(ArgumentError, /render_scope contains unknown keys: unknown/)
+  end
+
+  it "rejects non hash-like grouped options" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        toggle_scope: :invalid
+      )
+    end.to raise_error(ArgumentError, /toggle_scope must respond to to_h/)
+  end
+
   it "stores row attribute builders when given" do
     row_class_builder = ->(item) { item.name }
     row_data_builder = ->(item) { { name: item.name } }
