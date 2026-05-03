@@ -9,7 +9,8 @@ RSpec.describe "TreeView integration" do
 
   let(:root) { IntegrationNode.new(id: 1, parent_item_id: nil, name: "root") }
   let(:child) { IntegrationNode.new(id: 2, parent_item_id: 1, name: "child") }
-  let(:nodes) { [root, child] }
+  let(:grandchild) { IntegrationNode.new(id: 3, parent_item_id: 2, name: "grandchild") }
+  let(:nodes) { [root, child, grandchild] }
   let(:tree) { TreeView::Tree.new(records: nodes, parent_id_method: :parent_item_id) }
   let(:gem_view_path) { File.expand_path("../../app/views", __dir__) }
   let(:host_view_dir) { Dir.mktmpdir("tree_view_host_views") }
@@ -88,6 +89,25 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('data-node-id="1"')
       expect(rendered).to include('data-tree-depth="0"')
       expect(rendered).to include('data-tree-depth="1"')
+    end
+
+    it "limits initial child rendering with max_initial_depth" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        max_initial_depth: 1
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(rendered).to include('id="project_1"')
+      expect(rendered).to include('id="project_2"')
+      expect(rendered).not_to include('id="project_3"')
+      expect(rendered).to include('tree-toggle__hidden-count')
     end
 
     it "respects RenderState initial_state when rendering through tree_view_rows" do
