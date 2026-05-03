@@ -4,8 +4,8 @@ RSpec.describe "TreeView::Tree parent path helpers" do
   PathNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
   PathCountry = Struct.new(:id, :name, :children)
 
-  def build_tree(records)
-    TreeView::Tree.new(records: records, parent_id_method: :parent_item_id)
+  def build_tree(records, **options)
+    TreeView::Tree.new(records: records, parent_id_method: :parent_item_id, **options)
   end
 
   it "returns the parent record" do
@@ -51,6 +51,72 @@ RSpec.describe "TreeView::Tree parent path helpers" do
     tree = build_tree([root, child_a, child_b])
 
     expect(tree.paths_for([child_a, child_b])).to eq([[root, child_a], [root, child_b]])
+  end
+
+  it "returns unique expanded keys for one item path" do
+    root = PathNode.new(id: 1, parent_item_id: nil, name: "root")
+    parent = PathNode.new(id: 2, parent_item_id: 1, name: "parent")
+    child = PathNode.new(id: 3, parent_item_id: 2, name: "child")
+    tree = build_tree([root, parent, child])
+
+    expect(tree.expanded_keys_for(child)).to eq([1, 2, 3])
+  end
+
+  it "returns unique expanded keys for multiple item paths" do
+    root = PathNode.new(id: 1, parent_item_id: nil, name: "root")
+    child_a = PathNode.new(id: 2, parent_item_id: 1, name: "child-a")
+    child_b = PathNode.new(id: 3, parent_item_id: 1, name: "child-b")
+    tree = build_tree([root, child_a, child_b])
+
+    expect(tree.expanded_keys_for([child_a, child_b])).to eq([1, 2, 3])
+  end
+
+  it "rejects expanded key helpers in resolver mode" do
+    country = PathCountry.new(1, "japan", [])
+    tree = TreeView::Tree.new(
+      roots: [country],
+      children_resolver: ->(node) { node.children }
+    )
+
+    expect do
+      tree.expanded_keys_for(country)
+    end.to raise_error(ArgumentError, /only supported in records mode/)
+  end
+
+  it "returns orphan diagnostics with missing parent ids" do
+    root = PathNode.new(id: 1, parent_item_id: nil, name: "root")
+    orphan = PathNode.new(id: 2, parent_item_id: 999, name: "orphan")
+    tree = build_tree([root, orphan])
+
+    expect(tree.orphan_report).to eq([
+      { item: orphan, key: 2, missing_parent_id: 999 }
+    ])
+  end
+
+  it "returns tree stats for reachable nodes" do
+    root = PathNode.new(id: 1, parent_item_id: nil, name: "root")
+    child = PathNode.new(id: 2, parent_item_id: 1, name: "child")
+    grandchild = PathNode.new(id: 3, parent_item_id: 2, name: "grandchild")
+    sibling = PathNode.new(id: 4, parent_item_id: 1, name: "sibling")
+    orphan = PathNode.new(id: 5, parent_item_id: 999, name: "orphan")
+    tree = build_tree([root, child, grandchild, sibling, orphan])
+
+    expect(tree.stats).to eq(
+      nodes: 4,
+      roots: 1,
+      leaves: 2,
+      max_depth: 2,
+      orphans: 1,
+      max_descendant_count: 3
+    )
+  end
+
+  it "includes orphan roots in stats when orphan_strategy is as_root" do
+    root = PathNode.new(id: 1, parent_item_id: nil, name: "root")
+    orphan = PathNode.new(id: 2, parent_item_id: 999, name: "orphan")
+    tree = build_tree([root, orphan], orphan_strategy: :as_root)
+
+    expect(tree.stats).to include(nodes: 2, roots: 2, leaves: 2, orphans: 1)
   end
 
   it "detects cycles while walking parent paths" do
