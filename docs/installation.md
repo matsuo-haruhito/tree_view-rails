@@ -1,5 +1,10 @@
 # 導入手順
 
+## 必要環境
+
+- Ruby 3.2 以上
+- Rails 7.0 以上
+
 ## Gemfile
 
 host app の `Gemfile` に追加します。

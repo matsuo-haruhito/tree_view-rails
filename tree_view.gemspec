@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "Reusable tree traversal, render state, helpers, partials, and Rails integration points for tree-style UIs."
   spec.homepage = "https://github.com/matsuo-haruhito/tree_view-rails"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.1"
+  spec.required_ruby_version = ">= 3.2"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   spec.metadata["homepage_uri"] = spec.homepage
