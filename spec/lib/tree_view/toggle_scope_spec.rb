@@ -20,6 +20,16 @@ RSpec.describe TreeView::ToggleScope do
     expect(child_scope.within_scope?).to eq(all_scope.within_scope?)
   end
 
+  it "raises a clear error when mode is not symbolizable" do
+    expect do
+      described_class.new(mode: nil, current_depth: 1)
+    end.to raise_error(ArgumentError, /mode must be symbol-like/)
+
+    expect do
+      described_class.new(mode: 1, current_depth: 1)
+    end.to raise_error(ArgumentError, /mode must be symbol-like/)
+  end
+
   it "returns max depth while current depth is inside root-based scope" do
     scope = described_class.new(mode: :all, current_depth: 1, max_depth_from_root: 3)
 
