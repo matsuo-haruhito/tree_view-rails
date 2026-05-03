@@ -12,6 +12,7 @@ module TreeViewHelper
         row_partial: render_state.row_partial,
         mode: mode,
         collapsed: collapsed.nil? ? render_state.effective_initial_state == :collapsed : collapsed,
+        max_initial_depth: render_state.max_initial_depth,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder
       }
@@ -42,6 +43,10 @@ module TreeViewHelper
     return data.to_h if data.respond_to?(:to_h)
 
     raise ArgumentError, "row_data_builder must return a Hash-like object"
+  end
+
+  def tree_initial_depth_boundary?(depth, max_initial_depth)
+    !max_initial_depth.nil? && depth >= max_initial_depth
   end
 
   def tree_depth_slots(depth)

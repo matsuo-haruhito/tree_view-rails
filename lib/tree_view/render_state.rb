@@ -9,6 +9,7 @@ module TreeView
                 :row_partial,
                 :ui_config,
                 :initial_state,
+                :max_initial_depth,
                 :row_class_builder,
                 :row_data_builder
 
@@ -18,6 +19,7 @@ module TreeView
                    row_partial:,
                    ui_config:,
                    initial_state: nil,
+                   max_initial_depth: nil,
                    row_class_builder: nil,
                    row_data_builder: nil)
       @tree = tree
@@ -25,6 +27,7 @@ module TreeView
       @row_partial = row_partial
       @ui_config = ui_config
       @initial_state = normalize_initial_state(initial_state)
+      @max_initial_depth = normalize_max_initial_depth(max_initial_depth)
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
 
@@ -46,6 +49,13 @@ module TreeView
       return normalized_value if VALID_INITIAL_STATES.include?(normalized_value)
 
       raise ArgumentError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(', ')}"
+    end
+
+    def normalize_max_initial_depth(value)
+      return nil if value.nil?
+      return value if value.is_a?(Integer) && value >= 0
+
+      raise ArgumentError, "max_initial_depth must be a non-negative Integer"
     end
 
     def validate_builder!(builder, name)

@@ -150,7 +150,8 @@ render_state = TreeView::RenderState.new(
   root_items: tree.root_items,
   row_partial: "projects/tree_columns",
   ui_config: tree_ui,
-  initial_state: :collapsed,
+  initial_state: :expanded,
+  max_initial_depth: 2,
   row_class_builder: ->(item) { item.archived? ? "is-archived" : nil },
   row_data_builder: ->(item) { { status: item.status } }
 )
@@ -163,10 +164,16 @@ render_state = TreeView::RenderState.new(
 | `row_partial:` | yes | host app側の列描画partial |
 | `ui_config:` | yes | `TreeView::UiConfig` |
 | `initial_state:` | no | `:expanded` または `:collapsed` |
+| `max_initial_depth:` | no | 初期表示時に展開描画する最大depth。rootは `0` |
 | `row_class_builder:` | no | `tr` に付与するCSS classを返すcallable |
 | `row_data_builder:` | no | `tr` に付与するdata属性Hashを返すcallable |
 
 `effective_initial_state` は、画面固有指定、global config、既定値の順で解決します。
+
+`max_initial_depth` は `nil` または `0` 以上のIntegerを指定します。
+`nil` の場合はdepth制限なし、`0` の場合はrootのみ、`1` の場合はrootとそのchildrenまでを初期HTMLに描画します。
+境界depthのnodeは collapsed 扱いになり、子孫がある場合は `hidden_count` が表示されます。
+`initial_state: :collapsed` の場合は全体collapsedが優先され、rootのみが初期表示されます。
 
 `row_class_builder` は文字列、配列、または `nil` を返せます。
 `row_data_builder` はHash相当の値、または `nil` を返せます。
