@@ -4,26 +4,35 @@
 
 README は利用者向けの短い入口に留め、設計思想・導入手順・API仕様・開発方針はこの `docs/` 配下に分けて管理します。
 
-## ドキュメント一覧
+## 利用者向け
+
+TreeViewをhost Rails appに組み込む人は、まず以下を確認してください。
 
 | ドキュメント | 内容 |
 |---|---|
-| [設計思想と責務範囲](design-policy.md) | gem が担う責務、含めるもの、含めないもの、設計判断 |
 | [導入手順](installation.md) | Gemfile、CSS、importmap、Propshaft / Sprockets、開発環境 |
 | [最小利用例](minimal-usage.md) | host app での controller、view、row partial の最小構成 |
 | [使い方](usage.md) | 通常Tree、static表示、Turbo表示、RenderState、view実装例 |
 | [Cookbook](cookbook.md) | 既存APIを組み合わせた代表的な利用パターン |
-| [Rendering boundaries](rendering-boundaries.md) | Rails helper / ERB による描画境界と host app 側の責務 |
 | [Selection](selection.md) | checkbox selection、visibility、送信値 parse |
 | [Breadcrumb helper](breadcrumb.md) | 現在nodeや任意nodeの親階層pathをパンくずとして描画するhelper |
 | [Depth labels](depth-labels.md) | node depthを任意のラベルとして表示するhook |
 | [Row status](row-status.md) | 行全体のdisabled / readonly状態を表すhook |
 | [Node keys](node-keys.md) | 異種nodeや複数TreeViewで衝突しにくいnode_key生成helper |
 | [Tree diagnostics helpers](tree-diagnostics.md) | expanded keys、統計、orphan診断などの構造確認API |
+| [API仕様](api.md) | 主要オブジェクト、引数、挙動、制約 |
+
+## 保守者向け
+
+TreeView gem自体を変更・releaseする人は、以下も確認してください。
+
+| ドキュメント | 内容 |
+|---|---|
+| [設計思想と責務範囲](design-policy.md) | gem が担う責務、含めるもの、含めないもの、設計判断 |
+| [Rendering boundaries](rendering-boundaries.md) | Rails helper / ERB による描画境界と host app 側の責務 |
 | [Persisted State](persisted-state.md) | 開閉状態の保存/復元に関する設計方針 |
 | [Lazy Loading](lazy-loading.md) | 子ノードを必要なタイミングで読み込むための設計方針 |
 | [Public API](public-api.md) | host app が直接使ってよい API と互換性方針 |
-| [API仕様](api.md) | 主要オブジェクト、引数、挙動、制約 |
 | [Release checklist](release.md) | release 前に確認するテスト、docs、gem package 作業 |
 | [開発・保守方針](development.md) | テスト、CI、ドキュメント更新、今後の作業 |
 
