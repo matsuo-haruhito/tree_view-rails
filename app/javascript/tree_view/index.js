@@ -50,7 +50,7 @@ export class TreeViewStateController extends Controller {
     } else if (event.key === "ArrowLeft") {
       event.preventDefault()
       this.activateToggle(row, "hide")
-    } else if (event.key === "Enter") {
+    } else if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
       this.activateToggle(row)
     }

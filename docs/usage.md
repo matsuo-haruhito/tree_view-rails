@@ -56,6 +56,30 @@ tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "ite
 )
 ```
 
+## Keyboard navigation
+
+`tree-view-state` controller can optionally enable keyboard navigation.
+
+```erb
+<tbody
+  data-controller="tree-view-state"
+  data-action="keydown->tree-view-state#keydown"
+  data-tree-view-state-keyboard-value="true">
+  <%= tree_view_rows(@render_state) %>
+</tbody>
+```
+
+Supported keys:
+
+| key | action |
+|---|---|
+| ArrowDown | Focus next visible row |
+| ArrowUp | Focus previous visible row |
+| ArrowRight | Expand the focused row when a show button exists |
+| ArrowLeft | Collapse the focused row when a hide button exists |
+| Enter | Toggle the focused row |
+| Space | Toggle the focused row |
+
 ## RenderState
 
 画面単位の描画状態は `TreeView::RenderState` にまとめます。
