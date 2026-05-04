@@ -15,7 +15,7 @@
 <% mode = tree_toggle_mode(render_context.mode) %>
 <% row_classes = tree_row_classes(item, render_context.row_class_builder) %>
 <% transfer_data = tree_row_transfer_data(item, tree, render_context.row_event_payload_builder) %>
-<% row_data = tree_row_data(item, render_context.row_data_builder, tree: tree).merge(tree_depth: depth).merge(tree_state_row_data(item, tree, expanded: !effectively_collapsed)).merge(transfer_data) %>
+<% row_data = tree_render_row_data(item, tree, render_context, expanded: !effectively_collapsed, depth: depth, transfer_data: transfer_data) %>
 <% row_attrs = { id: tree_node_dom_id(item), class: row_classes.presence, data: row_data, aria: row_aria = { level: depth + 1, selected: tree_selection_checked?(item, tree, render_context.selection_selected_keys) } } %>
 <% row_attrs[:draggable] = true if transfer_data.present? %>
 <% children = row_context.children %>
