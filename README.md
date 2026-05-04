@@ -127,7 +127,9 @@ row partial:
 |---|---|
 | [docs/README.md](docs/README.md) | ドキュメント一覧 |
 | [docs/installation.md](docs/installation.md) | 導入手順 |
+| [docs/minimal-usage.md](docs/minimal-usage.md) | 最小利用例 |
 | [docs/usage.md](docs/usage.md) | 使い方とサンプル |
+| [docs/cookbook.md](docs/cookbook.md) | 既存APIの組み合わせ例 |
 | [docs/api.md](docs/api.md) | API仕様 |
 | [docs/design-policy.md](docs/design-policy.md) | 設計思想と責務範囲 |
 | [docs/development.md](docs/development.md) | 開発・保守方針 |
