@@ -121,7 +121,8 @@ export class TreeViewStateController extends Controller {
 export class TreeViewSelectionController extends Controller {
   static values = {
     cascade: Boolean,
-    indeterminate: Boolean
+    indeterminate: Boolean,
+    maxCount: Number
   }
 
   connect() {
@@ -157,7 +158,9 @@ export class TreeViewSelectionController extends Controller {
     const checkbox = event.target
     if (!checkbox || !checkbox.matches || !checkbox.matches(".tree-selection-checkbox")) return
 
+    const wasChecked = checkbox.checked
     if (this.cascadeValue) this.setDescendantChecked(checkbox, checkbox.checked)
+    this.enforceMaxCount(checkbox, wasChecked)
     this.updateIndeterminateStates()
     this.refresh()
   }
@@ -180,6 +183,26 @@ export class TreeViewSelectionController extends Controller {
       })
       return null
     }
+  }
+
+  enforceMaxCount(checkbox, attemptedChecked) {
+    if (!this.hasMaxCountValue || this.maxCountValue <= 0) return
+
+    const attemptedCount = this.selectedCheckboxes().length
+    if (attemptedCount <= this.maxCountValue) return
+
+    checkbox.checked = false
+    checkbox.indeterminate = false
+    if (this.cascadeValue) this.setDescendantChecked(checkbox, false)
+
+    this.dispatch("limit-exceeded", {
+      detail: {
+        maxCount: this.maxCountValue,
+        attemptedCount,
+        attemptedChecked,
+        checkbox
+      }
+    })
   }
 
   setDescendantChecked(checkbox, checked) {
