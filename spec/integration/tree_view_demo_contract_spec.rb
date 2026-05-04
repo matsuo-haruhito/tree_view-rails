@@ -51,8 +51,8 @@ RSpec.describe "TreeView demo app integration contract" do
       locals: { tree: tree, row_partial: "machines/tree_columns", collapsed: false }
     )
 
-    expect(rendered).to include('id="demomachinenode_1"')
-    expect(rendered).to include('id="demomachinenode_2"')
+    expect(rendered).to include('id="node_demomachinenode_1"')
+    expect(rendered).to include('id="node_demomachinenode_2"')
     expect(rendered).to include("DemoMachineNode:machine")
     expect(rendered).to include("DemoMachineNode:unit")
     expect(rendered).to include('aria-expanded="true"')
