@@ -5,6 +5,8 @@
 - Ruby 3.2 以上
 - Rails 7.0 以上
 
+この条件は `tree_view.gemspec` の `required_ruby_version` と `railties` dependency に合わせます。
+
 ## Gemfile
 
 host app の `Gemfile` に追加します。
@@ -51,6 +53,22 @@ pin "tree_view", to: "tree_view/index.js"
 
 現在のTreeViewは、static表示だけであれば専用JavaScriptなしでも利用できます。Turbo Streamで開閉を行う場合も、host app側のTurbo構成とpath builderが中心になります。
 
+## Packaged files
+
+TreeView gem package には、Rails host app で必要になる以下を含めます。
+
+- `app/assets/stylesheets/tree_view.scss`
+- `app/helpers/tree_view_helper.rb`
+- `app/javascript/tree_view/**/*`
+- `app/views/tree_view/**/*`
+- `config/importmap.tree_view.rb`
+- `lib/**/*`
+- `README.md`
+- `CHANGELOG.md`
+- `docs/**/*`
+
+導入手順を変更した場合は、`tree_view.gemspec` の packaged file list とこの一覧が食い違わないようにします。
+
 ## Propshaft
 
 Rails 8 + Propshaft でも利用できます。
@@ -65,6 +83,8 @@ Rails 8 + Propshaft でも利用できます。
 pin "tree_view", to: "tree_view/index.js"
 ```
 
+Propshaft 環境では、host app 側の asset 読み込み方針に合わせて、上記のCSSとimportmap pinを明示する運用を基本にします。
+
 ## Sprockets
 
 Engine側にはSprockets互換のasset hookを残しています。
@@ -73,6 +93,16 @@ Engine側にはSprockets互換のasset hookを残しています。
 - `tree_view.css` / `tree_view/index.js` を precompile 対象に追加
 
 ただし、導入の中心はhost app側でCSS / importmapを明示的に読み込む運用です。
+
+## Asset / importmap audit checklist
+
+asset または JavaScript の配置を変更した場合は、release 前に以下を確認します。
+
+- `tree_view.gemspec` がCSS、JavaScript、importmapファイルを含んでいる
+- README の導入例がこのファイルと一致している
+- `docs/release.md` の package checklist が更新されている
+- static表示がJavaScriptなしでも利用できる、という前提を壊していない
+- JavaScriptが必要な機能は、必要なimportmap pinやdata属性をdocsに書いている
 
 ## 開発環境
 
