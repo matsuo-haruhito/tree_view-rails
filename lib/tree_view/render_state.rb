@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+require "tree_view/render_state_builder_validation"
+
 module TreeView
   class RenderState
+    include TreeView::RenderStateBuilderValidation
+
     VALID_INITIAL_STATES = Configuration::VALID_INITIAL_STATES
     VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys collapsed_keys].freeze
     VALID_RENDER_SCOPE_KEYS = %i[max_depth max_leaf_distance].freeze
@@ -108,17 +112,19 @@ module TreeView
       @badge_builder = badge_builder
       @icon_builder = icon_builder
 
-      validate_builder!(row_class_builder, :row_class_builder)
-      validate_builder!(row_data_builder, :row_data_builder)
-      validate_builder!(row_event_payload_builder, :row_event_payload_builder)
-      validate_builder!(loading_builder, :loading_builder)
-      validate_builder!(error_builder, :error_builder)
-      validate_builder!(depth_label_builder, :depth_label_builder)
-      validate_builder!(badge_builder, :badge_builder)
-      validate_builder!(icon_builder, :icon_builder)
-      validate_builder!(@selection_payload_builder, :selection_payload_builder)
-      validate_builder!(@selection_disabled_builder, :selection_disabled_builder)
-      validate_builder!(@selection_disabled_reason_builder, :selection_disabled_reason_builder)
+      validate_builders!(
+        row_class_builder: row_class_builder,
+        row_data_builder: row_data_builder,
+        row_event_payload_builder: row_event_payload_builder,
+        loading_builder: loading_builder,
+        error_builder: error_builder,
+        depth_label_builder: depth_label_builder,
+        badge_builder: badge_builder,
+        icon_builder: icon_builder,
+        selection_payload_builder: @selection_payload_builder,
+        selection_disabled_builder: @selection_disabled_builder,
+        selection_disabled_reason_builder: @selection_disabled_reason_builder
+      )
       validate_expansion_key_conflicts!
     end
 
