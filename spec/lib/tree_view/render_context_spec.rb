@@ -16,6 +16,7 @@ RSpec.describe TreeView::RenderContext do
 
   it "delegates render configuration to render state" do
     row_class_builder = ->(_item) { ["row"] }
+    row_event_payload_builder = ->(_item) { { id: 1 } }
     state = build_state(
       max_initial_depth: 1,
       max_render_depth: 2,
@@ -27,6 +28,7 @@ RSpec.describe TreeView::RenderContext do
       selectable: true,
       selection: { visibility: :leaves, selected_keys: [3] },
       row_class_builder: row_class_builder,
+      row_event_payload_builder: row_event_payload_builder,
       badge_builder: ->(_item) { "badge" }
     )
 
@@ -48,6 +50,7 @@ RSpec.describe TreeView::RenderContext do
     expect(context.selection_visibility).to eq(:leaves)
     expect(context.selection_selected_keys).to eq([3])
     expect(context.row_class_builder).to eq(row_class_builder)
+    expect(context.row_event_payload_builder).to eq(row_event_payload_builder)
     expect(context.badge_builder.call(:item)).to eq("badge")
   end
 
