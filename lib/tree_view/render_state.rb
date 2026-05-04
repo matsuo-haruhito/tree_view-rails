@@ -10,7 +10,7 @@ module TreeView
     VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys collapsed_keys].freeze
     VALID_RENDER_SCOPE_KEYS = %i[max_depth max_leaf_distance].freeze
     VALID_TOGGLE_SCOPE_KEYS = %i[max_depth_from_root max_leaf_distance].freeze
-    VALID_SELECTION_KEYS = %i[enabled visibility payload_builder checkbox_name disabled_builder disabled_reason_builder selected_keys].freeze
+    VALID_SELECTION_KEYS = %i[enabled visibility payload_builder checkbox_name disabled_builder disabled_reason_builder selected_keys cascade indeterminate max_count].freeze
     VALID_SELECTION_VISIBILITIES = %i[all roots leaves none].freeze
     DEFAULT_SELECTION_CHECKBOX_NAME = "selected_nodes[]"
 
@@ -35,6 +35,9 @@ module TreeView
                 :selection_disabled_builder,
                 :selection_disabled_reason_builder,
                 :selection_selected_keys,
+                :selection_cascade,
+                :selection_indeterminate,
+                :selection_max_count,
                 :row_class_builder,
                 :row_data_builder,
                 :row_event_payload_builder,
@@ -68,6 +71,9 @@ module TreeView
                    selection_disabled_builder: nil,
                    selection_disabled_reason_builder: nil,
                    selection_selected_keys: nil,
+                   selection_cascade: nil,
+                   selection_indeterminate: nil,
+                   selection_max_count: nil,
                    selection: nil,
                    row_class_builder: nil,
                    row_data_builder: nil,
@@ -103,6 +109,9 @@ module TreeView
       @selection_disabled_builder = resolve_option(selection_disabled_builder, selection_options[:disabled_builder])
       @selection_disabled_reason_builder = resolve_option(selection_disabled_reason_builder, selection_options[:disabled_reason_builder])
       @selection_selected_keys = Array(resolve_option(selection_selected_keys, selection_options[:selected_keys])).freeze
+      @selection_cascade = normalize_boolean(resolve_option(selection_cascade, selection_options[:cascade]), :selection_cascade)
+      @selection_indeterminate = normalize_boolean(resolve_option(selection_indeterminate, selection_options[:indeterminate]), :selection_indeterminate)
+      @selection_max_count = normalize_optional_positive_integer(resolve_option(selection_max_count, selection_options[:max_count]), :selection_max_count)
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
       @row_event_payload_builder = row_event_payload_builder
@@ -130,6 +139,14 @@ module TreeView
 
     def selection_enabled?
       selection_enabled == true
+    end
+
+    def selection_cascade?
+      selection_cascade == true
+    end
+
+    def selection_indeterminate?
+      selection_indeterminate == true
     end
 
     # 画面固有指定があればそれを優先し、なければ global config を使う。
@@ -184,6 +201,13 @@ module TreeView
       return value if value.is_a?(Integer) && value >= 0
 
       raise ArgumentError, "#{name} must be a non-negative Integer"
+    end
+
+    def normalize_optional_positive_integer(value, name)
+      return nil if value.nil?
+      return value if value.is_a?(Integer) && value.positive?
+
+      raise ArgumentError, "#{name} must be a positive Integer"
     end
 
     def normalize_boolean(value, name)
