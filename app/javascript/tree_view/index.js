@@ -301,33 +301,54 @@ export class TreeViewSelectionController extends Controller {
 export class TreeViewTransferController extends Controller {
   start(event) {
     const row = this.rowFromEvent(event)
-    if (!row) return
+    if (!row || row.dataset.treeTransferDisabled === "true") return
 
-    const payload = this.payloadFromRow(row)
-    if (event.dataTransfer && payload) event.dataTransfer.setData("application/json", JSON.stringify(payload))
+    const sourcePayload = this.payloadFromRow(row)
+    if (event.dataTransfer && sourcePayload) {
+      event.dataTransfer.effectAllowed = "move"
+      event.dataTransfer.setData("application/json", JSON.stringify(sourcePayload))
+      event.dataTransfer.setData("text/plain", JSON.stringify(sourcePayload))
+    }
 
-    this.dispatch("started", { detail: { payload, row } })
+    this.dispatchTransferEvent("drag-start", {
+      sourcePayload,
+      sourceRow: row
+    })
   }
 
   over(event) {
-    event.preventDefault()
     const row = this.rowFromEvent(event)
-    this.dispatch("over", { detail: { payload: this.payloadFromRow(row), row } })
+    if (!row || row.dataset.treeTransferDisabled === "true") return
+
+    event.preventDefault()
+    if (event.dataTransfer) event.dataTransfer.dropEffect = "move"
+
+    this.dispatchTransferEvent("drag-over", {
+      targetPayload: this.payloadFromRow(row),
+      targetRow: row,
+      position: this.dropPosition(event, row)
+    })
   }
 
   drop(event) {
-    event.preventDefault()
     const targetRow = this.rowFromEvent(event)
+    if (!targetRow || targetRow.dataset.treeTransferDisabled === "true") return
+
+    event.preventDefault()
     const sourcePayload = this.payloadFromEvent(event)
     const targetPayload = this.payloadFromRow(targetRow)
+    const position = this.dropPosition(event, targetRow)
 
-    this.dispatch("dropped", {
-      detail: {
-        source: sourcePayload,
-        target: targetPayload,
-        targetRow
-      }
+    this.dispatchTransferEvent("drop", {
+      sourcePayload,
+      targetPayload,
+      position,
+      targetRow
     })
+  }
+
+  dispatchTransferEvent(name, detail) {
+    this.dispatch(name, { detail })
   }
 
   rowFromEvent(event) {
@@ -351,7 +372,7 @@ export class TreeViewTransferController extends Controller {
   payloadFromEvent(event) {
     if (!event.dataTransfer) return null
 
-    const value = event.dataTransfer.getData("application/json")
+    const value = event.dataTransfer.getData("application/json") || event.dataTransfer.getData("text/plain")
     if (!value) return null
 
     try {
@@ -360,6 +381,19 @@ export class TreeViewTransferController extends Controller {
       this.dispatch("invalid-transfer", { detail: { value } })
       return null
     }
+  }
+
+  dropPosition(event, row) {
+    if (!row || typeof row.getBoundingClientRect !== "function") return "inside"
+
+    const rect = row.getBoundingClientRect()
+    if (!rect || rect.height === 0) return "inside"
+
+    const offset = event.clientY - rect.top
+    if (offset < rect.height / 3) return "before"
+    if (offset > (rect.height * 2) / 3) return "after"
+
+    return "inside"
   }
 }
 
