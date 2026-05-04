@@ -2,12 +2,12 @@
 
 module TreeView
   class PersistedState
-    attr_reader :view_key, :expanded_keys
+    attr_reader :tree_instance_key, :expanded_keys
 
-    def initialize(view_key:, expanded_keys: [])
-      raise ArgumentError, "view_key is required" if view_key.nil? || view_key.to_s.empty?
+    def initialize(tree_instance_key:, expanded_keys: [])
+      raise ArgumentError, "tree_instance_key is required" if tree_instance_key.nil? || tree_instance_key.to_s.empty?
 
-      @view_key = view_key
+      @tree_instance_key = tree_instance_key
       @expanded_keys = Array(expanded_keys).freeze
     end
 
@@ -17,7 +17,7 @@ module TreeView
       raise ArgumentError, "persisted_state must be Hash-like" unless value.respond_to?(:to_h)
 
       options = value.to_h.transform_keys(&:to_sym)
-      new(view_key: options[:view_key], expanded_keys: options[:expanded_keys])
+      new(tree_instance_key: options[:tree_instance_key], expanded_keys: options[:expanded_keys])
     end
   end
 end
