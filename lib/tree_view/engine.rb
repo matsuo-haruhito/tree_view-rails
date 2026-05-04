@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rails/engine"
+require_relative File.join("..", "..", "app", "helpers", "tree_view_row_actions_helper")
 
 module TreeView
   class Engine < ::Rails::Engine
@@ -24,6 +25,7 @@ module TreeView
     initializer "tree_view.helpers" do
       ActiveSupport.on_load(:action_controller_base) do
         helper TreeViewHelper
+        helper TreeViewRowActionsHelper
         helper TreeViewStateHelper
       end
     end
