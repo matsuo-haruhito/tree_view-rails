@@ -11,8 +11,8 @@ module TreeView
       super(**options)
     end
 
-    def view_key
-      super || persisted_state&.view_key
+    def tree_instance_key
+      super || persisted_state&.tree_instance_key
     end
   end
 end

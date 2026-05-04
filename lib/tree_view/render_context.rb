@@ -41,7 +41,7 @@ module TreeView
         selection_enabled == true
       end
 
-      def view_key
+      def tree_instance_key
         nil
       end
     end
@@ -197,8 +197,8 @@ module TreeView
       render_state.error_builder
     end
 
-    def view_key
-      render_state.view_key
+    def tree_instance_key
+      render_state.tree_instance_key
     end
 
     def depth_label_builder
