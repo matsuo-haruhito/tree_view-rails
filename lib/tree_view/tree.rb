@@ -134,6 +134,10 @@ module TreeView
       TreeView::ReverseTree.new(base_tree: self, paths: paths_for(items))
     end
 
+    def filtered_tree_for(matched_items, mode: :with_ancestors)
+      TreeView::FilteredTree.new(base_tree: self, matched_items: matched_items, mode: mode)
+    end
+
     def node_key_for(record)
       if adapter_mode?
         adapter.node_key_for(record, id_method: id_method)
