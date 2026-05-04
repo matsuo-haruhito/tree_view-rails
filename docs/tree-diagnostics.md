@@ -1,6 +1,6 @@
 # Tree diagnostics helpers
 
-`TreeView::Tree` provides small helper APIs for host apps that need to open search-result paths or inspect tree data quality.
+`TreeView::Tree` and `TreeView::RenderState` provide small helper APIs for host apps that need to open search-result paths, inspect tree data quality, or validate rendered DOM identifiers during development and tests.
 
 ## expanded_keys_for
 
@@ -47,7 +47,51 @@ tree.orphan_report
 This is useful for maintenance screens, data cleanup, and tests.
 It is supported in records mode only.
 
+## Node key uniqueness
+
+`validate_unique_node_keys!` detects duplicated `node_key` values in the tree.
+
+```ruby
+tree.validate_unique_node_keys!
+```
+
+Use this in tests or development-only checks when a screen depends on stable node keys for expansion state, selection payloads, or DOM integration.
+
+## DOM ID uniqueness
+
+`TreeView::DomIdValidator` detects duplicate DOM IDs generated from a `RenderState` and its `ui_config`.
+
+```ruby
+render_state.validate_unique_dom_ids!
+```
+
+It checks the DOM IDs generated for rendered rows and TreeView-managed controls:
+
+- node row DOM ID
+- toggle cell / button DOM ID
+- show button DOM ID
+- selection checkbox DOM ID, when selection is enabled
+
+The validator respects render scope options such as `max_render_depth` and `max_leaf_distance`, so it checks the rows that are renderable for that `RenderState`.
+
+```ruby
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  max_render_depth: 2,
+  selectable: true
+)
+
+render_state.validate_unique_dom_ids!
+```
+
+If a collision is found, `ArgumentError` includes the duplicated DOM ID and the node keys that produced it.
+
+DOM ID validation is separate from node key validation. A duplicated `node_key` usually causes duplicated DOM IDs with the default `UiConfigBuilder`, but custom DOM ID builders can also create DOM ID collisions even when node keys are unique.
+
 ## Responsibility boundary
 
-These helpers only report or derive tree structure information.
+These helpers report or derive tree structure and render-identifier information.
 They do not repair data, persist expansion state, or implement business-specific maintenance actions.
