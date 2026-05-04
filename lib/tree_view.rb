@@ -41,6 +41,10 @@ module TreeView
     def parse_selection_params(value)
       SelectionParams.parse(value)
     end
+
+    def node_key(type, value)
+      [type, value].map { |part| part.to_s.strip }.join(":")
+    end
   end
 end
 
