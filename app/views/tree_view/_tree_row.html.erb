@@ -1,57 +1,38 @@
+<% render_context = local_assigns.fetch(:render_context) %>
+<% tree = render_context.tree %>
 <% branch_info = tree_branch_info(item, tree) %>
 <% depth = local_assigns.fetch(:depth, branch_info[:depth]) %>
-<% row_partial = local_assigns.fetch(:row_partial) %>
-<% row_actions_partial = local_assigns[:row_actions_partial] %>
-<% badge_builder = local_assigns[:badge_builder] %>
-<% collapsed = local_assigns.fetch(:collapsed, false) %>
-<% max_initial_depth = local_assigns[:max_initial_depth] %>
-<% max_render_depth = local_assigns[:max_render_depth] %>
-<% max_leaf_distance = local_assigns[:max_leaf_distance] %>
-<% max_toggle_depth_from_root = local_assigns[:max_toggle_depth_from_root] %>
-<% max_toggle_leaf_distance = local_assigns[:max_toggle_leaf_distance] %>
-<% expanded_keys = local_assigns[:expanded_keys] %>
-<% collapsed_keys = local_assigns[:collapsed_keys] %>
-<% current_key = local_assigns[:current_key] %>
-<% depth_label_builder = local_assigns[:depth_label_builder] %>
-<% selection_enabled = local_assigns[:selection_enabled] %>
-<% selection_visibility = local_assigns.fetch(:selection_visibility, :all) %>
-<% selection_payload_builder = local_assigns[:selection_payload_builder] %>
-<% selection_checkbox_name = local_assigns[:selection_checkbox_name] %>
-<% selection_disabled_builder = local_assigns[:selection_disabled_builder] %>
-<% selection_disabled_reason_builder = local_assigns[:selection_disabled_reason_builder] %>
-<% selection_selected_keys = local_assigns[:selection_selected_keys] %>
-<% hidden_message_builder = local_assigns[:hidden_message_builder] %>
-<% explicitly_expanded = tree_expanded_key?(item, tree, expanded_keys) %>
-<% explicitly_collapsed = tree_collapsed_key?(item, tree, collapsed_keys) %>
-<% depth_boundary = tree_initial_depth_boundary?(depth, max_initial_depth) %>
-<% render_children = tree_render_children?(depth, max_render_depth) %>
-<% render_self = tree_render_leaf_distance?(item, tree, max_leaf_distance) %>
+<% row_context = TreeView::RowContext.new(render_context: render_context, item: item, depth: depth) %>
+<% row_partial = render_context.row_partial %>
+<% row_actions_partial = render_context.row_actions_partial %>
+<% explicitly_expanded = tree_expanded_key?(item, tree, render_context.expanded_keys) %>
+<% explicitly_collapsed = tree_collapsed_key?(item, tree, render_context.collapsed_keys) %>
+<% depth_boundary = row_context.initial_depth_boundary? %>
+<% render_children = row_context.render_children? %>
+<% render_self = tree_render_leaf_distance?(item, tree, render_context.max_leaf_distance) %>
 <% leaf_distance = tree_leaf_distance(item, tree) %>
-<% effectively_collapsed = explicitly_collapsed || (!explicitly_expanded && (collapsed || depth_boundary)) %>
-<% mode = tree_toggle_mode(local_assigns[:mode]) %>
-<% row_class_builder = local_assigns[:row_class_builder] %>
-<% row_data_builder = local_assigns[:row_data_builder] %>
-<% row_classes = tree_row_classes(item, row_class_builder) %>
-<% row_data = tree_row_data(item, row_data_builder, tree: tree).merge(tree_depth: depth).merge(tree_state_row_data(item, tree, expanded: !effectively_collapsed)) %>
-<% children = tree.children_for(item) %>
-<% row_aria = { level: depth + 1, selected: tree_selection_checked?(item, tree, selection_selected_keys) } %>
+<% effectively_collapsed = explicitly_collapsed || (!explicitly_expanded && (render_context.collapsed? || depth_boundary)) %>
+<% mode = tree_toggle_mode(render_context.mode) %>
+<% row_classes = tree_row_classes(item, render_context.row_class_builder) %>
+<% row_data = tree_row_data(item, render_context.row_data_builder, tree: tree).merge(tree_depth: depth).merge(tree_state_row_data(item, tree, expanded: !effectively_collapsed)) %>
+<% children = row_context.children %>
+<% row_aria = { level: depth + 1, selected: tree_selection_checked?(item, tree, render_context.selection_selected_keys) } %>
 <% row_aria[:expanded] = !effectively_collapsed if children.any? %>
-<% row_aria[:current] = "page" if current_key == tree.node_key_for(item) %>
-<% descendant_count = tree.descendant_counts[tree.node_key_for(item)].to_i %>
-<% hidden_count = render_children && effectively_collapsed && descendant_count.positive? && render_self ? descendant_count : nil %>
+<% row_aria[:current] = "page" if row_context.current? %>
+<% hidden_count = render_children && effectively_collapsed && row_context.descendant_count.positive? && render_self ? row_context.descendant_count : nil %>
 <% if render_self %>
   <%= tag.tr(id: tree_node_dom_id(item), class: row_classes.presence, data: row_data, aria: row_aria) do %>
-    <% if selection_enabled %>
-      <% selection_visible = tree_selection_visible?(item, tree, depth, selection_visibility) %>
-      <%= render 'tree_view/tree_selection_cell', item: item, tree: tree, selection_visible: selection_visible, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys %>
+    <% if render_context.selection_enabled? %>
+      <% selection_visible = tree_selection_visible?(item, tree, depth, render_context.selection_visibility) %>
+      <%= render 'tree_view/tree_selection_cell', item: item, tree: tree, selection_visible: selection_visible, selection_payload_builder: render_context.selection_payload_builder, selection_checkbox_name: render_context.selection_checkbox_name, selection_disabled_builder: render_context.selection_disabled_builder, selection_disabled_reason_builder: render_context.selection_disabled_reason_builder, selection_selected_keys: render_context.selection_selected_keys %>
     <% end %>
-    <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: hidden_message_builder, depth_label_builder: depth_label_builder, badge_builder: badge_builder, mode: mode, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance %>
+    <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: render_context.hidden_message_builder, depth_label_builder: render_context.depth_label_builder, badge_builder: render_context.badge_builder, mode: mode, max_toggle_depth_from_root: render_context.max_toggle_depth_from_root, max_toggle_leaf_distance: render_context.max_toggle_leaf_distance, leaf_distance: leaf_distance %>
     <%= render row_partial, item: item %>
     <% if row_actions_partial %>
-      <%= render row_actions_partial, item: item, tree: tree, render_state: local_assigns[:render_state] %>
+      <%= render row_actions_partial, item: item, tree: tree, render_state: render_context.render_state %>
     <% end %>
   <% end %>
 <% end %>
 <% if render_children && !effectively_collapsed %>
-  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, row_actions_partial: row_actions_partial, badge_builder: badge_builder, mode: mode, max_initial_depth: max_initial_depth, max_render_depth: max_render_depth, max_leaf_distance: max_leaf_distance, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, expanded_keys: expanded_keys, collapsed_keys: collapsed_keys, current_key: current_key, depth_label_builder: depth_label_builder, selection_enabled: selection_enabled, selection_visibility: selection_visibility, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys, hidden_message_builder: hidden_message_builder, row_class_builder: row_class_builder, row_data_builder: row_data_builder, render_state: local_assigns[:render_state] %>
+  <%= render 'tree_view/tree_children', items: children, depth: depth, render_context: render_context %>
 <% end %>
