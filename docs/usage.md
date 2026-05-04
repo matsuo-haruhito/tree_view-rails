@@ -56,6 +56,23 @@ tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "ite
 )
 ```
 
+## Remote children hook
+
+Host apps that load children on demand can pass `load_children_path_builder` to `UiConfigBuilder#build`.
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "document").build(
+  hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth:, scope:) },
+  show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth:, scope:) },
+  load_children_path_builder: ->(item, depth, scope) {
+    children_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
+  },
+  toggle_all_path_builder: ->(state) { documents_path(state: state) }
+)
+```
+
+`load_children_path(item, depth, scope:)` only builds the URL. Fetching data, authorization, Turbo Stream responses, loading state, and retry behavior remain the host app's responsibility.
+
 ## Keyboard navigation
 
 `tree-view-state` controller can optionally enable keyboard navigation.

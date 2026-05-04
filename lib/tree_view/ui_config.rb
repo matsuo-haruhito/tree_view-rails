@@ -10,6 +10,7 @@ module TreeView
                 :show_button_dom_id_builder,
                 :hide_descendants_path_builder,
                 :show_descendants_path_builder,
+                :load_children_path_builder,
                 :toggle_all_path_builder,
                 :indent_unit,
                 :scope_format
@@ -19,6 +20,7 @@ module TreeView
                    show_button_dom_id_builder:,
                    hide_descendants_path_builder: nil,
                    show_descendants_path_builder: nil,
+                   load_children_path_builder: nil,
                    toggle_all_path_builder: nil,
                    indent_unit: '&ensp; &ensp; &ensp;',
                    scope_format: :string)
@@ -27,6 +29,7 @@ module TreeView
       validate_builder!(show_button_dom_id_builder, :show_button_dom_id_builder)
       validate_optional_builder!(hide_descendants_path_builder, :hide_descendants_path_builder)
       validate_optional_builder!(show_descendants_path_builder, :show_descendants_path_builder)
+      validate_optional_builder!(load_children_path_builder, :load_children_path_builder)
       validate_optional_builder!(toggle_all_path_builder, :toggle_all_path_builder)
 
       @node_dom_id_builder = node_dom_id_builder
@@ -34,6 +37,7 @@ module TreeView
       @show_button_dom_id_builder = show_button_dom_id_builder
       @hide_descendants_path_builder = hide_descendants_path_builder
       @show_descendants_path_builder = show_descendants_path_builder
+      @load_children_path_builder = load_children_path_builder
       @toggle_all_path_builder = toggle_all_path_builder
       @indent_unit = indent_unit
       @scope_format = normalize_scope_format(scope_format)
@@ -63,6 +67,12 @@ module TreeView
       show_descendants_path_builder.call(item, toggle_depth, scope)
     end
 
+    def load_children_path(item, depth, scope: 'all')
+      return nil unless load_children_path_builder
+
+      load_children_path_builder.call(item, depth, scope)
+    end
+
     def object_scope?
       scope_format == :object
     end
@@ -76,6 +86,7 @@ module TreeView
     def static?
       hide_descendants_path_builder.nil? &&
         show_descendants_path_builder.nil? &&
+        load_children_path_builder.nil? &&
         toggle_all_path_builder.nil?
     end
 
