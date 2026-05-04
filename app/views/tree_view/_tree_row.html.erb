@@ -2,6 +2,7 @@
 <% depth = local_assigns.fetch(:depth, branch_info[:depth]) %>
 <% row_partial = local_assigns.fetch(:row_partial) %>
 <% row_actions_partial = local_assigns[:row_actions_partial] %>
+<% badge_builder = local_assigns[:badge_builder] %>
 <% collapsed = local_assigns.fetch(:collapsed, false) %>
 <% max_initial_depth = local_assigns[:max_initial_depth] %>
 <% max_render_depth = local_assigns[:max_render_depth] %>
@@ -44,7 +45,7 @@
       <% selection_visible = tree_selection_visible?(item, tree, depth, selection_visibility) %>
       <%= render 'tree_view/tree_selection_cell', item: item, tree: tree, selection_visible: selection_visible, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys %>
     <% end %>
-    <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: hidden_message_builder, depth_label_builder: depth_label_builder, mode: mode, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance %>
+    <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: hidden_message_builder, depth_label_builder: depth_label_builder, badge_builder: badge_builder, mode: mode, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance %>
     <%= render row_partial, item: item %>
     <% if row_actions_partial %>
       <%= render row_actions_partial, item: item, tree: tree, render_state: local_assigns[:render_state] %>
@@ -52,5 +53,5 @@
   <% end %>
 <% end %>
 <% if render_children && !effectively_collapsed %>
-  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, row_actions_partial: row_actions_partial, mode: mode, max_initial_depth: max_initial_depth, max_render_depth: max_render_depth, max_leaf_distance: max_leaf_distance, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, expanded_keys: expanded_keys, collapsed_keys: collapsed_keys, current_key: current_key, depth_label_builder: depth_label_builder, selection_enabled: selection_enabled, selection_visibility: selection_visibility, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys, hidden_message_builder: hidden_message_builder, row_class_builder: row_class_builder, row_data_builder: row_data_builder, render_state: local_assigns[:render_state] %>
+  <%= render 'tree_view/tree_children', items: children, depth: depth, tree: tree, row_partial: row_partial, row_actions_partial: row_actions_partial, badge_builder: badge_builder, mode: mode, max_initial_depth: max_initial_depth, max_render_depth: max_render_depth, max_leaf_distance: max_leaf_distance, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, expanded_keys: expanded_keys, collapsed_keys: collapsed_keys, current_key: current_key, depth_label_builder: depth_label_builder, selection_enabled: selection_enabled, selection_visibility: selection_visibility, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys, hidden_message_builder: hidden_message_builder, row_class_builder: row_class_builder, row_data_builder: row_data_builder, render_state: local_assigns[:render_state] %>
 <% end %>

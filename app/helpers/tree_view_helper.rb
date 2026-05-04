@@ -37,7 +37,8 @@ module TreeViewHelper
         hidden_message_builder: render_state.hidden_message_builder,
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder,
-        depth_label_builder: render_state.depth_label_builder
+        depth_label_builder: render_state.depth_label_builder,
+        badge_builder: render_state.badge_builder
       }
     )
   ensure
@@ -83,6 +84,28 @@ module TreeViewHelper
     return nil unless builder
 
     builder.call(item, depth).presence
+  end
+
+  def tree_node_badge(item, builder = nil, tree: nil)
+    value = builder&.call(item)
+    return nil if value.nil?
+
+    if value.respond_to?(:to_h)
+      badge = value.to_h.symbolize_keys
+      text = badge[:text] || badge[:label]
+      return nil if text.blank?
+
+      {
+        text: text,
+        class: Array(badge[:class]).flatten.compact_blank,
+        title: badge[:title],
+        data: badge[:data].respond_to?(:to_h) ? badge[:data].to_h : {}
+      }
+    else
+      { text: value, class: [], title: nil, data: {} }
+    end
+  rescue NoMethodError
+    raise ArgumentError, "badge_builder must return text or a Hash-like object for #{tree_diagnostic_node_label(item, tree)}"
   end
 
   def tree_selection_payload(item, tree, builder = nil)
