@@ -2,7 +2,76 @@
 
 module TreeView
   class RenderContext
+    LegacyRenderState = Struct.new(
+      :tree,
+      :root_items,
+      :row_partial,
+      :row_actions_partial,
+      :max_initial_depth,
+      :max_render_depth,
+      :max_leaf_distance,
+      :max_toggle_depth_from_root,
+      :max_toggle_leaf_distance,
+      :expanded_keys,
+      :collapsed_keys,
+      :current_key,
+      :selection_enabled,
+      :selection_visibility,
+      :selection_payload_builder,
+      :selection_checkbox_name,
+      :selection_disabled_builder,
+      :selection_disabled_reason_builder,
+      :selection_selected_keys,
+      :hidden_message_builder,
+      :row_class_builder,
+      :row_data_builder,
+      :depth_label_builder,
+      :badge_builder,
+      keyword_init: true
+    ) do
+      def effective_initial_state
+        :expanded
+      end
+
+      def selection_enabled?
+        selection_enabled == true
+      end
+    end
+
     attr_reader :render_state, :mode
+
+    def self.from_legacy_locals(local_assigns)
+      new(
+        render_state: LegacyRenderState.new(
+          tree: local_assigns.fetch(:tree),
+          root_items: [],
+          row_partial: local_assigns.fetch(:row_partial),
+          row_actions_partial: local_assigns[:row_actions_partial],
+          max_initial_depth: local_assigns[:max_initial_depth],
+          max_render_depth: local_assigns[:max_render_depth],
+          max_leaf_distance: local_assigns[:max_leaf_distance],
+          max_toggle_depth_from_root: local_assigns[:max_toggle_depth_from_root],
+          max_toggle_leaf_distance: local_assigns[:max_toggle_leaf_distance],
+          expanded_keys: Array(local_assigns[:expanded_keys]),
+          collapsed_keys: Array(local_assigns[:collapsed_keys]),
+          current_key: local_assigns[:current_key],
+          selection_enabled: local_assigns[:selection_enabled] == true,
+          selection_visibility: local_assigns.fetch(:selection_visibility, :all),
+          selection_payload_builder: local_assigns[:selection_payload_builder],
+          selection_checkbox_name: local_assigns[:selection_checkbox_name] || RenderState::DEFAULT_SELECTION_CHECKBOX_NAME,
+          selection_disabled_builder: local_assigns[:selection_disabled_builder],
+          selection_disabled_reason_builder: local_assigns[:selection_disabled_reason_builder],
+          selection_selected_keys: Array(local_assigns[:selection_selected_keys]),
+          hidden_message_builder: local_assigns[:hidden_message_builder],
+          row_class_builder: local_assigns[:row_class_builder],
+          row_data_builder: local_assigns[:row_data_builder],
+          depth_label_builder: local_assigns[:depth_label_builder],
+          badge_builder: local_assigns[:badge_builder]
+        ),
+        mode: local_assigns[:mode],
+        collapsed: local_assigns.fetch(:collapsed, false)
+      )
+    end
 
     def initialize(render_state:, mode: nil, collapsed: nil)
       @render_state = render_state
