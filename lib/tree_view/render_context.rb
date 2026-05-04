@@ -206,7 +206,7 @@ module TreeView
     end
 
     def badge_builder
-      render_state.badge_builder
+      render_state.badge_builder || render_state.icon_builder
     end
 
     def icon_builder
