@@ -15,6 +15,7 @@ RSpec.describe TreeView::UiConfig do
     config = build_config(
       hide_descendants_path_builder: ->(item, depth, scope) { "/hide/#{item.id}?depth=#{depth}&scope=#{scope}" },
       show_descendants_path_builder: ->(item, depth, scope) { "/show/#{item.id}?depth=#{depth}&scope=#{scope}" },
+      load_children_path_builder: ->(item, depth, scope) { "/children/#{item.id}?depth=#{depth}&scope=#{scope}" },
       toggle_all_path_builder: ->(state) { "/toggle?state=#{state}" }
     )
 
@@ -27,6 +28,8 @@ RSpec.describe TreeView::UiConfig do
     expect(config.hide_descendants_path(item, 2, scope: "grandchildren")).to eq("/hide/7?depth=2&scope=grandchildren")
     expect(config.show_descendants_path(item, 3)).to eq("/show/7?depth=3&scope=all")
     expect(config.show_descendants_path(item, 3, scope: "children")).to eq("/show/7?depth=3&scope=children")
+    expect(config.load_children_path(item, 1)).to eq("/children/7?depth=1&scope=all")
+    expect(config.load_children_path(item, 1, scope: "children")).to eq("/children/7?depth=1&scope=children")
     expect(config.toggle_all_path(state: :collapsed)).to eq("/toggle?state=collapsed")
   end
 
@@ -38,6 +41,7 @@ RSpec.describe TreeView::UiConfig do
     expect(config.node_dom_id(item)).to eq("node_7")
     expect(config.hide_descendants_path(item, 2)).to be_nil
     expect(config.show_descendants_path(item, 3)).to be_nil
+    expect(config.load_children_path(item, 1)).to be_nil
     expect(config.toggle_all_path(state: :collapsed)).to be_nil
     expect(config.static?).to eq(true)
   end
