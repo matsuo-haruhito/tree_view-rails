@@ -68,6 +68,29 @@ Invalid JSON values are skipped and reported through `tree-view-selection:invali
 
 TreeView only collects and exposes the selected payloads. Deleting, moving, relating, or sending them to an API remains the host app's responsibility.
 
+## Selection max count
+
+Host apps can limit the number of checked boxes on the JavaScript controller.
+
+```erb
+<tbody
+  data-controller="tree-view-selection"
+  data-action="change->tree-view-selection#toggle"
+  data-tree-view-selection-max-count-value="10">
+  <%= tree_view_rows(@render_state) %>
+</tbody>
+```
+
+When a user exceeds the limit, TreeView unchecks the attempted checkbox and dispatches `tree-view-selection:limit-exceeded`.
+
+```js
+document.addEventListener("tree-view-selection:limit-exceeded", (event) => {
+  const { maxCount, attemptedCount } = event.detail
+})
+```
+
+The controller reports the limit event only. Business-specific messaging and API behavior remain the host app's responsibility.
+
 ## Linked checkbox behavior
 
 The Stimulus controller can also update rendered child rows and parent mixed states.
