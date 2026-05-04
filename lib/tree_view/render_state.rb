@@ -35,6 +35,7 @@ module TreeView
                 :row_data_builder,
                 :row_event_payload_builder,
                 :loading_builder,
+                :error_builder,
                 :depth_label_builder,
                 :badge_builder,
                 :icon_builder
@@ -68,6 +69,7 @@ module TreeView
                    row_data_builder: nil,
                    row_event_payload_builder: nil,
                    loading_builder: nil,
+                   error_builder: nil,
                    depth_label_builder: nil,
                    badge_builder: nil,
                    icon_builder: nil)
@@ -101,6 +103,7 @@ module TreeView
       @row_data_builder = row_data_builder
       @row_event_payload_builder = row_event_payload_builder
       @loading_builder = loading_builder
+      @error_builder = error_builder
       @depth_label_builder = depth_label_builder
       @badge_builder = badge_builder
       @icon_builder = icon_builder
@@ -109,6 +112,7 @@ module TreeView
       validate_builder!(row_data_builder, :row_data_builder)
       validate_builder!(row_event_payload_builder, :row_event_payload_builder)
       validate_builder!(loading_builder, :loading_builder)
+      validate_builder!(error_builder, :error_builder)
       validate_builder!(depth_label_builder, :depth_label_builder)
       validate_builder!(badge_builder, :badge_builder)
       validate_builder!(icon_builder, :icon_builder)
