@@ -63,6 +63,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Release, versioning, CHANGELOG, and gem packaging checks are documented in `docs/release.md`.
 - Asset and importmap packaging expectations are documented in `docs/installation.md`.
 - JavaScript controller responsibility boundaries are documented in `docs/design-policy.md`.
+- TreeView-specific concepts and API names are defined in `docs/glossary.md`.
 
 ### Notes
 
