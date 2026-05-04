@@ -7,6 +7,7 @@ This changelog uses the following categories when applicable:
 - `Fixed` for bug fixes.
 - `Deprecated` for features planned for removal.
 - `Removed` for removed features.
+- `Documentation` for docs-only changes.
 
 Breaking changes and required migration notes should be called out explicitly in the relevant version section.
 
@@ -52,6 +53,13 @@ Breaking changes and required migration notes should be called out explicitly in
 - Orphan handling strategies.
 - Optional node key uniqueness validation.
 - Japanese documentation under `docs/`.
+
+### Documentation
+
+- Public API and compatibility policy are documented in `docs/public-api.md`.
+- Release, versioning, CHANGELOG, and gem packaging checks are documented in `docs/release.md`.
+- Asset and importmap packaging expectations are documented in `docs/installation.md`.
+- JavaScript controller responsibility boundaries are documented in `docs/design-policy.md`.
 
 ### Notes
 
