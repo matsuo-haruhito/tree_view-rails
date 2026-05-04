@@ -26,6 +26,8 @@ module TreeView
       :row_class_builder,
       :row_data_builder,
       :row_event_payload_builder,
+      :loading_builder,
+      :error_builder,
       :depth_label_builder,
       :badge_builder,
       keyword_init: true
@@ -36,6 +38,10 @@ module TreeView
 
       def selection_enabled?
         selection_enabled == true
+      end
+
+      def view_key
+        nil
       end
     end
 
@@ -67,6 +73,8 @@ module TreeView
           row_class_builder: local_assigns[:row_class_builder],
           row_data_builder: local_assigns[:row_data_builder],
           row_event_payload_builder: local_assigns[:row_event_payload_builder],
+          loading_builder: local_assigns[:loading_builder],
+          error_builder: local_assigns[:error_builder],
           depth_label_builder: local_assigns[:depth_label_builder],
           badge_builder: local_assigns[:badge_builder]
         ),
@@ -177,6 +185,18 @@ module TreeView
 
     def row_event_payload_builder
       render_state.row_event_payload_builder
+    end
+
+    def loading_builder
+      render_state.loading_builder
+    end
+
+    def error_builder
+      render_state.error_builder
+    end
+
+    def view_key
+      render_state.view_key
     end
 
     def depth_label_builder
