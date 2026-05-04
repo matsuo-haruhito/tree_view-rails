@@ -66,7 +66,7 @@ pin "tree_view", to: "tree_view/index.js"
 TreeView gem package には、Rails host app で必要になる以下を含めます。
 
 - `app/assets/stylesheets/tree_view.scss`
-- `app/helpers tree_view_helper.rb`
+- `app/helpers/tree_view_helper.rb`
 - `app/javascript/tree_view/**/*`
 - `app/views/tree_view/**/*`
 - `config/importmap.tree_view.rb`
