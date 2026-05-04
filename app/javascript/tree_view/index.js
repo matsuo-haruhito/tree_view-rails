@@ -127,12 +127,28 @@ export class TreeViewSelectionController extends Controller {
 
   connect() {
     this.updateIndeterminateStates()
+    this.dispatchSelectionChanged()
   }
 
   selectedPayloads() {
     return this.selectedCheckboxes()
       .map((checkbox) => this.parsePayload(checkbox))
       .filter((payload) => payload !== null)
+  }
+
+  selectedValues() {
+    return this.selectedCheckboxes().map((checkbox) => checkbox.value)
+  }
+
+  selectionDetail() {
+    const selectedCheckboxes = this.selectedCheckboxes()
+    return {
+      selectedCount: selectedCheckboxes.length,
+      selectedValues: selectedCheckboxes.map((checkbox) => checkbox.value),
+      selectedPayloads: selectedCheckboxes
+        .map((checkbox) => this.parsePayload(checkbox))
+        .filter((payload) => payload !== null)
+    }
   }
 
   submit(event) {
@@ -151,6 +167,13 @@ export class TreeViewSelectionController extends Controller {
       detail: {
         payloads: this.selectedPayloads()
       }
+    })
+    this.dispatchSelectionChanged()
+  }
+
+  dispatchSelectionChanged() {
+    this.dispatch("change", {
+      detail: this.selectionDetail()
     })
   }
 
