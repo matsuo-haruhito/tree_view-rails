@@ -1,11 +1,16 @@
 <% hidden_count = local_assigns[:hidden_count] %>
 <% hidden_message_builder = local_assigns[:hidden_message_builder] %>
+<% depth_label_builder = local_assigns[:depth_label_builder] %>
 <% children ||= tree.children_for(item) %>
 <% mode = tree_toggle_mode(local_assigns[:mode]) %>
 <% max_toggle_depth_from_root = local_assigns[:max_toggle_depth_from_root] %>
 <% max_toggle_leaf_distance = local_assigns[:max_toggle_leaf_distance] %>
 <% leaf_distance = local_assigns[:leaf_distance] %>
+<% depth_label = tree_depth_label(item, depth, depth_label_builder) %>
 
 <td class="btn-cell tree-toggle-cell" id="<%= tree_button_dom_id(item) %>">
   <%= render 'tree_view/tree_toggle_content', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: hidden_message_builder, mode: mode, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance %>
+  <% if depth_label %>
+    <span class="tree-depth-label"><%= depth_label %></span>
+  <% end %>
 </td>
