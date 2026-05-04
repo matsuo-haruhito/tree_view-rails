@@ -15,17 +15,17 @@ RSpec.describe "TreeView::RenderState persisted state" do
   end
 
   it "uses persisted expanded keys when expanded_keys is omitted" do
-    persisted_state = TreeView::PersistedState.new(view_key: "documents", expanded_keys: [1, 2])
+    persisted_state = TreeView::PersistedState.new(tree_instance_key: "documents", expanded_keys: [1, 2])
 
     state = build_state(persisted_state: persisted_state)
 
     expect(state.persisted_state).to eq(persisted_state)
-    expect(state.view_key).to eq("documents")
+    expect(state.tree_instance_key).to eq("documents")
     expect(state.expanded_keys).to eq([1, 2])
   end
 
   it "prefers explicit expanded_keys over persisted expanded keys" do
-    persisted_state = TreeView::PersistedState.new(view_key: "documents", expanded_keys: [1, 2])
+    persisted_state = TreeView::PersistedState.new(tree_instance_key: "documents", expanded_keys: [1, 2])
 
     state = build_state(persisted_state: persisted_state, expanded_keys: [9])
 
@@ -33,9 +33,9 @@ RSpec.describe "TreeView::RenderState persisted state" do
   end
 
   it "accepts hash-like persisted state" do
-    state = build_state(persisted_state: { view_key: "documents", expanded_keys: [3] })
+    state = build_state(persisted_state: { tree_instance_key: "documents", expanded_keys: [3] })
 
-    expect(state.view_key).to eq("documents")
+    expect(state.tree_instance_key).to eq("documents")
     expect(state.expanded_keys).to eq([3])
   end
 end
