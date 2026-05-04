@@ -85,7 +85,7 @@ RSpec.describe "TreeView integration" do
       rendered = view.tree_view_rows(render_state)
 
       expect(view.tree_view_state_data(render_state)).to eq(controller: "tree-view-state tree-view-transfer")
-      expect(rendered).to include('draggable="draggable"')
+      expect(rendered).to include('draggable="true"')
       expect(rendered).to include('data-tree-transfer-node-key="1"')
       expect(rendered).to include('data-tree-transfer-payload="{&quot;id&quot;:1,&quot;name&quot;:&quot;root&quot;}"')
       expect(rendered).to include('dragstart-&gt;tree-view-transfer#start')
