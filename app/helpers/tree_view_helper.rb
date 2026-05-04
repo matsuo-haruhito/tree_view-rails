@@ -74,7 +74,9 @@ module TreeViewHelper
 
   def tree_render_row_data(item, tree, render_context, expanded:, depth:, transfer_data: nil)
     data = tree_row_data(item, render_context.row_data_builder, tree: tree)
-    data = data.merge(view_key: render_context.view_key) if render_context.view_key.present?
+    if render_context.tree_instance_key.present?
+      data = data.merge(tree_instance_key: render_context.tree_instance_key)
+    end
 
     if render_context.error_builder&.call(item) == true
       data = data.merge(remote_state: "error")
