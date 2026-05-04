@@ -289,13 +289,43 @@ RSpec.describe TreeView::RenderState do
       selection: {
         enabled: true,
         payload_builder: payload_builder,
-        checkbox_name: "documents[]"
+        checkbox_name: "documents[]",
+        cascade: true,
+        indeterminate: true,
+        max_count: 10
       }
     )
 
     expect(state.selection_enabled?).to eq(true)
     expect(state.selection_payload_builder).to eq(payload_builder)
     expect(state.selection_checkbox_name).to eq("documents[]")
+    expect(state.selection_cascade?).to eq(true)
+    expect(state.selection_indeterminate?).to eq(true)
+    expect(state.selection_max_count).to eq(10)
+  end
+
+  it "rejects invalid selection cascade options" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        selection: { enabled: true, cascade: "true" }
+      )
+    end.to raise_error(ArgumentError, /selection_cascade must be true or false/)
+  end
+
+  it "rejects invalid selection max count" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        selection: { enabled: true, max_count: 0 }
+      )
+    end.to raise_error(ArgumentError, /selection_max_count must be a positive Integer/)
   end
 
   it "uses the default selection checkbox name" do
