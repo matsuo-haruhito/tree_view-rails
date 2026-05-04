@@ -19,7 +19,7 @@ module TreeView
                 :row_partial,
                 :row_actions_partial,
                 :ui_config,
-                :view_key,
+                :tree_instance_key,
                 :initial_state,
                 :max_initial_depth,
                 :max_render_depth,
@@ -50,7 +50,7 @@ module TreeView
                    row_partial:,
                    ui_config:,
                    row_actions_partial: nil,
-                   view_key: nil,
+                   tree_instance_key: nil,
                    initial_state: nil,
                    max_initial_depth: nil,
                    max_render_depth: nil,
@@ -87,7 +87,7 @@ module TreeView
       @row_partial = row_partial
       @row_actions_partial = row_actions_partial
       @ui_config = ui_config
-      @view_key = view_key&.to_s
+      @tree_instance_key = tree_instance_key&.to_s
       @initial_state = normalize_initial_state(resolve_option(initial_state, initial_expansion_options[:default]))
       @max_initial_depth = normalize_non_negative_integer(resolve_option(max_initial_depth, initial_expansion_options[:max_depth]), :max_initial_depth)
       @max_render_depth = normalize_non_negative_integer(resolve_option(max_render_depth, render_scope_options[:max_depth]), :max_render_depth)
