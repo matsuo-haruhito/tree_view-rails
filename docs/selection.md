@@ -57,6 +57,14 @@ document.addEventListener("tree-view-selection:selected", (event) => {
 })
 ```
 
+When the controller connects or selection changes, it dispatches `tree-view-selection:change`.
+
+```js
+document.addEventListener("tree-view-selection:change", (event) => {
+  const { selectedCount, selectedValues, selectedPayloads } = event.detail
+})
+```
+
 The controller also exposes `selectedPayloads()` for direct JavaScript integration.
 
 ```js
