@@ -38,7 +38,8 @@ module TreeViewRowActionsHelper
         row_class_builder: render_state.row_class_builder,
         row_data_builder: render_state.row_data_builder,
         depth_label_builder: render_state.depth_label_builder,
-        badge_builder: render_state.badge_builder
+        badge_builder: render_state.badge_builder,
+        marker_builder: render_state.icon_builder
       }
     )
   ensure
