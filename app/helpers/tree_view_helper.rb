@@ -65,12 +65,12 @@ module TreeViewHelper
     Array(builder&.call(item)).flatten.compact_blank
   end
 
-  def tree_row_data(item, builder = nil)
+  def tree_row_data(item, builder = nil, tree: nil)
     data = builder&.call(item)
     return {} if data.nil?
     return data.to_h if data.respond_to?(:to_h)
 
-    raise ArgumentError, "row_data_builder must return a Hash-like object"
+    raise ArgumentError, "row_data_builder must return a Hash-like object for #{tree_diagnostic_node_label(item, tree)}"
   end
 
   def tree_hidden_count_message(hidden_count, builder = nil)
@@ -89,7 +89,7 @@ module TreeViewHelper
     payload = builder ? builder.call(item) : default_tree_selection_payload(item, tree)
     return payload.to_h if payload.respond_to?(:to_h)
 
-    raise ArgumentError, "selection_payload_builder must return a Hash-like object"
+    raise ArgumentError, "selection_payload_builder must return a Hash-like object for #{tree_diagnostic_node_label(item, tree)}"
   end
 
   def tree_selection_value(item, tree, builder = nil)
@@ -245,6 +245,16 @@ module TreeViewHelper
       id: item.respond_to?(:id) ? item.id : tree.node_key_for(item),
       type: item.class.name
     }
+  end
+
+  def tree_diagnostic_node_label(item, tree = nil)
+    return "node_key=#{tree.node_key_for(item).inspect}" if tree
+
+    if item.respond_to?(:id)
+      "item_id=#{item.id.inspect}"
+    else
+      "item=#{item.inspect}"
+    end
   end
 
   def tree_max_depth(tree)
