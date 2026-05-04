@@ -5,41 +5,17 @@ module TreeViewHelper
     previous_tree_ui = @tree_ui
     @tree_ui = render_state.ui_config
     clear_tree_view_render_caches!
+    render_context = TreeView::RenderContext.new(render_state: render_state, mode: mode, collapsed: collapsed)
 
-    if render_state.root_items.empty? && render_state.empty_message.present?
+    if render_context.root_items.empty? && render_state.empty_message.present?
       return render(partial: "tree_view/tree_empty_row", locals: { empty_message: render_state.empty_message })
     end
 
     render(
       partial: "tree_view/tree_row",
-      collection: render_state.root_items,
+      collection: render_context.root_items,
       as: :item,
-      locals: {
-        tree: render_state.tree,
-        row_partial: render_state.row_partial,
-        mode: mode,
-        collapsed: collapsed.nil? ? render_state.effective_initial_state == :collapsed : collapsed,
-        max_initial_depth: render_state.max_initial_depth,
-        max_render_depth: render_state.max_render_depth,
-        max_leaf_distance: render_state.max_leaf_distance,
-        max_toggle_depth_from_root: render_state.max_toggle_depth_from_root,
-        max_toggle_leaf_distance: render_state.max_toggle_leaf_distance,
-        expanded_keys: render_state.expanded_keys,
-        collapsed_keys: render_state.collapsed_keys,
-        current_key: render_state.current_key,
-        selection_enabled: render_state.selection_enabled?,
-        selection_visibility: render_state.selection_visibility,
-        selection_payload_builder: render_state.selection_payload_builder,
-        selection_checkbox_name: render_state.selection_checkbox_name,
-        selection_disabled_builder: render_state.selection_disabled_builder,
-        selection_disabled_reason_builder: render_state.selection_disabled_reason_builder,
-        selection_selected_keys: render_state.selection_selected_keys,
-        hidden_message_builder: render_state.hidden_message_builder,
-        row_class_builder: render_state.row_class_builder,
-        row_data_builder: render_state.row_data_builder,
-        depth_label_builder: render_state.depth_label_builder,
-        badge_builder: render_state.badge_builder
-      }
+      locals: { render_context: render_context }
     )
   ensure
     clear_tree_view_render_caches!
