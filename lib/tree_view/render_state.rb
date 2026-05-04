@@ -33,6 +33,7 @@ module TreeView
                 :selection_selected_keys,
                 :row_class_builder,
                 :row_data_builder,
+                :loading_builder,
                 :depth_label_builder,
                 :badge_builder,
                 :icon_builder
@@ -64,6 +65,7 @@ module TreeView
                    selection: nil,
                    row_class_builder: nil,
                    row_data_builder: nil,
+                   loading_builder: nil,
                    depth_label_builder: nil,
                    badge_builder: nil,
                    icon_builder: nil)
@@ -95,12 +97,14 @@ module TreeView
       @selection_selected_keys = Array(resolve_option(selection_selected_keys, selection_options[:selected_keys])).freeze
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
+      @loading_builder = loading_builder
       @depth_label_builder = depth_label_builder
       @badge_builder = badge_builder
       @icon_builder = icon_builder
 
       validate_builder!(row_class_builder, :row_class_builder)
       validate_builder!(row_data_builder, :row_data_builder)
+      validate_builder!(loading_builder, :loading_builder)
       validate_builder!(depth_label_builder, :depth_label_builder)
       validate_builder!(badge_builder, :badge_builder)
       validate_builder!(icon_builder, :icon_builder)
