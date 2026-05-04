@@ -24,6 +24,12 @@ require "tree_view/ui_config_builder"
 TreeView::Tree.prepend(TreeView::NodeKeyValidation)
 
 module TreeView
+  class Error < StandardError; end
+  class ConfigurationError < Error; end
+  class InvalidTreeError < Error; end
+  class UnsupportedModeError < Error; end
+  class RenderError < Error; end
+
   class << self
     # GEM 利用側の全体既定値はここから設定する。
     def configure
