@@ -48,25 +48,9 @@ module TreeView
     def descendant_counts
       @descendant_counts ||= begin
         memo = {}
-        visiting = {}
-
-        count_descendants = lambda do |record|
-          node_key = node_key_for(record)
-          return memo[node_key] if memo.key?(node_key)
-          raise ArgumentError, "cycle detected in tree for node #{node_key.inspect}" if visiting[node_key]
-
-          visiting[node_key] = true
-          children = children_for(record)
-          memo[node_key] = children.sum { |child| 1 + count_descendants.call(child) }
-          visiting.delete(node_key)
-          memo[node_key]
-        rescue StandardError
-          visiting.delete(node_key)
-          raise
-        end
 
         each_root_candidate do |root_candidate|
-          count_descendants.call(root_candidate)
+          count_descendants_iteratively(root_candidate, memo)
         end
 
         memo
@@ -269,6 +253,41 @@ module TreeView
           items.each { |item| yield item }
         end
       end
+    end
+
+    def count_descendants_iteratively(root, memo)
+      root_key = node_key_for(root)
+      return memo[root_key] if memo.key?(root_key)
+
+      visiting = {}
+      stack = [[root, false]]
+
+      until stack.empty?
+        item, expanded = stack.pop
+        key = node_key_for(item)
+
+        if expanded
+          visiting.delete(key)
+          children = children_for(item)
+          memo[key] = children.sum { |child| 1 + memo[node_key_for(child)].to_i }
+          next
+        end
+
+        next if memo.key?(key)
+        raise ArgumentError, "cycle detected in tree for node #{key.inspect}" if visiting[key]
+
+        visiting[key] = true
+        stack << [item, true]
+
+        children_for(item).reverse_each do |child|
+          child_key = node_key_for(child)
+          raise ArgumentError, "cycle detected in tree for node #{child_key.inspect}" if visiting[child_key]
+
+          stack << [child, false] unless memo.key?(child_key)
+        end
+      end
+
+      memo[root_key]
     end
 
     def each_reachable_node(root_nodes)
