@@ -24,6 +24,7 @@ module TreeView
     initializer "tree_view.helpers" do
       ActiveSupport.on_load(:action_controller_base) do
         helper TreeViewHelper
+        helper TreeViewRowActionsHelper
         helper TreeViewStateHelper
       end
     end
