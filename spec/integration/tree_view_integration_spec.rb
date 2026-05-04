@@ -71,6 +71,28 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include("project_2:child")
     end
 
+    it "renders row transfer data when row event payload builder is configured" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        row_event_payload_builder: ->(item) { { id: item.id, name: item.name } }
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(view.tree_view_state_data(render_state)).to eq(controller: "tree-view-state tree-view-transfer")
+      expect(rendered).to include('draggable="true"')
+      expect(rendered).to include('data-tree-transfer-node-key="1"')
+      expect(rendered).to include('data-tree-transfer-payload="{&quot;id&quot;:1,&quot;name&quot;:&quot;root&quot;}"')
+      expect(rendered).to include('dragstart-&gt;tree-view-transfer#start')
+      expect(rendered).to include('dragover-&gt;tree-view-transfer#over')
+      expect(rendered).to include('drop-&gt;tree-view-transfer#drop')
+    end
+
     it "renders an empty state row when root items are empty and empty_message is given" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       empty_tree = TreeView::Tree.new(records: [], parent_id_method: :parent_item_id)

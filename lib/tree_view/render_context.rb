@@ -25,6 +25,7 @@ module TreeView
       :hidden_message_builder,
       :row_class_builder,
       :row_data_builder,
+      :row_event_payload_builder,
       :depth_label_builder,
       :badge_builder,
       keyword_init: true
@@ -65,6 +66,7 @@ module TreeView
           hidden_message_builder: local_assigns[:hidden_message_builder],
           row_class_builder: local_assigns[:row_class_builder],
           row_data_builder: local_assigns[:row_data_builder],
+          row_event_payload_builder: local_assigns[:row_event_payload_builder],
           depth_label_builder: local_assigns[:depth_label_builder],
           badge_builder: local_assigns[:badge_builder]
         ),
@@ -171,6 +173,10 @@ module TreeView
 
     def row_data_builder
       render_state.row_data_builder
+    end
+
+    def row_event_payload_builder
+      render_state.row_event_payload_builder
     end
 
     def depth_label_builder
