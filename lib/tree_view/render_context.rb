@@ -30,6 +30,7 @@ module TreeView
       :error_builder,
       :depth_label_builder,
       :badge_builder,
+      :icon_builder,
       keyword_init: true
     ) do
       def effective_initial_state
@@ -76,7 +77,8 @@ module TreeView
           loading_builder: local_assigns[:loading_builder],
           error_builder: local_assigns[:error_builder],
           depth_label_builder: local_assigns[:depth_label_builder],
-          badge_builder: local_assigns[:badge_builder]
+          badge_builder: local_assigns[:badge_builder],
+          icon_builder: local_assigns[:icon_builder]
         ),
         mode: local_assigns[:mode],
         collapsed: local_assigns.fetch(:collapsed, false)
@@ -205,6 +207,10 @@ module TreeView
 
     def badge_builder
       render_state.badge_builder
+    end
+
+    def icon_builder
+      render_state.icon_builder
     end
   end
 end
