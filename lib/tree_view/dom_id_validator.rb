@@ -128,5 +128,9 @@ module TreeView
     def validate_dom_ids!
       DomIdValidator.validate!(self)
     end
+
+    def validate_unique_dom_ids!
+      validate_dom_ids!
+    end
   end
 end
