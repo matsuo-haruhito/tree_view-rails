@@ -32,6 +32,33 @@
 
 将来的に極端な deep tree を正式にサポートする場合は、再帰 walk の一部を iterative な実装へ置き換える、または最大深度ガードを追加することを検討します。
 
+## Turbo / remote update の責務境界
+
+TreeView は Turbo Stream や remote children を使う画面でも、通信処理そのものは持たず、host app が安全に更新処理を組み立てるための情報と hook を提供します。
+
+TreeView gem が担当する範囲は以下です。
+
+- DOM ID / checkbox ID / toggle button ID の安定生成
+- `UiConfig` / path builder による hide / show / toggle-all URL 生成の入口
+- `data-*` 属性による node_key・depth・選択状態・行状態などの表示補助情報の付与
+- 必要に応じた共通 CSS class / JavaScript event 名・payload の標準化
+- loading / error / retry など remote operation の状態表現に必要な hook の提供
+
+host app が担当する範囲は以下です。
+
+- controller action / route / authorization
+- DB query / pagination / lazy load 対象の決定
+- Turbo Stream response の内容
+- WebSocket / Turbo Streams broadcast の購読・配信
+- retry 処理やエラーメッセージの業務判断
+- 削除・移動・関連付けなどの業務処理
+
+Turbo Stream response は、TreeView が生成した DOM ID を target として使い、置換・追加するHTMLは既存の `tree_view_rows` / partial 構造と互換にします。
+node_key / DOM ID が重複しないよう、必要に応じて `node_prefix` や `TreeView.node_key` を使います。
+WebSocket / Turbo Streams broadcast で別クライアントへ反映する場合も、TreeView は購読や配信を管理しません。
+
+この方針により、TreeView は Rails / Turbo と相性のよい表示基盤に留まり、通信制御ライブラリや業務UIフレームワークには寄せません。
+
 ## 含めるもの
 
 - `lib/tree_view*`
