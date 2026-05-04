@@ -36,7 +36,7 @@ module TreeViewRowActionsHelper
         selection_selected_keys: render_state.selection_selected_keys,
         hidden_message_builder: render_state.hidden_message_builder,
         row_class_builder: render_state.row_class_builder,
-        row_data_builder: tree_view_row_data_with_key(render_state),
+        row_data_builder: tree_view_row_data_with_remote_state(render_state),
         depth_label_builder: render_state.depth_label_builder,
         badge_builder: render_state.badge_builder || render_state.public_send("ico" + "n_builder")
       }
@@ -48,13 +48,15 @@ module TreeViewRowActionsHelper
 
   private
 
-  def tree_view_row_data_with_key(render_state)
-    return render_state.row_data_builder unless render_state.view_key
+  def tree_view_row_data_with_remote_state(render_state)
+    return render_state.row_data_builder unless render_state.view_key || render_state.loading_builder
 
     lambda do |item|
       data = render_state.row_data_builder&.call(item)
       data = data.respond_to?(:to_h) ? data.to_h : {}
-      data.merge(view_key: render_state.view_key)
+      data = data.merge(view_key: render_state.view_key) if render_state.view_key
+      data = data.merge(remote_state: "loading") if render_state.loading_builder&.call(item) == true
+      data
     end
   end
 end
