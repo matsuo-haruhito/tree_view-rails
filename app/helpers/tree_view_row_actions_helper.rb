@@ -49,7 +49,7 @@ module TreeViewRowActionsHelper
   private
 
   def tree_view_row_data_for_render(render_state)
-    return render_state.row_data_builder unless render_state.view_key || render_state.row_event_payload_builder
+    return render_state.row_data_builder unless render_state.view_key || render_state.row_event_payload_builder || render_state.loading_builder
 
     lambda do |item|
       data = render_state.row_data_builder&.call(item)
@@ -62,6 +62,7 @@ module TreeViewRowActionsHelper
         data = data.merge(row_event_payload: JSON.generate(payload))
       end
 
+      data = data.merge(remote_state: "loading") if render_state.loading_builder&.call(item) == true
       data
     end
   end
