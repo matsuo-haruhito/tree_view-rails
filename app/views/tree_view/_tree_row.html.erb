@@ -1,4 +1,4 @@
-<% render_context = local_assigns.fetch(:render_context) %>
+<% render_context = local_assigns[:render_context] || TreeView::RenderContext.from_legacy_locals(local_assigns) %>
 <% tree = render_context.tree %>
 <% branch_info = tree_branch_info(item, tree) %>
 <% depth = local_assigns.fetch(:depth, branch_info[:depth]) %>
