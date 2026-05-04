@@ -66,7 +66,11 @@ module TreeView
 
       lambda do |item|
         data = original_row_data_builder&.call(item)
-        row_data = data.respond_to?(:to_h) ? data.to_h : {}
+        unless data.nil? || data.respond_to?(:to_h)
+          raise ArgumentError, "row_data_builder must return a Hash-like object"
+        end
+
+        row_data = data ? data.to_h : {}
         row_data[:tree_view_row_disabled] = true if row_disabled_builder&.call(item) == true
         row_data[:tree_view_row_readonly] = true if row_readonly_builder&.call(item) == true
         reason = row_disabled_reason_builder&.call(item)
