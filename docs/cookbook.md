@@ -14,8 +14,27 @@ The examples stay generic. Business-specific models, authorization, routes, and 
 - Checkbox selection: enable selection options and parse submitted values with `TreeView.parse_selection_params`.
 - Disabled selection rows: use disabled builders when rows should be visible but not selectable. Permission checks still belong in the host app.
 - Row class and data hooks: use `row_class_builder` and `row_data_builder` for styling and lightweight integration hooks.
+- Row visual hooks: use `badge_builder` for badges and `icon_builder` for a small node-type visual when no badge is configured.
 - Large tree guardrails: use `max_initial_depth`, `max_render_depth`, `max_leaf_distance`, or focused trees to avoid rendering everything by default.
 - Orphan diagnostics: choose an orphan strategy deliberately when parent IDs may point to missing records.
+
+## Icon builder
+
+`icon_builder` is a lightweight visual hook for node type or state markers.
+
+```ruby
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "items/tree_columns",
+  ui_config: tree_ui,
+  icon_builder: ->(item) {
+    item.folder? ? { text: "folder", title: "Folder" } : { text: "file", title: "File" }
+  }
+)
+```
+
+When both `badge_builder` and `icon_builder` are configured, `badge_builder` takes precedence in the current visual slot.
 
 ## Notes
 
