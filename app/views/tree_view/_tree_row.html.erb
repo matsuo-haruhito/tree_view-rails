@@ -14,14 +14,16 @@
 <% effectively_collapsed = explicitly_collapsed || (!explicitly_expanded && (render_context.collapsed? || depth_boundary)) %>
 <% mode = tree_toggle_mode(render_context.mode) %>
 <% row_classes = tree_row_classes(item, render_context.row_class_builder) %>
-<% row_data = tree_row_data(item, render_context.row_data_builder, tree: tree).merge(tree_depth: depth).merge(tree_state_row_data(item, tree, expanded: !effectively_collapsed)) %>
+<% transfer_data = tree_row_transfer_data(item, tree, render_context.row_event_payload_builder) %>
+<% row_data = tree_row_data(item, render_context.row_data_builder, tree: tree).merge(tree_depth: depth).merge(tree_state_row_data(item, tree, expanded: !effectively_collapsed)).merge(transfer_data) %>
+<% row_attrs = { id: tree_node_dom_id(item), class: row_classes.presence, data: row_data, aria: row_aria = { level: depth + 1, selected: tree_selection_checked?(item, tree, render_context.selection_selected_keys) } } %>
+<% row_attrs[:draggable] = true if transfer_data.present? %>
 <% children = row_context.children %>
-<% row_aria = { level: depth + 1, selected: tree_selection_checked?(item, tree, render_context.selection_selected_keys) } %>
 <% row_aria[:expanded] = !effectively_collapsed if children.any? %>
 <% row_aria[:current] = "page" if row_context.current? %>
 <% hidden_count = render_children && effectively_collapsed && row_context.descendant_count.positive? && render_self ? row_context.descendant_count : nil %>
 <% if render_self %>
-  <%= tag.tr(id: tree_node_dom_id(item), class: row_classes.presence, data: row_data, aria: row_aria) do %>
+  <%= tag.tr(**row_attrs) do %>
     <% if render_context.selection_enabled? %>
       <% selection_visible = tree_selection_visible?(item, tree, depth, render_context.selection_visibility) %>
       <%= render 'tree_view/tree_selection_cell', item: item, tree: tree, selection_visible: selection_visible, selection_payload_builder: render_context.selection_payload_builder, selection_checkbox_name: render_context.selection_checkbox_name, selection_disabled_builder: render_context.selection_disabled_builder, selection_disabled_reason_builder: render_context.selection_disabled_reason_builder, selection_selected_keys: render_context.selection_selected_keys %>
