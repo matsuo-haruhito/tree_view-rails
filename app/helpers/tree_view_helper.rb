@@ -281,42 +281,64 @@ module TreeViewHelper
   end
 
   def tree_max_depth(tree)
-    memo = {}
+    max_depth = 0
+    seen_depths = {}
+    stack = tree.root_items.reverse.map { |root| [root, 0, {}] }
 
-    walk = lambda do |node, depth|
+    until stack.empty?
+      node, depth, ancestor_keys = stack.pop
       node_key = tree.node_key_for(node)
-      previous = memo[node_key]
-      return previous if previous && previous >= depth
+      raise ArgumentError, "cycle detected in tree for node #{node_key.inspect}" if ancestor_keys[node_key]
 
-      memo[node_key] = depth
-      children = tree.children_for(node)
-      return depth if children.empty?
+      previous_depth = seen_depths[node_key]
+      next if previous_depth && previous_depth >= depth
 
-      children.map { |child| walk.call(child, depth + 1) }.max
+      seen_depths[node_key] = depth
+      max_depth = depth if depth > max_depth
+
+      next_ancestor_keys = ancestor_keys.merge(node_key => true)
+      tree.children_for(node).reverse_each do |child|
+        stack << [child, depth + 1, next_ancestor_keys]
+      end
     end
 
-    tree.root_items.map { |root| walk.call(root, 0) }.max.to_i
+    max_depth
   end
 
   def tree_leaf_distances(tree)
     @tree_leaf_distance_maps ||= {}
     @tree_leaf_distance_maps[tree.object_id] ||= begin
       distances = {}
+      stack = tree.root_items.reverse.map { |root| [root, false, {}] }
 
-      walk = lambda do |node|
+      until stack.empty?
+        node, expanded, ancestor_keys = stack.pop
         node_key = tree.node_key_for(node)
-        return distances[node_key] if distances.key?(node_key)
 
-        children = tree.children_for(node)
-        distances[node_key] = if children.empty?
-                                0
-                              else
-                                child_distances = children.map { |child| walk.call(child) }.compact
-                                child_distances.empty? ? nil : child_distances.min + 1
-                              end
+        if expanded
+          children = tree.children_for(node)
+          distances[node_key] = if children.empty?
+                                  0
+                                else
+                                  child_distances = children.map { |child| distances[tree.node_key_for(child)] }.compact
+                                  child_distances.empty? ? nil : child_distances.min + 1
+                                end
+          next
+        end
+
+        next if distances.key?(node_key)
+        raise ArgumentError, "cycle detected in tree for node #{node_key.inspect}" if ancestor_keys[node_key]
+
+        next_ancestor_keys = ancestor_keys.merge(node_key => true)
+        stack << [node, true, ancestor_keys]
+        tree.children_for(node).reverse_each do |child|
+          child_key = tree.node_key_for(child)
+          raise ArgumentError, "cycle detected in tree for node #{child_key.inspect}" if next_ancestor_keys[child_key]
+
+          stack << [child, false, next_ancestor_keys] unless distances.key?(child_key)
+        end
       end
 
-      tree.root_items.each { |root| walk.call(root) }
       distances
     end
   end
@@ -325,13 +347,19 @@ module TreeViewHelper
     @tree_branch_maps ||= {}
     @tree_branch_maps[tree.object_id] ||= begin
       branch_map = {}
+      stack = [[tree.root_items, 0, [], {}]]
 
-      walk = lambda do |nodes, depth, ancestor_last_states|
+      until stack.empty?
+        nodes, depth, ancestor_last_states, ancestor_keys = stack.pop
         sorted_nodes = tree.sort_items(nodes)
+        child_frames = []
 
         sorted_nodes.each_with_index do |node, index|
+          node_key = tree.node_key_for(node)
+          raise ArgumentError, "cycle detected in tree for node #{node_key.inspect}" if ancestor_keys[node_key]
+
           is_last = index == sorted_nodes.length - 1
-          branch_map[tree.node_key_for(node)] = {
+          branch_map[node_key] = {
             depth: depth,
             ancestor_last_states: ancestor_last_states.dup,
             is_last: is_last
@@ -341,11 +369,12 @@ module TreeViewHelper
           next if children.empty?
 
           next_ancestor_last_states = depth.zero? ? ancestor_last_states : ancestor_last_states + [is_last]
-          walk.call(children, depth + 1, next_ancestor_last_states)
+          child_frames << [children, depth + 1, next_ancestor_last_states, ancestor_keys.merge(node_key => true)]
         end
+
+        child_frames.reverse_each { |frame| stack << frame }
       end
 
-      walk.call(tree.root_items, 0, [])
       branch_map
     end
   end
