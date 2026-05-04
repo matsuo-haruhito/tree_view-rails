@@ -32,6 +32,15 @@ RSpec.describe "TreeView large tree baselines" do
     expect(counts[120]).to eq(0)
   end
 
+  it "counts descendants for a very deep chain without recursive stack growth" do
+    records = build_chain(1_500)
+    tree = TreeView::Tree.new(records: records, parent_id_method: :parent_item_id)
+
+    expect { tree.descendant_counts }.not_to raise_error
+    expect(tree.descendant_counts[1]).to eq(1_499)
+    expect(tree.descendant_counts[1_500]).to eq(0)
+  end
+
   it "counts descendants for a moderately wide tree" do
     records = build_wide_tree(250)
     tree = TreeView::Tree.new(records: records, parent_id_method: :parent_item_id)
