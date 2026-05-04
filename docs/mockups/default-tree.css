@@ -1,0 +1,5 @@
+.tree-root { list-style-type: none; padding-left: 20px; }
+.tree-node { padding: 2px 5px; }
+.tree-node.selected { background-color: #cce5ff; }
+.tree-node.expanded > ul { display: block; }
+.tree-node > ul { display: none; }
