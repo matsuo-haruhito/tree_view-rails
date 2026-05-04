@@ -72,6 +72,22 @@ module TreeViewHelper
     raise ArgumentError, "row_event_payload_builder must return a Hash-like object for #{tree_diagnostic_node_label(item, tree)}"
   end
 
+  def tree_render_row_data(item, tree, render_context, expanded:, depth:, transfer_data: nil)
+    data = tree_row_data(item, render_context.row_data_builder, tree: tree)
+    data = data.merge(view_key: render_context.view_key) if render_context.view_key.present?
+
+    if render_context.error_builder&.call(item) == true
+      data = data.merge(remote_state: "error")
+    elsif render_context.loading_builder&.call(item) == true
+      data = data.merge(remote_state: "loading")
+    end
+
+    data
+      .merge(tree_depth: depth)
+      .merge(tree_state_row_data(item, tree, expanded: expanded))
+      .merge(transfer_data || {})
+  end
+
   def tree_hidden_count_message(hidden_count, builder = nil)
     return hidden_count if builder.nil?
 
