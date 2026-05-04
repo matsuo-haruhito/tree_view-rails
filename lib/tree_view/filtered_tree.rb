@@ -128,6 +128,8 @@ module TreeView
     end
 
     def build_children_by_node_key
+      return {} if mode == :matched_only
+
       children_by_node_key = Hash.new { |hash, key| hash[key] = [] }
       included_keys = @included_by_node_key.keys.to_h { |key| [key, true] }
 
