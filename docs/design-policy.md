@@ -16,6 +16,16 @@
 - root / children の並び順は `TreeView::Tree` の sorter で一元化する
 - 既定の並び順は後方互換のため子孫数昇順とする
 
+## rendering API に関する方針
+
+当面の公開描画入口は `TreeView::RenderState`、`tree_view_rows(render_state)`、host app が渡す `row_partial` を中心にします。
+
+ViewComponent-style API は、現時点では TreeView gem 側では提供しません。ViewComponent gemへの依存を追加せず、必要なhost appでは薄いcomponentから `tree_view_rows(render_state)` を呼び出す構成を推奨します。
+
+column definition API も、現時点では提供しません。TreeViewが汎用table DSLへ寄りすぎることを避け、列のHTML、link、badge、button、権限制御、表示形式はhost appのpartial/helperに残します。
+
+この方針により、TreeViewは木構造表示の基盤に留まり、画面フレームワーク化を避けます。
+
 ## deep tree に関する方針
 
 現時点の `TreeView` は、通常の業務アプリで扱う親子階層を主対象とします。
