@@ -88,16 +88,14 @@ RSpec.describe TreeViewHelper do
   end
 
   describe "tree render caches" do
-    it "clears cached leaf distance and branch maps" do
+    it "clears cached render traversal objects" do
       helper = helper_host_class.new(tree_ui: ui_config)
 
-      helper.instance_variable_set(:@tree_leaf_distance_maps, { 1 => { stale: true } })
-      helper.instance_variable_set(:@tree_branch_maps, { 1 => { stale: true } })
+      helper.instance_variable_set(:@tree_render_traversals, { 1 => double("stale traversal") })
 
       helper.send(:clear_tree_view_render_caches!)
 
-      expect(helper.instance_variable_get(:@tree_leaf_distance_maps)).to eq({})
-      expect(helper.instance_variable_get(:@tree_branch_maps)).to eq({})
+      expect(helper.instance_variable_get(:@tree_render_traversals)).to eq({})
     end
   end
 
