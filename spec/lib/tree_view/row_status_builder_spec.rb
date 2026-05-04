@@ -1,10 +1,10 @@
 require "spec_helper"
 
 RSpec.describe "TreeView row status builders" do
-  Node = Struct.new(:id, :parent_item_id, :name, :locked, :readonly, keyword_init: true)
+  RowStatusSpecNode = Struct.new(:id, :parent_item_id, :name, :locked, :readonly, keyword_init: true)
 
-  let(:root) { Node.new(id: 1, parent_item_id: nil, name: "root", locked: true, readonly: false) }
-  let(:child) { Node.new(id: 2, parent_item_id: 1, name: "child", locked: false, readonly: true) }
+  let(:root) { RowStatusSpecNode.new(id: 1, parent_item_id: nil, name: "root", locked: true, readonly: false) }
+  let(:child) { RowStatusSpecNode.new(id: 2, parent_item_id: 1, name: "child", locked: false, readonly: true) }
   let(:tree) { TreeView::Tree.new(records: [root, child], parent_id_method: :parent_item_id) }
   let(:ui_config) { instance_double(TreeView::UiConfig) }
 
