@@ -2,6 +2,7 @@
 <% hidden_message_builder = local_assigns[:hidden_message_builder] %>
 <% depth_label_builder = local_assigns[:depth_label_builder] %>
 <% badge_builder = local_assigns[:badge_builder] %>
+<% marker_builder = local_assigns[:marker_builder] %>
 <% children ||= tree.children_for(item) %>
 <% mode = tree_toggle_mode(local_assigns[:mode]) %>
 <% max_toggle_depth_from_root = local_assigns[:max_toggle_depth_from_root] %>
@@ -9,9 +10,20 @@
 <% leaf_distance = local_assigns[:leaf_distance] %>
 <% depth_label = tree_depth_label(item, depth, depth_label_builder) %>
 <% badge = tree_node_badge(item, badge_builder, tree: tree) %>
+<% marker_value = marker_builder&.call(item) %>
+<% marker = if marker_value.respond_to?(:to_h)
+              marker_hash = marker_value.to_h.symbolize_keys
+              marker_text = marker_hash[:name] || marker_hash[:text] || marker_hash[:label]
+              marker_text.present? ? { text: marker_text, class: Array(marker_hash[:class]).flatten.compact_blank, title: marker_hash[:title], data: marker_hash[:data].respond_to?(:to_h) ? marker_hash[:data].to_h : {} } : nil
+            elsif marker_value.present?
+              { text: marker_value, class: [], title: nil, data: {} }
+            end %>
 
 <td class="btn-cell tree-toggle-cell" id="<%= tree_button_dom_id(item) %>">
   <%= render 'tree_view/tree_toggle_content', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: hidden_message_builder, mode: mode, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance %>
+  <% if marker %>
+    <%= tag.span marker[:text], class: ['tree-node-marker', marker[:class]].flatten.compact_blank, title: marker[:title], data: marker[:data] %>
+  <% end %>
   <% if depth_label %>
     <span class="tree-depth-label"><%= depth_label %></span>
   <% end %>
