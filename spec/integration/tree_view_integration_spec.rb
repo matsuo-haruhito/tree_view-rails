@@ -217,6 +217,44 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('data-tree-depth="1"')
     end
 
+    it "renders lazy-loading row data and remote-state controller hooks" do
+      tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build(
+        hide_descendants_path_builder: ->(_item, depth, scope) { "/hide?depth=#{depth}&scope=#{scope}" },
+        show_descendants_path_builder: ->(_item, depth, scope) { "/show?depth=#{depth}&scope=#{scope}" },
+        load_children_path_builder: ->(item, depth, scope) { "/children/#{item.id}?depth=#{depth}&scope=#{scope}" },
+        toggle_all_path_builder: ->(state) { "/toggle?state=#{state}" }
+      )
+      render_state = TreeView::RenderState.new(
+        tree: tree,
+        root_items: tree.root_items,
+        row_partial: "projects/tree_columns",
+        ui_config: tree_ui,
+        lazy_loading: {
+          enabled: true,
+          loaded_keys: [tree.node_key_for(child)],
+          scope: "children"
+        }
+      )
+      view = build_view(tree_ui: nil)
+
+      rendered = view.tree_view_rows(render_state)
+
+      expect(view.tree_view_state_data(render_state)).to eq(
+        controller: "tree-view-state tree-view-remote-state",
+        action: [
+          "tree-view:loading->tree-view-remote-state#loading",
+          "tree-view:loaded->tree-view-remote-state#loaded",
+          "tree-view:error->tree-view-remote-state#error",
+          "tree-view:retry->tree-view-remote-state#retry"
+        ].join(" ")
+      )
+      expect(rendered).to include('data-tree-lazy="true"')
+      expect(rendered).to include('data-tree-children-url="/children/1?depth=0&amp;scope=children"')
+      expect(rendered).to include('data-tree-children-url="/children/2?depth=1&amp;scope=children"')
+      expect(rendered).to include('data-tree-loaded="true"')
+      expect(rendered).to include('data-remote-state="loaded"')
+    end
+
     it "limits initial child rendering with max_initial_depth" do
       tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
       render_state = TreeView::RenderState.new(

@@ -114,7 +114,7 @@ expanded_keys = paths.flatten.map { |item| tree.node_key_for(item) }.uniq
 
 親がrecords内に存在しない orphan node の場合、`parent_for` は `nil`、`ancestors_for` は空配列、`path_for` は対象nodeのみを返します。
 親方向の循環参照を検出した場合は `ArgumentError` を発生させます。
-resolver mode / adapter mode では、これらの親方向helperは未対応です。
+これらの親方向helperは records mode 専用です。resolver mode / adapter mode では利用できません。
 
 `path_tree_for` は、検索結果などを起点に root → ancestor → matched item の通常向きTreeを作ります。
 共通祖先や共通edgeは重複表示されません。
@@ -226,7 +226,32 @@ tree.validate_unique_node_keys!
 node_key が重複している場合は、対象キーが分かる `ArgumentError` を発生させます。
 本番描画時に常に検証するものではなく、必要な画面やテストで明示的に呼び出す想定です。
 
-このAPIは node_key の重複検出のみを扱います。DOM ID の衝突検出は今後の拡張対象です。
+このAPIは node_key の重複検出のみを扱います。DOM ID の衝突検出は `RenderState#validate_unique_dom_ids!` で別APIとして提供されます。
+
+## TreeView::VisibleRows
+
+`TreeView::VisibleRows` は、現在の `RenderState` に基づいて表示対象となる行を一次元配列として取り出す public API です。
+
+```ruby
+visible_rows = TreeView::VisibleRows.new(
+  tree: tree,
+  root_items: tree.root_items,
+  render_state: render_state
+).to_a
+```
+
+各行は以下を持ちます。
+
+| 属性 | 説明 |
+|---|---|
+| `item` | 元の node |
+| `depth` | root 基準の depth |
+| `node_key` | `tree.node_key_for(item)` の値 |
+| `parent_key` | 親行の node_key。root は `nil` |
+| `has_children?` | 表示元 tree 上で child を持つか |
+| `expanded?` | 現在の render state で展開扱いか |
+
+`VisibleRows` は `max_initial_depth`、`max_render_depth`、`max_leaf_distance`、`expanded_keys`、`collapsed_keys`、`initial_state` を反映します。既存の recursive partial rendering を置き換えるものではなく、host app 側の windowing、keyboard model、inspection、export などの基盤として使う想定です。
 
 ## TreeView::GraphAdapter
 
@@ -290,6 +315,7 @@ render_state = TreeView::RenderState.new(
 | `selection:` | no | checkbox selectionをまとめるHash相当のオプション |
 | `row_class_builder:` | no | `tr` に付与するCSS classを返すcallable |
 | `row_data_builder:` | no | `tr` に付与するdata属性Hashを返すcallable |
+| `lazy_loading:` | no | lazy loading 用の state と scope をまとめるHash相当のオプション |
 
 `effective_initial_state` は、画面固有指定、global config、既定値の順で解決します。
 
@@ -324,6 +350,7 @@ render_state = TreeView::RenderState.new(
 | `initial_expansion:` | `:default` | `initial_state:` |
 | `initial_expansion:` | `:max_depth` | `max_initial_depth:` |
 | `initial_expansion:` | `:expanded_keys` | `expanded_keys:` |
+| `initial_expansion:` | `:collapsed_keys` | `collapsed_keys:` |
 | `render_scope:` | `:max_depth` | `max_render_depth:` |
 | `render_scope:` | `:max_leaf_distance` | `max_leaf_distance:` |
 | `toggle_scope:` | `:max_depth_from_root` | `max_toggle_depth_from_root:` |
@@ -357,6 +384,28 @@ render_state = TreeView::RenderState.new(
 | `:enabled` | `selectable:` | checkbox列を描画するか |
 | `:payload_builder` | `selection_payload_builder:` | checkbox valueに入れるpayload Hashを返すcallable |
 | `:checkbox_name` | `selection_checkbox_name:` | checkboxのname属性 |
+
+`lazy_loading:` では remote children 読み込み用の data 属性と状態をまとめて指定できます。
+
+```ruby
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  lazy_loading: {
+    enabled: true,
+    loaded_keys: ["document:1"],
+    scope: "children"
+  }
+)
+```
+
+| lazy_loading key | 説明 |
+|---|---|
+| `:enabled` | lazy loading 用 data 属性と remote-state hook を有効にする |
+| `:loaded_keys` | 既に children を読み込んだ node_key 配列 |
+| `:scope` | `UiConfig#load_children_path` に渡す scope 文字列。既定値は `"all"` |
 
 `selection_payload_builder` を省略した場合は、`key` / `id` / `type` を持つpayloadを生成します。
 checkboxの `value` にはJSON文字列が入ります。
@@ -404,6 +453,9 @@ path builder 側では `scope.toggle_leaf_distance` や `scope.leaf_distance_wit
 `row_data_builder` はHash相当の値、または `nil` を返せます。
 既存の `data-tree-depth` は常に維持されます。
 
+lazy loading が有効で `UiConfig#load_children_path(item, depth, scope:)` がURLを返す場合、行には `data-tree-lazy`、`data-tree-children-url`、`data-tree-loaded` が付きます。
+また、`loaded_keys` に含まれる行は `data-remote-state="loaded"` を持ちます。`loading_builder` / `error_builder` を併用する場合は、それぞれ `loading` / `error` が優先されます。
+
 ## TreeView::UiConfig
 
 DOM IDや開閉pathの作り方をまとめるオブジェクトです。
@@ -436,6 +488,7 @@ tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "ite
 |---|---|
 | `hide_descendants_path_builder` | 子孫を閉じるpathを返す |
 | `show_descendants_path_builder` | 子孫を開くpathを返す |
+| `load_children_path_builder` | remote children 読み込み用pathを返す |
 | `toggle_all_path_builder` | 全体開閉pathを返す |
 | `scope_format` | path builder 第3引数のscope形式。`:string` または `:object` |
 
@@ -504,6 +557,7 @@ viewから使う補助helperです。
 | `tree_selection_value(item, tree, builder = nil)` | selection checkboxのvalue用JSON文字列を返す |
 | `tree_hide_descendants_path(item, display_depth, scope: 'all')` | 閉じるpathを返す |
 | `tree_show_descendants_path(item, toggle_depth, scope: 'all')` | 開くpathを返す |
+| `tree_load_children_path(item, depth, scope: 'all')` | remote children 読み込みpathを返す |
 | `tree_toggle_all_path(state:)` | 全体開閉pathを返す |
 | `tree_expand_all_path` | 全体展開pathを返す |
 | `tree_collapse_all_path` | 全体折りたたみpathを返す |

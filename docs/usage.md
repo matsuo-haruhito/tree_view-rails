@@ -27,6 +27,26 @@ tree = TreeView::Tree.new(
 )
 ```
 
+複数キーで安定した並び順にしたい場合は、`sort_by` の戻り値を配列にします。
+
+```ruby
+tree = TreeView::Tree.new(
+  records: items,
+  parent_id_method: :parent_item_id,
+  sorter: ->(nodes, _tree) {
+    nodes.sort_by do |node|
+      [
+        node.display_order || Float::INFINITY,
+        node.name.to_s,
+        node.id
+      ]
+    end
+  }
+)
+```
+
+`sorter:` は root / children の両方に適用されます。`nil` が混じる項目は `Float::INFINITY` や空文字に寄せ、最後に `id` のような安定化キーを入れると表示順がぶれにくくなります。
+
 ## static表示
 
 開閉リンクを使わず、静的なツリーとして表示したい場合は `build_static` を使います。
@@ -72,6 +92,44 @@ tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "doc
 ```
 
 `load_children_path(item, depth, scope:)` only builds the URL. Fetching data, authorization, Turbo Stream responses, loading state, and retry behavior remain the host app's responsibility.
+
+## Lazy loading
+
+`load_children_path_builder` を用意した上で、`RenderState` 側で lazy loading を有効にすると、各行に children URL と loaded 状態の data 属性が付きます。
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(context: view_context, node_prefix: "document").build(
+  hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth:, scope:) },
+  show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth:, scope:) },
+  load_children_path_builder: ->(item, depth, scope) {
+    children_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
+  },
+  toggle_all_path_builder: ->(state) { documents_path(state: state) }
+)
+
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  lazy_loading: {
+    enabled: true,
+    loaded_keys: previously_loaded_keys,
+    scope: "children"
+  }
+)
+```
+
+`tree_view_state_data(render_state)` は lazy loading 有効時に `tree-view-remote-state` controller を追加し、以下の action hook を出します。
+
+```text
+tree-view:loading->tree-view-remote-state#loading
+tree-view:loaded->tree-view-remote-state#loaded
+tree-view:error->tree-view-remote-state#error
+tree-view:retry->tree-view-remote-state#retry
+```
+
+host app 側は fetch / Turbo request 自体を担当し、必要に応じてこれらのイベントを dispatch します。
 
 ## Keyboard navigation
 

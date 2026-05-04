@@ -78,10 +78,17 @@ module TreeViewHelper
       data = data.merge(tree_instance_key: render_context.tree_instance_key)
     end
 
+    if render_context.lazy_loading_enabled?
+      lazy_loading_data = tree_lazy_loading_data(item, tree, render_context, depth: depth)
+      data = data.merge(lazy_loading_data) if lazy_loading_data.any?
+    end
+
     if render_context.error_builder&.call(item) == true
       data = data.merge(remote_state: "error")
     elsif render_context.loading_builder&.call(item) == true
       data = data.merge(remote_state: "loading")
+    elsif render_context.lazy_loading_loaded_keys.include?(tree.node_key_for(item))
+      data = data.merge(remote_state: "loaded")
     end
 
     data
@@ -94,6 +101,17 @@ module TreeViewHelper
     return hidden_count if builder.nil?
 
     builder.call(hidden_count)
+  end
+
+  def tree_lazy_loading_data(item, tree, render_context, depth:)
+    path = tree_load_children_path(item, depth, scope: render_context.lazy_loading_scope, ui: render_context.render_state.ui_config)
+    return {} if path.nil?
+
+    {
+      tree_lazy: true,
+      tree_children_url: path,
+      tree_loaded: render_context.lazy_loading_loaded_keys.include?(tree.node_key_for(item))
+    }
   end
 
   def tree_depth_label(item, depth, builder = nil)
@@ -230,6 +248,10 @@ module TreeViewHelper
 
   def tree_show_descendants_path(item, toggle_depth, scope: 'all', ui: @tree_ui)
     resolved_ui(ui).show_descendants_path(item, toggle_depth, scope: scope)
+  end
+
+  def tree_load_children_path(item, depth, scope: 'all', ui: @tree_ui)
+    resolved_ui(ui).load_children_path(item, depth, scope: scope)
   end
 
   def tree_context_menu_label(item)

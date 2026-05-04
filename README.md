@@ -16,6 +16,7 @@
 - 子ノード起点で親方向へ辿る `ReverseTree`
 - viewから使うDOM ID / toggle path / 枝情報helper
 - `RenderState` からroot行を描画する `tree_view_rows` helper
+- 表示対象行の一次元化API `TreeView::VisibleRows`
 - host app側の `row_partial` 差し替え
 - 初期展開制御
   - `initial_state`
@@ -31,6 +32,9 @@
 - 行属性カスタマイズ
   - `row_class_builder`
   - `row_data_builder`
+- lazy loading hook
+  - `load_children_path_builder`
+  - `RenderState#lazy_loading`
 - checkbox selection
   - JSON payload送信
   - nodeごとのdisabled制御

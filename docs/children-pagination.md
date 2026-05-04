@@ -12,6 +12,4 @@ Recommended shape:
 - keep selection and row payloads stable across pages
 - use `loading_builder` and `error_builder` for remote state display
 
-A future TreeView pagination API should be opt-in and should not change the default tree rendering path.
-
-The API should focus on view hooks such as load-more labels, paths, and row data. It should not own SQL, Active Record scopes, or business-specific paging rules.
+TreeView does not provide a pagination API today. Keep pagination in the host app and treat TreeView as the rendering layer for the rows you decided to load.

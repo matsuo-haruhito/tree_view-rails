@@ -13,6 +13,7 @@ Host applications may use these entry points directly:
 - `TreeView.node_key`
 - `TreeView::Tree`
 - `TreeView::RenderState`
+- `TreeView::VisibleRows`
 - `TreeView::UiConfig`
 - `TreeView::UiConfigBuilder`
 - `TreeView::GraphAdapter`

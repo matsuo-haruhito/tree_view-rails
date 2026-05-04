@@ -56,6 +56,8 @@ Breaking changes and required migration notes should be called out explicitly in
 - Orphan handling strategies.
 - Optional node key uniqueness validation.
 - Optional DOM ID collision diagnostics via `RenderState#validate_unique_dom_ids!`.
+- `TreeView::VisibleRows` for flattening currently visible rows with depth and expansion state.
+- Lazy-loading row data hooks through `UiConfig#load_children_path_builder` and `RenderState#lazy_loading`.
 - Japanese documentation under `docs/`.
 
 ### Documentation
@@ -66,6 +68,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - JavaScript controller responsibility boundaries are documented in `docs/design-policy.md`.
 - TreeView-specific concepts and API names are defined in `docs/glossary.md`.
 - Tree diagnostics docs describe node key uniqueness and DOM ID collision checks.
+- Lazy loading, visible rows, sorter examples, and the static HTML mock are documented from the docs index.
 
 ### Notes
 

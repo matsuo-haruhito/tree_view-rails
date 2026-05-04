@@ -1,5 +1,7 @@
 # AGENTS.md
 
+see `/mnt/c/work/AGENTS.md`
+
 ## Purpose
 
 This repository contains the `tree_view` Ruby gem for Rails.
@@ -122,6 +124,4 @@ Do not implement large feature areas opportunistically while working on unrelate
 ## Codex Common Operation
 
 - Inherit the common skill definitions described in the root [AGENTS.md](/mnt/c/work/AGENTS.md), even when Codex is launched directly in this repository.
-- Record user prompts for this repository in the root [codex_prompt_log.md](/mnt/c/work/codex_prompt_log.md), not in a local prompt log.
-- Collect repeated request patterns and skillization candidates in the root [skill_backlog.md](/mnt/c/work/skill_backlog.md), not in a repo-local backlog.
 - Keep repository-specific context in this local `AGENTS.md` and durable docs in `docs/`.

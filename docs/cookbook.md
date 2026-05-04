@@ -16,6 +16,7 @@ The examples stay generic. Business-specific models, authorization, routes, and 
 - Row class and data hooks: use `row_class_builder` and `row_data_builder` for styling and lightweight integration hooks.
 - Row visual hooks: use `badge_builder` for badges and `icon_builder` for a small node-type visual when no badge is configured.
 - Large tree guardrails: use `max_initial_depth`, `max_render_depth`, `max_leaf_distance`, or focused trees to avoid rendering everything by default.
+- Multi-key sorting: use an array return from `sort_by` when screens need `display_order -> name -> id` style stable ordering.
 - Orphan diagnostics: choose an orphan strategy deliberately when parent IDs may point to missing records.
 
 ## Icon builder

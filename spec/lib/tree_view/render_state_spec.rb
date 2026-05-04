@@ -225,6 +225,38 @@ RSpec.describe TreeView::RenderState do
     expect(state.max_toggle_leaf_distance).to eq(2)
   end
 
+  it "stores grouped lazy_loading options" do
+    state = described_class.new(
+      tree: tree,
+      root_items: [],
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      lazy_loading: {
+        enabled: true,
+        loaded_keys: [1, 2],
+        scope: "children"
+      }
+    )
+
+    expect(state.lazy_loading_enabled?).to eq(true)
+    expect(state.lazy_loading_loaded_keys).to eq([1, 2])
+    expect(state.lazy_loading_scope).to eq("children")
+  end
+
+  it "rejects unknown lazy_loading keys" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        lazy_loading: {
+          future_key: true
+        }
+      )
+    end.to raise_error(ArgumentError, /lazy_loading contains unknown keys/)
+  end
+
   it "stores selection options" do
     payload_builder = ->(item) { { id: item.id } }
 

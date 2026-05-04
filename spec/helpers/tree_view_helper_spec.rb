@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe TreeViewHelper do
-  TestNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+  HelperTestNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
   let(:ui_config) do
     TreeView::UiConfig.new(
@@ -10,6 +10,7 @@ RSpec.describe TreeViewHelper do
       show_button_dom_id_builder: ->(item_or_id) { "item_show_button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
       hide_descendants_path_builder: ->(_item, _depth, scope) { "/hide?scope=#{scope}" },
       show_descendants_path_builder: ->(_item, _depth, scope) { "/show?scope=#{scope}" },
+      load_children_path_builder: ->(_item, depth, scope) { "/children?depth=#{depth}&scope=#{scope}" },
       toggle_all_path_builder: ->(state) { "/toggle?state=#{state}" }
     )
   end
@@ -27,7 +28,7 @@ RSpec.describe TreeViewHelper do
   describe "tree dom id helpers" do
     it "builds DOM ids and toggle paths through UiConfig" do
       helper = helper_host_class.new(tree_ui: ui_config)
-      item = TestNode.new(id: 42, parent_item_id: nil, name: "sample")
+      item = HelperTestNode.new(id: 42, parent_item_id: nil, name: "sample")
 
       expect(helper.tree_node_dom_id(item)).to eq("item_42")
       expect(helper.tree_button_dom_id(item)).to eq("item_button_box_42")
@@ -37,6 +38,8 @@ RSpec.describe TreeViewHelper do
       expect(helper.tree_hide_descendants_path(item, 1, scope: "grandchildren")).to eq("/hide?scope=grandchildren")
       expect(helper.tree_show_descendants_path(item, 1)).to eq("/show?scope=all")
       expect(helper.tree_show_descendants_path(item, 1, scope: "children")).to eq("/show?scope=children")
+      expect(helper.tree_load_children_path(item, 1)).to eq("/children?depth=1&scope=all")
+      expect(helper.tree_load_children_path(item, 1, scope: "children")).to eq("/children?depth=1&scope=children")
       expect(helper.tree_toggle_all_path(state: :collapsed)).to eq("/toggle?state=collapsed")
       expect(helper.tree_expand_all_path).to eq("/toggle?state=expanded")
       expect(helper.tree_collapse_all_path).to eq("/toggle?state=collapsed")
@@ -51,7 +54,7 @@ RSpec.describe TreeViewHelper do
         show_button_dom_id_builder: ->(item_or_id) { "item_show_button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" }
       )
       helper = helper_host_class.new(tree_ui: static_ui)
-      item = TestNode.new(id: 42, parent_item_id: nil, name: "sample")
+      item = HelperTestNode.new(id: 42, parent_item_id: nil, name: "sample")
 
       expect(helper.tree_hide_descendants_path(item, 1)).to be_nil
       expect(helper.tree_show_descendants_path(item, 1)).to be_nil
@@ -62,7 +65,7 @@ RSpec.describe TreeViewHelper do
   describe "ui_config resolution" do
     it "raises a clear error when ui_config is missing" do
       helper = helper_host_class.new
-      item = TestNode.new(id: 42, parent_item_id: nil, name: "sample")
+      item = HelperTestNode.new(id: 42, parent_item_id: nil, name: "sample")
 
       expect do
         helper.tree_node_dom_id(item)
@@ -101,11 +104,11 @@ RSpec.describe TreeViewHelper do
 
   describe "tree_branch_info" do
     it "returns branch information for each node" do
-      root_a = TestNode.new(id: 1, parent_item_id: nil, name: "root-a")
-      root_b = TestNode.new(id: 2, parent_item_id: nil, name: "root-b")
-      child_a1 = TestNode.new(id: 3, parent_item_id: 1, name: "child-a1")
-      child_a2 = TestNode.new(id: 4, parent_item_id: 1, name: "child-a2")
-      grandchild_a1 = TestNode.new(id: 5, parent_item_id: 3, name: "grandchild-a1")
+      root_a = HelperTestNode.new(id: 1, parent_item_id: nil, name: "root-a")
+      root_b = HelperTestNode.new(id: 2, parent_item_id: nil, name: "root-b")
+      child_a1 = HelperTestNode.new(id: 3, parent_item_id: 1, name: "child-a1")
+      child_a2 = HelperTestNode.new(id: 4, parent_item_id: 1, name: "child-a2")
+      grandchild_a1 = HelperTestNode.new(id: 5, parent_item_id: 3, name: "grandchild-a1")
       tree = TreeView::Tree.new(records: [root_a, root_b, child_a1, child_a2, grandchild_a1], parent_id_method: :parent_item_id)
 
       helper = helper_host_class.new(tree_ui: ui_config)
@@ -117,8 +120,8 @@ RSpec.describe TreeViewHelper do
     end
 
     it "uses the tree sorter for branch ordering" do
-      root_a = TestNode.new(id: 1, parent_item_id: nil, name: "alpha")
-      root_b = TestNode.new(id: 2, parent_item_id: nil, name: "beta")
+      root_a = HelperTestNode.new(id: 1, parent_item_id: nil, name: "alpha")
+      root_b = HelperTestNode.new(id: 2, parent_item_id: nil, name: "beta")
       tree = TreeView::Tree.new(
         records: [root_a, root_b],
         parent_id_method: :parent_item_id,

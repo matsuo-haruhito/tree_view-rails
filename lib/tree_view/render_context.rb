@@ -197,6 +197,22 @@ module TreeView
       render_state.error_builder
     end
 
+    def lazy_loading_enabled?
+      render_state.respond_to?(:lazy_loading_enabled?) && render_state.lazy_loading_enabled?
+    end
+
+    def lazy_loading_loaded_keys
+      return [] unless render_state.respond_to?(:lazy_loading_loaded_keys)
+
+      render_state.lazy_loading_loaded_keys
+    end
+
+    def lazy_loading_scope
+      return "all" unless render_state.respond_to?(:lazy_loading_scope)
+
+      render_state.lazy_loading_scope
+    end
+
     def tree_instance_key
       render_state.tree_instance_key
     end
