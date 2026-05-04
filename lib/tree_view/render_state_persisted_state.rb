@@ -12,7 +12,7 @@ module TreeView
     end
 
     def view_key
-      persisted_state&.view_key
+      super || persisted_state&.view_key
     end
   end
 end
