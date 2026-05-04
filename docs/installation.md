@@ -7,6 +7,14 @@
 
 この条件は `tree_view.gemspec` の `required_ruby_version` と `railties` dependency に合わせます。
 
+## CIで確認している範囲
+
+GitHub Actions では、Ruby 3.2 / 3.3 で `bundle exec rake` を実行します。
+
+gem package job は Ruby 3.3 で `gem build`、`gem install`、`require "tree_view"` を確認します。
+
+Rails version は `Gemfile.lock` 上の現在の解決結果で確認します。Rails version matrix を追加する場合は、CI時間とAppraisal等の構成を別途検討します。
+
 ## Gemfile
 
 host app の `Gemfile` に追加します。
