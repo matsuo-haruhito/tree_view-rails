@@ -6,8 +6,8 @@ module TreeViewStateHelper
     controllers << "tree-view-transfer" if render_state.respond_to?(:row_event_payload_builder) && render_state.row_event_payload_builder
 
     data = { controller: controllers.join(" ") }
-    if render_state.respond_to?(:view_key) && render_state.view_key.present?
-      data[:tree_view_state_view_key_value] = render_state.view_key
+    if render_state.respond_to?(:tree_instance_key) && render_state.tree_instance_key.present?
+      data[:tree_view_state_tree_instance_key_value] = render_state.tree_instance_key
     end
     data
   end
