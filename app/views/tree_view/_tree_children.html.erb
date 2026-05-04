@@ -1,26 +1,8 @@
+<% render_context = local_assigns.fetch(:render_context) %>
+<% tree = render_context.tree %>
 <% sorted_items = tree.sort_items(items) %>
-<% row_class_builder = local_assigns[:row_class_builder] %>
-<% row_data_builder = local_assigns[:row_data_builder] %>
-<% badge_builder = local_assigns[:badge_builder] %>
-<% max_initial_depth = local_assigns[:max_initial_depth] %>
-<% max_render_depth = local_assigns[:max_render_depth] %>
-<% max_leaf_distance = local_assigns[:max_leaf_distance] %>
-<% max_toggle_depth_from_root = local_assigns[:max_toggle_depth_from_root] %>
-<% max_toggle_leaf_distance = local_assigns[:max_toggle_leaf_distance] %>
-<% expanded_keys = local_assigns[:expanded_keys] %>
-<% collapsed_keys = local_assigns[:collapsed_keys] %>
-<% current_key = local_assigns[:current_key] %>
-<% depth_label_builder = local_assigns[:depth_label_builder] %>
-<% selection_enabled = local_assigns[:selection_enabled] %>
-<% selection_visibility = local_assigns.fetch(:selection_visibility, :all) %>
-<% selection_payload_builder = local_assigns[:selection_payload_builder] %>
-<% selection_checkbox_name = local_assigns[:selection_checkbox_name] %>
-<% selection_disabled_builder = local_assigns[:selection_disabled_builder] %>
-<% selection_disabled_reason_builder = local_assigns[:selection_disabled_reason_builder] %>
-<% selection_selected_keys = local_assigns[:selection_selected_keys] %>
-<% hidden_message_builder = local_assigns[:hidden_message_builder] %>
 
 <% sorted_items.each do |child_item| %>
   <% current_depth = depth + 1 %>
-  <%= render 'tree_view/tree_row', item: child_item, depth: current_depth, tree: tree, row_partial: row_partial, row_actions_partial: local_assigns[:row_actions_partial], badge_builder: badge_builder, mode: tree_toggle_mode(local_assigns[:mode]), max_initial_depth: max_initial_depth, max_render_depth: max_render_depth, max_leaf_distance: max_leaf_distance, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, expanded_keys: expanded_keys, collapsed_keys: collapsed_keys, current_key: current_key, depth_label_builder: depth_label_builder, selection_enabled: selection_enabled, selection_visibility: selection_visibility, selection_payload_builder: selection_payload_builder, selection_checkbox_name: selection_checkbox_name, selection_disabled_builder: selection_disabled_builder, selection_disabled_reason_builder: selection_disabled_reason_builder, selection_selected_keys: selection_selected_keys, hidden_message_builder: hidden_message_builder, row_class_builder: row_class_builder, row_data_builder: row_data_builder, render_state: local_assigns[:render_state] %>
+  <%= render 'tree_view/tree_row', item: child_item, depth: current_depth, render_context: render_context %>
 <% end %>
