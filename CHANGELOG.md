@@ -44,6 +44,9 @@ Breaking changes and required migration notes should be called out explicitly in
 - Row attribute builders:
   - `row_class_builder`
   - `row_data_builder`
+- Row visual hooks:
+  - `badge_builder`
+  - `icon_builder`
 - Checkbox selection support:
   - JSON payload values
   - custom checkbox name
