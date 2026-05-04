@@ -13,6 +13,7 @@ module TreeView
     attr_reader :tree,
                 :root_items,
                 :row_partial,
+                :row_actions_partial,
                 :ui_config,
                 :initial_state,
                 :max_initial_depth,
@@ -38,6 +39,7 @@ module TreeView
                    root_items:,
                    row_partial:,
                    ui_config:,
+                   row_actions_partial: nil,
                    initial_state: nil,
                    max_initial_depth: nil,
                    max_render_depth: nil,
@@ -67,6 +69,7 @@ module TreeView
       @tree = tree
       @root_items = root_items
       @row_partial = row_partial
+      @row_actions_partial = row_actions_partial
       @ui_config = ui_config
       @initial_state = normalize_initial_state(resolve_option(initial_state, initial_expansion_options[:default]))
       @max_initial_depth = normalize_non_negative_integer(resolve_option(max_initial_depth, initial_expansion_options[:max_depth]), :max_initial_depth)
