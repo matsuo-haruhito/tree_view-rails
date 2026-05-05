@@ -78,21 +78,21 @@ These should be split after the P0 entry points.
 
 These can follow after user-facing coverage is in place.
 
-| Topic | Current doc | Status | Needed work |
-|---|---|---|---|
-| Cookbook | `docs/cookbook.md` | Pending split | Create language-specific files. |
-| Glossary | `docs/glossary.md` | Pending split | Create language-specific files. |
-| Node keys | `docs/node-keys.md` | Pending split | Create language-specific files. |
-| Tree diagnostics | `docs/tree-diagnostics.md` | Pending split | Create language-specific files. |
-| Depth labels | `docs/depth-labels.md` | Pending split | Create language-specific files. |
-| Row status | `docs/row-status.md` | Pending split | Create language-specific files. |
-| Filtered trees | `docs/filtered-trees.md` | Pending split | Create language-specific files. |
-| Rendering boundaries | `docs/rendering-boundaries.md` | Pending split | Create language-specific files. |
-| Render scale | `docs/render-scale.md` | Pending split | Create language-specific files. |
-| Host app extension points | `docs/host-app-extension-points.md` | Pending split | Create language-specific files. |
-| Design policy | `docs/design-policy.md` | Pending split | Create language-specific files. |
-| Development | `docs/development.md` | Pending split | Create language-specific files. |
-| Code quality | `docs/code-quality.md` | Pending split | Create language-specific files. |
+| Topic | Japanese | English | Status | Needed work |
+|---|---|---|---|---|
+| Glossary | `docs/ja/glossary.md` | `docs/en/glossary.md` | Split | Keep TreeView terms and responsibility language in sync. |
+| Node keys | `docs/ja/node-keys.md` | `docs/en/node-keys.md` | Split | Keep node_key design and collision guidance in sync. |
+| Tree diagnostics | `docs/ja/tree-diagnostics.md` | `docs/en/tree-diagnostics.md` | Split | Keep diagnostics APIs and use cases in sync. |
+| Cookbook | `docs/cookbook.md` | `docs/en/cookbook.md` | Pending split | Create language-specific files. |
+| Depth labels | `docs/depth-labels.md` | `docs/en/depth-labels.md` | Pending split | Create language-specific files. |
+| Row status | `docs/row-status.md` | `docs/en/row-status.md` | Pending split | Create language-specific files. |
+| Filtered trees | `docs/filtered-trees.md` | `docs/en/filtered-trees.md` | Pending split | Create language-specific files. |
+| Rendering boundaries | `docs/rendering-boundaries.md` | `docs/en/rendering-boundaries.md` | Pending split | Create language-specific files. |
+| Render scale | `docs/render-scale.md` | `docs/en/render-scale.md` | Pending split | Create language-specific files. |
+| Host app extension points | `docs/host-app-extension-points.md` | `docs/en/host-app-extension-points.md` | Pending split | Create language-specific files. |
+| Design policy | `docs/design-policy.md` | `docs/en/design-policy.md` | Pending split | Create language-specific files. |
+| Development | `docs/development.md` | `docs/en/development.md` | Pending split | Create language-specific files. |
+| Code quality | `docs/code-quality.md` | `docs/en/code-quality.md` | Pending split | Create language-specific files. |
 
 ## Technical assets
 
@@ -105,9 +105,10 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Continue P2 supporting docs in topic-based PRs.
+1. Split cookbook, depth labels, and row status docs into language-specific files.
 2. Split `api.md` into language-specific API reference files when practical.
-3. Remove or redirect root-level compatibility docs after language-specific coverage is complete.
+3. Continue P2 supporting docs in topic-based PRs.
+4. Remove or redirect root-level compatibility docs after language-specific coverage is complete.
 
 ## Release decision
 
