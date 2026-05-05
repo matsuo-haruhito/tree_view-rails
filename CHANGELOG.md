@@ -30,6 +30,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Clarified large-tree performance hardening boundaries between TreeView gem support and host app responsibilities.
 - Added windowed rendering documentation.
 - Clarified public API, semi-public API, internal helper module, and JavaScript entrypoint compatibility policy.
+- Clarified that releases are normally managed by tags on `main`, with release branches reserved for parallel maintenance.
 
 ### Tests
 
