@@ -161,13 +161,14 @@ row partial:
 
 ```bash
 bundle install
+bundle exec standardrb tree_view.gemspec
 bundle exec rspec
 bundle exec rake build
 npm install
 npm test
 ```
 
-GitHub Actionsでは、`main` へのpushとPull Requestで Ruby spec、JavaScript tests、gem package確認を実行します。
+GitHub Actionsでは、`main` へのpushとPull Requestで Ruby spec、Ruby lint、JavaScript tests、gem package確認を実行します。
 
 ## Release
 
@@ -175,6 +176,7 @@ GitHub Actionsでは、`main` へのpushとPull Requestで Ruby spec、JavaScrip
 
 リリース前には以下を確認します。
 
+- `bundle exec standardrb tree_view.gemspec`
 - `bundle exec rspec`
 - `bundle exec rake build`
 - `npm test`
