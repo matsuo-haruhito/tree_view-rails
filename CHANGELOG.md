@@ -32,6 +32,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 - Added coverage for the persisted state install generator outputs.
 - Added unit and integration coverage for windowed rendering.
+- Added JavaScript controller tests for state, selection, transfer, and remote-state behavior.
 
 ## 0.1.0 - Initial release
 
