@@ -27,7 +27,7 @@ module TreeView
     end
 
     def raise_invalid_initial_state!
-      raise ArgumentError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(', ')}"
+      raise ArgumentError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(", ")}"
     end
   end
 end

@@ -15,74 +15,74 @@ module TreeView
     DEFAULT_SELECTION_CHECKBOX_NAME = "selected_nodes[]"
 
     attr_reader :tree,
-                :root_items,
-                :row_partial,
-                :row_actions_partial,
-                :ui_config,
-                :tree_instance_key,
-                :initial_state,
-                :max_initial_depth,
-                :max_render_depth,
-                :max_leaf_distance,
-                :max_toggle_depth_from_root,
-                :max_toggle_leaf_distance,
-                :expanded_keys,
-                :collapsed_keys,
-                :selection_enabled,
-                :selection_visibility,
-                :selection_payload_builder,
-                :selection_checkbox_name,
-                :selection_disabled_builder,
-                :selection_disabled_reason_builder,
-                :selection_selected_keys,
-                :selection_cascade,
-                :selection_indeterminate,
-                :selection_max_count,
-                :row_class_builder,
-                :row_data_builder,
-                :row_event_payload_builder,
-                :loading_builder,
-                :error_builder,
-                :depth_label_builder,
-                :badge_builder,
-                :icon_builder
+      :root_items,
+      :row_partial,
+      :row_actions_partial,
+      :ui_config,
+      :tree_instance_key,
+      :initial_state,
+      :max_initial_depth,
+      :max_render_depth,
+      :max_leaf_distance,
+      :max_toggle_depth_from_root,
+      :max_toggle_leaf_distance,
+      :expanded_keys,
+      :collapsed_keys,
+      :selection_enabled,
+      :selection_visibility,
+      :selection_payload_builder,
+      :selection_checkbox_name,
+      :selection_disabled_builder,
+      :selection_disabled_reason_builder,
+      :selection_selected_keys,
+      :selection_cascade,
+      :selection_indeterminate,
+      :selection_max_count,
+      :row_class_builder,
+      :row_data_builder,
+      :row_event_payload_builder,
+      :loading_builder,
+      :error_builder,
+      :depth_label_builder,
+      :badge_builder,
+      :icon_builder
 
     # RenderState は「この画面ではどう描くか」を束ねる。
     def initialize(tree:,
-                   root_items:,
-                   row_partial:,
-                   ui_config:,
-                   row_actions_partial: nil,
-                   tree_instance_key: nil,
-                   initial_state: nil,
-                   max_initial_depth: nil,
-                   max_render_depth: nil,
-                   max_leaf_distance: nil,
-                   max_toggle_depth_from_root: nil,
-                   max_toggle_leaf_distance: nil,
-                   expanded_keys: nil,
-                   collapsed_keys: nil,
-                   initial_expansion: nil,
-                   render_scope: nil,
-                   toggle_scope: nil,
-                   selectable: nil,
-                   selection_payload_builder: nil,
-                   selection_checkbox_name: nil,
-                   selection_disabled_builder: nil,
-                   selection_disabled_reason_builder: nil,
-                   selection_selected_keys: nil,
-                   selection_cascade: nil,
-                   selection_indeterminate: nil,
-                   selection_max_count: nil,
-                   selection: nil,
-                   row_class_builder: nil,
-                   row_data_builder: nil,
-                   row_event_payload_builder: nil,
-                   loading_builder: nil,
-                   error_builder: nil,
-                   depth_label_builder: nil,
-                   badge_builder: nil,
-                   icon_builder: nil)
+      root_items:,
+      row_partial:,
+      ui_config:,
+      row_actions_partial: nil,
+      tree_instance_key: nil,
+      initial_state: nil,
+      max_initial_depth: nil,
+      max_render_depth: nil,
+      max_leaf_distance: nil,
+      max_toggle_depth_from_root: nil,
+      max_toggle_leaf_distance: nil,
+      expanded_keys: nil,
+      collapsed_keys: nil,
+      initial_expansion: nil,
+      render_scope: nil,
+      toggle_scope: nil,
+      selectable: nil,
+      selection_payload_builder: nil,
+      selection_checkbox_name: nil,
+      selection_disabled_builder: nil,
+      selection_disabled_reason_builder: nil,
+      selection_selected_keys: nil,
+      selection_cascade: nil,
+      selection_indeterminate: nil,
+      selection_max_count: nil,
+      selection: nil,
+      row_class_builder: nil,
+      row_data_builder: nil,
+      row_event_payload_builder: nil,
+      loading_builder: nil,
+      error_builder: nil,
+      depth_label_builder: nil,
+      badge_builder: nil,
+      icon_builder: nil)
       initial_expansion_options = normalize_options(initial_expansion, :initial_expansion, VALID_INITIAL_EXPANSION_KEYS)
       render_scope_options = normalize_options(render_scope, :render_scope, VALID_RENDER_SCOPE_KEYS)
       toggle_scope_options = normalize_options(toggle_scope, :toggle_scope, VALID_TOGGLE_SCOPE_KEYS)
@@ -167,7 +167,7 @@ module TreeView
       options = value.to_h.transform_keys(&:to_sym)
       invalid_keys = options.keys - valid_keys
       if invalid_keys.any?
-        raise ArgumentError, "#{name} contains unknown keys: #{invalid_keys.join(', ')}"
+        raise ArgumentError, "#{name} contains unknown keys: #{invalid_keys.join(", ")}"
       end
 
       options
@@ -179,7 +179,7 @@ module TreeView
       normalized_value = value.to_sym
       return normalized_value if VALID_INITIAL_STATES.include?(normalized_value)
 
-      raise ArgumentError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(', ')}"
+      raise ArgumentError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(", ")}"
     end
 
     def normalize_selection_visibility(value)
@@ -193,7 +193,7 @@ module TreeView
     end
 
     def raise_invalid_selection_visibility!
-      raise ArgumentError, "selection visibility must be one of: #{VALID_SELECTION_VISIBILITIES.join(', ')}"
+      raise ArgumentError, "selection visibility must be one of: #{VALID_SELECTION_VISIBILITIES.join(", ")}"
     end
 
     def normalize_non_negative_integer(value, name)
@@ -227,7 +227,7 @@ module TreeView
       conflicts = expanded_keys & collapsed_keys
       return if conflicts.empty?
 
-      raise ArgumentError, "expanded_keys and collapsed_keys cannot include the same keys: #{conflicts.map(&:inspect).join(', ')}"
+      raise ArgumentError, "expanded_keys and collapsed_keys cannot include the same keys: #{conflicts.map(&:inspect).join(", ")}"
     end
   end
 end

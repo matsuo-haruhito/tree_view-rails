@@ -47,7 +47,7 @@ RSpec.describe "TreeView windowed rendering" do
   end
 
   it "renders only the requested visible rows" do
-    rendered = build_view.tree_view_rows(build_render_state, window: { offset: 1, limit: 2 })
+    rendered = build_view.tree_view_rows(build_render_state, window: {offset: 1, limit: 2})
 
     expect(rendered).not_to include('id="window_1"')
     expect(rendered).to include('id="window_2"')
@@ -60,7 +60,7 @@ RSpec.describe "TreeView windowed rendering" do
   it "uses current expansion state before applying the window" do
     rendered = build_view.tree_view_rows(
       build_render_state(initial_state: :collapsed, expanded_keys: [1]),
-      window: { offset: 0, limit: 10 }
+      window: {offset: 0, limit: 10}
     )
 
     expect(rendered).to include('id="window_1"')

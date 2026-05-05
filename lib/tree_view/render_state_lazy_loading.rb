@@ -5,8 +5,8 @@ module TreeView
     VALID_LAZY_LOADING_KEYS = %i[enabled loaded_keys scope].freeze
 
     attr_reader :lazy_loading_enabled,
-                :lazy_loading_loaded_keys,
-                :lazy_loading_scope
+      :lazy_loading_loaded_keys,
+      :lazy_loading_scope
 
     def initialize(**options)
       lazy_loading_options = normalize_lazy_loading_options(options.delete(:lazy_loading))
@@ -20,7 +20,7 @@ module TreeView
       ).freeze
       @lazy_loading_scope = resolve_lazy_loading_option(options.delete(:lazy_loading_scope), lazy_loading_options[:scope]) || "all"
 
-      super(**options)
+      super
     end
 
     def lazy_loading_enabled?
@@ -36,7 +36,7 @@ module TreeView
       options = value.to_h.transform_keys(&:to_sym)
       invalid_keys = options.keys - VALID_LAZY_LOADING_KEYS
       if invalid_keys.any?
-        raise ArgumentError, "lazy_loading contains unknown keys: #{invalid_keys.join(', ')}"
+        raise ArgumentError, "lazy_loading contains unknown keys: #{invalid_keys.join(", ")}"
       end
 
       options

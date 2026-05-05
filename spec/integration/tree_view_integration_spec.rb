@@ -42,7 +42,7 @@ RSpec.describe "TreeView integration" do
 
       rendered = view.render(
         partial: "tree_view/tree_row",
-        locals: { item: root, tree: tree, row_partial: "projects/tree_columns", mode: :static }
+        locals: {item: root, tree: tree, row_partial: "projects/tree_columns", mode: :static}
       )
 
       expect(view.tree_node_dom_id(root)).to eq("project_1")
@@ -78,7 +78,7 @@ RSpec.describe "TreeView integration" do
         root_items: tree.root_items,
         row_partial: "projects/tree_columns",
         ui_config: tree_ui,
-        row_event_payload_builder: ->(item) { { id: item.id, name: item.name } }
+        row_event_payload_builder: ->(item) { {id: item.id, name: item.name} }
       )
       view = build_view(tree_ui: nil)
 
@@ -88,9 +88,9 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('draggable="true"')
       expect(rendered).to include('data-tree-transfer-node-key="1"')
       expect(rendered).to include('data-tree-transfer-payload="{&quot;id&quot;:1,&quot;name&quot;:&quot;root&quot;}"')
-      expect(rendered).to include('dragstart-&gt;tree-view-transfer#start')
-      expect(rendered).to include('dragover-&gt;tree-view-transfer#over')
-      expect(rendered).to include('drop-&gt;tree-view-transfer#drop')
+      expect(rendered).to include("dragstart-&gt;tree-view-transfer#start")
+      expect(rendered).to include("dragover-&gt;tree-view-transfer#over")
+      expect(rendered).to include("drop-&gt;tree-view-transfer#drop")
     end
 
     it "renders an empty state row when root items are empty and empty_message is given" do
@@ -202,7 +202,7 @@ RSpec.describe "TreeView integration" do
         row_partial: "projects/tree_columns",
         ui_config: tree_ui,
         row_class_builder: ->(item) { ["tree-row", "is-#{item.name}"] },
-        row_data_builder: ->(item) { { node_name: item.name, node_id: item.id } }
+        row_data_builder: ->(item) { {node_name: item.name, node_id: item.id} }
       )
       view = build_view(tree_ui: nil)
 
@@ -272,9 +272,9 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('id="project_2"')
       expect(rendered).not_to include('id="project_3"')
       expect(rendered).to include('aria-expanded="false"')
-      expect(rendered).to include('tree-toggle__hidden-count')
-      expect(rendered).to include('visually-hidden')
-      expect(rendered).to include(' descendants')
+      expect(rendered).to include("tree-toggle__hidden-count")
+      expect(rendered).to include("visually-hidden")
+      expect(rendered).to include(" descendants")
     end
 
     it "customizes hidden count messages" do
@@ -311,7 +311,7 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('id="project_1"')
       expect(rendered).to include('id="project_2"')
       expect(rendered).not_to include('id="project_3"')
-      expect(rendered).not_to include('tree-toggle__hidden-count')
+      expect(rendered).not_to include("tree-toggle__hidden-count")
     end
 
     it "limits rendered rows with max_leaf_distance from leaves without hidden count" do
@@ -331,7 +331,7 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('id="project_2"')
       expect(rendered).to include('id="project_3"')
       expect(rendered).to include('id="project_4"')
-      expect(rendered).not_to include('tree-toggle__hidden-count')
+      expect(rendered).not_to include("tree-toggle__hidden-count")
     end
 
     it "uses the shortest distance when a node has multiple leaves" do
@@ -395,7 +395,7 @@ RSpec.describe "TreeView integration" do
       expect(rendered).to include('id="project_1"')
       expect(rendered).to include('id="project_2"')
       expect(rendered).not_to include('id="project_3"')
-      expect(rendered).to include('tree-toggle__hidden-count')
+      expect(rendered).to include("tree-toggle__hidden-count")
     end
 
     it "does not render descendants when only a hidden descendant is listed in expanded_keys" do
@@ -452,7 +452,7 @@ RSpec.describe "TreeView integration" do
 
       expect(rendered).to include('id="project_1"')
       expect(rendered).not_to include('id="project_2"')
-      expect(rendered).to include('tree-toggle__hidden-count')
+      expect(rendered).to include("tree-toggle__hidden-count")
     end
   end
 
@@ -467,10 +467,10 @@ RSpec.describe "TreeView integration" do
 
       rendered = view.render(
         partial: "tree_view/tree_row",
-        locals: { item: root, tree: tree, row_partial: "projects/tree_columns", mode: :turbo }
+        locals: {item: root, tree: tree, row_partial: "projects/tree_columns", mode: :turbo}
       )
 
-      expect(rendered).to include('/projects/1/hide?depth=0&amp;scope=all')
+      expect(rendered).to include("/projects/1/hide?depth=0&amp;scope=all")
       expect(rendered).to include('aria-expanded="true"')
       expect(rendered).to include('aria-controls="project_1"')
     end
@@ -497,8 +497,8 @@ RSpec.describe "TreeView integration" do
 
       rendered = view.tree_view_rows(render_state)
 
-      expect(rendered).to include('/projects/1/hide?depth=0&amp;toggle_depth=2&amp;within_scope=true')
-      expect(rendered).to include('/projects/2/hide?depth=1&amp;toggle_depth=2&amp;within_scope=true')
+      expect(rendered).to include("/projects/1/hide?depth=0&amp;toggle_depth=2&amp;within_scope=true")
+      expect(rendered).to include("/projects/2/hide?depth=1&amp;toggle_depth=2&amp;within_scope=true")
     end
 
     it "raises a clear error for invalid toggle modes" do
@@ -508,7 +508,7 @@ RSpec.describe "TreeView integration" do
       expect do
         view.render(
           partial: "tree_view/tree_row",
-          locals: { item: root, tree: tree, row_partial: "projects/tree_columns", mode: :statc }
+          locals: {item: root, tree: tree, row_partial: "projects/tree_columns", mode: :statc}
         )
       end.to raise_error(ActionView::Template::Error) { |error|
         expect(error.cause).to be_a(ArgumentError)

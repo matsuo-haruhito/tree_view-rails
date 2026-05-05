@@ -48,7 +48,7 @@ RSpec.describe "TreeView demo app integration contract" do
       partial: "tree_view/tree_row",
       collection: tree.root_items,
       as: :item,
-      locals: { tree: tree, row_partial: "machines/tree_columns", collapsed: false }
+      locals: {tree: tree, row_partial: "machines/tree_columns", collapsed: false}
     )
 
     expect(rendered).to include('id="node_demomachinenode_1"')

@@ -41,7 +41,7 @@ RSpec.describe "TreeView selection integration" do
       selection: {
         enabled: true,
         checkbox_name: "selected_documents[]",
-        payload_builder: ->(item) { { key: render_tree.node_key_for(item), id: item.id, type: item.class.name } }
+        payload_builder: ->(item) { {key: render_tree.node_key_for(item), id: item.id, type: item.class.name} }
       }.merge(selection_options)
     )
 
@@ -56,9 +56,9 @@ RSpec.describe "TreeView selection integration" do
     expect(rendered).to include('name="selected_documents[]"')
     expect(rendered).to include('id="project_1_selection"')
     expect(rendered).to include('aria-label="root"')
-    expect(rendered).to include('&quot;key&quot;:1')
-    expect(rendered).to include('&quot;id&quot;:1')
-    expect(rendered).to include('&quot;type&quot;:')
+    expect(rendered).to include("&quot;key&quot;:1")
+    expect(rendered).to include("&quot;id&quot;:1")
+    expect(rendered).to include("&quot;type&quot;:")
   end
 
   it "renders selection checkboxes only for roots when visibility is roots" do
@@ -100,7 +100,7 @@ RSpec.describe "TreeView selection integration" do
       tree.root_items,
       payload_builder: lambda do |item|
         called_item_ids << item.id
-        { key: tree.node_key_for(item), id: item.id, type: item.class.name }
+        {key: tree.node_key_for(item), id: item.id, type: item.class.name}
       end
     )
 
@@ -119,7 +119,7 @@ RSpec.describe "TreeView selection integration" do
       tree,
       tree.root_items,
       disabled_builder: ->(item) { item.id == 2 },
-      disabled_reason_builder: ->(item) { item.id == 2 ? "Cannot select child" : nil }
+      disabled_reason_builder: ->(item) { (item.id == 2) ? "Cannot select child" : nil }
     )
 
     expect(rendered).to include('id="project_2_selection"')

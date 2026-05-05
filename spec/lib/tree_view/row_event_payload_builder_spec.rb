@@ -7,7 +7,7 @@ RSpec.describe "TreeView row event payload builder" do
   let(:ui_config) { instance_double(TreeView::UiConfig) }
 
   it "stores a callable row event payload builder" do
-    builder = ->(item) { { id: item.id } }
+    builder = ->(item) { {id: item.id} }
 
     state = TreeView::RenderState.new(
       tree: tree,
@@ -35,7 +35,7 @@ RSpec.describe "TreeView row event payload builder" do
   it "builds transfer data attributes from a hash-like event payload" do
     helper = Object.new.extend(TreeViewHelper)
     item = RowEventNode.new(id: 1, name: "root")
-    builder = ->(node) { { id: node.id, name: node.name } }
+    builder = ->(node) { {id: node.id, name: node.name} }
 
     allow(tree).to receive(:node_key_for).with(item).and_return("node-1")
 

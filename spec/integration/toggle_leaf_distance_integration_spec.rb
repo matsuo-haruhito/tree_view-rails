@@ -54,7 +54,7 @@ RSpec.describe "TreeView leaf-based toggle scope integration" do
 
     rendered = view.tree_view_rows(render_state)
 
-    expect(rendered).to include('/projects/3/hide?depth=2&amp;toggle_leaf_distance=2&amp;within_scope=true')
-    expect(rendered).to include('/projects/2/hide?depth=1&amp;toggle_leaf_distance=2&amp;within_scope=false')
+    expect(rendered).to include("/projects/3/hide?depth=2&amp;toggle_leaf_distance=2&amp;within_scope=true")
+    expect(rendered).to include("/projects/2/hide?depth=1&amp;toggle_leaf_distance=2&amp;within_scope=false")
   end
 end

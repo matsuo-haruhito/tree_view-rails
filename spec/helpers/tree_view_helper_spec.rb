@@ -94,7 +94,7 @@ RSpec.describe TreeViewHelper do
     it "clears cached render traversal objects" do
       helper = helper_host_class.new(tree_ui: ui_config)
 
-      helper.instance_variable_set(:@tree_render_traversals, { 1 => double("stale traversal") })
+      helper.instance_variable_set(:@tree_render_traversals, {1 => double("stale traversal")})
 
       helper.send(:clear_tree_view_render_caches!)
 

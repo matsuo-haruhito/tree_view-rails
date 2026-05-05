@@ -9,23 +9,23 @@ module TreeView
     VALID_ORPHAN_STRATEGIES = %i[ignore as_root raise orphans_only].freeze
 
     attr_reader :records,
-                :id_method,
-                :parent_id_method,
-                :roots,
-                :children_resolver,
-                :adapter,
-                :sorter,
-                :orphan_strategy
+      :id_method,
+      :parent_id_method,
+      :roots,
+      :children_resolver,
+      :adapter,
+      :sorter,
+      :orphan_strategy
 
     def initialize(records: nil,
-                   parent_id_method: nil,
-                   id_method: :id,
-                   roots: nil,
-                   children_resolver: nil,
-                   node_key_resolver: nil,
-                   adapter: nil,
-                   sorter: nil,
-                   orphan_strategy: :ignore)
+      parent_id_method: nil,
+      id_method: :id,
+      roots: nil,
+      children_resolver: nil,
+      node_key_resolver: nil,
+      adapter: nil,
+      sorter: nil,
+      orphan_strategy: :ignore)
       @records = records
       @id_method = id_method
       @parent_id_method = parent_id_method
@@ -219,7 +219,7 @@ module TreeView
       end
 
       if duplicated_keys.any?
-        raise ArgumentError, "duplicate node_key detected: #{duplicated_keys.map(&:inspect).join(', ')}"
+        raise ArgumentError, "duplicate node_key detected: #{duplicated_keys.map(&:inspect).join(", ")}"
       end
 
       true
@@ -333,7 +333,7 @@ module TreeView
     def raise_if_orphans!
       return if orphan_items.empty?
 
-      orphan_keys = orphan_items.map { |item| node_key_for(item).inspect }.join(', ')
+      orphan_keys = orphan_items.map { |item| node_key_for(item).inspect }.join(", ")
       raise ArgumentError, "orphan nodes detected: #{orphan_keys}"
     end
 
@@ -351,21 +351,21 @@ module TreeView
     end
 
     def raise_invalid_orphan_strategy!
-      raise ArgumentError, "orphan_strategy must be one of: #{VALID_ORPHAN_STRATEGIES.join(', ')}"
+      raise ArgumentError, "orphan_strategy must be one of: #{VALID_ORPHAN_STRATEGIES.join(", ")}"
     end
 
     def validate_mode!
       raise ArgumentError, "sorter must respond to call" unless sorter.respond_to?(:call)
 
       if adapter_mode?
-        raise ArgumentError, 'adapter mode cannot be combined with records mode' if records || parent_id_method
-        raise ArgumentError, 'adapter mode cannot be combined with roots/children_resolver mode' if roots.any? || children_resolver
-        raise ArgumentError, 'orphan_strategy is only supported in records mode' unless orphan_strategy == :ignore
+        raise ArgumentError, "adapter mode cannot be combined with records mode" if records || parent_id_method
+        raise ArgumentError, "adapter mode cannot be combined with roots/children_resolver mode" if roots.any? || children_resolver
+        raise ArgumentError, "orphan_strategy is only supported in records mode" unless orphan_strategy == :ignore
       elsif resolver_mode?
-        raise ArgumentError, 'roots must be provided when children_resolver is used' if roots.empty?
-        raise ArgumentError, 'orphan_strategy is only supported in records mode' unless orphan_strategy == :ignore
-      else
-        raise ArgumentError, 'records and parent_id_method are required in records mode' if records.nil? || parent_id_method.nil?
+        raise ArgumentError, "roots must be provided when children_resolver is used" if roots.empty?
+        raise ArgumentError, "orphan_strategy is only supported in records mode" unless orphan_strategy == :ignore
+      elsif records.nil? || parent_id_method.nil?
+        raise ArgumentError, "records and parent_id_method are required in records mode"
       end
     end
   end

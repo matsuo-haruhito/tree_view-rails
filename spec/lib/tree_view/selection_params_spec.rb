@@ -17,20 +17,20 @@ RSpec.describe TreeView::SelectionParams do
       ]
 
       expect(described_class.parse(params)).to eq([
-        { "key" => 1, "id" => 1, "type" => "Document" },
-        { "key" => 2, "id" => 2, "type" => "Folder" }
+        {"key" => 1, "id" => 1, "type" => "Document"},
+        {"key" => 2, "id" => 2, "type" => "Folder"}
       ])
     end
 
     it "accepts a single JSON selection value" do
       expect(described_class.parse('{"key":1,"id":1}')).to eq([
-        { "key" => 1, "id" => 1 }
+        {"key" => 1, "id" => 1}
       ])
     end
 
     it "accepts hash-like entries" do
-      expect(described_class.parse([{ key: 1, id: 1 }])).to eq([
-        { key: 1, id: 1 }
+      expect(described_class.parse([{key: 1, id: 1}])).to eq([
+        {key: 1, id: 1}
       ])
     end
 

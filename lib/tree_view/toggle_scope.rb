@@ -3,10 +3,10 @@
 module TreeView
   class ToggleScope
     attr_reader :mode,
-                :current_depth,
-                :max_depth_from_root,
-                :current_leaf_distance,
-                :max_leaf_distance
+      :current_depth,
+      :max_depth_from_root,
+      :current_leaf_distance,
+      :max_leaf_distance
 
     # mode is intentionally carried as request/path metadata.
     # The current expansion boundary is determined by depth and leaf distance,

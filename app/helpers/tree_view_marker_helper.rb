@@ -15,7 +15,7 @@ module TreeViewMarkerHelper
         data: marker[:data].respond_to?(:to_h) ? marker[:data].to_h : {}
       }
     else
-      { text: value, class: [], title: nil, data: {} }
+      {text: value, class: [], title: nil, data: {}}
     end
   end
 end

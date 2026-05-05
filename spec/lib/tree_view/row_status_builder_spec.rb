@@ -29,7 +29,7 @@ RSpec.describe "TreeView row status builders" do
       root_items: tree.root_items,
       row_partial: "items/tree_columns",
       ui_config: ui_config,
-      row_data_builder: ->(item) { { name: item.name } },
+      row_data_builder: ->(item) { {name: item.name} },
       row_disabled_builder: ->(item) { item.locked },
       row_readonly_builder: ->(item) { item.readonly },
       row_disabled_reason_builder: ->(item) { item.locked ? "locked" : nil }
