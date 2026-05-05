@@ -1,24 +1,19 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "rails/generators"
-require "rails/generators/testing/behavior"
 require "tmpdir"
 require "fileutils"
 require "generators/tree_view/state/install_generator"
 
 RSpec.describe TreeView::Generators::State::InstallGenerator do
-  include Rails::Generators::Testing::Behavior
-
-  tests described_class
-  destination File.expand_path("../../tmp/generators", __dir__)
-
-  before do
-    prepare_destination
-  end
+  let(:destination_root) { Dir.mktmpdir("tree_view_generator") }
 
   after do
-    FileUtils.rm_rf(destination_root)
+    FileUtils.rm_rf(destination_root) if File.directory?(destination_root)
+  end
+
+  def run_generator
+    described_class.start([], destination_root: destination_root)
   end
 
   it "creates persisted state migration, model, and owner concern" do
