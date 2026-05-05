@@ -36,6 +36,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added Japanese summaries to `docs/public-api.md` and `docs/release.md`.
 - Added bilingual coverage to `docs/installation.md` and `docs/minimal-usage.md`.
 - Added bilingual summaries to `docs/usage.md` and a bilingual `docs/api-overview.md` entry point.
+- Started migrating documentation to language-specific `docs/ja/` and `docs/en/` directories.
 
 ### Tests
 
