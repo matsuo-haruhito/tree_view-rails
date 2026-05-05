@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -16,6 +19,27 @@ jobs:
           ruby-version: "3.3"
           bundler-cache: true
       - run: bundle exec standardrb
+
+  standard_fix:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - run: bundle exec standardrb --fix || true
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git add spec .standard.yml
+            git commit -m "Apply Standard Ruby formatting to specs"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
 
   spec:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
