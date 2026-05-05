@@ -31,22 +31,7 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
-      - run: bundle exec standardrb tree_view.gemspec
-
-  standard_format_patch:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.3"
-          bundler-cache: true
-      - run: bundle exec standardrb --fix || true
-      - run: git diff -- . > standard-format.patch
-      - uses: actions/upload-artifact@v4
-        with:
-          name: standard-format-patch
-          path: standard-format.patch
+      - run: bundle exec standardrb
 
   javascript:
     runs-on: ubuntu-latest
