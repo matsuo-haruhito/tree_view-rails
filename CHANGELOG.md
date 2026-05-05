@@ -19,6 +19,8 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added concrete multi-key sorter cookbook examples, including nil handling and stable fallback keys.
 - Clarified beta documentation cleanup responsibilities and the split between static mockups in this repository and Rails playground behavior in the demo repository.
 - Clarified the persisted state generator output and owner-side usage.
+- Added children pagination guidance for lazy loading examples.
+- Clarified large-tree performance hardening boundaries between TreeView gem support and host app responsibilities.
 
 ### Tests
 
