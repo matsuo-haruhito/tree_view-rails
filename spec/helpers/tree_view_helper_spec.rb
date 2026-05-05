@@ -1,7 +1,8 @@
 require "spec_helper"
+HelperTestNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+
 
 RSpec.describe TreeViewHelper do
-  HelperTestNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
   let(:ui_config) do
     TreeView::UiConfig.new(

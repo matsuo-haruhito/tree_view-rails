@@ -4,9 +4,10 @@ require "spec_helper"
 require "action_view"
 require "fileutils"
 require "tmpdir"
+WindowNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+
 
 RSpec.describe "TreeView windowed rendering" do
-  WindowNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
   let(:root) { WindowNode.new(id: 1, parent_item_id: nil, name: "root") }
   let(:child) { WindowNode.new(id: 2, parent_item_id: 1, name: "child") }

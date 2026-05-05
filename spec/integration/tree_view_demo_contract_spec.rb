@@ -2,9 +2,10 @@ require "spec_helper"
 require "action_view"
 require "fileutils"
 require "tmpdir"
+DemoMachineNode = Struct.new(:id, :name, :children, keyword_init: true)
+
 
 RSpec.describe "TreeView demo app integration contract" do
-  DemoMachineNode = Struct.new(:id, :name, :children, keyword_init: true)
 
   let(:gem_view_path) { File.expand_path("../../app/views", __dir__) }
   let(:host_view_dir) { Dir.mktmpdir("tree_view_demo_host_views") }

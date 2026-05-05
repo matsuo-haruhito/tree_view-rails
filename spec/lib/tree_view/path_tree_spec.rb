@@ -1,7 +1,8 @@
 require "spec_helper"
+PathTreeNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+
 
 RSpec.describe TreeView::PathTree do
-  PathTreeNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
   def build_base_tree(records)
     TreeView::Tree.new(records: records, parent_id_method: :parent_item_id, sorter: ->(items, _tree) { items.sort_by(&:id) })

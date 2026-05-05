@@ -1,7 +1,8 @@
 require "spec_helper"
+DummyRecord = Struct.new(:owner, :tree_instance_key, :expanded_keys) do
+
 
 RSpec.describe TreeView::StateStore do
-  DummyRecord = Struct.new(:owner, :tree_instance_key, :expanded_keys) do
     def save!
       true
     end

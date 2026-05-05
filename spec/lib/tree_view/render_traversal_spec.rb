@@ -1,7 +1,8 @@
 require "spec_helper"
+RenderTraversalNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+
 
 RSpec.describe TreeView::RenderTraversal do
-  RenderTraversalNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
   def build_tree
     root_a = RenderTraversalNode.new(id: 1, parent_item_id: nil, name: "root-a")

@@ -1,7 +1,8 @@
 require "spec_helper"
+SortPresetNode = Struct.new(:id, :parent_id, :position, :name, keyword_init: true)
+
 
 RSpec.describe TreeView::Sorters do
-  SortPresetNode = Struct.new(:id, :parent_id, :position, :name, keyword_init: true)
 
   it "sorts by one or more methods" do
     first = SortPresetNode.new(id: 1, parent_id: nil, position: 2, name: "B")

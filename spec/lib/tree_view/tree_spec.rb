@@ -1,10 +1,11 @@
 require "spec_helper"
+ItemNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+CountryNode = Struct.new(:id, :name, :cities)
+CityNode = Struct.new(:id, :name, :recipes)
+RecipeNode = Struct.new(:id, :name, :steps)
+
 
 RSpec.describe TreeView::Tree do
-  ItemNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
-  CountryNode = Struct.new(:id, :name, :cities)
-  CityNode = Struct.new(:id, :name, :recipes)
-  RecipeNode = Struct.new(:id, :name, :steps)
 
   describe "#descendant_counts" do
     it "counts descendants in records mode" do
