@@ -22,7 +22,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Installation](installation.md) | Gemfile, CSS, importmap, Propshaft / Sprockets, and development setup |
 | [Minimal usage](minimal-usage.md) | Minimal controller, view, and row partial setup in a host app |
 | [Usage](usage.md) | Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
-| [API overview](api-overview.md) | Bilingual overview of the main public APIs |
+| [API overview](api-overview.md) | Overview of the main public APIs |
 | [API reference](../api.md) | Detailed API reference; currently Japanese-first |
 | [Selection](../selection.md) | Checkbox selection, visibility, and submitted value parsing |
 | [Lazy Loading](../lazy-loading.md) | Hooks and data attributes for loading children on demand |
