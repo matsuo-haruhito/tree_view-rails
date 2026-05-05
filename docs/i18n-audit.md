@@ -67,8 +67,8 @@ These should be split after the P0 entry points.
 | Topic | Japanese | English | Status | Needed work |
 |---|---|---|---|---|
 | Selection | `docs/ja/selection.md` | `docs/en/selection.md` | Split | Keep checkbox visibility, payload, disabled state, cascade, indeterminate, and max count docs in sync. |
-| Lazy loading | `docs/lazy-loading.md` | `docs/en/lazy-loading.md` | Pending split | Create `docs/ja/lazy-loading.md` and `docs/en/lazy-loading.md`. |
-| Windowed rendering | `docs/windowed-rendering.md` | `docs/en/windowed-rendering.md` | Pending split | Create `docs/ja/windowed-rendering.md` and `docs/en/windowed-rendering.md`. |
+| Lazy loading | `docs/ja/lazy-loading.md` | `docs/en/lazy-loading.md` | Split | Keep lazy loading hooks, remote-state events, and children pagination guidance in sync. |
+| Windowed rendering | `docs/ja/windowed-rendering.md` | `docs/en/windowed-rendering.md` | Split | Keep VisibleRows/RenderWindow/windowed rendering guidance in sync. |
 | Persisted state | `docs/persisted-state.md` | `docs/en/persisted-state.md` | Pending split | Create language-specific files. |
 | Breadcrumb | `docs/breadcrumb.md` | `docs/en/breadcrumb.md` | Pending split | Create language-specific files. |
 | Drag and drop | `docs/drag-and-drop.md` | `docs/en/drag-and-drop.md` | Pending split | Create language-specific files. |
@@ -105,7 +105,7 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Split lazy loading and windowed rendering docs into language-specific files.
+1. Split persisted state and breadcrumb docs into language-specific files.
 2. Split `api.md` into language-specific API reference files when practical.
 3. Continue P1 feature docs in topic-based PRs.
 4. Remove or redirect root-level compatibility docs after language-specific coverage is complete.
