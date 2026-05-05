@@ -71,8 +71,8 @@ These should be split after the P0 entry points.
 | Windowed rendering | `docs/ja/windowed-rendering.md` | `docs/en/windowed-rendering.md` | Split | Keep VisibleRows/RenderWindow/windowed rendering guidance in sync. |
 | Persisted state | `docs/ja/persisted-state.md` | `docs/en/persisted-state.md` | Split | Keep StateStore, generator, owner model, and RenderState integration docs in sync. |
 | Breadcrumb | `docs/ja/breadcrumb.md` | `docs/en/breadcrumb.md` | Split | Keep helper usage, builders, and responsibility boundaries in sync. |
-| Drag and drop | `docs/drag-and-drop.md` | `docs/en/drag-and-drop.md` | Pending split | Create language-specific files. |
-| Children pagination | `docs/children-pagination.md` | `docs/en/children-pagination.md` | Pending split | Create language-specific files. |
+| Drag and drop | `docs/ja/drag-and-drop.md` | `docs/en/drag-and-drop.md` | Split | Keep row event payload and host app responsibility docs in sync. |
+| Children pagination | `docs/ja/children-pagination.md` | `docs/en/children-pagination.md` | Split | Keep server-side pagination guidance in sync. |
 
 ## P2: supporting and maintainer docs
 
@@ -105,10 +105,9 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Split drag-and-drop and children pagination docs into language-specific files.
+1. Continue P2 supporting docs in topic-based PRs.
 2. Split `api.md` into language-specific API reference files when practical.
-3. Continue P2 supporting docs in topic-based PRs.
-4. Remove or redirect root-level compatibility docs after language-specific coverage is complete.
+3. Remove or redirect root-level compatibility docs after language-specific coverage is complete.
 
 ## Release decision
 
