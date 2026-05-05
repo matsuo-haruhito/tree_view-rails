@@ -29,6 +29,8 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Windowed Rendering](windowed-rendering.md) | Opt-in API for rendering visible rows by offset / limit |
 | [Persisted State](persisted-state.md) | Persisting and restoring expansion state with the generator |
 | [Breadcrumb](breadcrumb.md) | Helper for rendering ancestor paths as breadcrumbs |
+| [Drag and Drop](drag-and-drop.md) | Drag-and-drop integration boundary using row event payloads |
+| [Children Pagination](children-pagination.md) | Server-side children pagination guidance for lazy loading |
 
 ## For maintainers
 
