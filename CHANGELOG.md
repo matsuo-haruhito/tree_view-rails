@@ -13,6 +13,11 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ## Unreleased
 
+### Added
+
+- Added `TreeView::RenderWindow` and opt-in windowed rendering through `tree_view_rows(render_state, window: { offset:, limit: })`.
+- Added `tree_view_window(render_state, offset:, limit:)` for pagination metadata around visible rows.
+
 ### Documentation
 
 - Expanded the default TreeView static HTML mock to cover root, child, leaf, expanded, collapsed, hidden-count, selection, disabled selection, badge, marker, depth label, data attributes, and row actions examples.
@@ -21,10 +26,12 @@ Breaking changes and required migration notes should be called out explicitly in
 - Clarified the persisted state generator output and owner-side usage.
 - Added children pagination guidance for lazy loading examples.
 - Clarified large-tree performance hardening boundaries between TreeView gem support and host app responsibilities.
+- Added windowed rendering documentation.
 
 ### Tests
 
 - Added coverage for the persisted state install generator outputs.
+- Added unit and integration coverage for windowed rendering.
 
 ## 0.1.0 - Initial release
 
