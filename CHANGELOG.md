@@ -33,6 +33,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Clarified that releases are normally managed by tags on `main`, with release branches reserved for parallel maintenance.
 - Added a documentation i18n audit covering language status, translation priority, and release readiness.
 - Added English documentation index content to `docs/README.md`.
+- Added Japanese summaries to `docs/public-api.md` and `docs/release.md`.
 
 ### Tests
 
