@@ -54,6 +54,39 @@ RSpec.describe TreeView::VisibleRows do
     expect(rows.find { |row| row.node_key == 2 }.expanded?).to eq(true)
   end
 
+  it "respects collapsed keys inside an expanded tree" do
+    rows = described_class.new(
+      tree: tree,
+      root_items: tree.root_items,
+      render_state: build_render_state(initial_state: :expanded, collapsed_keys: [2])
+    ).to_a
+
+    expect(rows.map(&:node_key)).to eq([1, 2, 4])
+    expect(rows.find { |row| row.node_key == 1 }.expanded?).to eq(true)
+    expect(rows.find { |row| row.node_key == 2 }.expanded?).to eq(false)
+    expect(rows.find { |row| row.node_key == 4 }.parent_key).to eq(1)
+  end
+
+  it "preserves sorted sibling order for wide trees" do
+    extra_sibling = VisibleRowsNode.new(id: 5, parent_item_id: 1, name: "extra sibling")
+    wide_tree = TreeView::Tree.new(
+      records: nodes + [extra_sibling],
+      parent_id_method: :parent_item_id,
+      sorter: ->(items, _tree) { items.sort_by { |item| -item.id } }
+    )
+    wide_render_state = TreeView::RenderState.new(
+      tree: wide_tree,
+      root_items: wide_tree.root_items,
+      row_partial: "items/tree_columns",
+      ui_config: ui_config
+    )
+
+    rows = described_class.new(tree: wide_tree, root_items: wide_tree.root_items, render_state: wide_render_state).to_a
+
+    expect(rows.map(&:node_key)).to eq([1, 5, 4, 2, 3])
+    expect(rows.select { |row| row.parent_key == 1 }.map(&:node_key)).to eq([5, 4, 2])
+  end
+
   it "respects max_render_depth" do
     rows = described_class.new(
       tree: tree,
