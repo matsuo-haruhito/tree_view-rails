@@ -31,6 +31,7 @@ If you are integrating TreeView into a host Rails app, start with these document
 | [導入手順 / Installation](installation.md) | Gemfile、CSS、importmap、Propshaft / Sprockets、開発環境 / Gemfile, CSS, importmap, Propshaft / Sprockets, and development setup |
 | [最小利用例 / Minimal usage](minimal-usage.md) | host app での controller、view、row partial の最小構成 / Minimal controller, view, and row partial setup in a host app |
 | [使い方 / Usage](usage.md) | 通常Tree、static表示、Turbo表示、RenderState、view実装例 / Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
+| [API概要 / API overview](api-overview.md) | 主要公開APIの概要 / Bilingual overview of the main public APIs |
 | [Cookbook](cookbook.md) | 既存APIを組み合わせた代表的な利用パターン / Common patterns composed from existing APIs |
 | [用語集 / Glossary](glossary.md) | TreeView固有の概念、コード上の表現、責務の整理 / TreeView concepts, code names, and responsibility boundaries |
 | [Selection](selection.md) | checkbox selection、visibility、送信値 parse / checkbox selection, visibility, and submitted value parsing |
@@ -67,6 +68,10 @@ If you are changing or releasing the TreeView gem itself, also read these docume
 初めて使う場合は [導入手順](installation.md)、[最小利用例](minimal-usage.md)、[使い方](usage.md) の順に確認してください。
 
 For first-time usage, read [Installation](installation.md), [Minimal usage](minimal-usage.md), and [Usage](usage.md) in that order.
+
+API全体の入口を確認したい場合は、まず [API概要](api-overview.md) を読み、細かい仕様は [API仕様](api.md) を参照してください。
+
+For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
 
 既存APIの組み合わせ方を確認したい場合は [Cookbook](cookbook.md) を参照してください。
 

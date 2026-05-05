@@ -20,6 +20,7 @@ For the initial release, the priority is:
 | Bilingual | Japanese and English content are both present enough for practical use. |
 | Japanese-first | Japanese is the canonical or more complete version; English should be added or expanded. |
 | English-first | English is the canonical or more complete version; Japanese should be added or expanded. |
+| Bilingual summary | Both languages have a usable summary, but one language may still contain the complete canonical detail. |
 | Technical asset | Not a prose document that needs translation, such as HTML/CSS mock assets. |
 
 ## Translation policy
@@ -40,10 +41,11 @@ These should be understandable in both Japanese and English before tagging `v0.1
 |---|---|---|
 | `README.md` | Bilingual | Keep Japanese and English entry content in sync. |
 | `docs/README.md` | Bilingual | Keep Japanese and English documentation index and reading order in sync. |
-| `docs/installation.md` | Needs audit | Ensure both languages cover Gemfile, CSS, importmap, Propshaft/Sprockets, Ruby/Rails requirements. |
-| `docs/minimal-usage.md` | Needs audit | Ensure both languages cover the smallest host app setup. |
-| `docs/usage.md` | Needs audit | Ensure both languages cover static rendering, Turbo rendering, RenderState, and row partials. |
-| `docs/api.md` | Needs audit | Ensure public API descriptions are available in both languages. |
+| `docs/installation.md` | Bilingual | Keep installation requirements, CSS/importmap guidance, CI notes, and packaged file lists in sync. |
+| `docs/minimal-usage.md` | Bilingual | Keep the minimal controller/view/row partial example in sync. |
+| `docs/usage.md` | Bilingual summary | Expand detailed English coverage when usage sections change. |
+| `docs/api-overview.md` | Bilingual | Keep the high-level API overview in sync with `docs/api.md`. |
+| `docs/api.md` | Japanese-first | Detailed API reference remains Japanese-first; use `docs/api-overview.md` as the bilingual entry point. |
 | `docs/public-api.md` | Bilingual summary | Expand Japanese details when the public API surface changes. |
 | `docs/release.md` | Bilingual summary | Expand Japanese details when the release process changes. |
 
@@ -92,8 +94,8 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Add bilingual coverage to `docs/installation.md`, `docs/minimal-usage.md`, `docs/usage.md`, and `docs/api.md`.
-2. Work through P1 feature docs in small topic-based PRs.
+1. Work through P1 feature docs in small topic-based PRs.
+2. Expand full English details in `docs/api.md` if the detailed API reference needs to be fully bilingual before a later release.
 
 ## Release decision
 
