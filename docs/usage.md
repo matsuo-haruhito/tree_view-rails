@@ -1,4 +1,36 @@
-# 使い方
+# 使い方 / Usage
+
+This page explains the main ways to render TreeView rows in a Rails host app.
+
+このページでは、Rails host app でTreeViewの行を描画する主な使い方を説明します。
+
+## English summary
+
+The usual flow is:
+
+1. Build a `TreeView::Tree` from records, resolver data, or an adapter.
+2. Build a `TreeView::UiConfig` with `TreeView::UiConfigBuilder`.
+3. Build a `TreeView::RenderState` for the screen.
+4. Render rows with `tree_view_rows(@render_state)`.
+5. Put host-app-specific columns in the configured `row_partial`.
+
+Static rendering can use `build_static` and does not require dedicated JavaScript. Turbo rendering uses path builders for expand/collapse URLs. Optional features include lazy loading, keyboard navigation, selection, row data builders, row class builders, `PathTree`, `ReverseTree`, render depth limits, leaf-distance limits, and toggle-scope controls.
+
+TreeView renders the tree UI primitives. Host apps remain responsible for application-specific CRUD, authorization, persistence, server-side queries, Turbo Stream responses, and business actions.
+
+## 日本語サマリー
+
+基本的な流れは以下です。
+
+1. records、resolver、adapter から `TreeView::Tree` を作る。
+2. `TreeView::UiConfigBuilder` で `TreeView::UiConfig` を作る。
+3. 画面単位の `TreeView::RenderState` を作る。
+4. `tree_view_rows(@render_state)` で行を描画する。
+5. host app固有の列は `row_partial` に実装する。
+
+static表示では `build_static` を使い、専用JavaScriptなしでも利用できます。Turbo表示では、開閉URLを作るpath builderを渡します。必要に応じて lazy loading、keyboard navigation、selection、row data/class builder、`PathTree`、`ReverseTree`、描画深度制限、leaf距離制限、toggle scope制御を組み合わせます。
+
+TreeView gem はツリーUIの基盤を提供します。CRUD、認可、保存、server-side query、Turbo Stream response、業務固有actionはhost app側で実装します。
 
 ## 基本構成
 
