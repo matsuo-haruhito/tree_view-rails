@@ -9,7 +9,7 @@ Documentation is moving to language-specific directories.
 - `docs/ja/`: Japanese documentation tree
 - `docs/en/`: English documentation tree
 - `docs/README.md`: language selector
-- root-level docs such as `docs/usage.md` and `docs/api.md`: kept temporarily for compatibility during migration
+- root-level docs such as `docs/api.md`: kept temporarily for compatibility during migration
 
 ## Goal
 
@@ -54,8 +54,8 @@ These should be understandable in both Japanese and English before tagging `v0.1
 | Docs index | `docs/ja/README.md` | `docs/en/README.md` | Split | Keep reading order and links in sync. |
 | Installation | `docs/ja/installation.md` | `docs/en/installation.md` | Split | Keep requirements, CSS/importmap guidance, CI notes, and packaged file lists in sync. |
 | Minimal usage | `docs/ja/minimal-usage.md` | `docs/en/minimal-usage.md` | Split | Keep controller/view/row partial examples in sync. |
+| Usage guide | `docs/ja/usage.md` | `docs/en/usage.md` | Split | Keep the practical usage guide in sync; root `docs/usage.md` remains temporarily as detailed legacy reference. |
 | API overview | `docs/ja/api-overview.md` | `docs/en/api-overview.md` | Split | Keep high-level API overview in sync with `docs/api.md`. |
-| Usage guide | `docs/usage.md` | `docs/en/usage.md` | Pending split | Move Japanese detail to `docs/ja/usage.md` and English guide to `docs/en/usage.md`. |
 | API reference | `docs/api.md` | `docs/en/api.md` | Pending split | Move detailed API reference into language-specific files when practical. |
 | Public API policy | `docs/public-api.md` | `docs/en/public-api.md` | Bilingual summary | Split later if the policy grows. |
 | Release checklist | `docs/release.md` | `docs/en/release.md` | Bilingual summary | Split later if the release process grows. |
@@ -105,9 +105,9 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Split `usage.md` into `docs/ja/usage.md` and `docs/en/usage.md`.
-2. Split `api.md` into language-specific API reference files when practical.
-3. Work through P1 feature docs in topic-based PRs.
+1. Split `api.md` into language-specific API reference files when practical.
+2. Work through P1 feature docs in topic-based PRs.
+3. Remove or redirect root-level compatibility docs after language-specific coverage is complete.
 
 ## Release decision
 
