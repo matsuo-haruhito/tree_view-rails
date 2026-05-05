@@ -11,6 +11,14 @@ This changelog uses the following categories when applicable:
 
 Breaking changes and required migration notes should be called out explicitly in the relevant version section.
 
+## Unreleased
+
+### Documentation
+
+- Expanded the default TreeView static HTML mock to cover root, child, leaf, expanded, collapsed, hidden-count, selection, disabled selection, badge, marker, depth label, data attributes, and row actions examples.
+- Added concrete multi-key sorter cookbook examples, including nil handling and stable fallback keys.
+- Clarified beta documentation cleanup responsibilities and the split between static mockups in this repository and Rails playground behavior in the demo repository.
+
 ## 0.1.0 - Initial release
 
 ### Added

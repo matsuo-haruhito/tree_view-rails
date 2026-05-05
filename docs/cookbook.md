@@ -19,6 +19,51 @@ The examples stay generic. Business-specific models, authorization, routes, and 
 - Multi-key sorting: use an array return from `sort_by` when screens need `display_order -> name -> id` style stable ordering.
 - Orphan diagnostics: choose an orphan strategy deliberately when parent IDs may point to missing records.
 
+## Multi-key sorter
+
+`TreeView::Tree` applies `sorter:` to both root nodes and children. A sorter only needs to respond to `call(nodes, tree)`, so a lambda is enough for most host apps.
+
+Use an array return from `sort_by` when a screen needs stable ordering with fallback keys.
+
+```ruby
+tree = TreeView::Tree.new(
+  records: items,
+  parent_id_method: :parent_item_id,
+  sorter: ->(nodes, _tree) {
+    nodes.sort_by do |node|
+      [
+        node.display_order || Float::INFINITY,
+        node.name.to_s,
+        node.id
+      ]
+    end
+  }
+)
+```
+
+This example sorts by:
+
+1. `display_order`, putting `nil` values at the end with `Float::INFINITY`
+2. `name`, normalizing `nil` to an empty string with `to_s`
+3. `id`, which acts as the final stabilizing key
+
+When the host app has mixed node types, keep the array comparable across all node classes. For example, normalize missing attributes before sorting.
+
+```ruby
+sorter = ->(nodes, _tree) {
+  nodes.sort_by do |node|
+    [
+      node.respond_to?(:display_order) ? (node.display_order || Float::INFINITY) : Float::INFINITY,
+      node.respond_to?(:name) ? node.name.to_s : "",
+      node.class.name,
+      node.respond_to?(:id) ? node.id.to_i : 0
+    ]
+  end
+}
+```
+
+Prefer keeping business-specific ranking rules in the host app. TreeView only calls the sorter and renders the resulting order.
+
 ## Icon builder
 
 `icon_builder` is a lightweight visual hook for node type or state markers.
