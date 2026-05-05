@@ -44,8 +44,8 @@ These should be understandable in both Japanese and English before tagging `v0.1
 | `docs/minimal-usage.md` | Needs audit | Ensure both languages cover the smallest host app setup. |
 | `docs/usage.md` | Needs audit | Ensure both languages cover static rendering, Turbo rendering, RenderState, and row partials. |
 | `docs/api.md` | Needs audit | Ensure public API descriptions are available in both languages. |
-| `docs/public-api.md` | English-first | Add Japanese summary for public/semi-public/internal API policy. |
-| `docs/release.md` | English-first | Add Japanese summary for main-tag release policy and release checklist. |
+| `docs/public-api.md` | Bilingual summary | Expand Japanese details when the public API surface changes. |
+| `docs/release.md` | Bilingual summary | Expand Japanese details when the release process changes. |
 
 ### P1: important feature docs
 
@@ -92,9 +92,8 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Add Japanese summaries to English-first policy docs: `docs/public-api.md` and `docs/release.md`.
-2. Add bilingual coverage to `docs/installation.md`, `docs/minimal-usage.md`, `docs/usage.md`, and `docs/api.md`.
-3. Work through P1 feature docs in small topic-based PRs.
+1. Add bilingual coverage to `docs/installation.md`, `docs/minimal-usage.md`, `docs/usage.md`, and `docs/api.md`.
+2. Work through P1 feature docs in small topic-based PRs.
 
 ## Release decision
 
