@@ -27,6 +27,8 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Selection](selection.md) | Checkbox selection, visibility, and submitted value parsing |
 | [Lazy Loading](lazy-loading.md) | Hooks and data attributes for loading children on demand |
 | [Windowed Rendering](windowed-rendering.md) | Opt-in API for rendering visible rows by offset / limit |
+| [Persisted State](persisted-state.md) | Persisting and restoring expansion state with the generator |
+| [Breadcrumb](breadcrumb.md) | Helper for rendering ancestor paths as breadcrumbs |
 
 ## For maintainers
 
