@@ -18,6 +18,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added `TreeView::RenderWindow` and opt-in windowed rendering through `tree_view_rows(render_state, window: { offset:, limit: })`.
 - Added `tree_view_window(render_state, offset:, limit:)` for pagination metadata around visible rows.
 - Added Standard Ruby linting to the development dependencies and CI.
+- Added Rails version matrix Gemfiles and a main-push-only Rails compatibility CI job.
 
 ### Documentation
 
