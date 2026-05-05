@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -17,10 +20,13 @@ jobs:
           bundler-cache: true
       - run: bundle exec standardrb
 
-  spec_constant_patch:
+  spec_constant_apply:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
       - run: |
           ruby <<'RUBY'
           Dir.glob("spec/**/*_spec.rb").each do |path|
@@ -57,11 +63,14 @@ jobs:
             File.write(path, lines.join)
           end
           RUBY
-      - run: git diff -- spec .standard.yml > spec-constants.patch
-      - uses: actions/upload-artifact@v4
-        with:
-          name: spec-constants-patch
-          path: spec-constants.patch
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git add spec
+            git commit -m "Move spec constants out of example groups"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
 
   spec:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
