@@ -168,7 +168,14 @@ npm install
 npm test
 ```
 
-GitHub Actionsでは、`main` へのpushとPull Requestで Ruby spec、Ruby lint、JavaScript tests、gem package確認を実行します。
+Rails互換性確認用のGemfileは `gemfiles/` 配下にあります。必要に応じて `BUNDLE_GEMFILE` を指定して実行します。
+
+```bash
+BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
+```
+
+GitHub Actionsでは、Pull RequestではRuby lintのみを実行し、`main` へのpushで Ruby spec、Rails version matrix、JavaScript tests、gem package確認を実行します。
 
 ## Release
 
@@ -179,6 +186,7 @@ GitHub Actionsでは、`main` へのpushとPull Requestで Ruby spec、Ruby lint
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - `bundle exec rake build`
+- Rails version matrix CI
 - `npm test`
 - README / docs / CHANGELOG の整合
 - gemspec metadata
