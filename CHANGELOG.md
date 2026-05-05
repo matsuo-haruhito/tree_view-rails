@@ -41,6 +41,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Split the selection guide into `docs/ja/selection.md` and `docs/en/selection.md` entry points.
 - Split the lazy loading and windowed rendering guides into language-specific `docs/ja/` and `docs/en/` entry points.
 - Split the persisted state and breadcrumb guides into language-specific `docs/ja/` and `docs/en/` entry points.
+- Split the drag-and-drop and children pagination guides into language-specific `docs/ja/` and `docs/en/` entry points.
 
 ### Tests
 
