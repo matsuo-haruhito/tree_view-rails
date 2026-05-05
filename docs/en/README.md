@@ -23,6 +23,9 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Minimal usage](minimal-usage.md) | Minimal controller, view, and row partial setup in a host app |
 | [Usage](usage.md) | Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
 | [API overview](api-overview.md) | Overview of the main public APIs |
+| [Glossary](glossary.md) | Main terms used in TreeView docs and code |
+| [Node keys](node-keys.md) | node_key design, collision avoidance, and validation |
+| [Tree diagnostics](tree-diagnostics.md) | Structure inspection APIs for node keys, DOM IDs, orphans, and cycles |
 | [API reference](../api.md) | Detailed API reference; currently Japanese-first |
 | [Selection](selection.md) | Checkbox selection, visibility, and submitted value parsing |
 | [Lazy Loading](lazy-loading.md) | Hooks and data attributes for loading children on demand |
@@ -46,5 +49,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 For first-time usage, read [Installation](installation.md), [Minimal usage](minimal-usage.md), and [Usage](usage.md) in that order.
 
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](../api.md) for details.
+
+When TreeView terminology or identifier design is unclear, see [Glossary](glossary.md), [Node keys](node-keys.md), and [Tree diagnostics](tree-diagnostics.md).
 
 For translation priority and bilingual readiness, see [Documentation i18n audit](../i18n-audit.md).
