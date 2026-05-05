@@ -17,6 +17,52 @@ jobs:
           bundler-cache: true
       - run: bundle exec standardrb
 
+  spec_constant_patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: |
+          ruby <<'RUBY'
+          Dir.glob("spec/**/*_spec.rb").each do |path|
+            text = File.read(path)
+            lines = text.lines
+            describe_index = lines.index { |line| line.start_with?("RSpec.describe ") }
+            next unless describe_index
+
+            extracted = []
+            changed = false
+            scan_index = describe_index + 1
+            while scan_index < lines.length
+              line = lines[scan_index]
+              if line.match?(/^\s*$/)
+                scan_index += 1
+                next
+              end
+              if line.match?(/^\s{2}[A-Z][A-Za-z0-9_]*\s*=\s*(Struct\.new|Class\.new)/)
+                extracted << line.sub(/^\s{2}/, "")
+                lines.delete_at(scan_index)
+                changed = true
+                next
+              end
+              break
+            end
+
+            next unless changed
+
+            insertion_index = describe_index
+            while insertion_index.positive? && lines[insertion_index - 1].match?(/^\s*$/)
+              insertion_index -= 1
+            end
+            lines.insert(insertion_index, *extracted, "\n")
+            File.write(path, lines.join)
+          end
+          RUBY
+      - run: git diff -- spec .standard.yml > spec-constants.patch
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spec-constants-patch
+          path: spec-constants.patch
+
   spec:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
