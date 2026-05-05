@@ -119,11 +119,29 @@ render_state = TreeView::RenderState.new(
 )
 ```
 
-DB 永続化を使う場合は、generator で host app 側に保存用モデルを追加します。
+## DB 永続化 generator
+
+DB 永続化を使う場合は、generator で host app 側に保存用 migration、model、owner concern を追加します。
 
 ```bash
 rails g tree_view:state:install
 rails db:migrate
+```
+
+生成されるファイルは以下です。
+
+| ファイル | 役割 |
+|---|---|
+| `db/migrate/*_create_tree_view_states.rb` | polymorphic owner と `tree_instance_key` ごとに `expanded_keys` を保存する |
+| `app/models/tree_view_state.rb` | host app 側の保存用 Active Record model |
+| `app/models/concerns/tree_view_state_owner.rb` | owner model へ include する読み書き helper |
+
+owner 側 model に concern を include します。
+
+```ruby
+class User < ApplicationRecord
+  include TreeViewStateOwner
+end
 ```
 
 owner 側 API の例です。
@@ -132,6 +150,8 @@ owner 側 API の例です。
 owner.tree_view_state_for("documents#index:main_tree")
 owner.save_tree_view_state!("documents#index:main_tree", expanded_keys: params[:expanded_keys])
 ```
+
+`tree_view_state_for` は保存済みrecordがない場合でも、空の `expanded_keys` を持つ `TreeView::PersistedState` を返します。`save_tree_view_state!` は保存後の `TreeView::PersistedState` を返すため、そのまま `RenderState` に渡せます。
 
 ## DB 永続化の雛形
 
