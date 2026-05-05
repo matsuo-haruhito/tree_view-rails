@@ -25,8 +25,8 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [API overview](api-overview.md) | Overview of the main public APIs |
 | [API reference](../api.md) | Detailed API reference; currently Japanese-first |
 | [Selection](selection.md) | Checkbox selection, visibility, and submitted value parsing |
-| [Lazy Loading](../lazy-loading.md) | Hooks and data attributes for loading children on demand |
-| [Windowed Rendering](../windowed-rendering.md) | Opt-in API for rendering visible rows by offset / limit |
+| [Lazy Loading](lazy-loading.md) | Hooks and data attributes for loading children on demand |
+| [Windowed Rendering](windowed-rendering.md) | Opt-in API for rendering visible rows by offset / limit |
 
 ## For maintainers
 
