@@ -5,9 +5,7 @@ require "fileutils"
 require "tmpdir"
 IntegrationNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
-
 RSpec.describe "TreeView integration" do
-
   let(:root) { IntegrationNode.new(id: 1, parent_item_id: nil, name: "root") }
   let(:child) { IntegrationNode.new(id: 2, parent_item_id: 1, name: "child") }
   let(:grandchild) { IntegrationNode.new(id: 3, parent_item_id: 2, name: "grandchild") }

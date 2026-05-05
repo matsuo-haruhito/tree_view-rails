@@ -4,9 +4,7 @@ require "fileutils"
 require "tmpdir"
 SelectionNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
-
 RSpec.describe "TreeView selection integration" do
-
   let(:root) { SelectionNode.new(id: 1, parent_item_id: nil, name: "root") }
   let(:child) { SelectionNode.new(id: 2, parent_item_id: 1, name: "child") }
   let(:grandchild) { SelectionNode.new(id: 3, parent_item_id: 2, name: "grandchild") }

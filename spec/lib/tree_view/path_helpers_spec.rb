@@ -2,9 +2,7 @@ require "spec_helper"
 PathNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 PathCountry = Struct.new(:id, :name, :children)
 
-
 RSpec.describe "TreeView::Tree parent path helpers" do
-
   def build_tree(records, **options)
     TreeView::Tree.new(records: records, parent_id_method: :parent_item_id, **options)
   end

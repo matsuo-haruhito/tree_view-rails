@@ -1,9 +1,7 @@
 require "spec_helper"
 Node = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
-
 RSpec.describe TreeView::RowContext do
-
   let(:root) { Node.new(id: 1, parent_item_id: nil, name: "root") }
   let(:child) { Node.new(id: 2, parent_item_id: 1, name: "child") }
   let(:tree) { TreeView::Tree.new(records: [root, child], parent_id_method: :parent_item_id) }

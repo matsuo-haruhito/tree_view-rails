@@ -1,9 +1,7 @@
 require "spec_helper"
 CycleNodeForSpec = Struct.new(:id, :parent_id, keyword_init: true)
 
-
 RSpec.describe "TreeView cycle diagnostics" do
-
   it "returns an empty report without cycles" do
     root = CycleNodeForSpec.new(id: 1, parent_id: nil)
     child = CycleNodeForSpec.new(id: 2, parent_id: 1)

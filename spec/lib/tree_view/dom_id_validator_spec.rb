@@ -1,9 +1,7 @@
 require "spec_helper"
 DomIdTestNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
-
 RSpec.describe TreeView::DomIdValidator do
-
   let(:root) { DomIdTestNode.new(id: 1, parent_item_id: nil, name: "root") }
   let(:child) { DomIdTestNode.new(id: 2, parent_item_id: 1, name: "child") }
   let(:nodes) { [root, child] }

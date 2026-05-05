@@ -4,9 +4,7 @@ require "fileutils"
 require "tmpdir"
 ToggleLeafNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
-
 RSpec.describe "TreeView leaf-based toggle scope integration" do
-
   let(:root) { ToggleLeafNode.new(id: 1, parent_item_id: nil, name: "root") }
   let(:child) { ToggleLeafNode.new(id: 2, parent_item_id: 1, name: "child") }
   let(:grandchild) { ToggleLeafNode.new(id: 3, parent_item_id: 2, name: "grandchild") }

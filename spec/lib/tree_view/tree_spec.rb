@@ -4,9 +4,7 @@ CountryNode = Struct.new(:id, :name, :cities)
 CityNode = Struct.new(:id, :name, :recipes)
 RecipeNode = Struct.new(:id, :name, :steps)
 
-
 RSpec.describe TreeView::Tree do
-
   describe "#descendant_counts" do
     it "counts descendants in records mode" do
       root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")

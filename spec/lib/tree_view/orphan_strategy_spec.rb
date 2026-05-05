@@ -2,9 +2,7 @@ require "spec_helper"
 OrphanNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 OrphanCountry = Struct.new(:id, :name, :children)
 
-
 RSpec.describe "TreeView::Tree orphan strategy" do
-
   def build_tree(records, **options)
     TreeView::Tree.new(records: records, parent_id_method: :parent_item_id, **options)
   end
