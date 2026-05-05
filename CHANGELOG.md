@@ -29,6 +29,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added children pagination guidance for lazy loading examples.
 - Clarified large-tree performance hardening boundaries between TreeView gem support and host app responsibilities.
 - Added windowed rendering documentation.
+- Clarified public API, semi-public API, internal helper module, and JavaScript entrypoint compatibility policy.
 
 ### Tests
 
