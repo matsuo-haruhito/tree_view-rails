@@ -34,6 +34,35 @@ jobs:
           bundler-cache: true
       - run: bundle exec rake
 
+  rails_matrix:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rails: "7.0"
+            gemfile: gemfiles/rails_7_0.gemfile
+            ruby-version: "3.2"
+          - rails: "7.1"
+            gemfile: gemfiles/rails_7_1.gemfile
+            ruby-version: "3.2"
+          - rails: "7.2"
+            gemfile: gemfiles/rails_7_2.gemfile
+            ruby-version: "3.2"
+          - rails: "8.0"
+            gemfile: gemfiles/rails_8_0.gemfile
+            ruby-version: "3.3"
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+      - run: bundle exec rake
+
   javascript:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
