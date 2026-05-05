@@ -161,7 +161,7 @@ row partial:
 
 ```bash
 bundle install
-bundle exec standardrb
+bundle exec standardrb tree_view.gemspec
 bundle exec rspec
 bundle exec rake build
 npm install
@@ -176,7 +176,7 @@ GitHub Actionsでは、`main` へのpushとPull Requestで Ruby spec、Ruby lint
 
 リリース前には以下を確認します。
 
-- `bundle exec standardrb`
+- `bundle exec standardrb tree_view.gemspec`
 - `bundle exec rspec`
 - `bundle exec rake build`
 - `npm test`
