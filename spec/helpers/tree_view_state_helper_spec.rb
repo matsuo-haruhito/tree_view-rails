@@ -1,8 +1,7 @@
 require "spec_helper"
+StateHelperTestNode = Struct.new(:id, keyword_init: true)
 
 RSpec.describe TreeViewStateHelper do
-  StateHelperTestNode = Struct.new(:id, keyword_init: true)
-
   let(:helper_host_class) do
     Class.new do
       include TreeViewStateHelper

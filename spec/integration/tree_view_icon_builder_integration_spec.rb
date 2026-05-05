@@ -2,10 +2,9 @@ require "spec_helper"
 require "action_view"
 require "fileutils"
 require "tmpdir"
+IconNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
 RSpec.describe "TreeView icon builder integration" do
-  IconNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
-
   let(:root) { IconNode.new(id: 1, parent_item_id: nil, name: "root") }
   let(:tree) { TreeView::Tree.new(records: [root], parent_id_method: :parent_item_id) }
   let(:gem_view_path) { File.expand_path("../../app/views", __dir__) }

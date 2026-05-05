@@ -1,8 +1,7 @@
 require "spec_helper"
+GraphAdapterNode = Struct.new(:id, :children)
 
 RSpec.describe TreeView::GraphAdapter do
-  GraphAdapterNode = Struct.new(:id, :children)
-
   it "provides roots, children, and node_key" do
     child = GraphAdapterNode.new(2, [])
     root = GraphAdapterNode.new(1, [child])

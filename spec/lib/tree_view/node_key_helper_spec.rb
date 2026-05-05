@@ -1,8 +1,7 @@
 require "spec_helper"
+NodeKeyHelperSpecItem = Struct.new(:id, :parent_id, keyword_init: true)
 
 RSpec.describe "TreeView node key helper" do
-  NodeKeyHelperSpecItem = Struct.new(:id, :parent_id, keyword_init: true)
-
   it "builds a namespaced node key" do
     expect(TreeView.node_key("Document", 123)).to eq("Document:123")
   end
