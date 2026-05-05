@@ -1,0 +1,16 @@
+{
+  "name": "tree_view",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2"
+  },
+  "devDependencies": {
+    "@vitest/ui": "^4.0.7",
+    "jsdom": "^27.1.0",
+    "vitest": "^4.0.7"
+  }
+}
