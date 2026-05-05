@@ -89,7 +89,7 @@ RSpec.describe "TreeView::Tree parent path helpers" do
     tree = build_tree([root, orphan])
 
     expect(tree.orphan_report).to eq([
-      { item: orphan, key: 2, missing_parent_id: 999 }
+      {item: orphan, key: 2, missing_parent_id: 999}
     ])
   end
 

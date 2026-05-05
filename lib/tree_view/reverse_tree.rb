@@ -44,7 +44,7 @@ module TreeView
           memo[node_key] = children.sum { |child| 1 + count_descendants.call(child) }
           visiting.delete(node_key)
           memo[node_key]
-        rescue StandardError
+        rescue
           visiting.delete(node_key)
           raise
         end

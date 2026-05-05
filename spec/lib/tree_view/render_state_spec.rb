@@ -258,7 +258,7 @@ RSpec.describe TreeView::RenderState do
   end
 
   it "stores selection options" do
-    payload_builder = ->(item) { { id: item.id } }
+    payload_builder = ->(item) { {id: item.id} }
 
     state = described_class.new(
       tree: tree,
@@ -311,7 +311,7 @@ RSpec.describe TreeView::RenderState do
   end
 
   it "stores grouped selection options" do
-    payload_builder = ->(item) { { id: item.id } }
+    payload_builder = ->(item) { {id: item.id} }
 
     state = described_class.new(
       tree: tree,
@@ -343,7 +343,7 @@ RSpec.describe TreeView::RenderState do
         root_items: [],
         row_partial: "items/tree_columns",
         ui_config: ui_config,
-        selection: { enabled: true, cascade: "true" }
+        selection: {enabled: true, cascade: "true"}
       )
     end.to raise_error(ArgumentError, /selection_cascade must be true or false/)
   end
@@ -355,7 +355,7 @@ RSpec.describe TreeView::RenderState do
         root_items: [],
         row_partial: "items/tree_columns",
         ui_config: ui_config,
-        selection: { enabled: true, max_count: 0 }
+        selection: {enabled: true, max_count: 0}
       )
     end.to raise_error(ArgumentError, /selection_max_count must be a positive Integer/)
   end
@@ -379,7 +379,7 @@ RSpec.describe TreeView::RenderState do
         root_items: [],
         row_partial: "items/tree_columns",
         ui_config: ui_config,
-        selection: { enabled: true, unknown: true }
+        selection: {enabled: true, unknown: true}
       )
     end.to raise_error(ArgumentError, /selection contains unknown keys: unknown/)
   end
@@ -403,7 +403,7 @@ RSpec.describe TreeView::RenderState do
         root_items: [],
         row_partial: "items/tree_columns",
         ui_config: ui_config,
-        selection: { enabled: true, payload_builder: :invalid }
+        selection: {enabled: true, payload_builder: :invalid}
       )
     end.to raise_error(ArgumentError, /selection_payload_builder/)
   end
@@ -415,7 +415,7 @@ RSpec.describe TreeView::RenderState do
         root_items: [],
         row_partial: "items/tree_columns",
         ui_config: ui_config,
-        selection: { enabled: true, disabled_builder: :invalid }
+        selection: {enabled: true, disabled_builder: :invalid}
       )
     end.to raise_error(ArgumentError, /selection_disabled_builder/)
   end
@@ -467,7 +467,7 @@ RSpec.describe TreeView::RenderState do
         root_items: [],
         row_partial: "items/tree_columns",
         ui_config: ui_config,
-        render_scope: { max_depth: 2, unknown: true }
+        render_scope: {max_depth: 2, unknown: true}
       )
     end.to raise_error(ArgumentError, /render_scope contains unknown keys: unknown/)
   end
@@ -486,7 +486,7 @@ RSpec.describe TreeView::RenderState do
 
   it "stores row attribute builders when given" do
     row_class_builder = ->(item) { item.name }
-    row_data_builder = ->(item) { { name: item.name } }
+    row_data_builder = ->(item) { {name: item.name} }
 
     state = described_class.new(
       tree: tree,

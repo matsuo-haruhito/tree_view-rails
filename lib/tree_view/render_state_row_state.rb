@@ -20,7 +20,7 @@ module TreeView
         highlighted_keys: @highlighted_keys
       )
 
-      super(**options)
+      super
     end
 
     private

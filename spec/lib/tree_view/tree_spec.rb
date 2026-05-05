@@ -113,7 +113,7 @@ RSpec.describe TreeView::Tree do
       tree = described_class.new(
         records: [root],
         parent_id_method: :parent_item_id,
-        sorter: ->(_items, _tree) { nil }
+        sorter: ->(_items, _tree) {}
       )
 
       expect do

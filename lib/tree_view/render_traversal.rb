@@ -52,11 +52,11 @@ module TreeView
           if expanded
             children = tree.children_for(node)
             distances[node_key] = if children.empty?
-                                    0
-                                  else
-                                    child_distances = children.map { |child| distances[tree.node_key_for(child)] }.compact
-                                    child_distances.empty? ? nil : child_distances.min + 1
-                                  end
+              0
+            else
+              child_distances = children.map { |child| distances[tree.node_key_for(child)] }.compact
+              child_distances.empty? ? nil : child_distances.min + 1
+            end
             next
           end
 

@@ -9,8 +9,8 @@ module TreeView
       @children_resolver = children_resolver
       @node_key_resolver = node_key_resolver
 
-      raise ArgumentError, 'roots must be provided' if @roots.empty?
-      raise ArgumentError, 'children_resolver must respond to call' unless @children_resolver.respond_to?(:call)
+      raise ArgumentError, "roots must be provided" if @roots.empty?
+      raise ArgumentError, "children_resolver must respond to call" unless @children_resolver.respond_to?(:call)
     end
 
     def children_for(node)

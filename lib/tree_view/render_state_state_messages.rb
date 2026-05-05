@@ -12,7 +12,7 @@ module TreeView
       @hidden_message_builder = resolve_state_message_option(options.delete(:hidden_message_builder), state_messages[:hidden_builder])
       validate_state_message_builder!(@hidden_message_builder)
 
-      super(**options)
+      super
     end
 
     private
@@ -24,7 +24,7 @@ module TreeView
       options = value.to_h.transform_keys(&:to_sym)
       invalid_keys = options.keys - VALID_STATE_MESSAGE_KEYS
       if invalid_keys.any?
-        raise ArgumentError, "state_messages contains unknown keys: #{invalid_keys.join(', ')}"
+        raise ArgumentError, "state_messages contains unknown keys: #{invalid_keys.join(", ")}"
       end
 
       options

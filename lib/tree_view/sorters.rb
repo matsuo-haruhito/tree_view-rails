@@ -20,7 +20,7 @@ module TreeView
 
       lambda do |items, tree|
         sorted = items.sort_by { |item| tree.descendant_counts[tree.node_key_for(item)].to_i }
-        direction == :desc ? sorted.reverse : sorted
+        (direction == :desc) ? sorted.reverse : sorted
       end
     end
 

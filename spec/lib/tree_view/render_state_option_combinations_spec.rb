@@ -36,8 +36,8 @@ RSpec.describe "TreeView::RenderState option combinations" do
 
   it "keeps render and toggle scope options independent" do
     state = build_state(
-      render_scope: { max_depth: 2, max_leaf_distance: 1 },
-      toggle_scope: { max_depth_from_root: 3, max_leaf_distance: 4 }
+      render_scope: {max_depth: 2, max_leaf_distance: 1},
+      toggle_scope: {max_depth_from_root: 3, max_leaf_distance: 4}
     )
 
     expect(state.max_render_depth).to eq(2)

@@ -77,11 +77,11 @@ module TreeView
 
           children = tree.children_for(node)
           distances[node_key] = if children.empty?
-                                  0
-                                else
-                                  child_distances = children.map { |child| walker.call(child) }.compact
-                                  child_distances.empty? ? nil : child_distances.min + 1
-                                end
+            0
+          else
+            child_distances = children.map { |child| walker.call(child) }.compact
+            child_distances.empty? ? nil : child_distances.min + 1
+          end
         end
 
         tree.root_items.each { |root| walker.call(root) }

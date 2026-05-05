@@ -6,8 +6,8 @@ module TreeView
     ROW_READONLY_CLASSES = ["tree-view-row--readonly"].freeze
 
     attr_reader :row_disabled_builder,
-                :row_readonly_builder,
-                :row_disabled_reason_builder
+      :row_readonly_builder,
+      :row_disabled_reason_builder
 
     def initialize(**options)
       original_row_class_builder = options[:row_class_builder]
@@ -23,7 +23,7 @@ module TreeView
       options[:row_class_builder] = build_row_status_class_builder(original_row_class_builder)
       options[:row_data_builder] = build_row_status_data_builder(original_row_data_builder)
 
-      super(**options)
+      super
     end
 
     private

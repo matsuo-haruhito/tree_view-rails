@@ -8,7 +8,7 @@ module TreeView
       @persisted_state = PersistedState.from(options.delete(:persisted_state))
       options[:expanded_keys] = persisted_state.expanded_keys if options[:expanded_keys].nil? && persisted_state
 
-      super(**options)
+      super
     end
 
     def tree_instance_key

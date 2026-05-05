@@ -33,7 +33,7 @@ RSpec.describe "TreeView::RenderState persisted state" do
   end
 
   it "accepts hash-like persisted state" do
-    state = build_state(persisted_state: { tree_instance_key: "documents", expanded_keys: [3] })
+    state = build_state(persisted_state: {tree_instance_key: "documents", expanded_keys: [3]})
 
     expect(state.tree_instance_key).to eq("documents")
     expect(state.expanded_keys).to eq([3])

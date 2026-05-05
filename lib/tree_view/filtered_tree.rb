@@ -53,7 +53,7 @@ module TreeView
           memo[node_key] = children.sum { |child| 1 + count_descendants.call(child) }
           visiting.delete(node_key)
           memo[node_key]
-        rescue StandardError
+        rescue
           visiting.delete(node_key)
           raise
         end
@@ -75,7 +75,7 @@ module TreeView
     end
 
     def raise_invalid_mode!
-      raise ArgumentError, "filter mode must be one of: #{VALID_MODES.join(', ')}"
+      raise ArgumentError, "filter mode must be one of: #{VALID_MODES.join(", ")}"
     end
 
     def build_included_by_node_key

@@ -7,7 +7,7 @@ module TreeViewStateHelper
     controllers << "tree-view-transfer" if render_state.respond_to?(:row_event_payload_builder) && render_state.row_event_payload_builder
     controllers << "tree-view-remote-state" if render_state.respond_to?(:lazy_loading_enabled?) && render_state.lazy_loading_enabled?
 
-    data = { controller: controllers.join(" ") }
+    data = {controller: controllers.join(" ")}
     if render_state.respond_to?(:tree_instance_key)
       tree_instance_key = render_state.tree_instance_key
       if !tree_instance_key.nil? && tree_instance_key.to_s != ""

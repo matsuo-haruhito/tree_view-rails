@@ -21,13 +21,13 @@ RSpec.describe "TreeView badge helper" do
   it "builds badge data from a hash-like value" do
     badge = helper.tree_node_badge(
       node,
-      ->(_item) { { text: "new", class: "is-new", title: "New" } }
+      ->(_item) { {text: "new", class: "is-new", title: "New"} }
     )
 
     expect(badge).to eq(text: "new", class: ["is-new"], title: "New", data: {})
   end
 
   it "returns nil when badge text is blank" do
-    expect(helper.tree_node_badge(node, ->(_item) { { text: "" } })).to be_nil
+    expect(helper.tree_node_badge(node, ->(_item) { {text: ""} })).to be_nil
   end
 end

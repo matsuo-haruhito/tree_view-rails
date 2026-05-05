@@ -42,9 +42,9 @@ RSpec.describe TreeView::UiConfigBuilder do
 
     expect do
       described_class.new(context: context, node_prefix: "entry").build(
-        hide_descendants_path_builder: ->(_candidate, _depth, _scope) { nil },
-        show_descendants_path_builder: ->(_candidate, _depth, _scope) { nil },
-        toggle_all_path_builder: ->(_state) { nil },
+        hide_descendants_path_builder: ->(_candidate, _depth, _scope) {},
+        show_descendants_path_builder: ->(_candidate, _depth, _scope) {},
+        toggle_all_path_builder: ->(_state) {},
         scope_format: :invalid
       )
     end.to raise_error(ArgumentError, /scope_format/)

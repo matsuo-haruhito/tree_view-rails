@@ -37,7 +37,7 @@ RSpec.describe "TreeView icon builder integration" do
       root_items: tree.root_items,
       row_partial: "items/tree_columns",
       ui_config: tree_ui,
-      icon_builder: ->(_item) { { text: "folder", title: "Folder", class: "node-icon" } }
+      icon_builder: ->(_item) { {text: "folder", title: "Folder", class: "node-icon"} }
     )
     view = build_view(tree_ui: nil)
 

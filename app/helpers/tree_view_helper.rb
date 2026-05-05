@@ -12,14 +12,14 @@ module TreeViewHelper
     end
 
     if render_context.root_items.empty? && render_state.empty_message.present?
-      return render(partial: "tree_view/tree_empty_row", locals: { empty_message: render_state.empty_message })
+      return render(partial: "tree_view/tree_empty_row", locals: {empty_message: render_state.empty_message})
     end
 
     render(
       partial: "tree_view/tree_row",
       collection: render_context.root_items,
       as: :item,
-      locals: { render_context: render_context }
+      locals: {render_context: render_context}
     )
   ensure
     clear_tree_view_render_caches!
@@ -150,7 +150,7 @@ module TreeViewHelper
         data: badge[:data].respond_to?(:to_h) ? badge[:data].to_h : {}
       }
     else
-      { text: value, class: [], title: nil, data: {} }
+      {text: value, class: [], title: nil, data: {}}
     end
   rescue NoMethodError
     raise ArgumentError, "badge_builder must return text or a Hash-like object for #{tree_diagnostic_node_label(item, tree)}"
@@ -249,22 +249,22 @@ module TreeViewHelper
   end
 
   def tree_toggle_label(depth)
-    depth.to_i >= 10 ? depth.to_i.to_s : "Lv#{depth}"
+    (depth.to_i >= 10) ? depth.to_i.to_s : "Lv#{depth}"
   end
 
   def tree_branch_info(item, tree = @tree)
     tree_render_traversal(tree).branch_info_for(item)
   end
 
-  def tree_hide_descendants_path(item, display_depth, scope: 'all', ui: @tree_ui)
+  def tree_hide_descendants_path(item, display_depth, scope: "all", ui: @tree_ui)
     resolved_ui(ui).hide_descendants_path(item, display_depth, scope: scope)
   end
 
-  def tree_show_descendants_path(item, toggle_depth, scope: 'all', ui: @tree_ui)
+  def tree_show_descendants_path(item, toggle_depth, scope: "all", ui: @tree_ui)
     resolved_ui(ui).show_descendants_path(item, toggle_depth, scope: scope)
   end
 
-  def tree_load_children_path(item, depth, scope: 'all', ui: @tree_ui)
+  def tree_load_children_path(item, depth, scope: "all", ui: @tree_ui)
     resolved_ui(ui).load_children_path(item, depth, scope: scope)
   end
 
@@ -296,21 +296,21 @@ module TreeViewHelper
 
   def tree_view_window_rows(render_context, window_options)
     window = if window_options.is_a?(TreeView::RenderWindow)
-               window_options
-             elsif window_options.respond_to?(:to_h)
-               options = window_options.to_h.transform_keys(&:to_sym)
-               tree_view_window(render_context.render_state, offset: options.fetch(:offset), limit: options.fetch(:limit))
-             else
-               raise ArgumentError, "window must be a TreeView::RenderWindow or Hash-like object"
-             end
+      window_options
+    elsif window_options.respond_to?(:to_h)
+      options = window_options.to_h.transform_keys(&:to_sym)
+      tree_view_window(render_context.render_state, offset: options.fetch(:offset), limit: options.fetch(:limit))
+    else
+      raise ArgumentError, "window must be a TreeView::RenderWindow or Hash-like object"
+    end
 
-    return render(partial: "tree_view/tree_empty_row", locals: { empty_message: render_context.render_state.empty_message }) if window.empty? && render_context.render_state.empty_message.present?
+    return render(partial: "tree_view/tree_empty_row", locals: {empty_message: render_context.render_state.empty_message}) if window.empty? && render_context.render_state.empty_message.present?
 
     render(
       partial: "tree_view/tree_window_row",
       collection: window.rows,
       as: :visible_row,
-      locals: { render_context: render_context }
+      locals: {render_context: render_context}
     )
   end
 

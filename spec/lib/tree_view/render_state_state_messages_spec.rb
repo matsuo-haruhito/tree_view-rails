@@ -59,7 +59,7 @@ RSpec.describe "TreeView::RenderState state messages" do
 
   it "rejects unknown grouped state message keys" do
     expect do
-      build_state(state_messages: { empty: "No rows", unknown: true })
+      build_state(state_messages: {empty: "No rows", unknown: true})
     end.to raise_error(ArgumentError, /state_messages contains unknown keys: unknown/)
   end
 
