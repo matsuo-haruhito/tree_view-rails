@@ -1,0 +1,11 @@
+source "https://rubygems.org"
+
+gemspec path: ".."
+
+gem "railties", "~> 8.0.4"
+
+group :development, :test do
+  gem "rubocop", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-rails", require: false
+end
