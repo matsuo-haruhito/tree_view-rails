@@ -1,30 +1,29 @@
 require "spec_helper"
-DummyRecord = Struct.new(:owner, :tree_instance_key, :expanded_keys) do
 
+DummyRecord = Struct.new(:owner, :tree_instance_key, :expanded_keys) do
+  def save!
+    true
+  end
+end
+
+class DummyModel
+  class << self
+    attr_accessor :record
+
+    def find_by(owner:, tree_instance_key:)
+      return nil unless record
+      return record if record.owner == owner && record.tree_instance_key == tree_instance_key
+
+      nil
+    end
+
+    def find_or_initialize_by(owner:, tree_instance_key:)
+      self.record ||= DummyRecord.new(owner, tree_instance_key, [])
+    end
+  end
+end
 
 RSpec.describe TreeView::StateStore do
-    def save!
-      true
-    end
-  end
-
-  class DummyModel
-    class << self
-      attr_accessor :record
-
-      def find_by(owner:, tree_instance_key:)
-        return nil unless record
-        return record if record.owner == owner && record.tree_instance_key == tree_instance_key
-
-        nil
-      end
-
-      def find_or_initialize_by(owner:, tree_instance_key:)
-        self.record ||= DummyRecord.new(owner, tree_instance_key, [])
-      end
-    end
-  end
-
   before do
     DummyModel.record = nil
   end
