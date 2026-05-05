@@ -1,6 +1,15 @@
 # Documentation i18n audit
 
-This document tracks the documentation language status before the `0.1.0` release.
+This document tracks documentation language status before the `0.1.0` release.
+
+## Current structure
+
+Documentation is moving to language-specific directories.
+
+- `docs/ja/`: Japanese documentation tree
+- `docs/en/`: English documentation tree
+- `docs/README.md`: language selector
+- root-level docs such as `docs/usage.md` and `docs/api.md`: kept temporarily for compatibility during migration
 
 ## Goal
 
@@ -8,82 +17,84 @@ The documentation should be usable by both Japanese and English readers.
 
 For the initial release, the priority is:
 
-1. Make the documentation inventory explicit.
-2. Mark which documents are already bilingual, Japanese-first, English-first, or not yet translated.
-3. Keep canonical behavior/API descriptions in sync while translations are added.
-4. Prioritize user-facing installation, usage, and API documents before maintainer-only process docs.
+1. Keep the language-specific structure explicit.
+2. Keep Japanese and English entry points easy to find.
+3. Move or rewrite user-facing docs into both `docs/ja/` and `docs/en/` gradually.
+4. Keep canonical behavior/API descriptions in sync while translations are added.
+5. Prefer translating user-facing documents before maintainer-only documents.
 
 ## Language status labels
 
 | Status | Meaning |
 |---|---|
-| Bilingual | Japanese and English content are both present enough for practical use. |
-| Japanese-first | Japanese is the canonical or more complete version; English should be added or expanded. |
-| English-first | English is the canonical or more complete version; Japanese should be added or expanded. |
+| Split | Separate Japanese and English files exist under `docs/ja/` and `docs/en/`. |
+| Japanese canonical | Japanese is currently the more complete canonical source. |
+| English canonical | English is currently the more complete canonical source. |
 | Bilingual summary | Both languages have a usable summary, but one language may still contain the complete canonical detail. |
+| Pending split | Existing root-level doc still needs language-specific copies. |
 | Technical asset | Not a prose document that needs translation, such as HTML/CSS mock assets. |
 
 ## Translation policy
 
+- Prefer separate files under `docs/ja/` and `docs/en/` for prose docs.
 - Keep code examples identical across languages unless a translated comment is more helpful.
-- Prefer one file per topic for now, with Japanese and English sections in the same document, instead of creating separate `ja/` and `en/` trees.
-- When behavior changes, update the canonical section first, then update the translated section in the same PR when practical.
-- If a PR cannot update both languages, add a short note to this audit or the relevant document so the gap remains visible.
-- Prefer translating user-facing documents before maintainer-only documents.
+- When behavior changes, update the canonical language first, then update the translation in the same PR when practical.
+- If a PR cannot update both languages, update this audit so the gap remains visible.
+- Root-level docs may remain temporarily for compatibility while the migration is in progress.
+- New user-facing docs should be created in both language directories when practical.
 
-## Priority order
-
-### P0: release-blocking for bilingual readiness
+## P0: release-blocking language entry points
 
 These should be understandable in both Japanese and English before tagging `v0.1.0`.
 
-| Document | Current status | Needed work |
-|---|---|---|
-| `README.md` | Bilingual | Keep Japanese and English entry content in sync. |
-| `docs/README.md` | Bilingual | Keep Japanese and English documentation index and reading order in sync. |
-| `docs/installation.md` | Bilingual | Keep installation requirements, CSS/importmap guidance, CI notes, and packaged file lists in sync. |
-| `docs/minimal-usage.md` | Bilingual | Keep the minimal controller/view/row partial example in sync. |
-| `docs/usage.md` | Bilingual summary | Expand detailed English coverage when usage sections change. |
-| `docs/api-overview.md` | Bilingual | Keep the high-level API overview in sync with `docs/api.md`. |
-| `docs/api.md` | Japanese-first | Detailed API reference remains Japanese-first; use `docs/api-overview.md` as the bilingual entry point. |
-| `docs/public-api.md` | Bilingual summary | Expand Japanese details when the public API surface changes. |
-| `docs/release.md` | Bilingual summary | Expand Japanese details when the release process changes. |
+| Topic | Japanese | English | Status | Needed work |
+|---|---|---|---|---|
+| Top-level README | `README.md` | `README.md` | Bilingual summary | Keep short entry content in sync. |
+| Docs selector | `docs/README.md` | `docs/README.md` | Split selector | Keep language selector current. |
+| Docs index | `docs/ja/README.md` | `docs/en/README.md` | Split | Keep reading order and links in sync. |
+| Installation | `docs/ja/installation.md` | `docs/en/installation.md` | Split | Keep requirements, CSS/importmap guidance, CI notes, and packaged file lists in sync. |
+| Minimal usage | `docs/ja/minimal-usage.md` | `docs/en/minimal-usage.md` | Split | Keep controller/view/row partial examples in sync. |
+| API overview | `docs/ja/api-overview.md` | `docs/en/api-overview.md` | Split | Keep high-level API overview in sync with `docs/api.md`. |
+| Usage guide | `docs/usage.md` | `docs/en/usage.md` | Pending split | Move Japanese detail to `docs/ja/usage.md` and English guide to `docs/en/usage.md`. |
+| API reference | `docs/api.md` | `docs/en/api.md` | Pending split | Move detailed API reference into language-specific files when practical. |
+| Public API policy | `docs/public-api.md` | `docs/en/public-api.md` | Bilingual summary | Split later if the policy grows. |
+| Release checklist | `docs/release.md` | `docs/en/release.md` | Bilingual summary | Split later if the release process grows. |
 
-### P1: important feature docs
+## P1: important feature docs
 
-These should be bilingual soon after P0.
+These should be split after the P0 entry points.
 
-| Document | Current status | Needed work |
-|---|---|---|
-| `docs/selection.md` | Needs audit | Ensure selection visibility, payload, disabled state, cascade, indeterminate, and max count are bilingual. |
-| `docs/lazy-loading.md` | Needs audit | Ensure lazy loading hooks, remote-state events, and children pagination guidance are bilingual. |
-| `docs/windowed-rendering.md` | Needs audit | Ensure VisibleRows/RenderWindow/windowed rendering guidance is bilingual. |
-| `docs/persisted-state.md` | Needs audit | Ensure generator output and owner-side usage are bilingual. |
-| `docs/breadcrumb.md` | Needs audit | Ensure helper usage and builder options are bilingual. |
-| `docs/drag-and-drop.md` | Needs audit | Ensure event payload and host app responsibilities are bilingual. |
-| `docs/children-pagination.md` | Needs audit | Ensure server-side pagination boundaries are bilingual. |
+| Topic | Current doc | Status | Needed work |
+|---|---|---|---|
+| Selection | `docs/selection.md` | Pending split | Create `docs/ja/selection.md` and `docs/en/selection.md`. |
+| Lazy loading | `docs/lazy-loading.md` | Pending split | Create `docs/ja/lazy-loading.md` and `docs/en/lazy-loading.md`. |
+| Windowed rendering | `docs/windowed-rendering.md` | Pending split | Create `docs/ja/windowed-rendering.md` and `docs/en/windowed-rendering.md`. |
+| Persisted state | `docs/persisted-state.md` | Pending split | Create language-specific files. |
+| Breadcrumb | `docs/breadcrumb.md` | Pending split | Create language-specific files. |
+| Drag and drop | `docs/drag-and-drop.md` | Pending split | Create language-specific files. |
+| Children pagination | `docs/children-pagination.md` | Pending split | Create language-specific files. |
 
-### P2: supporting and maintainer docs
+## P2: supporting and maintainer docs
 
 These can follow after user-facing coverage is in place.
 
-| Document | Current status | Needed work |
-|---|---|---|
-| `docs/cookbook.md` | Needs audit | Ensure examples and guidance are bilingual. |
-| `docs/glossary.md` | Needs audit | Ensure terms map clearly between Japanese and English. |
-| `docs/node-keys.md` | Needs audit | Ensure node key collision guidance is bilingual. |
-| `docs/tree-diagnostics.md` | Needs audit | Ensure diagnostics APIs and use cases are bilingual. |
-| `docs/depth-labels.md` | Needs audit | Ensure builder usage is bilingual. |
-| `docs/row-status.md` | Needs audit | Ensure disabled/readonly status guidance is bilingual. |
-| `docs/filtered-trees.md` | Needs audit | Ensure filter modes and use cases are bilingual. |
-| `docs/rendering-boundaries.md` | Needs audit | Ensure Rails helper/ERB/host app boundary guidance is bilingual. |
-| `docs/render-scale.md` | Needs audit | Ensure large tree performance guidance is bilingual. |
-| `docs/host-app-extension-points.md` | Needs audit | Ensure extension points are bilingual. |
-| `docs/design-policy.md` | Needs audit | Ensure responsibility boundaries are bilingual. |
-| `docs/development.md` | Needs audit | Ensure current CI/development workflow is bilingual. |
-| `docs/code-quality.md` | Needs audit | Ensure lint/test quality expectations are bilingual. |
+| Topic | Current doc | Status | Needed work |
+|---|---|---|---|
+| Cookbook | `docs/cookbook.md` | Pending split | Create language-specific files. |
+| Glossary | `docs/glossary.md` | Pending split | Create language-specific files. |
+| Node keys | `docs/node-keys.md` | Pending split | Create language-specific files. |
+| Tree diagnostics | `docs/tree-diagnostics.md` | Pending split | Create language-specific files. |
+| Depth labels | `docs/depth-labels.md` | Pending split | Create language-specific files. |
+| Row status | `docs/row-status.md` | Pending split | Create language-specific files. |
+| Filtered trees | `docs/filtered-trees.md` | Pending split | Create language-specific files. |
+| Rendering boundaries | `docs/rendering-boundaries.md` | Pending split | Create language-specific files. |
+| Render scale | `docs/render-scale.md` | Pending split | Create language-specific files. |
+| Host app extension points | `docs/host-app-extension-points.md` | Pending split | Create language-specific files. |
+| Design policy | `docs/design-policy.md` | Pending split | Create language-specific files. |
+| Development | `docs/development.md` | Pending split | Create language-specific files. |
+| Code quality | `docs/code-quality.md` | Pending split | Create language-specific files. |
 
-### Technical assets
+## Technical assets
 
 These do not need prose translation unless comments or visible labels become release-facing docs.
 
@@ -94,9 +105,10 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Work through P1 feature docs in small topic-based PRs.
-2. Expand full English details in `docs/api.md` if the detailed API reference needs to be fully bilingual before a later release.
+1. Split `usage.md` into `docs/ja/usage.md` and `docs/en/usage.md`.
+2. Split `api.md` into language-specific API reference files when practical.
+3. Work through P1 feature docs in topic-based PRs.
 
 ## Release decision
 
-Do not block all translation work on a single large PR. For `v0.1.0`, the release should at least have bilingual entry points and a visible i18n backlog so readers know which documents are canonical and which translations are pending.
+Do not block all translation work on a single large PR. For `v0.1.0`, the release should at least have language-specific entry points and a visible i18n backlog so readers know which documents are canonical and which translations are pending.
