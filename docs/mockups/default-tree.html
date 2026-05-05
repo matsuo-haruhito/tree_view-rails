@@ -1,23 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>Default TreeView Mock</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Default TreeView rendering mock</title>
 <link rel="stylesheet" href="default-tree.css">
 </head>
 <body>
-  <ul class="tree-root">
-    <li class="tree-node root expanded">
-      Root Node
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Default TreeView rendering mock</h1>
+      <p>
+        Rails を起動せずに、gem 標準 partial が出力する代表的な table / row / cell / data 属性の形を確認するための静的HTMLです。
+        実アプリ上の playground は demo repo、本体 repo のこの mock は DOM 構造と CSS 適用状態の確認に使います。
+      </p>
+    </header>
+
+    <section class="mock-section" aria-labelledby="static-tree-heading">
+      <h2 id="static-tree-heading">Standard table structure</h2>
+      <table class="tree-view-table" data-controller="tree-view-state" data-tree-view-state-keyboard-value="true">
+        <thead>
+          <tr>
+            <th scope="col">select</th>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">owner</th>
+            <th scope="col">status</th>
+            <th scope="col">actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="project_1" class="tree-row is-expanded" data-tree-node-key="project:1" data-tree-parent-key="" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true" aria-selected="false">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" id="project_1_selection" name="selected_nodes[]" type="checkbox" value='{"key":"project:1","id":1,"type":"Project"}' data-tree-selection-payload='{"key":"project:1","id":1,"type":"Project"}'>
+            </td>
+            <td class="btn-cell tree-toggle-cell" id="project_1_button">
+              <span class="tree-toggle" aria-label="Project root expanded">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                  <span class="tree-toggle__level">root</span>
+                </span>
+              </span>
+              <span class="tree-node-marker" title="Folder">folder</span>
+              <span class="tree-depth-label">L0</span>
+              <span class="tree-node-badge" title="Open child count">3</span>
+            </td>
+            <td>Product Platform</td>
+            <td>Team A</td>
+            <td><span class="mock-status mock-status--active">active</span></td>
+            <td class="tree-row-actions"><button type="button">Edit</button></td>
+          </tr>
+
+          <tr id="project_2" class="tree-row is-expanded is-selected" data-tree-node-key="project:2" data-tree-parent-key="project:1" data-tree-depth="1" data-tree-expanded="true" aria-level="2" aria-expanded="true" aria-selected="true" aria-current="page">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" id="project_2_selection" name="selected_nodes[]" type="checkbox" checked value='{"key":"project:2","id":2,"type":"Project"}' data-tree-selection-payload='{"key":"project:2","id":2,"type":"Project"}'>
+            </td>
+            <td class="btn-cell tree-toggle-cell" id="project_2_button">
+              <span class="tree-toggle" aria-label="Child row expanded">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                  <span class="tree-toggle__level">child</span>
+                </span>
+              </span>
+              <span class="tree-node-marker" title="Folder">folder</span>
+              <span class="tree-depth-label">L1</span>
+              <span class="tree-node-badge tree-node-badge--info" title="Selected node">selected</span>
+            </td>
+            <td>Admin UI</td>
+            <td>Team B</td>
+            <td><span class="mock-status mock-status--active">active</span></td>
+            <td class="tree-row-actions"><button type="button">Open</button></td>
+          </tr>
+
+          <tr id="project_3" class="tree-row is-leaf" data-tree-node-key="project:3" data-tree-parent-key="project:2" data-tree-depth="2" data-tree-expanded="false" aria-level="3" aria-selected="false">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" id="project_3_selection" name="selected_nodes[]" type="checkbox" value='{"key":"project:3","id":3,"type":"Project"}' data-tree-selection-payload='{"key":"project:3","id":3,"type":"Project"}'>
+            </td>
+            <td class="btn-cell tree-toggle-cell" id="project_3_button">
+              <span class="tree-toggle" aria-label="Leaf row">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-last"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">leaf</span>
+                </span>
+              </span>
+              <span class="tree-node-marker" title="File">file</span>
+              <span class="tree-depth-label">L2</span>
+            </td>
+            <td>Settings page</td>
+            <td>Team B</td>
+            <td><span class="mock-status">ready</span></td>
+            <td class="tree-row-actions"><button type="button">Open</button></td>
+          </tr>
+
+          <tr id="project_4" class="tree-row is-collapsed" data-tree-node-key="project:4" data-tree-parent-key="project:1" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false" aria-selected="false">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" id="project_4_selection" name="selected_nodes[]" type="checkbox" disabled title="Archived nodes cannot be selected" value='{"key":"project:4","id":4,"type":"Project"}' data-tree-selection-disabled-reason="Archived nodes cannot be selected" data-tree-selection-payload='{"key":"project:4","id":4,"type":"Project"}'>
+            </td>
+            <td class="btn-cell tree-toggle-cell" id="project_4_button">
+              <span class="tree-toggle" aria-label="Collapsed row with hidden descendants">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-last"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a>
+                  <span class="tree-toggle__level">child</span>
+                  <span class="tree-toggle__hidden-count" title="Hidden descendants">12</span>
+                </span>
+              </span>
+              <span class="tree-node-marker" title="Archive">archive</span>
+              <span class="tree-depth-label">L1</span>
+              <span class="tree-node-badge tree-node-badge--warning" title="Archived subtree">archived</span>
+            </td>
+            <td>Legacy reports</td>
+            <td>Team C</td>
+            <td><span class="mock-status mock-status--archived">archived</span></td>
+            <td class="tree-row-actions"><button type="button" disabled>Open</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">What this mock covers</h2>
       <ul>
-        <li class="tree-node child">
-          Child Node 1
-        </li>
-        <li class="tree-node child selected">
-          Child Node 2 (selected)
-        </li>
+        <li>root / child / leaf の代表行</li>
+        <li>expanded / collapsed / hidden count 表示</li>
+        <li>selected checkbox と disabled checkbox</li>
+        <li>badge / marker / depth label の配置</li>
+        <li>row data 属性、tree state data 属性、row actions partial の列位置</li>
       </ul>
-    </li>
-  </ul>
+    </section>
+  </main>
 </body>
 </html>
