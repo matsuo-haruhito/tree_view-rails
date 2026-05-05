@@ -2,6 +2,41 @@
 
 This document describes which APIs host applications can rely on directly, which parts are intentionally internal, and how compatibility is handled.
 
+## 日本語サマリー
+
+このドキュメントは、host Rails app が直接依存してよいAPIと、gem内部の実装詳細を区別するための方針です。
+
+### 安定した公開入口
+
+host app が直接使ってよい主な入口は以下です。
+
+- `TreeView::Tree`
+- `TreeView::RenderState`
+- `TreeView::UiConfigBuilder`
+- `TreeView::VisibleRows`
+- `TreeView::RenderWindow`
+- `TreeView::PersistedState`
+- `TreeView::StateStore`
+- `tree_view_rows(render_state)`
+- `tree_view_rows(render_state, window: { offset:, limit: })`
+- `tree_view_window(render_state, offset:, limit:)`
+- `tree_view_breadcrumb(tree, item, ...)`
+- `tree_view/index.js` の `registerTreeViewControllers(application)` と exported controller classes
+
+### host app の拡張ポイント
+
+推奨される拡張ポイントは、documented option、builder、`row_partial`、path builder、selection payload builder、lazy loading hook などです。
+
+`TreeViewHelper::Rendering` や `TreeViewHelper::Selection` などの内部moduleは、整理のために分割された実装詳細です。host app はこれらを直接includeせず、`TreeViewHelper` と documented helper method に依存してください。
+
+### 互換性方針
+
+documented class、helper、option、JavaScript event、CSS/data hook の削除・rename・意味変更はbreaking changeとして扱います。
+
+一方、documented behaviorを変えない内部module分割、controller file layout変更、private method変更はbreaking changeではありません。
+
+breaking change が必要な場合は、`CHANGELOG.md` と関連docsにmigration noteを書き、可能な限り互換shimを用意します。
+
 ## Stable public entry points
 
 Host applications may use these entry points directly:
