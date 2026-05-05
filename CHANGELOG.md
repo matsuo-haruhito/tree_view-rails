@@ -34,6 +34,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added a documentation i18n audit covering language status, translation priority, and release readiness.
 - Added English documentation index content to `docs/README.md`.
 - Added Japanese summaries to `docs/public-api.md` and `docs/release.md`.
+- Added bilingual coverage to `docs/installation.md` and `docs/minimal-usage.md`.
 
 ### Tests
 
