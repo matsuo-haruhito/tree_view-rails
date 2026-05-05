@@ -1,14 +1,13 @@
 require "spec_helper"
 require "action_view"
+
 BreadcrumbNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
 
 RSpec.describe TreeViewBreadcrumbHelper do
-  let(:helper_host_class) do
-    Class.new do
-      include ActionView::Helpers::TagHelper
-      include ActionView::Helpers::OutputSafetyHelper
-      include TreeViewBreadcrumbHelper
-    end
+  def build_helper
+    view = ActionView::Base.empty
+    view.extend(TreeViewBreadcrumbHelper)
+    view
   end
 
   def build_tree(records)
@@ -20,7 +19,7 @@ RSpec.describe TreeViewBreadcrumbHelper do
     child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
     grandchild = BreadcrumbNode.new(id: 3, parent_item_id: 2, name: "Grandchild")
     tree = build_tree([root, child, grandchild])
-    helper = helper_host_class.new
+    helper = build_helper
 
     rendered = helper.tree_view_breadcrumb(
       tree,
@@ -41,7 +40,7 @@ RSpec.describe TreeViewBreadcrumbHelper do
     root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
     child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
     tree = build_tree([root, child])
-    helper = helper_host_class.new
+    helper = build_helper
 
     rendered = helper.tree_view_breadcrumb(
       tree,
@@ -58,7 +57,7 @@ RSpec.describe TreeViewBreadcrumbHelper do
     root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
     child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
     tree = build_tree([root, child])
-    helper = helper_host_class.new
+    helper = build_helper
 
     rendered = helper.tree_view_breadcrumb(
       tree,
@@ -87,7 +86,7 @@ RSpec.describe TreeViewBreadcrumbHelper do
   it "rejects invalid builders" do
     node = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
     tree = build_tree([node])
-    helper = helper_host_class.new
+    helper = build_helper
 
     expect do
       helper.tree_view_breadcrumb(tree, node, label_builder: "name")
@@ -101,7 +100,7 @@ RSpec.describe TreeViewBreadcrumbHelper do
   it "uses Tree path errors for unsupported modes" do
     root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
     tree = TreeView::Tree.new(roots: [root], children_resolver: ->(_item) { [] })
-    helper = helper_host_class.new
+    helper = build_helper
 
     expect do
       helper.tree_view_breadcrumb(tree, root, label_builder: ->(item) { item.name })
