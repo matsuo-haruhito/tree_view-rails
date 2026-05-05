@@ -2,6 +2,43 @@
 
 Before publishing a gem version, check the following items.
 
+## 日本語サマリー
+
+このドキュメントは、`tree_view` gemをリリースする前に確認する手順と方針をまとめたものです。
+
+### バージョン管理
+
+`tree_view` は semantic versioning を前提にします。
+
+- patch version: 挙動を変えないbug fixやdocs修正
+- minor version: 後方互換なAPI、option、hook、docs追加
+- major version: 意図的なbreaking change
+
+`1.0.0` 未満でも、breaking change は意図的に扱い、`CHANGELOG.md` と関連docsにmigration noteを書きます。
+
+### release branch / tag 方針
+
+通常のリリースでは、長期運用する `release/*` branch は作らず、`main` のgreenなcommitに `vX.Y.Z` tag を付けます。
+
+release flow:
+
+1. `main` 向けにrelease preparation PRを作る。
+2. `lib/tree_view/version.rb` を更新する。
+3. `CHANGELOG.md` の `Unreleased` を日付付きversion sectionへ移す。
+4. PRを `main` にmergeする。
+5. main-push full CIがgreenであることを確認する。
+6. greenな `main` commit に `vX.Y.Z` tag を付ける。
+7. 必要に応じてGitHub Releaseを作成する。
+8. 必要に応じてgem publishする。
+
+`release/x.y` branch は、複数minor lineの並行保守、長期RC検証、security/compatibility patchなどが必要になった時だけ導入します。
+
+### release前の確認
+
+Pull Request CIは軽量lintのみなので、release判定には使いません。release tagは、merge後の `main` でfull CIが成功したcommitにだけ付けます。
+
+release前には、Ruby spec matrix、Rails version matrix、JavaScript tests、gem package verification、docs/CHANGELOG整合、packaged filesを確認します。
+
 ## Versioning policy
 
 `tree_view` follows semantic versioning.
