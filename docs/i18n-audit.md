@@ -83,9 +83,9 @@ These can follow after user-facing coverage is in place.
 | Glossary | `docs/ja/glossary.md` | `docs/en/glossary.md` | Split | Keep TreeView terms and responsibility language in sync. |
 | Node keys | `docs/ja/node-keys.md` | `docs/en/node-keys.md` | Split | Keep node_key design and collision guidance in sync. |
 | Tree diagnostics | `docs/ja/tree-diagnostics.md` | `docs/en/tree-diagnostics.md` | Split | Keep diagnostics APIs and use cases in sync. |
-| Cookbook | `docs/cookbook.md` | `docs/en/cookbook.md` | Pending split | Create language-specific files. |
-| Depth labels | `docs/depth-labels.md` | `docs/en/depth-labels.md` | Pending split | Create language-specific files. |
-| Row status | `docs/row-status.md` | `docs/en/row-status.md` | Pending split | Create language-specific files. |
+| Cookbook | `docs/ja/cookbook.md` | `docs/en/cookbook.md` | Split | Keep common examples and patterns in sync. |
+| Depth labels | `docs/ja/depth-labels.md` | `docs/en/depth-labels.md` | Split | Keep depth label builder usage in sync. |
+| Row status | `docs/ja/row-status.md` | `docs/en/row-status.md` | Split | Keep disabled/readonly row state guidance in sync. |
 | Filtered trees | `docs/filtered-trees.md` | `docs/en/filtered-trees.md` | Pending split | Create language-specific files. |
 | Rendering boundaries | `docs/rendering-boundaries.md` | `docs/en/rendering-boundaries.md` | Pending split | Create language-specific files. |
 | Render scale | `docs/render-scale.md` | `docs/en/render-scale.md` | Pending split | Create language-specific files. |
@@ -105,7 +105,7 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Split cookbook, depth labels, and row status docs into language-specific files.
+1. Split filtered trees, rendering boundaries, and render scale docs into language-specific files.
 2. Split `api.md` into language-specific API reference files when practical.
 3. Continue P2 supporting docs in topic-based PRs.
 4. Remove or redirect root-level compatibility docs after language-specific coverage is complete.
