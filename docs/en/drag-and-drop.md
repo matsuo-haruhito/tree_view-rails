@@ -58,6 +58,28 @@ row_data_builder: ->(document) {
 }
 ```
 
+## Interactive controls inside draggable rows
+
+Rows that are draggable can still contain host-app controls such as links, buttons, inputs, selects, textareas, and `contenteditable` labels. TreeView ignores drag start events that originate from those native interactive controls so that using the control does not accidentally start a row transfer.
+
+For custom widgets that are not native controls, add a TreeView marker to the widget or an ancestor inside the row.
+
+```erb
+<td>
+  <span data-tree-view-interactive="true">Custom picker</span>
+</td>
+```
+
+Use `data-tree-view-ignore-drag="true"` when only drag start should be ignored and other TreeView behaviors may still apply.
+
+```erb
+<td>
+  <span data-tree-view-ignore-drag="true">Drag-safe widget</span>
+</td>
+```
+
+See [Usage](usage.md#interactive-controls-inside-rows) for keyboard and row interaction markers.
+
 ## Drop behavior
 
 Drop targets are implemented by the host app.
@@ -76,6 +98,7 @@ function onDrop(event) {
 | row transfer payload builder validation | yes | provides builder |
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
+| interactive-control drag-start guard | yes | marks custom widgets when needed |
 | drop target | no | yes |
 | reorder / move persistence | no | yes |
 | authorization | no | yes |
