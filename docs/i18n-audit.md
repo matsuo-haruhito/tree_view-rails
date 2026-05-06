@@ -9,7 +9,7 @@ Documentation is moving to language-specific directories.
 - `docs/ja/`: Japanese documentation tree
 - `docs/en/`: English documentation tree
 - `docs/README.md`: language selector
-- root-level docs such as `docs/api.md`: kept temporarily for compatibility during migration
+- root-level compatibility pages: short language selectors for older links
 
 ## Goal
 
@@ -19,96 +19,73 @@ For the initial release, the priority is:
 
 1. Keep the language-specific structure explicit.
 2. Keep Japanese and English entry points easy to find.
-3. Move or rewrite user-facing docs into both `docs/ja/` and `docs/en/` gradually.
-4. Keep canonical behavior/API descriptions in sync while translations are added.
-5. Prefer translating user-facing documents before maintainer-only documents.
+3. Keep canonical behavior/API descriptions in sync.
+4. Prefer language-specific prose docs under `docs/ja/` and `docs/en/`.
+5. Keep root-level compatibility pages short.
 
 ## Language status labels
 
 | Status | Meaning |
 |---|---|
 | Split | Separate Japanese and English files exist under `docs/ja/` and `docs/en/`. |
-| Japanese canonical | Japanese is currently the more complete canonical source. |
-| English canonical | English is currently the more complete canonical source. |
-| Bilingual summary | Both languages have a usable summary, but one language may still contain the complete canonical detail. |
-| Pending root cleanup | Language-specific files exist; root-level compatibility entry still needs cleanup or redirect. |
-| Technical asset | Not a prose document that needs translation, such as HTML/CSS mock assets. |
-
-## Translation policy
-
-- Prefer separate files under `docs/ja/` and `docs/en/` for prose docs.
-- Keep code examples identical across languages unless a translated comment is more helpful.
-- When behavior changes, update the canonical language first, then update the translation in the same PR when practical.
-- If a PR cannot update both languages, update this audit so the gap remains visible.
-- Root-level docs may remain temporarily for compatibility while the migration is in progress.
-- New user-facing docs should be created in both language directories when practical.
+| Bilingual summary | Both languages have a usable summary, but one language may still contain more detail. |
+| Compatibility selector | Root-level page kept as a short language selector for older links. |
+| Technical asset | Not a prose document that needs translation. |
 
 ## P0: release-blocking language entry points
 
-These should be understandable in both Japanese and English before tagging `v0.1.0`.
-
-| Topic | Japanese | English | Status | Needed work |
+| Topic | Japanese | English | Status | Notes |
 |---|---|---|---|---|
 | Top-level README | `README.md` | `README.md` | Bilingual summary | Keep short entry content in sync. |
-| Docs selector | `docs/README.md` | `docs/README.md` | Split selector | Keep language selector current. |
+| Docs selector | `docs/README.md` | `docs/README.md` | Compatibility selector | Keep language selector current. |
 | Docs index | `docs/ja/README.md` | `docs/en/README.md` | Split | Keep reading order and links in sync. |
-| Installation | `docs/ja/installation.md` | `docs/en/installation.md` | Split | Keep requirements, CSS/importmap guidance, CI notes, and packaged file lists in sync. |
-| Minimal usage | `docs/ja/minimal-usage.md` | `docs/en/minimal-usage.md` | Split | Keep controller/view/row partial examples in sync. |
-| Usage guide | `docs/ja/usage.md` | `docs/en/usage.md` | Split | Keep the practical usage guide in sync; root `docs/usage.md` remains temporarily as detailed legacy reference. |
-| API overview | `docs/ja/api-overview.md` | `docs/en/api-overview.md` | Split | Keep high-level API overview in sync with API reference docs. |
-| API reference | `docs/ja/api.md` | `docs/en/api.md` | Split | Root `docs/api.md` remains temporarily as the old compatibility reference until root cleanup. |
-| Public API policy | `docs/public-api.md` | `docs/en/public-api.md` | Bilingual summary | Split later if the policy grows. |
-| Release checklist | `docs/release.md` | `docs/en/release.md` | Bilingual summary | Split later if the release process grows. |
+| Installation | `docs/ja/installation.md` | `docs/en/installation.md` | Split | Keep requirements and asset/importmap guidance in sync. |
+| Minimal usage | `docs/ja/minimal-usage.md` | `docs/en/minimal-usage.md` | Split | Keep examples in sync. |
+| Usage guide | `docs/ja/usage.md` | `docs/en/usage.md` | Split | Root `docs/usage.md` remains as compatibility reference for now. |
+| API overview | `docs/ja/api-overview.md` | `docs/en/api-overview.md` | Split | Keep in sync with API reference docs. |
+| API reference | `docs/ja/api.md` | `docs/en/api.md` | Split | Root `docs/api.md` remains as old compatibility reference for now. |
+| Public API policy | `docs/ja/public-api.md` | `docs/en/public-api.md` | Split | Root `docs/public-api.md` is a compatibility selector. |
+| Release checklist | `docs/ja/release.md` | `docs/en/release.md` | Split | Root `docs/release.md` is a compatibility selector. |
 
 ## P1: important feature docs
 
-These should be split after the P0 entry points.
-
-| Topic | Japanese | English | Status | Needed work |
+| Topic | Japanese | English | Status | Notes |
 |---|---|---|---|---|
-| Selection | `docs/ja/selection.md` | `docs/en/selection.md` | Split | Keep checkbox visibility, payload, disabled state, cascade, indeterminate, and max count docs in sync. |
-| Lazy loading | `docs/ja/lazy-loading.md` | `docs/en/lazy-loading.md` | Split | Keep lazy loading hooks, remote-state events, and children pagination guidance in sync. |
-| Windowed rendering | `docs/ja/windowed-rendering.md` | `docs/en/windowed-rendering.md` | Split | Keep VisibleRows/RenderWindow/windowed rendering guidance in sync. |
-| Persisted state | `docs/ja/persisted-state.md` | `docs/en/persisted-state.md` | Split | Keep StateStore, generator, owner model, and RenderState integration docs in sync. |
-| Breadcrumb | `docs/ja/breadcrumb.md` | `docs/en/breadcrumb.md` | Split | Keep helper usage, builders, and responsibility boundaries in sync. |
-| Drag and drop | `docs/ja/drag-and-drop.md` | `docs/en/drag-and-drop.md` | Split | Keep row event payload and host app responsibility docs in sync. |
+| Selection | `docs/ja/selection.md` | `docs/en/selection.md` | Split | Keep selection behavior in sync. |
+| Lazy loading | `docs/ja/lazy-loading.md` | `docs/en/lazy-loading.md` | Split | Keep hooks and remote-state guidance in sync. |
+| Windowed rendering | `docs/ja/windowed-rendering.md` | `docs/en/windowed-rendering.md` | Split | Keep VisibleRows/RenderWindow guidance in sync. |
+| Persisted state | `docs/ja/persisted-state.md` | `docs/en/persisted-state.md` | Split | Keep StateStore/generator guidance in sync. |
+| Breadcrumb | `docs/ja/breadcrumb.md` | `docs/en/breadcrumb.md` | Split | Keep helper usage in sync. |
+| Drag and drop | `docs/ja/drag-and-drop.md` | `docs/en/drag-and-drop.md` | Split | Keep row event payload guidance in sync. |
 | Children pagination | `docs/ja/children-pagination.md` | `docs/en/children-pagination.md` | Split | Keep server-side pagination guidance in sync. |
 
 ## P2: supporting and maintainer docs
 
-These can follow after user-facing coverage is in place.
-
-| Topic | Japanese | English | Status | Needed work |
+| Topic | Japanese | English | Status | Notes |
 |---|---|---|---|---|
-| Glossary | `docs/ja/glossary.md` | `docs/en/glossary.md` | Split | Keep TreeView terms and responsibility language in sync. |
-| Node keys | `docs/ja/node-keys.md` | `docs/en/node-keys.md` | Split | Keep node_key design and collision guidance in sync. |
-| Tree diagnostics | `docs/ja/tree-diagnostics.md` | `docs/en/tree-diagnostics.md` | Split | Keep diagnostics APIs and use cases in sync. |
-| Cookbook | `docs/ja/cookbook.md` | `docs/en/cookbook.md` | Split | Keep common examples and patterns in sync. |
-| Depth labels | `docs/ja/depth-labels.md` | `docs/en/depth-labels.md` | Split | Keep depth label builder usage in sync. |
-| Row status | `docs/ja/row-status.md` | `docs/en/row-status.md` | Split | Keep disabled/readonly row state guidance in sync. |
-| Filtered trees | `docs/ja/filtered-trees.md` | `docs/en/filtered-trees.md` | Split | Keep filtered tree modes and use cases in sync. |
-| Rendering boundaries | `docs/ja/rendering-boundaries.md` | `docs/en/rendering-boundaries.md` | Split | Keep gem/host rendering responsibility boundaries in sync. |
-| Render scale | `docs/ja/render-scale.md` | `docs/en/render-scale.md` | Split | Keep large-tree rendering guidance in sync. |
-| Host app extension points | `docs/ja/host-app-extension-points.md` | `docs/en/host-app-extension-points.md` | Split | Keep extension hook guidance in sync. |
-| Design policy | `docs/ja/design-policy.md` | `docs/en/design-policy.md` | Split | Keep design principles and responsibility boundaries in sync. |
-| Development | `docs/ja/development.md` | `docs/en/development.md` | Split | Keep local development and CI guidance in sync. |
-| Code quality | `docs/ja/code-quality.md` | `docs/en/code-quality.md` | Split | Keep lint, tests, errors, and documentation quality guidance in sync. |
+| Glossary | `docs/ja/glossary.md` | `docs/en/glossary.md` | Split | Keep terms in sync. |
+| Node keys | `docs/ja/node-keys.md` | `docs/en/node-keys.md` | Split | Keep node_key guidance in sync. |
+| Tree diagnostics | `docs/ja/tree-diagnostics.md` | `docs/en/tree-diagnostics.md` | Split | Keep diagnostics guidance in sync. |
+| Cookbook | `docs/ja/cookbook.md` | `docs/en/cookbook.md` | Split | Keep examples in sync. |
+| Depth labels | `docs/ja/depth-labels.md` | `docs/en/depth-labels.md` | Split | Keep builder usage in sync. |
+| Row status | `docs/ja/row-status.md` | `docs/en/row-status.md` | Split | Keep row state guidance in sync. |
+| Filtered trees | `docs/ja/filtered-trees.md` | `docs/en/filtered-trees.md` | Split | Keep modes in sync. |
+| Rendering boundaries | `docs/ja/rendering-boundaries.md` | `docs/en/rendering-boundaries.md` | Split | Keep responsibility boundaries in sync. |
+| Render scale | `docs/ja/render-scale.md` | `docs/en/render-scale.md` | Split | Keep large-tree guidance in sync. |
+| Host app extension points | `docs/ja/host-app-extension-points.md` | `docs/en/host-app-extension-points.md` | Split | Keep extension hooks in sync. |
+| Design policy | `docs/ja/design-policy.md` | `docs/en/design-policy.md` | Split | Root `docs/design-policy.md` is a compatibility selector. |
+| Development | `docs/ja/development.md` | `docs/en/development.md` | Split | Root `docs/development.md` is a compatibility selector. |
+| Code quality | `docs/ja/code-quality.md` | `docs/en/code-quality.md` | Split | Root `docs/code-quality.md` is a compatibility selector. |
 
 ## Technical assets
 
-These do not need prose translation unless comments or visible labels become release-facing docs.
-
 | Asset | Status | Notes |
 |---|---|---|
-| `docs/mockups/default-tree.html` | Technical asset | Visible sample labels may stay as-is unless the mock becomes user-facing localized documentation. |
+| `docs/mockups/default-tree.html` | Technical asset | No translation needed. |
 | `docs/mockups/default-tree.css` | Technical asset | No translation needed. |
 
-## Recommended next PRs
+## Remaining cleanup
 
-1. Replace root `docs/api.md` with a short language selector when GitHub contents SHA handling is convenient.
-2. Decide when to remove or redirect other root-level compatibility docs after language-specific coverage is complete.
-3. Keep `docs/ja/` and `docs/en/` in sync for future user-facing changes.
-
-## Release decision
-
-Do not block all translation work on a single large PR. For `v0.1.0`, the release should at least have language-specific entry points and a visible i18n backlog so readers know which documents are canonical and which translations are pending.
+- Replace root `docs/api.md` with a short language selector when practical.
+- Consider replacing root `docs/usage.md` with a short language selector after confirming no older links need the full legacy reference.
+- Keep `docs/ja/` and `docs/en/` in sync for future user-facing changes.
