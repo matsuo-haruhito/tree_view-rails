@@ -214,7 +214,7 @@ Use `selection:` to enable checkbox selection.
 
 TreeView renders checkboxes, builds payloads, and provides a JavaScript controller for collecting selected payloads. The host app owns business actions such as deleting, moving, or relating selected nodes.
 
-See [Selection](../selection.md) for details.
+See [Selection](selection.md) for details.
 
 ## Lazy loading
 
@@ -269,8 +269,8 @@ reverse_tree = base_tree.reverse_tree_for(matched_documents)
 ## Next steps
 
 - [API overview](api-overview.md)
-- [API reference](../api.md)
+- [API reference](api.md)
 - [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide)
-- [Selection](../selection.md)
-- [Lazy Loading](../lazy-loading.md)
-- [Windowed Rendering](../windowed-rendering.md)
+- [Selection](selection.md)
+- [Lazy Loading](lazy-loading.md)
+- [Windowed Rendering](windowed-rendering.md)
