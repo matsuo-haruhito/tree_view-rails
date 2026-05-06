@@ -4,7 +4,7 @@ This document tracks documentation language status before the `0.1.0` release.
 
 ## Current structure
 
-Documentation is moving to language-specific directories.
+Documentation is organized around language-specific directories.
 
 - `docs/ja/`: Japanese documentation tree
 - `docs/en/`: English documentation tree
@@ -39,7 +39,7 @@ For the initial release, the priority is:
 |---|---|---|---|---|
 | Top-level README | `README.md` | `README.md` | Bilingual summary | Keep short entry content in sync. |
 | Docs selector | `docs/README.md` | `docs/README.md` | Compatibility selector | Keep language selector current. |
-| Docs index | `docs/ja/README.md` | `docs/en/README.md` | Split | Keep reading order and links in sync. |
+| Docs index | `docs/ja/README.md` | `docs/en/README.md` | Split | Reading order and maintainer links now point to language-specific docs. |
 | Installation | `docs/ja/installation.md` | `docs/en/installation.md` | Split | Keep requirements and asset/importmap guidance in sync. |
 | Minimal usage | `docs/ja/minimal-usage.md` | `docs/en/minimal-usage.md` | Split | Keep examples in sync. |
 | Usage guide | `docs/ja/usage.md` | `docs/en/usage.md` | Split | Root `docs/usage.md` is a compatibility selector. |
@@ -63,7 +63,17 @@ All P2 supporting and maintainer docs are split under `docs/ja/` and `docs/en/`.
 | `docs/mockups/default-tree.html` | Technical asset | No translation needed. |
 | `docs/mockups/default-tree.css` | Technical asset | No translation needed. |
 
+## Release readiness documentation checks
+
+Before tagging `v0.1.0`, confirm:
+
+- `docs/ja/README.md` and `docs/en/README.md` point to language-specific user and maintainer docs.
+- Root compatibility pages are short language selectors where practical.
+- `docs/api.md` is the only known longer root compatibility reference.
+- `CHANGELOG.md` includes documentation migration entries.
+- New public API changes update both `docs/ja/api.md` and `docs/en/api.md` when practical.
+
 ## Remaining cleanup
 
-- Replace root `docs/api.md` with a short language selector when practical.
+- Replace root `docs/api.md` with a short language selector when its blob SHA can be retrieved reliably through the GitHub connector or a local git workflow.
 - Keep `docs/ja/` and `docs/en/` in sync for future user-facing changes.
