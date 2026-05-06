@@ -44,6 +44,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Split the drag-and-drop and children pagination guides into language-specific `docs/ja/` and `docs/en/` entry points.
 - Split the glossary, node keys, and tree diagnostics guides into language-specific `docs/ja/` and `docs/en/` entry points.
 - Split the cookbook, depth labels, and row status guides into language-specific `docs/ja/` and `docs/en/` entry points.
+- Split the remaining support docs into language-specific `docs/ja/` and `docs/en/` entry points: filtered trees, rendering boundaries, render scale, host app extension points, design policy, development, and code quality.
 
 ### Tests
 
