@@ -22,6 +22,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Installation](installation.md) | Gemfile, CSS, importmap, Propshaft / Sprockets, and development setup |
 | [Minimal usage](minimal-usage.md) | Minimal controller, view, and row partial setup in a host app |
 | [Usage](usage.md) | Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
+| [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
 | [API overview](api-overview.md) | Overview of the main public APIs |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
@@ -57,6 +58,8 @@ If you are integrating TreeView into a Rails host app, start with these document
 ## Reading order
 
 For first-time usage, read [Installation](installation.md), [Minimal usage](minimal-usage.md), and [Usage](usage.md) in that order.
+
+When you know the use case but not the right API, start with the [Decision guide](decision-guide.md).
 
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
 
