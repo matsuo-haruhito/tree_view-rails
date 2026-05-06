@@ -86,13 +86,13 @@ These can follow after user-facing coverage is in place.
 | Cookbook | `docs/ja/cookbook.md` | `docs/en/cookbook.md` | Split | Keep common examples and patterns in sync. |
 | Depth labels | `docs/ja/depth-labels.md` | `docs/en/depth-labels.md` | Split | Keep depth label builder usage in sync. |
 | Row status | `docs/ja/row-status.md` | `docs/en/row-status.md` | Split | Keep disabled/readonly row state guidance in sync. |
-| Filtered trees | `docs/filtered-trees.md` | `docs/en/filtered-trees.md` | Pending split | Create language-specific files. |
-| Rendering boundaries | `docs/rendering-boundaries.md` | `docs/en/rendering-boundaries.md` | Pending split | Create language-specific files. |
-| Render scale | `docs/render-scale.md` | `docs/en/render-scale.md` | Pending split | Create language-specific files. |
-| Host app extension points | `docs/host-app-extension-points.md` | `docs/en/host-app-extension-points.md` | Pending split | Create language-specific files. |
-| Design policy | `docs/design-policy.md` | `docs/en/design-policy.md` | Pending split | Create language-specific files. |
-| Development | `docs/development.md` | `docs/en/development.md` | Pending split | Create language-specific files. |
-| Code quality | `docs/code-quality.md` | `docs/en/code-quality.md` | Pending split | Create language-specific files. |
+| Filtered trees | `docs/ja/filtered-trees.md` | `docs/en/filtered-trees.md` | Split | Keep filtered tree modes and use cases in sync. |
+| Rendering boundaries | `docs/ja/rendering-boundaries.md` | `docs/en/rendering-boundaries.md` | Split | Keep gem/host rendering responsibility boundaries in sync. |
+| Render scale | `docs/ja/render-scale.md` | `docs/en/render-scale.md` | Split | Keep large-tree rendering guidance in sync. |
+| Host app extension points | `docs/ja/host-app-extension-points.md` | `docs/en/host-app-extension-points.md` | Split | Keep extension hook guidance in sync. |
+| Design policy | `docs/ja/design-policy.md` | `docs/en/design-policy.md` | Split | Keep design principles and responsibility boundaries in sync. |
+| Development | `docs/ja/development.md` | `docs/en/development.md` | Split | Keep local development and CI guidance in sync. |
+| Code quality | `docs/ja/code-quality.md` | `docs/en/code-quality.md` | Split | Keep lint, tests, errors, and documentation quality guidance in sync. |
 
 ## Technical assets
 
@@ -105,10 +105,9 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Split filtered trees, rendering boundaries, and render scale docs into language-specific files.
-2. Split `api.md` into language-specific API reference files when practical.
-3. Continue P2 supporting docs in topic-based PRs.
-4. Remove or redirect root-level compatibility docs after language-specific coverage is complete.
+1. Split `api.md` into language-specific API reference files when practical.
+2. Decide when to remove or redirect root-level compatibility docs after language-specific coverage is complete.
+3. Keep `docs/ja/` and `docs/en/` in sync for future user-facing changes.
 
 ## Release decision
 
