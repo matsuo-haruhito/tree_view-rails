@@ -212,7 +212,7 @@ checkbox selectionを使う場合は `selection:` を指定します。
 
 checkboxの描画、payload生成、JavaScript controllerによる収集はTreeViewが担当します。削除・移動・関連付けなどの業務処理はhost app側で実装します。
 
-詳しくは [Selection](../selection.md) を参照してください。
+詳しくは [Selection](selection.md) を参照してください。
 
 ## Lazy loading
 
@@ -267,8 +267,8 @@ reverse_tree = base_tree.reverse_tree_for(matched_documents)
 ## 次に読むもの
 
 - [API概要](api-overview.md)
-- [API仕様](../api.md)
+- [API仕様](api.md)
 - [Cookbook: 行customization quick guide](cookbook.md#行customization-quick-guide)
-- [Selection](../selection.md)
-- [Lazy Loading](../lazy-loading.md)
-- [Windowed Rendering](../windowed-rendering.md)
+- [Selection](selection.md)
+- [Lazy Loading](lazy-loading.md)
+- [Windowed Rendering](windowed-rendering.md)
