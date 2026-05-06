@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView interaction states mock</title>
+<link rel="stylesheet" href="default-tree.css">
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView interaction states mock</h1>
+      <p>
+        Lazy loading、loading、error/retry、children pagination、drag/drop の代表的な見た目とDOM hookを確認するための静的HTMLです。
+        Rails controller、Turbo Stream response、query、authorizationはhost appの責務なので、このmockには含めません。
+      </p>
+    </header>
+
+    <section class="mock-section" aria-labelledby="lazy-heading">
+      <h2 id="lazy-heading">Lazy loading and retry states</h2>
+      <table class="tree-view-table" data-controller="tree-view-state tree-view-remote-state">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">remote state</th>
+            <th scope="col">actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="folder_1" class="tree-row is-expanded" data-tree-node-key="folder:1" data-tree-depth="0" data-tree-expanded="true" data-tree-remote-state="loaded" aria-level="1" aria-expanded="true">
+            <td class="btn-cell tree-toggle-cell" id="folder_1_button">
+              <span class="tree-toggle" aria-label="Loaded branch">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                  <span class="tree-toggle__level">loaded</span>
+                </span>
+              </span>
+            </td>
+            <td>Loaded folder</td>
+            <td><span class="mock-status mock-status--active">loaded</span></td>
+            <td class="tree-row-actions"><button type="button">Refresh</button></td>
+          </tr>
+
+          <tr id="folder_2" class="tree-row is-loading" data-tree-node-key="folder:2" data-tree-depth="0" data-tree-expanded="false" data-tree-remote-state="loading" aria-level="1" aria-expanded="false" aria-busy="true">
+            <td class="btn-cell tree-toggle-cell" id="folder_2_button">
+              <span class="tree-toggle" aria-label="Loading children">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__action tree-toggle__action--pending">load</span>
+                  <span class="tree-toggle__level">loading</span>
+                </span>
+              </span>
+            </td>
+            <td>Loading folder</td>
+            <td><span class="mock-status mock-status--pending">loading children…</span></td>
+            <td class="tree-row-actions"><button type="button" disabled>Loading</button></td>
+          </tr>
+
+          <tr id="folder_3" class="tree-row is-error" data-tree-node-key="folder:3" data-tree-depth="0" data-tree-expanded="false" data-tree-remote-state="error" aria-level="1" aria-expanded="false">
+            <td class="btn-cell tree-toggle-cell" id="folder_3_button">
+              <span class="tree-toggle" aria-label="Loading failed">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">retry</a>
+                  <span class="tree-toggle__level">error</span>
+                </span>
+              </span>
+            </td>
+            <td>Failed folder</td>
+            <td><span class="mock-status mock-status--error">load failed</span></td>
+            <td class="tree-row-actions"><button type="button">Retry</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="pagination-heading">
+      <h2 id="pagination-heading">Children pagination state</h2>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">page state</th>
+            <th scope="col">actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="page_parent_1" class="tree-row is-expanded" data-tree-node-key="folder:large" data-tree-depth="0" data-tree-expanded="true" data-tree-next-page-cursor="cursor-002" aria-level="1" aria-expanded="true">
+            <td class="btn-cell tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Large child set">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control"><span class="tree-toggle__level">page 1</span></span>
+              </span>
+            </td>
+            <td>Large folder</td>
+            <td><span class="mock-status mock-status--active">25 of many loaded</span></td>
+            <td class="tree-row-actions"><button type="button">Load next page</button></td>
+          </tr>
+          <tr id="page_more_1" class="tree-row tree-row--pagination" data-tree-parent-key="folder:large" data-tree-depth="1" aria-level="2">
+            <td class="btn-cell tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Next page control">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-last"></span>
+                </span>
+                <span class="tree-toggle__control"><span class="tree-toggle__level">more</span></span>
+              </span>
+            </td>
+            <td>More children are available</td>
+            <td><span class="mock-status mock-status--pending">cursor: cursor-002</span></td>
+            <td class="tree-row-actions"><button type="button">Load more</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="drag-heading">
+      <h2 id="drag-heading">Drag/drop visual states</h2>
+      <table class="tree-view-table" data-controller="tree-view-transfer">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">drop state</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="drag_1" class="tree-row is-dragging" draggable="true" data-tree-node-key="task:1" data-tree-transfer-payload='{"key":"task:1","type":"Task"}' aria-level="1">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">drag</span></span></span></td>
+            <td>Dragged task</td>
+            <td><span class="mock-status mock-status--pending">dragging</span></td>
+          </tr>
+          <tr id="drag_2" class="tree-row is-drop-target" data-tree-node-key="task:2" data-tree-drop-position="inside" aria-level="1">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">target</span></span></span></td>
+            <td>Valid folder target</td>
+            <td><span class="mock-status mock-status--active">drop inside</span></td>
+          </tr>
+          <tr id="drag_3" class="tree-row is-drop-disabled" data-tree-node-key="task:3" data-tree-drop-disabled-reason="Readonly node" aria-level="1" aria-disabled="true">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">blocked</span></span></span></td>
+            <td>Readonly target</td>
+            <td><span class="mock-status mock-status--error">drop disabled</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
