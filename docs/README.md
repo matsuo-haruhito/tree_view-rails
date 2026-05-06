@@ -9,6 +9,11 @@
 - [日本語ドキュメント](ja/README.md)
 - [English documentation](en/README.md)
 
+## Recommended entry points
+
+- [English decision guide](en/decision-guide.md): choose APIs and options by use case.
+- [日本語API判断ガイド](ja/decision-guide.md): use caseからAPIやoptionを選ぶための入口。
+
 ## Translation status
 
 Documentation translation status and priorities are tracked in [Documentation i18n audit](i18n-audit.md).
