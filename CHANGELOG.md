@@ -17,12 +17,14 @@ Breaking changes and required migration notes should be called out explicitly in
 
 - Removed misleading `aria-controls` from Turbo toggle links until TreeView has a single stable controlled target.
 - Clarified public builder naming decisions: prefer `badge_builder`, keep `icon_builder` as a compatibility alias, treat `row_event_payload_builder` as transfer-specific, and document `loading_builder` / `error_builder` as boolean predicates.
+- Strengthened pull request CI to run Ruby specs alongside Standard Ruby lint while keeping broader compatibility and release checks on `main`.
 
 ### Documentation
 
 - Added README adoption guidance to help users decide whether TreeView fits their use case and to clarify the virtual scrolling boundary.
 - Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
 - Added public name decision docs in Japanese and English.
+- Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 
 ## 0.1.0 - 2026-05-07

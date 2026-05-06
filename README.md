@@ -194,7 +194,7 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 ```
 
-GitHub Actions runs lightweight Ruby lint on pull requests. The full Ruby spec matrix, Rails version matrix, JavaScript tests, and gem package verification run on pushes to `main`.
+GitHub Actions runs Ruby lint (`bundle exec standardrb`) and Ruby specs (`bundle exec rspec`) on pull requests. Pushes to `main` keep the heavier compatibility and release checks: Ruby/Rails matrices, JavaScript tests, and gem package verification.
 
 ## Release
 

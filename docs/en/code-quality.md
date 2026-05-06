@@ -22,7 +22,7 @@ Ruby lint uses Standard Ruby.
 bundle exec standardrb
 ```
 
-Pull request CI runs this as the lightweight lint check.
+Pull request CI runs this before merge.
 
 ## Tests
 
@@ -32,17 +32,23 @@ Ruby specs:
 bundle exec rspec
 ```
 
+Pull request CI also runs Ruby specs before merge so Ruby behavior and public API regressions are caught early.
+
 JavaScript tests:
 
 ```bash
 npm test
 ```
 
+JavaScript tests run in the broader `main` CI and should be run locally for JavaScript changes.
+
 Package verification:
 
 ```bash
 bundle exec rake build
 ```
+
+Package verification runs in the broader `main` CI before release decisions.
 
 ## Error messages
 
@@ -81,5 +87,5 @@ User-facing docs should include, when practical:
 - API names match existing docs.
 - Examples match the actual API.
 - Root docs, `docs/ja`, `docs/en`, and the i18n audit stay consistent.
-- PR CI lint passes.
-- Full CI after merge to `main` remains green.
+- PR CI lint and Ruby specs pass.
+- Full compatibility and package verification on `main` remains green before release decisions.

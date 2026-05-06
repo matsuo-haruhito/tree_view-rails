@@ -36,16 +36,19 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 
 ## CI policy
 
-Pull requests focus on lightweight lint.
+Pull requests run the fast Ruby checks that protect day-to-day changes:
 
-Pushes to `main` run full CI:
+- Ruby lint through `bundle exec standardrb`
+- Ruby specs through `bundle exec rspec`
 
-- Ruby specs
+Pushes to `main` run the broader compatibility and release checks:
+
+- Ruby version matrix
 - Rails version matrix
 - JavaScript tests
 - gem package verification
 
-This keeps pull request feedback quick while confirming compatibility and packaging after merge to `main`.
+This keeps pull request feedback focused on Ruby behavior and public API regressions while reserving heavier compatibility and packaging verification for `main` and release decisions.
 
 ## Change checklist
 
@@ -82,4 +85,5 @@ This keeps pull request feedback quick while confirming compatibility and packag
 
 - Keep functional changes small.
 - Larger docs-only inventory or split PRs are acceptable.
-- Full CI is confirmed after merge to `main`.
+- PR CI must pass before merge.
+- Full compatibility and package verification is confirmed on `main` before release decisions.

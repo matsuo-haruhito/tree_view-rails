@@ -36,16 +36,19 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 
 ## CI方針
 
-Pull Requestでは軽量lintを中心に実行します。
+Pull Requestでは、日常的な変更を守る高速なRuby checksを実行します。
 
-`main` へのpushではfull CIを実行します。
+- Ruby lint: `bundle exec standardrb`
+- Ruby specs: `bundle exec rspec`
 
-- Ruby specs
+`main` へのpushでは、より広い互換性確認とrelease向けのchecksを実行します。
+
+- Ruby version matrix
 - Rails version matrix
 - JavaScript tests
 - gem package verification
 
-この方針により、PRでは素早くfeedbackを得て、main merge後に互換性とpackage検証をまとめて確認します。
+この方針により、PRではRuby behaviorとpublic API regressionsを早く検出し、重い互換性確認とpackage検証は `main` / release判定で確認します。
 
 ## 変更時の確認ポイント
 
@@ -82,4 +85,5 @@ Pull Requestでは軽量lintを中心に実行します。
 
 - 小さな機能変更は小さなPRにする
 - docs-onlyで単純な分割や棚卸しは大きめのPRでもよい
-- full CIはmain merge後に確認する
+- merge前にPR CIを通す
+- release判定前に `main` でfull compatibility / package verificationを確認する

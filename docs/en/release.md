@@ -57,14 +57,19 @@ bundle exec rake build
 npm test
 ```
 
+Pull request CI checks:
+
+- Ruby lint through `bundle exec standardrb`
+- Ruby specs through `bundle exec rspec`
+
 Main-push CI checks:
 
-- Ruby spec matrix
+- Ruby version matrix
 - Rails version matrix
 - JavaScript tests through `npm ci`
 - Gem package verification
 
-Pull request CI is intentionally lightweight. Use the full CI on `main` after merge for release decisions.
+PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes compatibility matrices, JavaScript coverage, and package verification.
 
 ## Documentation
 

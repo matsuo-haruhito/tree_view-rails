@@ -11,11 +11,14 @@ These requirements should stay aligned with `required_ruby_version` and the `rai
 
 ## CI coverage
 
-On pull requests, GitHub Actions intentionally runs only lightweight Ruby lint.
+GitHub Actions runs the following checks on pull requests:
 
-On pushes to `main`, full CI runs:
+- Ruby lint through `bundle exec standardrb`
+- Ruby specs through `bundle exec rspec`
 
-- Ruby spec matrix
+Pushes to `main` keep the heavier compatibility and release checks:
+
+- Ruby version matrix
 - Rails version matrix
 - JavaScript tests through `npm ci`
 - gem package verification
@@ -156,6 +159,6 @@ Use `.devcontainer/devcontainer.json` for VS Code Dev Containers.
 
 ## CI
 
-GitHub Actions runs only `bundle exec standardrb` on pull requests.
+GitHub Actions runs `bundle exec standardrb` and `bundle exec rspec` on pull requests.
 
-On pushes to `main`, GitHub Actions runs Ruby specs, the Rails version matrix, JavaScript tests, and gem package verification.
+On pushes to `main`, GitHub Actions runs the Ruby/Rails matrices, JavaScript tests, and gem package verification.
