@@ -129,6 +129,41 @@ Host-app-specific columns live in the configured `row_partial`.
 
 The partial receives `item`.
 
+## Interactive controls inside rows
+
+Host apps can place inputs, selects, textareas, buttons, links, and `contenteditable` labels inside `row_partial` or `row_actions_partial`. TreeView treats these native interactive elements as application-owned controls, so tree keyboard navigation and transfer drag start behavior ignore events that originate from them.
+
+```erb
+<!-- app/views/documents/_tree_columns.html.erb -->
+<td>
+  <%= text_field_tag "documents[#{item.id}][name]", item.name %>
+</td>
+```
+
+```erb
+<!-- app/views/documents/_tree_actions.html.erb -->
+<td>
+  <%= link_to "Edit", edit_document_path(item) %>
+  <%= button_to "Archive", archive_document_path(item), method: :post %>
+</td>
+```
+
+For custom widgets that are not native controls, add `data-tree-view-interactive="true"` to the widget or an ancestor inside the row.
+
+```erb
+<td>
+  <span data-tree-view-interactive="true" contenteditable="true"><%= item.name %></span>
+</td>
+```
+
+Use narrower markers when only one tree behavior should ignore the control:
+
+- `data-tree-view-ignore-keyboard="true"` prevents arrow, space, and enter keys from triggering TreeView keyboard navigation.
+- `data-tree-view-ignore-row-click="true"` is reserved for row-click integrations in host apps.
+- `data-tree-view-ignore-drag="true"` prevents TreeView transfer drag start from that control.
+
+These markers only opt a control out of TreeView behavior. Validation, persistence, authorization, CRUD routes, and inline editing flows still belong to the host app.
+
 ## Grouped options
 
 Initial expansion, render scope, and toggle scope can be configured with grouped options.
