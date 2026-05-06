@@ -2,9 +2,9 @@
 
 require "spec_helper"
 
-RSpec.describe "Public API compatibility" do
-  TestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
 
+RSpec.describe "Public API compatibility" do
   def public_ui_config
     TreeView::UiConfig.new(
       node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
@@ -14,8 +14,8 @@ RSpec.describe "Public API compatibility" do
   end
 
   def public_tree
-    root = TestNode.new(id: 1, parent_id: nil, name: "Root")
-    child = TestNode.new(id: 2, parent_id: 1, name: "Child")
+    root = PublicApiCompatibilityTestNode.new(id: 1, parent_id: nil, name: "Root")
+    child = PublicApiCompatibilityTestNode.new(id: 2, parent_id: 1, name: "Child")
 
     TreeView::Tree.new(records: [root, child], parent_id_method: :parent_id)
   end
