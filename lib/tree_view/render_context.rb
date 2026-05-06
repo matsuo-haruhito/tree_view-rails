@@ -31,6 +31,7 @@ module TreeView
       :depth_label_builder,
       :badge_builder,
       :icon_builder,
+      :toggle_icon_builder,
       keyword_init: true
     ) do
       def effective_initial_state
@@ -78,7 +79,8 @@ module TreeView
           error_builder: local_assigns[:error_builder],
           depth_label_builder: local_assigns[:depth_label_builder],
           badge_builder: local_assigns[:badge_builder],
-          icon_builder: local_assigns[:icon_builder]
+          icon_builder: local_assigns[:icon_builder],
+          toggle_icon_builder: local_assigns[:toggle_icon_builder]
         ),
         mode: local_assigns[:mode],
         collapsed: local_assigns.fetch(:collapsed, false)
@@ -227,6 +229,12 @@ module TreeView
 
     def icon_builder
       render_state.icon_builder
+    end
+
+    def toggle_icon_builder
+      return nil unless render_state.respond_to?(:toggle_icon_builder)
+
+      render_state.toggle_icon_builder
     end
   end
 end
