@@ -71,6 +71,26 @@ h2 {
   background: #fffaf0;
 }
 
+.tree-row.is-loading,
+.tree-row.tree-row--pagination {
+  background: #f8fafc;
+}
+
+.tree-row.is-error,
+.tree-row.is-drop-disabled {
+  background: #fff1f2;
+}
+
+.tree-row.is-dragging {
+  opacity: 0.62;
+  outline: 2px dashed #94a3b8;
+}
+
+.tree-row.is-drop-target {
+  background: #ecfdf5;
+  outline: 2px solid #86efac;
+}
+
 .tree-selection-cell {
   width: 4rem;
   text-align: center;
@@ -175,6 +195,11 @@ h2 {
   background: #eff6ff;
 }
 
+.tree-toggle__action--pending {
+  color: #64748b;
+  background: #f8fafc;
+}
+
 .tree-toggle__level,
 .tree-depth-label {
   display: inline-flex;
@@ -226,6 +251,16 @@ h2 {
 .mock-status--archived {
   background: #fef3c7;
   color: #92400e;
+}
+
+.mock-status--pending {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.mock-status--error {
+  background: #ffe4e6;
+  color: #9f1239;
 }
 
 .tree-row-actions button {
