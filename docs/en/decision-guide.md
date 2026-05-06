@@ -7,7 +7,7 @@ TreeView APIs fall into two broad groups:
 - **Render controls** change which already-known tree rows are expanded, visible, or rendered into HTML.
 - **Data-loading controls** change when the host app fetches children or pages of children from the server.
 
-Use render controls first when the data is already available. Use lazy loading or children pagination when fetching all children up front is the problem.
+Use render controls first when the data is already available. Use lazy loading or children pagination when fetching all children up front is the problem. Use host-app JavaScript when the problem is full scroll-position-driven DOM virtualization.
 
 ## Start from the use case
 
@@ -17,9 +17,10 @@ Use render controls first when the data is already available. Use lazy loading o
 | Add Turbo expand/collapse | `TreeView::UiConfigBuilder#build` | `show_descendants_path_builder`, `hide_descendants_path_builder`, `toggle_all_path_builder` | Host app routes and Turbo Stream actions own the response. TreeView builds row IDs and URLs. |
 | Keep the first render small | `TreeView::RenderState` | `max_initial_depth`, `initial_expansion:`, `render_scope:` | These are render controls. They reduce initial HTML volume, not database query volume by themselves. |
 | Limit which descendants can be rendered | `render_scope:` | `max_depth`, `max_leaf_distance` | Use when a page should never render beyond a chosen depth or distance from matched leaves. |
-| Render only a visible slice | `tree_view_rows(..., window:)`, `tree_view_window`, `TreeView::RenderWindow` | `window: { offset:, limit: }` | Slices already-visible rows. It does not fetch less data by itself. |
+| Render only a visible slice | `tree_view_rows(..., window:)`, `tree_view_window`, `TreeView::RenderWindow` | `window: { offset:, limit: }` | Slices already-visible rows. It reduces HTML output only; it does not fetch less data by itself. |
 | Avoid fetching every child up front | Lazy Loading | `load_children_path_builder`, `lazy_loading: { enabled:, loaded_keys: }` | TreeView renders hooks and URLs. The host app implements controller actions, queries, authorization, and Turbo responses. |
 | Page very large child sets | Children Pagination | Lazy-loading URLs plus host-app cursor / limit / next-page strategy | TreeView has integration boundaries and hooks; the host app owns pagination state and fetch behavior. |
+| Add full virtual scrolling | Host-app JavaScript | Scroll observers, virtualization library, URL/window state | TreeView does not provide built-in DOM virtualization or infinite-scroll control. Combine it with render metadata only when useful. |
 | Show search results with ancestors | `path_tree_for` | `tree.path_tree_for(matches)` | Use when matched records need enough ancestors to preserve context from root to match. |
 | Show child-to-parent paths | `reverse_tree_for` | `tree.reverse_tree_for(items)` | Use when the primary display starts from children and expands toward parents. |
 | Add checkbox selection | `selection:` options | `enabled`, `checkbox_name`, `selected_keys`, `disabled_keys`, `visibility`, `cascade`, `max_selected` | TreeView renders selection state and values. The host app owns the submitted business action. |
@@ -44,6 +45,8 @@ flowchart TD
   A --> J{Is the problem HTML volume?}
   J -->|Initial HTML too large| K[max_initial_depth and render_scope]
   J -->|Visible rows too many| L[RenderWindow or window: offset/limit]
+  A --> V{Need scroll-position virtualization?}
+  V -->|Yes| W[Host-app JavaScript or external virtualization library]
   A --> M{Is the tree derived from a subset?}
   M -->|Search matches need ancestors| N[path_tree_for]
   M -->|Children should point back to parents| O[reverse_tree_for]
@@ -61,9 +64,10 @@ flowchart TD
 |---|---|---|---|
 | Initial expansion | `max_initial_depth`, `initial_expansion:` | Rows opened on first paint | Records loaded from the database |
 | Render scope | `render_scope: { max_depth:, max_leaf_distance: }` | Descendants eligible for rendering | Host-app query cost unless the app also scopes queries |
-| Windowed rendering | `window:`, `TreeView::RenderWindow` | HTML emitted for currently visible rows | Data needed to compute visibility |
+| Windowed rendering | `window:`, `TreeView::RenderWindow` | HTML emitted for currently visible rows | Data needed to compute visibility, host-app queries, or fetched records |
 | Lazy loading | `load_children_path_builder`, `lazy_loading:` | Up-front child fetching and HTML for unloaded children | Host-app controller/query implementation |
 | Children pagination | Host-app pagination around lazy loading | Per-request child count | TreeView does not choose cursor or SQL strategy |
+| Virtual scrolling | Host-app JavaScript or external library | DOM work tied to scroll position | TreeView does not observe scroll or virtualize DOM by itself |
 
 ## Recommended path by project stage
 
@@ -71,8 +75,9 @@ flowchart TD
 2. Add [API overview](api-overview.md) concepts only when the use case needs them.
 3. Use [Render Scale](render-scale.md) when HTML size or visible row count becomes the issue.
 4. Use [Lazy Loading](lazy-loading.md) and [Children Pagination](children-pagination.md) when query volume or child count is the issue.
-5. Add [Selection](selection.md), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction requirements are clear.
-6. Use [Tree diagnostics](tree-diagnostics.md) when node keys, DOM IDs, or tree structure need validation.
+5. Add host-app virtual scrolling only when scroll-position-driven DOM virtualization is a product requirement.
+6. Add [Selection](selection.md), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction requirements are clear.
+7. Use [Tree diagnostics](tree-diagnostics.md) when node keys, DOM IDs, or tree structure need validation.
 
 ## Common combinations
 
@@ -80,6 +85,7 @@ flowchart TD
 |---|---|
 | Small admin taxonomy | Static tree + `max_initial_depth` if needed |
 | Large folder browser | Lazy Loading + Children Pagination + Persisted State |
+| Large scrolling browser | Host-app virtual scrolling + render/window metadata as needed |
 | Search page | `path_tree_for` + render scope around matches |
 | Breadcrumb-like reverse view | `reverse_tree_for` + custom row partial |
 | Bulk action page | Static or Turbo rendering + `selection:` + host-app form action |

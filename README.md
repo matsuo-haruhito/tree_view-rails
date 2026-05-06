@@ -18,7 +18,7 @@ It provides reusable tree objects, render state, helpers, partials, and browser 
 - Use `ReverseTree` for child-to-parent paths.
 - Render rows from `TreeView::RenderState` with `tree_view_rows`.
 - Flatten currently visible rows with `TreeView::VisibleRows`.
-- Render visible rows by offset and limit with `TreeView::RenderWindow` and windowed rendering.
+- Render currently visible rows by offset and limit with `TreeView::RenderWindow` and windowed rendering. This limits HTML output only; it does not reduce host-app queries or fetched records.
 - Customize host-app row content through `row_partial`.
 - Control initial expansion with `initial_state`, `expanded_keys`, `collapsed_keys`, and `max_initial_depth`.
 - Limit render scope with `max_render_depth` and `max_leaf_distance`.
@@ -41,7 +41,8 @@ This gem focuses on tree rendering primitives. Host applications are responsible
 - context menus
 - business actions after checkbox selection, such as delete, move, or attach
 - server-side children pagination query and cursor strategy
-- JavaScript control for infinite scroll or virtual scroll
+- data-fetching reductions beyond TreeView's lazy-loading hooks
+- JavaScript control for infinite scroll or full virtual scroll
 - demo data and seeds
 
 ## Installation

@@ -17,6 +17,8 @@ TreeView gem が担当するのは以下です。
 
 scroll監視、infinite scroll、URL query、server-side pagination、データ取得はhost app側で実装します。
 
+windowed rendering が制御するのはHTML出力だけです。host app queryや取得済みrecord数は減りません。問題がdata loading量なら [Lazy Loading](lazy-loading.md) または [Children Pagination](children-pagination.md) から検討してください。scroll位置に応じたDOM仮想化が必要な場合は、host app側でvirtual scrollingを実装してください。
+
 ## tree_view_rows でwindowを指定する
 
 ```erb
@@ -79,7 +81,7 @@ windowed rendering はDOM仮想化ではありません。
 - server-side queryを変えません
 - 全treeのデータ取得量を減らすものではありません
 
-全データ取得量を減らしたい場合は、host app側でserver-side paginationやlazy loadingを組み合わせてください。
+全データ取得量を減らしたい場合は、[Lazy Loading](lazy-loading.md)、[Children Pagination](children-pagination.md)、またはhost app側のdata-loading strategyを使ってください。
 
 ## 責務範囲
 
@@ -91,5 +93,6 @@ windowed rendering はDOM仮想化ではありません。
 | pagination controls | metadata only | renders UI |
 | URL/query state | no | yes |
 | infinite scroll | no | yes |
+| virtual scroll | no | yes |
 | server-side pagination | no | yes |
 | data fetching | no | yes |

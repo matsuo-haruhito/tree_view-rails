@@ -22,6 +22,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 - Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
 - Added public name decision docs in Japanese and English.
+- Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 
 ## 0.1.0 - 2026-05-07
 
