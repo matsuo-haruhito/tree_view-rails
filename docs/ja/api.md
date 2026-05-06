@@ -173,9 +173,9 @@ render_state = TreeView::RenderState.new(
 | `row_partial:` | yes | host app側の列描画partial。 |
 | `ui_config:` | yes | `TreeView::UiConfig`。 |
 | `initial_state:` | no | `:expanded` または `:collapsed`。 |
-| `expanded_keys:` | no | 展開するnode_key配列。 |
-| `collapsed_keys:` | no | 折りたたむnode_key配列。 |
-| `initial_expansion:` | no | 初期展開設定group。 |
+| `expanded_keys:` | no | 展開するtree側node key配列。`tree.node_key_for(item)` と一致する必要があり、UIだけのDOM IDではありません。 |
+| `collapsed_keys:` | no | 折りたたむtree側node key配列。`tree.node_key_for(item)` と一致する必要があり、UIだけのDOM IDではありません。 |
+| `initial_expansion:` | no | 初期展開設定group。このgroup内の展開keyにも同じtree側node keyの規則が適用されます。 |
 | `render_scope:` | no | 描画範囲設定group。 |
 | `toggle_scope:` | no | 開閉操作範囲設定group。 |
 | `selection:` | no | checkbox selection設定group。 |
@@ -189,7 +189,7 @@ render_state = TreeView::RenderState.new(
 | `row_event_payload_builder:` | no | drag/drop transfer payloadを返すcallable。transfer専用であり、汎用row event hookではない。 |
 | `persisted_state:` | no | 保存済み展開状態。 |
 
-公開名の判断は [Public Name Decisions](public-name-decisions.md)、ARIA配置は [Accessibility Semantics](accessibility-semantics.md) を参照してください。
+公開名の判断は [Public Name Decisions](public-name-decisions.md)、ARIA配置は [Accessibility Semantics](accessibility-semantics.md) を参照してください。識別子設計は [Node keys](node-keys.md) を参照してください。
 
 ## TreeView::UiConfig / UiConfigBuilder
 
