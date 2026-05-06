@@ -25,6 +25,7 @@ bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
 npm test
+npm run test:browser
 ```
 
 Rails version matrixを確認する場合:
@@ -34,21 +35,35 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 ```
 
+## JavaScript browser smoke tests
+
+Unit-style JavaScript testsはVitestとjsdomで実行します。
+
+```bash
+npm test
+```
+
+Browser-level smoke testsはPlaywrightで実行します。
+
+```bash
+npm run test:browser
+```
+
+Browser smoke suiteは、実ブラウザのevent loop、focus handling、drag/drop APIで差が出やすい代表的なinteraction flowを確認するために使います。Keyboard navigation、expand/collapse、checkbox cascade、lazy-loading state changes、transfer payloads、row form controlsとtree behaviorの共存を、小さく安定したtestsで守ります。
+
 ## CI方針
 
-Pull Requestでは、日常的な変更を守る高速なRuby checksを実行します。
+Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScript testsを実行します。
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
+- JavaScript unit and browser smoke tests: `npm run test:js`
 
-`main` へのpushでは、より広い互換性確認とrelease向けのchecksを実行します。
+`main` へのpushでは、より広い互換性確認とrelease向けのchecksも実行します。
 
 - Ruby version matrix
 - Rails version matrix
-- JavaScript tests
 - gem package verification
-
-この方針により、PRではRuby behaviorとpublic API regressionsを早く検出し、重い互換性確認とpackage検証は `main` / release判定で確認します。
 
 ## 変更時の確認ポイント
 
@@ -62,6 +77,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksを実行し
 ### JavaScriptを変更した場合
 
 - `npm test` を確認する
+- Browser interaction、focus、drag/drop、実際のform controlsに影響する場合は `npm run test:browser` を確認する
 - importmap / packaged files に影響がないか確認する
 - JavaScript entrypointの互換性を確認する
 
@@ -76,6 +92,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksを実行し
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - `npm test`
+- `npm run test:browser`
 - `bundle exec rake build`
 - gem package contents
 - CHANGELOG
