@@ -31,7 +31,7 @@ For the initial release, the priority is:
 | Japanese canonical | Japanese is currently the more complete canonical source. |
 | English canonical | English is currently the more complete canonical source. |
 | Bilingual summary | Both languages have a usable summary, but one language may still contain the complete canonical detail. |
-| Pending split | Existing root-level doc still needs language-specific copies. |
+| Pending root cleanup | Language-specific files exist; root-level compatibility entry still needs cleanup or redirect. |
 | Technical asset | Not a prose document that needs translation, such as HTML/CSS mock assets. |
 
 ## Translation policy
@@ -55,8 +55,8 @@ These should be understandable in both Japanese and English before tagging `v0.1
 | Installation | `docs/ja/installation.md` | `docs/en/installation.md` | Split | Keep requirements, CSS/importmap guidance, CI notes, and packaged file lists in sync. |
 | Minimal usage | `docs/ja/minimal-usage.md` | `docs/en/minimal-usage.md` | Split | Keep controller/view/row partial examples in sync. |
 | Usage guide | `docs/ja/usage.md` | `docs/en/usage.md` | Split | Keep the practical usage guide in sync; root `docs/usage.md` remains temporarily as detailed legacy reference. |
-| API overview | `docs/ja/api-overview.md` | `docs/en/api-overview.md` | Split | Keep high-level API overview in sync with `docs/api.md`. |
-| API reference | `docs/api.md` | `docs/en/api.md` | Pending split | Move detailed API reference into language-specific files when practical. |
+| API overview | `docs/ja/api-overview.md` | `docs/en/api-overview.md` | Split | Keep high-level API overview in sync with API reference docs. |
+| API reference | `docs/ja/api.md` | `docs/en/api.md` | Split | Root `docs/api.md` remains temporarily as the old compatibility reference until root cleanup. |
 | Public API policy | `docs/public-api.md` | `docs/en/public-api.md` | Bilingual summary | Split later if the policy grows. |
 | Release checklist | `docs/release.md` | `docs/en/release.md` | Bilingual summary | Split later if the release process grows. |
 
@@ -105,8 +105,8 @@ These do not need prose translation unless comments or visible labels become rel
 
 ## Recommended next PRs
 
-1. Split `api.md` into language-specific API reference files when practical.
-2. Decide when to remove or redirect root-level compatibility docs after language-specific coverage is complete.
+1. Replace root `docs/api.md` with a short language selector when GitHub contents SHA handling is convenient.
+2. Decide when to remove or redirect other root-level compatibility docs after language-specific coverage is complete.
 3. Keep `docs/ja/` and `docs/en/` in sync for future user-facing changes.
 
 ## Release decision
