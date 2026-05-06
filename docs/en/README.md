@@ -35,6 +35,10 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Breadcrumb](breadcrumb.md) | Helper for rendering ancestor paths as breadcrumbs |
 | [Depth Labels](depth-labels.md) | Hook for displaying node depth labels |
 | [Row Status](row-status.md) | Hook for disabled / readonly row state |
+| [Filtered Trees](filtered-trees.md) | APIs for rendering search or filter results as trees |
+| [Rendering Boundaries](rendering-boundaries.md) | Rendering responsibility boundaries between TreeView and host apps |
+| [Render Scale](render-scale.md) | Guidance for controlling HTML and rendering volume for large trees |
+| [Host App Extension Points](host-app-extension-points.md) | Hooks host apps can use to extend and integrate TreeView |
 | [Drag and Drop](drag-and-drop.md) | Drag-and-drop integration boundary using row event payloads |
 | [Children Pagination](children-pagination.md) | Server-side children pagination guidance for lazy loading |
 
@@ -44,8 +48,9 @@ If you are integrating TreeView into a Rails host app, start with these document
 |---|---|
 | [Public API](../public-api.md) | APIs host apps may use directly and compatibility policy |
 | [Release checklist](../release.md) | Release tests, documentation, and gem package checklist |
-| [Design policy](../design-policy.md) | Gem responsibilities, included scope, excluded scope, and design decisions |
-| [Development](../development.md) | Tests, CI, documentation updates, and future work |
+| [Design policy](design-policy.md) | Gem responsibilities, included scope, excluded scope, and design decisions |
+| [Development](development.md) | Tests, CI, documentation updates, and future work |
+| [Code quality](code-quality.md) | Lint, tests, error messages, and documentation quality policy |
 
 ## Reading order
 
