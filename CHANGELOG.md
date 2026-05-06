@@ -86,6 +86,7 @@ No unreleased changes.
 - Clarified public API, semi-public API, internal helper module, JavaScript entrypoint, and compatibility policy.
 - Clarified that releases are normally managed by tags on `main`, with release branches reserved for parallel maintenance.
 - Converted root compatibility docs into short language selectors where practical.
+- Removed root-level docs compatibility selectors where language-specific docs already exist, keeping `docs/README.md`, `docs/i18n-audit.md`, language directories, and technical mockup assets as the primary docs structure.
 
 ### Tests
 
