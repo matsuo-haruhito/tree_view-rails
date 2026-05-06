@@ -24,6 +24,7 @@ TreeViewのAPIは大きく分けると次の2種類です。
 | 検索結果をancestor付きで表示したい | `path_tree_for` | `tree.path_tree_for(matches)` | matchしたrecordをrootからの文脈付きで表示したい場合に使います。 |
 | childからparentへ辿る表示をしたい | `reverse_tree_for` | `tree.reverse_tree_for(items)` | 子側を起点にして親方向へ展開する表示に使います。 |
 | checkbox selectionを追加したい | `selection:` options | `enabled`, `checkbox_name`, `selected_keys`, `disabled_keys`, `visibility`, `cascade`, `max_selected` | TreeViewはselection stateとvalueを描画します。送信後の業務処理はhost appが担当します。 |
+| 行内に編集fieldを置きたい | [Form と編集行](form-editing.md) | `row_partial`, `row_actions_partial`, Rails `form_with`, `fields_for`, host-app Form Object | TreeViewはinline-editing layoutを支援します。edit mode、validation、persistence、authorization、dirty-state handling、Turbo workflowはhost appが担当します。 |
 | drag-and-dropを追加したい | Drag/drop row hooks | drag属性とrow event payload | TreeViewは連携hookを出します。移動のvalidationと永続化はhost appが担当します。 |
 | 開閉状態を保存したい | `TreeView::PersistedState`, `TreeView::StateStore` | `rails g tree_view:state:install`, persisted state model | ユーザが再訪したときに同じ開閉状態へ戻したい場合に使います。 |
 | tree dataや識別子を検証したい | Diagnostics APIs | node key、DOM ID、orphan、cycle diagnostics | integration時、test時、invalidな構造の描画前確認に使います。 |
@@ -52,6 +53,7 @@ flowchart TD
   M -->|childからparentへ見せたい| O[reverse_tree_for]
   A --> P{interaction stateが必要?}
   P -->|checkbox| Q[selection: options]
+  P -->|行内編集field| X[Form と編集行: TreeView row layout と host-app form workflow]
   P -->|訪問間で開閉状態を保存| R[PersistedState と StateStore]
   P -->|drag/drop| S[Drag/drop hooks と host-app handlers]
   A --> T{input dataを検証したい?}
@@ -76,7 +78,7 @@ flowchart TD
 3. HTML量やvisible row数が問題になったら [Render Scale](render-scale.md) を使います。
 4. query量や子要素数が問題になったら [Lazy Loading](lazy-loading.md) と [Children Pagination](children-pagination.md) を使います。
 5. scroll位置に応じたDOM仮想化がproduct要件になった場合だけ、host app側でvirtual scrollingを追加します。
-6. interaction要件が固まったら [Selection](selection.md)、[Drag and Drop](drag-and-drop.md)、[Persisted State](persisted-state.md) を追加します。
+6. interaction要件が固まったら [Selection](selection.md)、[Form と編集行](form-editing.md)、[Drag and Drop](drag-and-drop.md)、[Persisted State](persisted-state.md) を追加します。
 7. node key、DOM ID、tree構造を検証したい場合は [Tree diagnostics](tree-diagnostics.md) を使います。
 
 ## よくある組み合わせ
@@ -89,6 +91,8 @@ flowchart TD
 | 検索ページ | `path_tree_for` + match周辺のrender scope |
 | breadcrumb風のreverse view | `reverse_tree_for` + custom row partial |
 | bulk action page | StaticまたはTurbo rendering + `selection:` + host-app form action |
+| bulk edit page | StaticまたはTurbo rendering + row partial form controls + host-app Form Object |
+| per-row inline edit page | 表示用row partial + host-app edit action / Turbo response + 編集用row partial |
 | 並び替え可能な階層 | StaticまたはTurbo rendering + drag/drop hooks + host-app move endpoint |
 
 ## 関連docs
@@ -100,6 +104,7 @@ flowchart TD
 - [Children Pagination](children-pagination.md)
 - [Filtered Trees](filtered-trees.md)
 - [Selection](selection.md)
+- [Form と編集行](form-editing.md)
 - [Drag and Drop](drag-and-drop.md)
 - [Persisted State](persisted-state.md)
 - [Tree diagnostics](tree-diagnostics.md)
