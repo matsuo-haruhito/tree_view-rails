@@ -57,14 +57,19 @@ bundle exec rake build
 npm test
 ```
 
+Pull Request CI checks:
+
+- Ruby lint: `bundle exec standardrb`
+- Ruby specs: `bundle exec rspec`
+
 Main-push CI checks:
 
-- Ruby spec matrix
+- Ruby version matrix
 - Rails version matrix
 - JavaScript tests through `npm ci`
 - Gem package verification
 
-Pull Request CIは軽量lint中心です。release判定には、merge後の `main` full CIを使います。
+merge前にPR CIを通します。互換性matrix、JavaScript coverage、package verificationを含むため、release判定にはより広い `main` CIを使います。
 
 ## Documentation
 
