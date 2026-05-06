@@ -198,15 +198,17 @@ Use `Float::INFINITY` to place missing `display_order` values last.
 
 ```ruby
 matched_documents = Document.search(params[:q]).to_a
-expanded_keys = tree.expanded_keys_for_paths(matched_documents)
+expanded_keys = tree.expanded_keys_for(matched_documents)
 
 render_state = TreeView::RenderState.new(
   tree: tree,
   root_items: tree.root_items,
   row_partial: "documents/tree_columns",
   ui_config: tree_ui,
-  initial_state: :collapsed,
-  expanded_keys: expanded_keys
+  initial_expansion: {
+    default: :collapsed,
+    expanded_keys: expanded_keys
+  }
 )
 ```
 
@@ -265,6 +267,149 @@ Use windowed rendering when many visible rows remain.
 ```
 
 Use lazy loading when children should be loaded only as needed.
+
+## Avoid an unopenable static collapsed tree
+
+`build_static` does not configure expand/collapse URLs. If static rendering is combined with `initial_expansion: { default: :collapsed }`, collapsed descendants are not rendered into the initial HTML and the user cannot open them from the browser.
+
+```ruby
+# Static mode has no show/hide URLs. When default expansion is collapsed,
+# descendant rows are not initially rendered and cannot be opened by user action.
+# Use Turbo mode with show/hide path builders when users should expand branches.
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document_tree",
+  key_resolver: ->(item) { node_key(item) }
+).build_static
+
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_expansion: { default: :collapsed }
+)
+```
+
+Use this only for a final, non-interactive snapshot. If users should open branches, use Turbo mode.
+
+## Minimal Turbo expand/collapse tree
+
+Turbo mode connects TreeView toggle links to host-app routes. Path builders only generate URLs; the host app still owns routing, authorization, queries, and Turbo Stream responses.
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: self,
+  node_prefix: "document_tree",
+  key_resolver: ->(item) { node_key(item) }
+).build(
+  show_descendants_path_builder: ->(item, depth, scope) {
+    show_document_tree_path(item, depth:, scope:, format: :turbo_stream)
+  },
+  hide_descendants_path_builder: ->(item, depth, scope) {
+    hide_document_tree_path(item, depth:, scope:, format: :turbo_stream)
+  },
+  toggle_all_path_builder: ->(state) {
+    documents_path(tree_state: state, format: :turbo_stream)
+  }
+)
+```
+
+```ruby
+def show_tree_branch
+  authorize! :read, @document
+  rebuild_tree_state(expanded_keys: expanded_keys_from_params + [node_key(@document)])
+
+  respond_to do |format|
+    format.turbo_stream do
+      render turbo_stream: turbo_stream.replace(
+        "tree_panel",
+        partial: "documents/tree",
+        locals: { render_state: @render_state }
+      )
+    end
+  end
+end
+```
+
+```erb
+<div id="tree_panel">
+  <%= tree_view_rows(render_state) %>
+</div>
+```
+
+For a first implementation, replacing the whole tree panel is usually easiest and keeps state reconstruction explicit. For very large trees, replace only the affected descendant rows after the route and state shape are stable.
+
+## Expand only the current branch initially
+
+Navigation sidebars often start with every branch collapsed except the branch containing the current project or document. Use `initial_expansion` with `default: :collapsed` and pass the parent branch key in `expanded_keys`.
+
+```ruby
+expanded_keys = []
+expanded_keys << node_key(@project) if @project
+current_key = @document ? node_key(@document) : node_key(@project)
+
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_expansion: {
+    default: :collapsed,
+    expanded_keys: expanded_keys
+  },
+  current_key: current_key,
+  row_class_builder: ->(document) {
+    ["document-row", ("is-current" if node_key(document) == current_key)]
+  }
+)
+```
+
+Use `expanded_keys = []` on index pages when only top-level rows should appear. If users need to open other branches, combine this pattern with Turbo mode rather than `build_static`.
+
+## GraphAdapter and ActiveRecord performance
+
+When `GraphAdapter` is backed by ActiveRecord data, avoid returning lazy relations from `children_resolver`. Rendering may ask for children more than once, and row partials often access related data. Precompute child arrays and keep expensive derived values out of the row partial.
+
+```ruby
+projects = Project.visible_to(current_user).to_a
+
+children_by_project_id = projects.index_with do |project|
+  project.documents
+    .accessible_to(current_user)
+    .includes(:latest_version)
+    .to_a
+    .sort_by(&:title)
+end.transform_keys(&:id)
+
+adapter = TreeView::GraphAdapter.new(
+  roots: projects,
+  children_resolver: ->(node) {
+    node.is_a?(Project) ? children_by_project_id.fetch(node.id, []) : []
+  }
+)
+```
+
+Practical checklist:
+
+- Materialize parent records with `to_a` before building the tree.
+- Return arrays, not ActiveRecord relations, from `children_resolver`.
+- Cache child collections by parent id in the host app.
+- Do not run DB queries or expensive permission/version checks inside row partials.
+- Cache derived values such as displayable versions in a helper or presenter.
+
+## Development logging tips for recursive trees
+
+Large recursive trees can produce many normal Rails view-render log lines such as `_tree_row.html.erb`, `_tree_toggle_cell.html.erb`, and `_tree_toggle_content.html.erb`. The render log itself is not a bug. During performance work, focus on whether row rendering is triggering repeated database work.
+
+Look for these signals in the Rails log:
+
+- High `ActiveRecord:` time compared with `Views:` time.
+- Repeated `Document Load` or `DocumentVersion Load` lines while rows render.
+- Many same-shaped queries that are not marked `CACHE`.
+- Derived helper calls from the row partial that repeatedly touch associations.
+
+Host-app mitigations include precomputing children as arrays, caching derived values used by the row partial, and temporarily reducing noisy development view logs while investigating database queries. Recursive partial logs are expected; repeated uncached queries are the problem.
 
 ## Add row state classes
 
