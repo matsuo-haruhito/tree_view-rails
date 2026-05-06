@@ -198,15 +198,17 @@ sorter = ->(nodes, _tree) {
 
 ```ruby
 matched_documents = Document.search(params[:q]).to_a
-expanded_keys = tree.expanded_keys_for_paths(matched_documents)
+expanded_keys = tree.expanded_keys_for(matched_documents)
 
 render_state = TreeView::RenderState.new(
   tree: tree,
   root_items: tree.root_items,
   row_partial: "documents/tree_columns",
   ui_config: tree_ui,
-  initial_state: :collapsed,
-  expanded_keys: expanded_keys
+  initial_expansion: {
+    default: :collapsed,
+    expanded_keys: expanded_keys
+  }
 )
 ```
 
@@ -265,6 +267,149 @@ render_state = TreeView::RenderState.new(
 ```
 
 子nodeを必要な分だけ読み込みたい場合は lazy loading を使います。
+
+## static collapsed tree が開けなくなる落とし穴を避ける
+
+`build_static` は開閉URLを設定しません。そのため static rendering と `initial_expansion: { default: :collapsed }` を組み合わせると、collapsed な子孫行は初期HTMLに描画されず、ユーザー操作では展開できません。
+
+```ruby
+# static mode は show/hide URL を持たないため、default collapsed にすると
+# 子孫行は初期描画されず、ユーザー操作では展開できない。
+# ユーザーに開閉させたい場合は Turbo mode で path builder を渡す。
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document_tree",
+  key_resolver: ->(item) { node_key(item) }
+).build_static
+
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_expansion: { default: :collapsed }
+)
+```
+
+これは最終的な非インタラクティブ表示だけに使ってください。ユーザーがbranchを開けるUIにしたい場合は Turbo mode を使います。
+
+## Turbo expand/collapse の最小構成
+
+Turbo mode は TreeView の toggle link を host app の route につなぎます。path builder は URL を作るだけで、route、認可、query、Turbo Stream response は host app 側の責務です。
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: self,
+  node_prefix: "document_tree",
+  key_resolver: ->(item) { node_key(item) }
+).build(
+  show_descendants_path_builder: ->(item, depth, scope) {
+    show_document_tree_path(item, depth:, scope:, format: :turbo_stream)
+  },
+  hide_descendants_path_builder: ->(item, depth, scope) {
+    hide_document_tree_path(item, depth:, scope:, format: :turbo_stream)
+  },
+  toggle_all_path_builder: ->(state) {
+    documents_path(tree_state: state, format: :turbo_stream)
+  }
+)
+```
+
+```ruby
+def show_tree_branch
+  authorize! :read, @document
+  rebuild_tree_state(expanded_keys: expanded_keys_from_params + [node_key(@document)])
+
+  respond_to do |format|
+    format.turbo_stream do
+      render turbo_stream: turbo_stream.replace(
+        "tree_panel",
+        partial: "documents/tree",
+        locals: { render_state: @render_state }
+      )
+    end
+  end
+end
+```
+
+```erb
+<div id="tree_panel">
+  <%= tree_view_rows(render_state) %>
+</div>
+```
+
+最初の実装では tree panel 全体を置換する方が、状態の再構築を明示できて手戻りが少ないです。大きなtreeでは、routeとstateの形が安定してから対象の子孫行だけ置換する方式を検討します。
+
+## 現在のブランチだけ初期展開する
+
+ナビゲーション用サイドバーでは、現在のprojectやdocumentを含むbranchだけを開き、他のbranchはcollapsedにする構成がよくあります。`initial_expansion` に `default: :collapsed` を指定し、`expanded_keys` に親branchのkeyを渡します。
+
+```ruby
+expanded_keys = []
+expanded_keys << node_key(@project) if @project
+current_key = @document ? node_key(@document) : node_key(@project)
+
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_expansion: {
+    default: :collapsed,
+    expanded_keys: expanded_keys
+  },
+  current_key: current_key,
+  row_class_builder: ->(document) {
+    ["document-row", ("is-current" if node_key(document) == current_key)]
+  }
+)
+```
+
+一覧ページでは `expanded_keys = []` にすると top-level 行だけを表示できます。他のbranchもユーザーに開閉させたい場合は、`build_static` ではなく Turbo mode と組み合わせます。
+
+## GraphAdapter と ActiveRecord の性能
+
+`GraphAdapter` の裏側で ActiveRecord data を扱う場合、`children_resolver` から lazy な relation を返さない方が安全です。描画中に children が複数回参照されることがあり、row partial でも関連データを触りがちです。子要素は配列として事前計算し、高コストな derived value は row partial の外に出します。
+
+```ruby
+projects = Project.visible_to(current_user).to_a
+
+children_by_project_id = projects.index_with do |project|
+  project.documents
+    .accessible_to(current_user)
+    .includes(:latest_version)
+    .to_a
+    .sort_by(&:title)
+end.transform_keys(&:id)
+
+adapter = TreeView::GraphAdapter.new(
+  roots: projects,
+  children_resolver: ->(node) {
+    node.is_a?(Project) ? children_by_project_id.fetch(node.id, []) : []
+  }
+)
+```
+
+実装時の確認ポイント:
+
+- tree 構築前に親recordを `to_a` で確定する。
+- `children_resolver` から ActiveRecord relation ではなく配列を返す。
+- parent id ごとの children cache を host app 側で作る。
+- row partial 内で DB query や高コストな権限・version判定をしない。
+- 表示可能versionなどの derived value は helper や presenter でcacheする。
+
+## recursive tree の development log Tips
+
+大きめの recursive tree では、Rails log に `_tree_row.html.erb`、`_tree_toggle_cell.html.erb`、`_tree_toggle_content.html.erb` などの view render log が大量に出ることがあります。render log 自体は異常ではありません。性能調査では、row render 中に database work が繰り返されていないかに注目します。
+
+Rails log では次を見ます。
+
+- `Views:` に比べて `ActiveRecord:` が大きい。
+- row render 中に `Document Load` や `DocumentVersion Load` が繰り返される。
+- `CACHE` ではない同形queryが大量に出る。
+- row partial から呼ぶ helper が association を繰り返し触っている。
+
+host app 側の対策は、children を配列で事前計算する、row partial で使う derived value をcacheする、DB query 調査中だけ development の view log ノイズを抑える、などです。recursive partial log は想定内で、問題は繰り返し発生する uncached query です。
 
 ## 行に状態classを付ける
 
