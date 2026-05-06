@@ -1,7 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
+import { isTreeViewInteractiveTarget } from "./interactive.js"
 
 export class TreeViewTransferController extends Controller {
   start(event) {
+    if (isTreeViewInteractiveTarget(event.target, "drag", this.element)) return
+
     const row = this.rowFromEvent(event)
     if (!row || row.dataset.treeTransferDisabled === "true") return
 
