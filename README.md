@@ -6,6 +6,31 @@ It provides reusable tree objects, render state, helpers, partials, and browser 
 
 日本語の説明、導入手順、API仕様は [日本語ドキュメント](docs/ja/README.md) を参照してください。
 
+## Is this gem for you?
+
+Use TreeView when you want Rails-friendly primitives for rendering tree or tree-table interfaces, not a complete file-manager application. It is a good fit when the host app owns the records, queries, routes, authorization, and business behavior, while TreeView handles reusable rendering and interaction hooks.
+
+TreeView is useful for:
+
+- Rails-friendly tree and table rendering
+- Turbo and Stimulus integration points
+- expandable rows
+- checkbox selection hooks
+- lazy-loading hooks
+- drag/drop hooks
+- host-app-controlled queries and business behavior
+
+TreeView does not provide:
+
+- a complete file-manager application
+- CRUD screens
+- authorization policies
+- product-specific context menus or bulk actions
+- server-side pagination algorithms
+- a full virtual scrolling engine
+
+For very large trees, combine TreeView's render controls with host-app loading and paging strategies. Start with [Render Scale](docs/en/render-scale.md), then add [Lazy Loading](docs/en/lazy-loading.md), [Children Pagination](docs/en/children-pagination.md), or custom virtual scrolling owned by the host app when your UI needs it.
+
 ## Features
 
 - Build trees from parent-child records.
