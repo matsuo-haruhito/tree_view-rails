@@ -17,6 +17,8 @@ TreeView is responsible for:
 
 The host app remains responsible for scroll observers, infinite scroll, URL query state, server-side pagination, and data fetching.
 
+Windowed rendering controls HTML output only. It does not reduce host-app queries or fetched records. If the problem is data-loading volume, start with [Lazy Loading](lazy-loading.md) or [Children Pagination](children-pagination.md). If the problem is scroll-position-driven DOM virtualization, implement virtual scrolling in the host app.
+
 ## Passing a window to tree_view_rows
 
 ```erb
@@ -79,7 +81,7 @@ Windowed rendering is not DOM virtualization.
 - It does not change server-side queries.
 - It does not reduce the amount of tree data fetched by the host app.
 
-If data-fetching volume needs to be reduced, combine this with host-app server-side pagination or lazy loading.
+If data-fetching volume needs to be reduced, use [Lazy Loading](lazy-loading.md), [Children Pagination](children-pagination.md), or another host-app data-loading strategy.
 
 ## Responsibility boundary
 
@@ -91,5 +93,6 @@ If data-fetching volume needs to be reduced, combine this with host-app server-s
 | pagination controls | metadata only | renders UI |
 | URL/query state | no | yes |
 | infinite scroll | no | yes |
+| virtual scroll | no | yes |
 | server-side pagination | no | yes |
 | data fetching | no | yes |
