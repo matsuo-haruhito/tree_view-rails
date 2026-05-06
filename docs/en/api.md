@@ -173,9 +173,9 @@ render_state = TreeView::RenderState.new(
 | `row_partial:` | yes | Host app partial for business columns. |
 | `ui_config:` | yes | `TreeView::UiConfig`. |
 | `initial_state:` | no | `:expanded` or `:collapsed`. |
-| `expanded_keys:` | no | Node keys to expand. |
-| `collapsed_keys:` | no | Node keys to collapse. |
-| `initial_expansion:` | no | Grouped initial expansion settings. |
+| `expanded_keys:` | no | Tree-side node keys to expand. These must match `tree.node_key_for(item)`, not UI-only DOM IDs. |
+| `collapsed_keys:` | no | Tree-side node keys to collapse. These must match `tree.node_key_for(item)`, not UI-only DOM IDs. |
+| `initial_expansion:` | no | Grouped initial expansion settings. Expansion keys inside this group follow the same tree-side node key rule. |
 | `render_scope:` | no | Grouped render scope settings. |
 | `toggle_scope:` | no | Grouped toggle scope settings. |
 | `selection:` | no | Grouped checkbox selection settings. |
@@ -189,7 +189,7 @@ render_state = TreeView::RenderState.new(
 | `row_event_payload_builder:` | no | Callable that returns drag/drop transfer payloads. This is transfer-specific, not a generic row event hook. |
 | `persisted_state:` | no | Saved expansion state. |
 
-For focused naming decisions, see [Public Name Decisions](public-name-decisions.md). For ARIA placement, see [Accessibility Semantics](accessibility-semantics.md).
+For focused naming decisions, see [Public Name Decisions](public-name-decisions.md). For ARIA placement, see [Accessibility Semantics](accessibility-semantics.md). For identifier design, see [Node keys](node-keys.md).
 
 ## TreeView::UiConfig / UiConfigBuilder
 
