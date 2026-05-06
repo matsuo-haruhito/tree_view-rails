@@ -1,5 +1,6 @@
 import { Application } from "@hotwired/stimulus"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { isTreeViewInteractiveTarget } from "./interactive.js"
 import {
   TreeViewRemoteStateController,
   TreeViewSelectionController,
@@ -10,6 +11,38 @@ import {
 function nextFrame() {
   return new Promise((resolve) => setTimeout(resolve, 0))
 }
+
+describe("tree view interactive target helpers", () => {
+  afterEach(() => {
+    document.body.innerHTML = ""
+  })
+
+  it("detects native controls and tree view markers", () => {
+    document.body.innerHTML = `
+      <table id="tree">
+        <tbody>
+          <tr>
+            <td>
+              <input id="native-input">
+              <span id="editable" contenteditable="true">Rename me</span>
+              <span id="custom" data-tree-view-interactive="true">Custom widget</span>
+              <span id="keyboard-only" data-tree-view-ignore-keyboard="true">Keyboard widget</span>
+              <span id="row-click-only" data-tree-view-ignore-row-click="true">Row click widget</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `
+    const root = document.querySelector("#tree")
+
+    expect(isTreeViewInteractiveTarget(document.querySelector("#native-input"), "keyboard", root)).toBe(true)
+    expect(isTreeViewInteractiveTarget(document.querySelector("#editable"), "keyboard", root)).toBe(true)
+    expect(isTreeViewInteractiveTarget(document.querySelector("#custom"), "drag", root)).toBe(true)
+    expect(isTreeViewInteractiveTarget(document.querySelector("#keyboard-only"), "keyboard", root)).toBe(true)
+    expect(isTreeViewInteractiveTarget(document.querySelector("#row-click-only"), "rowClick", root)).toBe(true)
+    expect(isTreeViewInteractiveTarget(document.querySelector("#keyboard-only"), "rowClick", root)).toBe(false)
+  })
+})
 
 describe("TreeViewStateController", () => {
   let application
@@ -26,7 +59,14 @@ describe("TreeViewStateController", () => {
             <td><button class="remove-button" type="button"></button></td>
           </tr>
           <tr id="row-2" data-tree-view-state-target="node" data-tree-view-state-node-key="project:2" data-tree-view-state-expanded="false">
-            <td><button class="show-button" type="button"></button></td>
+            <td>
+              <button class="show-button" type="button"></button>
+              <input class="title-input" type="text" value="Project 2">
+              <a class="edit-link" href="/projects/2/edit">Edit</a>
+              <span class="editable-label" contenteditable="true">Editable label</span>
+              <span class="custom-widget" data-tree-view-interactive="true">Custom widget</span>
+              <span class="keyboard-widget" data-tree-view-ignore-keyboard="true">Keyboard widget</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -75,6 +115,46 @@ describe("TreeViewStateController", () => {
     })
 
     expect(click).toHaveBeenCalledOnce()
+  })
+
+  it("ignores keyboard navigation from interactive row controls", () => {
+    const element = document.querySelector("[data-controller='tree-view-state']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    const button = document.querySelector("#row-2 .show-button")
+    const click = vi.spyOn(button, "click")
+    const preventDefault = vi.fn()
+
+    controller.keydown({
+      key: "ArrowRight",
+      preventDefault,
+      target: document.querySelector("#row-2 .title-input")
+    })
+
+    expect(preventDefault).not.toHaveBeenCalled()
+    expect(click).not.toHaveBeenCalled()
+  })
+
+  it("ignores keyboard navigation from explicit tree view interactive markers", () => {
+    const element = document.querySelector("[data-controller='tree-view-state']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    const button = document.querySelector("#row-2 .show-button")
+    const click = vi.spyOn(button, "click")
+    const preventDefault = vi.fn()
+
+    controller.keydown({
+      key: "Enter",
+      preventDefault,
+      target: document.querySelector("#row-2 .custom-widget")
+    })
+
+    controller.keydown({
+      key: " ",
+      preventDefault,
+      target: document.querySelector("#row-2 .keyboard-widget")
+    })
+
+    expect(preventDefault).not.toHaveBeenCalled()
+    expect(click).not.toHaveBeenCalled()
   })
 })
 
@@ -235,7 +315,12 @@ describe("TreeViewTransferController", () => {
     document.body.innerHTML = `
       <table data-controller="tree-view-transfer">
         <tbody>
-          <tr id="source-row" data-tree-depth="0" data-tree-transfer-payload='{"key":"project:1"}'></tr>
+          <tr id="source-row" data-tree-depth="0" data-tree-transfer-payload='{"key":"project:1"}'>
+            <td>
+              <button class="action-button" type="button">Edit</button>
+              <span class="drag-widget" data-tree-view-ignore-drag="true">Drag widget</span>
+            </td>
+          </tr>
           <tr id="target-row" data-tree-depth="0" data-tree-transfer-payload='{"key":"project:2"}'></tr>
         </tbody>
       </table>
@@ -263,6 +348,24 @@ describe("TreeViewTransferController", () => {
 
     expect(dataTransfer.effectAllowed).toBe("move")
     expect(dataTransfer.setData).toHaveBeenCalledWith("application/json", JSON.stringify({ key: "project:1" }))
+  })
+
+  it("ignores drag start from interactive row controls", () => {
+    const element = document.querySelector("[data-controller='tree-view-transfer']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-transfer")
+    const eventSpy = vi.fn()
+    element.addEventListener("tree-view-transfer:drag-start", eventSpy)
+    const dataTransfer = {
+      effectAllowed: null,
+      setData: vi.fn()
+    }
+
+    controller.start({ target: document.querySelector("#source-row .action-button"), dataTransfer })
+    controller.start({ target: document.querySelector("#source-row .drag-widget"), dataTransfer })
+
+    expect(dataTransfer.effectAllowed).toBeNull()
+    expect(dataTransfer.setData).not.toHaveBeenCalled()
+    expect(eventSpy).not.toHaveBeenCalled()
   })
 
   it("dispatches drop payloads with calculated position", () => {
