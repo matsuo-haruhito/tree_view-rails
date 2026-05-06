@@ -45,7 +45,8 @@ module TreeView
       :error_builder,
       :depth_label_builder,
       :badge_builder,
-      :icon_builder
+      :icon_builder,
+      :toggle_icon_builder
 
     # RenderState は「この画面ではどう描くか」を束ねる。
     def initialize(tree:,
@@ -82,7 +83,8 @@ module TreeView
       error_builder: nil,
       depth_label_builder: nil,
       badge_builder: nil,
-      icon_builder: nil)
+      icon_builder: nil,
+      toggle_icon_builder: nil)
       initial_expansion_options = normalize_options(initial_expansion, :initial_expansion, VALID_INITIAL_EXPANSION_KEYS)
       render_scope_options = normalize_options(render_scope, :render_scope, VALID_RENDER_SCOPE_KEYS)
       toggle_scope_options = normalize_options(toggle_scope, :toggle_scope, VALID_TOGGLE_SCOPE_KEYS)
@@ -120,6 +122,7 @@ module TreeView
       @depth_label_builder = depth_label_builder
       @badge_builder = badge_builder
       @icon_builder = icon_builder
+      @toggle_icon_builder = toggle_icon_builder
 
       validate_builders!(
         row_class_builder: row_class_builder,
@@ -130,6 +133,7 @@ module TreeView
         depth_label_builder: depth_label_builder,
         badge_builder: badge_builder,
         icon_builder: icon_builder,
+        toggle_icon_builder: toggle_icon_builder,
         selection_payload_builder: @selection_payload_builder,
         selection_disabled_builder: @selection_disabled_builder,
         selection_disabled_reason_builder: @selection_disabled_reason_builder
