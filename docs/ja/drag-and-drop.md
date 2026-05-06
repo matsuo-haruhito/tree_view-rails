@@ -1,6 +1,6 @@
 # Drag and Drop
 
-このページでは、TreeViewの行イベントpayloadを使ってdrag-and-drop UIをhost app側に実装するための境界を説明します。
+このページでは、TreeViewのtransfer payloadを使ってdrag-and-drop UIをhost app側に実装するための境界を説明します。
 
 ## 概要
 
@@ -11,13 +11,15 @@ TreeView が提供するのは以下です。
 - rowごとのtransfer payloadをdata属性として出力するhook
 - `tree-view-transfer` controller
 - drag start時にpayloadを `DataTransfer` へ入れる補助
-- host appがdrop先でpayloadを読むための最低限のイベント境界
+- host appがdrop先でpayloadを読むための最低限のtransfer境界
 
 実際のdrop target、並び替え保存、親変更、認可、validation、Turbo Stream更新、エラー表示はhost app側で実装します。
 
-## row event payload
+## row transfer payload
 
 `row_event_payload_builder` に、drag/dropで渡したいpayloadを返すcallableを指定します。
+
+歴史的な名前に反して、`row_event_payload_builder` はtransfer専用です。すべてのrow event向けの汎用payload hookではありません。詳細は [Public Name Decisions](public-name-decisions.md) を参照してください。
 
 ```ruby
 render_state = TreeView::RenderState.new(
@@ -71,7 +73,7 @@ function onDrop(event) {
 
 | Area | TreeView | Host app |
 |---|---|---|
-| row payload builder validation | yes | provides builder |
+| row transfer payload builder validation | yes | provides builder |
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
 | drop target | no | yes |

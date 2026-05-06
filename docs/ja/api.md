@@ -182,12 +182,14 @@ render_state = TreeView::RenderState.new(
 | `lazy_loading:` | no | lazy loading設定group。 |
 | `row_class_builder:` | no | `tr` classを返すcallable。 |
 | `row_data_builder:` | no | `tr` data属性を返すcallable。 |
-| `badge_builder:` | no | badge表示値を返すcallable。 |
-| `icon_builder:` | no | icon表示値を返すcallable。 |
+| `badge_builder:` | no | row badge / marker 表示値を返すcallable。 |
+| `icon_builder:` | no | row badge / marker 表示のcompatibility alias。新しいcodeでは `badge_builder` を推奨。 |
 | `depth_label_builder:` | no | depth labelを返すcallable。 |
 | `row_status_builder:` | no | row状態を返すcallable。 |
-| `row_event_payload_builder:` | no | drag/drop等のpayloadを返すcallable。 |
+| `row_event_payload_builder:` | no | drag/drop transfer payloadを返すcallable。transfer専用であり、汎用row event hookではない。 |
 | `persisted_state:` | no | 保存済み展開状態。 |
+
+公開名の判断は [Public Name Decisions](public-name-decisions.md)、ARIA配置は [Accessibility Semantics](accessibility-semantics.md) を参照してください。
 
 ## TreeView::UiConfig / UiConfigBuilder
 

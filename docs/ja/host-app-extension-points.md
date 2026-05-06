@@ -12,13 +12,14 @@ TreeViewは、業務固有の表示や挙動をgem内に持ち込まず、host a
 - `row_class_builder`
 - `row_data_builder`
 - `badge_builder`
-- `icon_builder`
 - `depth_label_builder`
 - `row_status_builder`
-- `row_event_payload_builder`
+- transfer payload builders
 - selection builders
 - lazy loading path builders
 - Turbo path builders
+
+`icon_builder` のcompatibility statusを含む公開名の判断は [Public Name Decisions](public-name-decisions.md) を参照してください。
 
 ## row_partial
 
@@ -46,19 +47,24 @@ row_data_builder: ->(document) {
 
 ## visual builders
 
+row badge / marker 表示には `badge_builder` を使います。`icon_builder` はcompatibility aliasとして利用可能ですが、新しいcodeやexamplesでは `badge_builder` を推奨します。
+
 ```ruby
 badge_builder: ->(document) { document.status },
-icon_builder: ->(document) { document.folder? ? "folder" : "file" },
 depth_label_builder: ->(_document, context) { "Level #{context.depth}" }
 ```
 
-## behavior builders
+## transfer payload builders
+
+`row_event_payload_builder` はtransfer専用です。drag/drop transfer dataとしてserializeされるpayloadを返します。汎用row event hookではありません。
 
 ```ruby
 row_event_payload_builder: ->(document) {
   { id: document.id, key: tree.node_key_for(document) }
 }
 ```
+
+## selection builders
 
 ```ruby
 selection: {

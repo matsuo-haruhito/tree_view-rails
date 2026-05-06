@@ -12,13 +12,14 @@ Main extension points:
 - `row_class_builder`
 - `row_data_builder`
 - `badge_builder`
-- `icon_builder`
 - `depth_label_builder`
 - `row_status_builder`
-- `row_event_payload_builder`
+- transfer payload builders
 - selection builders
 - lazy loading path builders
 - Turbo path builders
+
+For focused naming decisions, including the compatibility status of `icon_builder`, see [Public Name Decisions](public-name-decisions.md).
 
 ## row_partial
 
@@ -46,19 +47,24 @@ row_data_builder: ->(document) {
 
 ## Visual builders
 
+Use `badge_builder` for row badge or marker display. `icon_builder` remains available as a compatibility alias, but new code and examples should prefer `badge_builder`.
+
 ```ruby
 badge_builder: ->(document) { document.status },
-icon_builder: ->(document) { document.folder? ? "folder" : "file" },
 depth_label_builder: ->(_document, context) { "Level #{context.depth}" }
 ```
 
-## Behavior builders
+## Transfer payload builders
+
+`row_event_payload_builder` is transfer-specific. It returns the payload serialized for drag/drop transfer data; it is not a generic row event hook.
 
 ```ruby
 row_event_payload_builder: ->(document) {
   { id: document.id, key: tree.node_key_for(document) }
 }
 ```
+
+## Selection builders
 
 ```ruby
 selection: {

@@ -182,12 +182,14 @@ render_state = TreeView::RenderState.new(
 | `lazy_loading:` | no | Grouped lazy loading settings. |
 | `row_class_builder:` | no | Callable that returns row CSS classes. |
 | `row_data_builder:` | no | Callable that returns row data attributes. |
-| `badge_builder:` | no | Callable that returns a badge value. |
-| `icon_builder:` | no | Callable that returns an icon value. |
+| `badge_builder:` | no | Callable that returns a row badge or marker value. |
+| `icon_builder:` | no | Compatibility alias for row badge or marker display; prefer `badge_builder` in new code. |
 | `depth_label_builder:` | no | Callable that returns a depth label. |
 | `row_status_builder:` | no | Callable that returns row state. |
-| `row_event_payload_builder:` | no | Callable that returns drag/drop or transfer payloads. |
+| `row_event_payload_builder:` | no | Callable that returns drag/drop transfer payloads. This is transfer-specific, not a generic row event hook. |
 | `persisted_state:` | no | Saved expansion state. |
+
+For focused naming decisions, see [Public Name Decisions](public-name-decisions.md). For ARIA placement, see [Accessibility Semantics](accessibility-semantics.md).
 
 ## TreeView::UiConfig / UiConfigBuilder
 

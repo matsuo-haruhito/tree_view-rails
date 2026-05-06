@@ -1,6 +1,6 @@
 # Drag and Drop
 
-This page explains how host apps can use TreeView row event payloads to build drag-and-drop UI.
+This page explains how host apps can use TreeView transfer payloads to build drag-and-drop UI.
 
 ## Overview
 
@@ -11,13 +11,15 @@ TreeView provides:
 - hooks for rendering row transfer payloads as data attributes
 - the `tree-view-transfer` controller
 - helper behavior for putting payloads into `DataTransfer` on drag start
-- a minimal event boundary so host apps can read payloads at drop targets
+- a minimal transfer boundary so host apps can read payloads at drop targets
 
 The host app remains responsible for drop targets, saving reordered rows, changing parents, authorization, validation, Turbo Stream updates, and error handling.
 
-## Row event payload
+## Row transfer payload
 
 Pass `row_event_payload_builder` to return the payload that should be transferred during drag/drop behavior.
+
+Despite its historical name, `row_event_payload_builder` is transfer-specific. It is not a generic payload hook for every row event. See [Public Name Decisions](public-name-decisions.md).
 
 ```ruby
 render_state = TreeView::RenderState.new(
@@ -71,7 +73,7 @@ function onDrop(event) {
 
 | Area | TreeView | Host app |
 |---|---|---|
-| row payload builder validation | yes | provides builder |
+| row transfer payload builder validation | yes | provides builder |
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
 | drop target | no | yes |

@@ -13,7 +13,15 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ## Unreleased
 
-No unreleased changes.
+### Changed
+
+- Removed misleading `aria-controls` from Turbo toggle links until TreeView has a single stable controlled target.
+- Clarified public builder naming decisions: prefer `badge_builder`, keep `icon_builder` as a compatibility alias, treat `row_event_payload_builder` as transfer-specific, and document `loading_builder` / `error_builder` as boolean predicates.
+
+### Documentation
+
+- Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
+- Added public name decision docs in Japanese and English.
 
 ## 0.1.0 - 2026-05-07
 
