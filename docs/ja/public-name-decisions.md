@@ -8,7 +8,7 @@ row badge / marker 表示には `badge_builder` を推奨します。
 
 `icon_builder` は既存caller向けのcompatibility aliasとして残します。内部的には、`badge_builder` が未指定の場合に `RenderContext#badge_builder` が `icon_builder` へfallbackすることがあります。ただし、新しいdocsやexamplesでは `icon_builder` を推奨しません。
 
-将来のtoggle visualには、`toggle_icon_builder` のようなtoggle専用hookを使う方針です。TreeViewは引き続きtoggle link / button構造、ARIA属性、Turbo属性、keyboard behaviorを所有します。
+TreeView に toggle visual の専用customizationを追加する場合は、`toggle_icon_builder` のようなtoggle専用hookとして扱います。TreeViewは引き続きtoggle link / button構造、ARIA属性、Turbo属性、keyboard behaviorを所有します。
 
 ## `row_event_payload_builder`
 
