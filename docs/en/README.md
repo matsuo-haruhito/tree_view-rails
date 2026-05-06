@@ -24,10 +24,10 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Usage](usage.md) | Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
 | [API overview](api-overview.md) | Overview of the main public APIs |
+| [API reference](api.md) | Main public APIs, options, behavior, and constraints |
 | [Glossary](glossary.md) | Main terms used in TreeView docs and code |
 | [Node keys](node-keys.md) | node_key design, collision avoidance, and validation |
 | [Tree diagnostics](tree-diagnostics.md) | Structure inspection APIs for node keys, DOM IDs, orphans, and cycles |
-| [API reference](../api.md) | Detailed API reference; currently Japanese-first |
 | [Selection](selection.md) | Checkbox selection, visibility, and submitted value parsing |
 | [Lazy Loading](lazy-loading.md) | Hooks and data attributes for loading children on demand |
 | [Windowed Rendering](windowed-rendering.md) | Opt-in API for rendering visible rows by offset / limit |
@@ -56,7 +56,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 
 For first-time usage, read [Installation](installation.md), [Minimal usage](minimal-usage.md), and [Usage](usage.md) in that order.
 
-For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](../api.md) for details.
+For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
 
 For common API combinations, see [Cookbook](cookbook.md).
 
