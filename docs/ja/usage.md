@@ -72,7 +72,7 @@ tree_ui = TreeView::UiConfigBuilder.new(
   hide_descendants_path_builder: ->(item, depth, scope) {
     hide_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
   },
-  show_descendants_path_builder: ->(item, depth: depth, scope: scope) {
+  show_descendants_path_builder: ->(item, depth, scope) {
     show_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
   },
   toggle_all_path_builder: ->(state) {
