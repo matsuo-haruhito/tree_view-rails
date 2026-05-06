@@ -21,10 +21,11 @@ TreeView often uses `item` for the host-app object and `node` when describing th
 | Term | Meaning |
 |---|---|
 | id | A host-app record ID, usually a database ID. |
-| node_key | A key used by TreeView to identify a node. Used for DOM IDs, selection, expanded keys, and more. |
+| node_key | A tree-side key used by TreeView to identify a node for expansion, selection, persisted state, row payloads, and diagnostics. |
+| UI identifier / DOM ID | A browser-facing identifier generated through `UiConfig` / `UiConfigBuilder` for HTML IDs, Turbo targets, row attributes, and related hooks. |
 | tree_instance_key | A key used to distinguish a tree or screen when persisted state is saved. |
 
-Design `node_key` values so they do not collide when multiple trees or heterogeneous nodes appear on the same screen.
+Design `node_key` values so they do not collide when multiple trees or heterogeneous nodes appear on the same screen. Expansion-related values such as `expanded_keys` and `collapsed_keys` must match tree-side node keys, not UI-only DOM IDs unless the host app intentionally uses the same stable value in both layers.
 
 ## Rendering
 
@@ -42,8 +43,8 @@ Design `node_key` values so they do not collide when multiple trees or heterogen
 | Term | Meaning |
 |---|---|
 | initial_state | Default initial expansion state, either `:expanded` or `:collapsed`. |
-| expanded_keys | Node keys that should be expanded on initial render. |
-| collapsed_keys | Node keys that should be collapsed on initial render. |
+| expanded_keys | Tree-side node keys that should be expanded on initial render. |
+| collapsed_keys | Tree-side node keys that should be collapsed on initial render. |
 | persisted state | Saved and restored expansion state. |
 
 ## Tree variants
