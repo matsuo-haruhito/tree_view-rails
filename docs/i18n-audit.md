@@ -12,7 +12,7 @@ Documentation is organized around language-specific directories.
 - `docs/mockups/`: technical mockup assets
 - `docs/i18n-audit.md`: temporary release-readiness tracker
 
-Root-level prose docs have been removed where the GitHub connector allowed the deletion. The remaining root-level prose exceptions are tracked below.
+Root-level prose docs have been removed where the GitHub connector allowed the deletion. The remaining root-level prose exception is tracked below.
 
 ## Goal
 
@@ -42,7 +42,6 @@ For the initial release, the priority is:
 | `docs/README.md` | Entry point | Language selector for Japanese and English docs. |
 | `docs/i18n-audit.md` | Entry point | Temporary release-readiness tracker. Can be deleted or reduced after the release if it becomes stale. |
 | `docs/api.md` | Temporary exception | Detailed content also exists in `docs/ja/api.md` and `docs/en/api.md`; root cleanup was blocked by SHA/update limitations. |
-| `docs/development.md` | Temporary exception | Detailed content exists in `docs/ja/development.md` and `docs/en/development.md`; deletion was blocked by the safety layer. |
 
 ## P0: release-blocking language entry points
 
@@ -67,7 +66,7 @@ All P1 feature docs are split under `docs/ja/` and `docs/en/`.
 
 All P2 supporting and maintainer docs are split under `docs/ja/` and `docs/en/`.
 
-Root compatibility selectors for design policy, code quality, public API, release, and usage were removed. `docs/development.md` remains as a temporary exception because deletion was blocked.
+Root compatibility selectors for design policy, development, code quality, public API, release, and usage were removed.
 
 ## Technical assets
 
@@ -88,5 +87,4 @@ Before tagging `v0.1.0`, confirm:
 ## Remaining cleanup
 
 - Remove root `docs/api.md` when its blob SHA can be retrieved reliably through the GitHub connector or a local git workflow.
-- Remove root `docs/development.md` when the deletion call is no longer blocked.
 - Keep `docs/ja/` and `docs/en/` in sync for future user-facing changes.
