@@ -24,6 +24,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Usage](usage.md) | Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
 | [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
+| [Forms and editing rows](form-editing.md) | Bulk edit forms, inline editing layouts, Form Objects, row actions, and responsibility boundaries |
 | [API overview](api-overview.md) | Overview of the main public APIs |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
 | [Glossary](glossary.md) | Main terms used in TreeView docs and code |
@@ -63,7 +64,7 @@ When you know the use case but not the right API, start with the [Decision guide
 
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
 
-For common API combinations, see [Cookbook](cookbook.md).
+For common API combinations, see [Cookbook](cookbook.md). For editing-oriented row layouts, see [Forms and editing rows](form-editing.md).
 
 When TreeView terminology or identifier design is unclear, see [Glossary](glossary.md), [Node keys](node-keys.md), and [Tree diagnostics](tree-diagnostics.md).
 
