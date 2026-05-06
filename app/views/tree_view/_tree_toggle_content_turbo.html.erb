@@ -1,5 +1,7 @@
 <% hidden_count = local_assigns[:hidden_count] %>
 <% hidden_message_builder = local_assigns[:hidden_message_builder] %>
+<% toggle_icon_builder = local_assigns[:toggle_icon_builder] %>
+<% toggle_state = local_assigns[:toggle_state] || :leaf %>
 <% children ||= tree.children_for(item) %>
 <% branch_info = tree_branch_info(item, tree) %>
 <% ancestor_last_states = branch_info[:ancestor_last_states] %>
@@ -10,6 +12,7 @@
 <% toggle_scope = tree_toggle_scope(depth: depth, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance) %>
 <% show_path = tree_show_descendants_path(item, depth + 1, scope: toggle_scope) %>
 <% hide_path = tree_hide_descendants_path(item, depth, scope: toggle_scope) %>
+<% toggle_icon = tree_toggle_icon(item, toggle_state, toggle_icon_builder, depth: depth, tree: tree, children: children, hidden_count: hidden_count, mode: :turbo, leaf_distance: leaf_distance) %>
 
 <div class="tree-toggle">
   <div class="tree-toggle__branches" aria-hidden="true">
@@ -23,14 +26,14 @@
   <div class="tree-toggle__control">
     <% if hidden_count && show_path %>
       <%= link_to show_path, data: { turbo_stream: true }, class: 'btn btn-primary show-button tree-toggle__action', id: tree_show_button_dom_id(item), aria: { expanded: false } do %>
-        <%= tree_toggle_label(depth) %>
+        <%= toggle_icon || tree_toggle_label(depth) %>
       <% end %>
     <% elsif children.any? && hide_path %>
       <%= link_to hide_path, data: { turbo_stream: true }, class: 'btn btn-danger remove-button tree-toggle__action', aria: { expanded: true } do %>
-        <%= tree_toggle_label(depth) %>
+        <%= toggle_icon || tree_toggle_label(depth) %>
       <% end %>
     <% else %>
-      <span class="tree-toggle__level"><%= tree_toggle_label(depth) %></span>
+      <span class="tree-toggle__level"><%= toggle_icon || tree_toggle_label(depth) %></span>
     <% end %>
     <% if hidden_count %>
       <span class="tree-toggle__hidden-count"><%= tree_hidden_count_message(hidden_count, hidden_message_builder) %></span>

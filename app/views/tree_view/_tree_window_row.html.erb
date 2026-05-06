@@ -20,13 +20,22 @@
 <% row_aria[:expanded] = visible_row.expanded? if visible_row.has_children? %>
 <% row_aria[:current] = "page" if row_context.current? %>
 <% hidden_count = render_children && effectively_collapsed && row_context.descendant_count.positive? && render_self ? row_context.descendant_count : nil %>
+<% toggle_state = if render_context.loading_builder&.call(item)
+                    :loading
+                  elsif hidden_count
+                    :collapsed
+                  elsif children.any?
+                    :expanded
+                  else
+                    :leaf
+                  end %>
 <% if render_self %>
   <%= tag.tr(**row_attrs) do %>
     <% if render_context.selection_enabled? %>
       <% selection_visible = tree_selection_visible?(item, tree, depth, render_context.selection_visibility) %>
       <%= render 'tree_view/tree_selection_cell', item: item, tree: tree, selection_visible: selection_visible, selection_payload_builder: render_context.selection_payload_builder, selection_checkbox_name: render_context.selection_checkbox_name, selection_disabled_builder: render_context.selection_disabled_builder, selection_disabled_reason_builder: render_context.selection_disabled_reason_builder, selection_selected_keys: render_context.selection_selected_keys %>
     <% end %>
-    <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: render_context.hidden_message_builder, depth_label_builder: render_context.depth_label_builder, badge_builder: render_context.badge_builder, mode: mode, max_toggle_depth_from_root: render_context.max_toggle_depth_from_root, max_toggle_leaf_distance: render_context.max_toggle_leaf_distance, leaf_distance: leaf_distance %>
+    <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: render_context.hidden_message_builder, depth_label_builder: render_context.depth_label_builder, badge_builder: render_context.badge_builder, toggle_icon_builder: render_context.toggle_icon_builder, toggle_state: toggle_state, mode: mode, max_toggle_depth_from_root: render_context.max_toggle_depth_from_root, max_toggle_leaf_distance: render_context.max_toggle_leaf_distance, leaf_distance: leaf_distance %>
     <%= render row_partial, item: item %>
     <% if row_actions_partial %>
       <%= render row_actions_partial, item: item, tree: tree, render_state: render_context.render_state %>
