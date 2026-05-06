@@ -6,6 +6,8 @@
 
 cookbook は、個別APIの詳細仕様ではなく、host appでよく使う構成例を示すためのドキュメントです。
 
+編集寄りの tree/table 画面については [Form と編集行](form-editing.md) を参照してください。bulk edit form、inline editing layout、Form Object、行単位の編集 action、validation error、TreeView と host app の責務境界を扱います。
+
 より細かいAPI仕様は以下を参照してください。
 
 - [API概要](api-overview.md)

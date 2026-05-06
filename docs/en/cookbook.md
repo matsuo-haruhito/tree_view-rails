@@ -6,6 +6,8 @@ This page collects common ways to combine existing TreeView APIs in host apps.
 
 The cookbook is not a detailed API reference. It shows practical patterns that host apps commonly need.
 
+For editing-oriented tree/table screens, see [Forms and editing rows](form-editing.md). That page covers bulk edit forms, inline editing layouts, Form Objects, per-row edit actions, validation errors, and the responsibility boundary between TreeView and the host app.
+
 For API details, see:
 
 - [API overview](api-overview.md)
