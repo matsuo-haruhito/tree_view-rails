@@ -39,6 +39,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Rendering Boundaries](rendering-boundaries.md) | Rendering responsibility boundaries between TreeView and host apps |
 | [Render Scale](render-scale.md) | Guidance for controlling HTML and rendering volume for large trees |
 | [Host App Extension Points](host-app-extension-points.md) | Hooks host apps can use to extend and integrate TreeView |
+| [Accessibility Semantics](accessibility-semantics.md) | Table-first accessibility semantics and ARIA placement policy |
 | [Drag and Drop](drag-and-drop.md) | Drag-and-drop integration boundary using row event payloads |
 | [Children Pagination](children-pagination.md) | Server-side children pagination guidance for lazy loading |
 
@@ -61,5 +62,7 @@ For a high-level API entry point, read [API overview](api-overview.md) first, th
 For common API combinations, see [Cookbook](cookbook.md).
 
 When TreeView terminology or identifier design is unclear, see [Glossary](glossary.md), [Node keys](node-keys.md), and [Tree diagnostics](tree-diagnostics.md).
+
+For accessibility semantics, see [Accessibility Semantics](accessibility-semantics.md).
 
 For translation priority and bilingual readiness, see [Documentation i18n audit](../i18n-audit.md).
