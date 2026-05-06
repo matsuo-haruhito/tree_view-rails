@@ -19,7 +19,7 @@
 release flow:
 
 1. `main` 向けにrelease preparation PRを作る。
-2. `lib/tree_view/version.rb` を更新する。
+2. target version がまだ設定されていない場合は `lib/tree_view/version.rb` を更新する。
 3. `CHANGELOG.md` の `Unreleased` を日付付きversion sectionへ移す。
 4. PRを `main` にmergeする。
 5. main-push full CIがgreenであることを確認する。
@@ -35,6 +35,8 @@ release flow:
 
 Minimum release conditions:
 
+- `TreeView::VERSION` が `0.1.0` になっている
+- `CHANGELOG.md` に日付付き `0.1.0` section がある
 - core tree construction and rendering helpers are covered by specs
 - static rendering works without dedicated JavaScript
 - Turbo path-builder integration is documented
@@ -97,7 +99,7 @@ breaking changeやdeprecationにはmigration noteを書きます。
 
 release前に確認すること:
 
-- `TreeView::VERSION` を更新する
+- `TreeView::VERSION` がrelease versionと一致することを確認する
 - `gem build tree_view.gemspec` を実行する
 - 生成gemをローカルinstallして `require "tree_view"` を確認する
 - packaged filesに以下が含まれることを確認する

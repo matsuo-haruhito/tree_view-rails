@@ -19,7 +19,7 @@ For normal releases, do not create long-lived `release/*` branches. Tag a green 
 Release flow:
 
 1. Open a release preparation PR against `main`.
-2. Update `lib/tree_view/version.rb`.
+2. Update `lib/tree_view/version.rb` when the target version is not already set.
 3. Move relevant `CHANGELOG.md` entries from `Unreleased` into a dated version section.
 4. Merge the PR into `main`.
 5. Confirm main-push full CI is green.
@@ -35,6 +35,8 @@ The initial `0.1.0` release should include a coherent documented baseline rather
 
 Minimum release conditions:
 
+- `TreeView::VERSION` is set to `0.1.0`
+- `CHANGELOG.md` has a dated `0.1.0` section
 - core tree construction and rendering helpers are covered by specs
 - static rendering works without dedicated JavaScript
 - Turbo path-builder integration is documented
@@ -97,7 +99,7 @@ Include migration notes for breaking changes or deprecations.
 
 Before release:
 
-- Bump `TreeView::VERSION`.
+- Confirm `TreeView::VERSION` matches the release version.
 - Run `gem build tree_view.gemspec`.
 - Install the generated gem locally and confirm `require "tree_view"` works.
 - Confirm packaged files include:
