@@ -8,7 +8,7 @@ TreeView is table-first with tree-like row controls.
 
 TreeView renders host-app business columns in table rows, so it does not claim full `tree` semantics and does not currently opt into full `treegrid` semantics. Host apps should treat the generated markup as a table that includes expansion controls, selection state, current-row state, and optional lazy-loading state.
 
-TreeView may move toward `treegrid` semantics later, but that should be a focused compatibility decision. It should not happen as an incidental attribute change.
+Any move toward `treegrid` semantics should be a focused compatibility decision. It should not happen as an incidental attribute change.
 
 ## Current ARIA placement
 
