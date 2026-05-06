@@ -24,7 +24,9 @@ Use render controls first when the data is already available. Use lazy loading o
 | Show search results with ancestors | `path_tree_for` | `tree.path_tree_for(matches)` | Use when matched records need enough ancestors to preserve context from root to match. |
 | Show child-to-parent paths | `reverse_tree_for` | `tree.reverse_tree_for(items)` | Use when the primary display starts from children and expands toward parents. |
 | Add checkbox selection | `selection:` options | `enabled`, `checkbox_name`, `selected_keys`, `disabled_keys`, `visibility`, `cascade`, `max_selected` | TreeView renders selection state and values. The host app owns the submitted business action. |
-| Add editable fields inside rows | [Forms and editing rows](form-editing.md) | `row_partial`, `row_actions_partial`, Rails `form_with`, `fields_for`, host-app Form Objects | TreeView supports inline-editing layouts. The host app owns edit mode, validation, persistence, authorization, dirty-state handling, and Turbo workflows. |
+| Add editable fields inside rows | [Forms and editing rows](form-editing.md) and [Cookbook](cookbook.md#row-customization-quick-guide) | `row_partial`, `row_actions_partial`, Rails `form_with`, `fields_for`, host-app Form Objects | TreeView supports inline-editing layouts. The host app owns edit mode, validation, persistence, authorization, dirty-state handling, and Turbo workflows. |
+| Add row action buttons | [Cookbook](cookbook.md#row-customization-quick-guide) | `row_actions_partial` | Recommended slot for Edit, Show, Delete, Archive, and custom host-app actions. |
+| Customize level labels, badges, icons, or status visuals | [Cookbook](cookbook.md#row-customization-quick-guide) | `depth_label_builder`, `badge_builder`, `icon_builder`, `row_class_builder`, `row_data_builder` | TreeView provides rendering hooks; product-specific labels, statuses, and permissions stay in the host app. |
 | Add drag-and-drop | Drag/drop row hooks | Drag attributes and row event payloads | TreeView exposes integration hooks. The host app validates and persists the move. |
 | Persist expansion state | `TreeView::PersistedState`, `TreeView::StateStore` | `rails g tree_view:state:install`, persisted state model | Use when users should return to the same expanded/collapsed tree state. |
 | Validate tree data and identifiers | Diagnostics APIs | node key, DOM ID, orphan, and cycle diagnostics | Use during integration, tests, or admin diagnostics before rendering invalid structures. |
@@ -53,9 +55,11 @@ flowchart TD
   M -->|Children should point back to parents| O[reverse_tree_for]
   A --> P{Need interaction state?}
   P -->|Checkboxes| Q[selection: options]
-  P -->|Editable fields in rows| X[Forms and editing rows: host-app form workflow with TreeView row layouts]
+  P -->|Editable fields or row actions| X[row_partial / row_actions_partial plus host-app workflows]
   P -->|Expansion state between visits| R[PersistedState and StateStore]
   P -->|Drag/drop| S[Drag/drop hooks plus host-app handlers]
+  A --> Y{Need row visuals?}
+  Y -->|Level labels, badges, icons, status| Z[Cookbook row customization hooks]
   A --> T{Need confidence in input data?}
   T -->|Yes| U[Diagnostics APIs]
 ```
@@ -78,7 +82,7 @@ flowchart TD
 3. Use [Render Scale](render-scale.md) when HTML size or visible row count becomes the issue.
 4. Use [Lazy Loading](lazy-loading.md) and [Children Pagination](children-pagination.md) when query volume or child count is the issue.
 5. Add host-app virtual scrolling only when scroll-position-driven DOM virtualization is a product requirement.
-6. Add [Selection](selection.md), [Forms and editing rows](form-editing.md), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction requirements are clear.
+6. Add [Selection](selection.md), [Forms and editing rows](form-editing.md), [Cookbook row customization](cookbook.md#row-customization-quick-guide), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction and row customization requirements are clear.
 7. Use [Tree diagnostics](tree-diagnostics.md) when node keys, DOM IDs, or tree structure need validation.
 
 ## Common combinations
@@ -92,13 +96,16 @@ flowchart TD
 | Breadcrumb-like reverse view | `reverse_tree_for` + custom row partial |
 | Bulk action page | Static or Turbo rendering + `selection:` + host-app form action |
 | Bulk edit page | Static or Turbo rendering + row partial form controls + host-app Form Object |
-| Per-row inline edit page | Display row partials + host-app edit action/Turbo response + editing row partial |
+| Per-row inline edit page | Display row partials + `row_actions_partial` + host-app edit action / Turbo response + editing row partial |
+| Row action menu | `row_actions_partial` + host-app routes, authorization, and action handlers |
+| Status-heavy tree table | `row_class_builder` + `badge_builder` + host-app status rules |
 | Reorderable hierarchy | Static or Turbo rendering + drag/drop hooks + host-app move endpoint |
 
 ## Related docs
 
 - [API overview](api-overview.md)
 - [API reference](api.md)
+- [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide)
 - [Render Scale](render-scale.md)
 - [Lazy Loading](lazy-loading.md)
 - [Children Pagination](children-pagination.md)

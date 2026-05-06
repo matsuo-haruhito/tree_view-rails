@@ -129,6 +129,8 @@ Host-app-specific columns live in the configured `row_partial`.
 
 The partial receives `item`.
 
+Use `row_actions_partial` for per-row action links/buttons such as Edit, Show, Delete, Archive, and other host-app actions. For display columns, action links, inline controls, depth labels, badges, icons, and status markers, see [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide).
+
 ## Interactive controls inside rows
 
 Host apps can place inputs, selects, textareas, buttons, links, and `contenteditable` labels inside `row_partial` or `row_actions_partial`. TreeView treats these native interactive elements as application-owned controls, so tree keyboard navigation and transfer drag start behavior ignore events that originate from them.
@@ -268,6 +270,7 @@ reverse_tree = base_tree.reverse_tree_for(matched_documents)
 
 - [API overview](api-overview.md)
 - [API reference](../api.md)
+- [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide)
 - [Selection](../selection.md)
 - [Lazy Loading](../lazy-loading.md)
 - [Windowed Rendering](../windowed-rendering.md)
