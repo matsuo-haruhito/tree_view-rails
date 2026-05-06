@@ -35,6 +35,12 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 ```
 
+## Public API compatibility specs
+
+Public API compatibility specsは、documented Ruby entry points、helper methods、grouped options、JavaScript exportsが意図せず削除・renameされることを防ぐためのtestsです。これらのspecは、実装詳細を網羅するのではなく、APIの存在と代表的な互換挙動に絞ります。
+
+意図的なbreaking changeを受け入れる場合は、public API docsとcompatibility specsを同時に更新し、documented contractとtest coverageを同期させます。
+
 ## JavaScript browser smoke tests
 
 Unit-style JavaScript testsはVitestとjsdomで実行します。
@@ -71,6 +77,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 
 - specを追加または更新する
 - `docs/ja/api-overview.md` / `docs/en/api-overview.md` を確認する
+- documented entry points、helpers、optionsを意図的に変更する場合はpublic API compatibility specsを更新する
 - 必要に応じて `docs/api.md` を更新する
 - CHANGELOGを更新する
 
@@ -79,7 +86,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - `npm test` を確認する
 - Browser interaction、focus、drag/drop、実際のform controlsに影響する場合は `npm run test:browser` を確認する
 - importmap / packaged files に影響がないか確認する
-- JavaScript entrypointの互換性を確認する
+- JavaScript entrypointの互換性を確認し、documented exportsを意図的に変更する場合はcompatibility specsを更新する
 
 ### docsを変更した場合
 
