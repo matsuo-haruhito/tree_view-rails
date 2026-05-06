@@ -8,7 +8,7 @@ TreeView は table-first with tree-like row controls として扱います。
 
 TreeView は host app の業務columnsをtable row内に描画するため、現時点では完全な `tree` semantics を名乗らず、完全な `treegrid` semantics にもopt-inしません。host appは、生成markupを「展開control、selection状態、current row状態、任意のlazy-loading状態を持つtable」として扱ってください。
 
-将来的に `treegrid` semantics へ寄せる可能性はありますが、その場合は互換性を意識した明示的な判断として行います。個別属性のついでに導入しないでください。
+`treegrid` semantics へ寄せる場合は、互換性を意識した明示的な判断として行います。個別属性のついでに導入しないでください。
 
 ## 現在のARIA配置
 
