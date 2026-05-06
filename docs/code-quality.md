@@ -1,36 +1,16 @@
-# Code quality
+# Code quality / コード品質
 
-This document records lightweight quality checks for maintainers.
+Code quality documentation is now maintained in language-specific files.
 
-## Current baseline
+コード品質ドキュメントは言語別ファイルで管理します。
 
-The default project check is:
+## Languages
 
-```bash
-bundle exec rake
-```
+- [日本語: Code quality](ja/code-quality.md)
+- [English: Code quality](en/code-quality.md)
 
-Release checks also include:
+## Compatibility note
 
-```bash
-bundle exec rake build
-```
+This root-level page remains as a compatibility entry point during the documentation migration.
 
-## Linting policy
-
-Linting should be added gradually.
-
-Preferred order:
-
-1. Ruby linting for library and helper code.
-2. ERB/template checks for gem partials.
-3. JavaScript checks for TreeView browser helpers.
-4. Markdown checks for docs.
-
-Avoid large style-only rewrites in the same PR as behavior changes.
-
-## CI guidance
-
-A new lint task should be fast, deterministic, and documented before it is required in CI.
-
-If a lint rule would require broad churn, add it as a separate PR after the main feature work has settled.
+このroot直下のページは、ドキュメント移行期間中の互換用入口として残しています。
