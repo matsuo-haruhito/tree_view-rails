@@ -18,7 +18,7 @@ It provides reusable tree objects, render state, helpers, partials, and browser 
 - Use `ReverseTree` for child-to-parent paths.
 - Render rows from `TreeView::RenderState` with `tree_view_rows`.
 - Flatten currently visible rows with `TreeView::VisibleRows`.
-- Render visible rows by offset and limit with `TreeView::RenderWindow` and windowed rendering.
+- Render currently visible rows by offset and limit with `TreeView::RenderWindow` and windowed rendering. This limits HTML output only; it does not reduce host-app queries or fetched records.
 - Customize host-app row content through `row_partial`.
 - Control initial expansion with `initial_state`, `expanded_keys`, `collapsed_keys`, and `max_initial_depth`.
 - Limit render scope with `max_render_depth` and `max_leaf_distance`.
@@ -41,7 +41,8 @@ This gem focuses on tree rendering primitives. Host applications are responsible
 - context menus
 - business actions after checkbox selection, such as delete, move, or attach
 - server-side children pagination query and cursor strategy
-- JavaScript control for infinite scroll or virtual scroll
+- data-fetching reductions beyond TreeView's lazy-loading hooks
+- JavaScript control for infinite scroll or full virtual scroll
 - demo data and seeds
 
 ## Installation
@@ -121,6 +122,10 @@ See [Usage](docs/en/usage.md) for details.
 
 Documentation is organized by language.
 
+If you know the use case but are not sure which API or option to use, start with the [Decision guide](docs/en/decision-guide.md).
+
+使いたい場面からAPIやoptionを選びたい場合は [API判断ガイド](docs/ja/decision-guide.md) を参照してください。
+
 | Language | Entry point |
 |---|---|
 | English | [docs/en/README.md](docs/en/README.md) |
@@ -133,6 +138,7 @@ Key documents:
 | Installation | [Installation](docs/en/installation.md) | [導入手順](docs/ja/installation.md) |
 | Minimal usage | [Minimal usage](docs/en/minimal-usage.md) | [最小利用例](docs/ja/minimal-usage.md) |
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
+| Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
