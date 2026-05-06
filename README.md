@@ -121,6 +121,10 @@ See [Usage](docs/en/usage.md) for details.
 
 Documentation is organized by language.
 
+If you know the use case but are not sure which API or option to use, start with the [Decision guide](docs/en/decision-guide.md).
+
+使いたい場面からAPIやoptionを選びたい場合は [API判断ガイド](docs/ja/decision-guide.md) を参照してください。
+
 | Language | Entry point |
 |---|---|
 | English | [docs/en/README.md](docs/en/README.md) |
@@ -133,6 +137,7 @@ Key documents:
 | Installation | [Installation](docs/en/installation.md) | [導入手順](docs/ja/installation.md) |
 | Minimal usage | [Minimal usage](docs/en/minimal-usage.md) | [最小利用例](docs/ja/minimal-usage.md) |
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
+| Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
