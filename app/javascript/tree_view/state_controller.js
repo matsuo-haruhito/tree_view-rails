@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { isTreeViewInteractiveTarget } from "./interactive.js"
 
 export class TreeViewStateController extends Controller {
   static targets = ["node"]
@@ -34,6 +35,7 @@ export class TreeViewStateController extends Controller {
 
   keydown(event) {
     if (!this.keyboardValue) return
+    if (isTreeViewInteractiveTarget(event.target, "keyboard", this.element)) return
 
     const row = this.currentNode(event)
     if (!row) return
