@@ -34,6 +34,18 @@ row_partial: "documents/tree_columns"
 <td><%= item.owner_name %></td>
 ```
 
+このpartialには、input、select、button、link、inline editable labelなど、host app側のcontrolも配置できます。TreeViewはnative interactive controlから発生したeventでは、keyboard navigationやtransfer drag startを実行しません。Custom controlでは、`data-tree-view-interactive="true"` または `data-tree-view-ignore-keyboard="true"`、`data-tree-view-ignore-row-click="true"`、`data-tree-view-ignore-drag="true"` のようなより狭いmarkerを付けます。
+
+```erb
+<td>
+  <%= text_field_tag "documents[#{item.id}][name]", item.name %>
+  <%= link_to "Edit", edit_document_path(item) %>
+  <span data-tree-view-interactive="true">Custom picker</span>
+</td>
+```
+
+詳しいrow control例は [使い方](usage.md#行内のinteractive-control) を参照してください。
+
 ## row class / data builders
 
 ```ruby
@@ -93,6 +105,7 @@ load_children_path_builder: ->(item, depth, scope) {
 | extension hook definitions | yes | no |
 | builder invocation | yes | provides builders |
 | business UI | no | yes |
+| interactive-control guards | yes | marks custom widgets when needed |
 | routes and controllers | no | yes |
 | authorization | no | yes |
 | CSS/design system | hooks only | yes |

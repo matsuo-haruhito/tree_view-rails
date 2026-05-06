@@ -127,6 +127,41 @@ host app固有の列は `row_partial` に実装します。
 
 このpartialでは `item` を使えます。
 
+## 行内のinteractive control
+
+host appは `row_partial` や `row_actions_partial` の中に、input、select、textarea、button、link、`contenteditable` label を配置できます。TreeViewはこれらのnative interactive elementをhost app側のcontrolとして扱い、それらから発生したeventではTreeViewのkeyboard navigationやtransfer drag startを実行しません。
+
+```erb
+<!-- app/views/documents/_tree_columns.html.erb -->
+<td>
+  <%= text_field_tag "documents[#{item.id}][name]", item.name %>
+</td>
+```
+
+```erb
+<!-- app/views/documents/_tree_actions.html.erb -->
+<td>
+  <%= link_to "Edit", edit_document_path(item) %>
+  <%= button_to "Archive", archive_document_path(item), method: :post %>
+</td>
+```
+
+native controlではないcustom widgetでは、row内のwidgetまたはその祖先に `data-tree-view-interactive="true"` を付けます。
+
+```erb
+<td>
+  <span data-tree-view-interactive="true" contenteditable="true"><%= item.name %></span>
+</td>
+```
+
+特定のTreeView動作だけを無視したい場合は、より狭いmarkerを使えます。
+
+- `data-tree-view-ignore-keyboard="true"` は、arrow key、space、enter によるTreeView keyboard navigationを抑止します。
+- `data-tree-view-ignore-row-click="true"` は、host app側のrow click連携向けに予約されています。
+- `data-tree-view-ignore-drag="true"` は、そのcontrolからTreeView transfer drag startが始まることを抑止します。
+
+これらのmarkerはTreeView側の動作を無視するためのものです。validation、保存、認可、CRUD route、inline editing flowは引き続きhost app側で実装します。
+
 ## grouped option
 
 描画範囲・初期展開・開閉範囲は、概念単位でまとめて指定できます。

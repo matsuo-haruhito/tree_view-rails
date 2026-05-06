@@ -58,6 +58,28 @@ row_data_builder: ->(document) {
 }
 ```
 
+## draggable row内のinteractive control
+
+`draggable` なrowにも、link、button、input、select、textarea、`contenteditable` label などのhost app controlを配置できます。TreeViewはこれらのnative interactive controlから発生したdrag start eventを無視するため、control操作が誤ってrow transferを開始することはありません。
+
+native controlではないcustom widgetでは、row内のwidgetまたはその祖先にTreeView markerを付けます。
+
+```erb
+<td>
+  <span data-tree-view-interactive="true">Custom picker</span>
+</td>
+```
+
+Drag startだけを無視し、他のTreeView動作は残したい場合は `data-tree-view-ignore-drag="true"` を使います。
+
+```erb
+<td>
+  <span data-tree-view-ignore-drag="true">Drag-safe widget</span>
+</td>
+```
+
+keyboardやrow interaction向けのmarkerは [使い方](usage.md#行内のinteractive-control) を参照してください。
+
 ## drop処理
 
 drop先はhost app側で実装します。
@@ -76,6 +98,7 @@ function onDrop(event) {
 | row transfer payload builder validation | yes | provides builder |
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
+| interactive-control drag-start guard | yes | marks custom widgets when needed |
 | drop target | no | yes |
 | reorder / move persistence | no | yes |
 | authorization | no | yes |
