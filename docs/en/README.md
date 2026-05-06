@@ -46,8 +46,8 @@ If you are integrating TreeView into a Rails host app, start with these document
 
 | Document | Description |
 |---|---|
-| [Public API](../public-api.md) | APIs host apps may use directly and compatibility policy |
-| [Release checklist](../release.md) | Release tests, documentation, and gem package checklist |
+| [Public API](public-api.md) | APIs host apps may use directly and compatibility policy |
+| [Release checklist](release.md) | Release tests, documentation, and gem package checklist |
 | [Design policy](design-policy.md) | Gem responsibilities, included scope, excluded scope, and design decisions |
 | [Development](development.md) | Tests, CI, documentation updates, and future work |
 | [Code quality](code-quality.md) | Lint, tests, error messages, and documentation quality policy |

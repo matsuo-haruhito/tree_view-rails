@@ -48,6 +48,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added language-specific API reference entries at `docs/ja/api.md` and `docs/en/api.md`.
 - Added language-specific public API and release checklist docs, and converted several root-level docs into compatibility language selectors.
 - Converted root `docs/usage.md` into a short compatibility language selector.
+- Pointed the English docs index maintainer links to language-specific maintainer docs and added release readiness checks to the documentation i18n audit.
 
 ### Tests
 
