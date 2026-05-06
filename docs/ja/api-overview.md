@@ -63,6 +63,43 @@ adapter = TreeView::GraphAdapter.new(
 tree = TreeView::Tree.new(adapter: adapter)
 ```
 
+### node keyとUI識別子
+
+TreeViewには、関連しているが責務が異なる2種類の識別子があります。
+
+| 層 | 設定する場所 | 使われる場所 |
+|---|---|---|
+| Tree node key | records mode の `id_method:`、または adapter / resolver mode の `node_key_resolver:` | tree構造のlookup、開閉状態、`expanded_keys`、`collapsed_keys`、persisted state、diagnostics。 |
+| UI識別子 / DOM ID | `UiConfig` と `UiConfigBuilder` のDOM ID builder | HTML ID、Turbo target、row属性、ブラウザ側hook。 |
+
+初期展開や折りたたみ状態に渡す値は、UI configが生成するDOM IDだけでなく、tree本体が返すnode keyと一致している必要があります。UI側のDOM ID builderを変更しても、`TreeView::Tree` がnodeを識別するkeyは変わりません。
+
+異種node treeでは、同じ安定したkey生成方針をtree側とUI側の両方で使える形にしておくと安全です。
+
+```ruby
+node_key = ->(node) { [node.class.name, node.id].join(":") }
+
+adapter = TreeView::GraphAdapter.new(
+  roots: roots,
+  children_resolver: ->(node) { node.children },
+  node_key_resolver: node_key
+)
+
+tree = TreeView::Tree.new(adapter: adapter)
+
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_expansion: {
+    expanded_keys: [node_key.call(current_section)]
+  }
+)
+```
+
+この形にすると、tree側の開閉状態、diagnostics、UI側のDOM targetを揃えやすくなります。期待した行が初期展開されない場合は、UIだけのDOM ID設定を変える前に、treeが返しているnode keyを確認してください。
+
 ## 描画
 
 推奨される描画入口は `tree_view_rows(render_state)` です。
