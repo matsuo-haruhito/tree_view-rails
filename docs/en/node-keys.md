@@ -6,15 +6,16 @@ This page explains how `node_key` values identify nodes in TreeView.
 
 `node_key` is the key TreeView uses to identify a node.
 
-It is used by:
+It is used by tree-side state and payloads such as:
 
 - `expanded_keys`
 - `collapsed_keys`
 - `selected_keys`
-- DOM ID generation
 - persisted state
 - row event payloads
 - diagnostics
+
+TreeView can also use node keys as an input when generating browser-facing values such as DOM IDs, but that UI layer is configured separately through `UiConfig` and `UiConfigBuilder`. Do not assume that changing a UI DOM ID builder changes the node keys used by the tree.
 
 In simple records mode, the record ID is often enough. When multiple trees appear on the same screen or heterogeneous nodes are used in one tree, design keys carefully to avoid collisions.
 
@@ -65,6 +66,39 @@ TreeView.node_key(document.class.name, document.id)
 ```
 
 Whitespace is normalized, making the result easier to use in DOM IDs and related hooks.
+
+## Node keys vs UI identifiers
+
+TreeView has two related identifier layers.
+
+| Layer | Configured by | Used for |
+|---|---|---|
+| Tree node key | `id_method:` or `node_key_resolver:` | Tree structure lookup, expansion/collapse state, selection state, persisted state, row payloads, and diagnostics. |
+| UI identifier / DOM ID | `UiConfig` and `UiConfigBuilder` DOM ID builders | HTML IDs, Turbo targets, row attributes, and browser-facing hooks. |
+
+Expansion-related options such as `expanded_keys`, `collapsed_keys`, and grouped `initial_expansion:` values must match the tree node keys. They do not match UI-only DOM IDs unless the host app intentionally uses the same stable value in both layers.
+
+For heterogeneous trees, define one stable key strategy and reuse it wherever the tree state and UI layer need to agree:
+
+```ruby
+node_key = ->(node) { TreeView.node_key(node.class.name, node.id) }
+
+tree = TreeView::Tree.new(
+  roots: roots,
+  children_resolver: ->(node) { node.children },
+  node_key_resolver: node_key
+)
+
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  expanded_keys: [node_key.call(current_section)]
+)
+```
+
+If initial expansion or persisted state does not affect the expected rows, inspect `tree.node_key_for(item)` before changing UI-only DOM ID settings.
 
 ## Avoiding collisions
 
