@@ -127,6 +127,8 @@ host app固有の列は `row_partial` に実装します。
 
 このpartialでは `item` を使えます。
 
+Edit、Show、Delete、Archiveなどの行単位action link / buttonには `row_actions_partial` を使います。表示列、action link、inline control、depth label、badge、icon、status markerの例は [Cookbook: 行customization quick guide](cookbook.md#行customization-quick-guide) を参照してください。
+
 ## 行内のinteractive control
 
 host appは `row_partial` や `row_actions_partial` の中に、input、select、textarea、button、link、`contenteditable` label を配置できます。TreeViewはこれらのnative interactive elementをhost app側のcontrolとして扱い、それらから発生したeventではTreeViewのkeyboard navigationやtransfer drag startを実行しません。
@@ -266,6 +268,7 @@ reverse_tree = base_tree.reverse_tree_for(matched_documents)
 
 - [API概要](api-overview.md)
 - [API仕様](../api.md)
+- [Cookbook: 行customization quick guide](cookbook.md#行customization-quick-guide)
 - [Selection](../selection.md)
 - [Lazy Loading](../lazy-loading.md)
 - [Windowed Rendering](../windowed-rendering.md)
