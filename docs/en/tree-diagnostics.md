@@ -14,7 +14,7 @@ They are useful for checking:
 - parent paths
 - tree stats
 - cycle diagnostics
-- expanded keys for paths
+- expanded keys for items
 
 Use them during development, before release, or when investigating inconsistent host-app data.
 
@@ -74,7 +74,7 @@ tree.paths_for(documents)
 Use path helpers to build expanded keys for search results or current nodes.
 
 ```ruby
-expanded_keys = tree.expanded_keys_for_paths([document])
+expanded_keys = tree.expanded_keys_for([document])
 ```
 
 ## Tree stats
