@@ -35,6 +35,12 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 ```
 
+## Public API compatibility specs
+
+Public API compatibility specs protect documented Ruby entry points, helper methods, grouped options, and JavaScript exports from accidental removals or renames. Keep these specs focused on API existence and representative behavior rather than full implementation details.
+
+When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
+
 ## JavaScript browser smoke tests
 
 Unit-style JavaScript tests run through Vitest and jsdom with:
@@ -71,6 +77,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 
 - Add or update specs.
 - Check `docs/ja/api-overview.md` and `docs/en/api-overview.md`.
+- Update public API compatibility specs when documented entry points, helpers, or options are intentionally changed.
 - Update `docs/api.md` when needed.
 - Update CHANGELOG.
 
@@ -79,7 +86,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 - Run `npm test`.
 - Run `npm run test:browser` when browser interactions, focus, drag/drop, or real form controls are affected.
 - Check importmap and packaged files.
-- Confirm JavaScript entrypoint compatibility.
+- Confirm JavaScript entrypoint compatibility and update compatibility specs when documented exports intentionally change.
 
 ### Documentation changes
 
