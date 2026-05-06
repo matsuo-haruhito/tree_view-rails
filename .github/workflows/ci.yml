@@ -75,7 +75,6 @@ jobs:
       - run: bundle exec rake
 
   javascript:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -83,8 +82,9 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-      - run: npm ci
-      - run: npm test
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:js
 
   gem_package:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>TreeView browser smoke fixture</title>
+  </head>
+  <body>
+    <main id="fixture"></main>
+    <script type="module">
+      import { Application } from "@hotwired/stimulus"
+      import { registerTreeViewControllers } from "./index.js"
+
+      window.treeViewSmoke = {
+        application: null,
+        events: [],
+        async mount(markup) {
+          if (this.application) this.application.stop()
+          this.events = []
+          const fixture = document.querySelector("#fixture")
+          fixture.innerHTML = markup
+          this.application = Application.start()
+          registerTreeViewControllers(this.application)
+          fixture.addEventListener("tree-view-state:state-changed", (event) => this.events.push({ type: event.type, detail: event.detail }))
+          fixture.addEventListener("tree-view-selection:change", (event) => this.events.push({ type: event.type, detail: event.detail }))
+          fixture.addEventListener("tree-view-remote-state:change", (event) => this.events.push({ type: event.type, detail: event.detail }))
+          fixture.addEventListener("tree-view-remote-state:retry", (event) => this.events.push({ type: event.type, detail: event.detail }))
+          fixture.addEventListener("tree-view-transfer:drop", (event) => this.events.push({ type: event.type, detail: event.detail }))
+          await new Promise((resolve) => setTimeout(resolve, 0))
+        },
+        reset() {
+          if (this.application) this.application.stop()
+          this.application = null
+          this.events = []
+          document.querySelector("#fixture").innerHTML = ""
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -25,6 +25,7 @@ bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
 npm test
+npm run test:browser
 ```
 
 For the Rails version matrix:
@@ -34,21 +35,35 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 ```
 
+## JavaScript browser smoke tests
+
+Unit-style JavaScript tests run through Vitest and jsdom with:
+
+```bash
+npm test
+```
+
+Browser-level smoke tests run through Playwright with:
+
+```bash
+npm run test:browser
+```
+
+Use the browser smoke suite for representative interaction flows that need a real browser event loop, focus handling, and drag/drop APIs. Keep these tests small and stable: cover keyboard navigation, expand/collapse, checkbox cascade behavior, lazy-loading state changes, transfer payloads, and row form controls coexisting with tree behavior.
+
 ## CI policy
 
-Pull requests run the fast Ruby checks that protect day-to-day changes:
+Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-day changes:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
+- JavaScript unit and browser smoke tests through `npm run test:js`
 
-Pushes to `main` run the broader compatibility and release checks:
+Pushes to `main` also run the broader compatibility and release checks:
 
 - Ruby version matrix
 - Rails version matrix
-- JavaScript tests
 - gem package verification
-
-This keeps pull request feedback focused on Ruby behavior and public API regressions while reserving heavier compatibility and packaging verification for `main` and release decisions.
 
 ## Change checklist
 
@@ -62,6 +77,7 @@ This keeps pull request feedback focused on Ruby behavior and public API regress
 ### JavaScript changes
 
 - Run `npm test`.
+- Run `npm run test:browser` when browser interactions, focus, drag/drop, or real form controls are affected.
 - Check importmap and packaged files.
 - Confirm JavaScript entrypoint compatibility.
 
@@ -76,6 +92,7 @@ This keeps pull request feedback focused on Ruby behavior and public API regress
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - `npm test`
+- `npm run test:browser`
 - `bundle exec rake build`
 - gem package contents
 - CHANGELOG
