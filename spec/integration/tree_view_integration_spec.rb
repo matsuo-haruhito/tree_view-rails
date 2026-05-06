@@ -471,7 +471,7 @@ RSpec.describe "TreeView integration" do
 
       expect(rendered).to include("/projects/1/hide?depth=0&amp;scope=all")
       expect(rendered).to include('aria-expanded="true"')
-      expect(rendered).to include('aria-controls="project_1"')
+      expect(rendered).not_to include('aria-controls="project_1"')
     end
 
     it "passes object toggle scope when scope_format is object" do
