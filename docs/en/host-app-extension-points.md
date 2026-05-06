@@ -34,6 +34,18 @@ row_partial: "documents/tree_columns"
 <td><%= item.owner_name %></td>
 ```
 
+The partial can include application-owned controls such as inputs, selects, buttons, links, and inline editable labels. TreeView ignores keyboard navigation and transfer drag start when events originate from native interactive controls. For custom controls, add `data-tree-view-interactive="true"` or a narrower marker such as `data-tree-view-ignore-keyboard="true"`, `data-tree-view-ignore-row-click="true"`, or `data-tree-view-ignore-drag="true"`.
+
+```erb
+<td>
+  <%= text_field_tag "documents[#{item.id}][name]", item.name %>
+  <%= link_to "Edit", edit_document_path(item) %>
+  <span data-tree-view-interactive="true">Custom picker</span>
+</td>
+```
+
+See [Usage](usage.md#interactive-controls-inside-rows) for complete row-control examples.
+
 ## Row class / data builders
 
 ```ruby
@@ -93,6 +105,7 @@ load_children_path_builder: ->(item, depth, scope) {
 | extension hook definitions | yes | no |
 | builder invocation | yes | provides builders |
 | business UI | no | yes |
+| interactive-control guards | yes | marks custom widgets when needed |
 | routes and controllers | no | yes |
 | authorization | no | yes |
 | CSS/design system | hooks only | yes |
