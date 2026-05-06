@@ -13,50 +13,9 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ## Unreleased
 
-### Added
+No unreleased changes.
 
-- Added `TreeView::RenderWindow` and opt-in windowed rendering through `tree_view_rows(render_state, window: { offset:, limit: })`.
-- Added `tree_view_window(render_state, offset:, limit:)` for pagination metadata around visible rows.
-- Added Standard Ruby linting to the development dependencies and CI.
-- Added Rails version matrix Gemfiles and a main-push-only Rails compatibility CI job.
-
-### Documentation
-
-- Expanded the default TreeView static HTML mock to cover root, child, leaf, expanded, collapsed, hidden-count, selection, disabled selection, badge, marker, depth label, data attributes, and row actions examples.
-- Added concrete multi-key sorter cookbook examples, including nil handling and stable fallback keys.
-- Clarified beta documentation cleanup responsibilities and the split between static mockups in this repository and Rails playground behavior in the demo repository.
-- Clarified the persisted state generator output and owner-side usage.
-- Added children pagination guidance for lazy loading examples.
-- Clarified large-tree performance hardening boundaries between TreeView gem support and host app responsibilities.
-- Added windowed rendering documentation.
-- Clarified public API, semi-public API, internal helper module, and JavaScript entrypoint compatibility policy.
-- Clarified that releases are normally managed by tags on `main`, with release branches reserved for parallel maintenance.
-- Added a documentation i18n audit covering language status, translation priority, and release readiness.
-- Added English documentation index content to `docs/README.md`.
-- Added Japanese summaries to `docs/public-api.md` and `docs/release.md`.
-- Added bilingual coverage to `docs/installation.md` and `docs/minimal-usage.md`.
-- Added bilingual summaries to `docs/usage.md` and a bilingual `docs/api-overview.md` entry point.
-- Started migrating documentation to language-specific `docs/ja/` and `docs/en/` directories.
-- Split the usage guide into `docs/ja/usage.md` and `docs/en/usage.md` entry points.
-- Split the selection guide into `docs/ja/selection.md` and `docs/en/selection.md` entry points.
-- Split the lazy loading and windowed rendering guides into language-specific `docs/ja/` and `docs/en/` entry points.
-- Split the persisted state and breadcrumb guides into language-specific `docs/ja/` and `docs/en/` entry points.
-- Split the drag-and-drop and children pagination guides into language-specific `docs/ja/` and `docs/en/` entry points.
-- Split the glossary, node keys, and tree diagnostics guides into language-specific `docs/ja/` and `docs/en/` entry points.
-- Split the cookbook, depth labels, and row status guides into language-specific `docs/ja/` and `docs/en/` entry points.
-- Split the remaining support docs into language-specific `docs/ja/` and `docs/en/` entry points: filtered trees, rendering boundaries, render scale, host app extension points, design policy, development, and code quality.
-- Added language-specific API reference entries at `docs/ja/api.md` and `docs/en/api.md`.
-- Added language-specific public API and release checklist docs, and converted several root-level docs into compatibility language selectors.
-- Converted root `docs/usage.md` into a short compatibility language selector.
-- Pointed the English docs index maintainer links to language-specific maintainer docs and added release readiness checks to the documentation i18n audit.
-
-### Tests
-
-- Added coverage for the persisted state install generator outputs.
-- Added unit and integration coverage for windowed rendering.
-- Added JavaScript controller tests for state, selection, transfer, and remote-state behavior.
-
-## 0.1.0 - Initial release
+## 0.1.0 - 2026-05-07
 
 ### Added
 
@@ -67,7 +26,8 @@ Breaking changes and required migration notes should be called out explicitly in
 - `TreeView::ReverseTree` via `Tree#reverse_tree_for(items)` for rendering child-to-parent paths.
 - `TreeView::RenderState` for screen-level rendering options.
 - `tree_view_rows(render_state)` helper.
-- Host app row partial support via `row_partial`.
+- `TreeView::RenderWindow` and opt-in windowed rendering through `tree_view_rows(render_state, window: { offset:, limit: })`.
+- `tree_view_window(render_state, offset:, limit:)` for pagination metadata around visible rows.
 - Static tree rendering.
 - Turbo Stream path builder integration.
 - Initial expansion controls:
@@ -103,19 +63,38 @@ Breaking changes and required migration notes should be called out explicitly in
 - Optional DOM ID collision diagnostics via `RenderState#validate_unique_dom_ids!`.
 - `TreeView::VisibleRows` for flattening currently visible rows with depth and expansion state.
 - Lazy-loading row data hooks through `UiConfig#load_children_path_builder` and `RenderState#lazy_loading`.
-- Japanese documentation under `docs/`.
+- Persisted state support through `TreeView::PersistedState`, `TreeView::StateStore`, and the install generator.
+- Breadcrumb rendering helper for parent paths.
+- Standard Ruby linting in development dependencies and CI.
+- Rails version matrix Gemfiles and a main-push-only Rails compatibility CI job.
 
 ### Documentation
 
-- Public API and compatibility policy are documented in `docs/public-api.md`.
-- Release, versioning, CHANGELOG, and gem packaging checks are documented in `docs/release.md`.
-- Asset and importmap packaging expectations are documented in `docs/installation.md`.
-- JavaScript controller responsibility boundaries are documented in `docs/design-policy.md`.
-- TreeView-specific concepts and API names are defined in `docs/glossary.md`.
-- Tree diagnostics docs describe node key uniqueness and DOM ID collision checks.
-- Lazy loading, visible rows, sorter examples, and the static HTML mock are documented from the docs index.
+- Added Japanese documentation under `docs/`.
+- Added language-specific documentation trees under `docs/ja/` and `docs/en/`.
+- Added documentation language selector and i18n audit.
+- Added installation, minimal usage, usage, API overview, and API reference documentation in Japanese and English.
+- Added language-specific public API and release checklist docs.
+- Added feature docs in Japanese and English for selection, lazy loading, windowed rendering, persisted state, breadcrumb, drag and drop, and children pagination.
+- Added supporting docs in Japanese and English for glossary, node keys, tree diagnostics, cookbook, depth labels, row status, filtered trees, rendering boundaries, render scale, host app extension points, design policy, development, and code quality.
+- Expanded the default TreeView static HTML mock to cover root, child, leaf, expanded, collapsed, hidden-count, selection, disabled selection, badge, marker, depth label, data attributes, and row actions examples.
+- Added concrete multi-key sorter cookbook examples, including nil handling and stable fallback keys.
+- Clarified beta documentation cleanup responsibilities and the split between static mockups in this repository and Rails playground behavior in the demo repository.
+- Clarified the persisted state generator output and owner-side usage.
+- Added children pagination guidance for lazy loading examples.
+- Clarified large-tree performance hardening boundaries between TreeView gem support and host app responsibilities.
+- Clarified public API, semi-public API, internal helper module, JavaScript entrypoint, and compatibility policy.
+- Clarified that releases are normally managed by tags on `main`, with release branches reserved for parallel maintenance.
+- Converted root compatibility docs into short language selectors where practical.
+
+### Tests
+
+- Added coverage for the persisted state install generator outputs.
+- Added unit and integration coverage for windowed rendering.
+- Added JavaScript controller tests for state, selection, transfer, and remote-state behavior.
 
 ### Notes
 
 - This gem intentionally focuses on TreeView rendering primitives.
 - CRUD, authorization, business-specific actions, and selection side effects remain the responsibility of the host Rails application.
+- `TreeView::VERSION` is already set to `0.1.0` for this release.
