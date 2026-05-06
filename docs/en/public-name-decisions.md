@@ -8,7 +8,7 @@ Use `badge_builder` as the recommended hook for row badge or marker display.
 
 `icon_builder` remains as a compatibility alias for existing callers. Internally, `RenderContext#badge_builder` may still fall back to `icon_builder` when `badge_builder` is not configured, but new docs and examples should not recommend `icon_builder`.
 
-Future toggle visuals should use a separate, toggle-specific hook such as `toggle_icon_builder` so TreeView can continue to own the toggle link or button structure, ARIA attributes, Turbo attributes, and keyboard behavior.
+If TreeView adds toggle-specific visual customization, it should use a separate, toggle-specific hook such as `toggle_icon_builder` so TreeView can continue to own the toggle link or button structure, ARIA attributes, Turbo attributes, and keyboard behavior.
 
 ## `row_event_payload_builder`
 
