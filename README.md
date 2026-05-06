@@ -104,9 +104,9 @@ Add the importmap pin when needed:
 pin "tree_view", to: "tree_view/index.js"
 ```
 
-詳しくは [導入手順](docs/installation.md) を参照してください。
+詳しくは [日本語の導入手順](docs/ja/installation.md) を参照してください。
 
-See [Installation](docs/installation.md) for details.
+See [Installation](docs/en/installation.md) for details.
 
 ## Quick Start
 
@@ -153,28 +153,39 @@ row partial:
 <td><%= item.owner_name %></td>
 ```
 
-詳しくは [使い方](docs/usage.md) を参照してください。
+詳しくは [日本語の使い方](docs/ja/usage.md) を参照してください。
 
-See [Usage](docs/usage.md) for details.
+See [Usage](docs/en/usage.md) for details.
 
 ## Documentation
 
-| ドキュメント / Document | 内容 / Description |
+Documentation is organized by language.
+
+ドキュメントは言語別に管理しています。
+
+| Language | Entry point |
 |---|---|
-| [docs/README.md](docs/README.md) | ドキュメント一覧 / Documentation index |
-| [docs/i18n-audit.md](docs/i18n-audit.md) | 日英対応状況と翻訳優先度 / Documentation language status and translation priority |
-| [docs/installation.md](docs/installation.md) | 導入手順 / Installation |
-| [docs/minimal-usage.md](docs/minimal-usage.md) | 最小利用例 / Minimal usage |
-| [docs/usage.md](docs/usage.md) | 使い方とサンプル / Usage and examples |
-| [docs/cookbook.md](docs/cookbook.md) | 既存APIの組み合わせ例 / Cookbook patterns |
-| [docs/selection.md](docs/selection.md) | checkbox selection、cascade、indeterminate、max count |
-| [docs/lazy-loading.md](docs/lazy-loading.md) | lazy loading hook と children pagination guidance |
-| [docs/windowed-rendering.md](docs/windowed-rendering.md) | `VisibleRows` / `RenderWindow` と windowed rendering |
-| [docs/persisted-state.md](docs/persisted-state.md) | 開閉状態の保存/復元と generator / Persisted expansion state and generator |
-| [docs/api.md](docs/api.md) | API仕様 / API reference |
-| [docs/design-policy.md](docs/design-policy.md) | 設計思想と責務範囲 / Design policy and responsibility boundaries |
-| [docs/development.md](docs/development.md) | 開発・保守方針 / Development and maintenance |
-| [CHANGELOG.md](CHANGELOG.md) | 変更履歴 / Changelog |
+| 日本語 | [docs/ja/README.md](docs/ja/README.md) |
+| English | [docs/en/README.md](docs/en/README.md) |
+
+Key documents:
+
+| 日本語 | English |
+|---|---|
+| [導入手順](docs/ja/installation.md) | [Installation](docs/en/installation.md) |
+| [最小利用例](docs/ja/minimal-usage.md) | [Minimal usage](docs/en/minimal-usage.md) |
+| [使い方](docs/ja/usage.md) | [Usage](docs/en/usage.md) |
+| [Cookbook](docs/ja/cookbook.md) | [Cookbook](docs/en/cookbook.md) |
+| [API概要](docs/ja/api-overview.md) | [API overview](docs/en/api-overview.md) |
+| [API仕様](docs/ja/api.md) | [API reference](docs/en/api.md) |
+| [Public API](docs/ja/public-api.md) | [Public API](docs/en/public-api.md) |
+| [Release checklist](docs/ja/release.md) | [Release checklist](docs/en/release.md) |
+
+Additional docs:
+
+- [Documentation index](docs/README.md)
+- [Documentation i18n audit](docs/i18n-audit.md)
+- [CHANGELOG.md](CHANGELOG.md)
 
 ## Development
 
@@ -217,6 +228,11 @@ Before release, check:
 - `npm test`
 - README / docs / CHANGELOG の整合 / README, docs, and CHANGELOG consistency
 - gemspec metadata
+
+See also:
+
+- [日本語: Release checklist](docs/ja/release.md)
+- [English: Release checklist](docs/en/release.md)
 
 ## License
 
