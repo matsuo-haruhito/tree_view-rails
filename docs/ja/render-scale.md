@@ -36,8 +36,8 @@ TreeViewは、大きなtreeでも扱いやすいように複数の描画制御AP
 | 描画depthを制限する | `max_render_depth` / `max_leaf_distance` | HTML描画対象になる子孫 | query量も減らしたい場合はhost app側でqueryを絞ります。 |
 | expand/collapseごとにtree全体を再描画する | Turbo expand/collapse + render state再構築 | 小さなtreeでの実装複雑度 | toggleごとにhost appのquery、tree構築、partial rendering costは残ります。 |
 | visible rowsの一部だけを描画する | `TreeView::RenderWindow` / `tree_view_rows(..., window:)` | 現在visibleなrowsから出力されるHTML | host app queryや取得済みrecord数は減りません。 |
-| 子node取得を減らす | [Lazy Loading](lazy-loading.md) | 初期の子node取得と未読み込みchildrenのHTML | fetch、query、authorization、responseはhost appが実装します。 |
-| 大量childrenをpage分割する | [Children Pagination](children-pagination.md) | 1requestあたりに取得するchildren | cursor、offset、limit、次page判定、query strategyはhost appが担当します。 |
+| 子node取得を減らす | [Lazy Loading](lazy-loading.md) | 初期の子node取得と未読み込みchildrenのHTML | fetch、query、authorization、responseはhost appが実装します。最小controllerとTurbo Stream patternはLazy Loading docsを参照してください。 |
+| 大量childrenをpage分割する | [Children Pagination](children-pagination.md) | 1requestあたりに取得するchildren | cursor、offset、limit、次page判定、query strategyはhost appが担当します。cursorとnext-page例はChildren Pagination docsを参照してください。 |
 | full virtual scrollを行う | host app JavaScript | scroll位置に応じたDOM作業 | TreeViewの組み込みscope外です。 |
 
 ## 実装段階ごとのおすすめ
@@ -46,8 +46,8 @@ TreeViewは、大きなtreeでも扱いやすいように複数の描画制御AP
 
 1. **Staticまたは全体再描画のTurbo**: 小さなtree向けです。controllerとTurbo Stream responseを単純に保て、host appはrequestごとにrender state全体を再構築できます。
 2. **Render scope / windowed rendering**: dataはすでに手元にあるがHTML出力が大きい場合に使います。描画行数は減りますが、query量は減りません。
-3. **Lazy Loading**: 全子孫を先に取得・準備することが重い場合に使います。host appは開かれた親のchildrenを読み込み、必要なTurbo Stream responseを返します。
-4. **Children Pagination**: 1つの親に大量のchildrenがあり、1回のexpand requestで返す件数を制限したい場合に足します。
+3. **Lazy Loading**: 全子孫を先に取得・準備することが重い場合に使います。host appは開かれた親のchildrenを読み込み、必要なTurbo Stream responseを返します。[Lazy Loading](lazy-loading.md) のコピー可能なpatternから始めてください。
+4. **Children Pagination**: 1つの親に大量のchildrenがあり、1回のexpand requestで返す件数を制限したい場合に足します。[Children Pagination](children-pagination.md) のcursor、limit、next-page例を使います。
 5. **Host app側virtualization**: scroll位置に応じたDOM仮想化がproduct要件になった場合だけ追加します。
 
 全体再描画のexpand/collapseが遅く感じる場合は、ボトルネックがHTML量、host appのdata fetching、partial renderingのどれかを切り分けてください。HTML量だけが問題なら render scope や windowing が合います。query量やchildren数が問題なら lazy loading や children pagination を検討してください。
@@ -108,13 +108,13 @@ lazy_loading: {
 }
 ```
 
-TreeViewはchildren URLとrow state hookを描画します。実際のfetch、query、pagination、authorization、Turbo Stream responseはhost app側で実装します。詳細は [Lazy Loading](lazy-loading.md) を参照してください。
+TreeViewはchildren URLとrow state hookを描画します。実際のfetch、query、pagination、authorization、Turbo Stream responseはhost app側で実装します。controller、Turbo Stream、loaded/error/retry、authorization patternは [Lazy Loading](lazy-loading.md) を参照してください。
 
 ## children pagination
 
 1つの親が大量のchildrenを持つ場合、host app側でchildrenを小さなpageに分けて取得します。
 
-TreeViewはcursor、offset、limit、ordering、次page判定、response shapeを選びません。lazy-loading URLとrow data hookによる連携境界を提供します。詳細は [Children Pagination](children-pagination.md) を参照してください。
+TreeViewはcursor、offset、limit、ordering、次page判定、response shapeを選びません。lazy-loading URLとrow data hookによる連携境界を提供します。cursor-based pagination、limit clamp、stable ordering、next-page UI、unloaded childrenとselection / drag-dropの関係は [Children Pagination](children-pagination.md) を参照してください。
 
 ## 責務範囲
 
