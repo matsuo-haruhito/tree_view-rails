@@ -15,6 +15,8 @@ TreeView is responsible for:
 
 The host app remains responsible for fetch behavior, Turbo requests, controller actions, authorization, queries, retry UI, and children pagination.
 
+Lazy loading is intended for Turbo/server-driven rendering. It cannot be enabled with client-side toggle mode because client-side mode can only reveal descendants that are already present in the initial HTML.
+
 ## UiConfig setup
 
 Pass `load_children_path_builder` to `UiConfigBuilder#build`.
@@ -64,6 +66,8 @@ render_state = TreeView::RenderState.new(
 | `enabled:` | Whether lazy-loading data attributes should be rendered. |
 | `loaded_keys:` | Node keys whose children are already loaded. |
 | `scope:` | Optional scope value passed to path builders. |
+
+Do not combine `lazy_loading: { enabled: true }` with `UiConfigBuilder#build_client_side`. Client-side toggle mode assumes revealable descendants are already rendered in the initial DOM, while lazy loading assumes descendants may be fetched later. TreeView raises a configuration error for this combination.
 
 ## Minimal host-app pattern
 
