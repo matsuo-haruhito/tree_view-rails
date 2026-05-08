@@ -31,10 +31,20 @@ module TreeViewHelper
         data = data.merge(remote_state: "loaded")
       end
 
-      data
+      data = data
         .merge(tree_depth: depth)
         .merge(tree_state_row_data(item, tree, expanded: expanded))
         .merge(transfer_data || {})
+
+      if tree_toggle_mode(render_context.mode) == :client
+        data = data.merge(
+          tree_view_client_node_key: tree.node_key_for(item),
+          tree_view_client_depth: depth,
+          tree_view_client_expanded: expanded
+        )
+      end
+
+      data
     end
 
     def tree_node_badge(item, builder = nil, tree: nil)
