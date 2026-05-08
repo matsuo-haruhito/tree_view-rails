@@ -106,6 +106,7 @@ module TreeView
       @expanded_keys = Array(resolve_option(expanded_keys, initial_expansion_options[:expanded_keys])).freeze
       @collapsed_keys = Array(resolve_option(collapsed_keys, initial_expansion_options[:collapsed_keys])).freeze
       @selection_config = SelectionConfig.new(
+        default_checkbox_name: DEFAULT_SELECTION_CHECKBOX_NAME,
         selectable: selectable,
         payload_builder: selection_payload_builder,
         checkbox_name: selection_checkbox_name,
@@ -115,8 +116,7 @@ module TreeView
         cascade: selection_cascade,
         indeterminate: selection_indeterminate,
         max_count: selection_max_count,
-        selection: selection,
-        default_checkbox_name: DEFAULT_SELECTION_CHECKBOX_NAME
+        selection: selection
       )
       @selection_enabled = selection_config.enabled
       @selection_visibility = selection_config.visibility
@@ -210,6 +210,12 @@ module TreeView
       return value if value.is_a?(Integer) && value >= 0
 
       raise TreeView::ConfigurationError, "#{name} must be a non-negative Integer; pass nil or 0+"
+    end
+
+    def validate_builder!(builder, name)
+      return if builder.nil? || builder.respond_to?(:call)
+
+      raise TreeView::ConfigurationError, "#{name} must respond to call; pass a callable object or nil"
     end
 
     def validate_expansion_key_conflicts!
