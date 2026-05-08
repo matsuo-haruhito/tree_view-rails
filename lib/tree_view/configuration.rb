@@ -54,12 +54,12 @@ module TreeView
     end
 
     def raise_invalid_initial_state!
-      raise ArgumentError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(", ")}"
+      raise TreeView::ConfigurationError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(", ")}; use :expanded or :collapsed"
     end
 
     def raise_invalid_render_log_level!
       valid_values = VALID_RENDER_LOG_LEVELS.keys.join(", ")
-      raise ArgumentError, "render_log_level must be nil or one of: #{valid_values}"
+      raise TreeView::ConfigurationError, "render_log_level must be nil or one of: #{valid_values}; use nil to keep Rails render logs unchanged"
     end
   end
 end
