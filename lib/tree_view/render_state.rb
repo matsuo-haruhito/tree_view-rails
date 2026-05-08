@@ -179,11 +179,12 @@ module TreeView
 
     def normalize_initial_state(value)
       return nil if value.nil?
+      raise_invalid_initial_state! unless value.respond_to?(:to_sym)
 
       normalized_value = value.to_sym
       return normalized_value if VALID_INITIAL_STATES.include?(normalized_value)
 
-      raise TreeView::ConfigurationError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(", ")}; use :expanded or :collapsed"
+      raise_invalid_initial_state!
     end
 
     def normalize_selection_visibility(value)
@@ -194,6 +195,10 @@ module TreeView
       return normalized_value if VALID_SELECTION_VISIBILITIES.include?(normalized_value)
 
       raise_invalid_selection_visibility!
+    end
+
+    def raise_invalid_initial_state!
+      raise TreeView::ConfigurationError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(", ")}; use :expanded or :collapsed"
     end
 
     def raise_invalid_selection_visibility!
