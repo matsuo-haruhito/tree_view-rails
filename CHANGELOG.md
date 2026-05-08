@@ -17,6 +17,8 @@ Breaking changes and required migration notes should be called out explicitly in
 
 - Added `TreeView.configuration.render_log_level`, defaulting to `:warn`, so TreeView helper-rendered partial logs can be silenced without changing the host app's global Rails logger level.
 - Added a public TreeView-specific error hierarchy rooted at `TreeView::Error` for rescuing validation and configuration failures.
+- Added explicit `UiConfig#mode` values for `:turbo`, `:static`, and `:client`, plus `UiConfigBuilder#build_turbo` and `UiConfigBuilder#build_client_side`.
+- Added client-side-only expand/collapse mode that renders collapsed descendants into initial HTML and toggles rows in the browser with the bundled `tree-view-client` controller.
 
 ### Changed
 
@@ -28,6 +30,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 - Added README adoption guidance to help users decide whether TreeView fits their use case and to clarify the virtual scrolling boundary.
 - Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
+- Added client-side toggle mode docs in Japanese and English, including static / Turbo / client-side mode comparison and CSS customization guidance using `aria-expanded`.
 - Added error hierarchy docs in Japanese and English, including public rescue guidance and `ArgumentError` compatibility notes.
 - Added form and editing row docs for bulk edit forms, inline-editing layouts, Form Objects, validation errors, row actions, and host-app responsibility boundaries.
 - Added public name decision docs in Japanese and English.
@@ -39,6 +42,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 - Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered path trees, sorter call growth, children lookup scope, and max leaf distance behavior.
 - Added specs for TreeView-specific error rescue behavior.
+- Added Ruby and JavaScript specs for client-side toggle mode, mode builders, public API exports, and browser-local descendant visibility updates.
 
 ## 0.1.0 - 2026-05-07
 
