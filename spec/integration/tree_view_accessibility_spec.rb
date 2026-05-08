@@ -35,12 +35,13 @@ RSpec.describe "TreeView accessibility semantics" do
   end
 
   def render_rows(**render_state_options)
-    render_state = TreeView::RenderState.new(**{
+    options = {
       tree: tree,
       root_items: tree.root_items,
       row_partial: "projects/tree_columns",
       ui_config: tree_ui
-    }.merge(render_state_options))
+    }.merge(render_state_options)
+    render_state = TreeView::RenderState.new(**options)
 
     build_view.tree_view_rows(render_state)
   end
