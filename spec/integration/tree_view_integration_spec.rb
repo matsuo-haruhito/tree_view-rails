@@ -511,7 +511,7 @@ RSpec.describe "TreeView integration" do
         )
       end.to raise_error(ActionView::Template::Error) { |error|
         expect(error.cause).to be_a(ArgumentError)
-        expect(error.cause.message).to match(/must be :static or :turbo/)
+        expect(error.cause.message).to match(/must be one of: turbo, static, client/)
       }
     end
   end
