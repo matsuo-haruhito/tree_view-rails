@@ -1,8 +1,9 @@
 <% render_context = local_assigns.fetch(:render_context) %>
 <% tree = render_context.tree %>
 <% sorted_items = tree.sort_items(items) %>
+<% hidden_by_client_parent = local_assigns.fetch(:hidden_by_client_parent, false) %>
 
 <% sorted_items.each do |child_item| %>
   <% current_depth = depth + 1 %>
-  <%= render 'tree_view/tree_row', item: child_item, depth: current_depth, render_context: render_context %>
+  <%= render 'tree_view/tree_row', item: child_item, depth: current_depth, render_context: render_context, hidden_by_client_parent: hidden_by_client_parent %>
 <% end %>
