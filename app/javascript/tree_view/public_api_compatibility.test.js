@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 import {
+  TreeViewClientController,
   TreeViewRemoteStateController,
   TreeViewSelectionController,
   TreeViewStateController,
@@ -10,6 +11,7 @@ import {
 describe("TreeView JavaScript public API compatibility", () => {
   it("keeps documented controller exports available", () => {
     expect(TreeViewStateController).toBeTypeOf("function")
+    expect(TreeViewClientController).toBeTypeOf("function")
     expect(TreeViewSelectionController).toBeTypeOf("function")
     expect(TreeViewTransferController).toBeTypeOf("function")
     expect(TreeViewRemoteStateController).toBeTypeOf("function")
@@ -21,6 +23,7 @@ describe("TreeView JavaScript public API compatibility", () => {
     registerTreeViewControllers(application)
 
     expect(application.register).toHaveBeenCalledWith("tree-view-state", TreeViewStateController)
+    expect(application.register).toHaveBeenCalledWith("tree-view-client", TreeViewClientController)
     expect(application.register).toHaveBeenCalledWith("tree-view-selection", TreeViewSelectionController)
     expect(application.register).toHaveBeenCalledWith("tree-view-transfer", TreeViewTransferController)
     expect(application.register).toHaveBeenCalledWith("tree-view-remote-state", TreeViewRemoteStateController)
