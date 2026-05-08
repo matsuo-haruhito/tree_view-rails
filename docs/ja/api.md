@@ -228,7 +228,16 @@ render_state = TreeView::RenderState.new(
 
 ## TreeView::UiConfig / UiConfigBuilder
 
-DOM IDやpath builderをまとめる設定objectです。
+DOM ID、toggle mode、path builderをまとめる設定objectです。
+
+| Builder | Mode | 説明 |
+|---|---|---|
+| `build_turbo(...)` | `:turbo` | host appのpath builderでTurbo Stream開閉URLを作る。 |
+| `build(...)` | `:turbo` | 後方互換のための `build_turbo` alias。 |
+| `build_static` | `:static` | 開閉URLを持たない静的snapshot設定を作る。 |
+| `build_client_side` | `:client` | Turbo endpointを使わないbrowser-local開閉設定を作る。 |
+
+`UiConfig#mode` は `:turbo`、`:static`、`:client` を返します。`turbo?`、`static?`、`client?` predicateも使えます。
 
 ### static
 
@@ -245,13 +254,24 @@ tree_ui = TreeView::UiConfigBuilder.new(
 tree_ui = TreeView::UiConfigBuilder.new(
   context: view_context,
   node_prefix: "document"
-).build(
+).build_turbo(
   hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth: depth, scope: scope) },
   show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth: depth, scope: scope) },
   load_children_path_builder: ->(item, depth, scope) { children_document_path(item, depth: depth, scope: scope) },
   toggle_all_path_builder: ->(state) { documents_path(state: state) }
 )
 ```
+
+### client-side
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document"
+).build_client_side
+```
+
+client-side modeでは、render scope内のcollapsed descendantsを初期HTMLに `hidden` 付きで描画し、bundled `tree-view-client` controllerでbrowser内の行表示を切り替えます。初期HTML量を許容できる小〜中規模tree向けです。
 
 ## TreeView::PersistedState / StateStore
 
@@ -288,6 +308,8 @@ registerTreeViewControllers(application)
 
 主なcontroller:
 
+- `tree-view-state`
+- `tree-view-client`
 - `tree-view-selection`
 - `tree-view-transfer`
 - `tree-view-remote-state`
