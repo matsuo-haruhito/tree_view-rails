@@ -3,7 +3,13 @@
 require "spec_helper"
 
 RSpec.describe TreeView::Diagnostics do
-  DiagnosticNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+  def diagnostic_node_class
+    @diagnostic_node_class ||= Struct.new(:id, :parent_id, :name, keyword_init: true)
+  end
+
+  def diagnostic_node(id:, parent_id:, name:)
+    diagnostic_node_class.new(id: id, parent_id: parent_id, name: name)
+  end
 
   def diagnostic_ui_config
     TreeView::UiConfig.new(
@@ -14,8 +20,8 @@ RSpec.describe TreeView::Diagnostics do
   end
 
   it "returns a successful result when selected diagnostics pass" do
-    root = DiagnosticNode.new(id: 1, parent_id: nil, name: "Root")
-    child = DiagnosticNode.new(id: 2, parent_id: 1, name: "Child")
+    root = diagnostic_node(id: 1, parent_id: nil, name: "Root")
+    child = diagnostic_node(id: 2, parent_id: 1, name: "Child")
     tree = TreeView::Tree.new(records: [root, child], parent_id_method: :parent_id)
     render_state = TreeView::RenderState.new(
       tree: tree,
@@ -32,8 +38,8 @@ RSpec.describe TreeView::Diagnostics do
   end
 
   it "collects failures without raising by default" do
-    first = DiagnosticNode.new(id: 1, parent_id: nil, name: "First")
-    duplicate = DiagnosticNode.new(id: 1, parent_id: nil, name: "Duplicate")
+    first = diagnostic_node(id: 1, parent_id: nil, name: "First")
+    duplicate = diagnostic_node(id: 1, parent_id: nil, name: "Duplicate")
     tree = TreeView::Tree.new(records: [first, duplicate], parent_id_method: :parent_id)
 
     result = described_class.run(tree: tree, checks: [:node_keys])
@@ -44,8 +50,8 @@ RSpec.describe TreeView::Diagnostics do
   end
 
   it "can raise the first diagnostics failure" do
-    first = DiagnosticNode.new(id: 1, parent_id: nil, name: "First")
-    duplicate = DiagnosticNode.new(id: 1, parent_id: nil, name: "Duplicate")
+    first = diagnostic_node(id: 1, parent_id: nil, name: "First")
+    duplicate = diagnostic_node(id: 1, parent_id: nil, name: "Duplicate")
     tree = TreeView::Tree.new(records: [first, duplicate], parent_id_method: :parent_id)
 
     expect do
@@ -54,8 +60,8 @@ RSpec.describe TreeView::Diagnostics do
   end
 
   it "reports orphan nodes as warnings" do
-    root = DiagnosticNode.new(id: 1, parent_id: nil, name: "Root")
-    orphan = DiagnosticNode.new(id: 2, parent_id: 99, name: "Orphan")
+    root = diagnostic_node(id: 1, parent_id: nil, name: "Root")
+    orphan = diagnostic_node(id: 2, parent_id: 99, name: "Orphan")
     tree = TreeView::Tree.new(records: [root, orphan], parent_id_method: :parent_id)
 
     result = described_class.run(tree: tree, checks: [:orphans])
