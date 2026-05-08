@@ -27,6 +27,7 @@ Breaking changes and required migration notes should be called out explicitly in
 ### Documentation
 
 - Added README adoption guidance to help users decide whether TreeView fits their use case and to clarify the virtual scrolling boundary.
+- Promoted accessibility semantics as a first-class capability in the README and docs indexes, including ARIA placement, keyboard boundaries, and host-app responsibilities.
 - Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
 - Added error hierarchy docs in Japanese and English, including public rescue guidance and `ArgumentError` compatibility notes.
 - Added form and editing row docs for bulk edit forms, inline-editing layouts, Form Objects, validation errors, row actions, and host-app responsibility boundaries.
@@ -37,6 +38,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Tests
 
+- Added accessibility semantics integration specs for row ARIA state in static, collapsed, selection, and windowed rendering.
 - Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered path trees, sorter call growth, children lookup scope, and max leaf distance behavior.
 - Added specs for TreeView-specific error rescue behavior.
 
