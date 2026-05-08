@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "tree_view/render_state/selection_config"
 require "tree_view/render_state_builder_validation"
 
 module TreeView
@@ -10,8 +11,8 @@ module TreeView
     VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys collapsed_keys].freeze
     VALID_RENDER_SCOPE_KEYS = %i[max_depth max_leaf_distance].freeze
     VALID_TOGGLE_SCOPE_KEYS = %i[max_depth_from_root max_leaf_distance].freeze
-    VALID_SELECTION_KEYS = %i[enabled visibility payload_builder checkbox_name disabled_builder disabled_reason_builder selected_keys cascade indeterminate max_count].freeze
-    VALID_SELECTION_VISIBILITIES = %i[all roots leaves none].freeze
+    VALID_SELECTION_KEYS = SelectionConfig::VALID_KEYS
+    VALID_SELECTION_VISIBILITIES = SelectionConfig::VALID_VISIBILITIES
     DEFAULT_SELECTION_CHECKBOX_NAME = "selected_nodes[]"
 
     attr_reader :tree,
@@ -28,6 +29,7 @@ module TreeView
       :max_toggle_leaf_distance,
       :expanded_keys,
       :collapsed_keys,
+      :selection_config,
       :selection_enabled,
       :selection_visibility,
       :selection_payload_builder,
@@ -88,7 +90,6 @@ module TreeView
       initial_expansion_options = normalize_options(initial_expansion, :initial_expansion, VALID_INITIAL_EXPANSION_KEYS)
       render_scope_options = normalize_options(render_scope, :render_scope, VALID_RENDER_SCOPE_KEYS)
       toggle_scope_options = normalize_options(toggle_scope, :toggle_scope, VALID_TOGGLE_SCOPE_KEYS)
-      selection_options = normalize_options(selection, :selection, VALID_SELECTION_KEYS)
 
       @tree = tree
       @root_items = root_items
@@ -104,16 +105,29 @@ module TreeView
       @max_toggle_leaf_distance = normalize_non_negative_integer(resolve_option(max_toggle_leaf_distance, toggle_scope_options[:max_leaf_distance]), :max_toggle_leaf_distance)
       @expanded_keys = Array(resolve_option(expanded_keys, initial_expansion_options[:expanded_keys])).freeze
       @collapsed_keys = Array(resolve_option(collapsed_keys, initial_expansion_options[:collapsed_keys])).freeze
-      @selection_enabled = normalize_boolean(resolve_option(selectable, selection_options[:enabled]), :selectable)
-      @selection_visibility = normalize_selection_visibility(selection_options[:visibility])
-      @selection_payload_builder = resolve_option(selection_payload_builder, selection_options[:payload_builder])
-      @selection_checkbox_name = resolve_option(selection_checkbox_name, selection_options[:checkbox_name]) || DEFAULT_SELECTION_CHECKBOX_NAME
-      @selection_disabled_builder = resolve_option(selection_disabled_builder, selection_options[:disabled_builder])
-      @selection_disabled_reason_builder = resolve_option(selection_disabled_reason_builder, selection_options[:disabled_reason_builder])
-      @selection_selected_keys = Array(resolve_option(selection_selected_keys, selection_options[:selected_keys])).freeze
-      @selection_cascade = normalize_boolean(resolve_option(selection_cascade, selection_options[:cascade]), :selection_cascade)
-      @selection_indeterminate = normalize_boolean(resolve_option(selection_indeterminate, selection_options[:indeterminate]), :selection_indeterminate)
-      @selection_max_count = normalize_optional_positive_integer(resolve_option(selection_max_count, selection_options[:max_count]), :selection_max_count)
+      @selection_config = SelectionConfig.new(
+        selectable: selectable,
+        payload_builder: selection_payload_builder,
+        checkbox_name: selection_checkbox_name,
+        disabled_builder: selection_disabled_builder,
+        disabled_reason_builder: selection_disabled_reason_builder,
+        selected_keys: selection_selected_keys,
+        cascade: selection_cascade,
+        indeterminate: selection_indeterminate,
+        max_count: selection_max_count,
+        selection: selection,
+        default_checkbox_name: DEFAULT_SELECTION_CHECKBOX_NAME
+      )
+      @selection_enabled = selection_config.enabled
+      @selection_visibility = selection_config.visibility
+      @selection_payload_builder = selection_config.payload_builder
+      @selection_checkbox_name = selection_config.checkbox_name
+      @selection_disabled_builder = selection_config.disabled_builder
+      @selection_disabled_reason_builder = selection_config.disabled_reason_builder
+      @selection_selected_keys = selection_config.selected_keys
+      @selection_cascade = selection_config.cascade
+      @selection_indeterminate = selection_config.indeterminate
+      @selection_max_count = selection_config.max_count
       @row_class_builder = row_class_builder
       @row_data_builder = row_data_builder
       @row_event_payload_builder = row_event_payload_builder
@@ -142,15 +156,15 @@ module TreeView
     end
 
     def selection_enabled?
-      selection_enabled == true
+      selection_config.enabled?
     end
 
     def selection_cascade?
-      selection_cascade == true
+      selection_config.cascade?
     end
 
     def selection_indeterminate?
-      selection_indeterminate == true
+      selection_config.indeterminate?
     end
 
     # 画面固有指定があればそれを優先し、なければ global config を使う。
@@ -187,22 +201,8 @@ module TreeView
       raise_invalid_initial_state!
     end
 
-    def normalize_selection_visibility(value)
-      return :all if value.nil?
-      raise_invalid_selection_visibility! unless value.respond_to?(:to_sym)
-
-      normalized_value = value.to_sym
-      return normalized_value if VALID_SELECTION_VISIBILITIES.include?(normalized_value)
-
-      raise_invalid_selection_visibility!
-    end
-
     def raise_invalid_initial_state!
       raise TreeView::ConfigurationError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(", ")}; use :expanded or :collapsed"
-    end
-
-    def raise_invalid_selection_visibility!
-      raise TreeView::ConfigurationError, "selection visibility must be one of: #{VALID_SELECTION_VISIBILITIES.join(", ")}; choose which rows should show checkboxes"
     end
 
     def normalize_non_negative_integer(value, name)
@@ -210,26 +210,6 @@ module TreeView
       return value if value.is_a?(Integer) && value >= 0
 
       raise TreeView::ConfigurationError, "#{name} must be a non-negative Integer; pass nil or 0+"
-    end
-
-    def normalize_optional_positive_integer(value, name)
-      return nil if value.nil?
-      return value if value.is_a?(Integer) && value.positive?
-
-      raise TreeView::ConfigurationError, "#{name} must be a positive Integer; pass nil or a value greater than 0"
-    end
-
-    def normalize_boolean(value, name)
-      return false if value.nil?
-      return value if value == true || value == false
-
-      raise TreeView::ConfigurationError, "#{name} must be true or false; pass a boolean value"
-    end
-
-    def validate_builder!(builder, name)
-      return if builder.nil? || builder.respond_to?(:call)
-
-      raise TreeView::ConfigurationError, "#{name} must respond to call; pass a callable object or nil"
     end
 
     def validate_expansion_key_conflicts!
