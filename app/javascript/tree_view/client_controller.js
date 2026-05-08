@@ -43,9 +43,11 @@ export class TreeViewClientController extends Controller {
     if (!nodeKey) return
 
     this.element
-      .querySelectorAll(`[data-tree-view-client-hidden-count-for="${CSS.escape(nodeKey)}"]`)
+      .querySelectorAll("[data-tree-view-client-hidden-count-for]")
       .forEach((element) => {
-        element.hidden = !visible
+        if (element.dataset.treeViewClientHiddenCountFor === String(nodeKey)) {
+          element.hidden = !visible
+        }
       })
   }
 
