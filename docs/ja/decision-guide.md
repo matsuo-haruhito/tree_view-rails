@@ -18,8 +18,8 @@ TreeViewのAPIは大きく分けると次の2種類です。
 | 初期描画を小さくしたい | `TreeView::RenderState` | `max_initial_depth`, `initial_expansion:`, `render_scope:` | これは描画制御です。初期HTML量は減りますが、それだけでdatabase query量が減るわけではありません。 |
 | 描画対象の子孫範囲を制限したい | `render_scope:` | `max_depth`, `max_leaf_distance` | ページ上で一定のdepthやmatched leavesからの距離を超えて描画したくない場合に使います。 |
 | visible rowsの一部だけ描画したい | `tree_view_rows(..., window:)`, `tree_view_window`, `TreeView::RenderWindow` | `window: { offset:, limit: }` | すでにvisibleなrowsをsliceします。HTML出力量だけを減らし、それだけで取得データ量が減るわけではありません。 |
-| 全ての子要素を先に取得したくない | Lazy Loading | `load_children_path_builder`, `lazy_loading: { enabled:, loaded_keys: }` | TreeViewはhookとURLを描画します。controller action、query、authorization、Turbo responseはhost appが実装します。 |
-| 非常に大きい子要素集合をpage分割したい | Children Pagination | Lazy-loading URLとhost app側のcursor / limit / next-page strategy | TreeViewは連携境界とhookを提供します。pagination stateとfetch behaviorはhost appが担当します。 |
+| 全ての子要素を先に取得したくない | [Lazy Loading](lazy-loading.md) | `load_children_path_builder`, `lazy_loading: { enabled:, loaded_keys: }` | TreeViewはhookとURLを描画します。controller、Turbo Stream、loaded/error/retry、authorization patternはLazy Loading docsを参照してください。 |
+| 非常に大きい子要素集合をpage分割したい | [Children Pagination](children-pagination.md) | Lazy-loading URLとhost app側のcursor / limit / next-page strategy | TreeViewは連携境界とhookを提供します。cursor、limit、stable ordering、next-page UI例はChildren Pagination docsを参照してください。 |
 | full virtual scrollingを追加したい | host app JavaScript | scroll observer、virtualization library、URL/window state | TreeViewは組み込みのDOM仮想化やinfinite-scroll制御を提供しません。必要に応じてrender metadataと組み合わせます。 |
 | 検索結果をancestor付きで表示したい | `path_tree_for` | `tree.path_tree_for(matches)` | matchしたrecordをrootからの文脈付きで表示したい場合に使います。 |
 | childからparentへ辿る表示をしたい | `reverse_tree_for` | `tree.reverse_tree_for(items)` | 子側を起点にして親方向へ展開する表示に使います。 |
@@ -80,7 +80,7 @@ flowchart TD
 1. [最小利用例](minimal-usage.md) または [使い方](usage.md) から始め、static treeを描画します。
 2. 必要になったuse caseに応じて [API概要](api-overview.md) の概念を足します。
 3. HTML量やvisible row数が問題になったら [Render Scale](render-scale.md) を使います。
-4. query量や子要素数が問題になったら [Lazy Loading](lazy-loading.md) と [Children Pagination](children-pagination.md) を使います。
+4. query量や子要素数が問題になったら [Lazy Loading](lazy-loading.md) と [Children Pagination](children-pagination.md) を使います。これらのページには、host app controller、Turbo Stream、cursor、retry patternのコピー可能な例があります。
 5. scroll位置に応じたDOM仮想化がproduct要件になった場合だけ、host app側でvirtual scrollingを追加します。
 6. interaction要件やrow customization要件が固まったら [Selection](selection.md)、[Form と編集行](form-editing.md)、[Cookbook row customization](cookbook.md#行customization-quick-guide)、[Drag and Drop](drag-and-drop.md)、[Persisted State](persisted-state.md) を追加します。
 7. node key、DOM ID、tree構造を検証したい場合は [Tree diagnostics](tree-diagnostics.md) を使います。

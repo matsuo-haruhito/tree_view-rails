@@ -18,8 +18,8 @@ Use render controls first when the data is already available. Use lazy loading o
 | Keep the first render small | `TreeView::RenderState` | `max_initial_depth`, `initial_expansion:`, `render_scope:` | These are render controls. They reduce initial HTML volume, not database query volume by themselves. |
 | Limit which descendants can be rendered | `render_scope:` | `max_depth`, `max_leaf_distance` | Use when a page should never render beyond a chosen depth or distance from matched leaves. |
 | Render only a visible slice | `tree_view_rows(..., window:)`, `tree_view_window`, `TreeView::RenderWindow` | `window: { offset:, limit: }` | Slices already-visible rows. It reduces HTML output only; it does not fetch less data by itself. |
-| Avoid fetching every child up front | Lazy Loading | `load_children_path_builder`, `lazy_loading: { enabled:, loaded_keys: }` | TreeView renders hooks and URLs. The host app implements controller actions, queries, authorization, and Turbo responses. |
-| Page very large child sets | Children Pagination | Lazy-loading URLs plus host-app cursor / limit / next-page strategy | TreeView has integration boundaries and hooks; the host app owns pagination state and fetch behavior. |
+| Avoid fetching every child up front | [Lazy Loading](lazy-loading.md) | `load_children_path_builder`, `lazy_loading: { enabled:, loaded_keys: }` | TreeView renders hooks and URLs. See the Lazy Loading docs for controller, Turbo Stream, loaded/error/retry, and authorization patterns. |
+| Page very large child sets | [Children Pagination](children-pagination.md) | Lazy-loading URLs plus host-app cursor / limit / next-page strategy | TreeView has integration boundaries and hooks. See Children Pagination for cursor, limit, stable ordering, and next-page UI examples. |
 | Add full virtual scrolling | Host-app JavaScript | Scroll observers, virtualization library, URL/window state | TreeView does not provide built-in DOM virtualization or infinite-scroll control. Combine it with render metadata only when useful. |
 | Show search results with ancestors | `path_tree_for` | `tree.path_tree_for(matches)` | Use when matched records need enough ancestors to preserve context from root to match. |
 | Show child-to-parent paths | `reverse_tree_for` | `tree.reverse_tree_for(items)` | Use when the primary display starts from children and expands toward parents. |
@@ -80,7 +80,7 @@ flowchart TD
 1. Start with [Minimal usage](minimal-usage.md) or [Usage](usage.md) and render a static tree.
 2. Add [API overview](api-overview.md) concepts only when the use case needs them.
 3. Use [Render Scale](render-scale.md) when HTML size or visible row count becomes the issue.
-4. Use [Lazy Loading](lazy-loading.md) and [Children Pagination](children-pagination.md) when query volume or child count is the issue.
+4. Use [Lazy Loading](lazy-loading.md) and [Children Pagination](children-pagination.md) when query volume or child count is the issue; those pages include copyable host-app controller, Turbo Stream, cursor, and retry patterns.
 5. Add host-app virtual scrolling only when scroll-position-driven DOM virtualization is a product requirement.
 6. Add [Selection](selection.md), [Forms and editing rows](form-editing.md), [Cookbook row customization](cookbook.md#row-customization-quick-guide), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction and row customization requirements are clear.
 7. Use [Tree diagnostics](tree-diagnostics.md) when node keys, DOM IDs, or tree structure need validation.
