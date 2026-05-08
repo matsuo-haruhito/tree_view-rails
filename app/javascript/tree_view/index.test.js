@@ -148,7 +148,7 @@ describe("TreeViewClientController", () => {
     expect(document.querySelector("#outer-child").hidden).toBe(true)
     expect(document.querySelector("#inner-row").hidden).toBe(false)
     expect(document.querySelector("#inner-child").hidden).toBe(false)
-    expect(document.querySelector("#inner-hidden-count").hidden).toBe(false)
+    expect(document.querySelector("#inner-hidden-count").hidden).toBe(true)
   })
 })
 
