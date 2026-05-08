@@ -14,26 +14,58 @@ module TreeView
       load_children_path_builder: nil,
       indent_unit: "&ensp; &ensp; &ensp;",
       scope_format: :string)
-      UiConfig.new(
-        node_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_#{@key_resolver.call(item_or_id)}" },
-        button_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_button_box_#{@key_resolver.call(item_or_id)}" },
-        show_button_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_show_button_#{@key_resolver.call(item_or_id)}" },
-        hide_descendants_path_builder: hide_descendants_path_builder,
+      build_turbo(
         show_descendants_path_builder: show_descendants_path_builder,
-        load_children_path_builder: load_children_path_builder,
+        hide_descendants_path_builder: hide_descendants_path_builder,
         toggle_all_path_builder: toggle_all_path_builder,
+        load_children_path_builder: load_children_path_builder,
         indent_unit: indent_unit,
         scope_format: scope_format
       )
     end
 
+    def build_turbo(show_descendants_path_builder:,
+      hide_descendants_path_builder:,
+      toggle_all_path_builder:,
+      load_children_path_builder: nil,
+      indent_unit: "&ensp; &ensp; &ensp;",
+      scope_format: :string)
+      UiConfig.new(
+        **dom_builders,
+        hide_descendants_path_builder: hide_descendants_path_builder,
+        show_descendants_path_builder: show_descendants_path_builder,
+        load_children_path_builder: load_children_path_builder,
+        toggle_all_path_builder: toggle_all_path_builder,
+        indent_unit: indent_unit,
+        scope_format: scope_format,
+        mode: :turbo
+      )
+    end
+
     def build_static(indent_unit: "&ensp; &ensp; &ensp;")
       UiConfig.new(
+        **dom_builders,
+        indent_unit: indent_unit,
+        mode: :static
+      )
+    end
+
+    def build_client_side(indent_unit: "&ensp; &ensp; &ensp;")
+      UiConfig.new(
+        **dom_builders,
+        indent_unit: indent_unit,
+        mode: :client
+      )
+    end
+
+    private
+
+    def dom_builders
+      {
         node_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_#{@key_resolver.call(item_or_id)}" },
         button_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_button_box_#{@key_resolver.call(item_or_id)}" },
-        show_button_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_show_button_#{@key_resolver.call(item_or_id)}" },
-        indent_unit: indent_unit
-      )
+        show_button_dom_id_builder: ->(item_or_id) { "#{@node_prefix}_show_button_#{@key_resolver.call(item_or_id)}" }
+      }
     end
   end
 end
