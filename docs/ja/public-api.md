@@ -11,6 +11,12 @@ host app が直接使ってよい主な入口は以下です。
 - `TreeView.reset_configuration!`
 - `TreeView.parse_selection_params`
 - `TreeView.node_key`
+- `TreeView::Error`
+- `TreeView::ConfigurationError`
+- `TreeView::InvalidTreeError`
+- `TreeView::DuplicateNodeKeyError`
+- `TreeView::CycleDetectedError`
+- `TreeView::InvalidRenderWindowError`
 - `TreeView::Tree`
 - `TreeView::RenderState`
 - `TreeView::VisibleRows`
@@ -26,6 +32,14 @@ host app が直接使ってよい主な入口は以下です。
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
 - `tree_view_breadcrumb(tree, item, ...)`
+
+## Public error surface
+
+host app は `TreeView::Error` を rescue することで、documented された TreeView の validation / configuration failure を、他の application error と分けて扱えます。
+
+`TreeView::Error` は既存 integration との互換性のため `ArgumentError` を継承します。新しい integration では、TreeView 固有の失敗を扱うとき `TreeView::Error` または documented subclass を優先してください。
+
+documented public subclass は [Error hierarchy](errors.md) に整理しています。
 
 ## Public helper surface
 
@@ -110,6 +124,7 @@ undocumentedなCSS helper class、data attribute、DOM構造詳細、gem partial
 - `tree_view_rows(render_state)` のdocumented behavior変更
 - selection / row event payload shape変更
 - persisted state semantics変更
+- documented public error class の削除、または documented error を `TreeView::Error` hierarchy の外へ移すこと
 
 以下は通常breaking changeではありません。
 
@@ -117,6 +132,7 @@ undocumentedなCSS helper class、data attribute、DOM構造詳細、gem partial
 - documented classを維持したCSS class追加
 - data attribute追加
 - event detail key追加
+- 新しくdocumentedした validation / configuration failure 向けの `TreeView::Error` subclass 追加
 - internal helper module refactor
 - `tree_view/index.js` exportsを維持したcontroller file移動
 - README / docs導線を維持したdocs構造変更

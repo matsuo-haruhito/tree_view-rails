@@ -54,6 +54,7 @@ For the initial release, the priority is:
 | Decision guide | `docs/ja/decision-guide.md` | `docs/en/decision-guide.md` | Split | Keep use-case-to-API guidance, flowchart, and render/data-loading distinctions in sync. |
 | API overview | `docs/ja/api-overview.md` | `docs/en/api-overview.md` | Split | Keep in sync with API reference docs. |
 | API reference | `docs/ja/api.md` | `docs/en/api.md` | Split | Root `docs/api.md` has been removed. |
+| Error hierarchy | `docs/ja/errors.md` | `docs/en/errors.md` | Split | Keep public error classes and rescue compatibility guidance in sync. |
 | Public API policy | `docs/ja/public-api.md` | `docs/en/public-api.md` | Split | Root `docs/public-api.md` has been removed. |
 | Release checklist | `docs/ja/release.md` | `docs/en/release.md` | Split | Root `docs/release.md` has been removed. |
 
@@ -84,6 +85,7 @@ Before tagging `v0.1.0`, confirm:
 - Root-level prose docs have been removed.
 - `CHANGELOG.md` includes documentation migration entries.
 - New public API changes update both `docs/ja/api.md` and `docs/en/api.md` when practical.
+- New public error classes update `docs/ja/errors.md`, `docs/en/errors.md`, and public API policy docs when practical.
 
 ## Remaining cleanup
 

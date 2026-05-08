@@ -22,6 +22,23 @@ end
 
 `render_log_level` accepts `:debug`, `:info`, `:warn`, `:error`, `:fatal`, `:unknown`, `nil`, or the corresponding Ruby `Logger` level constants. See [Render log level](render-log-level.md) for details.
 
+## TreeView errors
+
+TreeView validation and configuration failures use a public error hierarchy rooted at `TreeView::Error`.
+
+`TreeView::Error` inherits from `ArgumentError` for compatibility with existing host apps that already rescue TreeView validation failures as `ArgumentError`.
+
+| Error class | Description |
+|---|---|
+| `TreeView::Error` | Base class for documented TreeView validation and configuration failures. |
+| `TreeView::ConfigurationError` | Invalid options, invalid mode combinations, invalid builders, or unsupported configuration values. |
+| `TreeView::InvalidTreeError` | Tree data cannot be treated as a valid tree. |
+| `TreeView::DuplicateNodeKeyError` | Duplicate node keys are detected. |
+| `TreeView::CycleDetectedError` | A parent/child cycle is detected. |
+| `TreeView::InvalidRenderWindowError` | A render window receives an invalid `offset` or `limit`. |
+
+See [Error hierarchy](errors.md) for rescue examples and compatibility guidance.
+
 ## TreeView::Tree
 
 The central object for treating parent-child data as a tree.
@@ -280,6 +297,7 @@ Main controllers:
 - [API overview](api-overview.md)
 - [Usage](usage.md)
 - [Cookbook](cookbook.md)
+- [Error hierarchy](errors.md)
 - [Render log level](render-log-level.md)
 - [Node keys](node-keys.md)
 - [Tree diagnostics](tree-diagnostics.md)

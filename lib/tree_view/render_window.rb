@@ -65,13 +65,13 @@ module TreeView
     def normalize_non_negative_integer(value, name)
       return value if value.is_a?(Integer) && value >= 0
 
-      raise ArgumentError, "#{name} must be a non-negative Integer"
+      raise TreeView::InvalidRenderWindowError, "#{name} must be a non-negative Integer; pass 0 or a positive row offset"
     end
 
     def normalize_positive_integer(value, name)
       return value if value.is_a?(Integer) && value.positive?
 
-      raise ArgumentError, "#{name} must be a positive Integer"
+      raise TreeView::InvalidRenderWindowError, "#{name} must be a positive Integer; pass the maximum number of rows to render"
     end
   end
 end

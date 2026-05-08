@@ -96,7 +96,7 @@ module TreeView
 
       loop do
         current_key = node_key_for(current)
-        raise ArgumentError, "cycle detected in parent path for node #{current_key.inspect}" if visiting[current_key]
+        raise TreeView::CycleDetectedError, "cycle detected in parent path for node #{current_key.inspect}; check parent_id values and remove the self-referential loop" if visiting[current_key]
 
         visiting[current_key] = true
         parent = parent_for(current)
@@ -153,7 +153,7 @@ module TreeView
     def sort_items(items)
       sorted = sorter.call(Array(items), self)
       if sorted.nil? || !sorted.respond_to?(:to_a)
-        raise ArgumentError, "sorter must return an Array-like object, got: #{sorted.class}"
+        raise TreeView::ConfigurationError, "sorter must return an Array-like object, got: #{sorted.class}; return the sorted items or configure a sorter that responds to to_a"
       end
 
       sorted.to_a
@@ -219,7 +219,7 @@ module TreeView
       end
 
       if duplicated_keys.any?
-        raise ArgumentError, "duplicate node_key detected: #{duplicated_keys.map(&:inspect).join(", ")}"
+        raise TreeView::DuplicateNodeKeyError, "duplicate node_key detected: #{duplicated_keys.map(&:inspect).join(", ")}; configure node_key_resolver or ensure records expose unique IDs before rendering"
       end
 
       true
@@ -242,7 +242,7 @@ module TreeView
     def ensure_records_path_helpers!
       return if records_mode?
 
-      raise ArgumentError, "parent path helpers are only supported in records mode"
+      raise TreeView::ConfigurationError, "parent path helpers are only supported in records mode; use records with parent_id_method or avoid path helpers for resolver/adapter trees"
     end
 
     def each_root_candidate
@@ -278,14 +278,14 @@ module TreeView
         end
 
         next if memo.key?(key)
-        raise ArgumentError, "cycle detected in tree for node #{key.inspect}" if visiting[key]
+        raise TreeView::CycleDetectedError, "cycle detected in tree for node #{key.inspect}; check children_resolver or parent_id values and remove the loop" if visiting[key]
 
         visiting[key] = true
         stack << [item, true]
 
         children_for(item).reverse_each do |child|
           child_key = node_key_for(child)
-          raise ArgumentError, "cycle detected in tree for node #{child_key.inspect}" if visiting[child_key]
+          raise TreeView::CycleDetectedError, "cycle detected in tree for node #{child_key.inspect}; check children_resolver or parent_id values and remove the loop" if visiting[child_key]
 
           stack << [child, false] unless memo.key?(child_key)
         end
@@ -334,7 +334,7 @@ module TreeView
       return if orphan_items.empty?
 
       orphan_keys = orphan_items.map { |item| node_key_for(item).inspect }.join(", ")
-      raise ArgumentError, "orphan nodes detected: #{orphan_keys}"
+      raise TreeView::InvalidTreeError, "orphan nodes detected: #{orphan_keys}; include missing parents, filter out orphans, or use orphan_strategy: :as_root/:ignore"
     end
 
     def items_by_id
@@ -351,21 +351,21 @@ module TreeView
     end
 
     def raise_invalid_orphan_strategy!
-      raise ArgumentError, "orphan_strategy must be one of: #{VALID_ORPHAN_STRATEGIES.join(", ")}"
+      raise TreeView::ConfigurationError, "orphan_strategy must be one of: #{VALID_ORPHAN_STRATEGIES.join(", ")}; choose how records with missing parents should be handled"
     end
 
     def validate_mode!
-      raise ArgumentError, "sorter must respond to call" unless sorter.respond_to?(:call)
+      raise TreeView::ConfigurationError, "sorter must respond to call; pass a callable such as ->(items, tree) { items }" unless sorter.respond_to?(:call)
 
       if adapter_mode?
-        raise ArgumentError, "adapter mode cannot be combined with records mode" if records || parent_id_method
-        raise ArgumentError, "adapter mode cannot be combined with roots/children_resolver mode" if roots.any? || children_resolver
-        raise ArgumentError, "orphan_strategy is only supported in records mode" unless orphan_strategy == :ignore
+        raise TreeView::ConfigurationError, "adapter mode cannot be combined with records mode; remove records and parent_id_method when using adapter" if records || parent_id_method
+        raise TreeView::ConfigurationError, "adapter mode cannot be combined with roots/children_resolver mode; pass those options to GraphAdapter instead" if roots.any? || children_resolver
+        raise TreeView::ConfigurationError, "orphan_strategy is only supported in records mode; omit it when using adapter mode" unless orphan_strategy == :ignore
       elsif resolver_mode?
-        raise ArgumentError, "roots must be provided when children_resolver is used" if roots.empty?
-        raise ArgumentError, "orphan_strategy is only supported in records mode" unless orphan_strategy == :ignore
+        raise TreeView::ConfigurationError, "roots must be provided when children_resolver is used; pass roots: [...] for resolver mode" if roots.empty?
+        raise TreeView::ConfigurationError, "orphan_strategy is only supported in records mode; omit it when using resolver mode" unless orphan_strategy == :ignore
       elsif records.nil? || parent_id_method.nil?
-        raise ArgumentError, "records and parent_id_method are required in records mode"
+        raise TreeView::ConfigurationError, "records and parent_id_method are required in records mode; provide both or use roots with children_resolver"
       end
     end
   end

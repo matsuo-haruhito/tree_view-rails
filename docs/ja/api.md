@@ -22,6 +22,23 @@ end
 
 `render_log_level` は `:debug`, `:info`, `:warn`, `:error`, `:fatal`, `:unknown`, `nil`、または対応する Ruby `Logger` level constant を受け付けます。詳細は [render log level](render-log-level.md) を参照してください。
 
+## TreeView errors
+
+TreeView の validation / configuration failure は、`TreeView::Error` を基底とする公開 error hierarchy を使います。
+
+`TreeView::Error` は、既存 host app が TreeView の validation failure を `ArgumentError` として rescue している場合の互換性を保つため、`ArgumentError` を継承します。
+
+| Error class | 説明 |
+|---|---|
+| `TreeView::Error` | documented された TreeView validation / configuration failure の基底 class。 |
+| `TreeView::ConfigurationError` | 不正な option、不正な mode 組み合わせ、不正な builder、未対応の configuration value。 |
+| `TreeView::InvalidTreeError` | tree data を有効な tree として扱えない場合。 |
+| `TreeView::DuplicateNodeKeyError` | node key の重複が検出された場合。 |
+| `TreeView::CycleDetectedError` | parent / child cycle が検出された場合。 |
+| `TreeView::InvalidRenderWindowError` | render window に不正な `offset` または `limit` が渡された場合。 |
+
+rescue 例と互換性方針は [Error hierarchy](errors.md) を参照してください。
+
 ## TreeView::Tree
 
 親子データをtreeとして扱う中心オブジェクトです。
@@ -280,6 +297,7 @@ registerTreeViewControllers(application)
 - [API概要](api-overview.md)
 - [使い方](usage.md)
 - [Cookbook](cookbook.md)
+- [Error hierarchy](errors.md)
 - [render log level](render-log-level.md)
 - [Node keys](node-keys.md)
 - [Tree diagnostics](tree-diagnostics.md)

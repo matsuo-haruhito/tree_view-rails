@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "tree_view/version"
+require "tree_view/errors"
 require "tree_view/configuration"
 require "tree_view/graph_adapter"
 require "tree_view/render_state"

@@ -11,6 +11,12 @@ Host apps may use these entry points directly:
 - `TreeView.reset_configuration!`
 - `TreeView.parse_selection_params`
 - `TreeView.node_key`
+- `TreeView::Error`
+- `TreeView::ConfigurationError`
+- `TreeView::InvalidTreeError`
+- `TreeView::DuplicateNodeKeyError`
+- `TreeView::CycleDetectedError`
+- `TreeView::InvalidRenderWindowError`
 - `TreeView::Tree`
 - `TreeView::RenderState`
 - `TreeView::VisibleRows`
@@ -26,6 +32,14 @@ Host apps may use these entry points directly:
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
 - `tree_view_breadcrumb(tree, item, ...)`
+
+## Public error surface
+
+Host apps may rescue `TreeView::Error` to handle documented TreeView validation and configuration failures separately from unrelated application errors.
+
+`TreeView::Error` inherits from `ArgumentError` for compatibility with existing integrations. New integrations should prefer `TreeView::Error` or a documented subclass when handling TreeView-specific failures.
+
+Documented public subclasses are listed in [Error hierarchy](errors.md).
 
 ## Public helper surface
 
@@ -110,6 +124,7 @@ Treat these as breaking changes:
 - changing documented `tree_view_rows(render_state)` behavior
 - changing documented selection or row event payload shapes
 - changing persisted state semantics
+- removing a documented public error class or moving a documented error out of the `TreeView::Error` hierarchy
 
 These are usually not breaking changes:
 
@@ -117,6 +132,7 @@ These are usually not breaking changes:
 - adding CSS classes while keeping documented classes
 - adding data attributes
 - adding event detail keys
+- adding new `TreeView::Error` subclasses for newly documented validation/configuration failures
 - refactoring internal helper modules
 - moving controller files while keeping `tree_view/index.js` exports stable
 - changing docs structure while preserving README/docs entry links

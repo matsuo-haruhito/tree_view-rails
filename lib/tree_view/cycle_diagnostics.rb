@@ -15,7 +15,7 @@ module TreeView
       return true if reports.empty?
 
       keys = reports.map { |report| report[:cycle_keys].map(&:inspect).join(" -> ") }.join(", ")
-      raise ArgumentError, "cycle detected in tree: #{keys}"
+      raise TreeView::CycleDetectedError, "cycle detected in tree: #{keys}; fix parent_id values so every path eventually reaches a root"
     end
 
     private

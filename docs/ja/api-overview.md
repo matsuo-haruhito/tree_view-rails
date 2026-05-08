@@ -1,6 +1,6 @@
 # API概要
 
-このページでは、主要な公開APIの概要を説明します。詳細な仕様は [API仕様](../api.md) を参照してください。
+このページでは、主要な公開APIの概要を説明します。詳細な仕様は [API仕様](api.md) を参照してください。
 
 ## 中心オブジェクト
 
@@ -14,6 +14,14 @@
 | `TreeView::RenderWindow` | visible rowsを `offset` / `limit` で切り出し、ページング用metadataを提供します。 |
 | `TreeView::PersistedState` | 保存された開閉状態を表します。 |
 | `TreeView::StateStore` | host app側のmodelを通じて開閉状態を読み書きします。 |
+
+## Error handling
+
+TreeView は、documented された validation / configuration failure の基底 class として `TreeView::Error` を公開します。互換性のため、これは `ArgumentError` の subclass です。
+
+host app が TreeView 固有の失敗を他の application error と分けて rescue したい場合は `TreeView::Error` を使ってください。特定の validation failure を扱う場合は、`TreeView::ConfigurationError`、`TreeView::DuplicateNodeKeyError`、`TreeView::CycleDetectedError`、`TreeView::InvalidRenderWindowError` などの documented subclass を使えます。
+
+全体一覧と rescue 例は [Error hierarchy](errors.md) を参照してください。
 
 ## ツリー構築
 
@@ -203,7 +211,8 @@ exportされるcontroller classは安定入口として扱います。個別cont
 
 ## 詳細
 
-- 詳細API仕様: [api.md](../api.md)
-- Public API互換性方針: [public-api.md](../public-api.md)
+- 詳細API仕様: [api.md](api.md)
+- Error hierarchy: [errors.md](errors.md)
+- Public API互換性方針: [public-api.md](public-api.md)
 - 最小利用例: [minimal-usage.md](minimal-usage.md)
-- 使い方: [usage.md](../usage.md)
+- 使い方: [usage.md](usage.md)
