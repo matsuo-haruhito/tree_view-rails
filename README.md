@@ -37,6 +37,7 @@ For very large trees, combine TreeView's render controls with host-app loading a
 - Count descendants.
 - Sort root and child items.
 - Render static tree rows.
+- Suppress TreeView partial render noise by default with configurable render log silencing.
 - Integrate Turbo Stream expand/collapse actions through path builders.
 - Use `GraphAdapter` for heterogeneous or graph-like nodes.
 - Use `PathTree` for matched nodes with ancestor paths.
@@ -138,6 +139,8 @@ Row partial:
 ```
 
 You can also render the `tree_view/tree_row` partial directly when needed.
+
+TreeView silences its own helper-rendered partial logs at `:warn` by default to avoid noisy `Rendered tree_view/...` entries in the host app log. Change or disable this with `TreeView.configure { |config| config.render_log_level = :info }` or `nil`.
 
 See [Usage](docs/en/usage.md) for details.
 
