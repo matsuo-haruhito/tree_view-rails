@@ -1,6 +1,6 @@
 # API overview
 
-This page gives an overview of the main public APIs. See [API reference](../api.md) for the full detailed reference.
+This page gives an overview of the main public APIs. See [API reference](api.md) for the full detailed reference.
 
 ## Core objects
 
@@ -14,6 +14,14 @@ This page gives an overview of the main public APIs. See [API reference](../api.
 | `TreeView::RenderWindow` | Slices visible rows by `offset` and `limit` and exposes pagination metadata. |
 | `TreeView::PersistedState` | Represents persisted expansion state. |
 | `TreeView::StateStore` | Loads and saves persisted state through a host app model. |
+
+## Error handling
+
+TreeView exposes `TreeView::Error` as the base class for documented validation and configuration failures. It remains an `ArgumentError` subclass for compatibility.
+
+Use `TreeView::Error` when host apps need to rescue TreeView-specific failures separately from other application errors. Use documented subclasses such as `TreeView::ConfigurationError`, `TreeView::DuplicateNodeKeyError`, `TreeView::CycleDetectedError`, and `TreeView::InvalidRenderWindowError` when handling a specific validation failure.
+
+See [Error hierarchy](errors.md) for the full list and rescue examples.
 
 ## Tree construction
 
@@ -203,7 +211,8 @@ Exported controller classes are documented as the stable entrypoints. Individual
 
 ## More detail
 
-- Full API reference: [api.md](../api.md)
-- Public API compatibility policy: [public-api.md](../public-api.md)
+- Full API reference: [api.md](api.md)
+- Error hierarchy: [errors.md](errors.md)
+- Public API compatibility policy: [public-api.md](public-api.md)
 - Minimal usage: [minimal-usage.md](minimal-usage.md)
 - Main usage guide: [usage.md](usage.md)
