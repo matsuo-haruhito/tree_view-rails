@@ -21,6 +21,7 @@ module TreeView
       @lazy_loading_scope = resolve_lazy_loading_option(options.delete(:lazy_loading_scope), lazy_loading_options[:scope]) || "all"
 
       super
+      validate_lazy_loading_mode_contract!
     end
 
     def lazy_loading_enabled?
@@ -51,6 +52,13 @@ module TreeView
       return value if value == true || value == false
 
       raise ArgumentError, "#{name} must be true or false"
+    end
+
+    def validate_lazy_loading_mode_contract!
+      return unless lazy_loading_enabled?
+      return unless ui_config.respond_to?(:client?) && ui_config.client?
+
+      raise TreeView::ConfigurationError, "lazy_loading cannot be enabled with client-side toggle mode; use turbo mode for remote child loading or disable lazy_loading"
     end
   end
 end
