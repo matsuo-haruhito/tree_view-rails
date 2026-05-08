@@ -297,6 +297,7 @@ Main controllers:
 - [API overview](api-overview.md)
 - [Usage](usage.md)
 - [Cookbook](cookbook.md)
+- [Accessibility Semantics](accessibility-semantics.md)
 - [Error hierarchy](errors.md)
 - [Render log level](render-log-level.md)
 - [Node keys](node-keys.md)
