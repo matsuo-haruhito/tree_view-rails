@@ -243,6 +243,20 @@ RSpec.describe TreeView::RenderState do
     expect(state.lazy_loading_scope).to eq("children")
   end
 
+  it "rejects lazy loading with client-side toggle mode" do
+    client_ui = instance_double(TreeView::UiConfig, client?: true)
+
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: client_ui,
+        lazy_loading: {enabled: true}
+      )
+    end.to raise_error(TreeView::ConfigurationError, /lazy_loading cannot be enabled with client-side toggle mode/)
+  end
+
   it "rejects unknown lazy_loading keys" do
     expect do
       described_class.new(
