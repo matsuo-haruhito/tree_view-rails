@@ -113,6 +113,16 @@ export class TreeViewStateController extends Controller {
   }
 
   activateToggle(row, preferredAction = null) {
+    const clientButton = row.querySelector(".tree-toggle__client-action")
+    if (clientButton) {
+      const expanded = row.dataset.treeViewStateExpanded === "true"
+      if (preferredAction === "show" && expanded) return
+      if (preferredAction === "hide" && !expanded) return
+
+      clientButton.click()
+      return
+    }
+
     const showButton = row.querySelector(".show-button")
     const hideButton = row.querySelector(".remove-button")
     const button = preferredAction === "show" ? showButton : preferredAction === "hide" ? hideButton : showButton || hideButton
