@@ -77,7 +77,8 @@ RSpec.describe "TreeView client-side toggle mode" do
     expect(rendered).to include('id="project_2"')
     expect(rendered).to include('id="project_4"')
     expect(rendered).not_to include('id="project_3"')
-    expect(rendered).not_to include('data-action="tree-view-client#toggle"')
+    expect(rendered).to include('data-action="tree-view-client#toggle" data-tree-view-client-node-key="1"')
+    expect(rendered).not_to include('data-action="tree-view-client#toggle" data-tree-view-client-node-key="2"')
     expect(rendered).to include('data-tree-view-client-hidden-count-for="1"')
   end
 
