@@ -24,7 +24,7 @@ RSpec.describe TreeView::VisibleRows do
     (1..length).map do |id|
       VisibleRowsNode.new(
         id: id,
-        parent_item_id: id == 1 ? nil : id - 1,
+        parent_item_id: (id == 1) ? nil : id - 1,
         name: "node #{id}"
       )
     end
@@ -50,6 +50,14 @@ RSpec.describe TreeView::VisibleRows do
     end
 
     records
+  end
+
+  def direct_child_ids(records)
+    records.select { |record| record.parent_item_id == 1 }.map(&:id)
+  end
+
+  def descendant_ids_below_children(records)
+    records.reject { |record| record.parent_item_id.nil? || record.parent_item_id == 1 }.map(&:id)
   end
 
   it "flattens visible rows with depth and parent information" do
@@ -190,7 +198,7 @@ RSpec.describe TreeView::VisibleRows do
 
     expect(rows.length).to eq(51)
     expect(rows.map(&:depth).uniq).to contain_exactly(0, 1)
-    expect(rows.map(&:node_key)).to eq((1..51).to_a)
+    expect(rows.map(&:node_key)).to eq([1] + direct_child_ids(wide_nodes))
   end
 
   it "does not traverse hidden grandchildren for collapsed wide branches" do
@@ -215,7 +223,7 @@ RSpec.describe TreeView::VisibleRows do
 
     expect(rows.length).to eq(41)
     expect(visited_parent_ids).to contain_exactly(*rows.map(&:node_key))
-    expect(visited_parent_ids).not_to include(*(42..mixed_nodes.length).to_a)
+    expect(visited_parent_ids).not_to include(*descendant_ids_below_children(mixed_nodes))
   end
 
   it "keeps sorter calls proportional to visible rows for collapsed branches" do
