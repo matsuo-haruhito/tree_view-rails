@@ -8,8 +8,8 @@
 |---|---|
 | `TreeView::Tree` | records、resolver、adapterからツリー構造を作り、問い合わせる中心オブジェクトです。 |
 | `TreeView::RenderState` | root、row partial、UI設定、展開状態、selection、描画範囲など、画面単位の描画状態をまとめます。 |
-| `TreeView::UiConfig` | static / Turbo描画で使うDOM IDやpath builderの設定を保持します。 |
-| `TreeView::UiConfigBuilder` | Rails view contextから `UiConfig` を組み立てます。 |
+| `TreeView::UiConfig` | static / Turbo / client-side描画で使うDOM ID、toggle mode、path builderの設定を保持します。 |
+| `TreeView::UiConfigBuilder` | Rails view contextから `build_turbo`、`build_static`、`build_client_side` で `UiConfig` を組み立てます。 |
 | `TreeView::VisibleRows` | 現在のrender stateで表示対象となる行を一次元化します。 |
 | `TreeView::RenderWindow` | visible rowsを `offset` / `limit` で切り出し、ページング用metadataを提供します。 |
 | `TreeView::PersistedState` | 保存された開閉状態を表します。 |
@@ -107,6 +107,16 @@ render_state = TreeView::RenderState.new(
 ```
 
 この形にすると、tree側の開閉状態、diagnostics、UI側のDOM targetを揃えやすくなります。期待した行が初期展開されない場合は、UIだけのDOM ID設定を変える前に、treeが返しているnode keyを確認してください。
+
+## toggle mode
+
+`TreeView::UiConfig` を作る時に、tree instanceごとのtoggle modeを選びます。
+
+| Builder | Mode | 使う場面 |
+|---|---|---|
+| `build_turbo` / `build` | `:turbo` | host appのTurbo Stream endpointで開閉したい場合。 |
+| `build_static` | `:static` | 開閉できない静的snapshotとして描画したい場合。 |
+| `build_client_side` | `:client` | render scope内の全行を初期HTMLに含め、browser内だけで開閉したい場合。 |
 
 ## 描画
 
