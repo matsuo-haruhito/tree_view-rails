@@ -56,6 +56,7 @@ RSpec.describe "Public API compatibility" do
       ReverseTree
       PersistedState
       StateStore
+      Diagnostics
     ].each do |constant_name|
       expect(TreeView.const_defined?(constant_name)).to be(true), "expected TreeView::#{constant_name} to remain public"
     end
