@@ -1,3 +1,10 @@
 <% mode = tree_toggle_mode(local_assigns[:mode]) %>
-<% partial_name = mode == :static ? 'tree_view/tree_toggle_content_static' : 'tree_view/tree_toggle_content_turbo' %>
+<% partial_name = case mode
+                  when :static
+                    'tree_view/tree_toggle_content_static'
+                  when :client
+                    'tree_view/tree_toggle_content_client'
+                  else
+                    'tree_view/tree_toggle_content_turbo'
+                  end %>
 <%= render partial_name, local_assigns %>
