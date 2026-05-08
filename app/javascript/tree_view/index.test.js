@@ -52,13 +52,16 @@ describe("TreeViewClientController", () => {
     document.body.innerHTML = `
       <table data-controller="tree-view-client">
         <tbody>
-          <tr id="row-1" data-tree-view-client-node-key="1" data-tree-view-client-depth="0" data-tree-view-client-expanded="false" data-tree-view-state-expanded="false" aria-expanded="false"></tr>
-          <tr id="row-2" data-tree-view-client-node-key="2" data-tree-view-client-depth="1" data-tree-view-client-expanded="true" data-tree-view-state-expanded="true" aria-expanded="true" hidden></tr>
-          <tr id="row-3" data-tree-view-client-node-key="3" data-tree-view-client-depth="2" data-tree-view-client-expanded="true" data-tree-view-state-expanded="true" aria-expanded="true" hidden></tr>
-          <tr id="row-4" data-tree-view-client-node-key="4" data-tree-view-client-depth="1" data-tree-view-client-expanded="true" data-tree-view-state-expanded="true" aria-expanded="true" hidden></tr>
+          <tr id="row-1" data-tree-view-client-node-key="1" data-tree-view-client-depth="0" data-tree-view-client-expanded="false" data-tree-view-state-expanded="false" aria-expanded="false">
+            <td>
+              <button id="toggle-1" data-action="tree-view-client#toggle" data-tree-view-client-node-key="1" aria-expanded="false"></button>
+              <span id="hidden-count-1" data-tree-view-client-hidden-count-for="1">3</span>
+            </td>
+          </tr>
+          <tr id="row-2" data-tree-view-client-node-key="2" data-tree-view-client-depth="1" data-tree-view-client-expanded="true" data-tree-view-state-expanded="true" aria-expanded="true" hidden><td></td></tr>
+          <tr id="row-3" data-tree-view-client-node-key="3" data-tree-view-client-depth="2" data-tree-view-client-expanded="true" data-tree-view-state-expanded="true" aria-expanded="true" hidden><td></td></tr>
+          <tr id="row-4" data-tree-view-client-node-key="4" data-tree-view-client-depth="1" data-tree-view-client-expanded="true" data-tree-view-state-expanded="true" aria-expanded="true" hidden><td></td></tr>
         </tbody>
-        <button id="toggle-1" data-action="tree-view-client#toggle" data-tree-view-client-node-key="1" aria-expanded="false"></button>
-        <span id="hidden-count-1" data-tree-view-client-hidden-count-for="1">3</span>
       </table>
     `
 
