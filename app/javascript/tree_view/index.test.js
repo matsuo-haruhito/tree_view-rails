@@ -72,7 +72,12 @@ describe("TreeViewClientController", () => {
     document.body.innerHTML = ""
   })
 
-  it("keeps descendants hidden while an ancestor is collapsed"), () => {}
+  it("keeps descendants hidden while an ancestor is collapsed", () => {
+    expect(document.querySelector("#row-2").hidden).toBe(true)
+    expect(document.querySelector("#row-3").hidden).toBe(true)
+    expect(document.querySelector("#row-4").hidden).toBe(true)
+    expect(document.querySelector("#hidden-count-1").hidden).toBe(false)
+  })
 
   it("opens descendants in the browser and preserves nested expansion state", () => {
     const button = document.querySelector("#toggle-1")
