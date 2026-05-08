@@ -81,6 +81,8 @@ tree_ui = TreeView::UiConfigBuilder.new(
 
 In client-side mode, collapsed descendants inside `max_render_depth` / `max_leaf_distance` are still rendered into the initial HTML with the `hidden` attribute. The bundled `tree-view-client` controller toggles `hidden`, `aria-expanded`, and TreeView row state data inside the current tree element. It does not replace lazy loading, children pagination, authorization, or server-side query strategies for large trees.
 
+Do not combine client-side mode with `lazy_loading: { enabled: true }`. Client-side mode can only reveal rows already present in the initial DOM; use Turbo mode for children that must be fetched later.
+
 Register TreeView JavaScript controllers as usual:
 
 ```js
@@ -307,7 +309,7 @@ tree_ui = TreeView::UiConfigBuilder.new(
 )
 ```
 
-The host app owns fetch behavior, Turbo requests, retry behavior, loading messages, and authorization.
+The host app owns fetch behavior, Turbo requests, retry behavior, loading messages, and authorization. Lazy loading requires Turbo/server-driven rendering and cannot be enabled with `build_client_side`.
 
 ## PathTree / ReverseTree
 
