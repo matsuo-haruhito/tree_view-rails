@@ -29,7 +29,7 @@
       <span class="tree-toggle__level"><%= toggle_icon || tree_toggle_label(depth) %></span>
     <% end %>
     <% if hidden_count %>
-      <span class="tree-toggle__hidden-count"><%= tree_hidden_count_message(hidden_count, hidden_message_builder) %></span>
+      <span class="tree-toggle__hidden-count" data-tree-view-client-hidden-count-for="<%= node_key %>"><%= tree_hidden_count_message(hidden_count, hidden_message_builder) %></span>
     <% end %>
   </div>
 </div>
