@@ -17,7 +17,8 @@ module TreeView
         :indeterminate,
         :max_count
 
-      def initialize(selectable: nil,
+      def initialize(default_checkbox_name:,
+        selectable: nil,
         payload_builder: nil,
         checkbox_name: nil,
         disabled_builder: nil,
@@ -26,8 +27,7 @@ module TreeView
         cascade: nil,
         indeterminate: nil,
         max_count: nil,
-        selection: nil,
-        default_checkbox_name:)
+        selection: nil)
         options = normalize_options(selection)
 
         @enabled = normalize_boolean(resolve_option(selectable, options[:enabled]), :selectable)
