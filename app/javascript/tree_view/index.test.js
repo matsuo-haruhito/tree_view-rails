@@ -108,6 +108,48 @@ describe("TreeViewClientController", () => {
     expect(document.querySelector("#row-2").hidden).toBe(false)
     expect(document.querySelector("#row-3").hidden).toBe(false)
   })
+
+  it("ignores rows and hidden counts that belong to a nested client tree", async () => {
+    application.stop()
+    document.body.innerHTML = `
+      <table id="outer" data-controller="tree-view-client">
+        <tbody>
+          <tr id="outer-row" data-tree-view-client-node-key="outer" data-tree-view-client-depth="0" data-tree-view-client-expanded="false">
+            <td>
+              <button id="outer-toggle" data-action="tree-view-client#toggle" data-tree-view-client-node-key="outer" aria-expanded="false"></button>
+              <span id="outer-hidden-count" data-tree-view-client-hidden-count-for="outer">1</span>
+              <table id="inner" data-controller="tree-view-client">
+                <tbody>
+                  <tr id="inner-row" data-tree-view-client-node-key="inner" data-tree-view-client-depth="0" data-tree-view-client-expanded="true">
+                    <td>
+                      <button id="inner-toggle" data-action="tree-view-client#toggle" data-tree-view-client-node-key="inner" aria-expanded="true"></button>
+                      <span id="inner-hidden-count" data-tree-view-client-hidden-count-for="inner">1</span>
+                    </td>
+                  </tr>
+                  <tr id="inner-child" data-tree-view-client-node-key="inner-child" data-tree-view-client-depth="1" data-tree-view-client-expanded="true"><td></td></tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr id="outer-child" data-tree-view-client-node-key="outer-child" data-tree-view-client-depth="1" data-tree-view-client-expanded="true" hidden><td></td></tr>
+        </tbody>
+      </table>
+    `
+
+    application = Application.start()
+    application.register("tree-view-client", TreeViewClientController)
+    await nextFrame()
+
+    const outer = document.querySelector("#outer")
+    const outerController = application.getControllerForElementAndIdentifier(outer, "tree-view-client")
+
+    outerController.refreshRows()
+
+    expect(document.querySelector("#outer-child").hidden).toBe(true)
+    expect(document.querySelector("#inner-row").hidden).toBe(false)
+    expect(document.querySelector("#inner-child").hidden).toBe(false)
+    expect(document.querySelector("#inner-hidden-count").hidden).toBe(true)
+  })
 })
 
 describe("TreeViewStateController", () => {

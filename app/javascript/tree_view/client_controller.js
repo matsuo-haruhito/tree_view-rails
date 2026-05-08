@@ -16,6 +16,8 @@ export class TreeViewClientController extends Controller {
   }
 
   rowForButton(button) {
+    if (!this.ownsElement(button)) return null
+
     const key = button.dataset.treeViewClientNodeKey
     if (!key) return button.closest("[data-tree-view-client-depth][data-tree-view-client-node-key]")
 
@@ -23,7 +25,11 @@ export class TreeViewClientController extends Controller {
   }
 
   rows() {
-    return Array.from(this.element.querySelectorAll("[data-tree-view-client-depth][data-tree-view-client-node-key]"))
+    return Array.from(this.element.querySelectorAll("[data-tree-view-client-depth][data-tree-view-client-node-key]")).filter((row) => this.ownsElement(row))
+  }
+
+  ownsElement(element) {
+    return element?.closest("[data-controller~='tree-view-client']") === this.element
   }
 
   expanded(row) {
@@ -45,7 +51,7 @@ export class TreeViewClientController extends Controller {
     this.element
       .querySelectorAll("[data-tree-view-client-hidden-count-for]")
       .forEach((element) => {
-        if (element.dataset.treeViewClientHiddenCountFor === String(nodeKey)) {
+        if (this.ownsElement(element) && element.dataset.treeViewClientHiddenCountFor === String(nodeKey)) {
           element.hidden = !visible
         }
       })

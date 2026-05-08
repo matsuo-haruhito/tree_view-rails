@@ -15,6 +15,8 @@ TreeView gem が担当するのは以下です。
 
 実際のfetch、Turbo request、controller action、認可、query、retry UI、children paginationはhost app側で実装します。
 
+lazy loading は Turbo / server-driven rendering 向けです。client-side toggle mode は初期HTML内にすでに存在する子孫だけを表示できる前提なので、lazy loading と同時には有効にできません。
+
 ## UiConfigの設定
 
 lazy loadingを使う場合は、`UiConfigBuilder#build` に `load_children_path_builder` を渡します。
@@ -64,6 +66,8 @@ render_state = TreeView::RenderState.new(
 | `enabled:` | lazy loading用data属性を出すかどうか。 |
 | `loaded_keys:` | すでにchildrenを読み込み済みのnode_key配列。 |
 | `scope:` | path builderへ渡すscope。省略可能。 |
+
+`lazy_loading: { enabled: true }` と `UiConfigBuilder#build_client_side` は併用しないでください。client-side toggle mode は、表示可能な子孫が初期DOMに描画済みであることを前提にします。一方、lazy loading は子孫を後から取得する前提です。この組み合わせでは TreeView は configuration error を発生させます。
 
 ## 最小host-app pattern
 
