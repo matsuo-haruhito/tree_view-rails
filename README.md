@@ -39,6 +39,7 @@ For very large trees, combine TreeView's render controls with host-app loading a
 - Render static tree rows.
 - Suppress TreeView partial render noise by default with configurable render log silencing.
 - Integrate Turbo Stream expand/collapse actions through path builders.
+- Expand/collapse small to medium trees in the browser with client-side toggle mode.
 - Use `GraphAdapter` for heterogeneous or graph-like nodes.
 - Use `PathTree` for matched nodes with ancestor paths.
 - Use `ReverseTree` for child-to-parent paths.
@@ -53,7 +54,7 @@ For very large trees, combine TreeView's render controls with host-app loading a
 - Add lazy loading hooks with `load_children_path_builder` and `RenderState#lazy_loading`.
 - Add checkbox selection with JSON payloads, disabled states, selected keys, cascade, indeterminate state, and max-count limits.
 - Persist expansion state through `TreeView::PersistedState`, `TreeView::StateStore`, and `rails g tree_view:state:install`.
-- Register JavaScript controllers for state tracking, selection, transfer payloads, and remote loading state.
+- Register JavaScript controllers for state tracking, client-side toggling, selection, transfer payloads, and remote loading state.
 
 ## Out of scope
 
