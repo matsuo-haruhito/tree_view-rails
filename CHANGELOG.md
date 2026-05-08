@@ -33,6 +33,10 @@ Breaking changes and required migration notes should be called out explicitly in
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 
+### Tests
+
+- Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered path trees, sorter call growth, children lookup scope, and max leaf distance behavior.
+
 ## 0.1.0 - 2026-05-07
 
 ### Added
