@@ -4,6 +4,24 @@ This page summarizes the main public APIs in TreeView.
 
 For practical usage, see [Usage](usage.md). For examples, see [Cookbook](cookbook.md). For concepts, see [Glossary](glossary.md).
 
+## TreeView configuration
+
+Host apps configure TreeView-wide defaults with `TreeView.configure`.
+
+```ruby
+TreeView.configure do |config|
+  config.initial_state = :collapsed
+  config.render_log_level = :warn
+end
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `initial_state` | `:expanded` | Global default expansion state when a screen-level `RenderState` does not override it. |
+| `render_log_level` | `:warn` | Logger silence threshold used while TreeView helper-rendered partials are rendered. Set `nil` to keep Rails' normal partial render logging. |
+
+`render_log_level` accepts `:debug`, `:info`, `:warn`, `:error`, `:fatal`, `:unknown`, `nil`, or the corresponding Ruby `Logger` level constants. See [Render log level](render-log-level.md) for details.
+
 ## TreeView::Tree
 
 The central object for treating parent-child data as a tree.
@@ -262,6 +280,7 @@ Main controllers:
 - [API overview](api-overview.md)
 - [Usage](usage.md)
 - [Cookbook](cookbook.md)
+- [Render log level](render-log-level.md)
 - [Node keys](node-keys.md)
 - [Tree diagnostics](tree-diagnostics.md)
-- [Public API policy](../public-api.md)
+- [Public API policy](public-api.md)
