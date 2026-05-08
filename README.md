@@ -13,6 +13,7 @@ Use TreeView when you want Rails-friendly primitives for rendering tree or tree-
 TreeView is useful for:
 
 - Rails-friendly tree and table rendering
+- accessibility-oriented row semantics for table-first tree UIs
 - Turbo and Stimulus integration points
 - expandable rows
 - checkbox selection hooks
@@ -37,6 +38,7 @@ For very large trees, combine TreeView's render controls with host-app loading a
 - Count descendants.
 - Sort root and child items.
 - Render static tree rows.
+- Protect table-first accessibility semantics with documented ARIA placement for level, expansion, selection, and current-row state.
 - Suppress TreeView partial render noise by default with configurable render log silencing.
 - Integrate Turbo Stream expand/collapse actions through path builders.
 - Use `GraphAdapter` for heterogeneous or graph-like nodes.
@@ -167,6 +169,7 @@ Key documents:
 | Minimal usage | [Minimal usage](docs/en/minimal-usage.md) | [最小利用例](docs/ja/minimal-usage.md) |
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
 | Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
+| Accessibility semantics | [Accessibility Semantics](docs/en/accessibility-semantics.md) | [Accessibility Semantics](docs/ja/accessibility-semantics.md) |
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
 | Forms and editing rows | [Forms and editing rows](docs/en/form-editing.md) | [Form と編集行](docs/ja/form-editing.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |

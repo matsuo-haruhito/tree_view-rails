@@ -1,6 +1,10 @@
 # Accessibility semantics
 
-This page records TreeView's current accessibility policy for table-based tree rows.
+This page records TreeView's current accessibility policy for table-based tree rows and describes the behavior host apps can rely on today.
+
+## Goal
+
+TreeView treats accessibility as a first-class integration concern. The gem provides consistent row-level ARIA state for tree-like table rows while host apps keep ownership of page structure, domain labels, captions, forms, and business-specific interactions.
 
 ## Policy
 
@@ -17,6 +21,37 @@ Any move toward `treegrid` semantics should be a focused compatibility decision.
 - `aria-selected` lives on the rendered row and mirrors TreeView row selection state.
 - `aria-current="page"` lives on the rendered row when the row represents the current item.
 - `aria-controls` is intentionally not emitted by toggle links for now.
+- TreeView intentionally does not emit `role="tree"` or `role="treeitem"` for table rows today.
+
+## Supported rendering examples
+
+### Static table rows
+
+Static rendering emits table rows with row-level depth and branch state:
+
+```html
+<tr id="project_1" aria-level="1" aria-expanded="true" aria-selected="false">
+  ...
+</tr>
+```
+
+When a branch is collapsed by `initial_state`, `collapsed_keys`, or `max_initial_depth`, the branch row exposes `aria-expanded="false"` and descendants that are not part of the current render are omitted from the HTML.
+
+### Turbo trees
+
+Turbo rendering uses the same row-level ARIA state as static rendering. Toggle links that perform expand/collapse actions also expose the current `aria-expanded` value so assistive technology can announce the control state.
+
+TreeView does not add `aria-controls` to Turbo toggle links because a toggle may affect multiple descendant rows and lazy-loading targets may not exist in the DOM yet.
+
+### Checkbox trees
+
+When selection is enabled, `aria-selected` on each rendered row mirrors TreeView's selected row state. Checkbox payloads and disabled state are still controlled by the selection APIs documented in [Selection](selection.md).
+
+## Keyboard behavior
+
+TreeView registers Stimulus controllers for state tracking, selection, transfer payloads, and remote loading state, but it does not currently implement a full WAI-ARIA tree or treegrid keyboard interaction model.
+
+Host apps remain responsible for page-level keyboard flow, focus order, table captions, action buttons, and any shortcut keys they add around TreeView. If a host app needs full treegrid keyboard navigation, treat that as an explicit application feature rather than assuming TreeView provides it automatically.
 
 ## `aria-controls`
 
@@ -29,6 +64,15 @@ Because of that, TreeView avoids pointing `aria-controls` at the current row or 
 `aria-selected` means TreeView row selection state. It does not mean the host application's business checkbox state unless the host app intentionally maps those concepts together.
 
 Checkbox payloads, disabled selection state, and submitted values remain documented in [Selection](selection.md).
+
+## Tests
+
+TreeView protects the documented ARIA behavior with integration specs for:
+
+- static row `aria-level`, `aria-expanded`, and `aria-current`
+- collapsed branch `aria-expanded="false"`
+- checkbox selection `aria-selected`
+- windowed rendering row depth and expansion state
 
 ## Host app responsibilities
 

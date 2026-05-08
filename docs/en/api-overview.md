@@ -212,6 +212,7 @@ Exported controller classes are documented as the stable entrypoints. Individual
 ## More detail
 
 - Full API reference: [api.md](api.md)
+- Accessibility semantics: [accessibility-semantics.md](accessibility-semantics.md)
 - Error hierarchy: [errors.md](errors.md)
 - Public API compatibility policy: [public-api.md](public-api.md)
 - Minimal usage: [minimal-usage.md](minimal-usage.md)

@@ -23,6 +23,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Minimal usage](minimal-usage.md) | Minimal controller, view, and row partial setup in a host app |
 | [Usage](usage.md) | Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
 | [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
+| [Accessibility Semantics](accessibility-semantics.md) | First-class accessibility guidance for table-first rows, ARIA placement, keyboard boundaries, and host-app responsibilities |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
 | [Forms and editing rows](form-editing.md) | Bulk edit forms, inline editing layouts, Form Objects, row actions, and responsibility boundaries |
 | [API overview](api-overview.md) | Overview of the main public APIs |
@@ -44,7 +45,6 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Render Scale](render-scale.md) | Guidance for controlling HTML and rendering volume for large trees |
 | [Host App Extension Points](host-app-extension-points.md) | Hooks host apps can use to extend and integrate TreeView |
 | [Public Name Decisions](public-name-decisions.md) | Focused decisions for confusing public-facing builder names |
-| [Accessibility Semantics](accessibility-semantics.md) | Table-first accessibility semantics and ARIA placement policy |
 | [Drag and Drop](drag-and-drop.md) | Drag-and-drop integration boundary using row event payloads |
 | [Children Pagination](children-pagination.md) | Server-side children pagination guidance for lazy loading |
 
@@ -72,7 +72,7 @@ When TreeView terminology or identifier design is unclear, see [Glossary](glossa
 
 For TreeView-specific rescue behavior, see [Error hierarchy](errors.md).
 
-For accessibility semantics, see [Accessibility Semantics](accessibility-semantics.md).
+For accessibility semantics, ARIA placement, and keyboard boundaries, see [Accessibility Semantics](accessibility-semantics.md).
 
 For TreeView render log verbosity in host app logs, see [Render log level](render-log-level.md).
 
