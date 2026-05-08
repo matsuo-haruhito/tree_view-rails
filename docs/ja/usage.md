@@ -79,6 +79,8 @@ tree_ui = TreeView::UiConfigBuilder.new(
 
 client-side modeでは、collapsed descendantsも初期HTMLに描画し、初期状態では `hidden` 属性で隠します。bundled `tree-view-client` controller が、現在のtree element内だけで `hidden`、`aria-expanded`、TreeView row state dataを同期します。lazy loading、children pagination、認可、server-side query削減の代替ではありません。
 
+client-side mode と `lazy_loading: { enabled: true }` は併用しないでください。client-side mode は初期DOMに存在するrowだけを表示できるため、後からchildrenを取得する必要がある場合は Turbo mode を使います。
+
 TreeView JavaScript controllerを通常どおり登録します。
 
 ```js
@@ -305,7 +307,7 @@ tree_ui = TreeView::UiConfigBuilder.new(
 )
 ```
 
-fetch、Turbo request、retry、loading message、認可はhost app側で実装します。
+fetch、Turbo request、retry、loading message、認可はhost app側で実装します。Lazy loading は Turbo / server-driven rendering を前提とし、`build_client_side` とは併用できません。
 
 ## PathTree / ReverseTree
 
