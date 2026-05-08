@@ -228,7 +228,16 @@ For focused naming decisions, see [Public Name Decisions](public-name-decisions.
 
 ## TreeView::UiConfig / UiConfigBuilder
 
-Configuration for DOM IDs and path builders.
+Configuration for DOM IDs, toggle mode, and path builders.
+
+| Builder | Mode | Description |
+|---|---|---|
+| `build_turbo(...)` | `:turbo` | Builds Turbo Stream expand/collapse URLs with host-app path builders. |
+| `build(...)` | `:turbo` | Backward-compatible alias for `build_turbo`. |
+| `build_static` | `:static` | Builds a static snapshot config with no expand/collapse URLs. |
+| `build_client_side` | `:client` | Builds a browser-local expand/collapse config with no Turbo endpoints. |
+
+`UiConfig#mode` returns `:turbo`, `:static`, or `:client`. Convenience predicates `turbo?`, `static?`, and `client?` are available.
 
 ### Static
 
@@ -245,13 +254,24 @@ tree_ui = TreeView::UiConfigBuilder.new(
 tree_ui = TreeView::UiConfigBuilder.new(
   context: view_context,
   node_prefix: "document"
-).build(
+).build_turbo(
   hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth: depth, scope: scope) },
   show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth: depth, scope: scope) },
   load_children_path_builder: ->(item, depth, scope) { children_document_path(item, depth: depth, scope: scope) },
   toggle_all_path_builder: ->(state) { documents_path(state: state) }
 )
 ```
+
+### Client-side
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document"
+).build_client_side
+```
+
+Client-side mode renders collapsed descendants inside the render scope into the initial HTML with `hidden`, then uses the bundled `tree-view-client` controller to toggle row visibility in the browser. It is intended for small to medium trees where initial HTML volume is acceptable.
 
 ## TreeView::PersistedState / StateStore
 
@@ -288,6 +308,8 @@ registerTreeViewControllers(application)
 
 Main controllers:
 
+- `tree-view-state`
+- `tree-view-client`
 - `tree-view-selection`
 - `tree-view-transfer`
 - `tree-view-remote-state`
