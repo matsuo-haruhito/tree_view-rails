@@ -14,7 +14,8 @@ Use render controls first when the data is already available. Use lazy loading o
 | I want to... | Start with | Key options or APIs | Notes |
 |---|---|---|---|
 | Render a simple static tree | `TreeView::Tree`, `TreeView::RenderState`, `tree_view_rows` | `records:`, `parent_id_method:`, `row_partial:`, `UiConfigBuilder#build_static` | Best first implementation when all nodes are already available and no remote expand/collapse is needed. |
-| Add Turbo expand/collapse | `TreeView::UiConfigBuilder#build` | `show_descendants_path_builder`, `hide_descendants_path_builder`, `toggle_all_path_builder` | Host app routes and Turbo Stream actions own the response. TreeView builds row IDs and URLs. |
+| Add Turbo expand/collapse | `TreeView::UiConfigBuilder#build_turbo` | `show_descendants_path_builder`, `hide_descendants_path_builder`, `toggle_all_path_builder` | `build` remains a backward-compatible alias. Host app routes and Turbo Stream actions own the response. |
+| Add browser-local expand/collapse without Turbo endpoints | `TreeView::UiConfigBuilder#build_client_side` | `initial_state`, `initial_expansion:`, `render_scope:` | Good for small to medium trees where all rows in the render scope can be included in the initial HTML. |
 | Keep the first render small | `TreeView::RenderState` | `max_initial_depth`, `initial_expansion:`, `render_scope:` | These are render controls. They reduce initial HTML volume, not database query volume by themselves. |
 | Limit which descendants can be rendered | `render_scope:` | `max_depth`, `max_leaf_distance` | Use when a page should never render beyond a chosen depth or distance from matched leaves. |
 | Render only a visible slice | `tree_view_rows(..., window:)`, `tree_view_window`, `TreeView::RenderWindow` | `window: { offset:, limit: }` | Slices already-visible rows. It reduces HTML output only; it does not fetch less data by itself. |
@@ -39,8 +40,9 @@ flowchart TD
   A[What are you trying to do?]
   A --> B{Do you already have the tree data?}
   B -->|Yes| C{Need remote expand/collapse?}
-  C -->|No| D[Static rendering: Tree + RenderState + tree_view_rows]
-  C -->|Yes| E[Turbo rendering: UiConfigBuilder#build with show/hide path builders]
+  C -->|No, no browser opening| D[Static rendering: Tree + RenderState + tree_view_rows]
+  C -->|No, browser-local opening is enough| CL[Client-side rendering: UiConfigBuilder#build_client_side]
+  C -->|Yes| E[Turbo rendering: UiConfigBuilder#build_turbo with show/hide path builders]
   B -->|No, fetching everything is too expensive| F[Lazy Loading or Children Pagination]
   F --> G{Are child sets huge per parent?}
   G -->|Yes| H[Children Pagination in the host app, exposed through lazy-loading URLs]
@@ -69,6 +71,7 @@ flowchart TD
 | Category | APIs | What they reduce | What they do not reduce |
 |---|---|---|---|
 | Initial expansion | `max_initial_depth`, `initial_expansion:` | Rows opened on first paint | Records loaded from the database |
+| Client-side toggling | `build_client_side`, `tree-view-client` | Server round-trips for expand/collapse | Initial HTML volume; rows in render scope are still emitted |
 | Render scope | `render_scope: { max_depth:, max_leaf_distance: }` | Descendants eligible for rendering | Host-app query cost unless the app also scopes queries |
 | Windowed rendering | `window:`, `TreeView::RenderWindow` | HTML emitted for currently visible rows | Data needed to compute visibility, host-app queries, or fetched records |
 | Lazy loading | `load_children_path_builder`, `lazy_loading:` | Up-front child fetching and HTML for unloaded children | Host-app controller/query implementation |
@@ -81,15 +84,17 @@ flowchart TD
 2. Add [API overview](api-overview.md) concepts only when the use case needs them.
 3. Use [Render Scale](render-scale.md) when HTML size or visible row count becomes the issue.
 4. Use [Lazy Loading](lazy-loading.md) and [Children Pagination](children-pagination.md) when query volume or child count is the issue; those pages include copyable host-app controller, Turbo Stream, cursor, and retry patterns.
-5. Add host-app virtual scrolling only when scroll-position-driven DOM virtualization is a product requirement.
-6. Add [Selection](selection.md), [Forms and editing rows](form-editing.md), [Cookbook row customization](cookbook.md#row-customization-quick-guide), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction and row customization requirements are clear.
-7. Use [Tree diagnostics](tree-diagnostics.md) when node keys, DOM IDs, or tree structure need validation.
+5. Use `build_client_side` when the data is already available, initial HTML volume is acceptable, and Turbo endpoints would be unnecessary overhead.
+6. Add host-app virtual scrolling only when scroll-position-driven DOM virtualization is a product requirement.
+7. Add [Selection](selection.md), [Forms and editing rows](form-editing.md), [Cookbook row customization](cookbook.md#row-customization-quick-guide), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction and row customization requirements are clear.
+8. Use [Tree diagnostics](tree-diagnostics.md) when node keys, DOM IDs, or tree structure need validation.
 
 ## Common combinations
 
 | Scenario | Combination |
 |---|---|
 | Small admin taxonomy | Static tree + `max_initial_depth` if needed |
+| Small docs sidebar with local opening | Client-side mode + `initial_state: :collapsed` + render scope as needed |
 | Large folder browser | Lazy Loading + Children Pagination + Persisted State |
 | Large scrolling browser | Host-app virtual scrolling + render/window metadata as needed |
 | Search page | `path_tree_for` + render scope around matches |

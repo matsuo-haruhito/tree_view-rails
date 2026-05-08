@@ -8,8 +8,8 @@ This page gives an overview of the main public APIs. See [API reference](api.md)
 |---|---|
 | `TreeView::Tree` | Builds and queries tree structures from records, resolvers, or adapters. |
 | `TreeView::RenderState` | Holds screen-level rendering state such as roots, row partial, UI config, expansion, selection, and render scope. |
-| `TreeView::UiConfig` | Stores DOM ID and path-building behavior for static or Turbo rendering. |
-| `TreeView::UiConfigBuilder` | Builds `UiConfig` objects from a Rails view context. |
+| `TreeView::UiConfig` | Stores DOM ID, toggle mode, and path-building behavior for static, Turbo, or client-side rendering. |
+| `TreeView::UiConfigBuilder` | Builds `UiConfig` objects from a Rails view context, including `build_turbo`, `build_static`, and `build_client_side`. |
 | `TreeView::VisibleRows` | Flattens currently visible rows from a render state. |
 | `TreeView::RenderWindow` | Slices visible rows by `offset` and `limit` and exposes pagination metadata. |
 | `TreeView::PersistedState` | Represents persisted expansion state. |
@@ -107,6 +107,16 @@ render_state = TreeView::RenderState.new(
 ```
 
 This keeps tree-side expansion state, diagnostics, and UI-side DOM targets aligned. If expansion does not affect the expected rows, first confirm which keys the tree returns before changing UI-only DOM ID settings.
+
+## Toggle modes
+
+Choose the toggle mode when building `TreeView::UiConfig`.
+
+| Builder | Mode | Use when |
+|---|---|---|
+| `build_turbo` / `build` | `:turbo` | Expand/collapse should round-trip through host-app Turbo Stream endpoints. |
+| `build_static` | `:static` | The page should render a static snapshot with no browser-side opening. |
+| `build_client_side` | `:client` | All rows in the render scope can be included in initial HTML and toggled locally in the browser. |
 
 ## Rendering
 

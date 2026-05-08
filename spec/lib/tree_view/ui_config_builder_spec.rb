@@ -21,6 +21,21 @@ RSpec.describe TreeView::UiConfigBuilder do
     expect(config.toggle_all_path(state: :collapsed)).to eq("/entries?state=collapsed")
     expect(config.scope_format).to eq(:string)
     expect(config.object_scope?).to eq(false)
+    expect(config.mode).to eq(:turbo)
+    expect(config.turbo?).to eq(true)
+  end
+
+  it "builds turbo config with the explicit method" do
+    context = double(:context)
+
+    config = described_class.new(context: context, node_prefix: "entry").build_turbo(
+      hide_descendants_path_builder: ->(_candidate, _depth, _scope) {},
+      show_descendants_path_builder: ->(_candidate, _depth, _scope) {},
+      toggle_all_path_builder: ->(_state) {}
+    )
+
+    expect(config.mode).to eq(:turbo)
+    expect(config.turbo?).to eq(true)
   end
 
   it "builds config with object scope format" do
@@ -50,6 +65,17 @@ RSpec.describe TreeView::UiConfigBuilder do
     end.to raise_error(ArgumentError, /scope_format/)
   end
 
+  it "rejects invalid explicit modes" do
+    expect do
+      TreeView::UiConfig.new(
+        node_dom_id_builder: ->(item_or_id) { "item_#{item_or_id}" },
+        button_dom_id_builder: ->(item_or_id) { "item_button_box_#{item_or_id}" },
+        show_button_dom_id_builder: ->(item_or_id) { "item_show_button_#{item_or_id}" },
+        mode: :invalid
+      )
+    end.to raise_error(ArgumentError, /mode/)
+  end
+
   it "builds static config without toggle paths" do
     context = double(:context)
     item = Struct.new(:id).new(8)
@@ -60,6 +86,22 @@ RSpec.describe TreeView::UiConfigBuilder do
     expect(config.button_dom_id(item)).to eq("entry_button_box_8")
     expect(config.show_button_dom_id(item)).to eq("entry_show_button_8")
     expect(config.static?).to eq(true)
+    expect(config.mode).to eq(:static)
+    expect(config.toggle_all_path(state: :collapsed)).to be_nil
+  end
+
+  it "builds client-side config without toggle paths" do
+    context = double(:context)
+    item = Struct.new(:id).new(8)
+
+    config = described_class.new(context: context, node_prefix: "entry").build_client_side
+
+    expect(config.node_dom_id(item)).to eq("entry_8")
+    expect(config.button_dom_id(item)).to eq("entry_button_box_8")
+    expect(config.show_button_dom_id(item)).to eq("entry_show_button_8")
+    expect(config.client?).to eq(true)
+    expect(config.static?).to eq(false)
+    expect(config.mode).to eq(:client)
     expect(config.toggle_all_path(state: :collapsed)).to be_nil
   end
 end

@@ -45,10 +45,10 @@ module TreeViewHelper
     end
 
     def tree_toggle_mode(mode = nil)
-      resolved_mode = (mode || (@tree_ui&.static? ? :static : :turbo)).to_sym
-      return resolved_mode if %i[static turbo].include?(resolved_mode)
+      resolved_mode = (mode || @tree_ui&.mode || (@tree_ui&.static? ? :static : :turbo)).to_sym
+      return resolved_mode if TreeView::UiConfig::TOGGLE_MODES.include?(resolved_mode)
 
-      raise ArgumentError, "TreeView toggle mode must be :static or :turbo, got: #{mode.inspect}"
+      raise ArgumentError, "TreeView toggle mode must be one of: #{TreeView::UiConfig::TOGGLE_MODES.join(", ")}, got: #{mode.inspect}"
     end
   end
 end

@@ -2,6 +2,7 @@ import { Application } from "@hotwired/stimulus"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { isTreeViewInteractiveTarget } from "./interactive.js"
 import {
+  TreeViewClientController,
   TreeViewRemoteStateController,
   TreeViewSelectionController,
   TreeViewStateController,
@@ -41,6 +42,71 @@ describe("tree view interactive target helpers", () => {
     expect(isTreeViewInteractiveTarget(document.querySelector("#keyboard-only"), "keyboard", root)).toBe(true)
     expect(isTreeViewInteractiveTarget(document.querySelector("#row-click-only"), "rowClick", root)).toBe(true)
     expect(isTreeViewInteractiveTarget(document.querySelector("#keyboard-only"), "rowClick", root)).toBe(false)
+  })
+})
+
+describe("TreeViewClientController", () => {
+  let application
+
+  beforeEach(async () => {
+    document.body.innerHTML = `
+      <table data-controller="tree-view-client">
+        <tbody>
+          <tr id="row-1" data-tree-view-client-node-key="1" data-tree-view-client-depth="0" data-tree-view-client-expanded="false" data-tree-view-state-expanded="false" aria-expanded="false">
+            <td>
+              <button id="toggle-1" data-action="tree-view-client#toggle" data-tree-view-client-node-key="1" aria-expanded="false"></button>
+              <span id="hidden-count-1" data-tree-view-client-hidden-count-for="1">3</span>
+            </td>
+          </tr>
+          <tr id="row-2" data-tree-view-client-node-key="2" data-tree-view-client-depth="1" data-tree-view-client-expanded="true" data-tree-view-state-expanded="true" aria-expanded="true" hidden><td></td></tr>
+          <tr id="row-3" data-tree-view-client-node-key="3" data-tree-view-client-depth="2" data-tree-view-client-expanded="true" data-tree-view-state-expanded="true" aria-expanded="true" hidden><td></td></tr>
+          <tr id="row-4" data-tree-view-client-node-key="4" data-tree-view-client-depth="1" data-tree-view-client-expanded="true" data-tree-view-state-expanded="true" aria-expanded="true" hidden><td></td></tr>
+        </tbody>
+      </table>
+    `
+
+    application = Application.start()
+    application.register("tree-view-client", TreeViewClientController)
+    await nextFrame()
+  })
+
+  afterEach(() => {
+    application.stop()
+    document.body.innerHTML = ""
+  })
+
+  it("keeps descendants hidden while an ancestor is collapsed", () => {
+    expect(document.querySelector("#row-2").hidden).toBe(true)
+    expect(document.querySelector("#row-3").hidden).toBe(true)
+    expect(document.querySelector("#row-4").hidden).toBe(true)
+    expect(document.querySelector("#hidden-count-1").hidden).toBe(false)
+  })
+
+  it("opens descendants in the browser and preserves nested expansion state", () => {
+    const button = document.querySelector("#toggle-1")
+    button.click()
+
+    expect(document.querySelector("#row-1").dataset.treeViewClientExpanded).toBe("true")
+    expect(document.querySelector("#row-1").dataset.treeViewStateExpanded).toBe("true")
+    expect(document.querySelector("#row-1").getAttribute("aria-expanded")).toBe("true")
+    expect(button.getAttribute("aria-expanded")).toBe("true")
+    expect(document.querySelector("#row-2").hidden).toBe(false)
+    expect(document.querySelector("#row-3").hidden).toBe(false)
+    expect(document.querySelector("#row-4").hidden).toBe(false)
+    expect(document.querySelector("#hidden-count-1").hidden).toBe(true)
+
+    button.click()
+
+    expect(document.querySelector("#row-1").dataset.treeViewClientExpanded).toBe("false")
+    expect(document.querySelector("#row-2").hidden).toBe(true)
+    expect(document.querySelector("#row-3").hidden).toBe(true)
+    expect(document.querySelector("#row-4").hidden).toBe(true)
+    expect(document.querySelector("#hidden-count-1").hidden).toBe(false)
+
+    button.click()
+
+    expect(document.querySelector("#row-2").hidden).toBe(false)
+    expect(document.querySelector("#row-3").hidden).toBe(false)
   })
 })
 

@@ -14,6 +14,102 @@
 
 TreeView gem はツリーUIの基盤を提供します。CRUD、認可、保存、server-side query、Turbo Stream response、業務固有actionはhost app側で実装します。
 
+## toggle mode
+
+開閉方式はtree instanceごとに選びます。1つのhost app内で画面ごとに使い分けたり、同じpage内に異なるmodeのtreeを並べたりできます。
+
+| Builder | Mode | 挙動 |
+|---|---|---|
+| `build_turbo` / `build` | `:turbo` | host appのTurbo Stream endpointで開閉する。 |
+| `build_static` | `:static` | 静的snapshotとして描画する。collapsed descendantsは描画されず、browser上では開けない。 |
+| `build_client_side` | `:client` | 初期HTMLにdescendantsを残し、TreeView JavaScriptでbrowser内だけで表示/非表示を切り替える。 |
+
+## static表示
+
+開閉URLを使わない静的なツリーとして表示する場合は `build_static` を使います。
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document"
+).build_static
+```
+
+## Turbo Stream開閉
+
+Turbo Streamで開閉したい場合は、`build_turbo` にpath builderを渡します。`build` は後方互換のため `build_turbo` と同じ意味で残しています。
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document"
+).build_turbo(
+  hide_descendants_path_builder: ->(item, depth, scope) {
+    hide_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
+  },
+  show_descendants_path_builder: ->(item, depth, scope) {
+    show_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
+  },
+  toggle_all_path_builder: ->(state) {
+    documents_path(state: state)
+  }
+)
+```
+
+path builderはURLを作るだけです。実際のcontroller action、Turbo Stream response、認可、server-side queryはhost app側の責務です。
+
+## client-side開閉
+
+`max_render_depth` / `max_leaf_distance` の範囲内のnodeを初期HTMLに含めても問題ない小〜中規模treeでは、`build_client_side` を使えます。Turbo routeやTurbo Stream responseを用意せず、browser内だけで開閉します。
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document"
+).build_client_side
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_state: :collapsed
+)
+```
+
+client-side modeでは、collapsed descendantsも初期HTMLに描画し、初期状態では `hidden` 属性で隠します。bundled `tree-view-client` controller が、現在のtree element内だけで `hidden`、`aria-expanded`、TreeView row state dataを同期します。lazy loading、children pagination、認可、server-side query削減の代替ではありません。
+
+TreeView JavaScript controllerを通常どおり登録します。
+
+```js
+import { application } from "controllers/application"
+import { registerTreeViewControllers } from "tree_view"
+
+registerTreeViewControllers(application)
+```
+
+Tree root elementには `tree_view_state_data` を付けます。
+
+```erb
+<%= tag.table class: "tree-view-table", data: tree_view_state_data(@render_state) do %>
+  <tbody>
+    <%= tree_view_rows(@render_state) %>
+  </tbody>
+<% end %>
+```
+
+client-side modeでは、開閉両方に使うtoggle button iconは1種類だけを標準サポートします。見た目を開閉状態で変えたい場合は、host app側のCSSで `aria-expanded` を使って調整できます。
+
+```css
+.tree-toggle__client-action[aria-expanded="false"] .tree-toggle__client-icon::before {
+  content: "▶";
+}
+
+.tree-toggle__client-action[aria-expanded="true"] .tree-toggle__client-icon::before {
+  content: "▼";
+}
+```
+
 ## 通常Tree
 
 親子関係を持つrecordsからtreeを作る場合は、`records:` と `parent_id_method:` を指定します。
@@ -48,40 +144,6 @@ sorter = ->(nodes, _tree) {
   end
 }
 ```
-
-## static表示
-
-開閉URLを使わない静的なツリーとして表示する場合は `build_static` を使います。
-
-```ruby
-tree_ui = TreeView::UiConfigBuilder.new(
-  context: view_context,
-  node_prefix: "document"
-).build_static
-```
-
-## Turbo Stream開閉
-
-Turbo Streamで開閉したい場合は、`build` にpath builderを渡します。
-
-```ruby
-tree_ui = TreeView::UiConfigBuilder.new(
-  context: view_context,
-  node_prefix: "document"
-).build(
-  hide_descendants_path_builder: ->(item, depth, scope) {
-    hide_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
-  },
-  show_descendants_path_builder: ->(item, depth, scope) {
-    show_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
-  },
-  toggle_all_path_builder: ->(state) {
-    documents_path(state: state)
-  }
-)
-```
-
-path builderはURLを作るだけです。実際のcontroller action、Turbo Stream response、認可、server-side queryはhost app側の責務です。
 
 ## RenderState
 
@@ -222,7 +284,7 @@ checkboxの描画、payload生成、JavaScript controllerによる収集はTreeV
 tree_ui = TreeView::UiConfigBuilder.new(
   context: view_context,
   node_prefix: "document"
-).build(
+).build_turbo(
   hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth:, scope:) },
   show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth:, scope:) },
   load_children_path_builder: ->(item, depth, scope) {

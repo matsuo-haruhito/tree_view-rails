@@ -61,6 +61,15 @@ RSpec.describe "Public API compatibility" do
     end
   end
 
+  it "keeps documented UiConfigBuilder mode methods available" do
+    builder = TreeView::UiConfigBuilder.new(context: Object.new)
+
+    expect(builder).to respond_to(:build)
+    expect(builder).to respond_to(:build_turbo)
+    expect(builder).to respond_to(:build_static)
+    expect(builder).to respond_to(:build_client_side)
+  end
+
   it "keeps documented RenderState grouped options available" do
     tree = instance_double(TreeView::Tree)
     ui_config = instance_double(TreeView::UiConfig)

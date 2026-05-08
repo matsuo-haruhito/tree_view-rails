@@ -16,6 +16,102 @@ The usual flow is:
 
 TreeView renders the tree UI primitives. Host apps remain responsible for application-specific CRUD, authorization, persistence, server-side queries, Turbo Stream responses, and business actions.
 
+## Toggle modes
+
+Choose the toggle mode per tree instance. One host app can use different modes on different screens, or even render multiple trees with different modes on the same page.
+
+| Builder | Mode | Behavior |
+|---|---|---|
+| `build_turbo` / `build` | `:turbo` | Expand/collapse through host-app Turbo Stream endpoints. |
+| `build_static` | `:static` | Render a static snapshot. Collapsed descendants are not rendered and cannot be opened in the browser. |
+| `build_client_side` | `:client` | Render descendants into the initial HTML and use TreeView JavaScript to show/hide rows in the browser. |
+
+## Static rendering
+
+Use `build_static` when you want static tree rows without expand/collapse URLs.
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document"
+).build_static
+```
+
+## Turbo Stream expand/collapse
+
+Use `build_turbo` with path builders when the host app handles expand/collapse through Turbo Stream endpoints. `build` is kept as a backward-compatible alias for `build_turbo`.
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document"
+).build_turbo(
+  hide_descendants_path_builder: ->(item, depth, scope) {
+    hide_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
+  },
+  show_descendants_path_builder: ->(item, depth, scope) {
+    show_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
+  },
+  toggle_all_path_builder: ->(state) {
+    documents_path(state: state)
+  }
+)
+```
+
+Path builders only build URLs. The host app owns controller actions, Turbo Stream responses, authorization, and server-side queries.
+
+## Client-side expand/collapse
+
+Use `build_client_side` when all nodes in the render scope can be included in the initial HTML and you only need browser-local expand/collapse.
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document"
+).build_client_side
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_state: :collapsed
+)
+```
+
+In client-side mode, collapsed descendants inside `max_render_depth` / `max_leaf_distance` are still rendered into the initial HTML with the `hidden` attribute. The bundled `tree-view-client` controller toggles `hidden`, `aria-expanded`, and TreeView row state data inside the current tree element. It does not replace lazy loading, children pagination, authorization, or server-side query strategies for large trees.
+
+Register TreeView JavaScript controllers as usual:
+
+```js
+import { application } from "controllers/application"
+import { registerTreeViewControllers } from "tree_view"
+
+registerTreeViewControllers(application)
+```
+
+Render the controller data on the tree root element:
+
+```erb
+<table class="tree-view-table" data: tree_view_state_data(@render_state)>
+  <tbody>
+    <%= tree_view_rows(@render_state) %>
+  </tbody>
+</table>
+```
+
+Client-side mode uses one toggle button icon for both open and closed states. If you want a visual state change, style the button from `aria-expanded` in the host app CSS:
+
+```css
+.tree-toggle__client-action[aria-expanded="false"] .tree-toggle__client-icon::before {
+  content: "▶";
+}
+
+.tree-toggle__client-action[aria-expanded="true"] .tree-toggle__client-icon::before {
+  content: "▼";
+}
+```
+
 ## Regular tree
 
 Use records mode when your items have parent-child relationships.
@@ -50,40 +146,6 @@ sorter = ->(nodes, _tree) {
   end
 }
 ```
-
-## Static rendering
-
-Use `build_static` when you want static tree rows without expand/collapse URLs.
-
-```ruby
-tree_ui = TreeView::UiConfigBuilder.new(
-  context: view_context,
-  node_prefix: "document"
-).build_static
-```
-
-## Turbo Stream expand/collapse
-
-Use `build` with path builders when the host app handles expand/collapse through Turbo Stream endpoints.
-
-```ruby
-tree_ui = TreeView::UiConfigBuilder.new(
-  context: view_context,
-  node_prefix: "document"
-).build(
-  hide_descendants_path_builder: ->(item, depth, scope) {
-    hide_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
-  },
-  show_descendants_path_builder: ->(item, depth, scope) {
-    show_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
-  },
-  toggle_all_path_builder: ->(state) {
-    documents_path(state: state)
-  }
-)
-```
-
-Path builders only build URLs. The host app owns controller actions, Turbo Stream responses, authorization, and server-side queries.
 
 ## RenderState
 
@@ -224,7 +286,7 @@ Use `load_children_path_builder` and `RenderState#lazy_loading` when children ar
 tree_ui = TreeView::UiConfigBuilder.new(
   context: view_context,
   node_prefix: "document"
-).build(
+).build_turbo(
   hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth:, scope:) },
   show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth:, scope:) },
   load_children_path_builder: ->(item, depth, scope) {

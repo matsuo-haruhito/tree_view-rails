@@ -3,6 +3,7 @@
 module TreeView
   class UiConfig
     SCOPE_FORMATS = %i[string object].freeze
+    TOGGLE_MODES = %i[turbo static client].freeze
 
     # DOM ID と path helper 周辺の UI 依存だけを受け持つ。
     attr_reader :node_dom_id_builder,
@@ -13,7 +14,8 @@ module TreeView
       :load_children_path_builder,
       :toggle_all_path_builder,
       :indent_unit,
-      :scope_format
+      :scope_format,
+      :mode
 
     def initialize(node_dom_id_builder:,
       button_dom_id_builder:,
@@ -23,7 +25,8 @@ module TreeView
       load_children_path_builder: nil,
       toggle_all_path_builder: nil,
       indent_unit: "&ensp; &ensp; &ensp;",
-      scope_format: :string)
+      scope_format: :string,
+      mode: nil)
       validate_builder!(node_dom_id_builder, :node_dom_id_builder)
       validate_builder!(button_dom_id_builder, :button_dom_id_builder)
       validate_builder!(show_button_dom_id_builder, :show_button_dom_id_builder)
@@ -41,6 +44,7 @@ module TreeView
       @toggle_all_path_builder = toggle_all_path_builder
       @indent_unit = indent_unit
       @scope_format = normalize_scope_format(scope_format)
+      @mode = normalize_mode(mode || inferred_mode)
     end
 
     def node_dom_id(item_or_id)
@@ -83,14 +87,30 @@ module TreeView
       toggle_all_path_builder.call(state.to_sym)
     end
 
+    def turbo?
+      mode == :turbo
+    end
+
     def static?
-      hide_descendants_path_builder.nil? &&
-        show_descendants_path_builder.nil? &&
-        load_children_path_builder.nil? &&
-        toggle_all_path_builder.nil?
+      mode == :static
+    end
+
+    def client?
+      mode == :client
     end
 
     private
+
+    def inferred_mode
+      if hide_descendants_path_builder.nil? &&
+          show_descendants_path_builder.nil? &&
+          load_children_path_builder.nil? &&
+          toggle_all_path_builder.nil?
+        :static
+      else
+        :turbo
+      end
+    end
 
     def validate_builder!(builder, name)
       return if builder.respond_to?(:call)
@@ -113,8 +133,21 @@ module TreeView
       raise_invalid_scope_format!
     end
 
+    def normalize_mode(value)
+      raise_invalid_mode! unless value.respond_to?(:to_sym)
+
+      normalized_value = value.to_sym
+      return normalized_value if TOGGLE_MODES.include?(normalized_value)
+
+      raise_invalid_mode!
+    end
+
     def raise_invalid_scope_format!
       raise ArgumentError, "scope_format must be one of: #{SCOPE_FORMATS.join(", ")}"
+    end
+
+    def raise_invalid_mode!
+      raise ArgumentError, "mode must be one of: #{TOGGLE_MODES.join(", ")}"
     end
   end
 end
