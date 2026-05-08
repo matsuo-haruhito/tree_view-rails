@@ -56,11 +56,10 @@ RSpec.describe "TreeView client-side toggle mode" do
     expect(rendered).to include('data-tree-view-client-depth="1"')
     expect(rendered).to include('data-tree-view-client-expanded="false"')
     expect(rendered).to include('hidden="hidden"')
-    expect(rendered).to include('data-action="tree-view-client#toggle"')
     expect(rendered).to include('data-tree-view-client-hidden-count-for="1"')
   end
 
-  it "respects max_render_depth while keeping collapsed descendants inside the render scope" do
+  it "does not render client toggle buttons when children are outside the render scope" do
     tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_client_side
     render_state = TreeView::RenderState.new(
       tree: tree,
@@ -78,6 +77,25 @@ RSpec.describe "TreeView client-side toggle mode" do
     expect(rendered).to include('id="project_2"')
     expect(rendered).to include('id="project_4"')
     expect(rendered).not_to include('id="project_3"')
+    expect(rendered).not_to include('data-action="tree-view-client#toggle"')
+    expect(rendered).to include('data-tree-view-client-hidden-count-for="1"')
+  end
+
+  it "renders client toggle buttons when children are present in the render scope" do
+    tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_client_side
+    render_state = TreeView::RenderState.new(
+      tree: tree,
+      root_items: tree.root_items,
+      row_partial: "projects/tree_columns",
+      ui_config: tree_ui,
+      initial_state: :collapsed,
+      max_render_depth: 2
+    )
+    view = build_view(tree_ui: nil)
+
+    rendered = view.tree_view_rows(render_state)
+
+    expect(rendered).to include('data-action="tree-view-client#toggle"')
   end
 
   it "adds the client controller to tree_view_state_data for client-side UiConfig" do
