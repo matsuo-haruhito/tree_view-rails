@@ -39,6 +39,7 @@ Internal module names may change as long as documented helper behavior is preser
 
 The public option surface includes documented keyword arguments and grouped options for these objects:
 
+- `TreeView::Configuration`
 - `TreeView::Tree`
 - `TreeView::RenderState`
 - `TreeView::UiConfig`
@@ -46,6 +47,11 @@ The public option surface includes documented keyword arguments and grouped opti
 - `TreeView::RenderWindow`
 - `TreeView::PersistedState`
 - `TreeView::StateStore`
+
+Documented configuration options include:
+
+- `initial_state`
+- `render_log_level`
 
 See [API reference](api.md) for details.
 

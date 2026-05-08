@@ -30,6 +30,19 @@ RSpec.describe "Public API compatibility" do
     expect(TreeView.node_key(:document, 1)).to eq("document:1")
   end
 
+  it "keeps documented configuration options available" do
+    expect(TreeView.configuration.initial_state).to eq(:expanded)
+    expect(TreeView.configuration.render_log_level).to eq(:warn)
+
+    TreeView.configure do |config|
+      config.initial_state = :collapsed
+      config.render_log_level = :info
+    end
+
+    expect(TreeView.configuration.initial_state).to eq(:collapsed)
+    expect(TreeView.configuration.render_log_level).to eq(:info)
+  end
+
   it "keeps documented public Ruby constants available" do
     %i[
       Tree

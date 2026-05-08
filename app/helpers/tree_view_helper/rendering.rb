@@ -11,10 +11,10 @@ module TreeViewHelper
       end
 
       if render_context.root_items.empty? && render_state.empty_message.present?
-        return render(partial: "tree_view/tree_empty_row", locals: {empty_message: render_state.empty_message})
+        return render_tree_view_partial(partial: "tree_view/tree_empty_row", locals: {empty_message: render_state.empty_message})
       end
 
-      render(
+      render_tree_view_partial(
         partial: "tree_view/tree_row",
         collection: render_context.root_items,
         as: :item,
@@ -47,14 +47,28 @@ module TreeViewHelper
         raise ArgumentError, "window must be a TreeView::RenderWindow or Hash-like object"
       end
 
-      return render(partial: "tree_view/tree_empty_row", locals: {empty_message: render_context.render_state.empty_message}) if window.empty? && render_context.render_state.empty_message.present?
+      if window.empty? && render_context.render_state.empty_message.present?
+        return render_tree_view_partial(partial: "tree_view/tree_empty_row", locals: {empty_message: render_context.render_state.empty_message})
+      end
 
-      render(
+      render_tree_view_partial(
         partial: "tree_view/tree_window_row",
         collection: window.rows,
         as: :visible_row,
         locals: {render_context: render_context}
       )
+    end
+
+    def render_tree_view_partial(**options)
+      render_log_level = TreeView.configuration.render_log_level
+      logger = defined?(Rails) ? Rails.logger : nil
+
+      return render(**options) if render_log_level.nil?
+      return render(**options) unless logger.respond_to?(:silence)
+
+      logger.silence(TreeView::Configuration::VALID_RENDER_LOG_LEVELS.fetch(render_log_level)) do
+        render(**options)
+      end
     end
 
     def clear_tree_view_render_caches!

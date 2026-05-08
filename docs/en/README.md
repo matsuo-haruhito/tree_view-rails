@@ -27,6 +27,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Forms and editing rows](form-editing.md) | Bulk edit forms, inline editing layouts, Form Objects, row actions, and responsibility boundaries |
 | [API overview](api-overview.md) | Overview of the main public APIs |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
+| [Render log level](render-log-level.md) | Configure TreeView partial render log silencing in host app logs |
 | [Glossary](glossary.md) | Main terms used in TreeView docs and code |
 | [Node keys](node-keys.md) | node_key design, collision avoidance, and validation |
 | [Tree diagnostics](tree-diagnostics.md) | Structure inspection APIs for node keys, DOM IDs, orphans, and cycles |
@@ -69,5 +70,7 @@ For common API combinations, see [Cookbook](cookbook.md). For editing-oriented r
 When TreeView terminology or identifier design is unclear, see [Glossary](glossary.md), [Node keys](node-keys.md), and [Tree diagnostics](tree-diagnostics.md).
 
 For accessibility semantics, see [Accessibility Semantics](accessibility-semantics.md).
+
+For TreeView render log verbosity in host app logs, see [Render log level](render-log-level.md).
 
 For translation priority and bilingual readiness, see [Documentation i18n audit](../i18n-audit.md).
