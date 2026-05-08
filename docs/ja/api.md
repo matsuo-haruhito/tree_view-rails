@@ -4,6 +4,24 @@
 
 詳細な使い方は [使い方](usage.md)、具体例は [Cookbook](cookbook.md)、概念は [用語集](glossary.md) も参照してください。
 
+## TreeView configuration
+
+host app は `TreeView.configure` で TreeView 全体の既定値を設定できます。
+
+```ruby
+TreeView.configure do |config|
+  config.initial_state = :collapsed
+  config.render_log_level = :warn
+end
+```
+
+| option | 既定値 | 説明 |
+|---|---|---|
+| `initial_state` | `:expanded` | 画面単位の `RenderState` が上書きしない場合のグローバルな初期展開状態。 |
+| `render_log_level` | `:warn` | TreeView helper 経由の partial render 中に使う logger silence 閾値。`nil` にすると Rails 標準の partial render log をそのまま出します。 |
+
+`render_log_level` は `:debug`, `:info`, `:warn`, `:error`, `:fatal`, `:unknown`, `nil`、または対応する Ruby `Logger` level constant を受け付けます。詳細は [render log level](render-log-level.md) を参照してください。
+
 ## TreeView::Tree
 
 親子データをtreeとして扱う中心オブジェクトです。
@@ -262,6 +280,7 @@ registerTreeViewControllers(application)
 - [API概要](api-overview.md)
 - [使い方](usage.md)
 - [Cookbook](cookbook.md)
+- [render log level](render-log-level.md)
 - [Node keys](node-keys.md)
 - [Tree diagnostics](tree-diagnostics.md)
-- [Public API policy](../public-api.md)
+- [Public API policy](public-api.md)
