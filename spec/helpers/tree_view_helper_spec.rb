@@ -73,11 +73,19 @@ RSpec.describe TreeViewHelper do
   end
 
   describe "tree_toggle_mode" do
-    it "returns static and turbo as-is" do
+    it "returns static, turbo, and client as-is" do
       helper = helper_host_class.new(tree_ui: ui_config)
 
       expect(helper.tree_toggle_mode(:static)).to eq(:static)
       expect(helper.tree_toggle_mode(:turbo)).to eq(:turbo)
+      expect(helper.tree_toggle_mode(:client)).to eq(:client)
+    end
+
+    it "uses the UiConfig mode when no explicit mode is given" do
+      client_ui = TreeView::UiConfigBuilder.new(context: Object.new).build_client_side
+      helper = helper_host_class.new(tree_ui: client_ui)
+
+      expect(helper.tree_toggle_mode).to eq(:client)
     end
 
     it "raises a clear error for invalid modes" do
@@ -85,7 +93,7 @@ RSpec.describe TreeViewHelper do
 
       expect do
         helper.tree_toggle_mode(:statc)
-      end.to raise_error(ArgumentError, /must be :static or :turbo/)
+      end.to raise_error(ArgumentError, /must be one of: turbo, static, client/)
     end
   end
 
