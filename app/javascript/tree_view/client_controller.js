@@ -17,13 +17,13 @@ export class TreeViewClientController extends Controller {
 
   rowForButton(button) {
     const key = button.dataset.treeViewClientNodeKey
-    if (!key) return button.closest("[data-tree-view-client-node-key]")
+    if (!key) return button.closest("[data-tree-view-client-depth][data-tree-view-client-node-key]")
 
     return this.rows().find((row) => row.dataset.treeViewClientNodeKey === key)
   }
 
   rows() {
-    return Array.from(this.element.querySelectorAll("[data-tree-view-client-node-key]"))
+    return Array.from(this.element.querySelectorAll("[data-tree-view-client-depth][data-tree-view-client-node-key]"))
   }
 
   expanded(row) {
