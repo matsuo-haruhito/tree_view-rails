@@ -109,7 +109,7 @@ describe("TreeViewClientController", () => {
     expect(document.querySelector("#row-3").hidden).toBe(false)
   })
 
-  it("ignores rows and hidden counts that belong to a nested client tree", () => {
+  it("ignores rows and hidden counts that belong to a nested client tree", async () => {
     application.stop()
     document.body.innerHTML = `
       <table id="outer" data-controller="tree-view-client">
@@ -138,6 +138,7 @@ describe("TreeViewClientController", () => {
 
     application = Application.start()
     application.register("tree-view-client", TreeViewClientController)
+    await nextFrame()
 
     const outer = document.querySelector("#outer")
     const outerController = application.getControllerForElementAndIdentifier(outer, "tree-view-client")
