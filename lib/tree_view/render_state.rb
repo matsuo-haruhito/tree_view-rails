@@ -166,12 +166,12 @@ module TreeView
 
     def normalize_options(value, name, valid_keys)
       return {} if value.nil?
-      raise ArgumentError, "#{name} must respond to to_h" unless value.respond_to?(:to_h)
+      raise TreeView::ConfigurationError, "#{name} must respond to to_h; pass a Hash-like object with documented keys" unless value.respond_to?(:to_h)
 
       options = value.to_h.transform_keys(&:to_sym)
       invalid_keys = options.keys - valid_keys
       if invalid_keys.any?
-        raise ArgumentError, "#{name} contains unknown keys: #{invalid_keys.join(", ")}"
+        raise TreeView::ConfigurationError, "#{name} contains unknown keys: #{invalid_keys.join(", ")}; supported keys are: #{valid_keys.join(", ")}"
       end
 
       options
@@ -183,7 +183,7 @@ module TreeView
       normalized_value = value.to_sym
       return normalized_value if VALID_INITIAL_STATES.include?(normalized_value)
 
-      raise ArgumentError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(", ")}"
+      raise TreeView::ConfigurationError, "initial_state must be one of: #{VALID_INITIAL_STATES.join(", ")}; use :expanded or :collapsed"
     end
 
     def normalize_selection_visibility(value)
@@ -197,41 +197,41 @@ module TreeView
     end
 
     def raise_invalid_selection_visibility!
-      raise ArgumentError, "selection visibility must be one of: #{VALID_SELECTION_VISIBILITIES.join(", ")}"
+      raise TreeView::ConfigurationError, "selection visibility must be one of: #{VALID_SELECTION_VISIBILITIES.join(", ")}; choose which rows should show checkboxes"
     end
 
     def normalize_non_negative_integer(value, name)
       return nil if value.nil?
       return value if value.is_a?(Integer) && value >= 0
 
-      raise ArgumentError, "#{name} must be a non-negative Integer"
+      raise TreeView::ConfigurationError, "#{name} must be a non-negative Integer; pass nil or 0+"
     end
 
     def normalize_optional_positive_integer(value, name)
       return nil if value.nil?
       return value if value.is_a?(Integer) && value.positive?
 
-      raise ArgumentError, "#{name} must be a positive Integer"
+      raise TreeView::ConfigurationError, "#{name} must be a positive Integer; pass nil or a value greater than 0"
     end
 
     def normalize_boolean(value, name)
       return false if value.nil?
       return value if value == true || value == false
 
-      raise ArgumentError, "#{name} must be true or false"
+      raise TreeView::ConfigurationError, "#{name} must be true or false; pass a boolean value"
     end
 
     def validate_builder!(builder, name)
       return if builder.nil? || builder.respond_to?(:call)
 
-      raise ArgumentError, "#{name} must respond to call"
+      raise TreeView::ConfigurationError, "#{name} must respond to call; pass a callable object or nil"
     end
 
     def validate_expansion_key_conflicts!
       conflicts = expanded_keys & collapsed_keys
       return if conflicts.empty?
 
-      raise ArgumentError, "expanded_keys and collapsed_keys cannot include the same keys: #{conflicts.map(&:inspect).join(", ")}"
+      raise TreeView::ConfigurationError, "expanded_keys and collapsed_keys cannot include the same keys: #{conflicts.map(&:inspect).join(", ")}; remove each key from one side"
     end
   end
 end
