@@ -3,15 +3,15 @@
 require "spec_helper"
 
 RSpec.describe "TreeView errors" do
-  ErrorSpecNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+  let(:node_class) { Struct.new(:id, :parent_item_id, :name, keyword_init: true) }
 
   it "exposes a TreeView-specific base error that preserves ArgumentError compatibility" do
     expect(TreeView::Error).to be < ArgumentError
   end
 
   it "lets host apps rescue duplicate node key failures via TreeView::Error" do
-    root = ErrorSpecNode.new(id: 1, parent_item_id: nil, name: "root")
-    duplicate_root = ErrorSpecNode.new(id: 1, parent_item_id: nil, name: "duplicate-root")
+    root = node_class.new(id: 1, parent_item_id: nil, name: "root")
+    duplicate_root = node_class.new(id: 1, parent_item_id: nil, name: "duplicate-root")
 
     error = capture_error do
       TreeView::Tree.new(records: [root, duplicate_root], parent_id_method: :parent_item_id, validate_node_keys: true)
