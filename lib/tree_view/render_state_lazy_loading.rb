@@ -23,7 +23,7 @@ module TreeView
       @lazy_loading_scope = lazy_loading_config.scope
 
       super
-      validate_lazy_loading_mode_contract!
+      validate_lazy_loading_config_mode_contract!
     end
 
     def lazy_loading_enabled?
@@ -32,7 +32,7 @@ module TreeView
 
     private
 
-    def validate_lazy_loading_mode_contract!
+    def validate_lazy_loading_config_mode_contract!
       return unless lazy_loading_enabled?
       return unless ui_config.respond_to?(:client?) && ui_config.client?
 
