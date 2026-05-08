@@ -36,6 +36,17 @@ export class TreeViewClientController extends Controller {
     row.dataset.treeViewStateExpanded = value
     row.setAttribute("aria-expanded", value)
     if (button) button.setAttribute("aria-expanded", value)
+    this.setHiddenCountVisible(row.dataset.treeViewClientNodeKey, !expanded)
+  }
+
+  setHiddenCountVisible(nodeKey, visible) {
+    if (!nodeKey) return
+
+    this.element
+      .querySelectorAll(`[data-tree-view-client-hidden-count-for="${CSS.escape(nodeKey)}"]`)
+      .forEach((element) => {
+        element.hidden = !visible
+      })
   }
 
   refreshRows() {
@@ -50,6 +61,7 @@ export class TreeViewClientController extends Controller {
 
       const hiddenByAncestor = collapsedDepths.length > 0
       row.hidden = hiddenByAncestor
+      this.setHiddenCountVisible(row.dataset.treeViewClientNodeKey, !this.expanded(row))
 
       if (!this.expanded(row)) {
         collapsedDepths.push(depth)
