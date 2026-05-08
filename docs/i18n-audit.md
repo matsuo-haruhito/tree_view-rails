@@ -52,6 +52,7 @@ For the initial release, the priority is:
 | Minimal usage | `docs/ja/minimal-usage.md` | `docs/en/minimal-usage.md` | Split | Keep examples in sync. |
 | Usage guide | `docs/ja/usage.md` | `docs/en/usage.md` | Split | Root `docs/usage.md` has been removed. |
 | Decision guide | `docs/ja/decision-guide.md` | `docs/en/decision-guide.md` | Split | Keep use-case-to-API guidance, flowchart, and render/data-loading distinctions in sync. |
+| Accessibility semantics | `docs/ja/accessibility-semantics.md` | `docs/en/accessibility-semantics.md` | Split | Keep ARIA placement, keyboard boundaries, and host-app responsibilities in sync. |
 | API overview | `docs/ja/api-overview.md` | `docs/en/api-overview.md` | Split | Keep in sync with API reference docs. |
 | API reference | `docs/ja/api.md` | `docs/en/api.md` | Split | Root `docs/api.md` has been removed. |
 | Error hierarchy | `docs/ja/errors.md` | `docs/en/errors.md` | Split | Keep public error classes and rescue compatibility guidance in sync. |
@@ -86,6 +87,7 @@ Before tagging `v0.1.0`, confirm:
 - `CHANGELOG.md` includes documentation migration entries.
 - New public API changes update both `docs/ja/api.md` and `docs/en/api.md` when practical.
 - New public error classes update `docs/ja/errors.md`, `docs/en/errors.md`, and public API policy docs when practical.
+- Accessibility behavior changes update both `docs/ja/accessibility-semantics.md` and `docs/en/accessibility-semantics.md` when practical.
 
 ## Remaining cleanup
 
