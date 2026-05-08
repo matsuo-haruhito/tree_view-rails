@@ -29,6 +29,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [API overview](api-overview.md) | Overview of the main public APIs |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
 | [Error hierarchy](errors.md) | Public TreeView error classes and rescue guidance |
+| [JavaScript event contract](js-events.md) | Public Stimulus event names, detail payloads, and compatibility policy |
 | [Render log level](render-log-level.md) | Configure TreeView partial render log silencing in host app logs |
 | [Glossary](glossary.md) | Main terms used in TreeView docs and code |
 | [Node keys](node-keys.md) | node_key design, collision avoidance, and validation |
@@ -71,6 +72,8 @@ For common API combinations, see [Cookbook](cookbook.md). For editing-oriented r
 When TreeView terminology or identifier design is unclear, see [Glossary](glossary.md), [Node keys](node-keys.md), and [Tree diagnostics](tree-diagnostics.md).
 
 For TreeView-specific rescue behavior, see [Error hierarchy](errors.md).
+
+For public Stimulus event names and payloads, see [JavaScript event contract](js-events.md).
 
 For accessibility semantics, ARIA placement, and keyboard boundaries, see [Accessibility Semantics](accessibility-semantics.md).
 
