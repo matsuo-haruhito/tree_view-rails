@@ -3,6 +3,7 @@
 module TreeViewStateHelper
   def tree_view_state_data(render_state)
     controllers = ["tree-view-state"]
+    controllers << "tree-view-client" if render_state.respond_to?(:ui_config) && render_state.ui_config.respond_to?(:client?) && render_state.ui_config.client?
     controllers << "tree-view-selection" if render_state.selection_enabled?
     controllers << "tree-view-transfer" if render_state.respond_to?(:row_event_payload_builder) && render_state.row_event_payload_builder
     controllers << "tree-view-remote-state" if render_state.respond_to?(:lazy_loading_enabled?) && render_state.lazy_loading_enabled?
