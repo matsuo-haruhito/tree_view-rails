@@ -19,12 +19,14 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added a public TreeView-specific error hierarchy rooted at `TreeView::Error` for rescuing validation and configuration failures.
 - Added explicit `UiConfig#mode` values for `:turbo`, `:static`, and `:client`, plus `UiConfigBuilder#build_turbo` and `UiConfigBuilder#build_client_side`.
 - Added client-side-only expand/collapse mode that renders collapsed descendants into initial HTML and toggles rows in the browser with the bundled `tree-view-client` controller.
+- Added `TreeView::Diagnostics.run` as a consolidated diagnostics entrypoint for node keys, DOM IDs, orphans, and cycles.
 
 ### Changed
 
 - Removed misleading `aria-controls` from Turbo toggle links until TreeView has a single stable controlled target.
 - Clarified public builder naming decisions: prefer `badge_builder`, keep `icon_builder` as a compatibility alias, treat `row_event_payload_builder` as transfer-specific, and document `loading_builder` / `error_builder` as boolean predicates.
 - Strengthened pull request CI to run Ruby specs alongside Standard Ruby lint while keeping broader compatibility and release checks on `main`.
+- Split RenderState selection and lazy-loading normalization into internal configuration objects while keeping the public RenderState API compatible.
 
 ### Documentation
 
@@ -36,6 +38,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added form and editing row docs for bulk edit forms, inline-editing layouts, Form Objects, validation errors, row actions, and host-app responsibility boundaries.
 - Added public name decision docs in Japanese and English.
 - Added render log level docs in Japanese and English.
+- Added JavaScript event contract docs in Japanese and English for public Stimulus events and payload details.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 
@@ -45,6 +48,8 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered path trees, sorter call growth, children lookup scope, and max leaf distance behavior.
 - Added specs for TreeView-specific error rescue behavior.
 - Added Ruby and JavaScript specs for client-side toggle mode, mode builders, public API exports, and browser-local descendant visibility updates.
+- Added specs for RenderState internal configuration objects and the consolidated diagnostics entrypoint.
+- Added JavaScript public event contract specs for selection, remote state, and transfer events.
 
 ## 0.1.0 - 2026-05-07
 
