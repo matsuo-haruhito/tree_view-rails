@@ -212,6 +212,7 @@ exportされるcontroller classは安定入口として扱います。個別cont
 ## 詳細
 
 - 詳細API仕様: [api.md](api.md)
+- Accessibility semantics: [accessibility-semantics.md](accessibility-semantics.md)
 - Error hierarchy: [errors.md](errors.md)
 - Public API互換性方針: [public-api.md](public-api.md)
 - 最小利用例: [minimal-usage.md](minimal-usage.md)
