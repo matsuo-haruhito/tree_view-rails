@@ -14,7 +14,8 @@ TreeViewのAPIは大きく分けると次の2種類です。
 | やりたいこと | まず使うAPI | 主なoption / API | 補足 |
 |---|---|---|---|
 | 単純なstatic treeを描画したい | `TreeView::Tree`, `TreeView::RenderState`, `tree_view_rows` | `records:`, `parent_id_method:`, `row_partial:`, `UiConfigBuilder#build_static` | 全nodeが取得済みでremote expand/collapseが不要な場合の最初の実装です。 |
-| Turboでexpand/collapseしたい | `TreeView::UiConfigBuilder#build` | `show_descendants_path_builder`, `hide_descendants_path_builder`, `toggle_all_path_builder` | host appのroutesとTurbo Stream actionがresponseを担当します。TreeViewはrow IDとURLを組み立てます。 |
+| Turboでexpand/collapseしたい | `TreeView::UiConfigBuilder#build_turbo` | `show_descendants_path_builder`, `hide_descendants_path_builder`, `toggle_all_path_builder` | `build` は後方互換aliasです。host appのroutesとTurbo Stream actionがresponseを担当します。 |
+| Turbo endpointなしでbrowser内だけで開閉したい | `TreeView::UiConfigBuilder#build_client_side` | `initial_state`, `initial_expansion:`, `render_scope:` | render scope内の全行を初期HTMLに含められる小〜中規模treeに向いています。 |
 | 初期描画を小さくしたい | `TreeView::RenderState` | `max_initial_depth`, `initial_expansion:`, `render_scope:` | これは描画制御です。初期HTML量は減りますが、それだけでdatabase query量が減るわけではありません。 |
 | 描画対象の子孫範囲を制限したい | `render_scope:` | `max_depth`, `max_leaf_distance` | ページ上で一定のdepthやmatched leavesからの距離を超えて描画したくない場合に使います。 |
 | visible rowsの一部だけ描画したい | `tree_view_rows(..., window:)`, `tree_view_window`, `TreeView::RenderWindow` | `window: { offset:, limit: }` | すでにvisibleなrowsをsliceします。HTML出力量だけを減らし、それだけで取得データ量が減るわけではありません。 |
@@ -39,8 +40,9 @@ flowchart TD
   A[何をしたいですか?]
   A --> B{tree dataはすでにありますか?}
   B -->|はい| C{remote expand/collapseが必要?}
-  C -->|いいえ| D[Static rendering: Tree + RenderState + tree_view_rows]
-  C -->|はい| E[Turbo rendering: UiConfigBuilder#build と show/hide path builders]
+  C -->|いいえ、browser上で開かない| D[Static rendering: Tree + RenderState + tree_view_rows]
+  C -->|いいえ、browser内開閉で十分| CL[Client-side rendering: UiConfigBuilder#build_client_side]
+  C -->|はい| E[Turbo rendering: UiConfigBuilder#build_turbo と show/hide path builders]
   B -->|いいえ、全取得が重い| F[Lazy Loading または Children Pagination]
   F --> G{親ごとの子要素数が非常に多い?}
   G -->|はい| H[host app側のChildren Paginationをlazy-loading URL経由で連携]
@@ -69,6 +71,7 @@ flowchart TD
 | 種類 | API | 減らせるもの | それだけでは減らないもの |
 |---|---|---|---|
 | 初期展開 | `max_initial_depth`, `initial_expansion:` | 初回表示で開くrow | databaseから読み込むrecord数 |
+| client-side開閉 | `build_client_side`, `tree-view-client` | 開閉時のserver round-trip | 初期HTML量。render scope内の行は初期HTMLに出力されます。 |
 | 描画範囲 | `render_scope: { max_depth:, max_leaf_distance: }` | 描画対象になる子孫 | host appがqueryも絞らない限りquery costは減りません |
 | windowed rendering | `window:`, `TreeView::RenderWindow` | 現在visibleなrowsから出力するHTML | visibility計算に必要なデータ、host app query、取得済みrecord数 |
 | Lazy Loading | `load_children_path_builder`, `lazy_loading:` | 初期の子要素取得と未読み込み子要素のHTML | host appのcontroller / query実装 |
@@ -81,15 +84,17 @@ flowchart TD
 2. 必要になったuse caseに応じて [API概要](api-overview.md) の概念を足します。
 3. HTML量やvisible row数が問題になったら [Render Scale](render-scale.md) を使います。
 4. query量や子要素数が問題になったら [Lazy Loading](lazy-loading.md) と [Children Pagination](children-pagination.md) を使います。これらのページには、host app controller、Turbo Stream、cursor、retry patternのコピー可能な例があります。
-5. scroll位置に応じたDOM仮想化がproduct要件になった場合だけ、host app側でvirtual scrollingを追加します。
-6. interaction要件やrow customization要件が固まったら [Selection](selection.md)、[Form と編集行](form-editing.md)、[Cookbook row customization](cookbook.md#行customization-quick-guide)、[Drag and Drop](drag-and-drop.md)、[Persisted State](persisted-state.md) を追加します。
-7. node key、DOM ID、tree構造を検証したい場合は [Tree diagnostics](tree-diagnostics.md) を使います。
+5. dataは取得済みで、初期HTML量を許容でき、Turbo endpointが過剰な場合は `build_client_side` を使います。
+6. scroll位置に応じたDOM仮想化がproduct要件になった場合だけ、host app側でvirtual scrollingを追加します。
+7. interaction要件やrow customization要件が固まったら [Selection](selection.md)、[Form と編集行](form-editing.md)、[Cookbook row customization](cookbook.md#行customization-quick-guide)、[Drag and Drop](drag-and-drop.md)、[Persisted State](persisted-state.md) を追加します。
+8. node key、DOM ID、tree構造を検証したい場合は [Tree diagnostics](tree-diagnostics.md) を使います。
 
 ## よくある組み合わせ
 
 | Scenario | 組み合わせ |
 |---|---|
 | 小さな管理用taxonomy | Static tree + 必要に応じて `max_initial_depth` |
+| 小さなdocs sidebarのlocal開閉 | Client-side mode + `initial_state: :collapsed` + 必要に応じてrender scope |
 | 大きなfolder browser | Lazy Loading + Children Pagination + Persisted State |
 | 大きなscrolling browser | host app virtual scrolling + 必要に応じてrender/window metadata |
 | 検索ページ | `path_tree_for` + match周辺のrender scope |
