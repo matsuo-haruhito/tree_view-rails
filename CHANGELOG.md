@@ -13,6 +13,10 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ## Unreleased
 
+### Added
+
+- Added `TreeView.configuration.render_log_level`, defaulting to `:warn`, so TreeView helper-rendered partial logs can be silenced without changing the host app's global Rails logger level.
+
 ### Changed
 
 - Removed misleading `aria-controls` from Turbo toggle links until TreeView has a single stable controlled target.
@@ -25,6 +29,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
 - Added form and editing row docs for bulk edit forms, inline-editing layouts, Form Objects, validation errors, row actions, and host-app responsibility boundaries.
 - Added public name decision docs in Japanese and English.
+- Added render log level docs in Japanese and English.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 
