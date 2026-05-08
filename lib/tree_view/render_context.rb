@@ -45,6 +45,10 @@ module TreeView
       def tree_instance_key
         nil
       end
+
+      def ui_config
+        nil
+      end
     end
 
     attr_reader :render_state, :mode
@@ -89,7 +93,7 @@ module TreeView
 
     def initialize(render_state:, mode: nil, collapsed: nil)
       @render_state = render_state
-      @mode = mode
+      @mode = mode || render_state_ui_mode
       @collapsed_override = collapsed
     end
 
@@ -235,6 +239,17 @@ module TreeView
       return nil unless render_state.respond_to?(:toggle_icon_builder)
 
       render_state.toggle_icon_builder
+    end
+
+    private
+
+    def render_state_ui_mode
+      return nil unless render_state.respond_to?(:ui_config)
+
+      ui_config = render_state.ui_config
+      return nil unless ui_config.respond_to?(:mode)
+
+      ui_config.mode
     end
   end
 end
