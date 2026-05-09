@@ -3,12 +3,12 @@ require "action_view"
 require "fileutils"
 require "tmpdir"
 
-ToggleIconBuilderNode = Struct.new(:id, :parent_item_id, :name, keyword_init: true)
+ToggleIconBuilderNode = Struct.new(:id, :parent_item_id, :name, :node_type, keyword_init: true)
 
 RSpec.describe "TreeView toggle_icon_builder integration" do
-  let(:root) { ToggleIconBuilderNode.new(id: 1, parent_item_id: nil, name: "root") }
-  let(:child) { ToggleIconBuilderNode.new(id: 2, parent_item_id: 1, name: "child") }
-  let(:leaf) { ToggleIconBuilderNode.new(id: 3, parent_item_id: 2, name: "leaf") }
+  let(:root) { ToggleIconBuilderNode.new(id: 1, parent_item_id: nil, name: "root", node_type: :folder) }
+  let(:child) { ToggleIconBuilderNode.new(id: 2, parent_item_id: 1, name: "child", node_type: :folder) }
+  let(:leaf) { ToggleIconBuilderNode.new(id: 3, parent_item_id: 2, name: "leaf", node_type: :file) }
   let(:nodes) { [root, child, leaf] }
   let(:tree) { TreeView::Tree.new(records: nodes, parent_id_method: :parent_item_id) }
   let(:gem_view_path) { File.expand_path("../../app/views", __dir__) }
@@ -81,5 +81,62 @@ RSpec.describe "TreeView toggle_icon_builder integration" do
     expect(rendered).to include("expanded:root")
     expect(rendered).to include('class="tree-toggle__icon chevron chevron-leaf"')
     expect(rendered).to include("leaf:leaf")
+  end
+
+  it "selects toggle icons by type, depth, then state" do
+    tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build(
+      hide_descendants_path_builder: ->(item, depth, scope) { "/projects/#{item.id}/hide?depth=#{depth}&scope=#{scope}" },
+      show_descendants_path_builder: ->(item, depth, scope) { "/projects/#{item.id}/show?depth=#{depth}&scope=#{scope}" },
+      toggle_all_path_builder: ->(state) { "/projects/toggle_all?state=#{state}" }
+    )
+    render_state = TreeView::RenderState.new(
+      tree: tree,
+      root_items: tree.root_items,
+      row_partial: "projects/tree_columns",
+      ui_config: tree_ui,
+      toggle_icons: {
+        by_state: {
+          expanded: "state-expanded",
+          collapsed: "state-collapsed",
+          leaf: "state-leaf"
+        },
+        by_depth: {
+          1 => {expanded: "depth-1-expanded", collapsed: "depth-1-collapsed", leaf: "depth-1-leaf"}
+        },
+        by_type: {
+          folder: {expanded: "folder-expanded", collapsed: "folder-collapsed"},
+          file: {leaf: "file-leaf"}
+        }
+      }
+    )
+    view = build_view(tree_ui: nil)
+
+    rendered = view.tree_view_rows(render_state, mode: :turbo)
+
+    expect(rendered).to include("folder-expanded")
+    expect(rendered).not_to include("state-expanded")
+    expect(rendered).to include("depth-1-expanded")
+    expect(rendered).to include("file-leaf")
+  end
+
+  it "uses toggle_icon_builder before toggle_icons when both are supplied" do
+    tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
+    render_state = TreeView::RenderState.new(
+      tree: tree,
+      root_items: tree.root_items,
+      row_partial: "projects/tree_columns",
+      ui_config: tree_ui,
+      initial_state: :collapsed,
+      toggle_icons: {
+        by_state: {collapsed: "mapped-collapsed"}
+      },
+      toggle_icon_builder: ->(_item, state, _context) { "builder-#{state}" }
+    )
+    view = build_view(tree_ui: nil)
+
+    rendered = view.tree_view_rows(render_state)
+
+    expect(rendered).to include("builder-collapsed")
+    expect(rendered).not_to include("mapped-collapsed")
   end
 end
