@@ -13,6 +13,9 @@ module TreeView
     VALID_TOGGLE_SCOPE_KEYS = %i[max_depth_from_root max_leaf_distance].freeze
     VALID_SELECTION_KEYS = SelectionConfig::VALID_KEYS
     VALID_SELECTION_VISIBILITIES = SelectionConfig::VALID_VISIBILITIES
+    VALID_TOGGLE_ICONS_KEYS = %i[by_state by_depth by_type].freeze
+    VALID_TOGGLE_ICON_STATES = %i[expanded collapsed leaf loading].freeze
+    TOGGLE_ICON_RENDER_KEYS = %i[text label icon html class title data aria_hidden].freeze
     DEFAULT_SELECTION_CHECKBOX_NAME = "selected_nodes[]"
 
     attr_reader :tree,
@@ -48,6 +51,7 @@ module TreeView
       :depth_label_builder,
       :badge_builder,
       :icon_builder,
+      :toggle_icons,
       :toggle_icon_builder
 
     # RenderState は「この画面ではどう描くか」を束ねる。
@@ -86,6 +90,7 @@ module TreeView
       depth_label_builder: nil,
       badge_builder: nil,
       icon_builder: nil,
+      toggle_icons: nil,
       toggle_icon_builder: nil)
       initial_expansion_options = normalize_options(initial_expansion, :initial_expansion, VALID_INITIAL_EXPANSION_KEYS)
       render_scope_options = normalize_options(render_scope, :render_scope, VALID_RENDER_SCOPE_KEYS)
@@ -136,7 +141,8 @@ module TreeView
       @depth_label_builder = depth_label_builder
       @badge_builder = badge_builder
       @icon_builder = icon_builder
-      @toggle_icon_builder = toggle_icon_builder
+      @toggle_icons = normalize_toggle_icons(toggle_icons)
+      @toggle_icon_builder = toggle_icon_builder || build_toggle_icon_builder(@toggle_icons)
 
       validate_builders!(
         row_class_builder: row_class_builder,
@@ -147,7 +153,7 @@ module TreeView
         depth_label_builder: depth_label_builder,
         badge_builder: badge_builder,
         icon_builder: icon_builder,
-        toggle_icon_builder: toggle_icon_builder,
+        toggle_icon_builder: @toggle_icon_builder,
         selection_payload_builder: @selection_payload_builder,
         selection_disabled_builder: @selection_disabled_builder,
         selection_disabled_reason_builder: @selection_disabled_reason_builder
@@ -189,6 +195,85 @@ module TreeView
       end
 
       options
+    end
+
+    def normalize_toggle_icons(value)
+      return {} if value.nil?
+      normalize_options(value, :toggle_icons, VALID_TOGGLE_ICONS_KEYS)
+    end
+
+    def build_toggle_icon_builder(icons)
+      return nil if icons.empty?
+
+      lambda do |item, state, context|
+        normalized_state = state.to_sym
+        icon_for_type(icons[:by_type], item, normalized_state) ||
+          icon_for_key(icons[:by_depth], context[:depth], normalized_state) ||
+          icon_for_state(icons[:by_state], normalized_state)
+      end
+    end
+
+    def icon_for_type(icons, item, state)
+      type = toggle_icon_node_type(item)
+      return nil if type.nil?
+
+      icon_for_key(icons, type, state)
+    end
+
+    def icon_for_key(icons, key, state)
+      return nil if icons.nil? || key.nil? || !icons.respond_to?(:to_h)
+
+      entry = lookup_icon_value(icons.to_h, key)
+      return nil if entry.nil?
+
+      icon_for_state_entry(entry, state)
+    end
+
+    def icon_for_state(icons, state)
+      return nil if icons.nil? || !icons.respond_to?(:to_h)
+
+      lookup_icon_value(icons.to_h, state)
+    end
+
+    def icon_for_state_entry(entry, state)
+      return entry unless entry.respond_to?(:to_h)
+
+      entry_hash = entry.to_h
+      return entry unless state_icon_map?(entry_hash)
+
+      lookup_icon_value(entry_hash, state)
+    end
+
+    def state_icon_map?(entry_hash)
+      normalized_keys = entry_hash.keys.filter_map { |key| key.to_sym if key.respond_to?(:to_sym) }
+      (normalized_keys & VALID_TOGGLE_ICON_STATES).any? && (normalized_keys & TOGGLE_ICON_RENDER_KEYS).empty?
+    end
+
+    def lookup_icon_value(hash, key)
+      return nil unless hash.respond_to?(:key?)
+
+      return hash[key] if hash.key?(key)
+
+      symbol_key = key.to_sym if key.respond_to?(:to_sym)
+      return hash[symbol_key] if !symbol_key.nil? && hash.key?(symbol_key)
+
+      string_key = key.to_s
+      return hash[string_key] if hash.key?(string_key)
+
+      nil
+    end
+
+    def toggle_icon_node_type(item)
+      if item.respond_to?(:[])
+        hash_type = lookup_icon_value(item, :node_type)
+        return hash_type unless hash_type.nil?
+      end
+
+      return item.node_type if item.respond_to?(:node_type)
+      return item.type if item.respond_to?(:type)
+      return item.kind if item.respond_to?(:kind)
+
+      nil
     end
 
     def normalize_initial_state(value)
