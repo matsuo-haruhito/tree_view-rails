@@ -1,10 +1,48 @@
 # Toggle icon customization
 
-Use `toggle_icon_builder:` when you want to replace the visual content of TreeView's expand/collapse control without taking over the control itself.
+Use `toggle_icons:` or `toggle_icon_builder:` when you want to replace the visual content of TreeView's expand/collapse control without taking over the control itself.
 
-TreeView still owns link generation, Turbo Stream data attributes, ARIA state, depth/branch layout, and lazy-loading semantics. The builder only supplies the content rendered inside the toggle control.
+TreeView still owns link generation, Turbo Stream data attributes, ARIA state, depth/branch layout, and lazy-loading semantics. Custom content only supplies the content rendered inside the toggle control.
+
+## Configure icons by state, depth, and node type with toggle_icons
+
+Use `toggle_icons:` when you want to configure multiple icons declaratively.
+
+```ruby
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  toggle_icons: {
+    by_state: {
+      expanded: "▾",
+      collapsed: "▸",
+      leaf: "•"
+    },
+    by_depth: {
+      0 => { expanded: "▼", collapsed: "▶", leaf: "●" },
+      1 => { expanded: "▾", collapsed: "▸", leaf: "•" }
+    },
+    by_type: {
+      folder: { expanded: "📂", collapsed: "📁" },
+      file: { leaf: "📄" }
+    }
+  }
+)
+```
+
+Icons are selected in this order: `by_type`, then `by_depth`, then `by_state`. If a more specific entry is not found, TreeView falls back to the next one.
+
+`by_type` reads the item using `node_type`, `type`, then `kind`. For Hash-like items, `:node_type` and `"node_type"` are also supported.
+
+`by_depth` uses the existing root-based `depth`, where root rows are depth `0`. This API uses `depth`, not `level`, to match the existing render context naming.
+
+When both `toggle_icon_builder:` and `toggle_icons:` are supplied, the explicit `toggle_icon_builder:` takes precedence.
 
 ## Builder arguments
+
+Use `toggle_icon_builder:` when you need more control.
 
 ```ruby
 toggle_icon_builder: ->(item, state, context) { ... }
@@ -16,7 +54,7 @@ toggle_icon_builder: ->(item, state, context) { ... }
 | `state` | One of `:expanded`, `:collapsed`, `:leaf`, or `:loading`. |
 | `context` | Hash containing `:state`, `:depth`, `:tree`, `:children`, `:hidden_count`, `:mode`, and `:leaf_distance`. |
 
-The builder may return plain text or a Hash-like value. Hash values support:
+Both `toggle_icons:` icon values and builder return values may be plain text or a Hash-like value. Hash values support:
 
 | Key | Description |
 |---|---|
