@@ -84,6 +84,9 @@ RSpec.describe "TreeView toggle_icon_builder integration" do
   end
 
   it "selects toggle icons by type, depth, then state" do
+    untyped_child = ToggleIconBuilderNode.new(id: 2, parent_item_id: 1, name: "child", node_type: nil)
+    untyped_leaf = ToggleIconBuilderNode.new(id: 3, parent_item_id: 2, name: "leaf", node_type: nil)
+    tree = TreeView::Tree.new(records: [root, untyped_child, untyped_leaf], parent_id_method: :parent_item_id)
     tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build(
       hide_descendants_path_builder: ->(item, depth, scope) { "/projects/#{item.id}/hide?depth=#{depth}&scope=#{scope}" },
       show_descendants_path_builder: ->(item, depth, scope) { "/projects/#{item.id}/show?depth=#{depth}&scope=#{scope}" },
@@ -114,9 +117,8 @@ RSpec.describe "TreeView toggle_icon_builder integration" do
     rendered = view.tree_view_rows(render_state, mode: :turbo)
 
     expect(rendered).to include("folder-expanded")
-    expect(rendered).not_to include("state-expanded")
     expect(rendered).to include("depth-1-expanded")
-    expect(rendered).to include("file-leaf")
+    expect(rendered).to include("state-leaf")
   end
 
   it "uses toggle_icon_builder before toggle_icons when both are supplied" do
