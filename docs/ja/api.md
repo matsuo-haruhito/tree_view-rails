@@ -220,6 +220,8 @@ render_state = TreeView::RenderState.new(
 | `badge_builder:` | no | row badge / marker 表示値を返すcallable。 |
 | `icon_builder:` | no | row badge / marker 表示のcompatibility alias。新しいcodeでは `badge_builder` を推奨。 |
 | `depth_label_builder:` | no | depth labelを返すcallable。 |
+| `toggle_icons:` | no | toggle control icon の宣言的map。`by_state`、`by_depth`、`by_type` を指定できます。詳細は [toggle icon のカスタマイズ](toggle-icons.md) を参照してください。 |
+| `toggle_icon_builder:` | no | toggle control content を返すcallable。`toggle_icons:` と両方指定した場合はこちらを優先します。 |
 | `row_status_builder:` | no | row状態を返すcallable。 |
 | `row_event_payload_builder:` | no | drag/drop transfer payloadを返すcallable。transfer専用であり、汎用row event hookではない。 |
 | `persisted_state:` | no | 保存済み展開状態。 |
