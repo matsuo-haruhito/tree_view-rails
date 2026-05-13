@@ -116,6 +116,43 @@ tree = TreeView::Tree.new(adapter: adapter)
 | `path_tree_for(items)` | root → parent → matched item | 検索結果を通常階層の中で見せる。 |
 | `reverse_tree_for(items)` | matched item → parent → root | 子node一覧から親方向へ辿る。 |
 
+## TreeView::PathTreeBuilder
+
+`PathTreeBuilder` は、path らしい値を持つ records から生成folder nodeとrecord nodeで構成されたtreeを作ります。database上にfolder recordを持たず、record側にpathだけがある場合に使います。
+
+```ruby
+builder = TreeView::PathTreeBuilder.new(
+  records: documents,
+  path_resolver: ->(document) { document.source_relative_path },
+  label_resolver: ->(document) { document.title },
+  id_resolver: ->(document) { TreeView.node_key(:document, document.id) },
+  sort: { folders_first: true }
+)
+
+render_state = TreeView::RenderState.new(
+  tree: builder.tree,
+  root_items: builder.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui
+)
+```
+
+| 引数 | 必須 | 説明 |
+|---|---:|---|
+| `records:` | yes | path らしい値を持つsource records。 |
+| `path_resolver:` | yes | 文字列pathまたはpath segment配列を返すcallable。 |
+| `label_resolver:` | no | record node labelを返すcallable。 |
+| `id_resolver:` | no | record node keyを返すcallable。安定したtyped keyを使う場合に指定します。 |
+| `sorter:` | no | 独自の `TreeView::Tree` 形式sorter。 |
+| `sort:` | no | default sort用option。`folders_first:` をサポートします。 |
+| `separator:` | no | 文字列path用separator。既定値は `/`。 |
+| `folder_key_prefix:` | no | 生成folder keyのprefix。既定値は `folder`。 |
+| `record_key_prefix:` | no | 既定record keyのprefix。既定値は `record`。 |
+
+builder は `nodes`, `paths`, `tree`, `root_items`, `children_for(node)`, `node_key_for(node)` を公開します。folder node は `TreeView::PathTreeBuilder::FolderNode`、record node は `TreeView::PathTreeBuilder::RecordNode` で、元recordを `record` に保持します。
+
+具体例と責務境界は [PathTreeBuilder](path-tree-builder.md) を参照してください。
+
 ## TreeView::FilteredTree
 
 検索や絞り込み結果をtreeとして表示するためのwrapperです。
@@ -321,6 +358,7 @@ registerTreeViewControllers(application)
 - [API概要](api-overview.md)
 - [使い方](usage.md)
 - [Cookbook](cookbook.md)
+- [PathTreeBuilder](path-tree-builder.md)
 - [Accessibility Semantics](accessibility-semantics.md)
 - [Error hierarchy](errors.md)
 - [render log level](render-log-level.md)
