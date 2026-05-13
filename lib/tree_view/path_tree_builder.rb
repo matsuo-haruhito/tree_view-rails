@@ -1,0 +1,189 @@
+# frozen_string_literal: true
+
+module TreeView
+  class PathTreeBuilder
+    FolderNode = Struct.new(:key, :parent_key, :label, :path, :node_type, keyword_init: true)
+    RecordNode = Struct.new(:key, :parent_key, :label, :path, :record, :node_type, keyword_init: true)
+
+    DEFAULT_FOLDER_KEY_PREFIX = "folder"
+    DEFAULT_RECORD_KEY_PREFIX = "record"
+
+    attr_reader :records,
+      :path_resolver,
+      :label_resolver,
+      :id_resolver,
+      :sorter,
+      :sort,
+      :separator,
+      :folder_key_prefix,
+      :record_key_prefix,
+      :folder_node_type,
+      :record_node_type
+
+    def initialize(records:,
+      path_resolver:,
+      label_resolver: nil,
+      id_resolver: nil,
+      sorter: nil,
+      sort: nil,
+      separator: "/",
+      folder_key_prefix: DEFAULT_FOLDER_KEY_PREFIX,
+      record_key_prefix: DEFAULT_RECORD_KEY_PREFIX,
+      folder_node_type: :folder,
+      record_node_type: :record)
+      @records = Array(records)
+      @path_resolver = path_resolver
+      @label_resolver = label_resolver
+      @id_resolver = id_resolver
+      @sorter = sorter
+      @sort = normalize_sort(sort)
+      @separator = separator.to_s
+      @folder_key_prefix = folder_key_prefix.to_s
+      @record_key_prefix = record_key_prefix.to_s
+      @folder_node_type = folder_node_type
+      @record_node_type = record_node_type
+
+      validate_callable!(path_resolver, :path_resolver)
+      validate_optional_callable!(label_resolver, :label_resolver)
+      validate_optional_callable!(id_resolver, :id_resolver)
+      validate_optional_callable!(sorter, :sorter)
+    end
+
+    def nodes
+      @nodes ||= paths.flatten.uniq { |node| node.key }
+    end
+
+    def paths
+      @paths ||= build_paths
+    end
+
+    def tree
+      @tree ||= TreeView::Tree.new(
+        records: nodes,
+        parent_id_method: :parent_key,
+        id_method: :key,
+        sorter: effective_sorter,
+        orphan_strategy: :as_root
+      )
+    end
+
+    def root_items(root_parent_id = nil)
+      tree.root_items(root_parent_id)
+    end
+
+    def children_for(node)
+      tree.children_for(node)
+    end
+
+    def node_key_for(node)
+      tree.node_key_for(node)
+    end
+
+    private
+
+    def build_paths
+      folder_nodes_by_key = {}
+
+      records.map do |record|
+        segments = path_segments_for(record)
+        folder_segments = segments[0...-1] || []
+        path_nodes = []
+        parent_key = nil
+
+        folder_segments.each_with_index do |segment, index|
+          folder_path = folder_segments[0..index]
+          key = folder_key_for(folder_path)
+          folder_nodes_by_key[key] ||= FolderNode.new(
+            key: key,
+            parent_key: parent_key,
+            label: segment,
+            path: folder_path.join(separator),
+            node_type: folder_node_type
+          )
+          path_nodes << folder_nodes_by_key[key]
+          parent_key = key
+        end
+
+        path_nodes << RecordNode.new(
+          key: record_key_for(record),
+          parent_key: parent_key,
+          label: label_for(record, segments),
+          path: segments.join(separator),
+          record: record,
+          node_type: record_node_type
+        )
+      end
+    end
+
+    def path_segments_for(record)
+      raw_path = path_resolver.call(record)
+      segments = if raw_path.is_a?(Array)
+        raw_path
+      else
+        raw_path.to_s.split(separator)
+      end
+
+      segments.map(&:to_s).map(&:strip).reject(&:empty?)
+    end
+
+    def label_for(record, segments)
+      return label_resolver.call(record) if label_resolver
+      return record.name if record.respond_to?(:name)
+      return segments.last unless segments.empty?
+
+      record.to_s
+    end
+
+    def record_key_for(record)
+      return id_resolver.call(record).to_s if id_resolver
+      return TreeView.node_key(record_key_prefix, record.id) if record.respond_to?(:id)
+
+      TreeView.node_key(record_key_prefix, record.object_id)
+    end
+
+    def folder_key_for(folder_path)
+      TreeView.node_key(folder_key_prefix, folder_path.join(separator))
+    end
+
+    def effective_sorter
+      sorter || lambda do |items, _tree|
+        sorted_items = Array(items)
+        sorted_items = sorted_items.sort_by { |item| [item.label.to_s, item.key.to_s] }
+        if sort[:folders_first]
+          sorted_items.sort_by { |item| folder_node?(item) ? 0 : 1 }
+        else
+          sorted_items
+        end
+      end
+    end
+
+    def folder_node?(item)
+      item.respond_to?(:node_type) && item.node_type == folder_node_type
+    end
+
+    def normalize_sort(value)
+      return {} if value.nil?
+      raise TreeView::ConfigurationError, "sort must respond to to_h; pass a Hash-like object or nil" unless value.respond_to?(:to_h)
+
+      options = value.to_h.transform_keys(&:to_sym)
+      invalid_keys = options.keys - %i[folders_first]
+      if invalid_keys.any?
+        raise TreeView::ConfigurationError, "sort contains unknown keys: #{invalid_keys.join(", ")}; supported keys are: folders_first"
+      end
+
+      options
+    end
+
+    def validate_callable!(callable, name)
+      return if callable.respond_to?(:call)
+
+      raise TreeView::ConfigurationError, "#{name} must respond to call"
+    end
+
+    def validate_optional_callable!(callable, name)
+      return if callable.nil?
+
+      validate_callable!(callable, name)
+    end
+  end
+end
