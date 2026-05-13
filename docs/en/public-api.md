@@ -25,6 +25,7 @@ Host apps may use these entry points directly:
 - `TreeView::UiConfigBuilder`
 - `TreeView::GraphAdapter`
 - `TreeView::PathTree`
+- `TreeView::PathTreeBuilder`
 - `TreeView::ReverseTree`
 - `TreeView::PersistedState`
 - `TreeView::StateStore`
@@ -55,6 +56,7 @@ The public option surface includes documented keyword arguments and grouped opti
 
 - `TreeView::Configuration`
 - `TreeView::Tree`
+- `TreeView::PathTreeBuilder`
 - `TreeView::RenderState`
 - `TreeView::UiConfig`
 - `TreeView::UiConfigBuilder`
@@ -74,6 +76,7 @@ See [API reference](api.md) for details.
 Host apps are expected to provide these pieces:
 
 - records or adapter data
+- path resolvers when building generated folder trees with `PathTreeBuilder`
 - `row_partial`
 - Turbo mode path builders
 - row class / data builders
