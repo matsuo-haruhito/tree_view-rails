@@ -50,7 +50,11 @@ module TreeView
     end
 
     def nodes
-      @nodes ||= paths.flatten.uniq { |node| node.key }
+      @nodes ||= paths.flatten.each_with_object([]) do |node, result|
+        next if folder_node?(node) && result.any? { |existing| existing.key == node.key }
+
+        result << node
+      end
     end
 
     def paths
@@ -63,7 +67,8 @@ module TreeView
         parent_id_method: :parent_key,
         id_method: :key,
         sorter: effective_sorter,
-        orphan_strategy: :as_root
+        orphan_strategy: :as_root,
+        validate_node_keys: true
       )
     end
 
@@ -147,12 +152,8 @@ module TreeView
 
     def effective_sorter
       sorter || lambda do |items, _tree|
-        sorted_items = Array(items)
-        sorted_items = sorted_items.sort_by { |item| [item.label.to_s, item.key.to_s] }
-        if sort[:folders_first]
-          sorted_items.sort_by { |item| folder_node?(item) ? 0 : 1 }
-        else
-          sorted_items
+        Array(items).sort_by do |item|
+          [sort[:folders_first] && !folder_node?(item) ? 1 : 0, item.label.to_s, item.key.to_s]
         end
       end
     end
