@@ -153,7 +153,9 @@ module TreeView
     def effective_sorter
       sorter || lambda do |items, _tree|
         Array(items).sort_by do |item|
-          [sort[:folders_first] && !folder_node?(item) ? 1 : 0, item.label.to_s, item.key.to_s]
+          sort_group = (sort[:folders_first] && !folder_node?(item)) ? 1 : 0
+
+          [sort_group, item.label.to_s, item.key.to_s]
         end
       end
     end
