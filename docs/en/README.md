@@ -23,6 +23,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Minimal usage](minimal-usage.md) | Minimal controller, view, and row partial setup in a host app |
 | [Usage](usage.md) | Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
 | [Turbo Frame option](turbo-frame.md) | Target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript |
+| [Localized names](localized-names.md) | Resolve model, attribute, and node type labels through ActiveModel / I18n |
 | [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
 | [Accessibility Semantics](accessibility-semantics.md) | First-class accessibility guidance for table-first rows, ARIA placement, keyboard boundaries, and host-app responsibilities |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
@@ -71,6 +72,8 @@ When you know the use case but not the right API, start with the [Decision guide
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
 
 For Turbo Frame targeting from TreeView toggle links, see [Turbo Frame option](turbo-frame.md).
+
+For localized model, attribute, and node type labels, see [Localized names](localized-names.md).
 
 For generated folder trees from path-like records, see [PathTreeBuilder](path-tree-builder.md).
 
