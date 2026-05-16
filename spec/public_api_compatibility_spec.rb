@@ -143,6 +143,7 @@ RSpec.describe "Public API compatibility" do
       tree_node_dom_id
       tree_selection_value
       tree_view_breadcrumb
+      tree_view_toolbar
     ].each do |method_name|
       expect(TreeViewHelper.public_instance_methods).to include(method_name)
     end
