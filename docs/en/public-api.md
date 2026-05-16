@@ -69,7 +69,13 @@ Documented configuration options include:
 - `initial_state`
 - `render_log_level`
 
-See [API reference](api.md) for details.
+Documented Turbo UI options include:
+
+- `UiConfig#turbo_frame`
+- `UiConfigBuilder#build_turbo(turbo_frame:)`
+- `UiConfigBuilder#build(..., turbo_frame:)`
+
+See [API reference](api.md) and [Turbo Frame option](turbo-frame.md) for details.
 
 ## Host app extension points
 
@@ -79,6 +85,7 @@ Host apps are expected to provide these pieces:
 - path resolvers when building generated folder trees with `PathTreeBuilder`
 - `row_partial`
 - Turbo mode path builders
+- optional Turbo Frame targets through `turbo_frame:`
 - row class / data builders
 - row event payload builders
 - selection payload / disabled builders
@@ -111,6 +118,8 @@ Internal by default:
 ## CSS and DOM surface
 
 Host apps may rely on documented CSS classes, data attributes, and JavaScript events intended as integration hooks.
+
+`data-turbo-frame` emitted from configured Turbo toggle links is part of the documented host-app integration surface.
 
 Undocumented CSS helper classes, data attributes, DOM structure details, and gem partial locals are implementation details.
 
