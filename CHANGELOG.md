@@ -15,6 +15,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Added
 
+- Added `UiConfig#turbo_frame` and `UiConfigBuilder#build_turbo(turbo_frame:)` so Turbo toggle links can target a host-app Turbo Frame without custom JavaScript.
 - Added `tree_view_toolbar(render_state)` for rendering tree-wide expand/collapse toolbar actions through `UiConfig#toggle_all_path`.
 - Added `TreeView::NodePresenter` as a thin adapter for node-level resolver hooks and `RenderState` row class/data/icon/badge builders.
 - Added owner model argument support to the persisted state install generator so `tree_view:state:install User` can include `TreeViewStateOwner` in an existing owner model.
@@ -35,6 +36,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Documentation
 
+- Added Turbo Frame option docs in Japanese and English.
 - Added NodePresenter row partial cookbook docs and clarified criteria for promoting app-specific UI patterns into TreeView.
 - Added toolbar helper docs in Japanese and English.
 - Added README adoption guidance to help users decide whether TreeView fits their use case and to clarify the virtual scrolling boundary.
@@ -51,6 +53,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Tests
 
+- Added Turbo Frame option unit and integration specs.
 - Added toolbar helper specs.
 - Added `NodePresenter` specs and `RenderState` integration specs.
 - Added generator specs for persisted state owner concern injection.
