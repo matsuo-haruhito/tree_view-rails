@@ -8,7 +8,8 @@ RSpec.describe TreeView::UiConfigBuilder do
     config = described_class.new(context: context, node_prefix: "entry").build(
       hide_descendants_path_builder: ->(candidate, depth, scope) { "/entries/#{candidate.id}/hide?depth=#{depth}&scope=#{scope}" },
       show_descendants_path_builder: ->(candidate, depth, scope) { "/entries/#{candidate.id}/show?depth=#{depth}&scope=#{scope}" },
-      toggle_all_path_builder: ->(state) { "/entries?state=#{state}" }
+      toggle_all_path_builder: ->(state) { "/entries?state=#{state}" },
+      turbo_frame: "entries_tree"
     )
 
     expect(config.node_dom_id(item)).to eq("entry_8")
@@ -19,6 +20,7 @@ RSpec.describe TreeView::UiConfigBuilder do
     expect(config.show_descendants_path(item, 2)).to eq("/entries/8/show?depth=2&scope=all")
     expect(config.show_descendants_path(item, 2, scope: "children")).to eq("/entries/8/show?depth=2&scope=children")
     expect(config.toggle_all_path(state: :collapsed)).to eq("/entries?state=collapsed")
+    expect(config.turbo_frame).to eq("entries_tree")
     expect(config.scope_format).to eq(:string)
     expect(config.object_scope?).to eq(false)
     expect(config.mode).to eq(:turbo)
@@ -31,11 +33,13 @@ RSpec.describe TreeView::UiConfigBuilder do
     config = described_class.new(context: context, node_prefix: "entry").build_turbo(
       hide_descendants_path_builder: ->(_candidate, _depth, _scope) {},
       show_descendants_path_builder: ->(_candidate, _depth, _scope) {},
-      toggle_all_path_builder: ->(_state) {}
+      toggle_all_path_builder: ->(_state) {},
+      turbo_frame: "entries_tree"
     )
 
     expect(config.mode).to eq(:turbo)
     expect(config.turbo?).to eq(true)
+    expect(config.turbo_frame).to eq("entries_tree")
   end
 
   it "builds config with object scope format" do
@@ -87,6 +91,7 @@ RSpec.describe TreeView::UiConfigBuilder do
     expect(config.show_button_dom_id(item)).to eq("entry_show_button_8")
     expect(config.static?).to eq(true)
     expect(config.mode).to eq(:static)
+    expect(config.turbo_frame).to be_nil
     expect(config.toggle_all_path(state: :collapsed)).to be_nil
   end
 
@@ -102,6 +107,7 @@ RSpec.describe TreeView::UiConfigBuilder do
     expect(config.client?).to eq(true)
     expect(config.static?).to eq(false)
     expect(config.mode).to eq(:client)
+    expect(config.turbo_frame).to be_nil
     expect(config.toggle_all_path(state: :collapsed)).to be_nil
   end
 end

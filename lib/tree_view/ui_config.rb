@@ -13,6 +13,7 @@ module TreeView
       :show_descendants_path_builder,
       :load_children_path_builder,
       :toggle_all_path_builder,
+      :turbo_frame,
       :indent_unit,
       :scope_format,
       :mode
@@ -24,6 +25,7 @@ module TreeView
       show_descendants_path_builder: nil,
       load_children_path_builder: nil,
       toggle_all_path_builder: nil,
+      turbo_frame: nil,
       indent_unit: "&ensp; &ensp; &ensp;",
       scope_format: :string,
       mode: nil)
@@ -42,6 +44,7 @@ module TreeView
       @show_descendants_path_builder = show_descendants_path_builder
       @load_children_path_builder = load_children_path_builder
       @toggle_all_path_builder = toggle_all_path_builder
+      @turbo_frame = normalize_turbo_frame(turbo_frame)
       @indent_unit = indent_unit
       @scope_format = normalize_scope_format(scope_format)
       @mode = normalize_mode(mode || inferred_mode)
@@ -122,6 +125,15 @@ module TreeView
       return if builder.nil?
 
       validate_builder!(builder, name)
+    end
+
+    def normalize_turbo_frame(value)
+      return nil if value.nil?
+
+      normalized_value = value.to_s.strip
+      return nil if normalized_value.empty?
+
+      normalized_value
     end
 
     def normalize_scope_format(value)
