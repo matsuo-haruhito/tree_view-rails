@@ -26,6 +26,9 @@ RSpec.describe "Public API compatibility" do
     expect(TreeView).to respond_to(:reset_configuration!)
     expect(TreeView).to respond_to(:parse_selection_params)
     expect(TreeView).to respond_to(:node_key)
+    expect(TreeView).to respond_to(:model_name_for)
+    expect(TreeView).to respond_to(:attribute_name_for)
+    expect(TreeView).to respond_to(:type_name_for)
 
     expect(TreeView.node_key(:document, 1)).to eq("document:1")
   end
@@ -52,6 +55,7 @@ RSpec.describe "Public API compatibility" do
       UiConfig
       UiConfigBuilder
       GraphAdapter
+      LocalizedNames
       NodePresenter
       PathTree
       PathTreeBuilder

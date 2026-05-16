@@ -22,6 +22,18 @@ end
 
 `render_log_level` accepts `:debug`, `:info`, `:warn`, `:error`, `:fatal`, `:unknown`, `nil`, or the corresponding Ruby `Logger` level constants. See [Render log level](render-log-level.md) for details.
 
+## TreeView localized names
+
+Helpers for resolving display names through ActiveModel / I18n when available:
+
+| Helper | Description |
+|---|---|
+| `TreeView.model_name_for(item_or_class, count: 1, default: nil)` | Resolves model names through `model_name.human`, falling back to a humanized class name. |
+| `TreeView.attribute_name_for(item_or_class, attribute, default: nil)` | Resolves attribute names through `human_attribute_name`, falling back to a humanized attribute name. |
+| `TreeView.type_name_for(item, count: 1, default: nil)` | Resolves `node_type` through `tree_view.node_types.*`, falling back to a humanized node type or model name. |
+
+See [Localized names](localized-names.md) for locale examples and NodePresenter usage.
+
 ## TreeView errors
 
 TreeView validation and configuration failures use a public error hierarchy rooted at `TreeView::Error`.

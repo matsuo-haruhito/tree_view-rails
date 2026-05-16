@@ -15,6 +15,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Added
 
+- Added localized display-name helpers for model, attribute, and node type names through ActiveModel / I18n.
 - Added `UiConfig#turbo_frame` and `UiConfigBuilder#build_turbo(turbo_frame:)` so Turbo toggle links can target a host-app Turbo Frame without custom JavaScript.
 - Added `tree_view_toolbar(render_state)` for rendering tree-wide expand/collapse toolbar actions through `UiConfig#toggle_all_path`.
 - Added `TreeView::NodePresenter` as a thin adapter for node-level resolver hooks and `RenderState` row class/data/icon/badge builders.
@@ -36,6 +37,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Documentation
 
+- Added localized names docs in Japanese and English.
 - Added Turbo Frame option docs in Japanese and English.
 - Added NodePresenter row partial cookbook docs and clarified criteria for promoting app-specific UI patterns into TreeView.
 - Added toolbar helper docs in Japanese and English.
@@ -53,6 +55,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Tests
 
+- Added localized names specs and public API compatibility coverage.
 - Added Turbo Frame option unit and integration specs.
 - Added toolbar helper specs.
 - Added `NodePresenter` specs and `RenderState` integration specs.
