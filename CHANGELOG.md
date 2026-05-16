@@ -15,6 +15,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Added
 
+- Added `tree_view_toolbar(render_state)` for rendering tree-wide expand/collapse toolbar actions through `UiConfig#toggle_all_path`.
 - Added `TreeView::NodePresenter` as a thin adapter for node-level resolver hooks and `RenderState` row class/data/icon/badge builders.
 - Added owner model argument support to the persisted state install generator so `tree_view:state:install User` can include `TreeViewStateOwner` in an existing owner model.
 - Added `RenderState` current node ancestor expansion via `current_item` / `current_key` and `auto_expand_ancestors`.
@@ -34,6 +35,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Documentation
 
+- Added toolbar helper docs in Japanese and English.
 - Added README adoption guidance to help users decide whether TreeView fits their use case and to clarify the virtual scrolling boundary.
 - Promoted accessibility semantics as a first-class capability in the README and docs indexes, including ARIA placement, keyboard boundaries, and host-app responsibilities.
 - Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
@@ -48,6 +50,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Tests
 
+- Added toolbar helper specs.
 - Added `NodePresenter` specs and `RenderState` integration specs.
 - Added generator specs for persisted state owner concern injection.
 - Added RenderState specs for current node ancestor auto-expansion.
