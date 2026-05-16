@@ -116,6 +116,43 @@ tree = TreeView::Tree.new(adapter: adapter)
 | `path_tree_for(items)` | root -> parent -> matched item | Show search results inside the normal hierarchy. |
 | `reverse_tree_for(items)` | matched item -> parent -> root | Start from child nodes and walk toward parents. |
 
+## TreeView::PathTreeBuilder
+
+`PathTreeBuilder` builds generated folder nodes and record nodes from path-like record values. Use it when records expose paths but the host app does not have folder records in its database.
+
+```ruby
+builder = TreeView::PathTreeBuilder.new(
+  records: documents,
+  path_resolver: ->(document) { document.source_relative_path },
+  label_resolver: ->(document) { document.title },
+  id_resolver: ->(document) { TreeView.node_key(:document, document.id) },
+  sort: { folders_first: true }
+)
+
+render_state = TreeView::RenderState.new(
+  tree: builder.tree,
+  root_items: builder.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui
+)
+```
+
+| Argument | Required | Description |
+|---|---:|---|
+| `records:` | yes | Source records that expose path-like values. |
+| `path_resolver:` | yes | Callable returning a string path or array of path segments. |
+| `label_resolver:` | no | Callable returning the record node label. |
+| `id_resolver:` | no | Callable returning the record node key. Use this for stable typed keys. |
+| `sorter:` | no | Custom `TreeView::Tree`-style sorter. |
+| `sort:` | no | Hash options for default sorting. Supports `folders_first:`. |
+| `separator:` | no | Path separator for string paths. Default: `/`. |
+| `folder_key_prefix:` | no | Prefix for generated folder keys. Default: `folder`. |
+| `record_key_prefix:` | no | Prefix for default record keys. Default: `record`. |
+
+The builder exposes `nodes`, `paths`, `tree`, `root_items`, `children_for(node)`, and `node_key_for(node)`. Folder nodes are `TreeView::PathTreeBuilder::FolderNode`; record nodes are `TreeView::PathTreeBuilder::RecordNode` and keep the original record in `record`.
+
+See [PathTreeBuilder](path-tree-builder.md) for examples and responsibility boundaries.
+
 ## TreeView::FilteredTree
 
 A wrapper for rendering search or filter results as a tree.
@@ -321,6 +358,7 @@ Main controllers:
 - [API overview](api-overview.md)
 - [Usage](usage.md)
 - [Cookbook](cookbook.md)
+- [PathTreeBuilder](path-tree-builder.md)
 - [Accessibility Semantics](accessibility-semantics.md)
 - [Error hierarchy](errors.md)
 - [Render log level](render-log-level.md)

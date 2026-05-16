@@ -35,6 +35,7 @@ For very large trees, combine TreeView's render controls with host-app loading a
 ## Features
 
 - Build trees from parent-child records.
+- Build generated folder trees from path-like record values with `PathTreeBuilder`.
 - Count descendants.
 - Sort root and child items.
 - Render static tree rows.
@@ -175,6 +176,7 @@ Key documents:
 | Forms and editing rows | [Forms and editing rows](docs/en/form-editing.md) | [Form と編集行](docs/ja/form-editing.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
+| PathTreeBuilder | [PathTreeBuilder](docs/en/path-tree-builder.md) | [PathTreeBuilder](docs/ja/path-tree-builder.md) |
 | Public API | [Public API](docs/en/public-api.md) | [Public API](docs/ja/public-api.md) |
 | Release checklist | [Release checklist](docs/en/release.md) | [Release checklist](docs/ja/release.md) |
 
