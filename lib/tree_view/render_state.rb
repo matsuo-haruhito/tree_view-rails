@@ -46,6 +46,7 @@ module TreeView
       :selection_cascade,
       :selection_indeterminate,
       :selection_max_count,
+      :node_presenter,
       :row_class_builder,
       :row_data_builder,
       :row_event_payload_builder,
@@ -88,6 +89,7 @@ module TreeView
       selection_indeterminate: nil,
       selection_max_count: nil,
       selection: nil,
+      node_presenter: nil,
       row_class_builder: nil,
       row_data_builder: nil,
       row_event_payload_builder: nil,
@@ -143,26 +145,27 @@ module TreeView
       @selection_cascade = selection_config.cascade
       @selection_indeterminate = selection_config.indeterminate
       @selection_max_count = selection_config.max_count
-      @row_class_builder = row_class_builder
-      @row_data_builder = row_data_builder
+      @node_presenter = normalize_node_presenter(node_presenter)
+      @row_class_builder = row_class_builder || @node_presenter&.row_class_builder
+      @row_data_builder = row_data_builder || @node_presenter&.row_data_builder
       @row_event_payload_builder = row_event_payload_builder
       @loading_builder = loading_builder
       @error_builder = error_builder
       @depth_label_builder = depth_label_builder
-      @badge_builder = badge_builder
-      @icon_builder = icon_builder
+      @badge_builder = badge_builder || @node_presenter&.badge_builder
+      @icon_builder = icon_builder || @node_presenter&.icon_builder
       @toggle_icons = normalize_toggle_icons(toggle_icons)
       @toggle_icon_builder = toggle_icon_builder || build_toggle_icon_builder(@toggle_icons)
 
       validate_builders!(
-        row_class_builder: row_class_builder,
-        row_data_builder: row_data_builder,
+        row_class_builder: @row_class_builder,
+        row_data_builder: @row_data_builder,
         row_event_payload_builder: row_event_payload_builder,
         loading_builder: loading_builder,
         error_builder: error_builder,
         depth_label_builder: depth_label_builder,
-        badge_builder: badge_builder,
-        icon_builder: icon_builder,
+        badge_builder: @badge_builder,
+        icon_builder: @icon_builder,
         toggle_icon_builder: @toggle_icon_builder,
         selection_payload_builder: @selection_payload_builder,
         selection_disabled_builder: @selection_disabled_builder,
@@ -322,6 +325,13 @@ module TreeView
       return nil if value.nil?
 
       value
+    end
+
+    def normalize_node_presenter(value)
+      return nil if value.nil?
+      return value if value.respond_to?(:row_class_builder) && value.respond_to?(:row_data_builder) && value.respond_to?(:badge_builder) && value.respond_to?(:icon_builder)
+
+      raise TreeView::ConfigurationError, "node_presenter must be a TreeView::NodePresenter-compatible object"
     end
 
     def expanded_keys_with_current_ancestors(keys)

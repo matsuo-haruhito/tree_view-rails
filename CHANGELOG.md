@@ -15,6 +15,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Added
 
+- Added `TreeView::NodePresenter` as a thin adapter for node-level resolver hooks and `RenderState` row class/data/icon/badge builders.
 - Added owner model argument support to the persisted state install generator so `tree_view:state:install User` can include `TreeViewStateOwner` in an existing owner model.
 - Added `RenderState` current node ancestor expansion via `current_item` / `current_key` and `auto_expand_ancestors`.
 - Added `TreeView::PathTreeBuilder` for building generated folder nodes and record nodes from path-like record values.
@@ -47,6 +48,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Tests
 
+- Added `NodePresenter` specs and `RenderState` integration specs.
 - Added generator specs for persisted state owner concern injection.
 - Added RenderState specs for current node ancestor auto-expansion.
 - Added accessibility semantics integration specs for row ARIA state in static, collapsed, selection, and windowed rendering.

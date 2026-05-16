@@ -52,6 +52,7 @@ RSpec.describe "Public API compatibility" do
       UiConfig
       UiConfigBuilder
       GraphAdapter
+      NodePresenter
       PathTree
       PathTreeBuilder
       ReverseTree
