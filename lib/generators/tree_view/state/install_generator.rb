@@ -16,6 +16,23 @@ module TreeView
           template "tree_view_state_owner.rb", "app/models/concerns/tree_view_state_owner.rb"
         end
 
+        def add_owner_concern
+          return if owner_model_name.to_s.strip.empty?
+
+          owner_path = File.join("app/models", "#{owner_model_name.underscore}.rb")
+          owner_file = File.join(destination_root, owner_path)
+          unless File.exist?(owner_file)
+            say_status :skip, "#{owner_path} does not exist"
+            return
+          end
+
+          content = File.read(owner_file)
+          return if content.include?("include TreeViewStateOwner")
+
+          updated = content.sub(/^class #{Regexp.escape(owner_model_name)}\b.*$/, "\\0\n  include TreeViewStateOwner")
+          File.write(owner_file, updated)
+        end
+
         private
 
         def migration_path
