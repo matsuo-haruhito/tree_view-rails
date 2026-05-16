@@ -267,16 +267,16 @@ render_state = TreeView::RenderState.new(
 
 ## TreeView::UiConfig / UiConfigBuilder
 
-DOM ID、toggle mode、path builderをまとめる設定objectです。
+DOM ID、toggle mode、path builder、任意の Turbo Frame target をまとめる設定objectです。
 
 | Builder | Mode | 説明 |
 |---|---|---|
-| `build_turbo(...)` | `:turbo` | host appのpath builderでTurbo Stream開閉URLを作る。 |
-| `build(...)` | `:turbo` | 後方互換のための `build_turbo` alias。 |
+| `build_turbo(...)` | `:turbo` | host appのpath builderでTurbo Stream開閉URLを作る。`turbo_frame:` を指定すると toggle link に `data-turbo-frame` を追加する。 |
+| `build(...)` | `:turbo` | 後方互換のための `build_turbo` alias。`turbo_frame:` も同様に指定できる。 |
 | `build_static` | `:static` | 開閉URLを持たない静的snapshot設定を作る。 |
 | `build_client_side` | `:client` | Turbo endpointを使わないbrowser-local開閉設定を作る。 |
 
-`UiConfig#mode` は `:turbo`、`:static`、`:client` を返します。`turbo?`、`static?`、`client?` predicateも使えます。
+`UiConfig#mode` は `:turbo`、`:static`、`:client` を返します。`UiConfig#turbo_frame` は設定された frame target または `nil` を返します。`turbo?`、`static?`、`client?` predicateも使えます。
 
 ### static
 
@@ -297,9 +297,12 @@ tree_ui = TreeView::UiConfigBuilder.new(
   hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth: depth, scope: scope) },
   show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth: depth, scope: scope) },
   load_children_path_builder: ->(item, depth, scope) { children_document_path(item, depth: depth, scope: scope) },
-  toggle_all_path_builder: ->(state) { documents_path(state: state) }
+  toggle_all_path_builder: ->(state) { documents_path(state: state) },
+  turbo_frame: "documents_tree"
 )
 ```
+
+`turbo_frame:` を指定すると、TreeView は Turbo toggle link に `data-turbo-frame` を追加します。scope と host app 側の責務は [Turbo Frame option](turbo-frame.md) を参照してください。
 
 ### client-side
 
@@ -334,6 +337,7 @@ store.save(expanded_keys: expanded_keys)
 | `tree_view_window(render_state, offset:, limit:)` | windowing metadataを返す。 |
 | `tree_view_state_data(render_state)` | root要素用data属性を作る。 |
 | `tree_node_dom_id(item, tree:, ui_config:)` | node DOM IDを作る。 |
+| `tree_turbo_frame(ui:)` | 解決されたUI configのTurbo Frame target、または `nil` を返す。 |
 | `tree_selection_value(item, tree:, render_state:)` | checkbox value用JSONを作る。 |
 | `tree_view_breadcrumb(tree, item, ...)` | breadcrumbを描画する。 |
 
@@ -357,6 +361,7 @@ registerTreeViewControllers(application)
 
 - [API概要](api-overview.md)
 - [使い方](usage.md)
+- [Turbo Frame option](turbo-frame.md)
 - [Cookbook](cookbook.md)
 - [PathTreeBuilder](path-tree-builder.md)
 - [Accessibility Semantics](accessibility-semantics.md)
