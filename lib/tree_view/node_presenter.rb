@@ -14,12 +14,24 @@ module TreeView
       actions
     ].freeze
 
+    Definition = Struct.new(:builders, keyword_init: true) do
+      def initialize(builders: {})
+        super
+      end
+
+      BUILDER_NAMES.each do |name|
+        define_method(name) do |&block|
+          builders[name] = block
+        end
+      end
+    end
+
     attr_reader :builders
 
     def self.define(&block)
-      new.tap do |presenter|
-        presenter.instance_eval(&block) if block
-      end
+      definition = Definition.new
+      definition.instance_eval(&block) if block
+      new(definition.builders)
     end
 
     def initialize(builders = {})
