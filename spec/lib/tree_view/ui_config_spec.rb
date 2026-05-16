@@ -31,6 +31,18 @@ RSpec.describe TreeView::UiConfig do
     expect(config.toggle_all_path(state: :collapsed)).to eq("/toggle?state=collapsed")
   end
 
+  it "stores normalized turbo frame names" do
+    config = build_config(turbo_frame: " documents_tree ")
+
+    expect(config.turbo_frame).to eq("documents_tree")
+  end
+
+  it "normalizes blank turbo frame names to nil" do
+    config = build_config(turbo_frame: " ")
+
+    expect(config.turbo_frame).to be_nil
+  end
+
   it "permits static configs without path builders" do
     config = build_config
 
