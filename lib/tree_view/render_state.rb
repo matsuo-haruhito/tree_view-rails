@@ -328,6 +328,8 @@ module TreeView
       return keys unless auto_expand_ancestors?
 
       current = current_item || find_current_item_by_key
+      return keys if current.nil? && keys.any?
+
       raise TreeView::ConfigurationError, "auto_expand_ancestors requires current_item or a current_key that matches a node under root_items" if current.nil?
 
       ancestor_keys = tree.ancestors_for(current).map { |ancestor| tree.node_key_for(ancestor) }
