@@ -7,6 +7,7 @@ require_relative "tree_view_helper/transfer"
 require_relative "tree_view_helper/visuals"
 require_relative "tree_view_helper/render_scope"
 require_relative "tree_view_helper/lazy_loading"
+require_relative "tree_view_helper/toolbar"
 require_relative "tree_view_breadcrumb_helper"
 
 module TreeViewHelper
@@ -19,4 +20,5 @@ module TreeViewHelper
   include Visuals
   include RenderScope
   include LazyLoading
+  include Toolbar
 end
