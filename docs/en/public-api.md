@@ -129,14 +129,14 @@ Treat these as breaking changes:
 
 - removing or renaming a documented class, module, helper, or method
 - removing or renaming a documented option
-- rendered output or parsed paramsに影響するdocumented default変更
-- flat options と grouped options のdocumented priority変更
-- documented JavaScript event name / payload key変更
-- documented CSS/data hooksの削除
-- `tree_view_rows(render_state)` のdocumented behavior変更
-- selection / row event payload shape変更
-- persisted state semantics変更
-- documented public error class の削除、または documented error を `TreeView::Error` hierarchy の外へ移すこと
+- changing a documented default that changes rendered output or parsed params
+- changing documented priority between flat options and grouped options
+- changing documented JavaScript event names or payload keys
+- removing documented CSS/data hooks
+- changing documented `tree_view_rows(render_state)` behavior
+- changing documented selection or row event payload shapes
+- changing persisted state semantics
+- removing a documented public error class or moving a documented error out of the `TreeView::Error` hierarchy
 
 These are usually not breaking changes:
 
