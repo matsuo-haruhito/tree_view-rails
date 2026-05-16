@@ -74,6 +74,15 @@ TreeView does not render links, tooltips, or actions automatically. Host app row
 <%= link_to presenter.label_for(item), presenter.href_for(item), title: presenter.tooltip_for(item) %>
 ```
 
+For localized labels or tooltips, use the localized display-name helpers from [Localized names](localized-names.md):
+
+```ruby
+presenter = TreeView::NodePresenter.define do
+  label { |item| item.respond_to?(:title) ? item.title : TreeView.model_name_for(item) }
+  tooltip { |item| TreeView.type_name_for(item) }
+end
+```
+
 ## Responsibility boundary
 
 `NodePresenter` is intentionally a thin adapter over existing extension points. It does not replace host app row partials and does not introduce a table/action DSL. Column and action rendering can build on top of it in a later PR.
