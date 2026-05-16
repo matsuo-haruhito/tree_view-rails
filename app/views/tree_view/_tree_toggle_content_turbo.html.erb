@@ -13,7 +13,8 @@
 <% show_path = tree_show_descendants_path(item, depth + 1, scope: toggle_scope) %>
 <% hide_path = tree_hide_descendants_path(item, depth, scope: toggle_scope) %>
 <% turbo_data = { turbo_stream: true } %>
-<% turbo_data[:turbo_frame] = render_state.ui_config.turbo_frame if render_state.ui_config.turbo_frame %>
+<% turbo_frame = tree_turbo_frame %>
+<% turbo_data[:turbo_frame] = turbo_frame if turbo_frame %>
 <% toggle_icon = tree_toggle_icon(item, toggle_state, toggle_icon_builder, depth: depth, tree: tree, children: children, hidden_count: hidden_count, mode: :turbo, leaf_distance: leaf_distance) %>
 
 <div class="tree-toggle">
