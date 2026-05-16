@@ -69,7 +69,13 @@ Documented configuration options include:
 - `initial_state`
 - `render_log_level`
 
-See [API reference](api.md) for details.
+Documented Turbo UI options include:
+
+- `UiConfig#turbo_frame`
+- `UiConfigBuilder#build_turbo(turbo_frame:)`
+- `UiConfigBuilder#build(..., turbo_frame:)`
+
+See [API reference](api.md) and [Turbo Frame option](turbo-frame.md) for details.
 
 ## Host app extension points
 
@@ -79,6 +85,7 @@ Host apps are expected to provide these pieces:
 - path resolvers when building generated folder trees with `PathTreeBuilder`
 - `row_partial`
 - Turbo mode path builders
+- optional Turbo Frame targets through `turbo_frame:`
 - row class / data builders
 - row event payload builders
 - selection payload / disabled builders
@@ -112,6 +119,8 @@ Internal by default:
 
 Host apps may rely on documented CSS classes, data attributes, and JavaScript events intended as integration hooks.
 
+`data-turbo-frame` emitted from configured Turbo toggle links is part of the documented host-app integration surface.
+
 Undocumented CSS helper classes, data attributes, DOM structure details, and gem partial locals are implementation details.
 
 ## Breaking change criteria
@@ -120,14 +129,14 @@ Treat these as breaking changes:
 
 - removing or renaming a documented class, module, helper, or method
 - removing or renaming a documented option
-- changing a documented default that changes rendered output or parsed params
-- changing documented priority between flat options and grouped options
-- changing documented JavaScript event names or payload keys
-- removing documented CSS/data hooks
-- changing documented `tree_view_rows(render_state)` behavior
-- changing documented selection or row event payload shapes
-- changing persisted state semantics
-- removing a documented public error class or moving a documented error out of the `TreeView::Error` hierarchy
+- rendered output or parsed paramsに影響するdocumented default変更
+- flat options と grouped options のdocumented priority変更
+- documented JavaScript event name / payload key変更
+- documented CSS/data hooksの削除
+- `tree_view_rows(render_state)` のdocumented behavior変更
+- selection / row event payload shape変更
+- persisted state semantics変更
+- documented public error class の削除、または documented error を `TreeView::Error` hierarchy の外へ移すこと
 
 These are usually not breaking changes:
 
