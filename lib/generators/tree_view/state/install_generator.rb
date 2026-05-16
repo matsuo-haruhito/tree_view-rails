@@ -8,6 +8,8 @@ module TreeView
       class InstallGenerator < Rails::Generators::Base
         source_root File.expand_path("templates", __dir__)
 
+        argument :owner_model_name, type: :string, required: false, banner: "OWNER_MODEL"
+
         def copy_files
           template "create_tree_view_states.rb", migration_path
           template "tree_view_state.rb", "app/models/tree_view_state.rb"
