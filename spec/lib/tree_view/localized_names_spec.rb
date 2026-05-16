@@ -1,11 +1,30 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "active_model"
+
+class LocalizedNamesTestModelName
+  def human(count: 1, default: nil)
+    I18n.t(
+      :localized_names_test_document,
+      scope: "activemodel.models",
+      count: count,
+      default: default
+    )
+  end
+end
 
 class LocalizedNamesTestDocument
-  include ActiveModel::Model
-  attr_accessor :title
+  def self.model_name
+    LocalizedNamesTestModelName.new
+  end
+
+  def self.human_attribute_name(attribute_name, default: nil)
+    I18n.t(
+      attribute_name,
+      scope: "activemodel.attributes.localized_names_test_document",
+      default: default
+    )
+  end
 end
 
 class LocalizedNamesPlainDocument
@@ -42,13 +61,13 @@ RSpec.describe TreeView::LocalizedNames do
     I18n.reload!
   end
 
-  it "resolves model names through ActiveModel and I18n" do
+  it "resolves model names through ActiveModel-compatible naming and I18n" do
     expect(described_class.model_name_for(LocalizedNamesTestDocument)).to eq("Document")
     expect(described_class.model_name_for(LocalizedNamesTestDocument, count: 2)).to eq("Documents")
     expect(TreeView.model_name_for(LocalizedNamesTestDocument.new)).to eq("Document")
   end
 
-  it "resolves attribute names through ActiveModel and I18n" do
+  it "resolves attribute names through ActiveModel-compatible naming and I18n" do
     expect(described_class.attribute_name_for(LocalizedNamesTestDocument, :title)).to eq("Title")
     expect(TreeView.attribute_name_for(LocalizedNamesTestDocument.new, :title)).to eq("Title")
   end
