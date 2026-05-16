@@ -85,7 +85,9 @@ RSpec.describe "Public API compatibility" do
         default: :collapsed,
         max_depth: 2,
         expanded_keys: ["node:1"],
-        collapsed_keys: ["node:2"]
+        collapsed_keys: ["node:2"],
+        current_key: "node:3",
+        auto_expand_ancestors: false
       },
       render_scope: {
         max_depth: 3,
@@ -115,6 +117,8 @@ RSpec.describe "Public API compatibility" do
     expect(state.max_initial_depth).to eq(2)
     expect(state.expanded_keys).to eq(["node:1"])
     expect(state.collapsed_keys).to eq(["node:2"])
+    expect(state.current_key).to eq("node:3")
+    expect(state.auto_expand_ancestors?).to eq(false)
     expect(state.max_render_depth).to eq(3)
     expect(state.max_leaf_distance).to eq(1)
     expect(state.max_toggle_depth_from_root).to eq(4)

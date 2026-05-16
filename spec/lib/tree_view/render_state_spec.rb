@@ -1,6 +1,8 @@
 require "spec_helper"
 
 RSpec.describe TreeView::RenderState do
+  RenderStateTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+
   let(:tree) { instance_double(TreeView::Tree) }
   let(:ui_config) { instance_double(TreeView::UiConfig) }
 
@@ -178,6 +180,98 @@ RSpec.describe TreeView::RenderState do
     expect(state.max_initial_depth).to eq(2)
     expect(state.expanded_keys).to eq([1, 2])
     expect(state.collapsed_keys).to eq([3])
+  end
+
+  it "auto-expands ancestors for current_item" do
+    root = RenderStateTestNode.new(id: 1, parent_id: nil, name: "Root")
+    folder = RenderStateTestNode.new(id: 2, parent_id: 1, name: "Folder")
+    document = RenderStateTestNode.new(id: 3, parent_id: 2, name: "Document")
+    real_tree = TreeView::Tree.new(records: [root, folder, document], parent_id_method: :parent_id)
+
+    state = described_class.new(
+      tree: real_tree,
+      root_items: real_tree.root_items,
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      current_item: document,
+      auto_expand_ancestors: true,
+      expanded_keys: [99],
+      initial_expansion: {default: :collapsed}
+    )
+
+    expect(state.current_item).to eq(document)
+    expect(state.current_key).to be_nil
+    expect(state.auto_expand_ancestors?).to eq(true)
+    expect(state.expanded_keys).to eq([99, 1, 2])
+  end
+
+  it "auto-expands ancestors for current_key under root_items" do
+    root = RenderStateTestNode.new(id: 1, parent_id: nil, name: "Root")
+    folder = RenderStateTestNode.new(id: 2, parent_id: 1, name: "Folder")
+    document = RenderStateTestNode.new(id: 3, parent_id: 2, name: "Document")
+    real_tree = TreeView::Tree.new(records: [root, folder, document], parent_id_method: :parent_id)
+
+    state = described_class.new(
+      tree: real_tree,
+      root_items: real_tree.root_items,
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      initial_expansion: {
+        default: :collapsed,
+        current_key: 3,
+        auto_expand_ancestors: true
+      }
+    )
+
+    expect(state.current_key).to eq(3)
+    expect(state.auto_expand_ancestors?).to eq(true)
+    expect(state.expanded_keys).to eq([1, 2])
+  end
+
+  it "rejects auto_expand_ancestors without a matching current node" do
+    real_tree = TreeView::Tree.new(records: [], parent_id_method: :parent_id)
+
+    expect do
+      described_class.new(
+        tree: real_tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        current_key: 999,
+        auto_expand_ancestors: true
+      )
+    end.to raise_error(TreeView::ConfigurationError, /auto_expand_ancestors requires current_item/)
+  end
+
+  it "rejects invalid auto_expand_ancestors values" do
+    expect do
+      described_class.new(
+        tree: tree,
+        root_items: [],
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        auto_expand_ancestors: "true"
+      )
+    end.to raise_error(TreeView::ConfigurationError, /auto_expand_ancestors must be true or false/)
+  end
+
+  it "rejects conflicting expanded and collapsed keys after ancestor expansion" do
+    root = RenderStateTestNode.new(id: 1, parent_id: nil, name: "Root")
+    folder = RenderStateTestNode.new(id: 2, parent_id: 1, name: "Folder")
+    document = RenderStateTestNode.new(id: 3, parent_id: 2, name: "Document")
+    real_tree = TreeView::Tree.new(records: [root, folder, document], parent_id_method: :parent_id)
+
+    expect do
+      described_class.new(
+        tree: real_tree,
+        root_items: real_tree.root_items,
+        row_partial: "items/tree_columns",
+        ui_config: ui_config,
+        current_item: document,
+        auto_expand_ancestors: true,
+        collapsed_keys: [2]
+      )
+    end.to raise_error(ArgumentError, /expanded_keys and collapsed_keys/)
   end
 
   it "rejects conflicting expanded and collapsed keys" do
@@ -452,7 +546,9 @@ RSpec.describe TreeView::RenderState do
         default: :collapsed,
         max_depth: 2,
         expanded_keys: [1, 2],
-        collapsed_keys: [3]
+        collapsed_keys: [3],
+        current_key: 10,
+        auto_expand_ancestors: true
       },
       render_scope: {
         max_depth: 3,
@@ -472,6 +568,8 @@ RSpec.describe TreeView::RenderState do
     expect(state.max_toggle_leaf_distance).to eq(1)
     expect(state.expanded_keys).to eq([9])
     expect(state.collapsed_keys).to eq([8])
+    expect(state.current_key).to eq(10)
+    expect(state.auto_expand_ancestors?).to eq(true)
   end
 
   it "rejects unknown grouped option keys" do
