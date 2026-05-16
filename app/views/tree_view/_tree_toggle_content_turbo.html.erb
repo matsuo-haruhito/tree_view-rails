@@ -12,6 +12,8 @@
 <% toggle_scope = tree_toggle_scope(depth: depth, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance) %>
 <% show_path = tree_show_descendants_path(item, depth + 1, scope: toggle_scope) %>
 <% hide_path = tree_hide_descendants_path(item, depth, scope: toggle_scope) %>
+<% turbo_data = { turbo_stream: true } %>
+<% turbo_data[:turbo_frame] = render_state.ui_config.turbo_frame if render_state.ui_config.turbo_frame %>
 <% toggle_icon = tree_toggle_icon(item, toggle_state, toggle_icon_builder, depth: depth, tree: tree, children: children, hidden_count: hidden_count, mode: :turbo, leaf_distance: leaf_distance) %>
 
 <div class="tree-toggle">
@@ -25,11 +27,11 @@
   </div>
   <div class="tree-toggle__control">
     <% if hidden_count && show_path %>
-      <%= link_to show_path, data: { turbo_stream: true }, class: 'btn btn-primary show-button tree-toggle__action', id: tree_show_button_dom_id(item), aria: { expanded: false } do %>
+      <%= link_to show_path, data: turbo_data, class: 'btn btn-primary show-button tree-toggle__action', id: tree_show_button_dom_id(item), aria: { expanded: false } do %>
         <%= toggle_icon || tree_toggle_label(depth) %>
       <% end %>
     <% elsif children.any? && hide_path %>
-      <%= link_to hide_path, data: { turbo_stream: true }, class: 'btn btn-danger remove-button tree-toggle__action', aria: { expanded: true } do %>
+      <%= link_to hide_path, data: turbo_data, class: 'btn btn-danger remove-button tree-toggle__action', aria: { expanded: true } do %>
         <%= toggle_icon || tree_toggle_label(depth) %>
       <% end %>
     <% else %>
