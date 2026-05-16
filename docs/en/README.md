@@ -25,6 +25,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
 | [Accessibility Semantics](accessibility-semantics.md) | First-class accessibility guidance for table-first rows, ARIA placement, keyboard boundaries, and host-app responsibilities |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
+| [NodePresenter row partial patterns](node-presenter-row-partials.md) | Use NodePresenter from host-app row partials instead of adding app-specific Column / Action DSLs |
 | [Forms and editing rows](form-editing.md) | Bulk edit forms, inline-editing layouts, Form Objects, row actions, and responsibility boundaries |
 | [API overview](api-overview.md) | Overview of the main public APIs |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
@@ -70,7 +71,7 @@ For a high-level API entry point, read [API overview](api-overview.md) first, th
 
 For generated folder trees from path-like records, see [PathTreeBuilder](path-tree-builder.md).
 
-For common API combinations, see [Cookbook](cookbook.md). For editing-oriented row layouts, see [Forms and editing rows](form-editing.md).
+For common API combinations, see [Cookbook](cookbook.md). For row partial patterns with NodePresenter, see [NodePresenter row partial patterns](node-presenter-row-partials.md). For editing-oriented row layouts, see [Forms and editing rows](form-editing.md).
 
 When TreeView terminology or identifier design is unclear, see [Glossary](glossary.md), [Node keys](node-keys.md), and [Tree diagnostics](tree-diagnostics.md).
 

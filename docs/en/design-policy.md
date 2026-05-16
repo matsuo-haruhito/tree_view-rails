@@ -70,3 +70,16 @@ When deciding whether a feature belongs in the gem, use these questions.
 | Does it mutate data? | no | yes |
 | Does it need authorization? | no | yes |
 | Does it need server-side querying? | no | yes |
+
+## Promotion criteria for UI patterns
+
+Prefer adding cookbook guidance before adding new rendering DSLs.
+
+A UI pattern should move from a host-app partial or cookbook into TreeView only when it is:
+
+- tree-specific rather than product-specific
+- useful across multiple host apps
+- expressible as a thin resolver, helper, or configuration object
+- not coupled to authorization, forms, modals, downloads, or domain workflows
+
+Column and action rendering should usually stay in host-app row partials, helpers, components, or ViewComponent until repeated use across apps shows a common TreeView-specific abstraction.

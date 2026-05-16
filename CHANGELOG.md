@@ -35,6 +35,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Documentation
 
+- Added NodePresenter row partial cookbook docs and clarified criteria for promoting app-specific UI patterns into TreeView.
 - Added toolbar helper docs in Japanese and English.
 - Added README adoption guidance to help users decide whether TreeView fits their use case and to clarify the virtual scrolling boundary.
 - Promoted accessibility semantics as a first-class capability in the README and docs indexes, including ARIA placement, keyboard boundaries, and host-app responsibilities.
