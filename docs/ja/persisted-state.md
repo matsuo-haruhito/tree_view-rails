@@ -35,6 +35,18 @@ migrationを確認してから実行してください。
 bin/rails db:migrate
 ```
 
+### owner concern を自動で include する
+
+既存の owner model に `TreeViewStateOwner` を include したい場合は、owner model 名を渡します。
+
+```bash
+bin/rails generate tree_view:state:install User
+```
+
+この場合も、migration、model、concern は通常どおり生成されます。`app/models/user.rb` が存在し、まだ `TreeViewStateOwner` を include していなければ、generator が include 行を追加します。
+
+owner model file が存在しない場合、model への注入は skip されます。その場合は concern を手動で include してください。
+
 ## owner model
 
 host app側のowner modelに concern をincludeします。
@@ -114,7 +126,7 @@ render_state = TreeView::RenderState.new(
 | persisted state value object | yes | no |
 | generated model/migration template | yes | reviews and migrates |
 | loading/saving through StateStore | yes | provides owner and key |
-| choosing owner model | no | yes |
+| choosing owner model | optional generator argument | yes |
 | deciding save timing | no | yes |
 | controller/API endpoint | no | yes |
 | authorization | no | yes |
