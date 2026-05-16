@@ -63,6 +63,11 @@ For the initial release, the priority is:
 
 All P1 feature docs are split under `docs/ja/` and `docs/en/`.
 
+| Topic | Japanese | English | Status | Notes |
+|---|---|---|---|---|
+| Localized names | `docs/ja/localized-names.md` | `docs/en/localized-names.md` | Split | Keep ActiveModel / I18n helper behavior and NodePresenter examples in sync. |
+| Turbo Frame option | `docs/ja/turbo-frame.md` | `docs/en/turbo-frame.md` | Split | Keep `turbo_frame:` behavior and host-app responsibility boundaries in sync. |
+
 ## P2: supporting and maintainer docs
 
 All P2 supporting and maintainer docs are split under `docs/ja/` and `docs/en/`.

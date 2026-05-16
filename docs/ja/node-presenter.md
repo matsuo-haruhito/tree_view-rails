@@ -53,6 +53,15 @@ render_state = TreeView::RenderState.new(
 <%= link_to presenter.label_for(item), presenter.href_for(item), title: presenter.tooltip_for(item) %>
 ```
 
+localeに沿ったlabelやtooltipには、[Localized names](localized-names.md) のlocalized display-name helperを使えます。
+
+```ruby
+presenter = TreeView::NodePresenter.define do
+  label { |item| item.respond_to?(:title) ? item.title : TreeView.model_name_for(item) }
+  tooltip { |item| TreeView.type_name_for(item) }
+end
+```
+
 ## 責務境界
 
 `NodePresenter` は既存 extension point の薄いadapterです。host app row partial を置き換えず、table/action DSL もまだ提供しません。Column / Action DSL は後続PRでこの上に積み上げられます。
