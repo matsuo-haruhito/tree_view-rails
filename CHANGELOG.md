@@ -15,6 +15,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Added
 
+- Added `RenderState` current node ancestor expansion via `current_item` / `current_key` and `auto_expand_ancestors`.
 - Added `TreeView::PathTreeBuilder` for building generated folder nodes and record nodes from path-like record values.
 - Added `TreeView.configuration.render_log_level`, defaulting to `:warn`, so TreeView helper-rendered partial logs can be silenced without changing the host app's global Rails logger level.
 - Added a public TreeView-specific error hierarchy rooted at `TreeView::Error` for rescuing validation and configuration failures.
@@ -45,6 +46,7 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Tests
 
+- Added RenderState specs for current node ancestor auto-expansion.
 - Added accessibility semantics integration specs for row ARIA state in static, collapsed, selection, and windowed rendering.
 - Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered path trees, sorter call growth, children lookup scope, and max leaf distance behavior.
 - Added specs for TreeView-specific error rescue behavior.
