@@ -72,7 +72,9 @@ RSpec.describe TreeView::PathTreeBuilder do
 
     builder = described_class.new(
       records: documents,
-      path_resolver: ->(document) { document.id == 1 ? ["root.md"] : ["docs", "nested.md"] },
+      path_resolver: lambda do |document|
+        (document.id == 1) ? ["root.md"] : ["docs", "nested.md"]
+      end,
       label_resolver: ->(document) { document.title },
       sort: {folders_first: true}
     )

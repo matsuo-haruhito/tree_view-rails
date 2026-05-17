@@ -4,6 +4,8 @@ require "tree_view/version"
 require "tree_view/errors"
 require "tree_view/configuration"
 require "tree_view/graph_adapter"
+require "tree_view/localized_names"
+require "tree_view/node_presenter"
 require "tree_view/render_state"
 require "tree_view/resource_table_render_state"
 require "tree_view/render_state_row_state"
@@ -57,6 +59,18 @@ module TreeView
 
     def node_key(type, value)
       [type, value].map { |part| part.to_s.strip }.join(":")
+    end
+
+    def model_name_for(item_or_class, count: 1, default: nil)
+      LocalizedNames.model_name_for(item_or_class, count: count, default: default)
+    end
+
+    def attribute_name_for(item_or_class, attribute, default: nil)
+      LocalizedNames.attribute_name_for(item_or_class, attribute, default: default)
+    end
+
+    def type_name_for(item, count: 1, default: nil)
+      LocalizedNames.type_name_for(item, count: count, default: default)
     end
   end
 end

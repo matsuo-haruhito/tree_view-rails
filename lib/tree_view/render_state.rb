@@ -8,7 +8,7 @@ module TreeView
     include TreeView::RenderStateBuilderValidation
 
     VALID_INITIAL_STATES = Configuration::VALID_INITIAL_STATES
-    VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys collapsed_keys].freeze
+    VALID_INITIAL_EXPANSION_KEYS = %i[default max_depth expanded_keys collapsed_keys current_item current_key auto_expand_ancestors].freeze
     VALID_RENDER_SCOPE_KEYS = %i[max_depth max_leaf_distance].freeze
     VALID_TOGGLE_SCOPE_KEYS = %i[max_depth_from_root max_leaf_distance].freeze
     VALID_SELECTION_KEYS = SelectionConfig::VALID_KEYS
@@ -33,6 +33,9 @@ module TreeView
       :max_toggle_leaf_distance,
       :expanded_keys,
       :collapsed_keys,
+      :current_item,
+      :current_key,
+      :auto_expand_ancestors,
       :selection_config,
       :selection_enabled,
       :selection_visibility,
@@ -44,6 +47,7 @@ module TreeView
       :selection_cascade,
       :selection_indeterminate,
       :selection_max_count,
+      :node_presenter,
       :row_class_builder,
       :row_data_builder,
       :row_event_payload_builder,
@@ -71,6 +75,9 @@ module TreeView
       max_toggle_leaf_distance: nil,
       expanded_keys: nil,
       collapsed_keys: nil,
+      current_item: nil,
+      current_key: nil,
+      auto_expand_ancestors: nil,
       initial_expansion: nil,
       render_scope: nil,
       toggle_scope: nil,
@@ -84,6 +91,7 @@ module TreeView
       selection_indeterminate: nil,
       selection_max_count: nil,
       selection: nil,
+      node_presenter: nil,
       row_class_builder: nil,
       row_data_builder: nil,
       row_event_payload_builder: nil,
@@ -111,7 +119,11 @@ module TreeView
       @max_leaf_distance = normalize_non_negative_integer(resolve_option(max_leaf_distance, render_scope_options[:max_leaf_distance]), :max_leaf_distance)
       @max_toggle_depth_from_root = normalize_non_negative_integer(resolve_option(max_toggle_depth_from_root, toggle_scope_options[:max_depth_from_root]), :max_toggle_depth_from_root)
       @max_toggle_leaf_distance = normalize_non_negative_integer(resolve_option(max_toggle_leaf_distance, toggle_scope_options[:max_leaf_distance]), :max_toggle_leaf_distance)
-      @expanded_keys = Array(resolve_option(expanded_keys, initial_expansion_options[:expanded_keys])).freeze
+      @current_item = resolve_option(current_item, initial_expansion_options[:current_item])
+      @current_key = normalize_current_key(resolve_option(@current_key, initial_expansion_options[:current_key]))
+      @auto_expand_ancestors = normalize_boolean(resolve_option(auto_expand_ancestors, initial_expansion_options[:auto_expand_ancestors]), :auto_expand_ancestors)
+      resolved_expanded_keys = Array(resolve_option(expanded_keys, initial_expansion_options[:expanded_keys]))
+      @expanded_keys = expanded_keys_with_current_ancestors(resolved_expanded_keys).freeze
       @collapsed_keys = Array(resolve_option(collapsed_keys, initial_expansion_options[:collapsed_keys])).freeze
       @selection_config = SelectionConfig.new(
         default_checkbox_name: DEFAULT_SELECTION_CHECKBOX_NAME,
@@ -136,26 +148,27 @@ module TreeView
       @selection_cascade = selection_config.cascade
       @selection_indeterminate = selection_config.indeterminate
       @selection_max_count = selection_config.max_count
-      @row_class_builder = row_class_builder
-      @row_data_builder = row_data_builder
+      @node_presenter = normalize_node_presenter(node_presenter)
+      @row_class_builder = row_class_builder || @node_presenter&.row_class_builder
+      @row_data_builder = row_data_builder || @node_presenter&.row_data_builder
       @row_event_payload_builder = row_event_payload_builder
       @loading_builder = loading_builder
       @error_builder = error_builder
       @depth_label_builder = depth_label_builder
-      @badge_builder = badge_builder
-      @icon_builder = icon_builder
+      @badge_builder = badge_builder || @node_presenter&.badge_builder
+      @icon_builder = icon_builder || @node_presenter&.icon_builder
       @toggle_icons = normalize_toggle_icons(toggle_icons)
       @toggle_icon_builder = toggle_icon_builder || build_toggle_icon_builder(@toggle_icons)
 
       validate_builders!(
-        row_class_builder: row_class_builder,
-        row_data_builder: row_data_builder,
+        row_class_builder: @row_class_builder,
+        row_data_builder: @row_data_builder,
         row_event_payload_builder: row_event_payload_builder,
         loading_builder: loading_builder,
         error_builder: error_builder,
         depth_label_builder: depth_label_builder,
-        badge_builder: badge_builder,
-        icon_builder: icon_builder,
+        badge_builder: @badge_builder,
+        icon_builder: @icon_builder,
         toggle_icon_builder: @toggle_icon_builder,
         selection_payload_builder: @selection_payload_builder,
         selection_disabled_builder: @selection_disabled_builder,
@@ -174,6 +187,10 @@ module TreeView
 
     def selection_indeterminate?
       selection_config.indeterminate?
+    end
+
+    def auto_expand_ancestors?
+      auto_expand_ancestors == true
     end
 
     # 画面固有指定があればそれを優先し、なければ global config を使う。
@@ -305,6 +322,60 @@ module TreeView
       return value if value.is_a?(Integer) && value >= 0
 
       raise TreeView::ConfigurationError, "#{name} must be a non-negative Integer; pass nil or 0+"
+    end
+
+    def normalize_boolean(value, name)
+      return false if value.nil?
+      return value if value == true || value == false
+
+      raise TreeView::ConfigurationError, "#{name} must be true or false; pass true, false, or nil"
+    end
+
+    def normalize_current_key(value)
+      return nil if value.nil?
+
+      value
+    end
+
+    def normalize_node_presenter(value)
+      return nil if value.nil?
+      return value if value.respond_to?(:row_class_builder) && value.respond_to?(:row_data_builder) && value.respond_to?(:badge_builder) && value.respond_to?(:icon_builder)
+
+      raise TreeView::ConfigurationError, "node_presenter must be a TreeView::NodePresenter-compatible object"
+    end
+
+    def expanded_keys_with_current_ancestors(keys)
+      return keys unless auto_expand_ancestors?
+
+      current = current_item || find_current_item_by_key
+      return keys if current.nil? && keys.any?
+
+      raise TreeView::ConfigurationError, "auto_expand_ancestors requires current_item or a current_key that matches a node under root_items" if current.nil?
+
+      ancestor_keys = tree.ancestors_for(current).map { |ancestor| tree.node_key_for(ancestor) }
+      (keys + ancestor_keys).uniq
+    end
+
+    def find_current_item_by_key
+      return nil if current_key.nil?
+
+      stack = Array(root_items).reverse
+      seen = {}
+
+      until stack.empty?
+        item = stack.pop
+        key = tree.node_key_for(item)
+        next if seen[key]
+
+        return item if key == current_key
+
+        seen[key] = true
+        tree.children_for(item).reverse_each do |child|
+          stack << child
+        end
+      end
+
+      nil
     end
 
     def validate_builder!(builder, name)

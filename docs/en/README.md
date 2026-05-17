@@ -22,9 +22,12 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Installation](installation.md) | Gemfile, CSS, importmap, Propshaft / Sprockets, and development setup |
 | [Minimal usage](minimal-usage.md) | Minimal controller, view, and row partial setup in a host app |
 | [Usage](usage.md) | Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
+| [Turbo Frame option](turbo-frame.md) | Target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript |
+| [Localized names](localized-names.md) | Resolve model, attribute, and node type labels through ActiveModel / I18n |
 | [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
 | [Accessibility Semantics](accessibility-semantics.md) | First-class accessibility guidance for table-first rows, ARIA placement, keyboard boundaries, and host-app responsibilities |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
+| [NodePresenter row partial patterns](node-presenter-row-partials.md) | Use NodePresenter from host-app row partials instead of adding app-specific Column / Action DSLs |
 | [Forms and editing rows](form-editing.md) | Bulk edit forms, inline-editing layouts, Form Objects, row actions, and responsibility boundaries |
 | [Resource table bridge](resource-table-bridge.md) | Bridge TreeView row rendering with a separate table layer that owns columns and table state |
 | [API overview](api-overview.md) | Overview of the main public APIs |
@@ -68,6 +71,10 @@ For first-time usage, read [Installation](installation.md), [Minimal usage](mini
 When you know the use case but not the right API, start with the [Decision guide](decision-guide.md).
 
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
+
+For Turbo Frame targeting from TreeView toggle links, see [Turbo Frame option](turbo-frame.md).
+
+For localized model, attribute, and node type labels, see [Localized names](localized-names.md).
 
 For generated folder trees from path-like records, see [PathTreeBuilder](path-tree-builder.md).
 

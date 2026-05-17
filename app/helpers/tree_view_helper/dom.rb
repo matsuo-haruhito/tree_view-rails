@@ -32,6 +32,10 @@ module TreeViewHelper
       resolved_ui(ui).toggle_all_path(state: state)
     end
 
+    def tree_turbo_frame(ui: @tree_ui)
+      resolved_ui(ui).turbo_frame
+    end
+
     def tree_expand_all_path(ui: @tree_ui)
       tree_toggle_all_path(state: :expanded, ui: ui)
     end

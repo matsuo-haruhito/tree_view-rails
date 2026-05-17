@@ -15,6 +15,12 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Added
 
+- Added localized display-name helpers for model, attribute, and node type names through ActiveModel / I18n.
+- Added `UiConfig#turbo_frame` and `UiConfigBuilder#build_turbo(turbo_frame:)` so Turbo toggle links can target a host-app Turbo Frame without custom JavaScript.
+- Added `tree_view_toolbar(render_state)` for rendering tree-wide expand/collapse toolbar actions through `UiConfig#toggle_all_path`.
+- Added `TreeView::NodePresenter` as a thin adapter for node-level resolver hooks and `RenderState` row class/data/icon/badge builders.
+- Added owner model argument support to the persisted state install generator so `tree_view:state:install User` can include `TreeViewStateOwner` in an existing owner model.
+- Added `RenderState` current node ancestor expansion via `current_item` / `current_key` and `auto_expand_ancestors`.
 - Added `TreeView::PathTreeBuilder` for building generated folder nodes and record nodes from path-like record values.
 - Added `TreeView.configuration.render_log_level`, defaulting to `:warn`, so TreeView helper-rendered partial logs can be silenced without changing the host app's global Rails logger level.
 - Added a public TreeView-specific error hierarchy rooted at `TreeView::Error` for rescuing validation and configuration failures.
@@ -31,6 +37,10 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Documentation
 
+- Added localized names docs in Japanese and English.
+- Added Turbo Frame option docs in Japanese and English.
+- Added NodePresenter row partial cookbook docs and clarified criteria for promoting app-specific UI patterns into TreeView.
+- Added toolbar helper docs in Japanese and English.
 - Added README adoption guidance to help users decide whether TreeView fits their use case and to clarify the virtual scrolling boundary.
 - Promoted accessibility semantics as a first-class capability in the README and docs indexes, including ARIA placement, keyboard boundaries, and host-app responsibilities.
 - Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
@@ -45,6 +55,12 @@ Breaking changes and required migration notes should be called out explicitly in
 
 ### Tests
 
+- Added localized names specs and public API compatibility coverage.
+- Added Turbo Frame option unit and integration specs.
+- Added toolbar helper specs.
+- Added `NodePresenter` specs and `RenderState` integration specs.
+- Added generator specs for persisted state owner concern injection.
+- Added RenderState specs for current node ancestor auto-expansion.
 - Added accessibility semantics integration specs for row ARIA state in static, collapsed, selection, and windowed rendering.
 - Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered path trees, sorter call growth, children lookup scope, and max leaf distance behavior.
 - Added specs for TreeView-specific error rescue behavior.

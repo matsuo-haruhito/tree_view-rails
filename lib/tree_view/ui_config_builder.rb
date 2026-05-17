@@ -12,6 +12,7 @@ module TreeView
       hide_descendants_path_builder:,
       toggle_all_path_builder:,
       load_children_path_builder: nil,
+      turbo_frame: nil,
       indent_unit: "&ensp; &ensp; &ensp;",
       scope_format: :string)
       build_turbo(
@@ -19,6 +20,7 @@ module TreeView
         hide_descendants_path_builder: hide_descendants_path_builder,
         toggle_all_path_builder: toggle_all_path_builder,
         load_children_path_builder: load_children_path_builder,
+        turbo_frame: turbo_frame,
         indent_unit: indent_unit,
         scope_format: scope_format
       )
@@ -28,6 +30,7 @@ module TreeView
       hide_descendants_path_builder:,
       toggle_all_path_builder:,
       load_children_path_builder: nil,
+      turbo_frame: nil,
       indent_unit: "&ensp; &ensp; &ensp;",
       scope_format: :string)
       UiConfig.new(
@@ -36,6 +39,7 @@ module TreeView
         show_descendants_path_builder: show_descendants_path_builder,
         load_children_path_builder: load_children_path_builder,
         toggle_all_path_builder: toggle_all_path_builder,
+        turbo_frame: turbo_frame,
         indent_unit: indent_unit,
         scope_format: scope_format,
         mode: :turbo

@@ -11,12 +11,16 @@ Host apps may use these entry points directly:
 - `TreeView.reset_configuration!`
 - `TreeView.parse_selection_params`
 - `TreeView.node_key`
+- `TreeView.model_name_for`
+- `TreeView.attribute_name_for`
+- `TreeView.type_name_for`
 - `TreeView::Error`
 - `TreeView::ConfigurationError`
 - `TreeView::InvalidTreeError`
 - `TreeView::DuplicateNodeKeyError`
 - `TreeView::CycleDetectedError`
 - `TreeView::InvalidRenderWindowError`
+- `TreeView::LocalizedNames`
 - `TreeView::Tree`
 - `TreeView::RenderState`
 - `TreeView::VisibleRows`
@@ -69,7 +73,19 @@ Documented configuration options include:
 - `initial_state`
 - `render_log_level`
 
-See [API reference](api.md) for details.
+Documented localized display-name helpers include:
+
+- `TreeView.model_name_for(item_or_class, count: 1, default: nil)`
+- `TreeView.attribute_name_for(item_or_class, attribute, default: nil)`
+- `TreeView.type_name_for(item, count: 1, default: nil)`
+
+Documented Turbo UI options include:
+
+- `UiConfig#turbo_frame`
+- `UiConfigBuilder#build_turbo(turbo_frame:)`
+- `UiConfigBuilder#build(..., turbo_frame:)`
+
+See [API reference](api.md), [Localized names](localized-names.md), and [Turbo Frame option](turbo-frame.md) for details.
 
 ## Host app extension points
 
@@ -77,8 +93,10 @@ Host apps are expected to provide these pieces:
 
 - records or adapter data
 - path resolvers when building generated folder trees with `PathTreeBuilder`
+- I18n translations for localized model, attribute, or node type display names
 - `row_partial`
 - Turbo mode path builders
+- optional Turbo Frame targets through `turbo_frame:`
 - row class / data builders
 - row event payload builders
 - selection payload / disabled builders
@@ -111,6 +129,8 @@ Internal by default:
 ## CSS and DOM surface
 
 Host apps may rely on documented CSS classes, data attributes, and JavaScript events intended as integration hooks.
+
+`data-turbo-frame` emitted from configured Turbo toggle links is part of the documented host-app integration surface.
 
 Undocumented CSS helper classes, data attributes, DOM structure details, and gem partial locals are implementation details.
 

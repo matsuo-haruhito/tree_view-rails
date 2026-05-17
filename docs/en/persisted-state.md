@@ -35,6 +35,18 @@ Review the migration, then run:
 bin/rails db:migrate
 ```
 
+### Include the owner concern automatically
+
+Pass an owner model name when you want the generator to include `TreeViewStateOwner` in an existing owner model.
+
+```bash
+bin/rails generate tree_view:state:install User
+```
+
+This still creates the same migration, model, and concern files. If `app/models/user.rb` exists and does not already include `TreeViewStateOwner`, the generator adds the include line.
+
+If the owner model file does not exist, the generator skips model injection and you can include the concern manually.
+
 ## Owner model
 
 Include the concern in the host app owner model.
@@ -114,7 +126,7 @@ Use different keys for different screens or trees, even when the owner is the sa
 | persisted state value object | yes | no |
 | generated model/migration template | yes | reviews and migrates |
 | loading/saving through StateStore | yes | provides owner and key |
-| choosing owner model | no | yes |
+| choosing owner model | optional generator argument | yes |
 | deciding save timing | no | yes |
 | controller/API endpoint | no | yes |
 | authorization | no | yes |
