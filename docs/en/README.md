@@ -80,7 +80,7 @@ For generated folder trees from path-like records, see [PathTreeBuilder](path-tr
 
 When a separate table layer owns columns or saved table state, see [Resource table bridge](resource-table-bridge.md).
 
-For common API combinations, see [Cookbook](cookbook.md). For editing-oriented row layouts, see [Forms and editing rows](form-editing.md).
+For common API combinations, see [Cookbook](cookbook.md). For row partial patterns with NodePresenter, see [NodePresenter row partial patterns](node-presenter-row-partials.md). For editing-oriented row layouts, see [Forms and editing rows](form-editing.md).
 
 When TreeView terminology or identifier design is unclear, see [Glossary](glossary.md), [Node keys](node-keys.md), and [Tree diagnostics](tree-diagnostics.md).
 
