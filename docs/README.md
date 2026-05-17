@@ -13,6 +13,8 @@
 
 - [English decision guide](en/decision-guide.md): choose APIs and options by use case.
 - [日本語API判断ガイド](ja/decision-guide.md): use caseからAPIやoptionを選ぶための入口。
+- [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.
+- [日本語Resource table bridge](ja/resource-table-bridge.md): 別table layerが列推論やtable stateを持つ場合のTreeView連携。
 
 ## Translation status
 
