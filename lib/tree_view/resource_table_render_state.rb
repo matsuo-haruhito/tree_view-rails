@@ -38,6 +38,7 @@ module TreeView
         root_items: tree.root_items,
         row_partial: row_partial,
         ui_config: resolved_ui_config,
+        row_locals: row_locals,
         row_data_builder: row_data_builder,
         **render_options
       )
@@ -69,6 +70,13 @@ module TreeView
         context: context,
         node_prefix: table_key || "tree-resource"
       ).build_static
+    end
+
+    def row_locals
+      {
+        columns: columns,
+        table_state: table_state
+      }.compact
     end
 
     def row_data_builder
