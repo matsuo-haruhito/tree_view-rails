@@ -71,6 +71,7 @@ RSpec.describe "Resource table render state integration" do
     render_state = TreeView::ResourceTableRenderState.call(
       records: [root],
       context: Object.new,
+      parent_id_method: :parent_item_id,
       columns: [{"key" => "name"}]
     )
 
