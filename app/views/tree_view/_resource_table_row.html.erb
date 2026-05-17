@@ -1,11 +1,13 @@
-<% visible_columns = local_assigns.fetch(:table_state, {}).fetch("visible_columns", local_assigns.fetch(:columns, [])) %>
+<% table_state = local_assigns.fetch(:table_state, {}) || {} %>
+<% visible_columns = table_state.fetch("visible_columns") { table_state.fetch(:visible_columns, local_assigns.fetch(:columns, [])) } %>
 
 <% visible_columns.each do |column| %>
-  <td data-tree-view-interactive="false" data-rails-table-preferences-column-key="<%= column.fetch("key") %>">
+  <% column_key = column.fetch("key") { column.fetch(:key) } %>
+  <td data-tree-view-interactive="false" data-rails-table-preferences-column-key="<%= column_key %>">
     <% if respond_to?(:table_preferences_value) %>
       <%= table_preferences_value(item, column) %>
-    <% elsif item.respond_to?(column.fetch("key")) %>
-      <%= item.public_send(column.fetch("key")) %>
+    <% elsif item.respond_to?(column_key) %>
+      <%= item.public_send(column_key) %>
     <% end %>
   </td>
 <% end %>
