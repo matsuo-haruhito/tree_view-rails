@@ -47,6 +47,7 @@ For very large trees, combine TreeView's render controls with host-app loading a
 - Use `PathTree` for matched nodes with ancestor paths.
 - Use `ReverseTree` for child-to-parent paths.
 - Render rows from `TreeView::RenderState` with `tree_view_rows`.
+- Build a resource-table-oriented render state with `TreeView::ResourceTableRenderState` when another table layer owns columns and table state.
 - Flatten currently visible rows with `TreeView::VisibleRows`.
 - Render currently visible rows by offset and limit with `TreeView::RenderWindow` and windowed rendering. This limits HTML output only; it does not reduce host-app queries or fetched records.
 - Customize host-app row content through `row_partial`.
@@ -74,6 +75,7 @@ This gem focuses on tree rendering primitives. Host applications are responsible
 - data-fetching reductions beyond TreeView's lazy-loading hooks
 - JavaScript control for infinite scroll or full virtual scroll
 - demo data and seeds
+- table column inference and saved table preferences unless a separate table layer provides them
 
 ## Installation
 
@@ -174,6 +176,7 @@ Key documents:
 | Accessibility semantics | [Accessibility Semantics](docs/en/accessibility-semantics.md) | [Accessibility Semantics](docs/ja/accessibility-semantics.md) |
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
 | Forms and editing rows | [Forms and editing rows](docs/en/form-editing.md) | [Form と編集行](docs/ja/form-editing.md) |
+| Resource table bridge | [Resource table bridge](docs/en/resource-table-bridge.md) | [Resource table bridge](docs/ja/resource-table-bridge.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
 | PathTreeBuilder | [PathTreeBuilder](docs/en/path-tree-builder.md) | [PathTreeBuilder](docs/ja/path-tree-builder.md) |

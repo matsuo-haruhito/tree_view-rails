@@ -7,6 +7,7 @@ module TreeView
       :root_items,
       :row_partial,
       :row_actions_partial,
+      :row_locals,
       :max_initial_depth,
       :max_render_depth,
       :max_leaf_distance,
@@ -60,6 +61,7 @@ module TreeView
           root_items: [],
           row_partial: local_assigns.fetch(:row_partial),
           row_actions_partial: local_assigns[:row_actions_partial],
+          row_locals: {},
           max_initial_depth: local_assigns[:max_initial_depth],
           max_render_depth: local_assigns[:max_render_depth],
           max_leaf_distance: local_assigns[:max_leaf_distance],
@@ -111,6 +113,12 @@ module TreeView
 
     def row_actions_partial
       render_state.row_actions_partial
+    end
+
+    def row_locals
+      return {} unless render_state.respond_to?(:row_locals)
+
+      render_state.row_locals
     end
 
     def collapsed?
