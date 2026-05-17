@@ -176,7 +176,7 @@ Key documents:
 | Accessibility semantics | [Accessibility Semantics](docs/en/accessibility-semantics.md) | [Accessibility Semantics](docs/ja/accessibility-semantics.md) |
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
 | Forms and editing rows | [Forms and editing rows](docs/en/form-editing.md) | [Form と編集行](docs/ja/form-editing.md) |
-| Resource table bridge | [Resource table bridge](docs/en/resource-table-bridge.md) | - |
+| Resource table bridge | [Resource table bridge](docs/en/resource-table-bridge.md) | [Resource table bridge](docs/ja/resource-table-bridge.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
 | PathTreeBuilder | [PathTreeBuilder](docs/en/path-tree-builder.md) | [PathTreeBuilder](docs/ja/path-tree-builder.md) |
@@ -221,3 +221,13 @@ Before release, check:
 - Rails version matrix CI
 - `npm test`
 - README, docs, and CHANGELOG consistency
+- gemspec metadata
+
+See also:
+
+- [Release checklist](docs/en/release.md)
+- [日本語: Release checklist](docs/ja/release.md)
+
+## License
+
+MIT
