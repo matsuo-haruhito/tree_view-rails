@@ -19,12 +19,12 @@ render_state = TreeView::ResourceTableRenderState.call(
 ```erb
 <table class="tree-view-table">
   <tbody>
-    <%= tree_view_rows(render_state, locals: { table_state: table_state }) %>
+    <%= tree_view_rows(render_state) %>
   </tbody>
 </table>
 ```
 
-default row partialは `tree_view/resource_table_row` です。`table_state["visible_columns"]` が渡されていればそれを使い、なければ `columns` localsを参照します。
+default row partialは `tree_view/resource_table_row` です。`table_state["visible_columns"]` が渡されていればそれを使い、なければ `columns` を参照します。`ResourceTableRenderState` はどちらも render state 経由で row partial に渡します。
 
 ## Rails Table Preferencesとの連携
 
@@ -39,7 +39,8 @@ render_state = TreeView::ResourceTableRenderState.call(
   context: view_context,
   parent_id_method: :parent_project_id,
   table_key: "projects_tree",
-  table_state: table_state
+  table_state: table_state,
+  columns: columns
 )
 ```
 
