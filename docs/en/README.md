@@ -26,6 +26,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Accessibility Semantics](accessibility-semantics.md) | First-class accessibility guidance for table-first rows, ARIA placement, keyboard boundaries, and host-app responsibilities |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
 | [Forms and editing rows](form-editing.md) | Bulk edit forms, inline-editing layouts, Form Objects, row actions, and responsibility boundaries |
+| [Resource table bridge](resource-table-bridge.md) | Bridge TreeView row rendering with a separate table layer that owns columns and table state |
 | [API overview](api-overview.md) | Overview of the main public APIs |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
 | [PathTreeBuilder](path-tree-builder.md) | Build generated folder nodes and record nodes from path-like record values |
@@ -69,6 +70,8 @@ When you know the use case but not the right API, start with the [Decision guide
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
 
 For generated folder trees from path-like records, see [PathTreeBuilder](path-tree-builder.md).
+
+When a separate table layer owns columns or saved table state, see [Resource table bridge](resource-table-bridge.md).
 
 For common API combinations, see [Cookbook](cookbook.md). For editing-oriented row layouts, see [Forms and editing rows](form-editing.md).
 
