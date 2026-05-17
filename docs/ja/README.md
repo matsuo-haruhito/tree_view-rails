@@ -78,7 +78,7 @@ path らしい record 値から生成folder treeを作りたい場合は [PathTr
 
 通常tableとtree tableで同じ列定義やtable stateを共有したい場合は [Resource table bridge](resource-table-bridge.md) を参照してください。
 
-具体的な組み合わせ例を見たい場合は [Cookbook](cookbook.md) を参照してください。編集寄りの row layout は [Form と編集行](form-editing.md) を参照してください。
+具体的な組み合わせ例を見たい場合は [Cookbook](cookbook.md) を参照してください。NodePresenter と row partial の組み合わせは [NodePresenter row partial patterns](node-presenter-row-partials.md) を参照してください。編集寄りの row layout は [Form と編集行](form-editing.md) を参照してください。
 
 TreeView固有の言葉や識別子設計で迷った場合は、[用語集](glossary.md)、[Node keys](node-keys.md)、[Tree diagnostics](tree-diagnostics.md) を参照してください。
 
