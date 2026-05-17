@@ -22,6 +22,7 @@ module TreeView
       :root_items,
       :row_partial,
       :row_actions_partial,
+      :row_locals,
       :ui_config,
       :tree_instance_key,
       :initial_state,
@@ -60,6 +61,7 @@ module TreeView
       row_partial:,
       ui_config:,
       row_actions_partial: nil,
+      row_locals: nil,
       tree_instance_key: nil,
       initial_state: nil,
       max_initial_depth: nil,
@@ -100,6 +102,7 @@ module TreeView
       @root_items = root_items
       @row_partial = row_partial
       @row_actions_partial = row_actions_partial
+      @row_locals = normalize_row_locals(row_locals)
       @ui_config = ui_config
       @tree_instance_key = tree_instance_key&.to_s
       @initial_state = normalize_initial_state(resolve_option(initial_state, initial_expansion_options[:default]))
@@ -195,6 +198,13 @@ module TreeView
       end
 
       options
+    end
+
+    def normalize_row_locals(value)
+      return {} if value.nil?
+      raise TreeView::ConfigurationError, "row_locals must respond to to_h; pass a Hash-like object or nil" unless value.respond_to?(:to_h)
+
+      value.to_h.transform_keys(&:to_sym).freeze
     end
 
     def normalize_toggle_icons(value)
