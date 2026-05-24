@@ -204,7 +204,7 @@ Key documents:
 Additional docs:
 
 - [Documentation index](docs/README.md)
-- [Documentation i18n audit](docs/i18n-audit.md)
+- [Documentation maintenance checklist](docs/i18n-audit.md)
 - [CHANGELOG.md](CHANGELOG.md)
 
 ## Development
@@ -238,14 +238,3 @@ Before release, check:
 - `bundle exec rake build`
 - Rails version matrix CI
 - `npm test`
-- README, docs, and CHANGELOG consistency
-- gemspec metadata
-
-See also:
-
-- [Release checklist](docs/en/release.md)
-- [日本語: Release checklist](docs/ja/release.md)
-
-## License
-
-MIT
