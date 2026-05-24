@@ -79,3 +79,4 @@ RSpec.describe "tree_view_toolbar helper" do
     end.to raise_error(TreeView::ConfigurationError, /unknown tree_view_toolbar action/)
   end
 end
+
