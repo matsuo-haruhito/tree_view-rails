@@ -23,6 +23,11 @@ Any move toward `treegrid` semantics should be a focused compatibility decision.
 - `aria-controls` is intentionally not emitted by toggle links for now.
 - TreeView intentionally does not emit `role="tree"` or `role="treeitem"` for table rows today.
 
+## Empty-state and hidden-count hooks
+
+- Empty rows now wrap the message in `.tree-view-empty-row__content` and `.tree-view-empty-row__message`, with `data-tree-view-empty-state="true"` on the wrapper so host apps can style or target empty states without overriding the partial.
+- Static hidden-count text appends a screen-reader-only suffix from `tree_view.accessibility.hidden_descendants`, which defaults to ` descendants` and can be localized by the host app.
+
 ## Supported rendering examples
 
 ### Static table rows
