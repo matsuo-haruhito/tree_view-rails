@@ -29,6 +29,14 @@ release tag は、`main` のfull CIが成功したcommitに付けます。
 
 host app の `Gemfile` に追加します。
 
+公開済み release を使うときは、通常の RubyGems 経路を使います。
+
+```ruby
+gem "tree_view"
+```
+
+まだ release に入っていない `main` の変更が必要なときだけ、GitHub source を明示します。
+
 ```ruby
 gem "tree_view", git: "https://github.com/matsuo-haruhito/tree_view-rails.git"
 ```
