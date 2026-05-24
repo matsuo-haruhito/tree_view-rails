@@ -86,9 +86,19 @@ This gem focuses on tree rendering primitives. Host applications are responsible
 
 ## Installation
 
+When you are installing a published release, add the gem normally:
+
+```ruby
+gem "tree_view"
+```
+
+If you need unreleased `main` changes, use the GitHub source explicitly:
+
 ```ruby
 gem "tree_view", git: "https://github.com/matsuo-haruhito/tree_view-rails.git"
 ```
+
+Then run `bundle install` as usual.
 
 ```bash
 bundle install
