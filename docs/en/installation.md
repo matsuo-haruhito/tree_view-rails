@@ -29,6 +29,14 @@ Release tags should be placed only on `main` commits whose full CI has passed.
 
 Add the gem to the host app's `Gemfile`.
 
+For a published release, use the ordinary RubyGems install path:
+
+```ruby
+gem "tree_view"
+```
+
+When you need unreleased `main` changes, use the GitHub source explicitly:
+
 ```ruby
 gem "tree_view", git: "https://github.com/matsuo-haruhito/tree_view-rails.git"
 ```
