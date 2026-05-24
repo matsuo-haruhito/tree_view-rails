@@ -9,6 +9,7 @@
 <% max_toggle_depth_from_root = local_assigns[:max_toggle_depth_from_root] %>
 <% max_toggle_leaf_distance = local_assigns[:max_toggle_leaf_distance] %>
 <% leaf_distance = local_assigns[:leaf_distance] %>
+<% hidden_descendants_sr_text = t("tree_view.accessibility.hidden_descendants", default: " descendants") %>
 <% toggle_scope = tree_toggle_scope(depth: depth, max_toggle_depth_from_root: max_toggle_depth_from_root, max_toggle_leaf_distance: max_toggle_leaf_distance, leaf_distance: leaf_distance) %>
 <% show_path = tree_show_descendants_path(item, depth + 1, scope: toggle_scope) %>
 <% hide_path = tree_hide_descendants_path(item, depth, scope: toggle_scope) %>
@@ -39,7 +40,7 @@
       <span class="tree-toggle__level"><%= toggle_icon || tree_toggle_label(depth) %></span>
     <% end %>
     <% if hidden_count %>
-      <span class="tree-toggle__hidden-count"><%= tree_hidden_count_message(hidden_count, hidden_message_builder) %></span>
+      <span class="tree-toggle__hidden-count"><%= tree_hidden_count_message(hidden_count, hidden_message_builder) %><span class="visually-hidden"><%= hidden_descendants_sr_text %></span></span>
     <% end %>
   </div>
 </div>
