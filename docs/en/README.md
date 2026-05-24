@@ -25,6 +25,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Turbo Frame option](turbo-frame.md) | Target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript |
 | [Localized names](localized-names.md) | Resolve model, attribute, and node type labels through ActiveModel / I18n |
 | [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
+| [FAQ](faq.md) | Short answers about responsibility boundaries, query expectations, and common misunderstandings |
 | [Accessibility Semantics](accessibility-semantics.md) | First-class accessibility guidance for table-first rows, ARIA placement, keyboard boundaries, and host-app responsibilities |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
 | [NodePresenter row partial patterns](node-presenter-row-partials.md) | Use NodePresenter from host-app row partials instead of adding app-specific Column / Action DSLs |
@@ -69,6 +70,8 @@ If you are integrating TreeView into a Rails host app, start with these document
 For first-time usage, read [Installation](installation.md), [Minimal usage](minimal-usage.md), and [Usage](usage.md) in that order.
 
 When you know the use case but not the right API, start with the [Decision guide](decision-guide.md).
+
+For common responsibility-boundary questions before choosing an API, read the [FAQ](faq.md).
 
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
 
