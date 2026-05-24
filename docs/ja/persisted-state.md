@@ -119,6 +119,54 @@ render_state = TreeView::RenderState.new(
 
 同じownerでも画面やtreeが異なる場合は、別のkeyを使ってください。
 
+## 1 つの host app で複数 tree instance を使う
+
+同じ owner に対して、sidebar tree と詳細 tree のように複数の persisted tree を並行運用できます。
+
+```ruby
+sidebar_store = TreeView::StateStore.new(
+  owner: current_user,
+  tree_instance_key: "projects:sidebar"
+)
+
+detail_store = TreeView::StateStore.new(
+  owner: current_user,
+  tree_instance_key: "projects:#{project.id}:detail"
+)
+
+sidebar_state = sidebar_store.load
+
+detail_state = detail_store.load
+```
+
+読み込んだ state は、それぞれ対応する render state に渡します。
+
+```ruby
+@sidebar_render_state = TreeView::RenderState.new(
+  tree: sidebar_tree,
+  root_items: sidebar_tree.root_items,
+  row_partial: "projects/sidebar_tree_columns",
+  ui_config: sidebar_tree_ui,
+  persisted_state: sidebar_state
+)
+
+@detail_render_state = TreeView::RenderState.new(
+  tree: detail_tree,
+  root_items: detail_tree.root_items,
+  row_partial: "projects/detail_tree_columns",
+  ui_config: detail_tree_ui,
+  persisted_state: detail_state
+)
+```
+
+key を決めるときは、次の考え方を使うと整理しやすくなります。
+
+- `sidebar`、`index`、`detail` のように、配置場所や責務ごとに key を分ける
+- 詳細 tree がページごとに変わる場合は、record ID や workspace ID を key に含める
+- 2 つの描画で本当に同じ展開状態を共有したい場合だけ、同じ key を再利用する
+
+TreeView が保存するのは expanded keys です。保存 request の入口、更新をいつ永続化するか、現在の render scope とどう組み合わせるかは引き続き host app 側で決めます。
+
 ## 責務範囲
 
 | Area | TreeView | Host app |

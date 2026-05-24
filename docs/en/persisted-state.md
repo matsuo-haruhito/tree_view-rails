@@ -119,6 +119,54 @@ Examples:
 
 Use different keys for different screens or trees, even when the owner is the same.
 
+## Multiple tree instances in one host app
+
+A host app can render more than one persisted tree for the same owner. A common pattern is a sidebar tree plus a detail tree on the main content area.
+
+```ruby
+sidebar_store = TreeView::StateStore.new(
+  owner: current_user,
+  tree_instance_key: "projects:sidebar"
+)
+
+detail_store = TreeView::StateStore.new(
+  owner: current_user,
+  tree_instance_key: "projects:#{project.id}:detail"
+)
+
+sidebar_state = sidebar_store.load
+
+detail_state = detail_store.load
+```
+
+Pass each loaded state to the matching render state.
+
+```ruby
+@sidebar_render_state = TreeView::RenderState.new(
+  tree: sidebar_tree,
+  root_items: sidebar_tree.root_items,
+  row_partial: "projects/sidebar_tree_columns",
+  ui_config: sidebar_tree_ui,
+  persisted_state: sidebar_state
+)
+
+@detail_render_state = TreeView::RenderState.new(
+  tree: detail_tree,
+  root_items: detail_tree.root_items,
+  row_partial: "projects/detail_tree_columns",
+  ui_config: detail_tree_ui,
+  persisted_state: detail_state
+)
+```
+
+Use these rules when choosing keys:
+
+- split keys by placement or responsibility, such as `sidebar`, `index`, or `detail`
+- include a record or workspace identifier when the detail tree changes by page
+- reuse the same key only when two renders are intentionally sharing the same expansion state
+
+TreeView stores expanded keys only. The host app still decides where save requests enter, when to persist updates, and how to combine persisted state with the current render scope.
+
 ## Responsibility boundary
 
 | Area | TreeView | Host app |
