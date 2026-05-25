@@ -11,8 +11,15 @@ They are **not** a complete Rails application and should not grow into host-app 
 | File | Covers |
 |---|---|
 | [default-tree.html](default-tree.html) | Default table/tree output, checkbox selection, expanded/collapsed rows, badges, depth labels, row actions, and baseline CSS. |
+| [narrow-sidebar-tree.html](narrow-sidebar-tree.html) | Narrow sidebar and small-width reference that keeps toggle controls, primary labels, and current or selection cues visible while secondary metadata wraps below. |
 | [interaction-states.html](interaction-states.html) | Lazy-loading, loading, error/retry, next-page, and drag/drop visual states. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
+
+## Narrow-width guidance
+
+- Keep the toggle control, the primary node label, and the current or selected cue visible in the first scan line.
+- Move owner, status, badges, and less-frequent actions into stacked metadata or a compact action surface before hiding hierarchy cues.
+- Treat exact truncation, action menus, and responsive breakpoints as host-app responsibilities. These mockups are reference layouts, not a shipped responsive design system.
 
 ## Review policy
 
