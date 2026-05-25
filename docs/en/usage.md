@@ -2,7 +2,7 @@
 
 This page explains the main ways to render TreeView rows in a Rails host app.
 
-During the migration to language-specific docs, the detailed legacy guide remains available at [root usage guide](../usage.md).
+For the language-specific docs index and related guides, see the [documentation index](../README.md).
 
 ## Basic flow
 
@@ -181,6 +181,8 @@ For windowed rendering, pass `window:`.
 <%= tree_view_rows(@render_state, window: { offset: 0, limit: 50 }) %>
 ```
 
+For current-row anchoring and offset handoff across Turbo refreshes, see [Windowed Rendering](windowed-rendering.md).
+
 ## Row partial
 
 Host-app-specific columns live in the configured `row_partial`.
@@ -259,3 +261,117 @@ Initial expansion, render scope, and toggle scope can be configured with grouped
 ```
 
 When both flat keyword options and grouped options are provided, flat keyword options take precedence for backward compatibility.
+
+### Expand only the current branch
+
+When the host app wants a collapsed tree that still opens the branch containing the current record, pass `current_item:` or `current_key:` with `auto_expand_ancestors: true`.
+
+```ruby
+current_key = @document ? node_key(@document) : node_key(@project)
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_expansion: {
+    default: :collapsed,
+    current_key: current_key,
+    auto_expand_ancestors: true
+  }
+)
+```
+
+If the host app already has the record object, you can pass `current_item:` instead of `current_key:`.
+
+```ruby
+initial_expansion: {
+  default: :collapsed,
+  current_item: @document,
+  auto_expand_ancestors: true
+}
+```
+
+`auto_expand_ancestors:` resolves the current node under `root_items` and merges only ancestor keys into `expanded_keys`. Keep using `expanded_keys:` alongside it when another sibling branch or additional path should also start open.
+
+## Selection
+
+Use `selection:` to enable checkbox selection.
+
+```ruby
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  selection: {
+    enabled: true,
+    checkbox_name: "selected_nodes[]",
+    visibility: :leaves
+  }
+)
+```
+
+TreeView renders checkboxes, builds payloads, and provides a JavaScript controller for collecting selected payloads. The host app owns business actions such as deleting, moving, or relating selected nodes.
+
+See [Selection](selection.md) for details.
+
+## Lazy loading
+
+Use `load_children_path_builder` and `RenderState#lazy_loading` when children are loaded on demand.
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document"
+).build_turbo(
+  hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth:, scope:) },
+  show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth:, scope:) },
+  load_children_path_builder: ->(item, depth, scope) {
+    children_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
+  },
+  toggle_all_path_builder: ->(state) { documents_path(state: state) }
+)
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  lazy_loading: {
+    enabled: true,
+    loaded_keys: loaded_keys
+  }
+)
+```
+
+The host app owns fetch behavior, Turbo requests, retry behavior, loading messages, and authorization. Lazy loading requires Turbo/server-driven rendering and cannot be enabled with `build_client_side`.
+
+## PathTree / ReverseTree
+
+Use `path_tree_for` when search results should be shown with their ancestors.
+
+```ruby
+path_tree = base_tree.path_tree_for(matched_documents)
+```
+
+Use `reverse_tree_for` when the UI starts at matched child nodes and walks toward roots.
+
+```ruby
+reverse_tree = base_tree.reverse_tree_for(matched_documents)
+```
+
+| API | Direction | Use case |
+|---|---|---|
+| `path_tree_for(items)` | root -> parent -> matched item | Show search results inside the normal hierarchy |
+| `reverse_tree_for(items)` | matched item -> parent -> root | Walk from child nodes toward parents |
+
+## Next steps
+
+- [API overview](api-overview.md)
+- [API reference](api.md)
+- [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide)
+- [Cookbook: Expand only the current branch initially](cookbook.md#expand-only-the-current-branch-initially)
+- [Selection](selection.md)
+- [Lazy Loading](lazy-loading.md)
+- [Windowed Rendering](windowed-rendering.md)
