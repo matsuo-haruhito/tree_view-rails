@@ -259,7 +259,10 @@ render_state = TreeView::RenderState.new(
 | `initial_state:` | no | `:expanded` or `:collapsed`. |
 | `expanded_keys:` | no | Tree-side node keys to expand. These must match `tree.node_key_for(item)`, not UI-only DOM IDs. |
 | `collapsed_keys:` | no | Tree-side node keys to collapse. These must match `tree.node_key_for(item)`, not UI-only DOM IDs. |
-| `initial_expansion:` | no | Grouped initial expansion settings. Expansion keys inside this group follow the same tree-side node key rule. |
+| `current_item:` | no | Current node object. Used for row-state decisions and as the source item when ancestor auto-expansion is enabled. |
+| `current_key:` | no | Current node key when the host app only has an identifier. TreeView resolves the matching node under `root_items` before ancestor auto-expansion. |
+| `auto_expand_ancestors:` | no | Boolean that merges the current node's ancestor keys into `expanded_keys`. Requires `current_item` or a `current_key` that resolves to a node under `root_items`. |
+| `initial_expansion:` | no | Grouped initial expansion settings. Supported keys are `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, and `auto_expand_ancestors`. |
 | `render_scope:` | no | Grouped render scope settings. |
 | `toggle_scope:` | no | Grouped toggle scope settings. |
 | `selection:` | no | Grouped checkbox selection settings. |
@@ -274,6 +277,8 @@ render_state = TreeView::RenderState.new(
 | `row_status_builder:` | no | Callable that returns row state. |
 | `row_event_payload_builder:` | no | Callable that returns drag/drop transfer payloads. This is transfer-specific, not a generic row event hook. |
 | `persisted_state:` | no | Saved expansion state. |
+
+When both flat keyword options and `initial_expansion:` are supplied, the flat keyword options win. `auto_expand_ancestors:` only opens the current node's path; keep using `expanded_keys:` when sibling branches or additional paths should also start open. For a practical example, see [Cookbook: Expand only the current branch initially](cookbook.md#expand-only-the-current-branch-initially).
 
 For focused naming decisions, see [Public Name Decisions](public-name-decisions.md). For ARIA placement, see [Accessibility Semantics](accessibility-semantics.md). For identifier design, see [Node keys](node-keys.md).
 
