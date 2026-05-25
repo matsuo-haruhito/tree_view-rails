@@ -49,6 +49,8 @@ Unit-style JavaScript tests run through Vitest and jsdom with:
 npm test
 ```
 
+The Vitest suite also includes an entrypoint smoke test for `app/javascript/tree_view/index.js` so the documented controller exports and `registerTreeViewControllers` helper stay aligned with the importmap entrypoint.
+
 Browser-level smoke tests run through Playwright with:
 
 ```bash
