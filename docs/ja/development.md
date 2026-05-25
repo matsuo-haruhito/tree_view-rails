@@ -49,6 +49,8 @@ Unit-style JavaScript testsはVitestとjsdomで実行します。
 npm test
 ```
 
+Vitest suite には `app/javascript/tree_view/index.js` を直接読む entrypoint smoke test も含め、documented controller exports と `registerTreeViewControllers` helper が importmap entrypoint とずれないようにしています。
+
 Browser-level smoke testsはPlaywrightで実行します。
 
 ```bash
