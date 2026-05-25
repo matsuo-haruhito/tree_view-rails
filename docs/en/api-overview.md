@@ -8,6 +8,7 @@ This page gives an overview of the main public APIs. See [API reference](api.md)
 |---|---|
 | `TreeView::Tree` | Builds and queries tree structures from records, resolvers, or adapters. |
 | `TreeView::RenderState` | Holds screen-level rendering state such as roots, row partial, UI config, expansion, selection, and render scope. |
+| `TreeView::ResourceTableRenderState` | Builds a `RenderState` bridge when a separate table layer already owns columns and table state. |
 | `TreeView::UiConfig` | Stores DOM ID, toggle mode, and path-building behavior for static, Turbo, or client-side rendering. |
 | `TreeView::UiConfigBuilder` | Builds `UiConfig` objects from a Rails view context, including `build_turbo`, `build_static`, and `build_client_side`. |
 | `TreeView::VisibleRows` | Flattens currently visible rows from a render state. |
@@ -70,6 +71,22 @@ adapter = TreeView::GraphAdapter.new(
 
 tree = TreeView::Tree.new(adapter: adapter)
 ```
+
+### Resource-table bridge
+
+Use `TreeView::ResourceTableRenderState.call(...)` when another table-oriented layer already owns visible columns, saved table preferences, or table state, and TreeView only needs to build hierarchical row rendering.
+
+```ruby
+render_state = TreeView::ResourceTableRenderState.call(
+  records: @projects,
+  context: view_context,
+  parent_id_method: :parent_project_id,
+  table_key: "projects_tree",
+  table_state: table_state
+)
+```
+
+See [Resource table bridge](resource-table-bridge.md) for the responsibility boundary and integration details.
 
 ### Node keys and UI identifiers
 
@@ -225,5 +242,6 @@ Exported controller classes are documented as the stable entrypoints. Individual
 - Accessibility semantics: [accessibility-semantics.md](accessibility-semantics.md)
 - Error hierarchy: [errors.md](errors.md)
 - Public API compatibility policy: [public-api.md](public-api.md)
+- Resource table bridge: [resource-table-bridge.md](resource-table-bridge.md)
 - Minimal usage: [minimal-usage.md](minimal-usage.md)
 - Main usage guide: [usage.md](usage.md)
