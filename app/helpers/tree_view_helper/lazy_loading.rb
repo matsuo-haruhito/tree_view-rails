@@ -9,10 +9,10 @@ module TreeViewHelper
     end
 
     def tree_remote_state_placeholder_attributes(item, state: nil, ui: @tree_ui)
-      attributes = { id: tree_remote_state_placeholder_dom_id(item, ui: ui) }
+      attributes = {id: tree_remote_state_placeholder_dom_id(item, ui: ui)}
       return attributes if state.nil?
 
-      attributes.merge(data: { tree_remote_state: state.to_s })
+      attributes.merge(data: {tree_remote_state: state.to_s})
     end
 
     def tree_lazy_loading_data(item, tree, render_context, depth:)
