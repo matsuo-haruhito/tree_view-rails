@@ -93,6 +93,11 @@ This gem focuses on tree rendering primitives. Host applications are responsible
 
 ## Installation
 
+Minimum supported environment:
+
+- Ruby 3.2 or later
+- Rails 7.0 or later
+
 When you are installing a published release, add the gem normally:
 
 ```ruby
