@@ -210,7 +210,6 @@ Key documents:
 Additional docs:
 
 - [Documentation index](docs/README.md)
-- [Product profile](Product%20Profile.md)
 - [Documentation maintenance checklist](docs/i18n-audit.md)
 - [CHANGELOG.md](CHANGELOG.md)
 
