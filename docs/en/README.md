@@ -27,6 +27,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
 | [FAQ](faq.md) | Short answers about responsibility boundaries, query expectations, and common misunderstandings |
 | [Troubleshooting](troubleshooting.md) | Symptom-based entry point for common integration problems before diving into API-specific pages |
+| [Visual reference mockups](../mockups/README.md) | Static HTML/CSS references for baseline output and interaction states without running a Rails app |
 | [Accessibility Semantics](accessibility-semantics.md) | First-class accessibility guidance for table-first rows, ARIA placement, keyboard boundaries, and host-app responsibilities |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
 | [NodePresenter row partial patterns](node-presenter-row-partials.md) | Use NodePresenter from host-app row partials instead of adding app-specific Column / Action DSLs |
@@ -75,6 +76,8 @@ When you know the use case but not the right API, start with the [Decision guide
 For common responsibility-boundary questions before choosing an API, read the [FAQ](faq.md).
 
 When you already know the symptom but need the fastest path to the relevant page, start with [Troubleshooting](troubleshooting.md).
+
+For static visual references of baseline DOM structure and interaction states, see [Visual reference mockups](../mockups/README.md).
 
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
 
