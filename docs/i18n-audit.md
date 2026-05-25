@@ -27,6 +27,7 @@ Typical triggers:
 - accessibility semantics, keyboard behavior, or ARIA responsibility changes
 - decision-guide recommendations or documented host-app responsibility boundaries
 - cookbook, lazy-loading, persisted-state, render-scale, or other feature guidance that changed meaningfully
+- migration, deprecation, or release-note guidance for shared public surfaces
 
 If one language must temporarily lag, leave a short note in the changed doc or PR so the mismatch is visible and easy to follow up.
 
@@ -38,7 +39,7 @@ If one language must temporarily lag, leave a short note in the changed doc or P
 | Accessibility semantics or interaction behavior | `docs/ja/accessibility-semantics.md`, `docs/en/accessibility-semantics.md`, and any feature docs that describe the affected behavior |
 | Installation, importmap, JavaScript entrypoints, packaging, or asset setup | `README.md`, `docs/ja/installation.md`, `docs/en/installation.md`, and `docs/ja/minimal-usage.md` / `docs/en/minimal-usage.md` when first-run examples change |
 | Usage recommendations, decision guidance, or responsibility boundaries | `docs/ja/usage.md`, `docs/en/usage.md`, `docs/ja/decision-guide.md`, `docs/en/decision-guide.md`, plus related feature docs |
-| Release policy, compatibility policy, or release checklist expectations | `docs/ja/release.md`, `docs/en/release.md`, this checklist, and `CHANGELOG.md` when the public surface changed |
+| Release policy, compatibility policy, migration guidance, or release checklist expectations | `docs/ja/release.md`, `docs/en/release.md`, `docs/ja/migration.md`, `docs/en/migration.md`, this checklist, and `CHANGELOG.md` when the public surface changed |
 | README-level positioning or top-level docs navigation | `README.md`, `docs/README.md`, `docs/ja/README.md`, and `docs/en/README.md` |
 
 ## CHANGELOG guidance
@@ -73,6 +74,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 - `README.md`, `docs/README.md`, `docs/ja/README.md`, and `docs/en/README.md` still point to the right entry docs
 - Japanese and English docs are updated together when the change affects shared user-facing guidance
 - public API changes updated both API docs and public API policy docs when needed
+- compatibility, migration, or deprecation guidance updated both migration guides and release docs when needed
 - accessibility changes updated both accessibility docs when needed
 - installation or packaging changes updated README and installation docs when needed
 - `CHANGELOG.md` was updated when the change materially affects adopters

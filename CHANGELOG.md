@@ -51,6 +51,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added public name decision docs in Japanese and English.
 - Added render log level docs in Japanese and English.
 - Added JavaScript event contract docs in Japanese and English for public Stimulus events and payload details.
+- Added migration guides in Japanese and English to summarize compatibility promises, deprecations, rename handling, and release-note expectations.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
