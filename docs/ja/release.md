@@ -48,25 +48,29 @@ Minimum release conditions:
 
 ## Code and tests
 
+committed `package-lock.json` はまだ `package.json` と同期していないため、JavaScript lane は local setup / CI ともに現時点では `npm install` 前提です。lockfile refresh 作業が入ったら、release checks も `npm ci` 前提へ戻します。
+
 Local checks:
 
 ```bash
 bundle exec standardrb
 bundle exec rake
 bundle exec rake build
-npm test
+npm run test:js
 ```
 
 Pull Request CI checks:
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
+- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile` と `gemfiles/rails_8_0.gemfile`
+- JavaScript tests: `npm install`、Playwright browser setup、`npm run test:js`
 
 Main-push CI checks:
 
 - Ruby version matrix
 - Rails version matrix
-- JavaScript tests through `npm ci`
+- JavaScript tests through `npm install` and `npm run test:js` until `package-lock.json` is refreshed in sync with `package.json`
 - Gem package verification
 
 merge前にPR CIを通します。互換性matrix、JavaScript coverage、package verificationを含むため、release判定にはより広い `main` CIを使います。
