@@ -13,6 +13,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [default-tree.html](default-tree.html) | Default table/tree output, checkbox selection, expanded/collapsed rows, badges, depth labels, row actions, and baseline CSS. |
 | [narrow-sidebar-tree.html](narrow-sidebar-tree.html) | Narrow sidebar and small-width reference that keeps toggle controls, primary labels, and current or selection cues visible while secondary metadata wraps below. |
 | [interaction-states.html](interaction-states.html) | Lazy-loading, loading, error/retry, next-page, and drag/drop visual states. |
+| [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
 
 ## Narrow-width guidance
@@ -20,6 +21,11 @@ They are **not** a complete Rails application and should not grow into host-app 
 - Keep the toggle control, the primary node label, and the current or selected cue visible in the first scan line.
 - Move owner, status, badges, and less-frequent actions into stacked metadata or a compact action surface before hiding hierarchy cues.
 - Treat exact truncation, action menus, and responsive breakpoints as host-app responsibilities. These mockups are reference layouts, not a shipped responsive design system.
+
+## Empty-state guidance
+
+- Use `data-tree-view-empty-state="true"` together with `.tree-view-empty-row__content` and `.tree-view-empty-row__message` as the reusable baseline hook.
+- Keep final empty copy, CTA, permission messaging, and filter-reset behavior in the host app.
 
 ## Review policy
 

@@ -369,3 +369,48 @@ h2 {
   padding: 0.3rem 0.45rem;
   font-weight: 700;
 }
+
+.tree-view-empty-row__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+.tree-view-empty-row__content[data-tree-view-empty-state="true"] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.tree-view-empty-row__message {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-empty-note {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.95rem;
+}
+
+.mock-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.8rem;
+}
+
+.mock-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f4c81;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
