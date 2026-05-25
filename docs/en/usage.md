@@ -60,6 +60,29 @@ tree_ui = TreeView::UiConfigBuilder.new(
 
 Path builders only build URLs. The host app owns controller actions, Turbo Stream responses, authorization, and server-side queries.
 
+If the host app wants to build its own toolbar instead of using TreeView's bundled HTML helper, ask TreeView for action metadata and render links or buttons in app-owned markup.
+
+```erb
+<% tree_view_toolbar_actions(@render_state).each do |action| %>
+  <% if action[:path] %>
+    <%= link_to action[:label], action[:path], data: action[:data] %>
+  <% else %>
+    <%= button_tag action[:label], type: "button", disabled: true, data: action[:data] %>
+  <% end %>
+<% end %>
+```
+
+Each action hash includes:
+
+- `:action` such as `:expand_all`
+- `:state` such as `:expanded`
+- `:label`
+- `:path`, or `nil` when the current mode does not support tree-wide toggling
+- `:disabled`
+- `:data` for host-app buttons or links
+
+TreeView only supplies the metadata. Final HTML structure, styling, icons, and authorization rules stay in the host app.
+
 ## Client-side expand/collapse
 
 Use `build_client_side` when all nodes in the render scope can be included in the initial HTML and you only need browser-local expand/collapse.
@@ -294,47 +317,4 @@ tree_ui = TreeView::UiConfigBuilder.new(
   load_children_path_builder: ->(item, depth, scope) {
     children_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
   },
-  toggle_all_path_builder: ->(state) { documents_path(state: state) }
-)
-
-@render_state = TreeView::RenderState.new(
-  tree: tree,
-  root_items: tree.root_items,
-  row_partial: "documents/tree_columns",
-  ui_config: tree_ui,
-  lazy_loading: {
-    enabled: true,
-    loaded_keys: loaded_keys
-  }
-)
-```
-
-The host app owns fetch behavior, Turbo requests, retry behavior, loading messages, and authorization. Lazy loading requires Turbo/server-driven rendering and cannot be enabled with `build_client_side`.
-
-## PathTree / ReverseTree
-
-Use `path_tree_for` when search results should be shown with their ancestors.
-
-```ruby
-path_tree = base_tree.path_tree_for(matched_documents)
-```
-
-Use `reverse_tree_for` when the UI starts at matched child nodes and walks toward roots.
-
-```ruby
-reverse_tree = base_tree.reverse_tree_for(matched_documents)
-```
-
-| API | Direction | Use case |
-|---|---|---|
-| `path_tree_for(items)` | root -> parent -> matched item | Show search results inside the normal hierarchy |
-| `reverse_tree_for(items)` | matched item -> parent -> root | Walk from child nodes toward parents |
-
-## Next steps
-
-- [API overview](api-overview.md)
-- [API reference](api.md)
-- [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide)
-- [Selection](selection.md)
-- [Lazy Loading](lazy-loading.md)
-- [Windowed Rendering](windowed-rendering.md)
+  toggle_all_path_builder: ->(state) t
