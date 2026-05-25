@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView empty state mock</title>
+<link rel="stylesheet" href="default-tree.css">
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView empty state mock</h1>
+      <p>
+        no root items と no results の代表的な empty row を、Rails を起動せずに確認するための静的HTMLです。
+        final copy、CTA、permission messaging、search condition summary は host app の責務のままにし、ここでは TreeView が提供する wrapper hook と row slot の見え方だけを固定します。
+      </p>
+    </header>
+
+    <section class="mock-section" aria-labelledby="no-root-items-heading">
+      <h2 id="no-root-items-heading">No root items</h2>
+      <p class="mock-empty-note">
+        初回セットアップ直後や、まだ root item が 0 件のときの代表例です。empty state は full-width cell の中に収まり、toggle / selection / row action は出しません。
+      </p>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">owner</th>
+            <th scope="col">status</th>
+            <th scope="col">actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5">
+              <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+                <p class="tree-view-empty-row__message">No root items are available yet.</p>
+                <p class="mock-empty-note">Host apps can replace this with onboarding copy, a create button, or permission-specific guidance.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="no-results-heading">
+      <h2 id="no-results-heading">No results after filtering</h2>
+      <div class="mock-filter-bar" aria-label="Filter summary example">
+        <span class="mock-filter-chip">status: archived</span>
+        <span class="mock-filter-chip">owner: Team B</span>
+        <span class="mock-filter-chip">query: reports</span>
+      </div>
+      <p class="mock-empty-note">
+        検索や filter の結果が 0 件のときも、same hook を使って row 全体を empty state slot として扱えます。どの filter が効いているかの説明や reset action は host app が持ちます。
+      </p>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">owner</th>
+            <th scope="col">status</th>
+            <th scope="col">actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5">
+              <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+                <p class="tree-view-empty-row__message">No rows match the current filters.</p>
+                <p class="mock-empty-note">Keep filter reset links, saved views, and search help in the host app. TreeView only guarantees the wrapper hook and message slot.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="comparison-heading">
+      <h2 id="comparison-heading">Difference from a populated row</h2>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">owner</th>
+            <th scope="col">status</th>
+            <th scope="col">actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="reference_row_1" class="tree-row is-expanded" data-tree-node-key="project:1" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+            <td class="btn-cell tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Loaded branch">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                  <span class="tree-toggle__level">root</span>
+                </span>
+              </span>
+              <span class="tree-node-marker" title="Folder">folder</span>
+            </td>
+            <td>Product Platform</td>
+            <td>Team A</td>
+            <td><span class="mock-status mock-status--active">active</span></td>
+            <td class="tree-row-actions"><button type="button">Open</button></td>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+                <p class="tree-view-empty-row__message">Empty rows consume the full content width instead of rendering branch controls.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li>Populated rows keep branch controls, badges, selection, and row actions.</li>
+        <li>Empty rows collapse those row-level controls into one full-width message slot.</li>
+        <li><code>data-tree-view-empty-state="true"</code> and the empty-row wrapper classes are the reusable surface.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
