@@ -2,7 +2,7 @@
 
 This page explains the main ways to render TreeView rows in a Rails host app.
 
-During the migration to language-specific docs, the detailed legacy guide remains available at [root usage guide](../usage.md).
+For the language-specific docs index and related guides, see the [documentation index](../README.md).
 
 ## Basic flow
 
@@ -203,6 +203,8 @@ For windowed rendering, pass `window:`.
 ```erb
 <%= tree_view_rows(@render_state, window: { offset: 0, limit: 50 }) %>
 ```
+
+For current-row anchoring and offset handoff across Turbo refreshes, see [Windowed Rendering](windowed-rendering.md).
 
 ## Row partial
 
