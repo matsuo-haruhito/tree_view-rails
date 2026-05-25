@@ -29,11 +29,11 @@ RSpec.describe "tree_view lazy loading helper" do
 
   it "returns placeholder attributes with optional remote state data" do
     expect(helper.tree_remote_state_placeholder_attributes(item, ui: ui_config)).to eq(
-      { id: "node_42_remote_state" }
+      {id: "node_42_remote_state"}
     )
 
     expect(helper.tree_remote_state_placeholder_attributes(item, state: :loaded, ui: ui_config)).to eq(
-      { id: "node_42_remote_state", data: { tree_remote_state: "loaded" } }
+      {id: "node_42_remote_state", data: {tree_remote_state: "loaded"}}
     )
   end
 end
