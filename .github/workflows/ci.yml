@@ -105,6 +105,7 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+      # package-lock.json is committed, but CI keeps npm install until the lockfile is refreshed in sync with package.json.
       - run: npm install
       - run: npx playwright install --with-deps chromium
       - run: npm run test:js

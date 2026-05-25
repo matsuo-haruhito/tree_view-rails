@@ -15,13 +15,16 @@ GitHub Actions runs the following checks on pull requests:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
+- JavaScript tests through `npm install`
 
 Pushes to `main` keep the heavier compatibility and release checks:
 
 - Ruby version matrix
 - Rails version matrix
-- JavaScript tests through `npm ci`
+- JavaScript tests through `npm install`
 - gem package verification
+
+The repository keeps a committed `package-lock.json`, but CI stays on `npm install` until that lockfile is refreshed in sync with `package.json`.
 
 Release tags should be placed only on `main` commits whose full CI has passed.
 
@@ -146,6 +149,8 @@ npm install
 npm test
 ```
 
+Use `npm install` here for the same reason as CI: the committed `package-lock.json` still needs a refresh before `npm ci` can be trusted.
+
 Rails compatibility Gemfiles live under `gemfiles/`.
 
 ```bash
@@ -167,6 +172,6 @@ Use `.devcontainer/devcontainer.json` for VS Code Dev Containers.
 
 ## CI
 
-GitHub Actions runs `bundle exec standardrb` and `bundle exec rspec` on pull requests.
+GitHub Actions runs `bundle exec standardrb`, `bundle exec rspec`, and JavaScript checks on pull requests.
 
 On pushes to `main`, GitHub Actions runs the Ruby/Rails matrices, JavaScript tests, and gem package verification.
