@@ -17,16 +17,18 @@ Before making changes, read these files in this order:
 1. `AGENTS.md`
 2. `README.md`
 3. `docs/README.md`
-4. The relevant document under `docs/`
+4. The relevant document under `docs/en/` or `docs/ja/`
 5. The implementation files related to the task
 
-Use `docs/` as the durable documentation source:
+Use these files as the durable documentation source:
 
-- `docs/design-policy.md` — design intent, responsibility boundaries, include/exclude policy
-- `docs/installation.md` — installation and asset/importmap setup
-- `docs/usage.md` — usage examples
-- `docs/api.md` — public API reference
-- `docs/development.md` — development, CI, and documentation update rules
+- `docs/README.md` — language selector and maintenance entry point
+- `docs/en/design-policy.md` / `docs/ja/design-policy.md` — design intent, responsibility boundaries, include/exclude policy
+- `docs/en/installation.md` / `docs/ja/installation.md` — installation and asset/importmap setup
+- `docs/en/usage.md` / `docs/ja/usage.md` — usage examples
+- `docs/en/api.md` / `docs/ja/api.md` — public API reference
+- `docs/en/development.md` / `docs/ja/development.md` — development, CI, and documentation update rules
+- `docs/i18n-audit.md` — documentation maintenance checklist
 
 ## Repository Scope
 
@@ -71,7 +73,7 @@ Current durable decisions:
 - Global toggle scope is currently `all`.
 - Branch rendering information is calculated in helper logic from the tree.
 - `row_partial` must be provided by the host app.
-- Toggle mode is `:static` or `:turbo`.
+- Toggle mode is `:static`, `:turbo`, or `:client`.
 - Root and children ordering is centralized through `TreeView::Tree#sort_items` and `sorter:`.
 - The default sorter is descendant count ascending.
 
@@ -81,11 +83,12 @@ When behavior, public API, setup steps, or design intent changes, update the rel
 
 - User-facing overview: `README.md`
 - Detailed docs index: `docs/README.md`
-- Design decisions: `docs/design-policy.md`
-- Installation changes: `docs/installation.md`
-- Usage changes: `docs/usage.md`
-- API changes: `docs/api.md`
-- Development and CI changes: `docs/development.md`
+- Design decisions: `docs/en/design-policy.md` and `docs/ja/design-policy.md`
+- Installation changes: `docs/en/installation.md` and `docs/ja/installation.md`
+- Usage changes: `docs/en/usage.md` and `docs/ja/usage.md`
+- API changes: `docs/en/api.md` and `docs/ja/api.md`
+- Development and CI changes: `docs/en/development.md` and `docs/ja/development.md`
+- Cross-language maintenance rules: `docs/i18n-audit.md`
 
 Keep `README.md` short. Put detailed setup, examples, and API contracts in `docs/`.
 
@@ -96,28 +99,31 @@ Do not recreate `context.md`.
 For implementation changes, run or preserve compatibility with:
 
 ```bash
+bundle exec standardrb
 bundle exec rspec
-bundle exec rake
 bundle exec rake build
+npm test
+npm run test:browser
 ```
 
-GitHub Actions runs `bundle exec rake` on pull requests and pushes to `main`.
+GitHub Actions runs the following on pull requests:
+
+- `bundle exec standardrb`
+- `bundle exec rspec`
+- representative Rails compatibility checks via `gemfiles/rails_7_0.gemfile` and `gemfiles/rails_8_0.gemfile`
+- `npm run test:js`
+
+Pushes to `main` also run the broader compatibility and release checks:
+
+- Ruby version matrix
+- full Rails version matrix
+- gem package verification
 
 ## Issue / Work Item Guidance
 
 Open GitHub Issues are the source of planned feature work.
 
-Important planned feature areas include:
-
-- path tree from child nodes to normal root-oriented display
-- reverse tree display from child to parent
-- orphan node handling
-- node-level initial expansion state
-- row class / data attribute builders
-- initial max depth rendering
-- node key / DOM ID collision detection
-- RenderState rendering helper
-- sorter return value validation
+Use the current issue body, PR description, README, and language-specific docs as the source of truth for planned work rather than relying on stale example lists in this file.
 
 Do not implement large feature areas opportunistically while working on unrelated tasks.
 
