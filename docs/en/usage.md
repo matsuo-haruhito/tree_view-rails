@@ -193,7 +193,7 @@ Host-app-specific columns live in the configured `row_partial`.
 <td><%= item.owner_name %></td>
 ```
 
-The partial receives `item`.
+The partial always receives `item`, `tree`, `render_state`, and `row_context`. When `RenderState#node_presenter` is configured, TreeView also passes `node_presenter` so host apps can reuse shared label / href / tooltip / badge / action resolvers without re-threading them through `row_locals`.
 
 Use `row_actions_partial` for per-row action links/buttons such as Edit, Show, Delete, Archive, and other host-app actions. For display columns, action links, inline controls, depth labels, badges, icons, and status markers, see [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide).
 
@@ -215,6 +215,8 @@ Host apps can place inputs, selects, textareas, buttons, links, and `contentedit
   <%= button_to "Archive", archive_document_path(item), method: :post %>
 </td>
 ```
+
+`row_actions_partial` receives the same `item`, `tree`, `render_state`, and `row_context` locals as `row_partial`, plus `node_presenter` when configured.
 
 For custom widgets that are not native controls, add `data-tree-view-interactive="true"` to the widget or an ancestor inside the row.
 
