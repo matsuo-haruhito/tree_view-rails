@@ -25,6 +25,7 @@ bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
 npm test
+npm run test:entrypoints
 npm run test:browser
 ```
 
@@ -49,7 +50,13 @@ Unit-style JavaScript tests run through Vitest and jsdom with:
 npm test
 ```
 
-The Vitest suite also includes an entrypoint smoke test for `app/javascript/tree_view/index.js` so the documented controller exports and `registerTreeViewControllers` helper stay aligned with the importmap entrypoint.
+A separate entrypoint smoke check loads `app/javascript/tree_view/index.js` directly:
+
+```bash
+npm run test:entrypoints
+```
+
+That check keeps the documented controller exports and `registerTreeViewControllers` helper aligned with the importmap entrypoint.
 
 Browser-level smoke tests run through Playwright with:
 
@@ -66,7 +73,7 @@ Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
 - Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile` and `gemfiles/rails_8_0.gemfile`
-- JavaScript unit and browser smoke tests through `npm run test:js`
+- JavaScript entrypoint, unit, and browser smoke tests through `npm run test:js`
 
 Pushes to `main` also run the broader compatibility and release checks:
 
@@ -87,6 +94,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 ### JavaScript changes
 
 - Run `npm test`.
+- Run `npm run test:entrypoints` when documented controller exports or entrypoint wiring changes.
 - Run `npm run test:browser` when browser interactions, focus, drag/drop, or real form controls are affected.
 - Check importmap and packaged files.
 - Confirm JavaScript entrypoint compatibility and update compatibility specs when documented exports intentionally change.
@@ -102,6 +110,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - `npm test`
+- `npm run test:entrypoints`
 - `npm run test:browser`
 - `bundle exec rake build`
 - gem package contents
