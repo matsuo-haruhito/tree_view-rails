@@ -142,9 +142,11 @@ bundle install
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
-npm install
+npm ci
 npm test
 ```
+
+The JavaScript path expects the committed `package-lock.json`, so `npm ci` is the local command that matches CI dependency resolution.
 
 Rails compatibility Gemfiles live under `gemfiles/`.
 
