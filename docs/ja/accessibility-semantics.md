@@ -58,6 +58,8 @@ TreeView は state tracking、selection、transfer payload、remote loading stat
 
 host app は page-level keyboard flow、focus order、table caption、action button、TreeView 周辺に追加する shortcut key に責任を持ちます。host app が完全な treegrid keyboard navigation を必要とする場合は、TreeView が自動提供しているものと見なさず、明示的な application feature として扱ってください。
 
+default stylesheet では `.tree-toggle__action:focus-visible` に軽量な ring と背景色を付けています。quick start のままでも keyboard focus を追いやすくするための baseline で、host app は copied stylesheet や上書き CSS でこの baseline を置き換えられます。
+
 ## `aria-controls`
 
 toggle linkは複数のdescendant rowsを表示/非表示にすることがあり、lazy-loading時は制御対象のdescendantsがまだDOM上に存在しない場合があります。常に制御対象と言える単一で安定したcontainerはありません。
