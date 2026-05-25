@@ -63,22 +63,22 @@ end
 )
 ```
 
+TreeView が `row_partial` を描画する時は、partial に `item`、`tree`、`render_state`、`row_context`、`node_presenter` が渡されます。`row_actions_partial` にも同じ local が渡されます。
+
 ## row partial 例
 
 ```erb
-<% presenter = render_state.node_presenter %>
-
 <td>
-  <% label = presenter&.label_for(item) || item.to_s %>
-  <% href = presenter&.href_for(item) %>
+  <% label = node_presenter&.label_for(item) || item.to_s %>
+  <% href = node_presenter&.href_for(item) %>
 
   <% if href %>
-    <%= link_to label, href, title: presenter&.tooltip_for(item) %>
+    <%= link_to label, href, title: node_presenter&.tooltip_for(item) %>
   <% else %>
     <%= label %>
   <% end %>
 
-  <% if (badge = presenter&.badge_for(item)) %>
+  <% if (badge = node_presenter&.badge_for(item)) %>
     <span class="badge"><%= badge %></span>
   <% end %>
 </td>
@@ -88,7 +88,7 @@ end
 </td>
 
 <td>
-  <% if presenter&.actions_for(item)&.include?(:download) && policy(item).download? %>
+  <% if node_presenter&.actions_for(item)&.include?(:download) && policy(item).download? %>
     <%= link_to "Download", download_document_path(item) %>
   <% end %>
 </td>
