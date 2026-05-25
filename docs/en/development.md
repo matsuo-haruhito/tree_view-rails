@@ -63,12 +63,13 @@ Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
+- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile` and `gemfiles/rails_8_0.gemfile`
 - JavaScript unit and browser smoke tests through `npm run test:js`
 
 Pushes to `main` also run the broader compatibility and release checks:
 
 - Ruby version matrix
-- Rails version matrix
+- Full Rails version matrix
 - gem package verification
 
 ## Change checklist

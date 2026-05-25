@@ -63,12 +63,13 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
+- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile` と `gemfiles/rails_8_0.gemfile`
 - JavaScript unit and browser smoke tests: `npm run test:js`
 
 `main` へのpushでは、より広い互換性確認とrelease向けのchecksも実行します。
 
 - Ruby version matrix
-- Rails version matrix
+- full Rails version matrix
 - gem package verification
 
 ## 変更時の確認ポイント

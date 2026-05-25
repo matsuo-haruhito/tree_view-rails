@@ -7,6 +7,7 @@ require "action_view/helpers"
 RSpec.describe "tree_view_toolbar helper" do
   let(:helper_class) do
     Class.new do
+      include ActionView::Context
       include ActionView::Helpers::TagHelper
       include ActionView::Helpers::UrlHelper
       include ActionView::Helpers::OutputSafetyHelper
