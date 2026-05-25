@@ -140,9 +140,11 @@ bundle install
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
-npm install
+npm ci
 npm test
 ```
+
+JavaScript 側は commit 済みの `package-lock.json` を前提にしているため、CI と同じ依存解決を再現したいときのローカル手順も `npm ci` を使います。
 
 Rails互換性確認用のGemfileは `gemfiles/` 配下にあります。
 
