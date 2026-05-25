@@ -2,7 +2,7 @@
 
 このページでは、Rails host app でTreeViewの行を描画する基本的な流れを説明します。
 
-より詳細な既存ガイドは、移行期間中は [root usage guide](../usage.md) も参照してください。
+language-specific docs 全体の入口と関連ガイドは [docs index](../README.md) を参照してください。
 
 ## 基本の流れ
 
