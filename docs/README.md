@@ -15,6 +15,8 @@
 - [日本語API判断ガイド](ja/decision-guide.md): use caseからAPIやoptionを選ぶための入口。
 - [English FAQ](en/faq.md): quick answers about responsibility boundaries and common misunderstandings.
 - [日本語FAQ](ja/faq.md): 責務境界とよくある誤解を短く確認する入口。
+- [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
+- [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.
 - [日本語Resource table bridge](ja/resource-table-bridge.md): 別table layerが列推論やtable stateを持つ場合のTreeView連携。
 
