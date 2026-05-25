@@ -8,7 +8,7 @@ This repository contains the `tree_view` Ruby gem for Rails.
 
 `tree_view` provides reusable tree rendering primitives for Rails host applications. It should stay focused on tree structure, render state, view helpers, partials, and Rails integration points.
 
-Do not use `context.md`. Repository context is maintained here, in `Product Profile.md`, and in `docs/`.
+Do not use `context.md`. Repository context is maintained here and in `docs/`.
 
 ## First Read
 
@@ -16,14 +16,12 @@ Before making changes, read these files in this order:
 
 1. `AGENTS.md`
 2. `README.md`
-3. `Product Profile.md`
-4. `docs/README.md`
-5. The relevant document under `docs/en/` or `docs/ja/`
-6. The implementation files related to the task
+3. `docs/README.md`
+4. The relevant document under `docs/en/` or `docs/ja/`
+5. The implementation files related to the task
 
 Use these files as the durable documentation source:
 
-- `Product Profile.md` — repository positioning, intended users, and non-goals
 - `docs/README.md` — language selector and maintenance entry point
 - `docs/en/design-policy.md` / `docs/ja/design-policy.md` — design intent, responsibility boundaries, include/exclude policy
 - `docs/en/installation.md` / `docs/ja/installation.md` — installation and asset/importmap setup
@@ -84,7 +82,6 @@ Current durable decisions:
 When behavior, public API, setup steps, or design intent changes, update the relevant docs.
 
 - User-facing overview: `README.md`
-- Repository positioning: `Product Profile.md`
 - Detailed docs index: `docs/README.md`
 - Design decisions: `docs/en/design-policy.md` and `docs/ja/design-policy.md`
 - Installation changes: `docs/en/installation.md` and `docs/ja/installation.md`
@@ -133,4 +130,4 @@ Do not implement large feature areas opportunistically while working on unrelate
 ## Codex Common Operation
 
 - Inherit the common skill definitions described in the root [AGENTS.md](/mnt/c/work/AGENTS.md), even when Codex is launched directly in this repository.
-- Keep repository-specific context in this local `AGENTS.md`, `Product Profile.md`, and durable docs in `docs/`.
+- Keep repository-specific context in this local `AGENTS.md` and durable docs in `docs/`.
