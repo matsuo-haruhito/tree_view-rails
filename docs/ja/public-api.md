@@ -113,11 +113,14 @@ host appが使ってよい入口:
 - `registerTreeViewControllers(application)`
 - exported controller classes
   - `TreeViewStateController`
+  - `TreeViewClientController`
   - `TreeViewSelectionController`
   - `TreeViewTransferController`
   - `TreeViewRemoteStateController`
 - documented JavaScript events and payload keys
 - documented `data-tree-view-*` integration hooks
+
+`registerTreeViewControllers(application)` は、上記 5 つの controller export を bundled entrypoint の documented identifier 順に登録します。
 
 内部扱い:
 

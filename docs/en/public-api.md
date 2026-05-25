@@ -113,11 +113,14 @@ Stable enough for host apps to use:
 - `registerTreeViewControllers(application)`
 - exported controller classes
   - `TreeViewStateController`
+  - `TreeViewClientController`
   - `TreeViewSelectionController`
   - `TreeViewTransferController`
   - `TreeViewRemoteStateController`
 - documented JavaScript events and payload keys
 - documented `data-tree-view-*` integration hooks
+
+`registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
 
 Internal by default:
 
