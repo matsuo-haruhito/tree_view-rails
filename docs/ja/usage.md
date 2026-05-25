@@ -179,6 +179,8 @@ windowed renderingを使う場合は、`window:` を渡します。
 <%= tree_view_rows(@render_state, window: { offset: 0, limit: 50 }) %>
 ```
 
+current row anchoring や Turbo refresh をまたぐ offset handoff の考え方は [Windowed Rendering](windowed-rendering.md) を参照してください。
+
 ## Row partial
 
 host app固有の列は `row_partial` に実装します。

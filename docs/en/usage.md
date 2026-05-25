@@ -181,6 +181,8 @@ For windowed rendering, pass `window:`.
 <%= tree_view_rows(@render_state, window: { offset: 0, limit: 50 }) %>
 ```
 
+For current-row anchoring and offset handoff across Turbo refreshes, see [Windowed Rendering](windowed-rendering.md).
+
 ## Row partial
 
 Host-app-specific columns live in the configured `row_partial`.
