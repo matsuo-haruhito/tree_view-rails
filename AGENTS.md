@@ -1,6 +1,7 @@
 # AGENTS.md
 
-see `/mnt/c/work/AGENTS.md`
+Repository-specific maintainer guidance for `tree_view`.
+Use this file together with `README.md`, `docs/README.md`, and `Product Profile.md`.
 
 ## Purpose
 
@@ -129,5 +130,6 @@ Do not implement large feature areas opportunistically while working on unrelate
 
 ## Codex Common Operation
 
-- Inherit the common skill definitions described in the root [AGENTS.md](/mnt/c/work/AGENTS.md), even when Codex is launched directly in this repository.
+- Use this local `AGENTS.md` as the repository-specific operating contract.
+- Prefer repository-local durable docs when you need broader context: `README.md`, `docs/README.md`, `Product Profile.md`, and the relevant language-specific docs under `docs/`.
 - Keep repository-specific context in this local `AGENTS.md` and durable docs in `docs/`.
