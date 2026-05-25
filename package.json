@@ -5,7 +5,8 @@
   "scripts": {
     "test": "vitest run",
     "test:browser": "playwright test",
-    "test:js": "npm test && npm run test:browser"
+    "test:entrypoints": "node --input-type=module -e \"import('./app/javascript/tree_view/index.js').then((module) => { if (typeof module.registerTreeViewControllers !== 'function') throw new Error('registerTreeViewControllers export is missing'); const expected = [['tree-view-state', module.TreeViewStateController], ['tree-view-client', module.TreeViewClientController], ['tree-view-selection', module.TreeViewSelectionController], ['tree-view-transfer', module.TreeViewTransferController], ['tree-view-remote-state', module.TreeViewRemoteStateController]]; const application = { calls: [], register(identifier, controller) { this.calls.push([identifier, controller]); } }; module.registerTreeViewControllers(application); if (application.calls.length !== expected.length || expected.some(([identifier, controller], index) => application.calls[index]?.[0] !== identifier || application.calls[index]?.[1] !== controller)) { throw new Error('documented tree_view entrypoint exports are out of sync'); } })\"",
+    "test:js": "npm run test:entrypoints && npm test && npm run test:browser"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2"
