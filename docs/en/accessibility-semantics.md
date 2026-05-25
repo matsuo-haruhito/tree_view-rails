@@ -60,6 +60,17 @@ Host apps remain responsible for page-level keyboard flow, focus order, table ca
 
 The shipped stylesheet adds a lightweight `.tree-toggle__action:focus-visible` ring and background so keyboard focus is easier to track in quick-start setups. Host apps can override or replace that baseline in copied CSS.
 
+## Baseline row-state styling
+
+The shipped stylesheet also adds lightweight row-state cues for quick-start setups:
+
+- selected rows via `aria-selected="true"` and `.is-selected`
+- current rows via `aria-current="page"`
+- collapsed rows via `aria-expanded="false"` and `.is-collapsed`
+- loading, error, and drop-target rows via row state classes such as `.is-loading`, `.is-error`, and `.is-drop-target`
+
+These defaults are intentionally thin. They are meant to make common states easier to distinguish before a host app adds its own theme, not to provide a finished product design system.
+
 ## `aria-controls`
 
 A toggle link may reveal or hide multiple descendant rows, and in lazy-loading cases the controlled descendants may not exist in the DOM yet. There is no single stable container that the toggle always controls.
