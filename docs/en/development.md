@@ -75,7 +75,7 @@ Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-
 - Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile` and `gemfiles/rails_8_0.gemfile`
 - JavaScript entrypoint, unit, and browser smoke tests through `npm run test:js`
 
-Docs-only pull requests that touch only `README.md` and `docs/**` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails and JavaScript jobs while preserving the same check names for branch protection.
+Docs-only pull requests that touch only `README.md` and `docs/**` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails and JavaScript jobs while preserving the same check names for branch protection. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.
 
 Pushes to `main` also run the broader compatibility and release checks:
 
@@ -107,6 +107,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 - Update `docs/i18n-audit.md`.
 - Decide whether root compatibility docs should remain or point to language-specific docs.
 - When a pull request touches only `README.md` and `docs/**`, confirm that the docs-only CI short-circuit is still the intended policy before relying on it.
+- If a pull request also changes `.github/workflows/**`, treat it as a full CI change rather than a docs-only shortcut candidate.
 
 ## Before release
 
@@ -126,4 +127,5 @@ Pushes to `main` also run the broader compatibility and release checks:
 - Larger docs-only inventory or split PRs are acceptable.
 - PR CI must pass before merge.
 - Docs-only PRs may short-circuit the representative Rails and JavaScript jobs, but merge still waits for the named checks to stay green.
+- PRs that change workflow definitions should be observed on a fresh head SHA before merge.
 - Full compatibility and package verification is confirmed on `main` before release decisions.
