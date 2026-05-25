@@ -342,11 +342,9 @@ For a first implementation, replacing the whole tree panel is usually easiest an
 
 ## Expand only the current branch initially
 
-Navigation sidebars often start with every branch collapsed except the branch containing the current project or document. Use `initial_expansion` with `default: :collapsed` and pass the parent branch key in `expanded_keys`.
+Navigation sidebars often start with every branch collapsed except the branch containing the current project or document. Use `current_item:` or `current_key:` with `auto_expand_ancestors: true` when TreeView should open only the current path and keep sibling branches collapsed.
 
 ```ruby
-expanded_keys = []
-expanded_keys << node_key(@project) if @project
 current_key = @document ? node_key(@document) : node_key(@project)
 
 render_state = TreeView::RenderState.new(
@@ -356,16 +354,28 @@ render_state = TreeView::RenderState.new(
   ui_config: tree_ui,
   initial_expansion: {
     default: :collapsed,
-    expanded_keys: expanded_keys
+    current_key: current_key,
+    auto_expand_ancestors: true
   },
-  current_key: current_key,
   row_class_builder: ->(document) {
     ["document-row", ("is-current" if node_key(document) == current_key)]
   }
 )
 ```
 
-Use `expanded_keys = []` on index pages when only top-level rows should appear. If users need to open other branches, combine this pattern with Turbo mode rather than `build_static`.
+If the host app already has the current record object, pass `current_item:` instead of `current_key:`.
+
+```ruby
+initial_expansion: {
+  default: :collapsed,
+  current_item: @document,
+  auto_expand_ancestors: true
+}
+```
+
+`auto_expand_ancestors:` resolves the current node under `root_items` and merges only ancestor keys into `expanded_keys`. Use `expanded_keys:` alongside it when another sibling branch or additional path should also start open.
+
+On index pages with no current node, omit `current_item:` / `current_key:` and keep `default: :collapsed` if only top-level rows should appear. If users need to open other branches, combine this pattern with Turbo mode rather than `build_static`.
 
 ## GraphAdapter and ActiveRecord performance
 

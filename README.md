@@ -93,6 +93,11 @@ This gem focuses on tree rendering primitives. Host applications are responsible
 
 ## Installation
 
+Minimum supported environment:
+
+- Ruby 3.2 or later
+- Rails 7.0 or later
+
 When you are installing a published release, add the gem normally:
 
 ```ruby
@@ -214,6 +219,7 @@ Additional docs:
 - [Documentation index](docs/README.md)
 - [Visual reference mockups](docs/mockups/README.md)
 - [Documentation maintenance checklist](docs/i18n-audit.md)
+- [Product Profile](Product%20Profile.md)
 - [CHANGELOG.md](CHANGELOG.md)
 
 ## Development
@@ -224,7 +230,9 @@ bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
 npm install
-npm test
+npm run test:js
 ```
+
+`npm run test:js` runs the documented JavaScript pull-request checks together: entrypoint smoke (`npm run test:entrypoints`), Vitest (`npm test`), and Playwright browser smoke (`npm run test:browser`). See the [English development guide](docs/en/development.md) and [日本語の開発・保守方針](docs/ja/development.md) for details.
 
 A committed `package-lock.json` is present, but it is not yet in sync with `package.json`, so CI and local setup keep using `npm install` until that lockfile is refreshed in a registry-enabled environment.

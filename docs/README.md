@@ -21,6 +21,10 @@
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.
 - [日本語Resource table bridge](ja/resource-table-bridge.md): 別table layerが列推論やtable stateを持つ場合のTreeView連携。
 
+## Maintainer entry points
+
+- [Product Profile](../Product%20Profile.md): repository positioning, source-of-truth order, host app responsibilities, and non-goals.
+
 ## Maintenance
 
 Documentation language-sync rules and ongoing maintenance checks are tracked in [Documentation maintenance checklist](i18n-audit.md).

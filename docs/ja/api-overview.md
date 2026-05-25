@@ -8,6 +8,7 @@
 |---|---|
 | `TreeView::Tree` | records、resolver、adapterからツリー構造を作り、問い合わせる中心オブジェクトです。 |
 | `TreeView::RenderState` | root、row partial、UI設定、展開状態、selection、描画範囲など、画面単位の描画状態をまとめます。 |
+| `TreeView::ResourceTableRenderState` | 別の table layer が列定義や table state を持っている前提で、TreeView 向けの `RenderState` bridge を組み立てます。 |
 | `TreeView::UiConfig` | static / Turbo / client-side描画で使うDOM ID、toggle mode、path builderの設定を保持します。 |
 | `TreeView::UiConfigBuilder` | Rails view contextから `build_turbo`、`build_static`、`build_client_side` で `UiConfig` を組み立てます。 |
 | `TreeView::VisibleRows` | 現在のrender stateで表示対象となる行を一次元化します。 |
@@ -27,7 +28,7 @@ host app が TreeView 固有の失敗を他の application error と分けて re
 
 ### records mode
 
-各itemがIDと親IDを持つ場合は records mode を使います。
+各 item が ID と親 ID を持つ場合は records mode を使います。
 
 ```ruby
 tree = TreeView::Tree.new(
@@ -36,19 +37,19 @@ tree = TreeView::Tree.new(
 )
 ```
 
-主なoption:
+主な option:
 
 | Option | 説明 |
 |---|---|
-| `records:` | ツリー化するitem配列。 |
-| `parent_id_method:` | 親IDを返すmethod名。 |
-| `id_method:` | item IDを返すmethod名。既定値は `:id`。 |
-| `sorter:` | root / children の並び順を決めるcallable。 |
-| `orphan_strategy:` | records内に親が存在しないnodeの扱い。 |
+| `records:` | ツリー化する item 配列。 |
+| `parent_id_method:` | 親 ID を返す method 名。 |
+| `id_method:` | item ID を返す method 名。既定値は `:id`。 |
+| `sorter:` | root / children の並び順を決める callable。 |
+| `orphan_strategy:` | records 内に親が存在しない node の扱い。 |
 
 ### resolver mode
 
-親IDではなくcallableでchildrenを返したい場合は resolver mode を使います。
+親 ID ではなく callable で children を返したい場合は resolver mode を使います。
 
 ```ruby
 tree = TreeView::Tree.new(
@@ -59,7 +60,7 @@ tree = TreeView::Tree.new(
 
 ### adapter mode
 
-異種node混在やgraph-likeな構造では adapter mode を使います。
+異種 node 混在や graph-like な構造では adapter mode を使います。
 
 ```ruby
 adapter = TreeView::GraphAdapter.new(
@@ -70,6 +71,22 @@ adapter = TreeView::GraphAdapter.new(
 
 tree = TreeView::Tree.new(adapter: adapter)
 ```
+
+### Resource table bridge
+
+`TreeView::ResourceTableRenderState.call(...)` は、別の table-oriented layer が visible columns や保存済み table state を管理していて、TreeView には階層行の描画 state だけを組み立てさせたい場合に使います。
+
+```ruby
+render_state = TreeView::ResourceTableRenderState.call(
+  records: @projects,
+  context: view_context,
+  parent_id_method: :parent_project_id,
+  table_key: "projects_tree",
+  table_state: table_state
+)
+```
+
+責務境界や連携の詳細は [Resource table bridge](resource-table-bridge.md) を参照してください。
 
 ### node keyとUI識別子
 
@@ -225,5 +242,6 @@ exportされるcontroller classは安定入口として扱います。個別cont
 - Accessibility semantics: [accessibility-semantics.md](accessibility-semantics.md)
 - Error hierarchy: [errors.md](errors.md)
 - Public API互換性方針: [public-api.md](public-api.md)
+- Resource table bridge: [resource-table-bridge.md](resource-table-bridge.md)
 - 最小利用例: [minimal-usage.md](minimal-usage.md)
 - 使い方: [usage.md](usage.md)

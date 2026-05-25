@@ -274,3 +274,143 @@ h2 {
   color: #9aa5b1;
   background: #f1f5f9;
 }
+
+.mock-narrow-frame {
+  inline-size: min(100%, 23rem);
+  margin: 0 auto 1.5rem;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-narrow-frame--tight {
+  inline-size: min(100%, 18rem);
+}
+
+.mock-narrow-caption {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e4e7eb;
+  background: #f8fafc;
+  color: #52606d;
+  font-size: 0.9rem;
+}
+
+.mock-narrow-note {
+  color: #52606d;
+  font-size: 0.95rem;
+}
+
+.tree-view-table--narrow .tree-toggle-cell {
+  min-width: 0;
+  width: 8.25rem;
+  white-space: normal;
+}
+
+.tree-view-table--narrow .tree-toggle {
+  align-items: flex-start;
+}
+
+.tree-view-table--narrow .tree-toggle__control {
+  flex-wrap: wrap;
+}
+
+.tree-view-table--narrow .tree-toggle__action,
+.tree-view-table--narrow .tree-toggle__level,
+.tree-view-table--narrow .tree-depth-label {
+  min-width: 0;
+}
+
+.tree-view-table--narrow .tree-row-actions {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.tree-view-table--narrow .tree-row-actions button {
+  padding: 0.3rem 0.5rem;
+}
+
+.tree-view-table--narrow .tree-node-marker,
+.tree-view-table--narrow .tree-node-badge,
+.tree-view-table--narrow .mock-status {
+  margin-left: 0;
+}
+
+.mock-node-stack {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.mock-node-primary,
+.mock-node-meta,
+.mock-pill-list {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.mock-node-title {
+  color: #102a43;
+  font-weight: 700;
+}
+
+.mock-node-secondary {
+  color: #52606d;
+  font-size: 0.88rem;
+}
+
+.mock-action-icon {
+  min-width: 2rem;
+  padding: 0.3rem 0.45rem;
+  font-weight: 700;
+}
+
+.tree-view-empty-row__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+.tree-view-empty-row__content[data-tree-view-empty-state="true"] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.tree-view-empty-row__message {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-empty-note {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.95rem;
+}
+
+.mock-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.8rem;
+}
+
+.mock-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f4c81;
+  font-size: 0.82rem;
+  font-weight: 700;
+}

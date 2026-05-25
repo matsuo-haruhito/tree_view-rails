@@ -46,6 +46,53 @@ Main metadata:
 | `has_previous?` | Whether a previous window exists. |
 | `has_next?` | Whether a next window exists. |
 
+## Keep the current row inside the window
+
+For navigation-heavy trees, the host app often wants to keep the currently selected row near the middle of the rendered window instead of always starting from offset `0`.
+
+TreeView does not decide which row is "current". The host app owns that meaning and can derive an offset from the visible-row list before building the final `TreeView::RenderWindow`.
+
+```ruby
+visible_rows = TreeView::VisibleRows.new(
+  tree: @render_state.tree,
+  root_items: @render_state.root_items,
+  render_state: @render_state
+).to_a
+
+limit = 50
+current_key = @render_state.tree.node_key_for(current_document)
+current_index = visible_rows.index { |row| row.node_key == current_key } || 0
+anchored_offset = [current_index - (limit / 2), 0].max
+window = TreeView::RenderWindow.new(visible_rows, offset: anchored_offset, limit: limit)
+```
+
+This pattern is useful when the host app has a current record from the route, selection state, or a server-driven navigation flow and wants to avoid dropping that row out of sight.
+
+If expansion state, collapsed keys, or render scope change, recompute the visible rows before anchoring. Windowing is applied after those rules have already decided which rows are visible.
+
+## Hand off offset across Turbo updates
+
+When the host app replaces the tree through Turbo or another server-driven refresh, keep the current offset in app-owned state such as a query param, hidden field, or toolbar link.
+
+```ruby
+limit = 50
+requested_offset = params.fetch(:tree_offset, 0).to_i
+window = tree_view_window(@render_state, offset: requested_offset, limit: limit)
+
+if window.empty? && requested_offset.positive?
+  window = tree_view_window(@render_state, offset: window.previous_offset || 0, limit: limit)
+end
+```
+
+```erb
+<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.has_previous? %>
+<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.has_next? %>
+```
+
+`tree_offset` is only an example key. The host app owns route design, param names, and which interactions must preserve the offset.
+
+In practice, carry the same offset through the links or forms that re-render the tree, especially when expanding/collapsing nodes, changing the current record, or refreshing a Turbo Frame around the tree.
+
 ## Expansion state
 
 Windowing is applied after the current expansion state and render scope are applied.
@@ -90,7 +137,10 @@ If data-fetching volume needs to be reduced, use [Lazy Loading](lazy-loading.md)
 | visible rows calculation | yes | no |
 | offset / limit slicing | yes | no |
 | row rendering for a window | yes | calls helper |
+| current-row meaning | no | yes |
+| current-row anchoring policy | no | yes |
 | pagination controls | metadata only | renders UI |
+| offset persistence across refreshes | no | yes |
 | URL/query state | no | yes |
 | infinite scroll | no | yes |
 | virtual scroll | no | yes |

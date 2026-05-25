@@ -46,6 +46,53 @@ window = tree_view_window(@render_state, offset: 0, limit: 50)
 | `has_previous?` | 前のwindowが存在するか。 |
 | `has_next?` | 次のwindowが存在するか。 |
 
+## current row を window 内に寄せる
+
+navigation が多いtreeでは、常に offset `0` から始めるよりも、現在選択中の行を window の中央付近に保ちたいことがあります。
+
+TreeView はどの行を "current" とみなすかを決めません。その意味付けは host app 側の責務です。host app は visible-row list から current row の位置を求めてから、最終的な `TreeView::RenderWindow` を組み立てられます。
+
+```ruby
+visible_rows = TreeView::VisibleRows.new(
+  tree: @render_state.tree,
+  root_items: @render_state.root_items,
+  render_state: @render_state
+).to_a
+
+limit = 50
+current_key = @render_state.tree.node_key_for(current_document)
+current_index = visible_rows.index { |row| row.node_key == current_key } || 0
+anchored_offset = [current_index - (limit / 2), 0].max
+window = TreeView::RenderWindow.new(visible_rows, offset: anchored_offset, limit: limit)
+```
+
+この考え方は、route・selection state・server-driven navigation などから current record が決まっていて、その行を window 外へ落としにくくしたい場合に向いています。
+
+展開状態、collapsed key、render scope が変わると visible rows 自体も変わるため、anchoring 前に visible rows を作り直してください。windowing は、それらの条件で表示対象が決まった後に適用されます。
+
+## Turbo 更新時に offset を持ち回る
+
+Turbo や他の server-driven refresh で tree を差し替える場合は、現在の offset を query param、hidden field、toolbar link など host app 管理の state に保持してください。
+
+```ruby
+limit = 50
+requested_offset = params.fetch(:tree_offset, 0).to_i
+window = tree_view_window(@render_state, offset: requested_offset, limit: limit)
+
+if window.empty? && requested_offset.positive?
+  window = tree_view_window(@render_state, offset: window.previous_offset || 0, limit: limit)
+end
+```
+
+```erb
+<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.has_previous? %>
+<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.has_next? %>
+```
+
+`tree_offset` はあくまで例です。param 名、route 設計、どの interaction で offset を保つかは host app 側で決めます。
+
+実運用では、node の開閉、current record の切り替え、tree を含む Turbo Frame の再描画など、tree を再描画する link や form で同じ offset を持ち回ると current context を失いにくくなります。
+
 ## 展開状態との関係
 
 windowingは、現在の展開状態・render scopeを適用した後のvisible rowsに対して行われます。
@@ -90,7 +137,10 @@ windowed rendering はDOM仮想化ではありません。
 | visible rows calculation | yes | no |
 | offset / limit slicing | yes | no |
 | row rendering for a window | yes | calls helper |
+| current-row meaning | no | yes |
+| current-row anchoring policy | no | yes |
 | pagination controls | metadata only | renders UI |
+| offset persistence across refreshes | no | yes |
 | URL/query state | no | yes |
 | infinite scroll | no | yes |
 | virtual scroll | no | yes |

@@ -10,9 +10,35 @@ They are **not** a complete Rails application and should not grow into host-app 
 
 | File | Covers |
 |---|---|
+| [review-gallery.html](review-gallery.html) | Single-surface comparison hub for the default, narrow, interaction, and empty-state mockups, with embedded previews and links to each full reference page. |
 | [default-tree.html](default-tree.html) | Default table/tree output, checkbox selection, expanded/collapsed rows, badges, depth labels, row actions, and baseline CSS. |
+| [narrow-sidebar-tree.html](narrow-sidebar-tree.html) | Narrow sidebar and small-width reference that keeps toggle controls, primary labels, and current or selection cues visible while secondary metadata wraps below. |
 | [interaction-states.html](interaction-states.html) | Lazy-loading, loading, error/retry, next-page, and drag/drop visual states. |
+| [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
+
+## Recommended review flow
+
+1. Start with [review-gallery.html](review-gallery.html) when you want a quick side-by-side pass across the main mockup surfaces.
+2. Open the linked full mockup page when one surface needs deeper inspection or longer notes.
+3. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+
+## Copy and language policy
+
+- Mockups use short, product-neutral English copy so reviewers can compare layout and state cues without language changes becoming visual noise.
+- Final labels, localization, permission messaging, and business wording remain host-app responsibilities.
+- If a future mockup intentionally uses another language, document that exception here so reviewers know it is deliberate.
+
+## Narrow-width guidance
+
+- Keep the toggle control, the primary node label, and the current or selected cue visible in the first scan line.
+- Move owner, status, badges, and less-frequent actions into stacked metadata or a compact action surface before hiding hierarchy cues.
+- Treat exact truncation, action menus, and responsive breakpoints as host-app responsibilities. These mockups are reference layouts, not a shipped responsive design system.
+
+## Empty-state guidance
+
+- Use `data-tree-view-empty-state="true"` together with `.tree-view-empty-row__content` and `.tree-view-empty-row__message` as the reusable baseline hook.
+- Keep final empty copy, CTA, permission messaging, and filter-reset behavior in the host app.
 
 ## Review policy
 

@@ -60,6 +60,17 @@ host app は page-level keyboard flow、focus order、table caption、action but
 
 default stylesheet では `.tree-toggle__action:focus-visible` に軽量な ring と背景色を付けています。quick start のままでも keyboard focus を追いやすくするための baseline で、host app は copied stylesheet や上書き CSS でこの baseline を置き換えられます。
 
+## baseline row state styling
+
+default stylesheet には、quick start 用の軽量な row state cue も含めています。
+
+- selected row は `aria-selected="true"` と `.is-selected` を使って見分けやすくしています
+- current row は `aria-current="page"` を使って先頭cellに細いaccentを出します
+- collapsed row は `aria-expanded="false"` と `.is-collapsed` を使って補助的に見分けやすくしています
+- loading / error / drop target は `.is-loading`、`.is-error`、`.is-drop-target` などの row state class を使う前提です
+
+これらの default はあくまで薄い baseline です。host app が独自themeを載せる前でも主要状態を見分けやすくするためのもので、完成済みの product design system を提供する意図ではありません。
+
 ## `aria-controls`
 
 toggle linkは複数のdescendant rowsを表示/非表示にすることがあり、lazy-loading時は制御対象のdescendantsがまだDOM上に存在しない場合があります。常に制御対象と言える単一で安定したcontainerはありません。

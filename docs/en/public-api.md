@@ -23,6 +23,7 @@ Host apps may use these entry points directly:
 - `TreeView::LocalizedNames`
 - `TreeView::Tree`
 - `TreeView::RenderState`
+- `TreeView::ResourceTableRenderState.call`
 - `TreeView::VisibleRows`
 - `TreeView::RenderWindow`
 - `TreeView::UiConfig`
@@ -37,6 +38,8 @@ Host apps may use these entry points directly:
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
 - `tree_view_breadcrumb(tree, item, ...)`
+
+Use `TreeView::ResourceTableRenderState.call` when another table layer already owns column inference and table state, and TreeView should only build the hierarchical render state. See [Resource table bridge](resource-table-bridge.md).
 
 ## Public error surface
 
@@ -62,6 +65,7 @@ The public option surface includes documented keyword arguments and grouped opti
 - `TreeView::Tree`
 - `TreeView::PathTreeBuilder`
 - `TreeView::RenderState`
+- `TreeView::ResourceTableRenderState.call`
 - `TreeView::UiConfig`
 - `TreeView::UiConfigBuilder`
 - `TreeView::RenderWindow`
@@ -113,11 +117,14 @@ Stable enough for host apps to use:
 - `registerTreeViewControllers(application)`
 - exported controller classes
   - `TreeViewStateController`
+  - `TreeViewClientController`
   - `TreeViewSelectionController`
   - `TreeViewTransferController`
   - `TreeViewRemoteStateController`
 - documented JavaScript events and payload keys
 - documented `data-tree-view-*` integration hooks
+
+`registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
 
 Internal by default:
 

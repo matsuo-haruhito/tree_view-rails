@@ -38,6 +38,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [PathTreeBuilder](path-tree-builder.md) | Build generated folder nodes and record nodes from path-like record values |
 | [Error hierarchy](errors.md) | Public TreeView error classes and rescue guidance |
 | [JavaScript event contract](js-events.md) | Public Stimulus event names, detail payloads, and compatibility policy |
+| [Migration guide](migration.md) | Upgrade-oriented compatibility, deprecation, rename, and release-note guidance |
 | [Render log level](render-log-level.md) | Configure TreeView partial render log silencing in host app logs |
 | [Glossary](glossary.md) | Main terms used in TreeView docs and code |
 | [Node keys](node-keys.md) | node_key design, collision avoidance, and validation |
@@ -61,7 +62,9 @@ If you are integrating TreeView into a Rails host app, start with these document
 
 | Document | Description |
 |---|---|
+| [Product Profile](../../Product%20Profile.md) | Repository positioning, source-of-truth order, maintainership boundaries, and non-goals |
 | [Public API](public-api.md) | APIs host apps may use directly and compatibility policy |
+| [Migration guide](migration.md) | Upgrade-oriented summary of compatibility promises, deprecations, and release-note expectations |
 | [Release checklist](release.md) | Release tests, documentation, and gem package checklist |
 | [Design policy](design-policy.md) | Gem responsibilities, included scope, excluded scope, and design decisions |
 | [Development](development.md) | Tests, CI, documentation updates, and future work |
@@ -96,6 +99,8 @@ When TreeView terminology or identifier design is unclear, see [Glossary](glossa
 For TreeView-specific rescue behavior, see [Error hierarchy](errors.md).
 
 For public Stimulus event names and payloads, see [JavaScript event contract](js-events.md).
+
+For upgrade planning, deprecations, and release-note expectations, see [Migration guide](migration.md).
 
 For accessibility semantics, ARIA placement, and keyboard boundaries, see [Accessibility Semantics](accessibility-semantics.md).
 

@@ -342,11 +342,9 @@ end
 
 ## 現在のブランチだけ初期展開する
 
-ナビゲーション用サイドバーでは、現在のprojectやdocumentを含むbranchだけを開き、他のbranchはcollapsedにする構成がよくあります。`initial_expansion` に `default: :collapsed` を指定し、`expanded_keys` に親branchのkeyを渡します。
+ナビゲーション用サイドバーでは、現在のprojectやdocumentを含むbranchだけを開き、他のbranchはcollapsedにする構成がよくあります。`current_item:` または `current_key:` と `auto_expand_ancestors: true` を組み合わせると、current path だけを開き、兄弟branchはcollapsedのまま保てます。
 
 ```ruby
-expanded_keys = []
-expanded_keys << node_key(@project) if @project
 current_key = @document ? node_key(@document) : node_key(@project)
 
 render_state = TreeView::RenderState.new(
@@ -356,16 +354,28 @@ render_state = TreeView::RenderState.new(
   ui_config: tree_ui,
   initial_expansion: {
     default: :collapsed,
-    expanded_keys: expanded_keys
+    current_key: current_key,
+    auto_expand_ancestors: true
   },
-  current_key: current_key,
   row_class_builder: ->(document) {
     ["document-row", ("is-current" if node_key(document) == current_key)]
   }
 )
 ```
 
-一覧ページでは `expanded_keys = []` にすると top-level 行だけを表示できます。他のbranchもユーザーに開閉させたい場合は、`build_static` ではなく Turbo mode と組み合わせます。
+host app 側が current record object をそのまま持っている場合は、`current_key:` の代わりに `current_item:` を渡せます。
+
+```ruby
+initial_expansion: {
+  default: :collapsed,
+  current_item: @document,
+  auto_expand_ancestors: true
+}
+```
+
+`auto_expand_ancestors:` は `root_items` 配下で current node を解決し、その祖先keyだけを `expanded_keys` に加えます。別の sibling branch や追加pathも最初から開きたい場合は、`expanded_keys:` を併用してください。
+
+current node がない一覧ページでは `current_item:` / `current_key:` を省略し、top-level 行だけを見せたいなら `default: :collapsed` を維持します。他branchもユーザーに開閉させたい場合は、`build_static` ではなく Turbo mode と組み合わせます。
 
 ## GraphAdapter と ActiveRecord の性能
 
