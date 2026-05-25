@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Narrow TreeView sidebar mock</title>
+<link rel="stylesheet" href="default-tree.css">
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Narrow TreeView sidebar mock</h1>
+      <p>
+        Static HTML for reviewing how a table-first tree can stay legible in a narrow sidebar or small viewport.
+        The goal is not to ship a responsive design system. The mock keeps hierarchy cues, the primary label, and current or selection state visible while less-critical metadata wraps below.
+      </p>
+    </header>
+
+    <section class="mock-section" aria-labelledby="sidebar-width-heading">
+      <h2 id="sidebar-width-heading">22rem sidebar frame</h2>
+      <p class="mock-narrow-note">
+        Keep the toggle control and the primary label on the first scan line. Secondary metadata can stack below without hiding the tree path.
+      </p>
+      <div class="mock-narrow-frame">
+        <p class="mock-narrow-caption">Representative frame width: 22rem</p>
+        <table class="tree-view-table tree-view-table--narrow" data-controller="tree-view-state" data-tree-view-state-keyboard-value="true">
+          <thead>
+            <tr>
+              <th scope="col">tree</th>
+              <th scope="col">node</th>
+              <th scope="col">act</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="project_21" class="tree-row is-expanded is-selected" data-tree-node-key="project:21" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true" aria-selected="true" aria-current="page">
+              <td class="btn-cell tree-toggle-cell" id="project_21_button">
+                <span class="tree-toggle" aria-label="Root row expanded">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                    <span class="tree-toggle__level">root</span>
+                  </span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary">
+                    <span class="mock-node-title">Platform</span>
+                    <span class="mock-status mock-status--active">active</span>
+                  </div>
+                  <div class="mock-node-secondary">Owner: Team A</div>
+                  <div class="mock-pill-list">
+                    <span class="tree-node-marker" title="Folder">folder</span>
+                    <span class="tree-node-badge tree-node-badge--info" title="Current row">current</span>
+                    <span class="tree-depth-label">L0</span>
+                  </div>
+                </div>
+              </td>
+              <td class="tree-row-actions"><button type="button" class="mock-action-icon">...</button></td>
+            </tr>
+            <tr id="project_22" class="tree-row is-leaf" data-tree-node-key="project:22" data-tree-parent-key="project:21" data-tree-depth="1" aria-level="2" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="project_22_button">
+                <span class="tree-toggle" aria-label="Leaf row">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot has-line"></span>
+                    <span class="tree-toggle__branch-slot is-current is-last"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <span class="tree-toggle__level">leaf</span>
+                  </span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary">
+                    <span class="mock-node-title">Admin UI</span>
+                  </div>
+                  <div class="mock-node-meta">
+                    <span class="mock-node-secondary">Team B</span>
+                    <span class="mock-status">ready</span>
+                  </div>
+                  <div class="mock-pill-list">
+                    <span class="tree-node-marker" title="File">file</span>
+                    <span class="tree-depth-label">L1</span>
+                  </div>
+                </div>
+              </td>
+              <td class="tree-row-actions"><button type="button" class="mock-action-icon">Open</button></td>
+            </tr>
+            <tr id="project_23" class="tree-row is-collapsed" data-tree-node-key="project:23" data-tree-parent-key="project:21" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="project_23_button">
+                <span class="tree-toggle" aria-label="Collapsed row with hidden descendants">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot has-line"></span>
+                    <span class="tree-toggle__branch-slot is-current is-last"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a>
+                    <span class="tree-toggle__level">child</span>
+                    <span class="tree-toggle__hidden-count" title="Hidden descendants">12</span>
+                  </span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary">
+                    <span class="mock-node-title">Legacy reports</span>
+                    <span class="mock-status mock-status--archived">archived</span>
+                  </div>
+                  <div class="mock-node-secondary">Owner: Team C</div>
+                  <div class="mock-pill-list">
+                    <span class="tree-node-marker" title="Archive">archive</span>
+                    <span class="tree-node-badge tree-node-badge--warning" title="Archived subtree">12 hidden</span>
+                  </div>
+                </div>
+              </td>
+              <td class="tree-row-actions"><button type="button" class="mock-action-icon">...</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="tight-width-heading">
+      <h2 id="tight-width-heading">18rem tight rail</h2>
+      <p class="mock-narrow-note">
+        When the frame gets tighter, the mock still keeps the hierarchy cue and primary label visible. Status, badges, and actions become compact rather than trying to stay on a single line.
+      </p>
+      <div class="mock-narrow-frame mock-narrow-frame--tight">
+        <p class="mock-narrow-caption">Representative frame width: 18rem</p>
+        <table class="tree-view-table tree-view-table--narrow">
+          <tbody>
+            <tr id="project_24" class="tree-row is-expanded" data-tree-node-key="project:24" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="project_24_button">
+                <span class="tree-toggle" aria-label="Expanded root row">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                    <span class="tree-toggle__level">root</span>
+                  </span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary">
+                    <span class="mock-node-title">Docs portal</span>
+                  </div>
+                  <div class="mock-pill-list">
+                    <span class="mock-status mock-status--pending">review</span>
+                    <span class="tree-node-badge">3 child</span>
+                  </div>
+                </div>
+              </td>
+              <td class="tree-row-actions"><button type="button" class="mock-action-icon">Go</button></td>
+            </tr>
+            <tr id="project_25" class="tree-row is-loading" data-tree-node-key="project:25" data-tree-parent-key="project:24" data-tree-depth="1" aria-level="2" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="project_25_button">
+                <span class="tree-toggle" aria-label="Loading child row">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot has-line"></span>
+                    <span class="tree-toggle__branch-slot is-current is-last"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <span class="tree-toggle__action tree-toggle__action--pending">wait</span>
+                    <span class="tree-toggle__level">child</span>
+                  </span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary">
+                    <span class="mock-node-title">Publishing queue</span>
+                  </div>
+                  <div class="mock-pill-list">
+                    <span class="mock-status mock-status--pending">loading</span>
+                  </div>
+                </div>
+              </td>
+              <td class="tree-row-actions"><button type="button" class="mock-action-icon" disabled>...</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="narrow-rules-heading">
+      <h2 id="narrow-rules-heading">Review cues</h2>
+      <ul>
+        <li>Do not hide the toggle path or the primary label before secondary metadata has somewhere else to go.</li>
+        <li>Current, selected, loading, and archived state should remain visible without forcing a wide multi-column row.</li>
+        <li>Exact truncation, compact menus, and breakpoints remain host-app responsibilities; this mock is a product-neutral reference.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

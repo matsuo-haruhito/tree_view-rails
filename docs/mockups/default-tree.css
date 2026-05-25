@@ -274,3 +274,98 @@ h2 {
   color: #9aa5b1;
   background: #f1f5f9;
 }
+
+.mock-narrow-frame {
+  inline-size: min(100%, 23rem);
+  margin: 0 auto 1.5rem;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-narrow-frame--tight {
+  inline-size: min(100%, 18rem);
+}
+
+.mock-narrow-caption {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e4e7eb;
+  background: #f8fafc;
+  color: #52606d;
+  font-size: 0.9rem;
+}
+
+.mock-narrow-note {
+  color: #52606d;
+  font-size: 0.95rem;
+}
+
+.tree-view-table--narrow .tree-toggle-cell {
+  min-width: 0;
+  width: 8.25rem;
+  white-space: normal;
+}
+
+.tree-view-table--narrow .tree-toggle {
+  align-items: flex-start;
+}
+
+.tree-view-table--narrow .tree-toggle__control {
+  flex-wrap: wrap;
+}
+
+.tree-view-table--narrow .tree-toggle__action,
+.tree-view-table--narrow .tree-toggle__level,
+.tree-view-table--narrow .tree-depth-label {
+  min-width: 0;
+}
+
+.tree-view-table--narrow .tree-row-actions {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.tree-view-table--narrow .tree-row-actions button {
+  padding: 0.3rem 0.5rem;
+}
+
+.tree-view-table--narrow .tree-node-marker,
+.tree-view-table--narrow .tree-node-badge,
+.tree-view-table--narrow .mock-status {
+  margin-left: 0;
+}
+
+.mock-node-stack {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.mock-node-primary,
+.mock-node-meta,
+.mock-pill-list {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.mock-node-title {
+  color: #102a43;
+  font-weight: 700;
+}
+
+.mock-node-secondary {
+  color: #52606d;
+  font-size: 0.88rem;
+}
+
+.mock-action-icon {
+  min-width: 2rem;
+  padding: 0.3rem 0.45rem;
+  font-weight: 700;
+}
