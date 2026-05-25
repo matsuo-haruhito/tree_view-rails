@@ -27,6 +27,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added explicit `UiConfig#mode` values for `:turbo`, `:static`, and `:client`, plus `UiConfigBuilder#build_turbo` and `UiConfigBuilder#build_client_side`.
 - Added client-side-only expand/collapse mode that renders collapsed descendants into initial HTML and toggles rows in the browser with the bundled `tree-view-client` controller.
 - Added `TreeView::Diagnostics.run` as a consolidated diagnostics entrypoint for node keys, DOM IDs, orphans, and cycles.
+- Added `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` so host apps can reuse stable lazy-loading placeholder IDs and data attributes.
 
 ### Changed
 
@@ -52,6 +53,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added JavaScript event contract docs in Japanese and English for public Stimulus events and payload details.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
+- Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
 
 ### Tests
 

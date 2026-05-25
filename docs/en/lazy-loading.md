@@ -134,27 +134,34 @@ end
 
 The exact query shape is application-specific. The important boundary is that TreeView renders the hooks, while the host app decides which records the current user may see.
 
+When you render the host-app placeholder regions, TreeView can also generate the stable IDs for the children container and remote-state element.
+
+```erb
+<tbody id="<%= tree_children_container_dom_id(@parent) %>"></tbody>
+<span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent)) %>></span>
+```
+
 ## Turbo Stream response pattern
 
 Return only the subtree or placeholder region the host app owns. For example:
 
 ```erb
-<%= turbo_stream.replace dom_id(@parent, :children) do %>
-  <tbody id="<%= dom_id(@parent, :children) %>">
+<%= turbo_stream.replace tree_children_container_dom_id(@parent) do %>
+  <tbody id="<%= tree_children_container_dom_id(@parent) %>">
     <%= tree_view_rows(@render_state) %>
   </tbody>
 <% end %>
 
-<%= turbo_stream.replace dom_id(@parent, :remote_state) do %>
-  <span id="<%= dom_id(@parent, :remote_state) %>" data-tree-remote-state="loaded">loaded</span>
+<%= turbo_stream.replace tree_remote_state_placeholder_dom_id(@parent) do %>
+  <span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent, state: "loaded")) %>>loaded</span>
 <% end %>
 ```
 
 If a request fails, return a host-app retry affordance instead of hiding the error in TreeView internals:
 
 ```erb
-<%= turbo_stream.replace dom_id(@parent, :remote_state) do %>
-  <span id="<%= dom_id(@parent, :remote_state) %>" data-tree-remote-state="error">
+<%= turbo_stream.replace tree_remote_state_placeholder_dom_id(@parent) do %>
+  <span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent, state: "error")) %>>
     Could not load children.
     <%= link_to "Retry", children_document_path(@parent, format: :turbo_stream), data: { turbo_stream: true } %>
   </span>

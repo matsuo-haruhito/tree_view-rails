@@ -134,27 +134,34 @@ end
 
 実際のquery shapeはアプリごとに異なります。重要なのは、TreeViewはhookを描画し、現在のuserが見てよいrecordの判断はhost app側で行う、という境界です。
 
+host app側のplaceholder領域を描画するときは、TreeView helper で children container と remote state 要素の安定したIDを作れます。
+
+```erb
+<tbody id="<%= tree_children_container_dom_id(@parent) %>"></tbody>
+<span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent)) %>></span>
+```
+
 ## Turbo Stream response pattern
 
 host appが所有するsubtreeやplaceholder領域だけを返します。
 
 ```erb
-<%= turbo_stream.replace dom_id(@parent, :children) do %>
-  <tbody id="<%= dom_id(@parent, :children) %>">
+<%= turbo_stream.replace tree_children_container_dom_id(@parent) do %>
+  <tbody id="<%= tree_children_container_dom_id(@parent) %>">
     <%= tree_view_rows(@render_state) %>
   </tbody>
 <% end %>
 
-<%= turbo_stream.replace dom_id(@parent, :remote_state) do %>
-  <span id="<%= dom_id(@parent, :remote_state) %>" data-tree-remote-state="loaded">loaded</span>
+<%= turbo_stream.replace tree_remote_state_placeholder_dom_id(@parent) do %>
+  <span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent, state: "loaded")) %>>loaded</span>
 <% end %>
 ```
 
 requestが失敗した場合は、TreeView内部にerrorを隠さず、host app側のretry UIを返します。
 
 ```erb
-<%= turbo_stream.replace dom_id(@parent, :remote_state) do %>
-  <span id="<%= dom_id(@parent, :remote_state) %>" data-tree-remote-state="error">
+<%= turbo_stream.replace tree_remote_state_placeholder_dom_id(@parent) do %>
+  <span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent, state: "error")) %>>
     childrenを読み込めませんでした。
     <%= link_to "再試行", children_document_path(@parent, format: :turbo_stream), data: { turbo_stream: true } %>
   </span>
