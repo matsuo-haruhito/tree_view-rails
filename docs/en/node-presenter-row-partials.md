@@ -63,22 +63,22 @@ Pass it to `RenderState`:
 )
 ```
 
+When TreeView renders `row_partial`, the partial receives `item`, `tree`, `render_state`, `row_context`, and `node_presenter`. `row_actions_partial` receives the same locals.
+
 ## Example row partial
 
 ```erb
-<% presenter = render_state.node_presenter %>
-
 <td>
-  <% label = presenter&.label_for(item) || item.to_s %>
-  <% href = presenter&.href_for(item) %>
+  <% label = node_presenter&.label_for(item) || item.to_s %>
+  <% href = node_presenter&.href_for(item) %>
 
   <% if href %>
-    <%= link_to label, href, title: presenter&.tooltip_for(item) %>
+    <%= link_to label, href, title: node_presenter&.tooltip_for(item) %>
   <% else %>
     <%= label %>
   <% end %>
 
-  <% if (badge = presenter&.badge_for(item)) %>
+  <% if (badge = node_presenter&.badge_for(item)) %>
     <span class="badge"><%= badge %></span>
   <% end %>
 </td>
@@ -88,7 +88,7 @@ Pass it to `RenderState`:
 </td>
 
 <td>
-  <% if presenter&.actions_for(item)&.include?(:download) && policy(item).download? %>
+  <% if node_presenter&.actions_for(item)&.include?(:download) && policy(item).download? %>
     <%= link_to "Download", download_document_path(item) %>
   <% end %>
 </td>
