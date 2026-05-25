@@ -10,6 +10,7 @@ TreeView is responsible for:
 
 - `TreeView::PersistedState` as the persisted-state value object
 - `TreeView::StateStore` for loading and saving through a host app model
+- `TreeView::PersistedStateController` for a small controller concern that bridges request params to `StateStore#save!`
 - an install generator for the migration, model, and concern
 - passing persisted expanded keys into `RenderState`
 
@@ -77,6 +78,38 @@ Save expansion state:
 ```ruby
 persisted_state = store.save(expanded_keys: expanded_keys)
 ```
+
+## Minimal controller concern
+
+If your host app wants to keep the save endpoint small, include `TreeView::PersistedStateController` in the controller and let it bridge the raw request values to `StateStore#save!`.
+
+```ruby
+class TreeStatesController < ApplicationController
+  include TreeView::PersistedStateController
+
+  def update
+    authorize current_user, :update?
+
+    persisted_state = save_tree_view_persisted_state!(
+      model: TreeViewState,
+      owner: current_user,
+      tree_instance_key: params.require(:tree_instance_key),
+      expanded_keys: params[:expanded_keys]
+    )
+
+    render json: {
+      tree_instance_key: persisted_state.tree_instance_key,
+      expanded_keys: persisted_state.expanded_keys
+    }
+  end
+end
+```
+
+The concern keeps responsibility boundaries narrow:
+
+- it normalizes `expanded_keys` from either an array-like param or a comma-separated string
+- it still requires the host app to choose the owner, authorization, route, save timing, and response shape
+- it does not provide a finished controller or lock the host app into Turbo Stream vs JSON responses
 
 ## RenderState integration
 
@@ -174,8 +207,10 @@ TreeView stores expanded keys only. The host app still decides where save reques
 | persisted state value object | yes | no |
 | generated model/migration template | yes | reviews and migrates |
 | loading/saving through StateStore | yes | provides owner and key |
+| save helper / controller concern | optional | includes and uses it |
 | choosing owner model | optional generator argument | yes |
 | deciding save timing | no | yes |
 | controller/API endpoint | no | yes |
 | authorization | no | yes |
+| response format | no | yes |
 | UI event wiring | hooks only | yes |
