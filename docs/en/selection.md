@@ -107,6 +107,30 @@ document.addEventListener("tree-view-selection:change", (event) => {
 
 Only checked and enabled `.tree-selection-checkbox` elements are included. Invalid JSON values are skipped and reported through `tree-view-selection:invalid-payload`.
 
+## Hidden input sync for regular form submit
+
+When the tree sits inside a normal HTML form, the same controller can mirror checked payloads into hidden inputs on the nearest form.
+
+```erb
+<form action="/documents/bulk_update" method="post">
+  <table>
+    <tbody
+      data-controller="tree-view-selection"
+      data-action="change->tree-view-selection#toggle"
+      data-tree-view-selection-hidden-input-name-value="selected_nodes[]">
+      <%= tree_view_rows(@render_state) %>
+    </tbody>
+  </table>
+</form>
+```
+
+With `data-tree-view-selection-hidden-input-name-value`, TreeView writes one hidden input per valid checked payload and keeps those inputs in sync on connect, change, submit, and manual refresh.
+
+- The hidden input `name` stays host-app controlled.
+- Values are written as JSON strings, so `TreeView.parse_selection_params(params[:selected_nodes])` keeps working.
+- Disabled checkboxes and invalid JSON payloads are skipped, matching the existing event payload behavior.
+- If the tree is not inside a form, TreeView keeps dispatching selection events and does not create hidden inputs.
+
 ## Selection max count
 
 Host apps can limit the number of checked boxes on the JavaScript controller.
@@ -152,7 +176,7 @@ This behavior is DOM-based. It affects rendered rows only and skips disabled che
 |---|---|---|
 | Rendering checkboxes | yes | no |
 | JSON payload generation | yes | optional customization |
-| Submitted value parsing | helper provided | owns controller behavior |
+| Submitted value parsing and hidden input sync | helper provided, optional form bridge | owns controller placement and business action |
 | Cascade / indeterminate | rendered DOM only | decides unloaded/server-side semantics |
 | Max count event | dispatches event | shows message or blocks business action |
 | Delete / move / relate / API calls | no | yes |

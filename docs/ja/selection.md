@@ -107,6 +107,30 @@ document.addEventListener("tree-view-selection:change", (event) => {
 
 対象になるのは、checked かつ enabled な `.tree-selection-checkbox` だけです。不正なJSON値はskipされ、`tree-view-selection:invalid-payload` で通知されます。
 
+## 通常form送信用の hidden input 同期
+
+tree が通常の HTML form の中にある場合、同じ controller で checked payload を最寄りの form に hidden input としてミラーできます。
+
+```erb
+<form action="/documents/bulk_update" method="post">
+  <table>
+    <tbody
+      data-controller="tree-view-selection"
+      data-action="change->tree-view-selection#toggle"
+      data-tree-view-selection-hidden-input-name-value="selected_nodes[]">
+      <%= tree_view_rows(@render_state) %>
+    </tbody>
+  </table>
+</form>
+```
+
+`data-tree-view-selection-hidden-input-name-value` を指定すると、TreeView は valid な checked payload ごとに hidden input を 1 つずつ生成し、connect / change / submit / manual refresh に追従して同期します。
+
+- hidden input の `name` は host app 側で決められます。
+- value は JSON 文字列で書き込まれるため、`TreeView.parse_selection_params(params[:selected_nodes])` をそのまま使えます。
+- disabled checkbox と不正な JSON payload は既存 event と同じく skip されます。
+- tree が form の外にある場合は、selection event だけを dispatch し、hidden input は生成しません。
+
 ## 最大選択数
 
 JavaScript controller側で、checked checkboxの最大数を制限できます。
@@ -152,7 +176,7 @@ Stimulus controllerは、描画済みchild rowsとparent mixed stateも更新で
 |---|---|---|
 | Rendering checkboxes | yes | no |
 | JSON payload generation | yes | optional customization |
-| Submitted value parsing | helper provided | owns controller behavior |
+| Submitted value parsing と hidden input sync | helper 提供、form bridge は optional | controller の配置と業務 action を決める |
 | Cascade / indeterminate | rendered DOM only | decides unloaded/server-side semantics |
 | Max count event | dispatches event | shows message or blocks business action |
 | Delete / move / relate / API calls | no | yes |
