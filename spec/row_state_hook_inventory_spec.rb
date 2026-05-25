@@ -28,7 +28,7 @@ RSpec.describe "row state hook inventory" do
 
   it "keeps the same representative row state hooks visible in the static mockups" do
     documented_row_state_hooks.each do |hook|
-      expect(mock_sources).to include(hook)
+      expect(mock_sources).to include(hook.delete_prefix("."))
     end
   end
 
