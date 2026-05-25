@@ -53,6 +53,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added JavaScript event contract docs in Japanese and English for public Stimulus events and payload details.
 - Added migration guides in Japanese and English to summarize compatibility promises, deprecations, rename handling, and release-note expectations.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
+- Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
 
