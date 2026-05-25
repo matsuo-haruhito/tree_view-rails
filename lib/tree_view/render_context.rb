@@ -26,6 +26,7 @@ module TreeView
       :hidden_message_builder,
       :row_class_builder,
       :row_data_builder,
+      :node_presenter,
       :row_event_payload_builder,
       :loading_builder,
       :error_builder,
@@ -80,6 +81,7 @@ module TreeView
           hidden_message_builder: local_assigns[:hidden_message_builder],
           row_class_builder: local_assigns[:row_class_builder],
           row_data_builder: local_assigns[:row_data_builder],
+          node_presenter: local_assigns[:node_presenter],
           row_event_payload_builder: local_assigns[:row_event_payload_builder],
           loading_builder: local_assigns[:loading_builder],
           error_builder: local_assigns[:error_builder],
@@ -119,6 +121,32 @@ module TreeView
       return {} unless render_state.respond_to?(:row_locals)
 
       render_state.row_locals
+    end
+
+    def node_presenter
+      return nil unless render_state.respond_to?(:node_presenter)
+
+      render_state.node_presenter
+    end
+
+    def row_partial_locals(item:, row_context:)
+      row_locals.merge(
+        item: item,
+        tree: tree,
+        render_state: render_state,
+        row_context: row_context,
+        node_presenter: node_presenter
+      ).compact
+    end
+
+    def row_actions_partial_locals(item:, row_context:)
+      {
+        item: item,
+        tree: tree,
+        render_state: render_state,
+        row_context: row_context,
+        node_presenter: node_presenter
+      }.compact
     end
 
     def collapsed?
