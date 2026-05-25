@@ -191,7 +191,7 @@ Host-app-specific columns live in the configured `row_partial`.
 <td><%= item.owner_name %></td>
 ```
 
-The partial receives `item`.
+The partial always receives `item`, `tree`, `render_state`, and `row_context`. When `RenderState#node_presenter` is configured, TreeView also passes `node_presenter` so host apps can reuse shared label / href / tooltip / badge / action resolvers without re-threading them through `row_locals`.
 
 Use `row_actions_partial` for per-row action links/buttons such as Edit, Show, Delete, Archive, and other host-app actions. For display columns, action links, inline controls, depth labels, badges, icons, and status markers, see [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide).
 
@@ -213,6 +213,8 @@ Host apps can place inputs, selects, textareas, buttons, links, and `contentedit
   <%= button_to "Archive", archive_document_path(item), method: :post %>
 </td>
 ```
+
+`row_actions_partial` receives the same `item`, `tree`, `render_state`, and `row_context` locals as `row_partial`, plus `node_presenter` when configured.
 
 For custom widgets that are not native controls, add `data-tree-view-interactive="true"` to the widget or an ancestor inside the row.
 
@@ -257,84 +259,3 @@ Initial expansion, render scope, and toggle scope can be configured with grouped
 ```
 
 When both flat keyword options and grouped options are provided, flat keyword options take precedence for backward compatibility.
-
-## Selection
-
-Use `selection:` to enable checkbox selection.
-
-```ruby
-@render_state = TreeView::RenderState.new(
-  tree: tree,
-  root_items: tree.root_items,
-  row_partial: "documents/tree_columns",
-  ui_config: tree_ui,
-  selection: {
-    enabled: true,
-    checkbox_name: "selected_nodes[]",
-    visibility: :leaves
-  }
-)
-```
-
-TreeView renders checkboxes, builds payloads, and provides a JavaScript controller for collecting selected payloads. The host app owns business actions such as deleting, moving, or relating selected nodes.
-
-See [Selection](selection.md) for details.
-
-## Lazy loading
-
-Use `load_children_path_builder` and `RenderState#lazy_loading` when children are loaded on demand.
-
-```ruby
-tree_ui = TreeView::UiConfigBuilder.new(
-  context: view_context,
-  node_prefix: "document"
-).build_turbo(
-  hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth:, scope:) },
-  show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth:, scope:) },
-  load_children_path_builder: ->(item, depth, scope) {
-    children_document_path(item, depth: depth, scope: scope, format: :turbo_stream)
-  },
-  toggle_all_path_builder: ->(state) { documents_path(state: state) }
-)
-
-@render_state = TreeView::RenderState.new(
-  tree: tree,
-  root_items: tree.root_items,
-  row_partial: "documents/tree_columns",
-  ui_config: tree_ui,
-  lazy_loading: {
-    enabled: true,
-    loaded_keys: loaded_keys
-  }
-)
-```
-
-The host app owns fetch behavior, Turbo requests, retry behavior, loading messages, and authorization. Lazy loading requires Turbo/server-driven rendering and cannot be enabled with `build_client_side`.
-
-## PathTree / ReverseTree
-
-Use `path_tree_for` when search results should be shown with their ancestors.
-
-```ruby
-path_tree = base_tree.path_tree_for(matched_documents)
-```
-
-Use `reverse_tree_for` when the UI starts at matched child nodes and walks toward roots.
-
-```ruby
-reverse_tree = base_tree.reverse_tree_for(matched_documents)
-```
-
-| API | Direction | Use case |
-|---|---|---|
-| `path_tree_for(items)` | root -> parent -> matched item | Show search results inside the normal hierarchy |
-| `reverse_tree_for(items)` | matched item -> parent -> root | Walk from child nodes toward parents |
-
-## Next steps
-
-- [API overview](api-overview.md)
-- [API reference](api.md)
-- [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide)
-- [Selection](selection.md)
-- [Lazy Loading](lazy-loading.md)
-- [Windowed Rendering](windowed-rendering.md)
