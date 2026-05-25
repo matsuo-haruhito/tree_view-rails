@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +12,8 @@
       <p class="mock-kicker">tree_view-rails</p>
       <h1>Default TreeView rendering mock</h1>
       <p>
-        Rails を起動せずに、gem 標準 partial が出力する代表的な table / row / cell / data 属性の形を確認するための静的HTMLです。
-        実アプリ上の playground は demo repo、本体 repo のこの mock は DOM 構造と CSS 適用状態の確認に使います。
+        Static HTML for reviewing representative table, row, cell, and data-attribute output from the bundled TreeView partials without running Rails.
+        Full playground scenarios belong in the demo repository; this mock stays focused on DOM structure and baseline CSS coverage.
       </p>
     </header>
 
@@ -136,11 +136,11 @@
     <section class="mock-section" aria-labelledby="notes-heading">
       <h2 id="notes-heading">What this mock covers</h2>
       <ul>
-        <li>root / child / leaf の代表行</li>
-        <li>expanded / collapsed / hidden count 表示</li>
-        <li>selected checkbox と disabled checkbox</li>
-        <li>badge / marker / depth label の配置</li>
-        <li>row data 属性、tree state data 属性、row actions partial の列位置</li>
+        <li>Representative root, child, and leaf rows</li>
+        <li>Expanded and collapsed rows with hidden-count cues</li>
+        <li>Selected and disabled checkbox states</li>
+        <li>Badge, marker, and depth-label placement</li>
+        <li>Row data attributes, tree state attributes, and row-actions column placement</li>
       </ul>
     </section>
   </main>
