@@ -16,6 +16,12 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
 
+## Copy and language policy
+
+- Mockups use short, product-neutral English copy so reviewers can compare layout and state cues without language changes becoming visual noise.
+- Final labels, localization, permission messaging, and business wording remain host-app responsibilities.
+- If a future mockup intentionally uses another language, document that exception here so reviewers know it is deliberate.
+
 ## Narrow-width guidance
 
 - Keep the toggle control, the primary node label, and the current or selected cue visible in the first scan line.
