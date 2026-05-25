@@ -4,7 +4,8 @@ export class TreeViewSelectionController extends Controller {
   static values = {
     cascade: Boolean,
     indeterminate: Boolean,
-    maxCount: Number
+    maxCount: Number,
+    hiddenInputName: String
   }
 
   connect() {
@@ -36,26 +37,35 @@ export class TreeViewSelectionController extends Controller {
   submit(event) {
     if (event) event.preventDefault()
 
+    const payloads = this.selectedPayloads()
+    this.syncHiddenInputs(payloads)
+
     this.dispatch("selected", {
       detail: {
-        payloads: this.selectedPayloads()
+        payloads
       }
     })
   }
 
   refresh() {
     this.updateIndeterminateStates()
+
+    const detail = this.selectionDetail()
+    this.syncHiddenInputs(detail.selectedPayloads)
+
     this.dispatch("selected", {
       detail: {
-        payloads: this.selectedPayloads()
+        payloads: detail.selectedPayloads
       }
     })
-    this.dispatchSelectionChanged()
+    this.dispatchSelectionChanged(detail)
   }
 
-  dispatchSelectionChanged() {
+  dispatchSelectionChanged(detail = this.selectionDetail()) {
+    this.syncHiddenInputs(detail.selectedPayloads)
+
     this.dispatch("change", {
-      detail: this.selectionDetail()
+      detail
     })
   }
 
@@ -88,6 +98,49 @@ export class TreeViewSelectionController extends Controller {
       })
       return null
     }
+  }
+
+  syncHiddenInputs(payloads = this.selectedPayloads()) {
+    if (!this.hiddenInputSyncEnabled()) return
+
+    const form = this.hiddenInputForm()
+    if (!form) return
+
+    this.removeSyncedHiddenInputs(form)
+
+    payloads.forEach((payload) => {
+      const input = document.createElement("input")
+      input.type = "hidden"
+      input.name = this.hiddenInputNameValue
+      input.value = JSON.stringify(payload)
+      input.dataset.treeViewSelectionGeneratedHiddenInput = "true"
+      input.dataset.treeViewSelectionSourceId = this.hiddenInputSourceId()
+      form.appendChild(input)
+    })
+  }
+
+  hiddenInputSyncEnabled() {
+    return this.hasHiddenInputNameValue && this.hiddenInputNameValue.length > 0
+  }
+
+  hiddenInputForm() {
+    return this.element.closest("form")
+  }
+
+  hiddenInputSourceId() {
+    if (!this.element.dataset.treeViewSelectionSourceId) {
+      this.element.dataset.treeViewSelectionSourceId = `tree-view-selection-${Math.random().toString(36).slice(2, 10)}`
+    }
+
+    return this.element.dataset.treeViewSelectionSourceId
+  }
+
+  removeSyncedHiddenInputs(form) {
+    form
+      .querySelectorAll(
+        `[data-tree-view-selection-generated-hidden-input="true"][data-tree-view-selection-source-id="${this.hiddenInputSourceId()}"]`
+      )
+      .forEach((input) => input.remove())
   }
 
   enforceMaxCount(checkbox, attemptedChecked) {
