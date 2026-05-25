@@ -214,8 +214,8 @@ bundle install
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
-npm ci
+npm install
 npm test
 ```
 
-JavaScript checks use the committed `package-lock.json`, so `npm ci` is the expected local path when you want the same dependency resolution as CI.
+A committed `package-lock.json` is present, but it is not yet in sync with `package.json`, so CI and local setup keep using `npm install` until that lockfile is refreshed in a registry-enabled environment.
