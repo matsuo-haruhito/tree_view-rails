@@ -214,6 +214,7 @@ Additional docs:
 - [Documentation index](docs/README.md)
 - [Visual reference mockups](docs/mockups/README.md)
 - [Documentation maintenance checklist](docs/i18n-audit.md)
+- [Product Profile](Product%20Profile.md)
 - [CHANGELOG.md](CHANGELOG.md)
 
 ## Development
