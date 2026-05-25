@@ -60,6 +60,29 @@ tree_ui = TreeView::UiConfigBuilder.new(
 
 Path builders only build URLs. The host app owns controller actions, Turbo Stream responses, authorization, and server-side queries.
 
+If the host app wants to build its own toolbar instead of using TreeView's bundled HTML helper, ask TreeView for action metadata and render links or buttons in app-owned markup.
+
+```erb
+<% tree_view_toolbar_actions(@render_state).each do |action| %>
+  <% if action[:path] %>
+    <%= link_to action[:label], action[:path], data: action[:data] %>
+  <% else %>
+    <%= button_tag action[:label], type: "button", disabled: true, data: action[:data] %>
+  <% end %>
+<% end %>
+```
+
+Each action hash includes:
+
+- `:action` such as `:expand_all`
+- `:state` such as `:expanded`
+- `:label`
+- `:path`, or `nil` when the current mode does not support tree-wide toggling
+- `:disabled`
+- `:data` for host-app buttons or links
+
+TreeView only supplies the metadata. Final HTML structure, styling, icons, and authorization rules stay in the host app.
+
 ## Client-side expand/collapse
 
 Use `build_client_side` when all nodes in the render scope can be included in the initial HTML and you only need browser-local expand/collapse.
