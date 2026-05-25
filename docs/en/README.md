@@ -61,6 +61,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 
 | Document | Description |
 |---|---|
+| [Product Profile](../../Product%20Profile.md) | Repository positioning, source-of-truth order, maintainership boundaries, and non-goals |
 | [Public API](public-api.md) | APIs host apps may use directly and compatibility policy |
 | [Release checklist](release.md) | Release tests, documentation, and gem package checklist |
 | [Design policy](design-policy.md) | Gem responsibilities, included scope, excluded scope, and design decisions |
