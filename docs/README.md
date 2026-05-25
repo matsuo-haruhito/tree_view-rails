@@ -18,22 +18,22 @@
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.
 - [日本語Resource table bridge](ja/resource-table-bridge.md): 別table layerが列推論やtable stateを持つ場合のTreeView連携。
 
-## Translation status
+## Maintenance
 
-Documentation translation status and priorities are tracked in [Documentation i18n audit](i18n-audit.md).
+Documentation language-sync rules and ongoing maintenance checks are tracked in [Documentation maintenance checklist](i18n-audit.md).
 
-ドキュメントの日英対応状況と優先度は [Documentation i18n audit](i18n-audit.md) で管理します。
+ドキュメントの日英同期ルールと継続的な保守チェックは [Documentation maintenance checklist](i18n-audit.md) で管理します。
 
 ## Policy
 
 - `docs/ja/` is the Japanese documentation tree and is the primary canonical source while Japanese coverage is more complete.
 - `docs/en/` is the English documentation tree.
-- Root-level docs are kept temporarily for compatibility during the migration.
+- Root-level docs should stay limited to intentional entry points, maintenance notes, and technical assets.
 - New or substantially updated user-facing docs should be added under both `docs/ja/` and `docs/en/` when practical.
 
 ## 方針
 
 - `docs/ja/` は日本語ドキュメントです。日本語側の内容がより充実している間は、主なcanonical sourceとして扱います。
 - `docs/en/` は英語ドキュメントです。
-- 移行中の互換性のため、root直下の既存docsは一旦残します。
+- root直下のdocsは、意図した入口、保守メモ、technical asset に限定します。
 - 利用者向けdocsを新規追加または大きく更新する場合は、可能な限り `docs/ja/` と `docs/en/` の両方に追加します。

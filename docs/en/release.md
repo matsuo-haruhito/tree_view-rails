@@ -83,6 +83,7 @@ When public usage or public options change, update related docs and CHANGELOG.
 - `docs/ja/public-api.md`
 - `docs/en/public-api.md`
 - feature-specific docs
+- `docs/i18n-audit.md` (documentation maintenance checklist)
 - `CHANGELOG.md`
 
 ## CHANGELOG policy
