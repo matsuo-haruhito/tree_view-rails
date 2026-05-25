@@ -44,6 +44,8 @@ If you already know the symptom and want a faster reverse-lookup entry point, se
 - [English Troubleshooting](docs/en/troubleshooting.md)
 - [日本語Troubleshooting](docs/ja/troubleshooting.md)
 
+If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md).
+
 ## Features
 
 - Build trees from parent-child records.
@@ -210,6 +212,7 @@ Key documents:
 Additional docs:
 
 - [Documentation index](docs/README.md)
+- [Visual reference mockups](docs/mockups/README.md)
 - [Documentation maintenance checklist](docs/i18n-audit.md)
 - [CHANGELOG.md](CHANGELOG.md)
 
