@@ -259,7 +259,10 @@ render_state = TreeView::RenderState.new(
 | `initial_state:` | no | `:expanded` または `:collapsed`。 |
 | `expanded_keys:` | no | 展開するtree側node key配列。`tree.node_key_for(item)` と一致する必要があり、UIだけのDOM IDではありません。 |
 | `collapsed_keys:` | no | 折りたたむtree側node key配列。`tree.node_key_for(item)` と一致する必要があり、UIだけのDOM IDではありません。 |
-| `initial_expansion:` | no | 初期展開設定group。このgroup内の展開keyにも同じtree側node keyの規則が適用されます。 |
+| `current_item:` | no | 現在nodeのobject。row状態判定に使えるほか、ancestor 自動展開時の起点にもなります。 |
+| `current_key:` | no | host app 側が key だけ持っている場合の現在node key。ancestor 自動展開の前に、TreeView が `root_items` 配下から対応nodeを解決します。 |
+| `auto_expand_ancestors:` | no | 現在nodeの ancestor key を `expanded_keys` に自動で足す boolean。`current_item`、または `root_items` 配下で解決できる `current_key` が必要です。 |
+| `initial_expansion:` | no | 初期展開設定group。`default`、`max_depth`、`expanded_keys`、`collapsed_keys`、`current_item`、`current_key`、`auto_expand_ancestors` を使えます。 |
 | `render_scope:` | no | 描画範囲設定group。 |
 | `toggle_scope:` | no | 開閉操作範囲設定group。 |
 | `selection:` | no | checkbox selection設定group。 |
@@ -274,6 +277,8 @@ render_state = TreeView::RenderState.new(
 | `row_status_builder:` | no | row状態を返すcallable。 |
 | `row_event_payload_builder:` | no | drag/drop transfer payloadを返すcallable。transfer専用であり、汎用row event hookではない。 |
 | `persisted_state:` | no | 保存済み展開状態。 |
+
+個別引数と `initial_expansion:` を同時に指定した場合は、個別引数を優先します。`auto_expand_ancestors:` が開くのは current node に至る path だけなので、兄弟branchや別pathも最初から開きたい場合は引き続き `expanded_keys:` を併用してください。実用例は [Cookbook の「現在のブランチだけ初期展開する」](cookbook.md#現在のブランチだけ初期展開する) を参照してください。
 
 公開名の判断は [Public Name Decisions](public-name-decisions.md)、ARIA配置は [Accessibility Semantics](accessibility-semantics.md) を参照してください。識別子設計は [Node keys](node-keys.md) を参照してください。
 
