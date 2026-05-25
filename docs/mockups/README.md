@@ -6,6 +6,8 @@ These files are intentionally small, reviewable assets in the gem repository. Th
 
 They are **not** a complete Rails application and should not grow into host-app CRUD, query, authorization, seed data, or controller examples. Full playground/application examples belong in `matsuo-haruhito/tree_view-rails-demo` once that demo repository is public.
 
+Representative mockups in this directory use short, product-neutral English copy by default so side-by-side review can focus on structure and state differences instead of language drift. Final product copy and localization strategy remain host-app responsibilities.
+
 ## Files
 
 | File | Covers |
