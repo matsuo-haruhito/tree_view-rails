@@ -66,6 +66,24 @@ TreeView は row wrapper と共通 tree UI cell を担当し、`row_partial` の
 - [使い方](usage.md)
 - [JavaScript event contract](js-events.md)
 
+## TreeView partial の render log が見えない / 多すぎる
+
+TreeView は helper-rendered partial の周辺だけ、既定で log level を下げて描画します。これは意図した挙動で、TreeView helper を通る partial render だけに効きます。
+
+次を確認してください。
+
+- `TreeView.configuration.render_log_level` の既定値は `:warn`
+- row partial の wiring や render flow を追いたいときは `TreeView.configure { |config| config.render_log_level = :info }` または `:debug` を試す
+- Rails の render log をそのまま見たいときは `TreeView.configure { |config| config.render_log_level = nil }` を使う
+- `render_log_level` を変えても効かない場合は、host app の logger が `silence` に対応しているか確認する。対応していなければ TreeView は logger wrapper を使わず通常描画に戻る
+- 足りない / 多すぎる log が controller、SQL、business log 側の話なら、TreeView ではなく host app の logger policy を調整する
+
+次に読む文書:
+
+- [Render log silencing](render-log-silencing.md)
+- [使い方](usage.md)
+- [Rendering Boundaries](rendering-boundaries.md)
+
 ## lazy loading で children が置き換わらない / remote state が戻らない
 
 lazy loading は Turbo / server-driven 前提です。
