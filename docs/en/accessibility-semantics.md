@@ -58,6 +58,8 @@ TreeView registers Stimulus controllers for state tracking, selection, transfer 
 
 Host apps remain responsible for page-level keyboard flow, focus order, table captions, action buttons, and any shortcut keys they add around TreeView. If a host app needs full treegrid keyboard navigation, treat that as an explicit application feature rather than assuming TreeView provides it automatically.
 
+The shipped stylesheet adds a lightweight `.tree-toggle__action:focus-visible` ring and background so keyboard focus is easier to track in quick-start setups. Host apps can override or replace that baseline in copied CSS.
+
 ## `aria-controls`
 
 A toggle link may reveal or hide multiple descendant rows, and in lazy-loading cases the controlled descendants may not exist in the DOM yet. There is no single stable container that the toggle always controls.
