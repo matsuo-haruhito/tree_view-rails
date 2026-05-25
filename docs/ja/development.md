@@ -75,7 +75,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile` と `gemfiles/rails_8_0.gemfile`
 - JavaScript entrypoint、unit、browser smoke tests: `npm run test:js`
 
-`README.md` と `docs/**` だけに触れる docs-only Pull Request では、`lint` と `pr_specs` はそのまま残しつつ、representative Rails job と JavaScript job を short-circuit します。branch protection のため、check 名はそのまま維持します。
+`README.md` と `docs/**` だけに触れる docs-only Pull Request では、`lint` と `pr_specs` はそのまま残しつつ、representative Rails job と JavaScript job を short-circuit します。branch protection のため、check 名はそのまま維持します。`.github/workflows/**` も変更する Pull Request ではこの shortcut を使わず、通常の PR lanes を確認します。
 
 `main` へのpushでは、より広い互換性確認とrelease向けのchecksも実行します。
 
@@ -107,6 +107,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - `docs/i18n-audit.md` を更新する
 - root互換docを残すか、言語別docへ誘導するかを判断する
 - `README.md` と `docs/**` だけのPRでは、docs-only CI short-circuit が今回も妥当かを確認してから使う
+- `.github/workflows/**` も含むPRは、docs-only shortcut の候補ではなく full CI change として扱う
 
 ## release前の確認
 
@@ -126,4 +127,5 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - docs-onlyで単純な分割や棚卸しは大きめのPRでもよい
 - merge前にPR CIを通す
 - docs-only PR では representative Rails / JavaScript job を short-circuit できるが、merge は同じ check 名が green のままで待つ
+- workflow 定義を変えるPRは、merge前に fresh な head SHA で Checks を観測する
 - release判定前に `main` でfull compatibility / package verificationを確認する
