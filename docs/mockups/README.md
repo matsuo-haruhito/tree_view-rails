@@ -11,10 +11,18 @@ They are **not** a complete Rails application and should not grow into host-app 
 | File | Covers |
 |---|---|
 | [default-tree.html](default-tree.html) | Default table/tree output, checkbox selection, expanded/collapsed rows, badges, depth labels, row actions, and baseline CSS. |
+| [toolbar-actions.html](toolbar-actions.html) | Expand-all / collapse-all toolbar reference showing enabled, disabled, and current-state variants without host-app routes or authorization copy. |
 | [narrow-sidebar-tree.html](narrow-sidebar-tree.html) | Narrow sidebar and small-width reference that keeps toggle controls, primary labels, and current or selection cues visible while secondary metadata wraps below. |
 | [interaction-states.html](interaction-states.html) | Lazy-loading, loading, error/retry, next-page, and drag/drop visual states. |
 | [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
+
+## Recommended review flow
+
+1. Start with [review-gallery.html](review-gallery.html) when you want a quick side-by-side pass across the main mockup surfaces.
+2. Open the linked full mockup page when one surface needs deeper inspection or longer notes.
+3. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on tree-wide expand / collapse affordances instead of row-by-row hierarchy layout.
+4. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Copy and language policy
 
