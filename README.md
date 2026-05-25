@@ -39,6 +39,11 @@ For short answers about responsibility boundaries and common misunderstandings, 
 - [English FAQ](docs/en/faq.md)
 - [日本語FAQ](docs/ja/faq.md)
 
+If you already know the symptom and want a faster reverse-lookup entry point, see:
+
+- [English Troubleshooting](docs/en/troubleshooting.md)
+- [日本語Troubleshooting](docs/ja/troubleshooting.md)
+
 ## Features
 
 - Build trees from parent-child records.
@@ -191,6 +196,7 @@ Key documents:
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
 | Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
 | FAQ | [FAQ](docs/en/faq.md) | [FAQ](docs/ja/faq.md) |
+| Troubleshooting | [Troubleshooting](docs/en/troubleshooting.md) | [Troubleshooting](docs/ja/troubleshooting.md) |
 | Accessibility semantics | [Accessibility Semantics](docs/en/accessibility-semantics.md) | [Accessibility Semantics](docs/ja/accessibility-semantics.md) |
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
 | Forms and editing rows | [Forms and editing rows](docs/en/form-editing.md) | [Form と編集行](docs/ja/form-editing.md) |
