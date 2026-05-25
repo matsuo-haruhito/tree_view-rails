@@ -258,6 +258,38 @@ Initial expansion, render scope, and toggle scope can be configured with grouped
 
 When both flat keyword options and grouped options are provided, flat keyword options take precedence for backward compatibility.
 
+### Expand only the current branch
+
+When the host app wants a collapsed tree that still opens the branch containing the current record, pass `current_item:` or `current_key:` with `auto_expand_ancestors: true`.
+
+```ruby
+current_key = @document ? node_key(@document) : node_key(@project)
+
+@render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  initial_expansion: {
+    default: :collapsed,
+    current_key: current_key,
+    auto_expand_ancestors: true
+  }
+)
+```
+
+If the host app already has the record object, you can pass `current_item:` instead of `current_key:`.
+
+```ruby
+initial_expansion: {
+  default: :collapsed,
+  current_item: @document,
+  auto_expand_ancestors: true
+}
+```
+
+`auto_expand_ancestors:` resolves the current node under `root_items` and merges only ancestor keys into `expanded_keys`. Keep using `expanded_keys:` alongside it when another sibling branch or additional path should also start open.
+
 ## Selection
 
 Use `selection:` to enable checkbox selection.
@@ -335,6 +367,7 @@ reverse_tree = base_tree.reverse_tree_for(matched_documents)
 - [API overview](api-overview.md)
 - [API reference](api.md)
 - [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide)
+- [Cookbook: Expand only the current branch initially](cookbook.md#expand-only-the-current-branch-initially)
 - [Selection](selection.md)
 - [Lazy Loading](lazy-loading.md)
 - [Windowed Rendering](windowed-rendering.md)
