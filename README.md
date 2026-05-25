@@ -214,27 +214,8 @@ bundle install
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
-npm install
+npm ci
 npm test
 ```
 
-Rails compatibility Gemfiles are under `gemfiles/`. Set `BUNDLE_GEMFILE` when checking a specific Rails version.
-
-```bash
-BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
-BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
-```
-
-GitHub Actions runs Ruby lint (`bundle exec standardrb`), Ruby specs (`bundle exec rspec`), and representative Rails compatibility checks for Rails 7.0 / 8.0 on pull requests. Pushes to `main` keep the heavier compatibility and release checks: full Ruby/Rails matrices, JavaScript tests, and gem package verification.
-
-## Release
-
-The initial release target is `0.1.0`.
-
-Before release, check:
-
-- `bundle exec standardrb`
-- `bundle exec rspec`
-- `bundle exec rake build`
-- Rails version matrix CI
-- `npm test`
+JavaScript checks use the committed `package-lock.json`, so `npm ci` is the expected local path when you want the same dependency resolution as CI.
