@@ -66,6 +66,24 @@ Read next:
 - [Usage](usage.md)
 - [JavaScript event contract](js-events.md)
 
+## TreeView partial render logs are missing or too noisy
+
+TreeView lowers the log level around helper-rendered partials by default. That is intentional and only affects partial rendering that goes through TreeView helpers.
+
+Check these points.
+
+- `TreeView.configuration.render_log_level` defaults to `:warn`.
+- Set `TreeView.configure { |config| config.render_log_level = :info }` or `:debug` when you want more render visibility while inspecting row partial wiring.
+- Set `TreeView.configure { |config| config.render_log_level = nil }` when you want Rails render logs to remain unchanged.
+- If changing `render_log_level` has no effect, confirm the host app logger responds to `silence`; otherwise TreeView falls back to normal rendering without wrapping the logger.
+- If the missing or noisy lines come from controller, SQL, or business logs, adjust the host app logging policy instead of expecting TreeView to change them.
+
+Read next:
+
+- [Render log silencing](render-log-silencing.md)
+- [Usage](usage.md)
+- [Rendering Boundaries](rendering-boundaries.md)
+
 ## Lazy loading does not replace children or remote state stays stuck
 
 Lazy loading is Turbo/server-driven.
