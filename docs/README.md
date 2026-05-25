@@ -24,7 +24,11 @@
 
 Documentation language-sync rules and ongoing maintenance checks are tracked in [Documentation maintenance checklist](i18n-audit.md).
 
+Repository-level positioning, intended users, and non-goals are summarized in [Product Profile](../Product%20Profile.md).
+
 ドキュメントの日英同期ルールと継続的な保守チェックは [Documentation maintenance checklist](i18n-audit.md) で管理します。
+
+リポジトリの位置づけ、想定利用者、非対象範囲は [Product Profile](../Product%20Profile.md) にまとめています。
 
 ## Policy
 
