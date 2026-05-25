@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView mockup review gallery</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-gallery-page {
+  max-width: 1320px;
+}
+
+.mock-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.mock-gallery-card {
+  display: grid;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  padding: 20px;
+}
+
+.mock-gallery-card h2,
+.mock-gallery-card p,
+.mock-gallery-card ul {
+  margin: 0;
+}
+
+.mock-gallery-eyebrow {
+  color: #52606d;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-gallery-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.mock-gallery-points {
+  padding-left: 1.2rem;
+  color: #334e68;
+}
+
+.mock-gallery-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.mock-gallery-links a {
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mock-gallery-links a:hover,
+.mock-gallery-links a:focus {
+  text-decoration: underline;
+}
+
+.mock-gallery-preview {
+  min-height: 340px;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.mock-gallery-preview iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  border: 0;
+  background: #fff;
+}
+
+.mock-comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-comparison-table th,
+.mock-comparison-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-comparison-table th {
+  background: #f1f5f9;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .mock-gallery-preview,
+  .mock-gallery-preview iframe {
+    min-height: 280px;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-gallery-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView mockup review gallery</h1>
+      <p>
+        Static review hub for comparing the main TreeView mockups without running a Rails app.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, and empty-state spacing in one session.
+      </p>
+    </header>
+
+    <section class="mock-section" aria-labelledby="gallery-usage-heading">
+      <h2 id="gallery-usage-heading">How to use this gallery</h2>
+      <ul>
+        <li>Start here when a review needs quick side-by-side comparison across the main mockup surfaces.</li>
+        <li>Open the linked full mockup when you want the complete page context or longer notes for one state family.</li>
+        <li>Treat final business copy, routes, permissions, and actions as host-app responsibilities. This gallery stays product-neutral on purpose.</li>
+      </ul>
+    </section>
+
+    <section class="mock-gallery-grid" aria-label="Mockup comparison gallery">
+      <article class="mock-gallery-card" aria-labelledby="gallery-default-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Baseline structure</p>
+          <h2 id="gallery-default-heading">Default tree</h2>
+          <p>
+            Use this surface to inspect representative root, child, leaf, selected, collapsed, and disabled rows in the default table-first presentation.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Expanded and collapsed hierarchy cues</li>
+            <li>Selection, badges, and status placement</li>
+            <li>Baseline row-actions column layout</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="default-tree.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="default-tree.html" title="Default tree mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-narrow-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Responsive reference</p>
+          <h2 id="gallery-narrow-heading">Narrow sidebar</h2>
+          <p>
+            Use this surface to compare how hierarchy cues stay visible when width gets tight and secondary metadata needs to stack below the primary label.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>22rem and 18rem representative frames</li>
+            <li>Current, archived, and loading cues in compressed rows</li>
+            <li>Compact action treatment without hiding the tree path</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="narrow-sidebar-tree.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="narrow-sidebar-tree.html" title="Narrow sidebar tree mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-interaction-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">State transitions</p>
+          <h2 id="gallery-interaction-heading">Interaction states</h2>
+          <p>
+            Use this surface to review lazy loading, retry, pagination, and drag or drop cues without bringing in Turbo responses, controllers, or host-app behavior.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Loaded, loading, and error or retry rows</li>
+            <li>Children pagination placeholder rows</li>
+            <li>Dragging, valid drop, and blocked drop states</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="interaction-states.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="interaction-states.html" title="Interaction states mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-empty-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Spacing and fallback</p>
+          <h2 id="gallery-empty-heading">Empty state</h2>
+          <p>
+            Use this surface to compare no-root-items and no-results rows against a populated row so wrapper spacing and the full-width message slot stay easy to inspect.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Reusable empty-row wrapper hook</li>
+            <li>Full-width message slot behavior</li>
+            <li>Difference from a populated row with controls</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="empty-state.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="empty-state.html" title="Empty state mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+    </section>
+
+    <section class="mock-section" aria-labelledby="comparison-cues-heading">
+      <h2 id="comparison-cues-heading">Comparison cues</h2>
+      <table class="mock-comparison-table">
+        <thead>
+          <tr>
+            <th scope="col">Surface</th>
+            <th scope="col">Best for</th>
+            <th scope="col">Keep outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Default tree</td>
+            <td>Baseline DOM shape, hierarchy path, selection cues, badges, and row actions.</td>
+            <td>Host-app CRUD, queries, business labels, or authorization behavior.</td>
+          </tr>
+          <tr>
+            <td>Narrow sidebar</td>
+            <td>Hierarchy readability when width shrinks and metadata needs to wrap.</td>
+            <td>Exact breakpoints, truncation rules, or a shipped responsive design system.</td>
+          </tr>
+          <tr>
+            <td>Interaction states</td>
+            <td>Loading, retry, pagination, and drag or drop status cues.</td>
+            <td>Real Turbo responses, route wiring, or persistence behavior.</td>
+          </tr>
+          <tr>
+            <td>Empty state</td>
+            <td>Spacing, wrapper hooks, and the full-width empty-row slot.</td>
+            <td>Final onboarding copy, CTA wording, permission messaging, or filter reset logic.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
