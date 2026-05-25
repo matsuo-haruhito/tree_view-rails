@@ -238,3 +238,14 @@ Before release, check:
 - `bundle exec rake build`
 - Rails version matrix CI
 - `npm test`
+- README, docs, and CHANGELOG consistency
+- gemspec metadata
+
+See also:
+
+- [Release checklist](docs/en/release.md)
+- [日本語: Release checklist](docs/ja/release.md)
+
+## License
+
+MIT
