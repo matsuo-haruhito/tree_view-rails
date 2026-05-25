@@ -42,9 +42,9 @@
       <%= render 'tree_view/tree_selection_cell', item: item, tree: tree, selection_visible: selection_visible, selection_payload_builder: render_context.selection_payload_builder, selection_checkbox_name: render_context.selection_checkbox_name, selection_disabled_builder: render_context.selection_disabled_builder, selection_disabled_reason_builder: render_context.selection_disabled_reason_builder, selection_selected_keys: render_context.selection_selected_keys %>
     <% end %>
     <%= render 'tree_view/tree_toggle_cell', item: item, depth: depth, tree: tree, children: children, hidden_count: hidden_count, hidden_message_builder: render_context.hidden_message_builder, depth_label_builder: render_context.depth_label_builder, badge_builder: render_context.badge_builder, toggle_icon_builder: render_context.toggle_icon_builder, toggle_state: toggle_state, mode: mode, max_toggle_depth_from_root: render_context.max_toggle_depth_from_root, max_toggle_leaf_distance: render_context.max_toggle_leaf_distance, leaf_distance: leaf_distance, client_children_rendered: client_children_rendered %>
-    <%= render row_partial, **render_context.row_locals.merge(item: item) %>
+    <%= render row_partial, **render_context.row_partial_locals(item: item, row_context: row_context) %>
     <% if row_actions_partial %>
-      <%= render row_actions_partial, item: item, tree: tree, render_state: render_context.render_state %>
+      <%= render row_actions_partial, **render_context.row_actions_partial_locals(item: item, row_context: row_context) %>
     <% end %>
   <% end %>
 <% end %>
