@@ -141,7 +141,7 @@ module TreeView
 
       def verify_tag_alignment!
         tag_name = "v#{version}"
-        tag_sha = git_rev_parse("refs/tags/#{tag_name}")
+        tag_sha = git_commit_sha("refs/tags/#{tag_name}")
 
         if tag_sha.nil?
           raise Failure, "expected git tag #{tag_name} to exist" if require_release_tag
@@ -150,15 +150,15 @@ module TreeView
           return
         end
 
-        head_sha = git_rev_parse("HEAD")
+        head_sha = git_commit_sha("HEAD")
         return if head_sha == tag_sha
 
         raise Failure, "#{tag_name} points to #{tag_sha}, expected #{head_sha}"
       end
 
-      def git_rev_parse(ref)
-        stdout_string, = Open3.capture3("git", "-C", root, "rev-parse", "-q", "--verify", ref)
-        return nil if stdout_string.empty?
+      def git_commit_sha(ref)
+        stdout_string, status = Open3.capture3("git", "-C", root, "rev-parse", "-q", "--verify", "#{ref}^{commit}")
+        return nil unless status.success?
 
         stdout_string.strip
       end
