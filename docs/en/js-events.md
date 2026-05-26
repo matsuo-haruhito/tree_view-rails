@@ -114,4 +114,6 @@ Dispatched when row payload JSON or transferred JSON cannot be parsed.
 
 ## Compatibility policy
 
+The machine-readable public API manifest mirrors the event names and representative required `event.detail` keys documented on this page so compatibility specs can detect drift; this page remains the primary contract.
+
 The event names and documented `detail` fields above are public integration points. Additive fields may be added in minor releases. Removing events, renaming fields, or changing documented field meanings should be treated as a compatibility-impacting change and called out in the changelog.
