@@ -116,6 +116,7 @@ host app が使ってよい入口:
 
 - `registerTreeViewControllers(application)`
 - `TreeViewControllerIdentifiers`
+- `TreeViewControllerEntries`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -127,9 +128,11 @@ host app が使ってよい入口:
 
 `registerTreeViewControllers(application)` は、上記 5 つの controller export を bundled entrypoint の documented identifier 順に登録します。
 
-`TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
+`TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。identifier string だけが必要な host app は、この export を使ってください。
 
-`TreeViewControllerIdentifiers` の documented key:
+`TreeViewControllerEntries` は、documented registration order を frozen な `{ key, identifier, controller }` object の配列として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier と controller class の対応を自前で並べ直さず、この export を反復して使ってください。
+
+`TreeViewControllerIdentifiers` と `TreeViewControllerEntries` の documented key:
 
 - `state`
 - `client`

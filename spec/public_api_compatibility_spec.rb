@@ -185,6 +185,24 @@ RSpec.describe "Public API compatibility" do
     end
   end
 
+  it "keeps documented JavaScript controller entries available for host apps" do
+    source = javascript_entrypoint_source
+
+    expect(source).to include("export const TreeViewControllerEntries = Object.freeze([")
+
+    public_javascript_manifest.fetch("controller_registrations").each do |registration|
+      key = registration.fetch("key")
+      export_name = registration.fetch("export")
+
+      expect(source).to include("key: \"#{key}\""),
+        "expected TreeViewControllerEntries to include key #{key}"
+      expect(source).to include("identifier: TreeViewControllerIdentifiers.#{key}"),
+        "expected TreeViewControllerEntries to map #{key} through TreeViewControllerIdentifiers"
+      expect(source).to include("controller: #{export_name}"),
+        "expected TreeViewControllerEntries to expose #{export_name}"
+    end
+  end
+
   it "keeps documented JavaScript controller identifiers wired through registerTreeViewControllers" do
     source = javascript_entrypoint_source
 
