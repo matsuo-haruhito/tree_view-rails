@@ -25,6 +25,10 @@ module TreeViewHelper
       end
     end
 
+    def tree_view_toolbar_supported_actions
+      TREE_VIEW_TOOLBAR_ACTIONS.dup
+    end
+
     def tree_view_toolbar_actions(render_state, actions: DEFAULT_TREE_VIEW_TOOLBAR_ACTIONS, labels: {})
       normalized_labels = labels.to_h.transform_keys(&:to_sym)
 
