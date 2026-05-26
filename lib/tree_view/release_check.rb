@@ -157,7 +157,7 @@ module TreeView
       end
 
       def git_commit_sha(ref)
-        stdout_string, status = Open3.capture3("git", "-C", root, "rev-parse", "-q", "--verify", "#{ref}^{commit}")
+        stdout_string, _stderr_string, status = Open3.capture3("git", "-C", root, "rev-parse", "-q", "--verify", "#{ref}^{commit}")
         return nil unless status.success?
 
         stdout_string.strip
