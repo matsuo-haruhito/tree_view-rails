@@ -11,6 +11,9 @@ export { TreeViewStateController } from "./state_controller.js"
 export { TreeViewTransferController } from "./transfer_controller.js"
 
 export const TreeViewEventNames = Object.freeze({
+  state: Object.freeze({
+    stateChanged: "tree-view-state:state-changed"
+  }),
   selection: Object.freeze({
     change: "tree-view-selection:change",
     selected: "tree-view-selection:selected",
