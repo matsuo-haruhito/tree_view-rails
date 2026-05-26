@@ -135,6 +135,7 @@ Stable enough for host apps to use:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
+- `TreeViewControllerEntries`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -147,9 +148,11 @@ Stable enough for host apps to use:
 `registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
 
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
-`TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
+`TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that only need identifier strings should use this export instead of hand-copying them.
 
-Documented keys on `TreeViewControllerIdentifiers`:
+`TreeViewControllerEntries` exposes the documented registration order as a machine-readable array of frozen `{ key, identifier, controller }` objects. Host apps that selectively register controllers or choose a custom boot order should iterate this export instead of pairing identifiers and controller classes manually.
+
+Documented keys on `TreeViewControllerIdentifiers` and `TreeViewControllerEntries`:
 
 - `state`
 - `client`
