@@ -53,6 +53,7 @@ Start with installation wiring.
 - Import the stylesheet with `@import "tree_view";`.
 - Add the importmap pin when JavaScript-powered features are needed: `pin "tree_view", to: "tree_view/index.js"`.
 - Register TreeView controllers in the host app when using client-side toggling, selection, transfer hooks, remote loading state, or other browser-side features.
+- When the host app registers only some controllers or chooses a custom boot order, import `TreeViewControllerIdentifiers` from `tree_view/index.js` instead of hand-copying identifier strings.
 
 Remember the boundary.
 

@@ -57,19 +57,25 @@ grouped_option_keys:
 javascript_package_root:
   named_exports:
     - registerTreeViewControllers
+    - TreeViewControllerIdentifiers
     - TreeViewStateController
     - TreeViewClientController
     - TreeViewSelectionController
     - TreeViewTransferController
     - TreeViewRemoteStateController
   controller_registrations:
-    - identifier: tree-view-state
+    - key: state
+      identifier: tree-view-state
       export: TreeViewStateController
-    - identifier: tree-view-client
+    - key: client
+      identifier: tree-view-client
       export: TreeViewClientController
-    - identifier: tree-view-selection
+    - key: selection
+      identifier: tree-view-selection
       export: TreeViewSelectionController
-    - identifier: tree-view-transfer
+    - key: transfer
+      identifier: tree-view-transfer
       export: TreeViewTransferController
-    - identifier: tree-view-remote-state
+    - key: remoteState
+      identifier: tree-view-remote-state
       export: TreeViewRemoteStateController
