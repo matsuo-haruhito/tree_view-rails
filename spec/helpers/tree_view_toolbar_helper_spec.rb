@@ -28,6 +28,14 @@ RSpec.describe "tree_view_toolbar helper" do
     instance_double(TreeView::RenderState, ui_config: ui_config)
   end
 
+  around do |example|
+    original_available_locales = I18n.available_locales
+    I18n.available_locales = original_available_locales | %i[toolbar_test_ja toolbar_test_missing]
+    example.run
+  ensure
+    I18n.available_locales = original_available_locales
+  end
+
   it "returns toolbar action metadata for host-app-owned controls" do
     actions = helper.tree_view_toolbar_actions(render_state, actions: [:expand_all, :collapse_all], labels: {expand_all: "Open all"})
 
@@ -51,6 +59,50 @@ RSpec.describe "tree_view_toolbar helper" do
         }
       ]
     )
+  end
+
+  it "uses I18n toolbar labels when a translation is available" do
+    I18n.backend.store_translations(:toolbar_test_ja, {
+      tree_view: {
+        toolbar: {
+          labels: {
+            expand_all: "すべて展開"
+          }
+        }
+      }
+    })
+
+    action = I18n.with_locale(:toolbar_test_ja) do
+      helper.tree_view_toolbar_action_metadata(render_state, :expand_all)
+    end
+
+    expect(action[:label]).to eq("すべて展開")
+  end
+
+  it "prefers an explicit label override over the I18n default" do
+    I18n.backend.store_translations(:toolbar_test_ja, {
+      tree_view: {
+        toolbar: {
+          labels: {
+            expand_all: "すべて展開"
+          }
+        }
+      }
+    })
+
+    actions = I18n.with_locale(:toolbar_test_ja) do
+      helper.tree_view_toolbar_actions(render_state, actions: [:expand_all], labels: {expand_all: "Open all now"})
+    end
+
+    expect(actions.first[:label]).to eq("Open all now")
+  end
+
+  it "falls back to the built-in English label when no translation exists" do
+    action = I18n.with_locale(:toolbar_test_missing) do
+      helper.tree_view_toolbar_action_metadata(render_state, :collapse_all_except_current_path)
+    end
+
+    expect(action[:label]).to eq("Collapse all except current path")
   end
 
   it "returns disabled metadata when the ui does not expose toggle_all_path" do
