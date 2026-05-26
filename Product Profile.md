@@ -48,8 +48,10 @@ When implementation and docs drift, use this order:
 
 ## Recommended first reads
 
-1. `README.md` for public positioning and quick entry points
-2. `docs/README.md` for the docs map
-3. `docs/en/README.md` or `docs/ja/README.md` for language-specific docs
-4. `docs/en/design-policy.md` or `docs/ja/design-policy.md` for responsibility boundaries
-5. `AGENTS.md` for repository-specific maintainer guidance
+For maintainers making changes, start in this order:
+
+1. `AGENTS.md` for repository-specific workflow and documentation update rules
+2. `README.md` for public positioning and quick entry points
+3. `docs/README.md` for the docs map
+4. `docs/en/README.md` or `docs/ja/README.md` for language-specific docs
+5. `docs/en/design-policy.md` or `docs/ja/design-policy.md` for responsibility boundaries
