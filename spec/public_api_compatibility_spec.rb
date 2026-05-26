@@ -55,7 +55,7 @@ RSpec.describe "Public API compatibility" do
   end
 
   def source_mentions_detail_key?(source, detail_key)
-    source.match?(/#{Regexp.escape(detail_key)}\s*:/) || source.match?(/[\{\s,]#{Regexp.escape(detail_key)}[\s,}]/)
+    source.match?(/#{Regexp.escape(detail_key)}\s*:/) || source.match?(/[{\s,]#{Regexp.escape(detail_key)}[\s,}]/)
   end
 
   def public_ui_config
