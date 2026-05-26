@@ -115,6 +115,7 @@ host appが提供する主な拡張点は以下です。
 host appが使ってよい入口:
 
 - `registerTreeViewControllers(application)`
+- `TreeViewEventNames`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -125,6 +126,8 @@ host appが使ってよい入口:
 - documented `data-tree-view-*` integration hooks
 
 `registerTreeViewControllers(application)` は、上記 5 つの controller export を bundled entrypoint の documented identifier 順に登録します。
+
+`TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 
 package-root の JavaScript export と bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
