@@ -57,6 +57,7 @@ Use these durable entry points together when you are checking scope, docs sync, 
 - `docs/README.md` for the cross-language docs map and maintainer entry points
 - `docs/en/README.md` or `docs/ja/README.md` for language-specific docs navigation
 - `docs/i18n-audit.md` for cross-language maintenance rules and docs update coverage
+- `docs/en/release.md` or `docs/ja/release.md` for release checklist, release consistency checks, and changelog expectations
 - `CHANGELOG.md` for shipped public changes, compatibility notes, and notable docs additions
 
 ## Recommended first reads
@@ -69,4 +70,5 @@ For maintainers making changes, start in this order:
 4. `docs/en/README.md` or `docs/ja/README.md` for language-specific docs navigation
 5. `docs/en/design-policy.md` or `docs/ja/design-policy.md` for responsibility boundaries
 6. `docs/i18n-audit.md` when the task changes public docs or language coverage
-7. `CHANGELOG.md` when the task affects release-facing public behavior or compatibility notes
+7. `docs/en/release.md` or `docs/ja/release.md` when the task affects release-facing docs, compatibility notes, or package verification workflow
+8. `CHANGELOG.md` when the task affects release-facing public behavior or compatibility notes
