@@ -1,0 +1,41 @@
+module_methods:
+  - configure
+  - configuration
+  - reset_configuration!
+  - parse_selection_params
+  - node_key
+  - model_name_for
+  - attribute_name_for
+  - type_name_for
+public_constants:
+  - Error
+  - ConfigurationError
+  - InvalidTreeError
+  - DuplicateNodeKeyError
+  - CycleDetectedError
+  - InvalidRenderWindowError
+  - LocalizedNames
+  - Tree
+  - RenderState
+  - ResourceTableRenderState
+  - VisibleRows
+  - RenderWindow
+  - UiConfig
+  - UiConfigBuilder
+  - GraphAdapter
+  - NodePresenter
+  - PathTree
+  - PathTreeBuilder
+  - ReverseTree
+  - PersistedState
+  - StateStore
+  - Diagnostics
+helper_methods:
+  - tree_view_rows
+  - tree_view_window
+  - tree_node_dom_id
+  - tree_selection_value
+  - tree_view_breadcrumb
+  - tree_view_toolbar
+  - tree_view_toolbar_actions
+  - tree_view_toolbar_action_metadata
