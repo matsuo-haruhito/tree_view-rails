@@ -1,10 +1,19 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "yaml"
 
 PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
 
 RSpec.describe "Public API compatibility" do
+  PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+
+  def public_api_manifest
+    # First slice only: Ruby/module/helper entrypoint lists live in the manifest.
+    # Grouped options, JavaScript hooks, and broader docs sync stay explicit here for now.
+    @public_api_manifest ||= YAML.safe_load(File.read(PUBLIC_API_MANIFEST_PATH))
+  end
+
   def public_ui_config
     TreeView::UiConfig.new(
       node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
@@ -21,14 +30,9 @@ RSpec.describe "Public API compatibility" do
   end
 
   it "keeps documented TreeView module methods available" do
-    expect(TreeView).to respond_to(:configure)
-    expect(TreeView).to respond_to(:configuration)
-    expect(TreeView).to respond_to(:reset_configuration!)
-    expect(TreeView).to respond_to(:parse_selection_params)
-    expect(TreeView).to respond_to(:node_key)
-    expect(TreeView).to respond_to(:model_name_for)
-    expect(TreeView).to respond_to(:attribute_name_for)
-    expect(TreeView).to respond_to(:type_name_for)
+    public_api_manifest.fetch("module_methods").each do |method_name|
+      expect(TreeView).to respond_to(method_name.to_sym), "expected TreeView.#{method_name} to remain public"
+    end
 
     expect(TreeView.node_key(:document, 1)).to eq("document:1")
   end
@@ -47,23 +51,7 @@ RSpec.describe "Public API compatibility" do
   end
 
   it "keeps documented public Ruby constants available" do
-    %i[
-      Tree
-      RenderState
-      VisibleRows
-      RenderWindow
-      UiConfig
-      UiConfigBuilder
-      GraphAdapter
-      LocalizedNames
-      NodePresenter
-      PathTree
-      PathTreeBuilder
-      ReverseTree
-      PersistedState
-      StateStore
-      Diagnostics
-    ].each do |constant_name|
+    public_api_manifest.fetch("public_constants").each do |constant_name|
       expect(TreeView.const_defined?(constant_name)).to be(true), "expected TreeView::#{constant_name} to remain public"
     end
   end
@@ -141,15 +129,8 @@ RSpec.describe "Public API compatibility" do
   end
 
   it "keeps documented helper method names available through TreeViewHelper" do
-    %i[
-      tree_view_rows
-      tree_view_window
-      tree_node_dom_id
-      tree_selection_value
-      tree_view_breadcrumb
-      tree_view_toolbar
-    ].each do |method_name|
-      expect(TreeViewHelper.public_instance_methods).to include(method_name)
+    public_api_manifest.fetch("helper_methods").each do |method_name|
+      expect(TreeViewHelper.public_instance_methods).to include(method_name.to_sym), "expected TreeViewHelper##{method_name} to remain public"
     end
   end
 
