@@ -15,6 +15,18 @@ TreeView は、host app が TreeView 由来の失敗を他の application error 
 
 `TreeView::Error` は、既存 host app が TreeView の従来の validation failure を `ArgumentError` として rescue している場合の互換性を保つため、意図的に `ArgumentError` を継承します。
 
+## 代表的な message
+
+次の例は、よくある validation failure で host app が受け取れる message の粒度を示します。
+
+- `render_scope contains unknown keys: max_depths; supported keys are: max_depth, max_leaf_distance`
+- `initial_state must be one of: expanded, collapsed; use :expanded or :collapsed`
+- `expanded_keys and collapsed_keys cannot include the same keys: "node:1"; remove each key from one side`
+- `duplicate node_key detected: "document:42"; configure node_key_resolver or ensure records expose unique IDs before rendering`
+- `offset must be a non-negative Integer; pass 0 or a positive row offset`
+
+文言自体は今後改善されてよいですが、少なくとも「何が失敗したか」「どの値や key が関係しているか」「どう直す方向か」は同じ粒度で読める状態を保つのが方針です。
+
 ## rescue 例
 
 TreeView の validation / configuration failure をまとめて扱う例:
