@@ -60,12 +60,14 @@ tree_ui = TreeView::UiConfigBuilder.new(
 
 Path builders only build URLs. The host app owns controller actions, Turbo Stream responses, authorization, and server-side queries.
 
-If the host app wants to build its own toolbar instead of using TreeView's bundled HTML helper, ask TreeView for action metadata and render links or buttons in app-owned markup.
+If the host app wants to build its own toolbar instead of using TreeView's bundled HTML helper, ask TreeView for the documented supported action set first, then render links or buttons in app-owned markup.
 
 By default, `tree_view_toolbar`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` resolve labels through `tree_view.toolbar.labels.*` for the current locale and fall back to the built-in English copy. Pass `labels:` only when a screen needs app-specific wording.
 
 ```erb
-<% tree_view_toolbar_actions(@render_state).each do |action| %>
+<% supported_actions = tree_view_toolbar_supported_actions %>
+
+<% tree_view_toolbar_actions(@render_state, actions: supported_actions).each do |action| %>
   <% if action[:path] %>
     <%= link_to action[:label], action[:path], data: action[:data] %>
   <% else %>
@@ -73,6 +75,8 @@ By default, `tree_view_toolbar`, `tree_view_toolbar_actions`, and `tree_view_too
   <% end %>
 <% end %>
 ```
+
+`tree_view_toolbar_supported_actions` returns the documented public action symbols, currently `:expand_all`, `:collapse_all`, and `:collapse_all_except_current_path`. Use it instead of internal constants when the host app wants to enumerate every supported action.
 
 Each action hash includes:
 

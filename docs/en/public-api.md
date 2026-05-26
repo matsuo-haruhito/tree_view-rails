@@ -58,6 +58,7 @@ The supported helper surface is the documented helper method names exposed by `T
 
 Host apps should include `TreeViewHelper` and depend on documented helper methods. They should not directly include internal implementation modules such as `TreeViewHelper::Rendering` or `TreeViewHelper::Selection`.
 
+For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` rather than internal constants.
 Documented toolbar helpers are part of that public helper surface:
 
 - `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` renders TreeView's bundled toolbar markup.

@@ -28,6 +28,14 @@ RSpec.describe "tree_view_toolbar helper" do
     instance_double(TreeView::RenderState, ui_config: ui_config)
   end
 
+  it "returns the supported toolbar actions through a public helper" do
+    actions = helper.tree_view_toolbar_supported_actions
+
+    expect(actions).to eq(%i[expand_all collapse_all collapse_all_except_current_path])
+
+    actions << :custom_action
+
+    expect(helper.tree_view_toolbar_supported_actions).to eq(%i[expand_all collapse_all collapse_all_except_current_path])
   around do |example|
     original_available_locales = I18n.available_locales
     I18n.available_locales = original_available_locales | %i[toolbar_test_ja toolbar_test_missing]
