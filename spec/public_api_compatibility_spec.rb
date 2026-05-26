@@ -5,6 +5,14 @@ require "yaml"
 
 PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
 PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+
+RSpec.describe "Public API compatibility" do
+  def public_api_manifest
+    # First slice only: Ruby/module/helper entrypoint lists live in the manifest.
+    # Grouped options, JavaScript hooks, and broader docs sync stay explicit here for now.
+    @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
+  end
+
 JAVASCRIPT_ENTRYPOINT_PATH = File.expand_path("../app/javascript/tree_view/index.js", __dir__)
 RENDER_STATE_GROUPED_OPTION_CONSTANTS = {
   "initial_expansion" => :VALID_INITIAL_EXPANSION_KEYS,

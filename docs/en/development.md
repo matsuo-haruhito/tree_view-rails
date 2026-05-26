@@ -44,6 +44,8 @@ Public API compatibility specs protect documented Ruby entry points, helper meth
 
 When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
 
+`config/public_api_manifest.yml` is the machine-readable source of truth for the current first slice of documented Ruby module methods, public constants, and helper names. When you add, rename, or remove one of those entries, update the manifest, keep `docs/en/public-api.md` and `docs/ja/public-api.md` aligned, check any README, usage page, or feature doc that names the same surface, add the user-facing note to `CHANGELOG.md`, and review `docs/en/release.md` / `docs/ja/release.md` when release notes or migration expectations need to change.
+
 ## JavaScript browser smoke tests
 
 Unit-style JavaScript tests run through Vitest and jsdom with:
@@ -94,7 +96,8 @@ Pushes to `main` also run the broader compatibility and release checks:
 - Add or update specs.
 - Check `docs/ja/api-overview.md` and `docs/en/api-overview.md`.
 - Update public API compatibility specs when documented entry points, helpers, or options are intentionally changed.
-- Update `docs/api.md` when needed.
+- If `config/public_api_manifest.yml` changes, update `docs/en/public-api.md` / `docs/ja/public-api.md`, then review the related README, usage docs, feature docs, `CHANGELOG.md`, and `docs/en/release.md` / `docs/ja/release.md`.
+- Update `docs/en/api.md` / `docs/ja/api.md` when needed.
 - Update CHANGELOG.
 
 ### JavaScript changes
@@ -122,6 +125,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 - `npm run test:browser`
 - `bundle exec rake build`
 - gem package contents
+- confirm `config/public_api_manifest.yml` still matches the documented Ruby / helper entry points and related public API docs
 - CHANGELOG
 - docs index / i18n audit
 
