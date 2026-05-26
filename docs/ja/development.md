@@ -34,6 +34,8 @@ Rails version matrixを確認する場合:
 ```bash
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle exec rake
 ```
 
 ## Public API compatibility specs
@@ -72,7 +74,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
-- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile` と `gemfiles/rails_8_0.gemfile`
+- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
 - JavaScript entrypoint、unit、browser smoke tests: `npm run test:js`
 
 `README.md` と `docs/**` だけに触れる docs-only Pull Request では、`lint` と `pr_specs` はそのまま残しつつ、representative Rails job と JavaScript job を short-circuit します。branch protection のため、check 名はそのまま維持します。`.github/workflows/**` も変更する Pull Request ではこの shortcut を使わず、通常の PR lanes を確認します。
