@@ -4,14 +4,13 @@ require "spec_helper"
 require "yaml"
 
 PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 
 RSpec.describe "Public API compatibility" do
-  PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-
   def public_api_manifest
     # First slice only: Ruby/module/helper entrypoint lists live in the manifest.
     # Grouped options, JavaScript hooks, and broader docs sync stay explicit here for now.
-    @public_api_manifest ||= YAML.safe_load(File.read(PUBLIC_API_MANIFEST_PATH))
+    @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
   end
 
   def public_ui_config
