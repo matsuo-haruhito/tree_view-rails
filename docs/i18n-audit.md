@@ -87,6 +87,8 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | `docs/mockups/README.md` | Technical asset | Index for static mockup assets. Short bilingual-style prose is acceptable; no separate translation needed. |
 | `docs/mockups/review-gallery.html` | Technical asset | Comparison hub for the current static mockup set. No translation needed. |
 | `docs/mockups/default-tree.html` | Technical asset | No translation needed. |
+| `docs/mockups/resource-table-bridge.html` | Technical asset | No translation needed. |
+| `docs/mockups/toolbar-actions.html` | Technical asset | No translation needed. |
 | `docs/mockups/narrow-sidebar-tree.html` | Technical asset | No translation needed. |
 | `docs/mockups/interaction-states.html` | Technical asset | No translation needed. |
 | `docs/mockups/empty-state.html` | Technical asset | No translation needed. |
@@ -96,4 +98,5 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 
 - Keep `docs/ja/` and `docs/en/` in sync for future user-facing changes.
 - If a temporary mismatch is unavoidable, leave a visible note and plan the follow-up.
+- When `docs/mockups/` gains a new focused reference page, update this technical-assets table and confirm `docs/mockups/README.md` plus `docs/mockups/review-gallery.html` still describe the current set.
 - Prefer updating this checklist by replacement when the maintenance rule changes, instead of stacking stale release-specific notes on top of it.
