@@ -28,6 +28,16 @@ RSpec.describe "tree_view_toolbar helper" do
     instance_double(TreeView::RenderState, ui_config: ui_config)
   end
 
+  it "returns the supported toolbar actions through a public helper" do
+    actions = helper.tree_view_toolbar_supported_actions
+
+    expect(actions).to eq(%i[expand_all collapse_all collapse_all_except_current_path])
+
+    actions << :custom_action
+
+    expect(helper.tree_view_toolbar_supported_actions).to eq(%i[expand_all collapse_all collapse_all_except_current_path])
+  end
+
   it "returns toolbar action metadata for host-app-owned controls" do
     actions = helper.tree_view_toolbar_actions(render_state, actions: [:expand_all, :collapse_all], labels: {expand_all: "Open all"})
 
