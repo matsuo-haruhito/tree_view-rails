@@ -15,12 +15,12 @@ RSpec.describe TreeView::ReleaseCheck::Runner do
 
   def run_command(*command, chdir: nil)
     success = if chdir
-                Dir.chdir(chdir) { system(*command) }
-              else
-                system(*command)
-              end
+      Dir.chdir(chdir) { system(*command) }
+    else
+      system(*command)
+    end
 
-    raise "command failed: #{command.join(' ')}" unless success
+    raise "command failed: #{command.join(" ")}" unless success
   end
 
   def initialize_git_repo(root)
