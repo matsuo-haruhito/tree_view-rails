@@ -1,7 +1,7 @@
 # AGENTS.md
 
 Repository-specific maintainer guidance for `tree_view`.
-Use this file together with `README.md`, `docs/README.md`, and `Product Profile.md`.
+Use this file together with `README.md`, `docs/README.md`, `Product Profile.md`, and `CHANGELOG.md`.
 
 ## Purpose
 
@@ -18,11 +18,18 @@ Before making changes, read these files in this order:
 1. `AGENTS.md`
 2. `README.md`
 3. `docs/README.md`
-4. The relevant document under `docs/en/` or `docs/ja/`
-5. The implementation files related to the task
+4. `Product Profile.md`
+5. The relevant document under `docs/en/` or `docs/ja/`
+6. The implementation files related to the task
+
+When the task touches documentation structure or bilingual coverage, also read `docs/i18n-audit.md`.
+
+When the task touches release-facing behavior, compatibility notes, or notable documentation additions, also read `CHANGELOG.md`.
 
 Use these files as the durable documentation source:
 
+- `README.md` — public positioning and short entry point
+- `Product Profile.md` — repository positioning, source-of-truth order, host-app responsibilities, and non-goals
 - `docs/README.md` — language selector and maintenance entry point
 - `docs/en/design-policy.md` / `docs/ja/design-policy.md` — design intent, responsibility boundaries, include/exclude policy
 - `docs/en/installation.md` / `docs/ja/installation.md` — installation and asset/importmap setup
@@ -30,6 +37,7 @@ Use these files as the durable documentation source:
 - `docs/en/api.md` / `docs/ja/api.md` — public API reference
 - `docs/en/development.md` / `docs/ja/development.md` — development, CI, and documentation update rules
 - `docs/en/release.md` / `docs/ja/release.md` — release checklist, changelog expectations, and compatibility-note policy
+- `CHANGELOG.md` — release-facing summary of public changes, compatibility notes, and notable documentation additions
 - `docs/i18n-audit.md` — documentation maintenance checklist
 
 ## Repository Scope
@@ -85,6 +93,7 @@ When behavior, public API, setup steps, or design intent changes, update the rel
 
 - User-facing overview: `README.md`
 - Detailed docs index: `docs/README.md`
+- Maintainer entry-point or source-of-truth guidance: `AGENTS.md`, `Product Profile.md`, and `CHANGELOG.md` when release-facing expectations or notable documentation additions changed
 - Design decisions: `docs/en/design-policy.md` and `docs/ja/design-policy.md`
 - Installation changes: `docs/en/installation.md` and `docs/ja/installation.md`
 - Usage changes: `docs/en/usage.md` and `docs/ja/usage.md`
@@ -133,5 +142,5 @@ Do not implement large feature areas opportunistically while working on unrelate
 ## Codex Common Operation
 
 - Use this local `AGENTS.md` as the repository-specific operating contract.
-- Prefer repository-local durable docs when you need broader context: `README.md`, `docs/README.md`, `Product Profile.md`, and the relevant language-specific docs under `docs/`.
+- Prefer repository-local durable docs when you need broader context: `README.md`, `docs/README.md`, `Product Profile.md`, `CHANGELOG.md`, and the relevant language-specific docs under `docs/`.
 - Keep repository-specific context in this local `AGENTS.md` and durable docs in `docs/`.
