@@ -54,3 +54,22 @@ grouped_option_keys:
   toggle_scope:
     - max_depth_from_root
     - max_leaf_distance
+javascript_package_root:
+  named_exports:
+    - registerTreeViewControllers
+    - TreeViewStateController
+    - TreeViewClientController
+    - TreeViewSelectionController
+    - TreeViewTransferController
+    - TreeViewRemoteStateController
+  controller_registrations:
+    - identifier: tree-view-state
+      export: TreeViewStateController
+    - identifier: tree-view-client
+      export: TreeViewClientController
+    - identifier: tree-view-selection
+      export: TreeViewSelectionController
+    - identifier: tree-view-transfer
+      export: TreeViewTransferController
+    - identifier: tree-view-remote-state
+      export: TreeViewRemoteStateController
