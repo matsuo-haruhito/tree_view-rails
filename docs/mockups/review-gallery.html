@@ -118,15 +118,16 @@
       <p class="mock-kicker">tree_view-rails</p>
       <h1>TreeView mockup review gallery</h1>
       <p>
-        Static review hub for comparing the main TreeView mockups without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, and empty-state spacing in one session.
+        Static review hub for comparing the main TreeView mockups and the focused toolbar or resource-table references without running a Rails app.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, empty-state spacing, and newer focused surfaces in one session.
       </p>
     </header>
 
     <section class="mock-section" aria-labelledby="gallery-usage-heading">
       <h2 id="gallery-usage-heading">How to use this gallery</h2>
       <ul>
-        <li>Start here when a review needs quick side-by-side comparison across the main mockup surfaces.</li>
+        <li>Start here when a review needs quick side-by-side comparison across the main TreeView mockup surfaces.</li>
+        <li>Use the focused toolbar and resource-table cards when one review thread is about tree-wide actions or table-owned column context rather than the whole mockup family.</li>
         <li>Open the linked full mockup when you want the complete page context or longer notes for one state family.</li>
         <li>Treat final business copy, routes, permissions, and actions as host-app responsibilities. This gallery stays product-neutral on purpose.</li>
       </ul>
@@ -216,6 +217,48 @@
           <iframe src="empty-state.html" title="Empty state mock preview" loading="lazy"></iframe>
         </div>
       </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-toolbar-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused action review</p>
+          <h2 id="gallery-toolbar-heading">Toolbar actions</h2>
+          <p>
+            Use this surface when the review is about tree-wide expand and collapse affordances rather than row-by-row hierarchy layout.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Enabled pair for mixed tree state</li>
+            <li>Expand-disabled and collapse-disabled variants</li>
+            <li>Current-state emphasis without host-app route copy</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="toolbar-actions.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="toolbar-actions.html" title="Toolbar actions mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-bridge-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused layout review</p>
+          <h2 id="gallery-bridge-heading">Resource table bridge</h2>
+          <p>
+            Use this surface when the review is about shared hierarchy rows across fuller and narrower visible column sets in a table-owned layout.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Fuller desktop column set and compact visible-column variant</li>
+            <li>Hierarchy cues preserved in the first data column</li>
+            <li>Table-owned column summary without host-app table logic</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="resource-table-bridge.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="resource-table-bridge.html" title="Resource table bridge mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
     </section>
 
     <section class="mock-section" aria-labelledby="comparison-cues-heading">
@@ -248,6 +291,16 @@
             <td>Empty state</td>
             <td>Spacing, wrapper hooks, and the full-width empty-row slot.</td>
             <td>Final onboarding copy, CTA wording, permission messaging, or filter reset logic.</td>
+          </tr>
+          <tr>
+            <td>Toolbar actions</td>
+            <td>Tree-wide expand and collapse states, including which action stays available in fully expanded or fully collapsed trees.</td>
+            <td>Route names, authorization, or business-specific toolbar copy.</td>
+          </tr>
+          <tr>
+            <td>Resource table bridge</td>
+            <td>Shared hierarchy-row readability when a separate table layer owns visible columns and the layout changes between fuller and compact column sets.</td>
+            <td>Table preference controls, host-app query strategy, or runtime bridge wiring.</td>
           </tr>
         </tbody>
       </table>
