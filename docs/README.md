@@ -25,6 +25,7 @@
 
 - [Product Profile](../Product%20Profile.md): repository positioning, source-of-truth order, host app responsibilities, and non-goals.
 - [AGENTS.md](../AGENTS.md): repository-specific maintainer workflow, first-read order, and documentation update rules.
+- [CHANGELOG.md](../CHANGELOG.md): release-facing summary of public changes, compatibility notes, and notable documentation additions.
 
 ## Maintenance
 
