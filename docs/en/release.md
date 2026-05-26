@@ -53,11 +53,13 @@ The committed `package-lock.json` is not yet in sync with `package.json`, so bot
 Local checks:
 
 ```bash
+bundle exec rake release:check
 bundle exec standardrb
 bundle exec rake
-bundle exec rake build
 npm run test:js
 ```
+
+`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, verifies the gem can be built, confirms release-facing files are packaged, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. It skips tag alignment until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
 
 Pull request CI checks:
 
