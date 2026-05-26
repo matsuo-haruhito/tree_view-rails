@@ -63,6 +63,7 @@ javascript_package_root:
     - TreeViewSelectionController
     - TreeViewTransferController
     - TreeViewRemoteStateController
+    - TreeViewEventNames
   controller_registrations:
     - key: state
       identifier: tree-view-state
@@ -79,3 +80,18 @@ javascript_package_root:
     - key: remoteState
       identifier: tree-view-remote-state
       export: TreeViewRemoteStateController
+  event_names:
+    selection:
+      change: tree-view-selection:change
+      selected: tree-view-selection:selected
+      limit_exceeded: tree-view-selection:limit-exceeded
+      invalid_payload: tree-view-selection:invalid-payload
+    remote_state:
+      change: tree-view-remote-state:change
+      retry: tree-view-remote-state:retry
+    transfer:
+      drag_start: tree-view-transfer:drag-start
+      drag_over: tree-view-transfer:drag-over
+      drop: tree-view-transfer:drop
+      invalid_payload: tree-view-transfer:invalid-payload
+      invalid_transfer: tree-view-transfer:invalid-transfer

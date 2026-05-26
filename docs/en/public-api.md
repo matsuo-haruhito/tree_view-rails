@@ -131,6 +131,7 @@ The public JavaScript entrypoint is `tree_view/index.js`.
 Stable enough for host apps to use:
 
 - `registerTreeViewControllers(application)`
+- `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
 - exported controller classes
   - `TreeViewStateController`
@@ -143,6 +144,7 @@ Stable enough for host apps to use:
 
 `registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
 
+`TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
 
 Documented keys on `TreeViewControllerIdentifiers`:
