@@ -53,7 +53,7 @@ TreeView は row wrapper と共通 tree UI cell を担当し、`row_partial` の
 - stylesheet で `@import "tree_view";` を読み込む
 - JavaScript を使うなら `pin "tree_view", to: "tree_view/index.js"` を追加する
 - client-side toggle、selection、transfer hook、remote loading state など browser 側機能を使う場合は、host app 側で TreeView controller を登録する
-- host app が controller を部分登録したり custom boot order を組んだりする場合は、identifier string を写経せず `tree_view/index.js` の `TreeViewControllerIdentifiers` を使う
+- host app が controller を部分登録したり custom boot order を組んだりする場合は、documented ordered pair が必要なら `TreeViewControllerEntries` を、identifier string だけが必要なら `TreeViewControllerIdentifiers` を `tree_view/index.js` から使う
 
 責務境界も合わせて確認してください。
 
