@@ -35,7 +35,7 @@ RSpec.describe "TreeView error message quality" do
     tree = build_tree([build_node(1)])
 
     expect do
-      build_render_state(tree: tree, render_scope: { max_depths: 2 })
+      build_render_state(tree: tree, render_scope: {max_depths: 2})
     end.to raise_error(
       TreeView::ConfigurationError,
       /render_scope contains unknown keys: max_depths; supported keys are: max_depth, max_leaf_distance/
