@@ -5,14 +5,6 @@ require "yaml"
 
 PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
 PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-
-RSpec.describe "Public API compatibility" do
-  def public_api_manifest
-    # First slice only: Ruby/module/helper entrypoint lists live in the manifest.
-    # Grouped options, JavaScript hooks, and broader docs sync stay explicit here for now.
-    @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
-  end
-
 JAVASCRIPT_ENTRYPOINT_PATH = File.expand_path("../app/javascript/tree_view/index.js", __dir__)
 RENDER_STATE_GROUPED_OPTION_CONSTANTS = {
   "initial_expansion" => :VALID_INITIAL_EXPANSION_KEYS,
@@ -176,20 +168,13 @@ RSpec.describe "Public API compatibility" do
       case export_name
       when "registerTreeViewControllers"
         expect(source).to include("export function registerTreeViewControllers(application)")
-      when "TreeViewEventNames"
-        expect(source).to include("export const TreeViewEventNames = Object.freeze({")
       else
-        expect(source).to include("export { #{export_name} } from"),
+        has_reexport = source.include?("export { #{export_name} } from")
+        has_const_export = source.include?("export const #{export_name} =")
+
+        expect(has_reexport || has_const_export).to be(true),
           "expected tree_view package root to keep exporting #{export_name}"
       end
-    expect(source).to include("export function registerTreeViewControllers(application)")
-
-    public_javascript_manifest.fetch("named_exports").reject { |name| name == "registerTreeViewControllers" }.each do |export_name|
-      has_reexport = source.include?("export { #{export_name} } from")
-      has_const_export = source.include?("export const #{export_name} =")
-
-      expect(has_reexport || has_const_export).to be(true),
-        "expected tree_view package root to keep exporting #{export_name}"
     end
   end
 
