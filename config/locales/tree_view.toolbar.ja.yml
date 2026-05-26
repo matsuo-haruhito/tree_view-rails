@@ -1,0 +1,7 @@
+ja:
+  tree_view:
+    toolbar:
+      labels:
+        expand_all: "すべて展開"
+        collapse_all: "すべて折りたたむ"
+        collapse_all_except_current_path: "現在の経路以外を折りたたむ"

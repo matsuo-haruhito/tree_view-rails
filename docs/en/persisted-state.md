@@ -111,6 +111,40 @@ The concern keeps responsibility boundaries narrow:
 - it still requires the host app to choose the owner, authorization, route, save timing, and response shape
 - it does not provide a finished controller or lock the host app into Turbo Stream vs JSON responses
 
+## Browser event wiring
+
+If your host app wants to persist expansion changes as users interact, listen for the public `tree-view-state:state-changed` event on the TreeView state controller element and forward `event.detail.expandedKeys` to your save endpoint.
+
+```js
+const element = document.querySelector("[data-controller~='tree-view-state']")
+
+if (element) {
+  element.addEventListener("tree-view-state:state-changed", async (event) => {
+    const { viewKey, expandedKeys } = event.detail
+    if (!viewKey) return
+
+    await fetch("/tree_states", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']")?.content || ""
+      },
+      body: JSON.stringify({
+        tree_instance_key: viewKey,
+        expanded_keys: expandedKeys
+      })
+    })
+  })
+}
+```
+
+A few practical notes:
+
+- `viewKey` comes from `data-tree-view-state-view-key-value`. A common pattern is to keep it aligned with the server-side `tree_instance_key` so the browser listener can save the correct screen state without extra lookup.
+- `expandedKeys` is the current expanded node-key snapshot published by the state controller after connect, `refresh`, and expand/collapse updates.
+- Because the controller dispatches once on initial connect, host apps that only want user-initiated saves can debounce the listener, ignore the first event, or gate saves behind their own dirty-state policy.
+- TreeView only dispatches the event. The host app still owns the route, authorization, retry behavior, and the decision to save on every change or only at explicit checkpoints.
+
 ## RenderState integration
 
 Pass the loaded state to `RenderState`.

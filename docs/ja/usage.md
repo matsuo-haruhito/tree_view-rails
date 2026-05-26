@@ -58,6 +58,45 @@ tree_ui = TreeView::UiConfigBuilder.new(
 
 path builderはURLを作るだけです。実際のcontroller action、Turbo Stream response、認可、server-side queryはhost app側の責務です。
 
+bundled HTML helperを使わず、host app側でtoolbar markupを組み立てたい場合は、まず documentedされた supported action set を取得してから、app-owned な link / button を描画します。
+
+```erb
+<% supported_actions = tree_view_toolbar_supported_actions %>
+
+<% tree_view_toolbar_actions(@render_state, actions: supported_actions).each do |action| %>
+bundled HTML helper の代わりに host app 側で toolbar markup を組みたい場合は、TreeView から action metadata を受け取り、app-owned markup で link / button を描画できます。
+
+`tree_view_toolbar`、`tree_view_toolbar_actions`、`tree_view_toolbar_action_metadata` の default label は current locale の `tree_view.toolbar.labels.*` を参照し、translation が無い場合は built-in の英語copyへ fallback します。画面固有の文言が必要な場合だけ `labels:` を渡してください。
+
+```erb
+<% tree_view_toolbar_actions(@render_state).each do |action| %>
+  <% if action[:path] %>
+    <%= link_to action[:label], action[:path], data: action[:data] %>
+  <% else %>
+    <%= button_tag action[:label], type: "button", disabled: true, data: action[:data] %>
+  <% end %>
+<% end %>
+```
+
+`tree_view_toolbar_supported_actions` は documented public action symbol を返します。現時点では `:expand_all`、`:collapse_all`、`:collapse_all_except_current_path` です。host app が対応action全体を列挙したい場合は、internal constant ではなくこのhelperを使ってください。
+
+各action hashには次が入ります。
+各 action hash には以下が含まれます。
+
+- `:action` 例: `:expand_all`
+- `:state` 例: `:expanded`
+- `:label`
+- `:path`。現在のmodeがtree全体toggleを持たない場合は `nil`
+- `:disabled`
+- host app側のbutton / linkに使う `:data`
+
+TreeView はmetadataだけを提供します。最終的なHTML構造、style、icon、認可ルールはhost app側で決めます。
+- `:path`。tree-wide toggle を使わない mode では `nil`
+- `:disabled`
+- host app 側の link / button に渡せる `:data`
+
+TreeView が提供するのは metadata までです。最終的な HTML 構造、style、icon、authorization rule は host app 側で決めます。
+
 ## client-side開閉
 
 `max_render_depth` / `max_leaf_distance` の範囲内のnodeを初期HTMLに含めても問題ない小〜中規模treeでは、`build_client_side` を使えます。Turbo routeやTurbo Stream responseを用意せず、browser内だけで開閉します。

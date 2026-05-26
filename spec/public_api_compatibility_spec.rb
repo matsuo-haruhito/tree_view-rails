@@ -13,6 +13,29 @@ RSpec.describe "Public API compatibility" do
     @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
   end
 
+JAVASCRIPT_ENTRYPOINT_PATH = File.expand_path("../app/javascript/tree_view/index.js", __dir__)
+RENDER_STATE_GROUPED_OPTION_CONSTANTS = {
+  "initial_expansion" => :VALID_INITIAL_EXPANSION_KEYS,
+  "render_scope" => :VALID_RENDER_SCOPE_KEYS,
+  "toggle_scope" => :VALID_TOGGLE_SCOPE_KEYS
+}.freeze
+
+RSpec.describe "Public API compatibility" do
+  def public_api_manifest
+    # The machine-readable manifest covers Ruby/module/helper entrypoints,
+    # grouped option keys, and JavaScript package-root exports. Grouped option
+    # behavior and broader docs sync stay explicit here.
+    @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
+  end
+
+  def public_javascript_manifest
+    public_api_manifest.fetch("javascript_package_root")
+  end
+
+  def javascript_entrypoint_source
+    @javascript_entrypoint_source ||= File.read(JAVASCRIPT_ENTRYPOINT_PATH)
+  end
+
   def public_ui_config
     TreeView::UiConfig.new(
       node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
@@ -64,7 +87,16 @@ RSpec.describe "Public API compatibility" do
     expect(builder).to respond_to(:build_client_side)
   end
 
-  it "keeps documented RenderState grouped options available" do
+  it "keeps documented RenderState grouped option keys available" do
+    public_api_manifest.fetch("grouped_option_keys").each do |group_name, manifest_keys|
+      constant_name = RENDER_STATE_GROUPED_OPTION_CONSTANTS.fetch(group_name)
+      expected_keys = TreeView::RenderState.const_get(constant_name).map(&:to_s)
+
+      expect(manifest_keys).to eq(expected_keys), "expected #{group_name} keys to match TreeView::RenderState::#{constant_name}"
+    end
+  end
+
+  it "keeps representative grouped option behavior available" do
     tree = instance_double(TreeView::Tree)
     ui_config = instance_double(TreeView::UiConfig)
 
@@ -130,6 +162,29 @@ RSpec.describe "Public API compatibility" do
   it "keeps documented helper method names available through TreeViewHelper" do
     public_api_manifest.fetch("helper_methods").each do |method_name|
       expect(TreeViewHelper.public_instance_methods).to include(method_name.to_sym), "expected TreeViewHelper##{method_name} to remain public"
+    end
+  end
+
+  it "keeps documented JavaScript package-root exports available" do
+    source = javascript_entrypoint_source
+
+    expect(source).to include("export function registerTreeViewControllers(application)")
+
+    public_javascript_manifest.fetch("named_exports").reject { |name| name == "registerTreeViewControllers" }.each do |export_name|
+      expect(source).to include("export { #{export_name} } from"),
+        "expected tree_view package root to keep exporting #{export_name}"
+    end
+  end
+
+  it "keeps documented JavaScript controller identifiers wired through registerTreeViewControllers" do
+    source = javascript_entrypoint_source
+
+    public_javascript_manifest.fetch("controller_registrations").each do |registration|
+      export_name = registration.fetch("export")
+      identifier = registration.fetch("identifier")
+
+      expect(source).to include("application.register(\"#{identifier}\", #{export_name})"),
+        "expected registerTreeViewControllers to register #{export_name} as #{identifier}"
     end
   end
 

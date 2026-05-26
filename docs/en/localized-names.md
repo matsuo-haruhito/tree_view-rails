@@ -76,6 +76,22 @@ en:
 
 If the translation is missing, TreeView falls back to a humanized `node_type` value.
 
+## Toolbar action labels
+
+The bundled toolbar helpers also use I18n-backed default labels.
+
+```yaml
+en:
+  tree_view:
+    toolbar:
+      labels:
+        expand_all: "Expand all"
+        collapse_all: "Collapse all"
+        collapse_all_except_current_path: "Collapse all except current path"
+```
+
+`tree_view_toolbar`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` read these keys for the current locale unless the host app passes an explicit `labels:` override. Missing translations fall back to the built-in English copy.
+
 ## NodePresenter example
 
 ```ruby

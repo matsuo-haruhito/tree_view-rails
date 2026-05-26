@@ -34,6 +34,8 @@ For the Rails version matrix:
 ```bash
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle exec rake
 ```
 
 ## Public API compatibility specs
@@ -68,13 +70,15 @@ npm run test:browser
 
 Use the browser smoke suite for representative interaction flows that need a real browser event loop, focus handling, and drag/drop APIs. Keep these tests small and stable: cover keyboard navigation, expand/collapse, checkbox cascade behavior, lazy-loading state changes, transfer payloads, and row form controls coexisting with tree behavior.
 
+When browser-level accessibility smoke is added, do not silently suppress tree or treegrid-oriented findings. If a fixture intentionally allows a pattern because of TreeView's documented table-first policy, leave a short adjacent comment or suppression note that cites `docs/en/accessibility-semantics.md` or `docs/ja/accessibility-semantics.md` and names the specific policy being relied on, such as row-level ARIA on table rows, omitted `aria-controls`, or host-app-owned keyboard flow.
+
 ## CI policy
 
 Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-day changes:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
-- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile` and `gemfiles/rails_8_0.gemfile`
+- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
 - JavaScript entrypoint, unit, and browser smoke tests through `npm run test:js`
 
 Docs-only pull requests that touch only `README.md` and `docs/**` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails and JavaScript jobs while preserving the same check names for branch protection. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.

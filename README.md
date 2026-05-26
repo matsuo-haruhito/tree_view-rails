@@ -220,6 +220,7 @@ Additional docs:
 - [Visual reference mockups](docs/mockups/README.md)
 - [Documentation maintenance checklist](docs/i18n-audit.md)
 - [Product Profile](Product%20Profile.md)
+- [Maintainer guide](AGENTS.md)
 - [CHANGELOG.md](CHANGELOG.md)
 
 ## Development
