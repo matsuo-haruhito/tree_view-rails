@@ -50,8 +50,12 @@ RSpec.describe "Public API compatibility" do
     event_key.tr("_", "-")
   end
 
+  def source_dispatches_event?(source, dispatch_name)
+    source.match?(/\bdispatch\("#{Regexp.escape(dispatch_name)}"/)
+  end
+
   def source_mentions_detail_key?(source, detail_key)
-    source.match?(/#{Regexp.escape(detail_key)}\s*:/) || source.match?(/[\{\s,]#{Regexp.escape(detail_key)}[\s,\}]/)
+    source.match?(/#{Regexp.escape(detail_key)}\s*:/) || source.match?(/[\{\s,]#{Regexp.escape(detail_key)}[\s,}]/)
   end
 
   def public_ui_config
@@ -254,7 +258,7 @@ RSpec.describe "Public API compatibility" do
       events.each do |event_key, detail_keys|
         dispatch_name = event_dispatch_name(event_key)
 
-        expect(source).to include(%(dispatch("#{dispatch_name}"))),
+        expect(source_dispatches_event?(source, dispatch_name)).to be(true),
           "expected #{group_name} controller to dispatch #{dispatch_name}"
 
         detail_keys.each do |detail_key|
