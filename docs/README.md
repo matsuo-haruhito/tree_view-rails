@@ -52,4 +52,4 @@ Documentation language-sync rules and ongoing maintenance checks are tracked in 
 - `docs/ja/` は日本語ドキュメントです。日本語側の内容がより充実している間は、主なcanonical sourceとして扱います。
 - `docs/en/` は英語ドキュメントです。
 - root直下のdocsは、意図した入口、保守メモ、technical asset に限定します。
-- 利用者向けdocsを新規追加または大きく更新する場合は、可能な限り `docs/ja/` と `docs/en/` の両方に追加します.
+- 利用者向けdocsを新規追加または大きく更新する場合は、可能な限り `docs/ja/` と `docs/en/` の両方に追加します。
