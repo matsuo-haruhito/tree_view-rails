@@ -10,6 +10,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 
 | File | Covers |
 |---|---|
+| [review-gallery.html](review-gallery.html) | Single-surface comparison hub for the default, narrow, interaction, and empty-state mockups, with embedded previews and links to each full reference page. |
 | [default-tree.html](default-tree.html) | Default table/tree output, checkbox selection, expanded/collapsed rows, badges, depth labels, row actions, and baseline CSS. |
 | [toolbar-actions.html](toolbar-actions.html) | Expand-all / collapse-all toolbar reference showing enabled, disabled, and current-state variants without host-app routes or authorization copy. |
 | [narrow-sidebar-tree.html](narrow-sidebar-tree.html) | Narrow sidebar and small-width reference that keeps toggle controls, primary labels, and current or selection cues visible while secondary metadata wraps below. |
