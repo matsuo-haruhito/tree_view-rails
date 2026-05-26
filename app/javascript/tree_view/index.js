@@ -10,6 +10,26 @@ export { TreeViewSelectionController } from "./selection_controller.js"
 export { TreeViewStateController } from "./state_controller.js"
 export { TreeViewTransferController } from "./transfer_controller.js"
 
+export const TreeViewEventNames = Object.freeze({
+  selection: Object.freeze({
+    change: "tree-view-selection:change",
+    selected: "tree-view-selection:selected",
+    limitExceeded: "tree-view-selection:limit-exceeded",
+    invalidPayload: "tree-view-selection:invalid-payload"
+  }),
+  remoteState: Object.freeze({
+    change: "tree-view-remote-state:change",
+    retry: "tree-view-remote-state:retry"
+  }),
+  transfer: Object.freeze({
+    dragStart: "tree-view-transfer:drag-start",
+    dragOver: "tree-view-transfer:drag-over",
+    drop: "tree-view-transfer:drop",
+    invalidPayload: "tree-view-transfer:invalid-payload",
+    invalidTransfer: "tree-view-transfer:invalid-transfer"
+  })
+})
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-client", TreeViewClientController)
