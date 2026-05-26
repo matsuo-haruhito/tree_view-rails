@@ -93,4 +93,27 @@ RSpec.describe TreeView::ReleaseCheck::Runner do
       expect(output.string).to include("Skipping tag alignment check because v0.1.0 does not exist yet")
     end
   end
+
+  it "accepts an existing annotated release tag that resolves to the current head commit" do
+    with_fixture_root do |root|
+      runner = described_class.new(root: root, stdout: StringIO.new, verify_package: false)
+      allow(runner).to receive(:git_commit_sha).with("refs/tags/v0.1.0").and_return("abc123")
+      allow(runner).to receive(:git_commit_sha).with("HEAD").and_return("abc123")
+
+      expect { runner.run! }.not_to raise_error
+    end
+  end
+
+  it "fails when the release tag resolves to a different commit than HEAD" do
+    with_fixture_root do |root|
+      runner = described_class.new(root: root, stdout: StringIO.new, verify_package: false)
+      allow(runner).to receive(:git_commit_sha).with("refs/tags/v0.1.0").and_return("deadbeef")
+      allow(runner).to receive(:git_commit_sha).with("HEAD").and_return("abc123")
+
+      expect { runner.run! }.to raise_error(
+        TreeView::ReleaseCheck::Failure,
+        /v0\.1\.0 points to deadbeef, expected abc123/
+      )
+    end
+  end
 end
