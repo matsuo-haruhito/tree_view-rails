@@ -93,7 +93,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 - Check `docs/ja/api-overview.md` and `docs/en/api-overview.md`.
 - Update public API compatibility specs when documented entry points, helpers, or options are intentionally changed.
 - If `config/public_api_manifest.yml` changes, update `docs/en/public-api.md` / `docs/ja/public-api.md`, then review the related README, usage docs, feature docs, `CHANGELOG.md`, and `docs/en/release.md` / `docs/ja/release.md`.
-- Update `docs/api.md` when needed.
+- Update `docs/en/api.md` / `docs/ja/api.md` when needed.
 - Update CHANGELOG.
 
 ### JavaScript changes
