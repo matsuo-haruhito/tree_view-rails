@@ -33,6 +33,29 @@ export const TreeViewEventNames = Object.freeze({
   })
 })
 
+export const TreeViewEventDetailKeys = Object.freeze({
+  state: Object.freeze({
+    stateChanged: Object.freeze(["viewKey", "expandedKeys"])
+  }),
+  selection: Object.freeze({
+    change: Object.freeze(["selectedCount", "selectedValues", "selectedPayloads"]),
+    selected: Object.freeze(["payloads"]),
+    limitExceeded: Object.freeze(["maxCount", "attemptedCount", "attemptedChecked", "checkbox"]),
+    invalidPayload: Object.freeze(["value", "checkbox"])
+  }),
+  remoteState: Object.freeze({
+    change: Object.freeze(["row", "state", "childrenUrl", "nodeKey"]),
+    retry: Object.freeze(["row", "childrenUrl", "nodeKey"])
+  }),
+  transfer: Object.freeze({
+    dragStart: Object.freeze(["sourcePayload", "sourceRow"]),
+    dragOver: Object.freeze(["targetPayload", "targetRow", "position"]),
+    drop: Object.freeze(["sourcePayload", "targetPayload", "position", "targetRow"]),
+    invalidPayload: Object.freeze(["value", "row"]),
+    invalidTransfer: Object.freeze(["value"])
+  })
+})
+
 export const TreeViewControllerIdentifiers = Object.freeze({
   state: "tree-view-state",
   client: "tree-view-client",
