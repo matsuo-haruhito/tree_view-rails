@@ -11,6 +11,8 @@ Events are dispatched through Stimulus `dispatch`, so public TreeView events:
 
 Treat fields not documented here as internal implementation details.
 
+When host-app listeners need a machine-readable source of truth, import both `TreeViewEventNames` and `TreeViewEventDetailKeys` from `tree_view/index.js`. The first avoids hand-copying event-name strings, and the second exposes the documented `event.detail` key lists for each public event.
+
 ## State events
 
 ### `tree-view-state:state-changed`
@@ -115,5 +117,7 @@ Dispatched when row payload JSON or transferred JSON cannot be parsed.
 ## Compatibility policy
 
 The machine-readable public API manifest mirrors the event names and representative required `event.detail` keys documented on this page so compatibility specs can detect drift; this page remains the primary contract.
+
+The package-root exports `TreeViewEventNames` and `TreeViewEventDetailKeys` mirror that same documented contract for host-app listeners and tests.
 
 The event names and documented `detail` fields above are public integration points. Additive fields may be added in minor releases. Removing events, renaming fields, or changing documented field meanings should be treated as a compatibility-impacting change and called out in the changelog.
