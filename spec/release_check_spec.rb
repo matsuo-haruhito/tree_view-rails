@@ -14,11 +14,12 @@ RSpec.describe TreeView::ReleaseCheck::Runner do
   end
 
   def run_command(*command, chdir: nil)
-    success = if chdir
-      Dir.chdir(chdir) { system(*command) }
-    else
-      system(*command)
-    end
+    success =
+      if chdir
+        Dir.chdir(chdir) { system(*command) }
+      else
+        system(*command)
+      end
 
     raise "command failed: #{command.join(" ")}" unless success
   end
