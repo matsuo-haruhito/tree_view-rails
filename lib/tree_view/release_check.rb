@@ -100,7 +100,7 @@ module TreeView
 
           Gem::Package.build(specification)
         end
-      rescue StandardError => e
+      rescue => e
         raise Failure, "gem build failed: #{e.message}"
       end
 
@@ -117,7 +117,7 @@ module TreeView
 
         return if missing.empty?
 
-        raise Failure, "built gem is missing required release files: #{missing.join(', ')}"
+        raise Failure, "built gem is missing required release files: #{missing.join(", ")}"
       end
 
       def verify_library_load!
