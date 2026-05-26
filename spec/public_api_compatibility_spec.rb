@@ -51,7 +51,7 @@ RSpec.describe "Public API compatibility" do
   end
 
   def source_dispatches_event?(source, dispatch_name)
-    source.match?(/\bdispatch\("#{Regexp.escape(dispatch_name)}"/)
+    source.match?(/dispatch[A-Za-z]*\("#{Regexp.escape(dispatch_name)}"/)
   end
 
   def source_mentions_detail_key?(source, detail_key)
