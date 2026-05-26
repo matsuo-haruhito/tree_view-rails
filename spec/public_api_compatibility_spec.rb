@@ -5,11 +5,16 @@ require "yaml"
 
 PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
 PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+RENDER_STATE_GROUPED_OPTION_CONSTANTS = {
+  "initial_expansion" => :VALID_INITIAL_EXPANSION_KEYS,
+  "render_scope" => :VALID_RENDER_SCOPE_KEYS,
+  "toggle_scope" => :VALID_TOGGLE_SCOPE_KEYS
+}.freeze
 
 RSpec.describe "Public API compatibility" do
   def public_api_manifest
-    # First slice only: Ruby/module/helper entrypoint lists live in the manifest.
-    # Grouped options, JavaScript hooks, and broader docs sync stay explicit here for now.
+    # Ruby/module/helper entrypoint lists and grouped option keys live in the manifest.
+    # Grouped option behavior, JavaScript hooks, and broader docs sync stay explicit here.
     @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
   end
 
@@ -64,7 +69,16 @@ RSpec.describe "Public API compatibility" do
     expect(builder).to respond_to(:build_client_side)
   end
 
-  it "keeps documented RenderState grouped options available" do
+  it "keeps documented RenderState grouped option keys available" do
+    public_api_manifest.fetch("grouped_option_keys").each do |group_name, manifest_keys|
+      constant_name = RENDER_STATE_GROUPED_OPTION_CONSTANTS.fetch(group_name)
+      expected_keys = TreeView::RenderState.const_get(constant_name).map(&:to_s)
+
+      expect(manifest_keys).to eq(expected_keys), "expected #{group_name} keys to match TreeView::RenderState::#{constant_name}"
+    end
+  end
+
+  it "keeps representative grouped option behavior available" do
     tree = instance_double(TreeView::Tree)
     ui_config = instance_double(TreeView::UiConfig)
 
