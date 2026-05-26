@@ -37,6 +37,7 @@ helper_methods:
   - tree_selection_value
   - tree_view_breadcrumb
   - tree_view_toolbar
+  - tree_view_toolbar_supported_actions
   - tree_view_toolbar_actions
   - tree_view_toolbar_action_metadata
 grouped_option_keys:
@@ -97,3 +98,47 @@ javascript_package_root:
       drop: tree-view-transfer:drop
       invalid_payload: tree-view-transfer:invalid-payload
       invalid_transfer: tree-view-transfer:invalid-transfer
+  event_detail_keys:
+    selection:
+      change:
+        - selectedCount
+        - selectedValues
+        - selectedPayloads
+      selected:
+        - payloads
+      limit_exceeded:
+        - maxCount
+        - attemptedCount
+        - attemptedChecked
+        - checkbox
+      invalid_payload:
+        - value
+        - checkbox
+    remote_state:
+      change:
+        - row
+        - state
+        - childrenUrl
+        - nodeKey
+      retry:
+        - row
+        - childrenUrl
+        - nodeKey
+    transfer:
+      drag_start:
+        - sourcePayload
+        - sourceRow
+      drag_over:
+        - targetPayload
+        - targetRow
+        - position
+      drop:
+        - sourcePayload
+        - targetPayload
+        - position
+        - targetRow
+      invalid_payload:
+        - value
+        - row
+      invalid_transfer:
+        - value
