@@ -65,6 +65,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Product Profile](../../Product%20Profile.md) | Repository positioning, source-of-truth order, maintainership boundaries, and non-goals |
 | [AGENTS.md](../../AGENTS.md) | Repository-specific maintainer workflow, first-read order, and documentation update rules |
 | [CHANGELOG.md](../../CHANGELOG.md) | Release-facing summary of public changes, compatibility notes, and notable documentation additions |
+| [Documentation i18n audit](../i18n-audit.md) | Cross-language sync rules, technical-asset inventory, and translation priority checks |
 | [Public API](public-api.md) | APIs host apps may use directly and compatibility policy |
 | [Migration guide](migration.md) | Upgrade-oriented summary of compatibility promises, deprecations, and release-note expectations |
 | [Release checklist](release.md) | Release tests, documentation, and gem package checklist |
