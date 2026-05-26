@@ -24,6 +24,10 @@ RSpec.describe "Public API compatibility" do
     public_api_manifest.fetch("javascript_package_root")
   end
 
+  def public_javascript_event_names
+    public_javascript_manifest.fetch("event_names")
+  end
+
   def javascript_entrypoint_source
     @javascript_entrypoint_source ||= File.read(JAVASCRIPT_ENTRYPOINT_PATH)
   end
@@ -160,11 +164,16 @@ RSpec.describe "Public API compatibility" do
   it "keeps documented JavaScript package-root exports available" do
     source = javascript_entrypoint_source
 
-    expect(source).to include("export function registerTreeViewControllers(application)")
-
-    public_javascript_manifest.fetch("named_exports").reject { |name| name == "registerTreeViewControllers" }.each do |export_name|
-      expect(source).to include("export { #{export_name} } from"),
-        "expected tree_view package root to keep exporting #{export_name}"
+    public_javascript_manifest.fetch("named_exports").each do |export_name|
+      case export_name
+      when "registerTreeViewControllers"
+        expect(source).to include("export function registerTreeViewControllers(application)")
+      when "TreeViewEventNames"
+        expect(source).to include("export const TreeViewEventNames = Object.freeze({")
+      else
+        expect(source).to include("export { #{export_name} } from"),
+          "expected tree_view package root to keep exporting #{export_name}"
+      end
     end
   end
 
@@ -177,6 +186,27 @@ RSpec.describe "Public API compatibility" do
 
       expect(source).to include("application.register(\"#{identifier}\", #{export_name})"),
         "expected registerTreeViewControllers to register #{export_name} as #{identifier}"
+    end
+  end
+
+  it "keeps documented JavaScript event names available through TreeViewEventNames" do
+    source = javascript_entrypoint_source
+
+    expect(source).to include("export const TreeViewEventNames = Object.freeze({")
+    expect(source).to include("selection: Object.freeze({")
+    expect(source).to include("remoteState: Object.freeze({")
+    expect(source).to include("transfer: Object.freeze({")
+    expect(source).to include('limitExceeded: "tree-view-selection:limit-exceeded"')
+    expect(source).to include('invalidPayload: "tree-view-selection:invalid-payload"')
+    expect(source).to include('dragStart: "tree-view-transfer:drag-start"')
+    expect(source).to include('dragOver: "tree-view-transfer:drag-over"')
+    expect(source).to include('invalidTransfer: "tree-view-transfer:invalid-transfer"')
+
+    public_javascript_event_names.each_value do |group|
+      group.each_value do |event_name|
+        expect(source).to include(%("#{event_name}")),
+          "expected TreeViewEventNames to include #{event_name}"
+      end
     end
   end
 
