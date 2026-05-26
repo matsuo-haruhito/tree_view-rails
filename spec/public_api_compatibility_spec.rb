@@ -7,6 +7,7 @@ PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init
 PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 JAVASCRIPT_ENTRYPOINT_PATH = File.expand_path("../app/javascript/tree_view/index.js", __dir__)
 JAVASCRIPT_CONTROLLER_PATHS = {
+  "state" => File.expand_path("../app/javascript/tree_view/state_controller.js", __dir__),
   "selection" => File.expand_path("../app/javascript/tree_view/selection_controller.js", __dir__),
   "remote_state" => File.expand_path("../app/javascript/tree_view/remote_state_controller.js", __dir__),
   "transfer" => File.expand_path("../app/javascript/tree_view/transfer_controller.js", __dir__)
@@ -48,6 +49,11 @@ RSpec.describe "Public API compatibility" do
 
   def event_dispatch_name(event_key)
     event_key.tr("_", "-")
+  end
+
+  def javascript_manifest_key(key)
+    head, *tail = key.split("_")
+    [head, *tail.map(&:capitalize)].join
   end
 
   def source_dispatches_event?(source, dispatch_name)
@@ -249,6 +255,27 @@ RSpec.describe "Public API compatibility" do
       group.each_value do |event_name|
         expect(source).to include(%("#{event_name}")),
           "expected TreeViewEventNames to include #{event_name}"
+      end
+    end
+  end
+
+  it "keeps documented JavaScript event detail keys available through TreeViewEventDetailKeys" do
+    source = javascript_entrypoint_source
+
+    expect(source).to include("export const TreeViewEventDetailKeys = Object.freeze({")
+
+    public_javascript_event_detail_keys.each do |group_name, events|
+      group_key = javascript_manifest_key(group_name)
+      expect(source).to include("#{group_key}: Object.freeze({")
+
+      events.each do |event_key, detail_keys|
+        event_name = javascript_manifest_key(event_key)
+        expect(source).to include("#{event_name}: Object.freeze([")
+
+        detail_keys.each do |detail_key|
+          expect(source).to include(%("#{detail_key}")),
+            "expected TreeViewEventDetailKeys.#{group_key}.#{event_name} to include #{detail_key}"
+        end
       end
     end
   end
