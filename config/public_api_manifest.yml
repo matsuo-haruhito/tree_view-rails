@@ -81,6 +81,8 @@ javascript_package_root:
       identifier: tree-view-remote-state
       export: TreeViewRemoteStateController
   event_names:
+    state:
+      state_changed: tree-view-state:state-changed
     selection:
       change: tree-view-selection:change
       selected: tree-view-selection:selected
