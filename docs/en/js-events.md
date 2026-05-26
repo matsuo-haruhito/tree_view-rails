@@ -11,6 +11,19 @@ Events are dispatched through Stimulus `dispatch`, so public TreeView events:
 
 Treat fields not documented here as internal implementation details.
 
+## State events
+
+### `tree-view-state:state-changed`
+
+Dispatched whenever the state controller publishes the current expanded-state snapshot, including on initial connect, `refresh`, and expand/collapse updates.
+
+`event.detail` contains:
+
+| Field | Type | Description |
+|---|---|---|
+| `viewKey` | String or null | Value from `data-tree-view-state-view-key-value`, when present. Host apps can align this with the persisted `tree_instance_key` they save against. |
+| `expandedKeys` | Array<String> | Current expanded node keys collected from the state controller's tracked rows. |
+
 ## Selection events
 
 ### `tree-view-selection:change`

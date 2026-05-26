@@ -34,6 +34,8 @@ Rails version matrixを確認する場合:
 ```bash
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle exec rake
 ```
 
 ## Public API compatibility specs
@@ -41,6 +43,8 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 Public API compatibility specsは、documented Ruby entry points、helper methods、grouped options、JavaScript exportsが意図せず削除・renameされることを防ぐためのtestsです。これらのspecは、実装詳細を網羅するのではなく、APIの存在と代表的な互換挙動に絞ります。
 
 意図的なbreaking changeを受け入れる場合は、public API docsとcompatibility specsを同時に更新し、documented contractとtest coverageを同期させます。
+
+`config/public_api_manifest.yml` は、current first slice の documented Ruby module methods、public constants、helper names を表す machine-readable source of truth です。ここに entry を追加・rename・削除する場合は、manifest 自体を更新したうえで `docs/en/public-api.md` と `docs/ja/public-api.md` をそろえ、同じ surface を名前で案内している README / usage docs / feature docs を見直し、利用者向けの変更点を `CHANGELOG.md` に残し、必要なら `docs/en/release.md` / `docs/ja/release.md` の release note や migration expectation も更新してください。
 
 ## JavaScript browser smoke tests
 
@@ -66,13 +70,15 @@ npm run test:browser
 
 Browser smoke suiteは、実ブラウザのevent loop、focus handling、drag/drop APIで差が出やすい代表的なinteraction flowを確認するために使います。Keyboard navigation、expand/collapse、checkbox cascade、lazy-loading state changes、transfer payloads、row form controlsとtree behaviorの共存を、小さく安定したtestsで守ります。
 
+browser-level の accessibility smoke を追加するときは、tree や treegrid 前提の指摘を無言で suppress しないでください。TreeView の documented な table-first policy に基づいて意図的に許容する fixture がある場合は、近くの comment や suppression note から `docs/en/accessibility-semantics.md` または `docs/ja/accessibility-semantics.md` を参照し、row-level ARIA on table rows、`aria-controls` 非採用、host app 側 keyboard flow など、どの policy を根拠にしているかを短く明記します。
+
 ## CI方針
 
 Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScript testsを実行します。
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
-- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile` と `gemfiles/rails_8_0.gemfile`
+- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
 - JavaScript entrypoint、unit、browser smoke tests: `npm run test:js`
 
 `README.md` と `docs/**` だけに触れる docs-only Pull Request では、`lint` と `pr_specs` はそのまま残しつつ、representative Rails job と JavaScript job を short-circuit します。branch protection のため、check 名はそのまま維持します。`.github/workflows/**` も変更する Pull Request ではこの shortcut を使わず、通常の PR lanes を確認します。
@@ -90,7 +96,8 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - specを追加または更新する
 - `docs/ja/api-overview.md` / `docs/en/api-overview.md` を確認する
 - documented entry points、helpers、optionsを意図的に変更する場合はpublic API compatibility specsを更新する
-- 必要に応じて `docs/api.md` を更新する
+- `config/public_api_manifest.yml` を更新した場合は、`docs/en/public-api.md` / `docs/ja/public-api.md` をそろえたうえで、関連する README、usage docs、feature docs、`CHANGELOG.md`、`docs/en/release.md` / `docs/ja/release.md` も見直す
+- 必要に応じて `docs/en/api.md` / `docs/ja/api.md` を更新する
 - CHANGELOGを更新する
 
 ### JavaScriptを変更した場合
@@ -118,6 +125,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - `npm run test:browser`
 - `bundle exec rake build`
 - gem package contents
+- `config/public_api_manifest.yml` が documented Ruby / helper entry points と public API docs に追従していることを確認する
 - CHANGELOG
 - docs index / i18n audit
 

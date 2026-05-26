@@ -357,6 +357,36 @@ store.save(expanded_keys: expanded_keys)
 | `tree_turbo_frame(ui:)` | Returns the configured Turbo Frame target for the resolved UI config, or `nil`. |
 | `tree_selection_value(item, tree:, render_state:)` | Builds JSON for checkbox values. |
 | `tree_view_breadcrumb(tree, item, ...)` | Renders breadcrumbs. |
+| `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` | Renders TreeView's bundled toolbar markup. |
+| `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` | Returns toolbar action hashes so the host app can render its own markup. |
+| `tree_view_toolbar_action_metadata(render_state, action, label: nil)` | Returns metadata for one supported toolbar action. |
+
+### Toolbar helpers
+
+Use `tree_view_toolbar` when TreeView's default toolbar markup is enough.
+
+Use `tree_view_toolbar_actions` or `tree_view_toolbar_action_metadata` when the host app owns the final HTML, classes, icons, or authorization rules and only wants TreeView to provide the supported action metadata.
+
+Each action metadata hash includes:
+
+- `:action`
+- `:state`
+- `:label`
+- `:path`
+- `:disabled`
+- `:data`
+
+Supported toolbar actions are:
+
+| Action | Requested tree-wide state | Notes |
+|---|---|---|
+| `:expand_all` | `:expanded` | Uses the host app's `toggle_all_path_builder` for the expanded state. |
+| `:collapse_all` | `:collapsed` | Uses the host app's `toggle_all_path_builder` for the collapsed state. |
+| `:collapse_all_except_current_path` | `:current_path` | Uses the host app's `toggle_all_path_builder` for the current-path state. |
+
+When the current UI mode does not expose `toggle_all_path_builder`, toolbar metadata returns `path: nil` and `disabled: true`. TreeView still documents the action/state pair, but fallback UI and messaging remain the host app's responsibility.
+
+The internal constants that back these helpers are not public API. Depend on the documented helper methods and returned metadata shape instead of referencing those constants directly.
 
 ## JavaScript entrypoint
 

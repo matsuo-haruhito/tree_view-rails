@@ -29,6 +29,7 @@ Use these files as the durable documentation source:
 - `docs/en/usage.md` / `docs/ja/usage.md` — usage examples
 - `docs/en/api.md` / `docs/ja/api.md` — public API reference
 - `docs/en/development.md` / `docs/ja/development.md` — development, CI, and documentation update rules
+- `docs/en/release.md` / `docs/ja/release.md` — release checklist, changelog expectations, and compatibility-note policy
 - `docs/i18n-audit.md` — documentation maintenance checklist
 
 ## Repository Scope
@@ -90,6 +91,7 @@ When behavior, public API, setup steps, or design intent changes, update the rel
 - API changes: `docs/en/api.md` and `docs/ja/api.md`
 - Development and CI changes: `docs/en/development.md` and `docs/ja/development.md`
 - Cross-language maintenance rules: `docs/i18n-audit.md`
+- When `config/public_api_manifest.yml` changes, also review `docs/en/public-api.md`, `docs/ja/public-api.md`, the affected usage or feature docs, `CHANGELOG.md`, and `docs/en/release.md` / `docs/ja/release.md` when release notes or migration expectations need to change
 
 Keep `README.md` short. Put detailed setup, examples, and API contracts in `docs/`.
 

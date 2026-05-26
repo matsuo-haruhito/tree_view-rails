@@ -28,6 +28,12 @@ export const TreeViewEventNames = Object.freeze({
     invalidPayload: "tree-view-transfer:invalid-payload",
     invalidTransfer: "tree-view-transfer:invalid-transfer"
   })
+export const TreeViewControllerIdentifiers = Object.freeze({
+  state: "tree-view-state",
+  client: "tree-view-client",
+  selection: "tree-view-selection",
+  transfer: "tree-view-transfer",
+  remoteState: "tree-view-remote-state"
 })
 
 export function registerTreeViewControllers(application) {

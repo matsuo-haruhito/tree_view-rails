@@ -357,6 +357,36 @@ store.save(expanded_keys: expanded_keys)
 | `tree_turbo_frame(ui:)` | 解決されたUI configのTurbo Frame target、または `nil` を返す。 |
 | `tree_selection_value(item, tree:, render_state:)` | checkbox value用JSONを作る。 |
 | `tree_view_breadcrumb(tree, item, ...)` | breadcrumbを描画する。 |
+| `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` | TreeView bundled toolbar の markup を描画する。 |
+| `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` | host app が独自 markup を組み立てるための toolbar action hash を返す。 |
+| `tree_view_toolbar_action_metadata(render_state, action, label: nil)` | 1 つの supported toolbar action 用 metadata を返す。 |
+
+### Toolbar helpers
+
+TreeView 既定の toolbar markup で十分な場合は `tree_view_toolbar` を使います。
+
+最終的な HTML、class、icon、authorization rule を host app が持ちたい場合は、`tree_view_toolbar_actions` または `tree_view_toolbar_action_metadata` を使って、TreeView から supported action metadata だけを受け取ります。
+
+各 action metadata hash には次の key が入ります。
+
+- `:action`
+- `:state`
+- `:label`
+- `:path`
+- `:disabled`
+- `:data`
+
+公開されている toolbar action は次の 3 つです。
+
+| Action | 要求する tree-wide state | 補足 |
+|---|---|---|
+| `:expand_all` | `:expanded` | host app の `toggle_all_path_builder` に expanded state を渡します。 |
+| `:collapse_all` | `:collapsed` | host app の `toggle_all_path_builder` に collapsed state を渡します。 |
+| `:collapse_all_except_current_path` | `:current_path` | host app の `toggle_all_path_builder` に current-path state を渡します。 |
+
+現在の UI mode が `toggle_all_path_builder` を持たない場合、toolbar metadata は `path: nil` と `disabled: true` を返します。TreeView は action/state の対応だけを公開し、fallback UI や表示文言の判断は host app 側に残します。
+
+これらの helper を支える内部constantは public API ではありません。constant 名ではなく、documented helper method と返り値の metadata shape に依存してください。
 
 ## JavaScript entrypoint
 
