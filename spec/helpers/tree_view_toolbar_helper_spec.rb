@@ -28,6 +28,14 @@ RSpec.describe "tree_view_toolbar helper" do
     instance_double(TreeView::RenderState, ui_config: ui_config)
   end
 
+  around do |example|
+    original_available_locales = I18n.available_locales
+    I18n.available_locales = original_available_locales | %i[toolbar_test_ja toolbar_test_missing]
+    example.run
+  ensure
+    I18n.available_locales = original_available_locales
+  end
+
   it "returns toolbar action metadata for host-app-owned controls" do
     actions = helper.tree_view_toolbar_actions(render_state, actions: [:expand_all, :collapse_all], labels: {expand_all: "Open all"})
 
