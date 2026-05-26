@@ -34,6 +34,8 @@ For the Rails version matrix:
 ```bash
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle exec rake
 ```
 
 ## Public API compatibility specs
@@ -72,7 +74,7 @@ Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
-- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile` and `gemfiles/rails_8_0.gemfile`
+- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
 - JavaScript entrypoint, unit, and browser smoke tests through `npm run test:js`
 
 Docs-only pull requests that touch only `README.md` and `docs/**` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails and JavaScript jobs while preserving the same check names for branch protection. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.
