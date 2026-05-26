@@ -44,7 +44,7 @@ If you already know the symptom and want a faster reverse-lookup entry point, se
 - [English Troubleshooting](docs/en/troubleshooting.md)
 - [日本語Troubleshooting](docs/ja/troubleshooting.md)
 
-If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md).
+If you want a visual first look before wiring a host app, start with the [TreeView review gallery](docs/mockups/review-gallery.html), then use [TreeView mockups](docs/mockups/README.md) for the full static reference set.
 
 ## Features
 
