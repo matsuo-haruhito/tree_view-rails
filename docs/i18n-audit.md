@@ -85,8 +85,11 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | Asset | Status | Notes |
 |---|---|---|
 | `docs/mockups/README.md` | Technical asset | Index for static mockup assets. Short bilingual-style prose is acceptable; no separate translation needed. |
+| `docs/mockups/review-gallery.html` | Technical asset | Comparison hub for the current static mockup set. No translation needed. |
 | `docs/mockups/default-tree.html` | Technical asset | No translation needed. |
+| `docs/mockups/narrow-sidebar-tree.html` | Technical asset | No translation needed. |
 | `docs/mockups/interaction-states.html` | Technical asset | No translation needed. |
+| `docs/mockups/empty-state.html` | Technical asset | No translation needed. |
 | `docs/mockups/default-tree.css` | Technical asset | No translation needed. |
 
 ## Ongoing maintenance

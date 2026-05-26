@@ -48,25 +48,29 @@ Minimum release conditions:
 
 ## Code and tests
 
+The committed `package-lock.json` is not yet in sync with `package.json`, so both local setup and CI still use `npm install` for the JavaScript lane. Switch these release checks back to `npm ci` after the lockfile refresh work lands.
+
 Local checks:
 
 ```bash
 bundle exec standardrb
 bundle exec rake
 bundle exec rake build
-npm test
+npm run test:js
 ```
 
 Pull request CI checks:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
+- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile` and `gemfiles/rails_8_0.gemfile`
+- JavaScript tests through `npm install`, Playwright browser setup, and `npm run test:js`
 
 Main-push CI checks:
 
 - Ruby version matrix
 - Rails version matrix
-- JavaScript tests through `npm ci`
+- JavaScript tests through `npm install` and `npm run test:js` until the lockfile is refreshed in sync with `package.json`
 - Gem package verification
 
 PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes compatibility matrices, JavaScript coverage, and package verification.
