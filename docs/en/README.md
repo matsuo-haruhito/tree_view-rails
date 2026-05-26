@@ -6,7 +6,7 @@ The top-level README stays short. Detailed installation, usage, API, design, and
 
 ## Language status
 
-Documentation is being migrated to language-specific directories before the `0.1.0` release.
+Documentation now lives in language-specific directories, and bilingual coverage is tracked as an ongoing maintenance task after the `0.1.0` release.
 
 - [Japanese documentation](../ja/README.md)
 - [Documentation i18n audit](../i18n-audit.md)
