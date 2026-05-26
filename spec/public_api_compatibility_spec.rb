@@ -192,7 +192,6 @@ RSpec.describe "Public API compatibility" do
 
     public_javascript_manifest.fetch("controller_registrations").each do |registration|
       key = registration.fetch("key")
-      identifier = registration.fetch("identifier")
       export_name = registration.fetch("export")
 
       expect(source).to include("key: \"#{key}\""),
