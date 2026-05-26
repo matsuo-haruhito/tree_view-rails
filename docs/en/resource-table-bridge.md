@@ -48,4 +48,22 @@ This keeps the responsibilities separate:
 
 - Rails Table Preferences owns column inference, labels, saved table state, and preference UI.
 - TreeView owns tree structure and hierarchical row rendering.
-- The host app can override partials for presentation.
+- The host app can override partials for presentation, queries, authorization, and business behavior.
+
+## When to use it
+
+For a regular TreeView integration, `TreeView::RenderState` is still the default choice.
+
+Use `ResourceTableRenderState` when:
+
+- you want a standard table and a tree-table to share the same column definitions or table state
+- another layer such as Rails Table Preferences already decides `visible_columns`
+- you want TreeView to stay responsible only for hierarchy and row rendering
+
+## When not to use it
+
+Avoid `ResourceTableRenderState` when:
+
+- TreeView alone is enough for a simple tree
+- you do not need column visibility settings or saved table state
+- the host app already fully owns the row partial and table presentation as a separate implementation
