@@ -223,6 +223,10 @@ Records mode provides helpers for inspecting parent paths.
 | `tree_node_dom_id` | Build a node DOM ID through `UiConfig`. |
 | `tree_selection_value` | Build a JSON checkbox value. |
 | `tree_view_breadcrumb` | Render an ancestor breadcrumb. |
+| `tree_view_toolbar` | Render TreeView's bundled toolbar markup. |
+| `tree_view_toolbar_supported_actions` | Return the supported toolbar action symbols for app-owned toolbar builders. |
+| `tree_view_toolbar_actions` | Return toolbar action hashes for host-app-owned toolbar markup. |
+| `tree_view_toolbar_action_metadata` | Return metadata for a supported toolbar action. |
 
 ## JavaScript entrypoint
 
