@@ -93,7 +93,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - `docs/ja/api-overview.md` / `docs/en/api-overview.md` を確認する
 - documented entry points、helpers、optionsを意図的に変更する場合はpublic API compatibility specsを更新する
 - `config/public_api_manifest.yml` を更新した場合は、`docs/en/public-api.md` / `docs/ja/public-api.md` をそろえたうえで、関連する README、usage docs、feature docs、`CHANGELOG.md`、`docs/en/release.md` / `docs/ja/release.md` も見直す
-- 必要に応じて `docs/api.md` を更新する
+- 必要に応じて `docs/en/api.md` / `docs/ja/api.md` を更新する
 - CHANGELOGを更新する
 
 ### JavaScriptを変更した場合
