@@ -208,9 +208,11 @@ RSpec.describe "Public API compatibility" do
     source = javascript_entrypoint_source
 
     expect(source).to include("export const TreeViewEventNames = Object.freeze({")
+    expect(source).to include("state: Object.freeze({")
     expect(source).to include("selection: Object.freeze({")
     expect(source).to include("remoteState: Object.freeze({")
     expect(source).to include("transfer: Object.freeze({")
+    expect(source).to include('stateChanged: "tree-view-state:state-changed"')
     expect(source).to include('limitExceeded: "tree-view-selection:limit-exceeded"')
     expect(source).to include('invalidPayload: "tree-view-selection:invalid-payload"')
     expect(source).to include('dragStart: "tree-view-transfer:drag-start"')
