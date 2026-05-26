@@ -44,7 +44,7 @@ If you already know the symptom and want a faster reverse-lookup entry point, se
 - [English Troubleshooting](docs/en/troubleshooting.md)
 - [日本語Troubleshooting](docs/ja/troubleshooting.md)
 
-If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md).
+If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md) and start with [review-gallery.html](docs/mockups/review-gallery.html).
 
 ## Features
 
@@ -204,6 +204,7 @@ Key documents:
 | Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
 | FAQ | [FAQ](docs/en/faq.md) | [FAQ](docs/ja/faq.md) |
 | Troubleshooting | [Troubleshooting](docs/en/troubleshooting.md) | [Troubleshooting](docs/ja/troubleshooting.md) |
+| Visual reference mockups | [review-gallery.html](docs/mockups/review-gallery.html) | [review-gallery.html](docs/mockups/review-gallery.html) |
 | JavaScript event contract | [JavaScript event contract](docs/en/js-events.md) | [JavaScript イベント契約](docs/ja/js-events.md) |
 | Accessibility semantics | [Accessibility Semantics](docs/en/accessibility-semantics.md) | [Accessibility Semantics](docs/ja/accessibility-semantics.md) |
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
