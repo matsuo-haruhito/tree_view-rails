@@ -13,6 +13,24 @@ RSpec.describe TreeView::ReleaseCheck::Runner do
     File.write(path, content)
   end
 
+  def run_command(*command, chdir: nil)
+    success = if chdir
+                Dir.chdir(chdir) { system(*command) }
+              else
+                system(*command)
+              end
+
+    raise "command failed: #{command.join(' ')}" unless success
+  end
+
+  def initialize_git_repo(root)
+    run_command("git", "init", "-q", chdir: root)
+    run_command("git", "config", "user.name", "TreeView test", chdir: root)
+    run_command("git", "config", "user.email", "tree-view@example.com", chdir: root)
+    run_command("git", "add", ".", chdir: root)
+    run_command("git", "commit", "-q", "-m", "Initial fixture", chdir: root)
+  end
+
   def with_fixture_root(version: "0.1.0", changelog_version: version, include_release_check: true)
     Dir.mktmpdir do |root|
       write_file(root, "lib/tree_view/version.rb", <<~RUBY)
@@ -94,25 +112,30 @@ RSpec.describe TreeView::ReleaseCheck::Runner do
     end
   end
 
-  it "accepts an existing annotated release tag that resolves to the current head commit" do
+  it "accepts an annotated release tag that points to HEAD" do
     with_fixture_root do |root|
+      initialize_git_repo(root)
+      run_command("git", "tag", "-a", "v0.1.0", "-m", "Release 0.1.0", chdir: root)
+
       runner = described_class.new(root: root, stdout: StringIO.new, verify_package: false)
-      allow(runner).to receive(:git_commit_sha).with("refs/tags/v0.1.0").and_return("abc123")
-      allow(runner).to receive(:git_commit_sha).with("HEAD").and_return("abc123")
 
       expect { runner.run! }.not_to raise_error
     end
   end
 
-  it "fails when the release tag resolves to a different commit than HEAD" do
+  it "fails when the release tag points to a different commit" do
     with_fixture_root do |root|
+      initialize_git_repo(root)
+      run_command("git", "tag", "-a", "v0.1.0", "-m", "Release 0.1.0", chdir: root)
+      write_file(root, "README.md", "fixture update\n")
+      run_command("git", "add", "README.md", chdir: root)
+      run_command("git", "commit", "-q", "-m", "Advance HEAD", chdir: root)
+
       runner = described_class.new(root: root, stdout: StringIO.new, verify_package: false)
-      allow(runner).to receive(:git_commit_sha).with("refs/tags/v0.1.0").and_return("deadbeef")
-      allow(runner).to receive(:git_commit_sha).with("HEAD").and_return("abc123")
 
       expect { runner.run! }.to raise_error(
         TreeView::ReleaseCheck::Failure,
-        /v0\.1\.0 points to deadbeef, expected abc123/
+        /v0\.1\.0 points to .* expected .*/
       )
     end
   end
