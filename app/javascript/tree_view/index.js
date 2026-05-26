@@ -41,6 +41,34 @@ export const TreeViewControllerIdentifiers = Object.freeze({
   remoteState: "tree-view-remote-state"
 })
 
+export const TreeViewControllerEntries = Object.freeze([
+  Object.freeze({
+    key: "state",
+    identifier: TreeViewControllerIdentifiers.state,
+    controller: TreeViewStateController
+  }),
+  Object.freeze({
+    key: "client",
+    identifier: TreeViewControllerIdentifiers.client,
+    controller: TreeViewClientController
+  }),
+  Object.freeze({
+    key: "selection",
+    identifier: TreeViewControllerIdentifiers.selection,
+    controller: TreeViewSelectionController
+  }),
+  Object.freeze({
+    key: "transfer",
+    identifier: TreeViewControllerIdentifiers.transfer,
+    controller: TreeViewTransferController
+  }),
+  Object.freeze({
+    key: "remoteState",
+    identifier: TreeViewControllerIdentifiers.remoteState,
+    controller: TreeViewRemoteStateController
+  })
+])
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-client", TreeViewClientController)
