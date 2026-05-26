@@ -6,6 +6,11 @@ require "yaml"
 PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
 PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 JAVASCRIPT_ENTRYPOINT_PATH = File.expand_path("../app/javascript/tree_view/index.js", __dir__)
+JAVASCRIPT_CONTROLLER_PATHS = {
+  "selection" => File.expand_path("../app/javascript/tree_view/selection_controller.js", __dir__),
+  "remote_state" => File.expand_path("../app/javascript/tree_view/remote_state_controller.js", __dir__),
+  "transfer" => File.expand_path("../app/javascript/tree_view/transfer_controller.js", __dir__)
+}.freeze
 RENDER_STATE_GROUPED_OPTION_CONSTANTS = {
   "initial_expansion" => :VALID_INITIAL_EXPANSION_KEYS,
   "render_scope" => :VALID_RENDER_SCOPE_KEYS,
@@ -15,8 +20,8 @@ RENDER_STATE_GROUPED_OPTION_CONSTANTS = {
 RSpec.describe "Public API compatibility" do
   def public_api_manifest
     # The machine-readable manifest covers Ruby/module/helper entrypoints,
-    # grouped option keys, and JavaScript package-root exports. Grouped option
-    # behavior and broader docs sync stay explicit here.
+    # grouped option keys, package-root exports, and required JavaScript event
+    # detail keys. Broader behavior and docs sync stay explicit here.
     @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
   end
 
@@ -28,8 +33,25 @@ RSpec.describe "Public API compatibility" do
     public_javascript_manifest.fetch("event_names")
   end
 
+  def public_javascript_event_detail_keys
+    public_javascript_manifest.fetch("event_detail_keys")
+  end
+
   def javascript_entrypoint_source
     @javascript_entrypoint_source ||= File.read(JAVASCRIPT_ENTRYPOINT_PATH)
+  end
+
+  def javascript_controller_source(group_name)
+    @javascript_controller_sources ||= {}
+    @javascript_controller_sources[group_name] ||= File.read(JAVASCRIPT_CONTROLLER_PATHS.fetch(group_name))
+  end
+
+  def event_dispatch_name(event_key)
+    event_key.tr("_", "-")
+  end
+
+  def source_mentions_detail_key?(source, detail_key)
+    source.match?(/#{Regexp.escape(detail_key)}\s*:/) || source.match?(/[\{\s,]#{Regexp.escape(detail_key)}[\s,\}]/)
   end
 
   def public_ui_config
@@ -221,6 +243,24 @@ RSpec.describe "Public API compatibility" do
       group.each_value do |event_name|
         expect(source).to include(%("#{event_name}")),
           "expected TreeViewEventNames to include #{event_name}"
+      end
+    end
+  end
+
+  it "keeps documented JavaScript event detail keys aligned with controller dispatch sources" do
+    public_javascript_event_detail_keys.each do |group_name, events|
+      source = javascript_controller_source(group_name)
+
+      events.each do |event_key, detail_keys|
+        dispatch_name = event_dispatch_name(event_key)
+
+        expect(source).to include(%(dispatch("#{dispatch_name}"))),
+          "expected #{group_name} controller to dispatch #{dispatch_name}"
+
+        detail_keys.each do |detail_key|
+          expect(source_mentions_detail_key?(source, detail_key)).to be(true),
+            "expected #{group_name} controller source to keep #{detail_key} in the documented #{event_key} detail"
+        end
       end
     end
   end
