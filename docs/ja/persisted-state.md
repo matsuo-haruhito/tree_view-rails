@@ -111,6 +111,40 @@ end
 - owner、認可、route、保存タイミング、response shape の最終判断は引き続き host app 側に残す
 - 完成済み controller や Turbo Stream / JSON の固定 response policy は提供しない
 
+## Browser event wiring
+
+利用者の操作に合わせて開閉状態を保存したい場合は、TreeView state controller element で公開 event `tree-view-state:state-changed` を listen し、`event.detail.expandedKeys` を save endpoint へ渡します。
+
+```js
+const element = document.querySelector("[data-controller~='tree-view-state']")
+
+if (element) {
+  element.addEventListener("tree-view-state:state-changed", async (event) => {
+    const { viewKey, expandedKeys } = event.detail
+    if (!viewKey) return
+
+    await fetch("/tree_states", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": document.querySelector("meta[name='csrf-token']")?.content || ""
+      },
+      body: JSON.stringify({
+        tree_instance_key: viewKey,
+        expanded_keys: expandedKeys
+      })
+    })
+  })
+}
+```
+
+実運用では次の点を意識すると扱いやすくなります。
+
+- `viewKey` は `data-tree-view-state-view-key-value` の値です。browser 側で追加 lookup を増やさないため、server-side の `tree_instance_key` とそろえておくのがよくある形です。
+- `expandedKeys` は、state controller が connect、`refresh`、expand/collapse 更新後に公開する current expanded node-key snapshot です。
+- controller は初回 connect 時にも 1 回 dispatch するため、利用者操作だけを保存したい host app では debounce する、最初の event を無視する、独自の dirty-state policy を挟む、などの制御を host app 側で行えます。
+- TreeView が提供するのは event dispatch までです。route、認可、retry、毎回保存するか明示 checkpoint だけ保存するか、という保存方針は引き続き host app 側が持ちます。
+
 ## RenderStateとの連携
 
 読み込んだpersisted stateは `RenderState` に渡せます。
