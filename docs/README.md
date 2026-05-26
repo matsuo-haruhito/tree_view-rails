@@ -24,6 +24,7 @@
 ## Maintainer entry points
 
 - [Product Profile](../Product%20Profile.md): repository positioning, source-of-truth order, host app responsibilities, and non-goals.
+- [AGENTS.md](../AGENTS.md): repository-specific maintainer workflow, first-read order, and documentation update rules.
 
 ## Maintenance
 
