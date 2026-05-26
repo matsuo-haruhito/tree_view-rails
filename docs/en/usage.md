@@ -62,6 +62,8 @@ Path builders only build URLs. The host app owns controller actions, Turbo Strea
 
 If the host app wants to build its own toolbar instead of using TreeView's bundled HTML helper, ask TreeView for the documented supported action set first, then render links or buttons in app-owned markup.
 
+By default, `tree_view_toolbar`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` resolve labels through `tree_view.toolbar.labels.*` for the current locale and fall back to the built-in English copy. Pass `labels:` only when a screen needs app-specific wording.
+
 ```erb
 <% supported_actions = tree_view_toolbar_supported_actions %>
 

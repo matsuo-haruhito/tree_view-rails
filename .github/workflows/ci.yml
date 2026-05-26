@@ -79,6 +79,9 @@ jobs:
           - rails: "7.0"
             gemfile: gemfiles/rails_7_0.gemfile
             ruby-version: "3.2"
+          - rails: "7.2"
+            gemfile: gemfiles/rails_7_2.gemfile
+            ruby-version: "3.2"
           - rails: "8.0"
             gemfile: gemfiles/rails_8_0.gemfile
             ruby-version: "3.3"
@@ -86,7 +89,7 @@ jobs:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     steps:
       - if: needs.changes.outputs.docs_only == 'true'
-        run: echo "Docs-only PR: skipping representative Rails compatibility lane."
+        run: 'echo "Docs-only PR: skipping representative Rails compatibility lane."'
       - if: needs.changes.outputs.docs_only != 'true'
         uses: actions/checkout@v6
       - if: needs.changes.outputs.docs_only != 'true'
@@ -148,7 +151,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true'
-        run: echo "Docs-only PR: skipping JavaScript browser and entrypoint checks."
+        run: 'echo "Docs-only PR: skipping JavaScript browser and entrypoint checks."'
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
         uses: actions/checkout@v6
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'

@@ -38,6 +38,9 @@ Host apps may use these entry points directly:
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
 - `tree_view_breadcrumb(tree, item, ...)`
+- `tree_view_toolbar(render_state, ...)`
+- `tree_view_toolbar_actions(render_state, ...)`
+- `tree_view_toolbar_action_metadata(render_state, action, ...)`
 
 Use `TreeView::ResourceTableRenderState.call` when another table layer already owns column inference and table state, and TreeView should only build the hierarchical render state. See [Resource table bridge](resource-table-bridge.md).
 
@@ -56,6 +59,17 @@ The supported helper surface is the documented helper method names exposed by `T
 Host apps should include `TreeViewHelper` and depend on documented helper methods. They should not directly include internal implementation modules such as `TreeViewHelper::Rendering` or `TreeViewHelper::Selection`.
 
 For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` rather than internal constants.
+Documented toolbar helpers are part of that public helper surface:
+
+- `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` renders TreeView's bundled toolbar markup.
+- `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` returns action hashes so the host app can render its own toolbar markup.
+- `tree_view_toolbar_action_metadata(render_state, action, label: nil)` returns metadata for one supported action.
+
+Supported toolbar action symbols are `:expand_all`, `:collapse_all`, and `:collapse_all_except_current_path`.
+
+These actions request tree-wide toggle states `:expanded`, `:collapsed`, and `:current_path` respectively. When the current UI mode does not expose `toggle_all_path_builder`, metadata returns `path: nil` and `disabled: true`, leaving fallback UI decisions to the host app.
+
+Internal constants such as `TREE_VIEW_TOOLBAR_ACTIONS`, `TREE_VIEW_TOOLBAR_LABELS`, and `TREE_VIEW_TOOLBAR_STATES` are implementation details. Host apps should depend on the documented helper methods and returned metadata shape instead of referencing those constants directly.
 
 Internal module names may change as long as documented helper behavior is preserved.
 
@@ -127,6 +141,8 @@ Stable enough for host apps to use:
 - documented `data-tree-view-*` integration hooks
 
 `registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
+
+The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 

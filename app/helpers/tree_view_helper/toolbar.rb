@@ -45,7 +45,7 @@ module TreeViewHelper
       {
         action: normalized_action,
         state: TREE_VIEW_TOOLBAR_STATES.fetch(normalized_action),
-        label: label || TREE_VIEW_TOOLBAR_LABELS.fetch(normalized_action),
+        label: label || tree_view_toolbar_default_label(normalized_action),
         path: path,
         disabled: disabled,
         data: tree_view_toolbar_action_data(normalized_action, disabled: disabled)
@@ -63,6 +63,13 @@ module TreeViewHelper
       return normalized_action if TREE_VIEW_TOOLBAR_ACTIONS.include?(normalized_action)
 
       raise TreeView::ConfigurationError, "unknown tree_view_toolbar action: #{action}; supported actions are: #{TREE_VIEW_TOOLBAR_ACTIONS.join(", ")}"
+    end
+
+    def tree_view_toolbar_default_label(action)
+      default_label = TREE_VIEW_TOOLBAR_LABELS.fetch(action)
+      return default_label unless defined?(I18n)
+
+      I18n.t("tree_view.toolbar.labels.#{action}", default: default_label)
     end
 
     def tree_view_toolbar_action_tag(action, button_class_name)

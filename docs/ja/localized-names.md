@@ -74,6 +74,22 @@ ja:
 
 translation が見つからない場合は、`node_type` の値を humanize します。
 
+## Toolbar action labels
+
+bundled toolbar helper の default label も I18n 経由で解決できます。
+
+```yaml
+ja:
+  tree_view:
+    toolbar:
+      labels:
+        expand_all: "すべて展開"
+        collapse_all: "すべて折りたたむ"
+        collapse_all_except_current_path: "現在の経路以外を折りたたむ"
+```
+
+`tree_view_toolbar`、`tree_view_toolbar_actions`、`tree_view_toolbar_action_metadata` は、host app が `labels:` override を明示しない限り current locale のこれらの key を参照します。translation が無い場合は built-in の英語copyへ fallback します。
+
 ## NodePresenter example
 
 ```ruby

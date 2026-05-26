@@ -1,0 +1,7 @@
+en:
+  tree_view:
+    toolbar:
+      labels:
+        expand_all: "Expand all"
+        collapse_all: "Collapse all"
+        collapse_all_except_current_path: "Collapse all except current path"
