@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView resource table bridge mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-bridge-page {
+  max-width: 1240px;
+}
+
+.mock-bridge-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.mock-bridge-principles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.mock-bridge-principle {
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  padding: 16px;
+}
+
+.mock-bridge-principle h2,
+.mock-bridge-principle p,
+.mock-bridge-table-card h2,
+.mock-bridge-table-card p,
+.mock-bridge-note,
+.mock-bridge-checklist th,
+.mock-bridge-checklist td {
+  margin: 0;
+}
+
+.mock-bridge-principle h2 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.mock-bridge-table-card {
+  display: grid;
+  gap: 14px;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  padding: 18px;
+}
+
+.mock-bridge-table-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mock-bridge-eyebrow {
+  color: #52606d;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-bridge-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-bridge-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.8rem;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.mock-bridge-pill--muted {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.mock-bridge-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #dde4ec;
+  border-radius: 10px;
+}
+
+.mock-bridge-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.mock-bridge-table th,
+.mock-bridge-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.mock-bridge-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mock-bridge-table td.is-muted {
+  color: #52606d;
+}
+
+.mock-bridge-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #334155;
+  font-weight: 700;
+}
+
+.mock-bridge-section-label::before {
+  content: "";
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border-radius: 999px;
+  background: #93c5fd;
+}
+
+.mock-bridge-note {
+  color: #52606d;
+}
+
+.mock-bridge-checklist {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-bridge-checklist th,
+.mock-bridge-checklist td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-bridge-checklist th {
+  background: #f1f5f9;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .mock-bridge-table {
+    min-width: 640px;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-bridge-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Resource table bridge mock</h1>
+      <p>
+        Static reference for the bridge-style presentation where a table layer owns columns and visible column state,
+        while TreeView renders only the hierarchy rows. This page keeps the review surface product-neutral and focused on
+        column sharing, indentation, and row readability.
+      </p>
+    </header>
+
+    <section class="mock-section mock-bridge-grid" aria-labelledby="bridge-principles-heading">
+      <div>
+        <h2 id="bridge-principles-heading">Bridge responsibilities at a glance</h2>
+        <p class="mock-bridge-note">
+          Use this mock when review needs a visual reference for table-owned columns plus TreeView-owned hierarchy cues,
+          without pulling in controllers, persistence, or host-app business actions.
+        </p>
+      </div>
+
+      <div class="mock-bridge-principles">
+        <article class="mock-bridge-principle">
+          <h2>Table layer owns columns</h2>
+          <p>Column order, visibility, labels, and saved table state stay outside TreeView.</p>
+        </article>
+        <article class="mock-bridge-principle">
+          <h2>TreeView owns hierarchy rows</h2>
+          <p>Indent guides, toggle controls, row depth, and parent or child shape stay consistent across column sets.</p>
+        </article>
+        <article class="mock-bridge-principle">
+          <h2>Host app owns final actions</h2>
+          <p>Queries, routes, permissions, badges with business meaning, and workflow-specific labels remain app concerns.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section mock-bridge-grid" aria-labelledby="bridge-full-heading">
+      <article class="mock-bridge-table-card">
+        <div class="mock-bridge-table-header">
+          <div>
+            <p class="mock-bridge-eyebrow">State A</p>
+            <h2 id="bridge-full-heading">Shared desktop column set</h2>
+            <p class="mock-bridge-note">
+              Use this surface to review the baseline where the surrounding table layer exposes several descriptive columns
+              and TreeView contributes the hierarchy cell in the first data column.
+            </p>
+          </div>
+          <div class="mock-bridge-pill-row" aria-label="Visible columns summary">
+            <span class="mock-bridge-pill">visible_columns: name</span>
+            <span class="mock-bridge-pill">owner</span>
+            <span class="mock-bridge-pill">region</span>
+            <span class="mock-bridge-pill">updated</span>
+            <span class="mock-bridge-pill">status</span>
+          </div>
+        </div>
+
+        <div class="mock-bridge-table-wrap">
+          <table class="mock-bridge-table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Owner</th>
+                <th scope="col">Region</th>
+                <th scope="col">Updated</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 0 expanded row">
+                    <span class="tree-toggle__branches" aria-hidden="true"></span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">-</span>
+                      <span class="tree-toggle__level">L0</span>
+                      <strong>Platform rollout</strong>
+                      <span class="tree-node-badge tree-node-badge--info">current</span>
+                    </span>
+                  </div>
+                </td>
+                <td>Core delivery</td>
+                <td>Global</td>
+                <td class="is-muted">2 hours ago</td>
+                <td><span class="mock-status mock-status--active">Active</span></td>
+              </tr>
+              <tr>
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 1 expanded row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">-</span>
+                      <span class="tree-toggle__level">L1</span>
+                      <strong>North America launch</strong>
+                    </span>
+                  </div>
+                </td>
+                <td>Regional program</td>
+                <td>NA</td>
+                <td class="is-muted">Yesterday</td>
+                <td><span class="mock-status mock-status--pending">In progress</span></td>
+              </tr>
+              <tr class="tree-row is-collapsed">
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 2 collapsed row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-last"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">+</span>
+                      <span class="tree-toggle__level">L2</span>
+                      <strong>Warehouse checklist</strong>
+                      <span class="tree-toggle__hidden-count">4</span>
+                    </span>
+                  </div>
+                </td>
+                <td>Operations</td>
+                <td>Toronto</td>
+                <td class="is-muted">3 days ago</td>
+                <td><span class="mock-status mock-status--archived">Blocked</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="mock-bridge-table-card">
+        <div class="mock-bridge-table-header">
+          <div>
+            <p class="mock-bridge-eyebrow">State B</p>
+            <h2>Compact visible column variant</h2>
+            <p class="mock-bridge-note">
+              Use this surface to review how the same hierarchy cell still reads clearly when the surrounding table layer
+              hides auxiliary columns and keeps only the compact scan fields.
+            </p>
+          </div>
+          <div class="mock-bridge-pill-row" aria-label="Visible columns summary">
+            <span class="mock-bridge-pill">visible_columns: name</span>
+            <span class="mock-bridge-pill">status</span>
+            <span class="mock-bridge-pill">updated</span>
+            <span class="mock-bridge-pill mock-bridge-pill--muted">hidden: owner</span>
+            <span class="mock-bridge-pill mock-bridge-pill--muted">hidden: region</span>
+          </div>
+        </div>
+
+        <div class="mock-bridge-table-wrap">
+          <table class="mock-bridge-table">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 0 expanded row">
+                    <span class="tree-toggle__branches" aria-hidden="true"></span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">-</span>
+                      <span class="tree-toggle__level">L0</span>
+                      <strong>Platform rollout</strong>
+                      <span class="tree-node-badge tree-node-badge--info">current</span>
+                    </span>
+                  </div>
+                </td>
+                <td><span class="mock-status mock-status--active">Active</span></td>
+                <td class="is-muted">2 hours ago</td>
+              </tr>
+              <tr>
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 1 expanded row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">-</span>
+                      <span class="tree-toggle__level">L1</span>
+                      <strong>North America launch</strong>
+                    </span>
+                  </div>
+                </td>
+                <td><span class="mock-status mock-status--pending">In progress</span></td>
+                <td class="is-muted">Yesterday</td>
+              </tr>
+              <tr class="tree-row is-collapsed">
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 2 collapsed row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-last"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">+</span>
+                      <span class="tree-toggle__level">L2</span>
+                      <strong>Warehouse checklist</strong>
+                      <span class="tree-toggle__hidden-count">4</span>
+                    </span>
+                  </div>
+                </td>
+                <td><span class="mock-status mock-status--archived">Blocked</span></td>
+                <td class="is-muted">3 days ago</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="mock-section" aria-labelledby="bridge-review-heading">
+      <h2 id="bridge-review-heading">Review checklist</h2>
+      <table class="mock-bridge-checklist">
+        <thead>
+          <tr>
+            <th scope="col">Review concern</th>
+            <th scope="col">What this mock should answer</th>
+            <th scope="col">Keep outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Column sharing</td>
+            <td>The same tree rows stay readable across a fuller and a narrower visible column set.</td>
+            <td>Automatic column inference, saved preference UI, or table personalization controls.</td>
+          </tr>
+          <tr>
+            <td>Hierarchy cues</td>
+            <td>Indent guides, toggles, current-row emphasis, and hidden-child counts remain legible in the first data column.</td>
+            <td>Real expand or collapse behavior, controller wiring, or asynchronous loading.</td>
+          </tr>
+          <tr>
+            <td>Responsibility boundary</td>
+            <td>TreeView owns the hierarchy presentation while the table layer owns which non-tree columns appear.</td>
+            <td>Host-app query strategy, authorization, routing, and business-specific row actions.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
