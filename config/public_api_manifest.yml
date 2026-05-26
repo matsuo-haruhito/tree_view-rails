@@ -39,3 +39,18 @@ helper_methods:
   - tree_view_toolbar
   - tree_view_toolbar_actions
   - tree_view_toolbar_action_metadata
+grouped_option_keys:
+  initial_expansion:
+    - default
+    - max_depth
+    - expanded_keys
+    - collapsed_keys
+    - current_item
+    - current_key
+    - auto_expand_ancestors
+  render_scope:
+    - max_depth
+    - max_leaf_distance
+  toggle_scope:
+    - max_depth_from_root
+    - max_leaf_distance
