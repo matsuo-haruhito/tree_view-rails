@@ -23,6 +23,17 @@ Any move toward `treegrid` semantics should be a focused compatibility decision.
 - `aria-controls` is intentionally not emitted by toggle links for now.
 - TreeView intentionally does not emit `role="tree"` or `role="treeitem"` for table rows today.
 
+## Intentional allowances for automated accessibility checks
+
+When automated checks expect full `tree` or `treegrid` semantics, use this section as the current policy baseline.
+
+- TreeView rows intentionally keep table semantics with row-level ARIA state instead of adding `role="tree"`, `role="treegrid"`, or `role="treeitem"`.
+- Toggle links may expose `aria-expanded` without `aria-controls` because there is no single stable controlled target across static, Turbo, and lazy-loading flows.
+- TreeView does not promise a full treegrid keyboard model today; page-level focus order, captions, and shortcut behavior remain host-app responsibilities.
+- `aria-selected` reflects TreeView row selection state only. It should not be interpreted as host-app business checkbox semantics unless the host app intentionally maps those concepts together.
+
+If a future browser-level accessibility smoke test treats one of these patterns as an allowed exception, the test comment or suppression note should cite this section and name the specific policy it relies on.
+
 ## Empty-state and hidden-count hooks
 
 - Empty rows now wrap the message in `.tree-view-empty-row__content` and `.tree-view-empty-row__message`, with `data-tree-view-empty-state="true"` on the wrapper so host apps can style or target empty states without overriding the partial.
@@ -91,6 +102,8 @@ TreeView protects the documented ARIA behavior with integration specs for:
 - collapsed branch `aria-expanded="false"`
 - checkbox selection `aria-selected`
 - windowed rendering row depth and expansion state
+
+When browser-level accessibility smoke tests are introduced, keep any rule-specific allowances or suppressions adjacent to the relevant test and point them back to this policy instead of suppressing failures without context.
 
 ## Host app responsibilities
 
