@@ -18,8 +18,10 @@ When implementation and docs drift, use this order:
 
 1. Current code in `lib/`, `app/helpers/`, `app/views/`, `app/assets/`, and `app/javascript/`
 2. Explicit decisions in the relevant issue and pull request
-3. Durable docs under `docs/en/` and `docs/ja/`
-4. Entry-point summaries in `README.md`, `docs/README.md`, and `AGENTS.md`
+3. Durable docs under `docs/`, especially the relevant guides in `docs/en/` and `docs/ja/`
+4. Entry-point summaries in `README.md`, `docs/README.md`, `AGENTS.md`, and this profile
+
+Treat `CHANGELOG.md` as a release-facing summary of shipped public changes, not as the primary source for current behavior.
 
 ## What TreeView owns
 
@@ -46,12 +48,25 @@ When implementation and docs drift, use this order:
 - A full virtual scrolling engine or host-app query planner
 - Demo app business logic or seed data as part of the gem's public contract
 
+## Maintainer companion docs
+
+Use these durable entry points together when you are checking scope, docs sync, or release-facing changes:
+
+- `AGENTS.md` for repository workflow and documentation update rules
+- `README.md` for public positioning and quick entry points
+- `docs/README.md` for the cross-language docs map and maintainer entry points
+- `docs/en/README.md` or `docs/ja/README.md` for language-specific docs navigation
+- `docs/i18n-audit.md` for cross-language maintenance rules and docs update coverage
+- `CHANGELOG.md` for shipped public changes, compatibility notes, and notable docs additions
+
 ## Recommended first reads
 
 For maintainers making changes, start in this order:
 
 1. `AGENTS.md` for repository-specific workflow and documentation update rules
 2. `README.md` for public positioning and quick entry points
-3. `docs/README.md` for the docs map
-4. `docs/en/README.md` or `docs/ja/README.md` for language-specific docs
+3. `docs/README.md` for the docs map and maintainer entry points
+4. `docs/en/README.md` or `docs/ja/README.md` for language-specific docs navigation
 5. `docs/en/design-policy.md` or `docs/ja/design-policy.md` for responsibility boundaries
+6. `docs/i18n-audit.md` when the task changes public docs or language coverage
+7. `CHANGELOG.md` when the task affects release-facing public behavior or compatibility notes
