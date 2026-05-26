@@ -126,6 +126,8 @@ Stable enough for host apps to use:
 
 `registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
 
+The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+
 Internal by default:
 
 - private controller methods
