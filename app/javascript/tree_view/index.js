@@ -10,6 +10,14 @@ export { TreeViewSelectionController } from "./selection_controller.js"
 export { TreeViewStateController } from "./state_controller.js"
 export { TreeViewTransferController } from "./transfer_controller.js"
 
+export const TreeViewControllerIdentifiers = Object.freeze({
+  state: "tree-view-state",
+  client: "tree-view-client",
+  selection: "tree-view-selection",
+  transfer: "tree-view-transfer",
+  remoteState: "tree-view-remote-state"
+})
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-client", TreeViewClientController)
