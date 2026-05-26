@@ -134,6 +134,7 @@ host app が使ってよい入口:
 
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
+- `TreeViewEventDetailKeys`
 - `TreeViewControllerIdentifiers`
 - exported controller classes
   - `TreeViewStateController`
@@ -147,6 +148,7 @@ host app が使ってよい入口:
 `registerTreeViewControllers(application)` は、上記 5 つの controller export を bundled entrypoint の documented identifier 順に登録します。
 
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
+`TreeViewEventDetailKeys` は documented `event.detail` key 一覧を machine-readable に参照するための package-root export です。host app 側の listener や test で `TreeViewEventDetailKeys.selection.change` や `TreeViewEventDetailKeys.transfer.drop` のように使うことで、payload key の写経を避けられます。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
 
 `TreeViewControllerIdentifiers` の documented key:
