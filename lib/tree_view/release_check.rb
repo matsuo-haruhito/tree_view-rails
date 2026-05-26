@@ -123,15 +123,15 @@ module TreeView
       def verify_library_load!
         stdout.puts("Running bundle exec ruby -Ilib load check")
 
+        expected_version = version
+        script = <<~RUBY
+          require "tree_view"
+          actual_version = TreeView::VERSION
+          abort("expected #{expected_version}, got \#{actual_version}") unless actual_version == #{expected_version.dump}
+        RUBY
+
         success = Dir.chdir(root) do
-          system(
-            "bundle",
-            "exec",
-            RbConfig.ruby,
-            "-Ilib",
-            "-e",
-            %(require "tree_view"; abort("expected #{version}, got #{TreeView::VERSION}") unless TreeView::VERSION == "#{version}")
-          )
+          system("bundle", "exec", RbConfig.ruby, "-Ilib", "-e", script)
         end
 
         return if success
