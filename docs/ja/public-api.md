@@ -39,6 +39,7 @@ host app が直接使ってよい主な入口は以下です。
 - `tree_view_window(render_state, offset:, limit:)`
 - `tree_view_breadcrumb(tree, item, ...)`
 - `tree_view_toolbar(render_state, ...)`
+- `tree_view_toolbar_supported_actions`
 - `tree_view_toolbar_actions(render_state, ...)`
 - `tree_view_toolbar_action_metadata(render_state, action, ...)`
 
@@ -62,6 +63,7 @@ app-owned toolbar builderでは、internal constantを直接参照せず、`tree
 toolbar helper もこの公開helper surfaceに含まれます。
 
 - `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` は TreeView bundled toolbar の HTML を描画します。
+- `tree_view_toolbar_supported_actions` は app-owned toolbar builder が使ってよい supported toolbar action symbol を返します。
 - `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` は host app が独自 toolbar markup を組み立てるための action hash 配列を返します。
 - `tree_view_toolbar_action_metadata(render_state, action, label: nil)` は 1 つの supported action 用 metadata を返します。
 

@@ -39,6 +39,7 @@ Host apps may use these entry points directly:
 - `tree_view_window(render_state, offset:, limit:)`
 - `tree_view_breadcrumb(tree, item, ...)`
 - `tree_view_toolbar(render_state, ...)`
+- `tree_view_toolbar_supported_actions`
 - `tree_view_toolbar_actions(render_state, ...)`
 - `tree_view_toolbar_action_metadata(render_state, action, ...)`
 
@@ -62,6 +63,7 @@ For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree
 Documented toolbar helpers are part of that public helper surface:
 
 - `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` renders TreeView's bundled toolbar markup.
+- `tree_view_toolbar_supported_actions` returns the supported toolbar action symbols for app-owned toolbar builders.
 - `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` returns action hashes so the host app can render its own toolbar markup.
 - `tree_view_toolbar_action_metadata(render_state, action, label: nil)` returns metadata for one supported action.
 

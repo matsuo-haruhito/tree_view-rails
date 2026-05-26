@@ -223,6 +223,10 @@ records modeでは、親方向のpathを確認するhelperを使えます。
 | `tree_node_dom_id` | `UiConfig` 経由でnode DOM IDを作ります。 |
 | `tree_selection_value` | checkbox value用JSONを作ります。 |
 | `tree_view_breadcrumb` | 祖先pathをbreadcrumbとして描画します。 |
+| `tree_view_toolbar` | TreeView bundled toolbar の HTML を描画します。 |
+| `tree_view_toolbar_supported_actions` | app-owned toolbar builder が使ってよい supported toolbar action symbol を返します。 |
+| `tree_view_toolbar_actions` | host app 側 toolbar markup 用の action hash 配列を返します。 |
+| `tree_view_toolbar_action_metadata` | supported toolbar action 1 件分の metadata を返します。 |
 
 ## JavaScript入口
 
