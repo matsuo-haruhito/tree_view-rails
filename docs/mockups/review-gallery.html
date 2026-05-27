@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, windowed rendering cues, filtered-tree mode differences, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, focused children-pagination placement, windowed rendering cues, filtered-tree mode differences, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -234,7 +234,7 @@
           </p>
           <ul class="mock-gallery-points">
             <li>Loaded, loading, and error or retry rows</li>
-            <li>Children pagination placeholder rows</li>
+            <li>Children pagination placeholder rows in one compact surface</li>
             <li>Dragging, valid drop, and blocked drop states</li>
           </ul>
           <div class="mock-gallery-links">
@@ -243,6 +243,27 @@
         </div>
         <div class="mock-gallery-preview">
           <iframe src="interaction-states.html" title="Interaction states mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-children-pagination-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused pagination</p>
+          <h2 id="gallery-children-pagination-heading">Children pagination</h2>
+          <p>
+            Use this surface when review needs a narrower pass on where next-page placeholder rows and load-more affordances should sit inside one expanded branch.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Initial page with a branch-scoped placeholder row</li>
+            <li>Load-more placement that stays tied to one parent branch</li>
+            <li>After-append state where the placeholder moves downward in place</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="children-pagination.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="children-pagination.html" title="Children pagination mock preview" loading="lazy"></iframe>
         </div>
       </article>
 
@@ -361,6 +382,11 @@
             <td>Interaction states</td>
             <td>Loading, retry, pagination, and drag or drop status cues.</td>
             <td>Real Turbo responses, route wiring, or persistence behavior.</td>
+          </tr>
+          <tr>
+            <td>Children pagination</td>
+            <td>Next-page placeholder placement, branch-scoped load-more cues, and the after-append handoff to a replacement placeholder row.</td>
+            <td>Cursor encoding, next-page detection, Turbo Stream append or replace logic, and final business copy.</td>
           </tr>
           <tr>
             <td>Windowed rendering</td>
