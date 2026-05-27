@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, windowed rendering cues, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, drag-safe control markers, windowed rendering cues, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -243,6 +243,27 @@
         </div>
         <div class="mock-gallery-preview">
           <iframe src="interaction-states.html" title="Interaction states mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-drag-controls-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused drag guards</p>
+          <h2 id="gallery-drag-controls-heading">Drag interactive controls</h2>
+          <p>
+            Use this surface to compare plain draggable rows against native controls, broad interactive markers, and drag-only ignore markers inside the same tree layout.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Native input, link, and button drag-start guard</li>
+            <li><code>data-tree-view-interactive</code> for custom widgets</li>
+            <li><code>data-tree-view-ignore-drag</code> for narrower drag-safe controls</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="drag-interactive-controls.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="drag-interactive-controls.html" title="Drag interactive controls mock preview" loading="lazy"></iframe>
         </div>
       </article>
 
@@ -382,6 +403,11 @@
             <td>Interaction states</td>
             <td>Loading, retry, pagination, and drag or drop status cues.</td>
             <td>Real Turbo responses, route wiring, or persistence behavior.</td>
+          </tr>
+          <tr>
+            <td>Drag interactive controls</td>
+            <td>Comparing plain draggable rows against native controls, broad interactive markers, and drag-only ignore markers.</td>
+            <td>Drop targets, widget implementation details, permission rules, or business-specific drag affordances.</td>
           </tr>
           <tr>
             <td>Windowed rendering</td>
