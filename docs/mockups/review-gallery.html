@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, drag-safe control markers, windowed rendering cues, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, drag-safe control markers, windowed rendering cues, breadcrumb path context, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -288,6 +288,27 @@
         </div>
       </article>
 
+      <article class="mock-gallery-card" aria-labelledby="gallery-breadcrumb-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused navigation context</p>
+          <h2 id="gallery-breadcrumb-heading">Breadcrumb paths</h2>
+          <p>
+            Use this surface to compare breadcrumb-path context against the tree's own current-row cue without turning the mockup into a route-design or Turbo-navigation review.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Shallow and deep representative paths</li>
+            <li>Current item at the end of the breadcrumb chain</li>
+            <li>Role split between path context and row-local hierarchy cues</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="breadcrumb-paths.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="breadcrumb-paths.html" title="Breadcrumb paths mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
       <article class="mock-gallery-card" aria-labelledby="gallery-filtered-heading">
         <div class="mock-gallery-copy">
           <p class="mock-gallery-eyebrow">Focused filtering</p>
@@ -413,6 +434,11 @@
             <td>Windowed rendering</td>
             <td>Visible-row slicing, current-row anchoring, and previous or next metadata framing.</td>
             <td>Pagination controls, infinite scroll, query state, or data fetching behavior.</td>
+          </tr>
+          <tr>
+            <td>Breadcrumb paths</td>
+            <td>Comparing breadcrumb lineage outside the tree against the current-row cue inside the hierarchy.</td>
+            <td>Route helpers, Turbo navigation, responsive overflow rules, and permission-aware labels.</td>
           </tr>
           <tr>
             <td>Filtered tree modes</td>
