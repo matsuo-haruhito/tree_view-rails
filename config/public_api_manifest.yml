@@ -151,3 +151,7 @@ javascript_package_root:
       childrenUrl: data-tree-children-url
     transfer:
       payload: data-tree-transfer-payload
+    emptyState:
+      contentClass: tree-view-empty-row__content
+      messageClass: tree-view-empty-row__message
+      stateAttribute: data-tree-view-empty-state
