@@ -44,7 +44,7 @@ If you already know the symptom and want a faster reverse-lookup entry point, se
 - [English Troubleshooting](docs/en/troubleshooting.md)
 - [日本語Troubleshooting](docs/ja/troubleshooting.md)
 
-If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md). Start with [review-gallery.html](docs/mockups/review-gallery.html) for the fastest first look, then use the mockup index for the current baseline reference, focused pages, and each page's role.
+If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md). Start with [review-gallery.html](docs/mockups/review-gallery.html) for the fastest first look, open [default-tree.html](docs/mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
 
 ## Features
 
@@ -204,7 +204,7 @@ Key documents:
 | Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
 | FAQ | [FAQ](docs/en/faq.md) | [FAQ](docs/ja/faq.md) |
 | Troubleshooting | [Troubleshooting](docs/en/troubleshooting.md) | [Troubleshooting](docs/ja/troubleshooting.md) |
-| Visual reference mockups | [TreeView mockups](docs/mockups/README.md) and [review-gallery.html](docs/mockups/review-gallery.html) | [TreeView mockups](docs/mockups/README.md) and [review-gallery.html](docs/mockups/review-gallery.html) |
+| Visual reference mockups | [TreeView mockups](docs/mockups/README.md), [review-gallery.html](docs/mockups/review-gallery.html), and [default-tree.html](docs/mockups/default-tree.html) | [TreeView mockups](docs/mockups/README.md), [review-gallery.html](docs/mockups/review-gallery.html), and [default-tree.html](docs/mockups/default-tree.html) |
 | JavaScript event contract | [JavaScript event contract](docs/en/js-events.md) | [JavaScript イベント契約](docs/ja/js-events.md) |
 | Accessibility semantics | [Accessibility Semantics](docs/en/accessibility-semantics.md) | [Accessibility Semantics](docs/ja/accessibility-semantics.md) |
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
