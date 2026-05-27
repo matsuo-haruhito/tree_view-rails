@@ -157,6 +157,7 @@ Stable enough for host apps to use:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
+- `TreeViewIntegrationHooks`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -170,6 +171,7 @@ Stable enough for host apps to use:
 
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
+`TreeViewIntegrationHooks` exposes the documented drag-safe interactive markers as a machine-readable object. Use it when custom widgets, browser assertions, or host-app wiring need the same documented attribute names without repeating raw strings.
 
 Documented keys on `TreeViewControllerIdentifiers`:
 
@@ -179,7 +181,12 @@ Documented keys on `TreeViewControllerIdentifiers`:
 - `transfer`
 - `remoteState`
 
-The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+Documented keys on `TreeViewIntegrationHooks`:
+
+- `interactive.marker`
+- `interactive.ignoreDrag`
+
+The machine-readable source of truth for the package-root JavaScript exports, documented integration hooks, and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
