@@ -85,6 +85,29 @@ selection: {
 }
 ```
 
+`selection:` config covers row-level payload generation, disabled-state decisions, selected keys, and checkbox visibility inside `TreeView::RenderState`.
+
+When the host app configures the `tree-view-selection` controller on the host element, these documented value attributes are part of the stable wiring surface:
+
+- `data-tree-view-selection-hidden-input-name-value` for hidden-input sync into the nearest form
+- `data-tree-view-selection-max-count-value` for client-side selection limits
+- `data-tree-view-selection-cascade-value` for rendered-row cascade behavior
+- `data-tree-view-selection-indeterminate-value` for parent mixed-state updates
+
+```erb
+<tbody
+  data-controller="tree-view-selection"
+  data-action="change->tree-view-selection#toggle"
+  data-tree-view-selection-hidden-input-name-value="selected_nodes[]"
+  data-tree-view-selection-max-count-value="10"
+  data-tree-view-selection-cascade-value="true"
+  data-tree-view-selection-indeterminate-value="true">
+  <%= tree_view_rows(@render_state) %>
+</tbody>
+```
+
+Use the render-state `selection:` options for what each row means, and use the host-element value attributes for how the Stimulus controller mirrors or constrains already-rendered checkboxes. For complete event and behavior details, see [Selection](selection.md).
+
 ## Path builders
 
 Turbo and lazy-loading URLs are provided by the host app.

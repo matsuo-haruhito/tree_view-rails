@@ -179,13 +179,22 @@ host app が使ってよい入口:
 - `transfer`
 - `remoteState`
 
+`tree-view-selection` controller の documented host-element value attribute も、stable な host-app wiring surface の一部です。
+
+- `data-tree-view-selection-hidden-input-name-value`
+- `data-tree-view-selection-max-count-value`
+- `data-tree-view-selection-cascade-value`
+- `data-tree-view-selection-indeterminate-value`
+
+これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
+
 package-root の JavaScript export と bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
 内部扱い:
 
 - private controller methods
 - `app/javascript/tree_view/` 以下の file layout
-- undocumented `data-*` attributes
+- documented host-app wiring surface に含まれない undocumented `data-*` attributes
 - controller 内部の DOM traversal details
 
 ## CSS and DOM surface
