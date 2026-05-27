@@ -55,9 +55,17 @@ Documented public subclasses are listed in [Error hierarchy](errors.md).
 
 ## Public helper surface
 
-The supported helper surface is the documented helper method names exposed by `TreeViewHelper` and related helper modules.
+The supported helper surface is the documented helper method names exposed by `TreeViewHelper` and related helper modules, tracked as the machine-readable helper-method contract in `config/public_api_manifest.yml`.
 
 Host apps should include `TreeViewHelper` and depend on documented helper methods. They should not directly include internal implementation modules such as `TreeViewHelper::Rendering` or `TreeViewHelper::Selection`.
+
+Documented non-toolbar helpers that are part of that public helper surface include:
+
+- `tree_view_rows(render_state, window: nil)` renders TreeView rows, including opt-in windowed rendering.
+- `tree_view_window(render_state, offset:, limit:)` returns documented window metadata for visible rows.
+- `tree_node_dom_id(item_or_id, ui: @tree_ui)` builds node DOM IDs through the resolved `UiConfig`.
+- `tree_selection_value(item, tree, builder = nil)` serializes the documented checkbox payload contract for host-app selection wiring and assertions.
+- `tree_view_breadcrumb(tree, item, ...)` renders a breadcrumb path for a node.
 
 For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` rather than internal constants.
 Documented toolbar helpers are part of that public helper surface:
@@ -72,6 +80,8 @@ Supported toolbar action symbols are `:expand_all`, `:collapse_all`, and `:colla
 These actions request tree-wide toggle states `:expanded`, `:collapsed`, and `:current_path` respectively. When the current UI mode does not expose `toggle_all_path_builder`, metadata returns `path: nil` and `disabled: true`, leaving fallback UI decisions to the host app.
 
 Internal constants such as `TREE_VIEW_TOOLBAR_ACTIONS`, `TREE_VIEW_TOOLBAR_LABELS`, and `TREE_VIEW_TOOLBAR_STATES` are implementation details. Host apps should depend on the documented helper methods and returned metadata shape instead of referencing those constants directly.
+
+Helper methods that are not documented in `config/public_api_manifest.yml` are not part of the public compatibility contract even if bundled partials call them internally.
 
 Internal module names may change as long as documented helper behavior is preserved.
 
