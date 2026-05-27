@@ -59,6 +59,7 @@ javascript_package_root:
   named_exports:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
+    - TreeViewIntegrationHooks
     - TreeViewStateController
     - TreeViewClientController
     - TreeViewSelectionController
@@ -142,3 +143,11 @@ javascript_package_root:
         - row
       invalid_transfer:
         - value
+  integration_hooks:
+    state:
+      viewKeyValue: data-tree-view-state-view-key-value
+      nodeKey: data-tree-view-state-node-key
+    remoteState:
+      childrenUrl: data-tree-children-url
+    transfer:
+      payload: data-tree-transfer-payload
