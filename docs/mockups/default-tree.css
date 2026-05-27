@@ -40,6 +40,37 @@ h2 {
   margin-top: 0;
 }
 
+.mock-return-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 20px;
+}
+
+.mock-return-nav__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.2rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mock-return-nav__link:hover,
+.mock-return-nav__link:focus {
+  background: #eff6ff;
+  text-decoration: none;
+}
+
+.mock-return-nav__link--secondary {
+  color: #334155;
+}
+
 .tree-view-table {
   min-width: 100%;
   width: 100%;
