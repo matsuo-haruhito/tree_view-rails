@@ -92,6 +92,10 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | `docs/mockups/toolbar-actions.html` | Technical asset | No translation needed. |
 | `docs/mockups/narrow-sidebar-tree.html` | Technical asset | No translation needed. |
 | `docs/mockups/interaction-states.html` | Technical asset | No translation needed. |
+| `docs/mockups/children-pagination.html` | Technical asset | No translation needed. |
+| `docs/mockups/windowed-rendering.html` | Technical asset | No translation needed. |
+| `docs/mockups/filtered-tree-modes.html` | Technical asset | No translation needed. |
+| `docs/mockups/form-editing-rows.html` | Technical asset | No translation needed. |
 | `docs/mockups/empty-state.html` | Technical asset | No translation needed. |
 | `docs/mockups/default-tree.css` | Technical asset | No translation needed. |
 
