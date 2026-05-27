@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selection visibility and disabled-state mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-visibility-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.mock-state-card {
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #f8fafc;
+  padding: 16px;
+}
+
+.mock-state-card h3,
+.mock-state-card p,
+.mock-state-card ul {
+  margin-top: 0;
+}
+
+.mock-state-card h3 {
+  margin-bottom: 0.35rem;
+}
+
+.mock-state-card p {
+  color: #52606d;
+}
+
+.mock-state-card .tree-view-table {
+  background: #fff;
+}
+
+.mock-selection-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.mock-disabled-reason {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.35rem;
+  padding: 0.08rem 0.4rem;
+  border-radius: 999px;
+  background: #fff1f2;
+  color: #9f1239;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.mock-selection-note {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.92rem;
+}
+
+.mock-scope-table td:first-child,
+.mock-scope-table th:first-child {
+  width: 4rem;
+  text-align: center;
+}
+
+.mock-scope-table td:nth-child(2),
+.mock-scope-table th:nth-child(2) {
+  width: 7rem;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Selection visibility and disabled-state mock</h1>
+      <p>
+        Static HTML for reviewing how TreeView selection cells change across visibility modes,
+        disabled checkbox rules, and mixed parent cues without wiring real forms, submit flows,
+        or host-app bulk actions.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="visibility-heading">
+      <h2 id="visibility-heading">Visibility modes</h2>
+      <p>
+        Each card keeps the same representative root, child, and leaf rows so reviewers can compare
+        which rows render checkboxes when <code>selection[:visibility]</code> changes.
+      </p>
+      <div class="mock-visibility-grid">
+        <article class="mock-state-card">
+          <h3><code>:all</code></h3>
+          <p>All rendered rows keep checkboxes, including expandable branches and leaves.</p>
+          <table class="tree-view-table mock-scope-table" aria-label="Selection visibility all">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">level</th>
+                <th scope="col">name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-expanded">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Select root"></td>
+                <td><span class="tree-toggle__level">root</span></td>
+                <td>Portfolio</td>
+              </tr>
+              <tr class="tree-row is-expanded is-selected">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Select child"></td>
+                <td><span class="tree-toggle__level">child</span></td>
+                <td>Operations board</td>
+              </tr>
+              <tr class="tree-row is-leaf">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Select leaf"></td>
+                <td><span class="tree-toggle__level">leaf</span></td>
+                <td>Runbook</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="mock-state-card">
+          <h3><code>:roots</code></h3>
+          <p>Only root rows keep checkboxes. Descendants still reserve the same cell so columns stay aligned.</p>
+          <table class="tree-view-table mock-scope-table" aria-label="Selection visibility roots">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">level</th>
+                <th scope="col">name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-expanded">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Select root only"></td>
+                <td><span class="tree-toggle__level">root</span></td>
+                <td>Portfolio</td>
+              </tr>
+              <tr class="tree-row is-expanded">
+                <td class="tree-selection-cell"><span class="mock-selection-placeholder" aria-hidden="true">-</span></td>
+                <td><span class="tree-toggle__level">child</span></td>
+                <td>Operations board</td>
+              </tr>
+              <tr class="tree-row is-leaf">
+                <td class="tree-selection-cell"><span class="mock-selection-placeholder" aria-hidden="true">-</span></td>
+                <td><span class="tree-toggle__level">leaf</span></td>
+                <td>Runbook</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="mock-state-card">
+          <h3><code>:leaves</code></h3>
+          <p>Leaf rows keep checkboxes while branch rows become structural only.</p>
+          <table class="tree-view-table mock-scope-table" aria-label="Selection visibility leaves">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">level</th>
+                <th scope="col">name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-expanded">
+                <td class="tree-selection-cell"><span class="mock-selection-placeholder" aria-hidden="true">-</span></td>
+                <td><span class="tree-toggle__level">root</span></td>
+                <td>Portfolio</td>
+              </tr>
+              <tr class="tree-row is-expanded">
+                <td class="tree-selection-cell"><span class="mock-selection-placeholder" aria-hidden="true">-</span></td>
+                <td><span class="tree-toggle__level">child</span></td>
+                <td>Operations board</td>
+              </tr>
+              <tr class="tree-row is-leaf is-selected">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Select leaf only"></td>
+                <td><span class="tree-toggle__level">leaf</span></td>
+                <td>Runbook</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="mock-state-card">
+          <h3><code>:none</code></h3>
+          <p>No rendered row exposes a checkbox, but the empty cells stay in place for table consistency.</p>
+          <table class="tree-view-table mock-scope-table" aria-label="Selection visibility none">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">level</th>
+                <th scope="col">name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-expanded">
+                <td class="tree-selection-cell"><span class="mock-selection-placeholder" aria-hidden="true">-</span></td>
+                <td><span class="tree-toggle__level">root</span></td>
+                <td>Portfolio</td>
+              </tr>
+              <tr class="tree-row is-expanded">
+                <td class="tree-selection-cell"><span class="mock-selection-placeholder" aria-hidden="true">-</span></td>
+                <td><span class="tree-toggle__level">child</span></td>
+                <td>Operations board</td>
+              </tr>
+              <tr class="tree-row is-leaf">
+                <td class="tree-selection-cell"><span class="mock-selection-placeholder" aria-hidden="true">-</span></td>
+                <td><span class="tree-toggle__level">leaf</span></td>
+                <td>Runbook</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="disabled-heading">
+      <h2 id="disabled-heading">Disabled and mixed states</h2>
+      <p>
+        This table focuses on disabled checkboxes, disabled reasons, and a parent row that stays visually mixed
+        while child business actions remain outside TreeView's reusable scope.
+      </p>
+      <table class="tree-view-table" aria-label="Disabled and mixed selection states">
+        <thead>
+          <tr>
+            <th scope="col">select</th>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">state cue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tree-row is-expanded">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" type="checkbox" checked aria-checked="mixed" aria-label="Mixed parent selection">
+            </td>
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">root</span>
+                </span>
+              </span>
+            </td>
+            <td>Operations board</td>
+            <td><span class="tree-node-badge tree-node-badge--info">mixed</span></td>
+          </tr>
+          <tr class="tree-row is-leaf is-selected">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" type="checkbox" checked aria-label="Enabled child selection">
+            </td>
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">leaf</span>
+                </span>
+              </span>
+            </td>
+            <td>Current checklist</td>
+            <td><span class="mock-status mock-status--active">selected</span></td>
+          </tr>
+          <tr class="tree-row is-leaf is-collapsed">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" type="checkbox" disabled title="Archived items cannot be selected" aria-label="Disabled archived child selection">
+            </td>
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-last"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">leaf</span>
+                </span>
+              </span>
+            </td>
+            <td>
+              Archived checklist
+              <span class="mock-disabled-reason">disabled reason</span>
+            </td>
+            <td><span class="mock-status mock-status--archived">archived</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="mock-selection-note">
+        TreeView can render the checkbox, disabled reason, and mixed row cue. Bulk action wording,
+        hidden input sync, submit handling, and max-count messaging still belong to the host app.
+      </p>
+    </section>
+
+    <section class="mock-section" aria-labelledby="coverage-heading">
+      <h2 id="coverage-heading">What this mock covers</h2>
+      <ul>
+        <li>Representative checkbox visibility for <code>:all</code>, <code>:roots</code>, <code>:leaves</code>, and <code>:none</code></li>
+        <li>Disabled checkbox rendering and disabled reason placement</li>
+        <li>Mixed parent state as a visual cue rather than a business action workflow</li>
+        <li>Clear boundary between reusable TreeView output and host-app-owned submit behavior</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
