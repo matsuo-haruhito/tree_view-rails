@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, focused children-pagination placement, windowed rendering cues, filtered-tree mode differences, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, focused children-pagination placement, partially-loaded selection boundaries, windowed rendering cues, filtered-tree mode differences, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -264,6 +264,27 @@
         </div>
         <div class="mock-gallery-preview">
           <iframe src="children-pagination.html" title="Children pagination mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-selection-boundary-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused selection boundary</p>
+          <h2 id="gallery-selection-boundary-heading">Partially-loaded selection boundary</h2>
+          <p>
+            Use this surface when review needs to compare loaded-row selection, mixed parent cues, and bulk-action framing while a branch still has unloaded descendants.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Checked rows stay scoped to the loaded DOM subset</li>
+            <li>Indeterminate and cascade cues stop at rendered rows</li>
+            <li>Loaded-row actions stay distinct from query-backed whole-filter actions</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="children-pagination-selection-boundary.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="children-pagination-selection-boundary.html" title="Partially-loaded selection boundary mock preview" loading="lazy"></iframe>
         </div>
       </article>
 
@@ -387,6 +408,11 @@
             <td>Children pagination</td>
             <td>Next-page placeholder placement, branch-scoped load-more cues, and the after-append handoff to a replacement placeholder row.</td>
             <td>Cursor encoding, next-page detection, Turbo Stream append or replace logic, and final business copy.</td>
+          </tr>
+          <tr>
+            <td>Partially-loaded selection boundary</td>
+            <td>Loaded-row selection scope, mixed parent cues, and the difference between DOM-backed actions and server-backed whole-filter actions.</td>
+            <td>Hidden-input sync, real submit workflow, authorization, and whole-filter business rules.</td>
           </tr>
           <tr>
             <td>Windowed rendering</td>
