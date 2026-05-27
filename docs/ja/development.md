@@ -18,6 +18,8 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
+現状は `npm install` を使い続けてください。repo には `package-lock.json` を commit していますが、まだ `package.json` と同期していないため、ローカルセットアップと Pull Request CI は、registry-enabled な環境で lockfile refresh が完了するまで `npm install` を前提にしています。現在の CI と install path の整理は [導入手順](installation.md) を参照してください。
+
 ## よく使うコマンド
 
 ```bash
