@@ -109,6 +109,18 @@ toolbar helper もこの公開helper surfaceに含まれます。
 
 詳細は [API仕様](api.md)、[Localized names](localized-names.md)、[Turbo Frame option](turbo-frame.md) を参照してください。
 
+### RenderState grouped option keys
+
+`TreeView::RenderState` の grouped options も public option surface の一部です。exact key set の machine-readable source of truth は `config/public_api_manifest.yml` にあり、`spec/public_api_compatibility_spec.rb` が current `TreeView::RenderState` constant と representative behavior に対してその manifest を照合します。
+
+| Group | documented public keys | 補足 |
+|---|---|---|
+| `initial_expansion` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | 個別keyword option と `initial_expansion:` を併用した場合でも、優先されるのは個別keyword optionです。 |
+| `render_scope` | `max_depth`, `max_leaf_distance` | `TreeView::RenderState` の documented render-depth / leaf-distance control に対応します。 |
+| `toggle_scope` | `max_depth_from_root`, `max_leaf_distance` | tree-wide toggle の documented depth / leaf-distance control に対応します。 |
+
+`selection:` と `lazy_loading:` も引き続き documented public grouped options ですが、manifest-backed grouped-key contract は現時点では上の 3 つの `TreeView::RenderState` group に絞って管理しています。
+
 ## Host app extension points
 
 host app が提供する主な拡張点は以下です。

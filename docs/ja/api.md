@@ -282,6 +282,16 @@ render_state = TreeView::RenderState.new(
 
 公開名の判断は [Public Name Decisions](public-name-decisions.md)、ARIA配置は [Accessibility Semantics](accessibility-semantics.md) を参照してください。識別子設計は [Node keys](node-keys.md) を参照してください。
 
+### Documented grouped option keys
+
+`TreeView::RenderState` の grouped-option contract の exact key set は `config/public_api_manifest.yml` を machine-readable source of truth にし、`spec/public_api_compatibility_spec.rb` が current constant と representative behavior に対してその manifest を照合します。
+
+| Grouped option | supported keys | 補足 |
+|---|---|---|
+| `initial_expansion:` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | 個別keyword option と両方書いた場合でも、優先されるのは個別keyword optionです。 |
+| `render_scope:` | `max_depth`, `max_leaf_distance` | `TreeView::RenderState` でdocumentedされている render-depth / leaf-distance control と同じ契約です。 |
+| `toggle_scope:` | `max_depth_from_root`, `max_leaf_distance` | `TreeView::RenderState` でdocumentedされている toggle-depth / toggle leaf-distance control と同じ契約です。 |
+
 ## TreeView::UiConfig / UiConfigBuilder
 
 DOM ID、toggle mode、path builder、任意の Turbo Frame target をまとめる設定objectです。

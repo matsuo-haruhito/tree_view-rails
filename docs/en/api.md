@@ -282,6 +282,16 @@ When both flat keyword options and `initial_expansion:` are supplied, the flat k
 
 For focused naming decisions, see [Public Name Decisions](public-name-decisions.md). For ARIA placement, see [Accessibility Semantics](accessibility-semantics.md). For identifier design, see [Node keys](node-keys.md).
 
+### Documented grouped option keys
+
+The exact machine-readable grouped-option contract for `TreeView::RenderState` lives in `config/public_api_manifest.yml`, and `spec/public_api_compatibility_spec.rb` checks that manifest against the current constants and representative behavior.
+
+| Grouped option | Supported keys | Notes |
+|---|---|---|
+| `initial_expansion:` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | Equivalent flat keyword options still take priority when both forms are supplied. |
+| `render_scope:` | `max_depth`, `max_leaf_distance` | Use these grouped keys for the same render-depth and leaf-distance controls documented for `TreeView::RenderState`. |
+| `toggle_scope:` | `max_depth_from_root`, `max_leaf_distance` | Use these grouped keys for the same toggle-depth and toggle leaf-distance controls documented for `TreeView::RenderState`. |
+
 ## TreeView::UiConfig / UiConfigBuilder
 
 Configuration for DOM IDs, toggle mode, path builders, and optional Turbo Frame targeting.

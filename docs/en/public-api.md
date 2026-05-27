@@ -109,6 +109,18 @@ Documented Turbo UI options include:
 
 See [API reference](api.md), [Localized names](localized-names.md), and [Turbo Frame option](turbo-frame.md) for details.
 
+### RenderState grouped option keys
+
+`TreeView::RenderState` grouped options are part of the public option surface. The exact machine-readable key set lives in `config/public_api_manifest.yml`, and `spec/public_api_compatibility_spec.rb` checks that manifest against the current `TreeView::RenderState` constants and representative behavior.
+
+| Group | Documented public keys | Notes |
+|---|---|---|
+| `initial_expansion` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | When flat keyword options and `initial_expansion:` are both supplied, the flat keyword options still win. |
+| `render_scope` | `max_depth`, `max_leaf_distance` | Mirrors the documented render-depth and leaf-distance controls for `TreeView::RenderState`. |
+| `toggle_scope` | `max_depth_from_root`, `max_leaf_distance` | Mirrors the documented tree-wide toggle depth and toggle leaf-distance controls. |
+
+`selection:` and `lazy_loading:` remain documented public grouped options too, but the manifest-backed grouped-key contract currently focuses on the three `TreeView::RenderState` groups above.
+
 ## Host app extension points
 
 Host apps are expected to provide these pieces:
