@@ -135,6 +135,7 @@ Stable enough for host apps to use:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewEventDetailKeys`
+- `TreeViewEventDetailValues`
 - `TreeViewControllerIdentifiers`
 - exported controller classes
   - `TreeViewStateController`
@@ -142,13 +143,14 @@ Stable enough for host apps to use:
   - `TreeViewSelectionController`
   - `TreeViewTransferController`
   - `TreeViewRemoteStateController`
-- documented JavaScript events and payload keys
+- documented JavaScript events, payload keys, and documented enum-like payload values
 - documented `data-tree-view-*` integration hooks
 
 `registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
 
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewEventDetailKeys` exposes the documented `event.detail` key lists as a machine-readable package-root export. Use it when host-app listeners or tests need the stable payload keys for an event such as `TreeViewEventDetailKeys.selection.change` or `TreeViewEventDetailKeys.transfer.drop`.
+`TreeViewEventDetailValues` exposes the documented enum-like `event.detail` values for selected fields. Use it when host-app listeners or tests want the documented `remoteState.change.state` or transfer `position` values without hand-copying strings.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
 
 Documented keys on `TreeViewControllerIdentifiers`:
@@ -159,7 +161,7 @@ Documented keys on `TreeViewControllerIdentifiers`:
 - `transfer`
 - `remoteState`
 
-The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, documented event detail keys, and documented enum-like event detail values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
@@ -184,7 +186,7 @@ Treat these as breaking changes:
 - removing or renaming a documented option
 - changing a documented default that changes rendered output or parsed params
 - changing documented priority between flat options and grouped options
-- changing documented JavaScript event names or payload keys
+- changing documented JavaScript event names, payload keys, or documented enum-like payload values
 - removing documented CSS/data hooks
 - changing documented `tree_view_rows(render_state)` behavior
 - changing documented selection or row event payload shapes
@@ -197,6 +199,7 @@ These are usually not breaking changes:
 - adding CSS classes while keeping documented classes
 - adding data attributes
 - adding event detail keys
+- adding new documented enum-like payload values only when the relevant docs explicitly allow additive values for that field
 - adding new `TreeView::Error` subclasses for newly documented validation/configuration failures
 - refactoring internal helper modules
 - moving controller files while keeping `tree_view/index.js` exports stable
