@@ -161,4 +161,6 @@ javascript_package_root:
   integration_hooks:
     interactive:
       marker: data-tree-view-interactive
+      ignoreKeyboard: data-tree-view-ignore-keyboard
+      ignoreRowClick: data-tree-view-ignore-row-click
       ignoreDrag: data-tree-view-ignore-drag
