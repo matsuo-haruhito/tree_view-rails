@@ -115,6 +115,7 @@ bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
 npm test
+npm run test:entrypoints
 npm run test:browser
 ```
 
@@ -122,8 +123,10 @@ GitHub Actions runs the following on pull requests:
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
-- representative Rails compatibility checks via `gemfiles/rails_7_0.gemfile` and `gemfiles/rails_8_0.gemfile`
+- representative Rails compatibility checks via `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
 - `npm run test:js`
+
+Docs-only pull requests that touch only `README.md` and `docs/**` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails and JavaScript jobs while preserving the same check names for branch protection. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.
 
 Pushes to `main` also run the broader compatibility and release checks:
 
