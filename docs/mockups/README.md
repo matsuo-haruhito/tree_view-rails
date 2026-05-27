@@ -17,6 +17,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [interaction-states.html](interaction-states.html) | Lazy-loading, loading, error/retry, next-page, and drag/drop visual states. |
 | [windowed-rendering.html](windowed-rendering.html) | Focused comparison for `offset` / `limit` slices, current-row anchoring, and previous or next metadata without host-app pagination behavior. |
 | [filtered-tree-modes.html](filtered-tree-modes.html) | Focused comparison for `filtered_tree_for` modes, showing matched-only, ancestor-retaining, and descendant-retaining output without host-app search behavior. |
+| [form-editing-rows.html](form-editing-rows.html) | Focused comparison for bulk-edit rows, per-row edit placement, and the boundary between TreeView selection checkboxes and host-app business controls. |
 | [toolbar-actions.html](toolbar-actions.html) | Expand-all / collapse-all toolbar reference showing enabled, disabled, and current-state variants without host-app routes or authorization copy. |
 | [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
@@ -29,8 +30,9 @@ They are **not** a complete Rails application and should not grow into host-app 
 4. Use [interaction-states.html](interaction-states.html) when review needs a focused pass on lazy loading, retry, pagination placeholders, or drag/drop states.
 5. Use [windowed-rendering.html](windowed-rendering.html) when review needs to compare visible-row slicing and current-row anchoring without adding host-app paging controls.
 6. Use [filtered-tree-modes.html](filtered-tree-modes.html) when review needs to compare matched nodes against ancestor or descendant context without adding host-app search UI.
-7. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on tree-wide expand / collapse affordances instead of row-by-row hierarchy layout.
-8. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+7. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
+8. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on tree-wide expand / collapse affordances instead of row-by-row hierarchy layout.
+9. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Copy and language policy
 
