@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView windowed rendering mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-windowed-page {
+  max-width: 1260px;
+}
+
+.mock-windowed-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.mock-windowed-state {
+  display: grid;
+  gap: 16px;
+}
+
+.mock-windowed-state__header {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-windowed-eyebrow {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-windowed-note {
+  margin: 0;
+  color: #52606d;
+}
+
+.mock-windowed-frame {
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-windowed-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mock-windowed-toolbar__copy {
+  display: grid;
+  gap: 2px;
+}
+
+.mock-windowed-toolbar__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-windowed-toolbar__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-windowed-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f4c81;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.mock-windowed-chip--secondary {
+  background: #e9ecef;
+  color: #334155;
+}
+
+.mock-windowed-body {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.mock-windowed-callout {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.mock-windowed-summary {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-windowed-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.mock-windowed-pagination span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.35rem 0.72rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #334155;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.mock-windowed-pagination .is-available {
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.mock-windowed-pagination .is-muted {
+  border-style: dashed;
+  color: #64748b;
+}
+
+.mock-windowed-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-windowed-table th,
+.mock-windowed-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-windowed-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tree-row.is-window-current {
+  background: #ecfeff;
+}
+
+.tree-node-badge--current {
+  background: #cffafe;
+  color: #155e75;
+}
+
+.tree-row.tree-row--window-hint td {
+  background: #fffbeb;
+  color: #92400e;
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-windowed-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView windowed rendering mock</h1>
+      <p>
+        Static HTML for reviewing representative <code>offset</code> and <code>limit</code> slices, current-row anchoring,
+        and previous or next metadata from windowed rendering. Pagination controls, query state, and data fetching remain host-app responsibilities and are intentionally not modeled here.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-windowed-grid" aria-labelledby="windowed-slices-heading">
+      <div class="mock-windowed-state">
+        <div class="mock-windowed-state__header">
+          <p class="mock-windowed-eyebrow">Mode A</p>
+          <h2 id="windowed-slices-heading">Visible-row slice</h2>
+          <p class="mock-windowed-note">
+            Use this state when the review goal is to inspect a representative <code>offset</code> / <code>limit</code> window without mixing in current-row policy.
+          </p>
+        </div>
+
+        <div class="mock-windowed-frame">
+          <div class="mock-windowed-toolbar">
+            <div class="mock-windowed-toolbar__copy">
+              <p class="mock-windowed-toolbar__title">A middle window of visible rows</p>
+            </div>
+            <div class="mock-windowed-toolbar__meta" aria-label="Representative window metadata">
+              <span class="mock-windowed-chip">offset: 40</span>
+              <span class="mock-windowed-chip">limit: 6</span>
+              <span class="mock-windowed-chip mock-windowed-chip--secondary">total_count: 143</span>
+            </div>
+          </div>
+          <div class="mock-windowed-body">
+            <p class="mock-windowed-callout">
+              TreeView is only showing rows 41 through 46 of the current visible-row list. Route params, toolbar buttons, and infinite-scroll policy still belong to the host app.
+            </p>
+            <div class="mock-windowed-pagination" aria-label="Representative previous and next metadata">
+              <span class="is-available">previous_offset: 34</span>
+              <span>rows: 41-46</span>
+              <span class="is-available">next_offset: 46</span>
+            </div>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">owner</th>
+                  <th scope="col">state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row tree-row--window-hint" aria-level="1">
+                  <td colspan="4">Earlier visible rows exist before this window, but they are intentionally not rendered here.</td>
+                </tr>
+                <tr id="slice_41" class="tree-row is-expanded" data-tree-node-key="section:41" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Window row 41">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#">hide</a>
+                        <span class="tree-toggle__level">root</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Operations</td>
+                  <td>Shared services</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr id="slice_42" class="tree-row" data-tree-node-key="section:42" data-tree-parent-key="section:41" data-tree-depth="1" aria-level="2">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Window row 42">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Billing imports</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr id="slice_43" class="tree-row" data-tree-node-key="section:43" data-tree-parent-key="section:41" data-tree-depth="1" aria-level="2">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Window row 43">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Refund queue</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr id="slice_44" class="tree-row" data-tree-node-key="section:44" data-tree-parent-key="section:41" data-tree-depth="1" aria-level="2">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Window row 44">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Support escalations</td>
+                  <td>Customer success</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr id="slice_45" class="tree-row" data-tree-node-key="section:45" data-tree-depth="0" aria-level="1">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Window row 45">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">root</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Analytics</td>
+                  <td>Data</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr id="slice_46" class="tree-row" data-tree-node-key="section:46" data-tree-parent-key="section:45" data-tree-depth="1" aria-level="2">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Window row 46">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Weekly dashboard</td>
+                  <td>Data</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr class="tree-row tree-row--window-hint" aria-level="1">
+                  <td colspan="4">Later visible rows exist after this window, but they are intentionally not rendered here.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-windowed-state">
+        <div class="mock-windowed-state__header">
+          <p class="mock-windowed-eyebrow">Mode B</p>
+          <h2>Current-row anchoring</h2>
+          <p class="mock-windowed-note">
+            Use this state when the review goal is to keep a host-app-defined current row near the middle of the rendered window.
+          </p>
+        </div>
+
+        <div class="mock-windowed-frame">
+          <div class="mock-windowed-toolbar">
+            <div class="mock-windowed-toolbar__copy">
+              <p class="mock-windowed-toolbar__title">Anchored around the current record</p>
+            </div>
+            <div class="mock-windowed-toolbar__meta" aria-label="Representative anchored window metadata">
+              <span class="mock-windowed-chip">current_index: 78</span>
+              <span class="mock-windowed-chip">anchored_offset: 75</span>
+              <span class="mock-windowed-chip mock-windowed-chip--secondary">limit: 6</span>
+            </div>
+          </div>
+          <div class="mock-windowed-body">
+            <p class="mock-windowed-callout">
+              TreeView does not decide what “current” means. The host app owns that choice, then builds a window that keeps the chosen row inside view.
+            </p>
+            <div class="mock-windowed-pagination" aria-label="Anchored window availability">
+              <span class="is-available">previous_offset: 69</span>
+              <span>current row stays in view</span>
+              <span class="is-available">next_offset: 81</span>
+            </div>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">owner</th>
+                  <th scope="col">state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="anchor_75" class="tree-row" data-tree-node-key="record:75" data-tree-depth="0" aria-level="1">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Anchored window row 75">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">root</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Team dashboards</td>
+                  <td>Operations</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr id="anchor_76" class="tree-row" data-tree-node-key="record:76" data-tree-parent-key="record:75" data-tree-depth="1" aria-level="2">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Anchored window row 76">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>North America</td>
+                  <td>Ops reporting</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr id="anchor_77" class="tree-row" data-tree-node-key="record:77" data-tree-parent-key="record:75" data-tree-depth="1" aria-level="2">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Anchored window row 77">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Europe</td>
+                  <td>Ops reporting</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr id="anchor_78" class="tree-row is-window-current" data-tree-node-key="record:78" data-tree-depth="0" aria-level="1" aria-current="page">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Current row anchored inside the window">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">root</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--current">current</span>
+                  </td>
+                  <td>Current account review</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status mock-status--active">anchored</span></td>
+                </tr>
+                <tr id="anchor_79" class="tree-row" data-tree-node-key="record:79" data-tree-parent-key="record:78" data-tree-depth="1" aria-level="2">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Anchored window row 79">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Invoices pending review</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr id="anchor_80" class="tree-row" data-tree-node-key="record:80" data-tree-parent-key="record:78" data-tree-depth="1" aria-level="2">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Anchored window row 80">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Escalated refunds</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-windowed-state">
+        <div class="mock-windowed-state__header">
+          <p class="mock-windowed-eyebrow">Mode C</p>
+          <h2>Previous and next availability</h2>
+          <p class="mock-windowed-note">
+            Use this state when the review goal is to show metadata for both directions without turning the mock into a real pagination surface.
+          </p>
+        </div>
+
+        <div class="mock-windowed-frame">
+          <div class="mock-windowed-toolbar">
+            <div class="mock-windowed-toolbar__copy">
+              <p class="mock-windowed-toolbar__title">Metadata-only paging cues</p>
+            </div>
+            <div class="mock-windowed-toolbar__meta" aria-label="Representative boundary metadata">
+              <span class="mock-windowed-chip">offset: 96</span>
+              <span class="mock-windowed-chip">limit: 4</span>
+              <span class="mock-windowed-chip mock-windowed-chip--secondary">window: 97-100</span>
+            </div>
+          </div>
+          <div class="mock-windowed-body">
+            <p class="mock-windowed-callout">
+              The host app can turn previous or next metadata into links, buttons, or infinite-scroll triggers. This mock deliberately stops at the metadata boundary.
+            </p>
+            <div class="mock-windowed-summary">
+              <div class="mock-windowed-pagination" aria-label="Representative boundary availability">
+                <span class="is-available">has_previous?: true</span>
+                <span class="is-muted">previous_offset: 92</span>
+                <span class="is-available">has_next?: true</span>
+                <span class="is-muted">next_offset: 100</span>
+              </div>
+            </div>
+            <table class="mock-windowed-table">
+              <thead>
+                <tr>
+                  <th scope="col">What TreeView gives</th>
+                  <th scope="col">What the host app still owns</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>rows</code>, <code>offset</code>, <code>limit</code>, <code>total_count</code>, <code>has_previous?</code>, and <code>has_next?</code></td>
+                  <td>Whether those values become numbered pages, “load more” controls, or infinite-scroll observers</td>
+                </tr>
+                <tr>
+                  <td>Visible-row slicing after expansion state and render scope are applied</td>
+                  <td>Which interactions preserve offset across refresh, route changes, or Turbo updates</td>
+                </tr>
+                <tr>
+                  <td>Current-row anchoring is possible because TreeView exposes the visible-row list</td>
+                  <td>What counts as the current row and where it should sit inside the window</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
