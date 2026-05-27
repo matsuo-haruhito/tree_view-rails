@@ -157,6 +157,7 @@ host app が使ってよい入口:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
+- `TreeViewIntegrationHooks`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -170,6 +171,7 @@ host app が使ってよい入口:
 
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
+`TreeViewIntegrationHooks` は、documented な drag-safe interactive marker を machine-readable な object として公開します。custom widget、browser assertion、host-app wiring で同じ attribute 名を raw string のまま繰り返したくないときに使ってください。
 
 `TreeViewControllerIdentifiers` の documented key:
 
@@ -179,7 +181,12 @@ host app が使ってよい入口:
 - `transfer`
 - `remoteState`
 
-package-root の JavaScript export と bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
+`TreeViewIntegrationHooks` の documented key:
+
+- `interactive.marker`
+- `interactive.ignoreDrag`
+
+package-root の JavaScript export、documented integration hook、bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
 内部扱い:
 
