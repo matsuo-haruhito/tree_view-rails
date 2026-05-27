@@ -81,6 +81,8 @@ PR CI must pass before merge. Use the broader `main` CI for release decisions be
 
 When public usage or public options change, update related docs and CHANGELOG.
 
+When the change touches machine-readable public contract surfaces such as package-root JavaScript exports, controller identifiers, grouped option keys, or documented event names/detail keys, review `config/public_api_manifest.yml` together with the public API docs and any affected feature pages.
+
 - `README.md`
 - `docs/ja/README.md`
 - `docs/en/README.md`
@@ -88,6 +90,7 @@ When public usage or public options change, update related docs and CHANGELOG.
 - `docs/en/api.md`
 - `docs/ja/public-api.md`
 - `docs/en/public-api.md`
+- `config/public_api_manifest.yml` when it is the source of truth for the changed contract surface
 - feature-specific docs
 - `docs/i18n-audit.md` (documentation maintenance checklist)
 - `CHANGELOG.md`
