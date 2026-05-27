@@ -36,6 +36,8 @@ row_partial: "documents/tree_columns"
 
 このpartialには、input、select、button、link、inline editable labelなど、host app側のcontrolも配置できます。TreeViewはnative interactive controlから発生したeventでは、keyboard navigationやtransfer drag startを実行しません。Custom controlでは、`data-tree-view-interactive="true"` または `data-tree-view-ignore-keyboard="true"`、`data-tree-view-ignore-row-click="true"`、`data-tree-view-ignore-drag="true"` のようなより狭いmarkerを付けます。
 
+machine-readable な host-app wiring では、`TreeViewIntegrationHooks.interactive.marker`、`TreeViewIntegrationHooks.interactive.ignoreKeyboard`、`TreeViewIntegrationHooks.interactive.ignoreRowClick`、`TreeViewIntegrationHooks.interactive.ignoreDrag` が、その documented behavior-specific marker をそのまま参照できます。この export は、より広い private selector までは公開しません。
+
 ```erb
 <td>
   <%= text_field_tag "documents[#{item.id}][name]", item.name %>
