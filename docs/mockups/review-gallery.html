@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, windowed rendering cues, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -246,6 +246,27 @@
         </div>
       </article>
 
+      <article class="mock-gallery-card" aria-labelledby="gallery-windowed-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused rendering</p>
+          <h2 id="gallery-windowed-heading">Windowed rendering</h2>
+          <p>
+            Use this surface to compare visible-row slices, current-row anchoring, and previous or next availability without introducing host-app paging controls or loading behavior.
+          </p>
+          <ul class="mock-gallery-points">
+            <li><code>offset</code> and <code>limit</code> window slices</li>
+            <li>Current-row anchoring inside the rendered window</li>
+            <li>Boundary between TreeView metadata and host-app paging UI</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="windowed-rendering.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="windowed-rendering.html" title="Windowed rendering mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
       <article class="mock-gallery-card" aria-labelledby="gallery-toolbar-heading">
         <div class="mock-gallery-copy">
           <p class="mock-gallery-eyebrow">Focused controls</p>
@@ -319,6 +340,11 @@
             <td>Interaction states</td>
             <td>Loading, retry, pagination, and drag or drop status cues.</td>
             <td>Real Turbo responses, route wiring, or persistence behavior.</td>
+          </tr>
+          <tr>
+            <td>Windowed rendering</td>
+            <td>Visible-row slicing, current-row anchoring, and previous or next metadata framing.</td>
+            <td>Pagination controls, infinite scroll, query state, or data fetching behavior.</td>
           </tr>
           <tr>
             <td>Toolbar actions</td>
