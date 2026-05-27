@@ -157,6 +157,7 @@ host app が使ってよい入口:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
+- `TreeViewSelectionValueAttributes`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -170,6 +171,7 @@ host app が使ってよい入口:
 
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
+`TreeViewSelectionValueAttributes` は、documented な `tree-view-selection` host-element value attribute 名を machine-readable に参照するための object です。host app 側の JavaScript wiring や browser assertion で attribute 名を写経したくないときに使います。
 
 `TreeViewControllerIdentifiers` の documented key:
 
@@ -178,6 +180,22 @@ host app が使ってよい入口:
 - `selection`
 - `transfer`
 - `remoteState`
+
+`TreeViewSelectionValueAttributes` の documented key:
+
+- `hiddenInputName`
+- `maxCount`
+- `cascade`
+- `indeterminate`
+
+`tree-view-selection` controller の documented host-element value attribute も、stable な host-app wiring surface の一部です。`TreeViewSelectionValueAttributes` は、それぞれ次の documented attribute 名へ対応します。
+
+- `data-tree-view-selection-hidden-input-name-value`
+- `data-tree-view-selection-max-count-value`
+- `data-tree-view-selection-cascade-value`
+- `data-tree-view-selection-indeterminate-value`
+
+これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
 
 package-root の JavaScript export と bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
