@@ -17,7 +17,7 @@
 - [日本語FAQ](ja/faq.md): 責務境界とよくある誤解を短く確認する入口。
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
-- [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure and interaction states. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, then use [resource-table-bridge.html](mockups/resource-table-bridge.html) or [toolbar-actions.html](mockups/toolbar-actions.html) for structure-focused reviews, [narrow-sidebar-tree.html](mockups/narrow-sidebar-tree.html) for small-width hierarchy checks, [interaction-states.html](mockups/interaction-states.html) for loading, error, and drag/drop states, and [empty-state.html](mockups/empty-state.html) for no-root-items or no-results empty rows.
+- [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure and interaction states. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, then use the mockup index for the current baseline reference, focused pages, and each page's role.
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.
 - [日本語Resource table bridge](ja/resource-table-bridge.md): 別table layerが列推論やtable stateを持つ場合のTreeView連携。
 
