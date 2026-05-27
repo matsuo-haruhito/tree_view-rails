@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView interactive marker behavior mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-marker-page {
+  max-width: 1320px;
+}
+
+.mock-marker-frame {
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-marker-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mock-marker-toolbar__copy {
+  display: grid;
+  gap: 4px;
+}
+
+.mock-marker-toolbar__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-marker-toolbar__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-marker-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.mock-marker-chip--broad {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.mock-marker-chip--keyboard {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-marker-chip--row-click {
+  background: #e0f2fe;
+  color: #0f4c81;
+}
+
+.mock-marker-chip--drag {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-marker-body {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.mock-marker-callout {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.mock-marker-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-marker-table th,
+.mock-marker-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.72rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-marker-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mock-marker-stack {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-marker-badge-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-marker-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+
+.mock-marker-badge--broad {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.mock-marker-badge--keyboard {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-marker-badge--row-click {
+  background: #e0f2fe;
+  color: #0f4c81;
+}
+
+.mock-marker-badge--drag {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-marker-widget {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #102a43;
+  font-weight: 600;
+}
+
+.mock-marker-widget--broad {
+  border-color: #c4b5fd;
+  background: #f5f3ff;
+}
+
+.mock-marker-widget--keyboard {
+  border-color: #fcd34d;
+  background: #fffbeb;
+}
+
+.mock-marker-widget--row-click {
+  border-color: #7dd3fc;
+  background: #f0f9ff;
+}
+
+.mock-marker-widget--drag {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.mock-marker-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.77rem;
+  font-weight: 700;
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.mock-marker-status--safe {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-marker-status--mixed {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-marker-status--reserved {
+  background: #e0f2fe;
+  color: #0f4c81;
+}
+
+.mock-marker-note-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #334155;
+}
+
+.tree-row.is-marker-broad-preview {
+  background: #faf5ff;
+}
+
+.tree-row.is-marker-broad-preview td {
+  border-bottom-color: #ddd6fe;
+}
+
+.tree-row.is-marker-keyboard-preview {
+  background: #fffbeb;
+}
+
+.tree-row.is-marker-keyboard-preview td {
+  border-bottom-color: #fde68a;
+}
+
+.tree-row.is-marker-row-click-preview {
+  background: #f0f9ff;
+}
+
+.tree-row.is-marker-row-click-preview td {
+  border-bottom-color: #bae6fd;
+}
+
+.tree-row.is-marker-drag-preview {
+  background: #f0fdf4;
+}
+
+.tree-row.is-marker-drag-preview td {
+  border-bottom-color: #bbf7d0;
+}
+
+@media (max-width: 980px) {
+  .mock-marker-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-marker-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView interactive marker behavior mock</h1>
+      <p>
+        Static reference for comparing the broad interactive marker against the narrower keyboard, row-click,
+        and drag behavior markers inside the same TreeView row family. TreeView owns the reusable marker contract;
+        host apps still own final row-click wiring, business actions, and widget implementation details.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="marker-grid-heading">
+      <div class="mock-marker-frame">
+        <div class="mock-marker-toolbar">
+          <div class="mock-marker-toolbar__copy">
+            <p class="mock-marker-toolbar__title">Compare broad and behavior-specific markers inside one row surface</p>
+          </div>
+          <div class="mock-marker-toolbar__meta" aria-label="Representative marker categories">
+            <span class="mock-marker-chip mock-marker-chip--broad">broad interactive</span>
+            <span class="mock-marker-chip mock-marker-chip--keyboard">keyboard-only</span>
+            <span class="mock-marker-chip mock-marker-chip--row-click">row-click boundary</span>
+            <span class="mock-marker-chip mock-marker-chip--drag">drag-only</span>
+          </div>
+        </div>
+        <div class="mock-marker-body">
+          <p class="mock-marker-callout">
+            Use this page when review needs to answer "which TreeView behavior should ignore this control?" without
+            expanding into host-app saves, modal flows, or product-specific permissions.
+          </p>
+          <table class="tree-view-table" data-controller="tree-view-client tree-view-transfer">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">embedded control</th>
+                <th scope="col">keyboard navigation</th>
+                <th scope="col">row click</th>
+                <th scope="col">drag start</th>
+                <th scope="col">best use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-marker-broad-preview" draggable="true" data-tree-node-key="doc:broad" data-tree-transfer-payload='{"key":"doc:broad","type":"Document"}' aria-level="1">
+                <td class="tree-toggle-cell">
+                  <div class="mock-marker-stack">
+                    <span class="tree-toggle" aria-label="Broad interactive marker row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">broad</span></span>
+                    </span>
+                    <div class="mock-marker-badge-row">
+                      <span class="mock-marker-badge mock-marker-badge--broad">data-tree-view-interactive</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mock-marker-stack">
+                    <span class="mock-marker-widget mock-marker-widget--broad" data-tree-view-interactive="true">Custom palette picker</span>
+                    <span class="mock-marker-status mock-marker-status--safe">Non-native widget is treated as broadly interactive.</span>
+                  </div>
+                </td>
+                <td><span class="mock-marker-status mock-marker-status--safe">ignored</span></td>
+                <td><span class="mock-marker-status mock-marker-status--safe">ignored</span></td>
+                <td><span class="mock-marker-status mock-marker-status--safe">ignored</span></td>
+                <td>Use when one custom control should opt out of every TreeView interaction guard, not only a single behavior.</td>
+              </tr>
+
+              <tr class="tree-row is-marker-keyboard-preview" draggable="true" data-tree-node-key="doc:keyboard" data-tree-transfer-payload='{"key":"doc:keyboard","type":"Document"}' aria-level="1">
+                <td class="tree-toggle-cell">
+                  <div class="mock-marker-stack">
+                    <span class="tree-toggle" aria-label="Keyboard-ignore marker row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">keys</span></span>
+                    </span>
+                    <div class="mock-marker-badge-row">
+                      <span class="mock-marker-badge mock-marker-badge--keyboard">data-tree-view-ignore-keyboard</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mock-marker-stack">
+                    <span class="mock-marker-widget mock-marker-widget--keyboard" data-tree-view-ignore-keyboard="true">Chip input shell</span>
+                    <span class="mock-marker-status mock-marker-status--mixed">Arrow, space, and enter stay with the control.</span>
+                  </div>
+                </td>
+                <td><span class="mock-marker-status mock-marker-status--safe">ignored</span></td>
+                <td><span class="mock-marker-status">still available</span></td>
+                <td><span class="mock-marker-status">still available</span></td>
+                <td>Use when the widget needs its own key handling, but row click and drag should stay available elsewhere in the row.</td>
+              </tr>
+
+              <tr class="tree-row is-marker-row-click-preview" draggable="true" data-tree-node-key="doc:row-click" data-tree-transfer-payload='{"key":"doc:row-click","type":"Document"}' aria-level="1">
+                <td class="tree-toggle-cell">
+                  <div class="mock-marker-stack">
+                    <span class="tree-toggle" aria-label="Row-click-ignore marker row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">click</span></span>
+                    </span>
+                    <div class="mock-marker-badge-row">
+                      <span class="mock-marker-badge mock-marker-badge--row-click">data-tree-view-ignore-row-click</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mock-marker-stack">
+                    <span class="mock-marker-widget mock-marker-widget--row-click" data-tree-view-ignore-row-click="true">Inline preview toggle</span>
+                    <span class="mock-marker-status mock-marker-status--reserved">Reserved for host-app row-click integrations.</span>
+                  </div>
+                </td>
+                <td><span class="mock-marker-status">still available</span></td>
+                <td><span class="mock-marker-status mock-marker-status--reserved">host-app should ignore</span></td>
+                <td><span class="mock-marker-status">still available</span></td>
+                <td>Use when a host app adds row-click activation and one control inside the row must stay clickable without triggering that app-owned action.</td>
+              </tr>
+
+              <tr class="tree-row is-marker-drag-preview" draggable="true" data-tree-node-key="doc:drag" data-tree-transfer-payload='{"key":"doc:drag","type":"Document"}' aria-level="1">
+                <td class="tree-toggle-cell">
+                  <div class="mock-marker-stack">
+                    <span class="tree-toggle" aria-label="Drag-ignore marker row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">drag</span></span>
+                    </span>
+                    <div class="mock-marker-badge-row">
+                      <span class="mock-marker-badge mock-marker-badge--drag">data-tree-view-ignore-drag</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mock-marker-stack">
+                    <span class="mock-marker-widget mock-marker-widget--drag" data-tree-view-ignore-drag="true">Range scrubber</span>
+                    <span class="mock-marker-status mock-marker-status--safe">Drag start stays with the widget instead of the row transfer.</span>
+                  </div>
+                </td>
+                <td><span class="mock-marker-status">still available</span></td>
+                <td><span class="mock-marker-status">still available</span></td>
+                <td><span class="mock-marker-status mock-marker-status--safe">ignored</span></td>
+                <td>Use when a control only needs drag protection and should not broaden into keyboard or row-click opt-outs.</td>
+              </tr>
+
+              <tr class="tree-row" draggable="true" data-tree-node-key="doc:native" data-tree-transfer-payload='{"key":"doc:native","type":"Document"}' aria-level="1">
+                <td class="tree-toggle-cell">
+                  <div class="mock-marker-stack">
+                    <span class="tree-toggle" aria-label="Native control row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">native</span></span>
+                    </span>
+                    <div class="mock-marker-badge-row">
+                      <span class="mock-marker-badge">implicit interactive target</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mock-marker-stack">
+                    <button class="tree-toggle__action" type="button">Edit</button>
+                    <span class="mock-marker-status">Native controls already count as interactive targets.</span>
+                  </div>
+                </td>
+                <td><span class="mock-marker-status mock-marker-status--safe">ignored</span></td>
+                <td><span class="mock-marker-status mock-marker-status--safe">ignored</span></td>
+                <td><span class="mock-marker-status mock-marker-status--safe">ignored</span></td>
+                <td>Use as the baseline reminder that native inputs, buttons, links, selects, and editable labels do not need extra marker attributes.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="marker-summary-heading">
+      <h2 id="marker-summary-heading">What this mock compares</h2>
+      <table class="mock-marker-table">
+        <thead>
+          <tr>
+            <th scope="col">Surface</th>
+            <th scope="col">Best for</th>
+            <th scope="col">Keep outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>data-tree-view-interactive</code></td>
+            <td>Showing the broad custom-widget marker when a non-native control should opt out of every TreeView behavior guard.</td>
+            <td>Widget implementation details, final business logic, or route wiring.</td>
+          </tr>
+          <tr>
+            <td><code>data-tree-view-ignore-keyboard</code></td>
+            <td>Comparing widgets that need arrow, space, or enter for themselves without claiming the broader row-click or drag boundaries.</td>
+            <td>Keyboard policy redesign, shortcuts outside the widget, or product-specific editor behavior.</td>
+          </tr>
+          <tr>
+            <td><code>data-tree-view-ignore-row-click</code></td>
+            <td>Highlighting the reserved boundary for host-app row-click integrations so one inner control can stay clickable.</td>
+            <td>Implementing the host-app row-click action itself or changing current TreeView runtime policy.</td>
+          </tr>
+          <tr>
+            <td><code>data-tree-view-ignore-drag</code></td>
+            <td>Showing the narrow drag-start opt-out for sliders, scrubbers, or other controls that only need transfer protection.</td>
+            <td>Drop target rules, persistence, or drag-and-drop workflow design.</td>
+          </tr>
+          <tr>
+            <td>Native controls</td>
+            <td>Confirming that standard inputs, buttons, links, selects, textareas, and editable labels already behave like interactive targets.</td>
+            <td>Validation, save timing, or business copy owned by the host app.</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul class="mock-marker-note-list">
+        <li>These markers only opt a control out of TreeView behavior. Validation, persistence, permissions, and CRUD flows remain host-app responsibilities.</li>
+        <li>`data-tree-view-ignore-row-click` is shown as the documented boundary for app-owned row-click integrations, not as a full runtime feature demonstration.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
