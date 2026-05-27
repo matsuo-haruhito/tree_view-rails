@@ -11,7 +11,7 @@ Events are dispatched through Stimulus `dispatch`, so public TreeView events:
 
 Treat fields not documented here as internal implementation details.
 
-When host-app listeners need a machine-readable source of truth, import both `TreeViewEventNames` and `TreeViewEventDetailKeys` from `tree_view/index.js`. The first avoids hand-copying event-name strings, and the second exposes the documented `event.detail` key lists for each public event.
+When host-app listeners need a machine-readable source of truth, import `TreeViewEventNames`, `TreeViewEventDetailKeys`, and `TreeViewEventDetailValues` from `tree_view/index.js`. The first avoids hand-copying event-name strings, the second exposes the documented `event.detail` key lists for each public event, and the third exposes the documented enum-like values for selected `event.detail` fields.
 
 ## State events
 
@@ -73,7 +73,7 @@ Dispatched when a row is marked `loading`, `loaded`, or `error`.
 | Field | Type | Description |
 |---|---|---|
 | `row` | Element | The row whose remote state changed. |
-| `state` | String | One of `loading`, `loaded`, or `error`. |
+| `state` | String | One of `loading`, `loaded`, or `error`. The documented value list is also available from `TreeViewEventDetailValues.remoteState.change.state`. |
 | `childrenUrl` | String or null | Value from `data-tree-children-url`, when present. |
 | `nodeKey` | String or null | Value from `data-tree-view-state-node-key`, when present. |
 
@@ -107,7 +107,7 @@ Dispatched when a payload is dropped on a target row.
 |---|---|---|
 | `sourcePayload` | Object or null | Payload parsed from `DataTransfer`. |
 | `targetPayload` | Object or null | Payload parsed from the target row's `data-tree-transfer-payload`. |
-| `position` | String | `before`, `inside`, or `after`. |
+| `position` | String | `before`, `inside`, or `after`. The documented value list is also available from `TreeViewEventDetailValues.transfer.dragOver.position` and `TreeViewEventDetailValues.transfer.drop.position`. |
 | `targetRow` | Element | The row receiving the drop. |
 
 ### `tree-view-transfer:invalid-payload` / `tree-view-transfer:invalid-transfer`
@@ -116,8 +116,8 @@ Dispatched when row payload JSON or transferred JSON cannot be parsed.
 
 ## Compatibility policy
 
-The machine-readable public API manifest mirrors the event names and representative required `event.detail` keys documented on this page so compatibility specs can detect drift; this page remains the primary contract.
+The machine-readable public API manifest mirrors the event names, representative required `event.detail` keys, and documented enum-like `event.detail` values on this page so compatibility specs can detect drift; this page remains the primary contract.
 
-The package-root exports `TreeViewEventNames` and `TreeViewEventDetailKeys` mirror that same documented contract for host-app listeners and tests.
+The package-root exports `TreeViewEventNames`, `TreeViewEventDetailKeys`, and `TreeViewEventDetailValues` mirror that same documented contract for host-app listeners and tests.
 
-The event names and documented `detail` fields above are public integration points. Additive fields may be added in minor releases. Removing events, renaming fields, or changing documented field meanings should be treated as a compatibility-impacting change and called out in the changelog.
+The event names, documented `detail` fields, and documented enum-like `detail` values above are public integration points. Additive fields may be added in minor releases. Removing events, renaming fields, changing documented field meanings, or changing documented enum-like values should be treated as a compatibility-impacting change and called out in the changelog.
