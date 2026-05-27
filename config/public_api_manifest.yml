@@ -66,6 +66,7 @@ javascript_package_root:
     - TreeViewRemoteStateController
     - TreeViewEventNames
     - TreeViewEventDetailKeys
+    - TreeViewEventDetailValues
   controller_registrations:
     - key: state
       identifier: tree-view-state
@@ -147,3 +148,21 @@ javascript_package_root:
         - row
       invalid_transfer:
         - value
+  event_detail_values:
+    remote_state:
+      change:
+        state:
+          - loading
+          - loaded
+          - error
+    transfer:
+      drag_over:
+        position:
+          - before
+          - inside
+          - after
+      drop:
+        position:
+          - before
+          - inside
+          - after
