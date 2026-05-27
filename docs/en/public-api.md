@@ -157,6 +157,7 @@ Stable enough for host apps to use:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
+- `TreeViewSelectionValueAttributes`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -170,6 +171,7 @@ Stable enough for host apps to use:
 
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
+`TreeViewSelectionValueAttributes` exposes the documented `tree-view-selection` host-element value-attribute names as a machine-readable object. Host apps can use it for JavaScript wiring and browser assertions without hand-copying strings.
 
 Documented keys on `TreeViewControllerIdentifiers`:
 
@@ -178,6 +180,22 @@ Documented keys on `TreeViewControllerIdentifiers`:
 - `selection`
 - `transfer`
 - `remoteState`
+
+Documented keys on `TreeViewSelectionValueAttributes`:
+
+- `hiddenInputName`
+- `maxCount`
+- `cascade`
+- `indeterminate`
+
+The `tree-view-selection` controller's documented host-element value attributes are also part of the stable host-app wiring surface. `TreeViewSelectionValueAttributes` maps them to the following documented attribute names:
+
+- `data-tree-view-selection-hidden-input-name-value`
+- `data-tree-view-selection-max-count-value`
+- `data-tree-view-selection-cascade-value`
+- `data-tree-view-selection-indeterminate-value`
+
+Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
 The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
