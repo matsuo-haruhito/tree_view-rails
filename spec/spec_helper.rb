@@ -7,6 +7,8 @@ require_relative "../app/helpers/tree_view_state_helper"
 require_relative "../app/helpers/tree_view_row_attrs_helper"
 require_relative "../app/helpers/tree_view_breadcrumb_helper"
 
+Dir[File.expand_path("support/**/*.rb", __dir__)].sort.each { |path| require path }
+
 RSpec.configure do |config|
   config.disable_monkey_patching!
   config.order = :random
