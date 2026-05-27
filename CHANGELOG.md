@@ -51,6 +51,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added public name decision docs in Japanese and English.
 - Added render log level docs in Japanese and English.
 - Added JavaScript event contract docs in Japanese and English for public Stimulus events and payload details.
+- Clarified release checklist guidance for documented JavaScript wiring surfaces, including `data-tree-view-*` integration hooks and selection controller host-element value attributes, alongside machine-readable package-root exports.
 - Added migration guides in Japanese and English to summarize compatibility promises, deprecations, rename handling, and release-note expectations.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
