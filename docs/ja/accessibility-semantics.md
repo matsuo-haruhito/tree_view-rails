@@ -36,7 +36,7 @@ TreeView は host app の業務columnsをtable row内に描画するため、現
 
 ## 空状態と hidden count の hook
 
-- 空状態 row は、message を `.tree-view-empty-row__content` と `.tree-view-empty-row__message` で包み、wrapper に `data-tree-view-empty-state="true"` を付けます。host app は partial override なしで空状態を装飾・target できます。
+- 空状態 row は、message を `.tree-view-empty-row__content` と `.tree-view-empty-row__message` で包み、wrapper に `data-tree-view-empty-state="true"` を付けます。host app は partial override なしで空状態を装飾・target できます。同じ 3 つの documented hook 名は `TreeViewIntegrationHooks.emptyState.*` からも参照できるようにしてあり、詳細は [Public API](public-api.md) にまとめています。
 - static hidden count の screen reader 向け suffix は `tree_view.accessibility.hidden_descendants` から取得します。default は ` descendants` で、host app 側 locale で差し替えできます。
 
 ## 対応している描画例
