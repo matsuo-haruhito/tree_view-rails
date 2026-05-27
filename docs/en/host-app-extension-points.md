@@ -36,6 +36,8 @@ row_partial: "documents/tree_columns"
 
 The partial can include application-owned controls such as inputs, selects, buttons, links, and inline editable labels. TreeView ignores keyboard navigation and transfer drag start when events originate from native interactive controls. For custom controls, add `data-tree-view-interactive="true"` or a narrower marker such as `data-tree-view-ignore-keyboard="true"`, `data-tree-view-ignore-row-click="true"`, or `data-tree-view-ignore-drag="true"`.
 
+For machine-readable host-app wiring, `TreeViewIntegrationHooks.interactive.marker`, `TreeViewIntegrationHooks.interactive.ignoreKeyboard`, `TreeViewIntegrationHooks.interactive.ignoreRowClick`, and `TreeViewIntegrationHooks.interactive.ignoreDrag` mirror those documented behavior-specific markers. The export does not expose broader private selectors.
+
 ```erb
 <td>
   <%= text_field_tag "documents[#{item.id}][name]", item.name %>
