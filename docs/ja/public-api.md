@@ -154,13 +154,13 @@ host app が使ってよい入口:
   - `TreeViewTransferController`
   - `TreeViewRemoteStateController`
 - documented JavaScript events and payload keys
-- documented `data-tree-view-*` integration hooks
+- documented された `data-tree-view-*`、`data-tree-*`、bundled empty-state wrapper markup 用の integration hooks
 
 `registerTreeViewControllers(application)` は、上記 5 つの controller export を bundled entrypoint の documented identifier 順に登録します。
 
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
-`TreeViewIntegrationHooks` は、documented されている小さな `data-tree-view-*` / `data-tree-*` hook 名を machine-readable な object として公開します。custom controller、browser assertion、host-app wiring が同じ attribute 名を使うとき、raw string の写経を避けられます。
+`TreeViewIntegrationHooks` は、documented された小さな integration hook 名を machine-readable な object として公開します。custom controller、browser assertion、host-app CSS、host-app wiring が同じ attribute 名や wrapper class 名を使うとき、raw string の写経を避けられます。`emptyState` group は [Accessibility semantics](accessibility-semantics.md) に記載した bundled empty-row wrapper hook だけへ意図的に限定しています。
 
 `TreeViewControllerIdentifiers` の documented key:
 
@@ -176,6 +176,9 @@ host app が使ってよい入口:
 - `state.nodeKey`
 - `remoteState.childrenUrl`
 - `transfer.payload`
+- `emptyState.contentClass`
+- `emptyState.messageClass`
+- `emptyState.stateAttribute`
 
 package-root の JavaScript export、documented integration hook、bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
