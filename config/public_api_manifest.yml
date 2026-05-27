@@ -55,6 +55,21 @@ grouped_option_keys:
   toggle_scope:
     - max_depth_from_root
     - max_leaf_distance
+  selection:
+    - enabled
+    - visibility
+    - payload_builder
+    - checkbox_name
+    - disabled_builder
+    - disabled_reason_builder
+    - selected_keys
+    - cascade
+    - indeterminate
+    - max_count
+  lazy_loading:
+    - enabled
+    - loaded_keys
+    - scope
 javascript_package_root:
   named_exports:
     - registerTreeViewControllers
