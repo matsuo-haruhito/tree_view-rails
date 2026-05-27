@@ -135,6 +135,7 @@ host app が使ってよい入口:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewEventDetailKeys`
+- `TreeViewEventDetailValues`
 - `TreeViewControllerIdentifiers`
 - exported controller classes
   - `TreeViewStateController`
@@ -142,13 +143,14 @@ host app が使ってよい入口:
   - `TreeViewSelectionController`
   - `TreeViewTransferController`
   - `TreeViewRemoteStateController`
-- documented JavaScript events and payload keys
+- documented JavaScript events、payload keys、documented enum-like payload values
 - documented `data-tree-view-*` integration hooks
 
 `registerTreeViewControllers(application)` は、上記 5 つの controller export を bundled entrypoint の documented identifier 順に登録します。
 
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 `TreeViewEventDetailKeys` は documented `event.detail` key 一覧を machine-readable に参照するための package-root export です。host app 側の listener や test で `TreeViewEventDetailKeys.selection.change` や `TreeViewEventDetailKeys.transfer.drop` のように使うことで、payload key の写経を避けられます。
+`TreeViewEventDetailValues` は、選択された field の documented enum-like `event.detail` values を machine-readable に参照するための package-root export です。host app 側の listener や test で `remoteState.change.state` や transfer `position` values を文字列写経せず使いたいときに利用してください。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
 
 `TreeViewControllerIdentifiers` の documented key:
@@ -159,7 +161,7 @@ host app が使ってよい入口:
 - `transfer`
 - `remoteState`
 
-package-root の JavaScript export と bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
+package-root の JavaScript export、bundled controller identifier、documented event detail key、documented enum-like event detail values の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
 内部扱い:
 
@@ -184,7 +186,7 @@ undocumented なCSS helper class、data attribute、DOM構造詳細、gem partia
 - documented option の削除・rename
 - rendered output や parsed params に影響する documented default 変更
 - flat options と grouped options の documented priority 変更
-- documented JavaScript event name / payload key 変更
+- documented JavaScript event name、payload key、documented enum-like payload value の変更
 - documented CSS/data hooks の削除
 - `tree_view_rows(render_state)` の documented behavior 変更
 - selection / row event payload shape 変更
@@ -197,6 +199,7 @@ undocumented なCSS helper class、data attribute、DOM構造詳細、gem partia
 - documented class を維持した CSS class 追加
 - data attribute 追加
 - event detail key 追加
+- relevant docs が additive value を明示的に許容している field に限った documented enum-like payload value 追加
 - 新しく documented した validation / configuration failure 向けの `TreeView::Error` subclass 追加
 - internal helper module refactor
 - `tree_view/index.js` exports を維持した controller file 移動
@@ -212,4 +215,3 @@ breaking change が必要だが急がない場合:
 4. 可能なら次 minor release まで compatibility path を維持する。
 
 pre-`1.0` でもbreaking changeは意図的に扱い、migration noteを残します。
-pre-`1.0` でも breaking change は意図的に扱い、migration note を残します。
