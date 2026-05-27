@@ -44,6 +44,8 @@ export const TreeViewControllerIdentifiers = Object.freeze({
 export const TreeViewIntegrationHooks = Object.freeze({
   interactive: Object.freeze({
     marker: "data-tree-view-interactive",
+    ignoreKeyboard: "data-tree-view-ignore-keyboard",
+    ignoreRowClick: "data-tree-view-ignore-row-click",
     ignoreDrag: "data-tree-view-ignore-drag"
   })
 })
