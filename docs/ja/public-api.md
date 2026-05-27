@@ -128,8 +128,8 @@ toolbar helper もこの公開 helper surface に含まれます。
 | `initial_expansion` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | 個別 keyword option と `initial_expansion:` を併用した場合でも、優先されるのは個別 keyword option です。 |
 | `render_scope` | `max_depth`, `max_leaf_distance` | `TreeView::RenderState` の documented render-depth / leaf-distance control に対応します。 |
 | `toggle_scope` | `max_depth_from_root`, `max_leaf_distance` | tree-wide toggle の documented depth / leaf-distance control に対応します。 |
-
-`selection:` と `lazy_loading:` も引き続き documented public grouped options ですが、manifest-backed grouped-key contract は現時点では上の 3 つの `TreeView::RenderState` group に絞って管理しています。
+| `selection` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | `TreeView::RenderState::SelectionConfig` と同じ grouped key を machine-readable に追跡し、documented な flat selection keyword との対応も崩れないようにします。 |
+| `lazy_loading` | `enabled`, `loaded_keys`, `scope` | documented lazy-loading row-state hook と optional な host-app scope passthrough に対応します。 |
 
 ## Host app extension points
 
