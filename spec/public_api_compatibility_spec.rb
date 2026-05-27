@@ -37,6 +37,10 @@ RSpec.describe "Public API compatibility" do
     public_javascript_manifest.fetch("event_detail_keys")
   end
 
+  def public_javascript_integration_hooks
+    public_javascript_manifest.fetch("integration_hooks")
+  end
+
   def javascript_entrypoint_source
     @javascript_entrypoint_source ||= File.read(JAVASCRIPT_ENTRYPOINT_PATH)
   end
@@ -215,6 +219,21 @@ RSpec.describe "Public API compatibility" do
 
       expect(source).to include("#{key}: \"#{identifier}\""),
         "expected TreeViewControllerIdentifiers.#{key} to remain mapped to #{identifier}"
+    end
+  end
+
+  it "keeps documented JavaScript integration hooks available through TreeViewIntegrationHooks" do
+    source = javascript_entrypoint_source
+
+    expect(source).to include("export const TreeViewIntegrationHooks = Object.freeze({")
+
+    public_javascript_integration_hooks.each do |group_name, hooks|
+      expect(source).to include("#{group_name}: Object.freeze({")
+
+      hooks.each do |hook_key, hook_name|
+        expect(source).to include("#{hook_key}: \"#{hook_name}\""),
+          "expected TreeViewIntegrationHooks.#{group_name}.#{hook_key} to remain mapped to #{hook_name}"
+      end
     end
   end
 
