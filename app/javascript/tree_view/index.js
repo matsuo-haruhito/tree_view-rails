@@ -56,6 +56,22 @@ export const TreeViewEventDetailKeys = Object.freeze({
   })
 })
 
+export const TreeViewEventDetailValues = Object.freeze({
+  remoteState: Object.freeze({
+    change: Object.freeze({
+      state: Object.freeze(["loading", "loaded", "error"])
+    })
+  }),
+  transfer: Object.freeze({
+    dragOver: Object.freeze({
+      position: Object.freeze(["before", "inside", "after"])
+    }),
+    drop: Object.freeze({
+      position: Object.freeze(["before", "inside", "after"])
+    })
+  })
+})
+
 export const TreeViewControllerIdentifiers = Object.freeze({
   state: "tree-view-state",
   client: "tree-view-client",
