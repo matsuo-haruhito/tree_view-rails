@@ -18,6 +18,8 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
+Keep using `npm install` for now. The repository has a committed `package-lock.json`, but it is not yet refreshed in sync with `package.json`, so local setup and pull-request CI stay on `npm install` until that lockfile refresh is completed in a registry-enabled environment. See [Installation](installation.md) for the current CI and install-path summary.
+
 ## Common commands
 
 ```bash
