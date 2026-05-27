@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView breadcrumb path mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-breadcrumb-page {
+  max-width: 1260px;
+}
+
+.mock-breadcrumb-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.mock-breadcrumb-state {
+  display: grid;
+  gap: 16px;
+}
+
+.mock-breadcrumb-state__header {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-breadcrumb-eyebrow {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-breadcrumb-note {
+  margin: 0;
+  color: #52606d;
+}
+
+.mock-breadcrumb-frame {
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-breadcrumb-toolbar {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mock-breadcrumb-toolbar__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-breadcrumb-toolbar__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-breadcrumb-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f4c81;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.mock-breadcrumb-chip--secondary {
+  background: #e9ecef;
+  color: #334155;
+}
+
+.mock-breadcrumb-body {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.mock-breadcrumb-callout {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.mock-breadcrumb-path {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.mock-breadcrumb-path li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.mock-breadcrumb-path li + li::before {
+  content: "›";
+  color: #94a3b8;
+  font-weight: 700;
+  margin-right: 0.05rem;
+}
+
+.mock-breadcrumb-pill {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0.34rem 0.72rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #102a43;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mock-breadcrumb-pill--current {
+  border-color: #0ea5e9;
+  background: #ecfeff;
+  color: #0f4c81;
+}
+
+.mock-breadcrumb-pill--muted {
+  border-style: dashed;
+  color: #64748b;
+}
+
+.mock-breadcrumb-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-breadcrumb-table th,
+.mock-breadcrumb-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-breadcrumb-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tree-row.is-window-current {
+  background: #ecfeff;
+}
+
+.tree-node-badge--current {
+  background: #cffafe;
+  color: #155e75;
+}
+
+.mock-breadcrumb-comparison {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-breadcrumb-comparison th,
+.mock-breadcrumb-comparison td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-breadcrumb-comparison th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .mock-breadcrumb-path {
+    align-items: flex-start;
+  }
+
+  .mock-breadcrumb-pill {
+    white-space: normal;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-breadcrumb-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView breadcrumb path mock</h1>
+      <p>
+        Static HTML for reviewing representative breadcrumb-path output beside the tree's own current-row cue.
+        The path stays outside the table on purpose so reviewers can compare navigation context against row-level state without bringing in routes, Turbo navigation, or host-app wording.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-breadcrumb-grid" aria-labelledby="breadcrumb-states-heading">
+      <div class="mock-breadcrumb-state">
+        <div class="mock-breadcrumb-state__header">
+          <p class="mock-breadcrumb-eyebrow">Mode A</p>
+          <h2 id="breadcrumb-states-heading">Shallow path with current item at the end</h2>
+          <p class="mock-breadcrumb-note">
+            Use this state when the review goal is to compare a short path against the row that still carries the tree-local current cue.
+          </p>
+        </div>
+
+        <div class="mock-breadcrumb-frame">
+          <div class="mock-breadcrumb-toolbar">
+            <p class="mock-breadcrumb-toolbar__title">Current branch path</p>
+            <div class="mock-breadcrumb-toolbar__meta" aria-label="Representative path metadata">
+              <span class="mock-breadcrumb-chip">shallow path</span>
+              <span class="mock-breadcrumb-chip mock-breadcrumb-chip--secondary">current item is last</span>
+            </div>
+          </div>
+          <div class="mock-breadcrumb-body">
+            <p class="mock-breadcrumb-callout">
+              Breadcrumbs summarize the current location outside the tree. The table still owns row selection, expansion, and <code>aria-current</code> cues inside the visible hierarchy.
+            </p>
+            <ol class="mock-breadcrumb-path" aria-label="Representative shallow breadcrumb path">
+              <li><span class="mock-breadcrumb-pill">Workspace</span></li>
+              <li><span class="mock-breadcrumb-pill">Projects</span></li>
+              <li><span class="mock-breadcrumb-pill mock-breadcrumb-pill--current" aria-current="page">Admin UI</span></li>
+            </ol>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">owner</th>
+                  <th scope="col">state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id="breadcrumb_root" class="tree-row is-expanded" data-tree-node-key="project:1" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Root row expanded">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#">hide</a>
+                        <span class="tree-toggle__level">root</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-marker" title="Folder">folder</span>
+                    <span class="tree-depth-label">L0</span>
+                  </td>
+                  <td>Workspace</td>
+                  <td>Shared services</td>
+                  <td><span class="mock-status">context root</span></td>
+                </tr>
+                <tr id="breadcrumb_current" class="tree-row is-window-current" data-tree-node-key="project:2" data-tree-parent-key="project:1" data-tree-depth="1" data-tree-expanded="true" aria-level="2" aria-expanded="true" aria-current="page">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Current row expanded">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#">hide</a>
+                        <span class="tree-toggle__level">child</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-marker" title="Folder">folder</span>
+                    <span class="tree-depth-label">L1</span>
+                    <span class="tree-node-badge tree-node-badge--current">current row</span>
+                  </td>
+                  <td>Admin UI</td>
+                  <td>Team B</td>
+                  <td><span class="mock-status mock-status--active">current item</span></td>
+                </tr>
+                <tr id="breadcrumb_sibling" class="tree-row" data-tree-node-key="project:3" data-tree-parent-key="project:1" data-tree-depth="1" aria-level="2">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Sibling row">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-toggle__level">child</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-marker" title="File">file</span>
+                    <span class="tree-depth-label">L1</span>
+                  </td>
+                  <td>Billing settings</td>
+                  <td>Team C</td>
+                  <td><span class="mock-status">sibling context</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-breadcrumb-state">
+        <div class="mock-breadcrumb-state__header">
+          <p class="mock-breadcrumb-eyebrow">Mode B</p>
+          <h2>Deep path with truncated row context outside scope</h2>
+          <p class="mock-breadcrumb-note">
+            Use this state when the review goal is to compare a longer breadcrumb chain against a deeper current row without turning the mockup into a routing or responsive-navigation exercise.
+          </p>
+        </div>
+
+        <div class="mock-breadcrumb-frame">
+          <div class="mock-breadcrumb-toolbar">
+            <p class="mock-breadcrumb-toolbar__title">Deep current-item path</p>
+            <div class="mock-breadcrumb-toolbar__meta" aria-label="Representative deep path metadata">
+              <span class="mock-breadcrumb-chip">deep path</span>
+              <span class="mock-breadcrumb-chip mock-breadcrumb-chip--secondary">path stays product-neutral</span>
+            </div>
+          </div>
+          <div class="mock-breadcrumb-body">
+            <p class="mock-breadcrumb-callout">
+              The breadcrumb path names the lineage all the way to the current item. Exact URLs, truncation rules, and permission-aware labels still belong to the host app.
+            </p>
+            <ol class="mock-breadcrumb-path" aria-label="Representative deep breadcrumb path">
+              <li><span class="mock-breadcrumb-pill">Workspace</span></li>
+              <li><span class="mock-breadcrumb-pill">Programs</span></li>
+              <li><span class="mock-breadcrumb-pill">Platform refresh</span></li>
+              <li><span class="mock-breadcrumb-pill">Quarterly planning</span></li>
+              <li><span class="mock-breadcrumb-pill mock-breadcrumb-pill--current" aria-current="page">Accessibility backlog</span></li>
+            </ol>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">owner</th>
+                  <th scope="col">state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-expanded" data-tree-node-key="initiative:1" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Program row expanded">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#">hide</a>
+                        <span class="tree-toggle__level">root</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-marker" title="Folder">folder</span>
+                    <span class="tree-depth-label">L0</span>
+                  </td>
+                  <td>Workspace</td>
+                  <td>Program office</td>
+                  <td><span class="mock-status">root</span></td>
+                </tr>
+                <tr class="tree-row is-expanded" data-tree-node-key="initiative:2" data-tree-parent-key="initiative:1" data-tree-depth="1" data-tree-expanded="true" aria-level="2" aria-expanded="true">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Ancestor row expanded">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#">hide</a>
+                        <span class="tree-toggle__level">child</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-marker" title="Folder">folder</span>
+                    <span class="tree-depth-label">L1</span>
+                  </td>
+                  <td>Programs</td>
+                  <td>Platform group</td>
+                  <td><span class="mock-status">ancestor</span></td>
+                </tr>
+                <tr class="tree-row is-expanded" data-tree-node-key="initiative:3" data-tree-parent-key="initiative:2" data-tree-depth="2" data-tree-expanded="true" aria-level="3" aria-expanded="true">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Deeper ancestor row expanded">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#">hide</a>
+                        <span class="tree-toggle__level">child</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-marker" title="Folder">folder</span>
+                    <span class="tree-depth-label">L2</span>
+                  </td>
+                  <td>Platform refresh</td>
+                  <td>Delivery</td>
+                  <td><span class="mock-status">ancestor</span></td>
+                </tr>
+                <tr class="tree-row is-window-current" data-tree-node-key="initiative:4" data-tree-parent-key="initiative:3" data-tree-depth="3" aria-level="4" aria-current="page">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Current deep row">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-toggle__level">leaf</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-marker" title="File">file</span>
+                    <span class="tree-depth-label">L3</span>
+                    <span class="tree-node-badge tree-node-badge--current">current row</span>
+                  </td>
+                  <td>Accessibility backlog</td>
+                  <td>Design systems</td>
+                  <td><span class="mock-status mock-status--active">current item</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="breadcrumb-comparison-heading">
+      <h2 id="breadcrumb-comparison-heading">What this mock separates</h2>
+      <table class="mock-breadcrumb-comparison">
+        <thead>
+          <tr>
+            <th scope="col">Surface</th>
+            <th scope="col">Shows</th>
+            <th scope="col">Keeps outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Breadcrumb path</td>
+            <td>The lineage to the current item, including shallow and deep representative paths.</td>
+            <td>Real route helpers, final labels, authorization-aware visibility, and Turbo navigation.</td>
+          </tr>
+          <tr>
+            <td>Current tree row</td>
+            <td>The row that still carries tree-local hierarchy, expansion, and <code>aria-current</code> cues.</td>
+            <td>Cross-page navigation context or host-app breadcrumbs outside the tree.</td>
+          </tr>
+          <tr>
+            <td>Combined read</td>
+            <td>How a host app can show both reusable path context and row-local hierarchy cues without conflating their roles.</td>
+            <td>Business-specific navigation wording, responsive overflow policy, and URL design.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
