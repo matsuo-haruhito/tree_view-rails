@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView partially-loaded selection boundary mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-selection-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.mock-selection-card {
+  display: grid;
+  gap: 14px;
+}
+
+.mock-selection-card h3,
+.mock-selection-card p,
+.mock-selection-card ul {
+  margin: 0;
+}
+
+.mock-selection-caption {
+  color: #52606d;
+  font-size: 0.94rem;
+}
+
+.mock-selection-inline-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.35rem;
+  padding: 0.08rem 0.5rem;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.mock-selection-summary {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.9rem 1rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.mock-selection-summary strong {
+  color: #102a43;
+}
+
+.mock-selection-comparison {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-selection-comparison th,
+.mock-selection-comparison td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-selection-comparison th {
+  background: #f1f5f9;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mock-selection-more-row td {
+  background: #f8fafc;
+}
+
+.mock-selection-bulk-note {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.3rem;
+  padding: 0.08rem 0.45rem;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView partially-loaded selection boundary mock</h1>
+      <p>
+        Focused static HTML for reviewing how selection, cascade cues, and bulk-action framing should read when a branch still has unloaded descendants.
+        This page keeps hidden-input sync, real submit handling, cursor logic, authorization, and business workflow decisions out of scope on purpose.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="selection-purpose-heading">
+      <h2 id="selection-purpose-heading">What this surface is for</h2>
+      <ul>
+        <li>Compare loaded-row selection cues against a next-page placeholder in the same expanded branch.</li>
+        <li>Show that cascade and indeterminate state stop at rendered rows unless the host app computes a broader server-side selection intent.</li>
+        <li>Keep bulk-action framing honest so a loaded-row action does not look like it automatically includes unloaded descendants.</li>
+      </ul>
+    </section>
+
+    <section class="mock-section" aria-labelledby="selection-states-heading">
+      <h2 id="selection-states-heading">Representative partially-loaded selection states</h2>
+      <div class="mock-selection-grid">
+        <article class="mock-selection-card" aria-labelledby="selection-loaded-heading">
+          <h3 id="selection-loaded-heading">1. Loaded rows are selected, but more descendants are still off-page</h3>
+          <p class="mock-selection-caption">
+            The action cue stays scoped to the loaded rows that are visibly checked. The next-page placeholder makes it clear that the branch continues beyond the current DOM.
+          </p>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">tree</th>
+                <th scope="col">name</th>
+                <th scope="col">selection state</th>
+                <th scope="col">actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="records_1" class="tree-row is-expanded" data-tree-node-key="folder:records" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                <td class="tree-selection-cell"><input type="checkbox" class="tree-selection-checkbox" aria-label="Select Records branch"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Expanded folder">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">hide</a>
+                      <span class="tree-toggle__level">page 1</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Records</td>
+                <td>
+                  <span class="mock-status mock-status--pending">2 loaded rows selected</span>
+                  <span class="mock-selection-inline-note">more descendants still unloaded</span>
+                </td>
+                <td class="tree-row-actions"><button type="button">Refresh branch</button></td>
+              </tr>
+              <tr id="records_child_1" class="tree-row is-selected" data-tree-node-key="record:a" data-tree-depth="1" aria-level="2">
+                <td class="tree-selection-cell"><input type="checkbox" class="tree-selection-checkbox" checked aria-label="Select Policy overview"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Loaded selected row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                    </span>
+                    <span class="tree-toggle__control"><span class="tree-depth-label">leaf</span></span>
+                  </span>
+                </td>
+                <td>Policy overview</td>
+                <td><span class="mock-status mock-status--active">loaded and selected</span></td>
+                <td class="tree-row-actions"><button type="button">Open</button></td>
+              </tr>
+              <tr id="records_child_2" class="tree-row is-selected" data-tree-node-key="record:b" data-tree-depth="1" aria-level="2">
+                <td class="tree-selection-cell"><input type="checkbox" class="tree-selection-checkbox" checked aria-label="Select Review notes"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Loaded selected row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                    </span>
+                    <span class="tree-toggle__control"><span class="tree-depth-label">leaf</span></span>
+                  </span>
+                </td>
+                <td>Review notes</td>
+                <td><span class="mock-status mock-status--active">loaded and selected</span></td>
+                <td class="tree-row-actions"><button type="button">Open</button></td>
+              </tr>
+              <tr id="records_more_1" class="tree-row mock-selection-more-row" data-tree-parent-key="folder:records" data-tree-depth="1" aria-level="2">
+                <td class="tree-selection-cell"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Next page placeholder row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-last"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__level">more</span>
+                      <span class="mock-selection-inline-note">cursor: records-002</span>
+                    </span>
+                  </span>
+                </td>
+                <td>More descendants are still outside the DOM</td>
+                <td><span class="mock-status mock-status--pending">selection does not imply these rows</span></td>
+                <td class="tree-row-actions"><button type="button">Load more</button></td>
+              </tr>
+              <tr>
+                <td colspan="5">
+                  <strong>Bulk action cue:</strong>
+                  Archive loaded rows
+                  <span class="mock-selection-bulk-note">acts on 2 checked rows, not the unseen remainder</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="mock-selection-card" aria-labelledby="selection-cascade-heading">
+          <h3 id="selection-cascade-heading">2. Cascade and indeterminate state stop at rendered rows</h3>
+          <p class="mock-selection-caption">
+            The parent row can look mixed because the rendered children disagree, while the placeholder row keeps the unloaded descendants explicitly unknown.
+          </p>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">tree</th>
+                <th scope="col">name</th>
+                <th scope="col">selection state</th>
+                <th scope="col">actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="cases_1" class="tree-row is-expanded" data-tree-node-key="folder:cases" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                <td class="tree-selection-cell"><input type="checkbox" class="tree-selection-checkbox" aria-label="Select Cases branch"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Expanded branch with mixed state">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">hide</a>
+                      <span class="tree-toggle__level">mixed</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Cases</td>
+                <td>
+                  <span class="mock-status mock-status--pending">indeterminate from rendered rows</span>
+                  <span class="mock-selection-inline-note">unloaded descendants remain unknown</span>
+                </td>
+                <td class="tree-row-actions"><button type="button">Refresh branch</button></td>
+              </tr>
+              <tr id="cases_child_1" class="tree-row is-selected" data-tree-node-key="case:open" data-tree-depth="1" aria-level="2">
+                <td class="tree-selection-cell"><input type="checkbox" class="tree-selection-checkbox" checked aria-label="Select Open review"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Selected rendered child">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                    </span>
+                    <span class="tree-toggle__control"><span class="tree-depth-label">leaf</span></span>
+                  </span>
+                </td>
+                <td>Open review</td>
+                <td><span class="mock-status mock-status--active">selected in rendered page</span></td>
+                <td class="tree-row-actions"><button type="button">Open</button></td>
+              </tr>
+              <tr id="cases_child_2" class="tree-row" data-tree-node-key="case:archived" data-tree-depth="1" aria-level="2" aria-disabled="true">
+                <td class="tree-selection-cell"><input type="checkbox" class="tree-selection-checkbox" disabled aria-label="Archived case cannot be selected"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Disabled rendered child">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                    </span>
+                    <span class="tree-toggle__control"><span class="tree-depth-label">leaf</span></span>
+                  </span>
+                </td>
+                <td>Archived case</td>
+                <td><span class="mock-status mock-status--archived">disabled in rendered page</span></td>
+                <td class="tree-row-actions"><button type="button" disabled>Blocked</button></td>
+              </tr>
+              <tr id="cases_more_1" class="tree-row mock-selection-more-row" data-tree-parent-key="folder:cases" data-tree-depth="1" aria-level="2">
+                <td class="tree-selection-cell"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Unknown descendants placeholder">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-last"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__level">more</span>
+                      <span class="mock-selection-inline-note">server decides broader semantics</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Additional descendants have not been rendered yet</td>
+                <td><span class="mock-status mock-status--pending">do not infer cascade beyond the DOM</span></td>
+                <td class="tree-row-actions"><button type="button">Load more</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="mock-selection-card" aria-labelledby="selection-bulk-heading">
+          <h3 id="selection-bulk-heading">3. Bulk-action framing can stay honest about loaded versus query-backed scope</h3>
+          <p class="mock-selection-caption">
+            A host app can keep the visible tree action scoped to loaded rows, then present a separate server-backed action when the product wants to include the entire filtered child set.
+          </p>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">tree</th>
+                <th scope="col">name</th>
+                <th scope="col">selection state</th>
+                <th scope="col">actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="invoices_1" class="tree-row is-expanded" data-tree-node-key="folder:invoices" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                <td class="tree-selection-cell"><input type="checkbox" class="tree-selection-checkbox" aria-label="Select Invoices branch"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Expanded branch">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">hide</a>
+                      <span class="tree-toggle__level">filtered</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Invoices</td>
+                <td><span class="mock-status mock-status--pending">3 loaded rows checked</span></td>
+                <td class="tree-row-actions"><button type="button">Refresh branch</button></td>
+              </tr>
+              <tr id="invoices_child_1" class="tree-row is-selected" data-tree-node-key="invoice:a" data-tree-depth="1" aria-level="2">
+                <td class="tree-selection-cell"><input type="checkbox" class="tree-selection-checkbox" checked aria-label="Select January invoice"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Selected invoice row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                    </span>
+                    <span class="tree-toggle__control"><span class="tree-depth-label">leaf</span></span>
+                  </span>
+                </td>
+                <td>January invoice</td>
+                <td><span class="mock-status mock-status--active">loaded and selected</span></td>
+                <td class="tree-row-actions"><button type="button">Open</button></td>
+              </tr>
+              <tr id="invoices_child_2" class="tree-row is-selected" data-tree-node-key="invoice:b" data-tree-depth="1" aria-level="2">
+                <td class="tree-selection-cell"><input type="checkbox" class="tree-selection-checkbox" checked aria-label="Select February invoice"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Selected invoice row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                    </span>
+                    <span class="tree-toggle__control"><span class="tree-depth-label">leaf</span></span>
+                  </span>
+                </td>
+                <td>February invoice</td>
+                <td><span class="mock-status mock-status--active">loaded and selected</span></td>
+                <td class="tree-row-actions"><button type="button">Open</button></td>
+              </tr>
+              <tr id="invoices_more_1" class="tree-row mock-selection-more-row" data-tree-parent-key="folder:invoices" data-tree-depth="1" aria-level="2">
+                <td class="tree-selection-cell"></td>
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="More filtered rows placeholder">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-last"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__level">more</span>
+                      <span class="mock-selection-inline-note">additional filtered rows off-page</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Unloaded descendants still match the filter</td>
+                <td><span class="mock-status mock-status--pending">visible bulk action should not silently include them</span></td>
+                <td class="tree-row-actions"><button type="button">Load more</button></td>
+              </tr>
+              <tr>
+                <td colspan="5">
+                  <strong>Loaded-row action:</strong>
+                  Process 3 checked rows
+                  <span class="mock-selection-bulk-note">DOM-backed and intentionally narrow</span>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5">
+                  <strong>Host-app query action:</strong>
+                  Process all filtered descendants
+                  <span class="mock-selection-bulk-note">separate server intent, not implied by visible checkboxes</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="selection-boundary-heading">
+      <h2 id="selection-boundary-heading">Responsibility boundary reminders</h2>
+      <div class="mock-selection-summary">
+        <strong>TreeView-owned cues in this mock</strong>
+        <span>Rendered-row checkboxes, branch structure, placeholder placement, and the DOM-only nature of cascade or indeterminate state.</span>
+      </div>
+      <div class="mock-selection-summary">
+        <strong>Host-app decisions kept out of scope</strong>
+        <span>Hidden-input submit policy, server-backed query actions, authorization, cursor logic, and whether a product should offer a whole-filter action at all.</span>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="selection-compare-heading">
+      <h2 id="selection-compare-heading">Review cues</h2>
+      <table class="mock-selection-comparison">
+        <thead>
+          <tr>
+            <th scope="col">State</th>
+            <th scope="col">Best for checking</th>
+            <th scope="col">Keep outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Loaded rows selected</td>
+            <td>Whether the checked rows and action cue read as a DOM-backed subset while the placeholder still signals unseen descendants.</td>
+            <td>Real form submission, hidden-input mirroring, or exact business wording.</td>
+          </tr>
+          <tr>
+            <td>Mixed parent state</td>
+            <td>Whether indeterminate and cascade cues stop at rendered rows instead of claiming knowledge about unloaded descendants.</td>
+            <td>Server-side cascade policy, cross-page counting, or event payload details.</td>
+          </tr>
+          <tr>
+            <td>Separate bulk-action framing</td>
+            <td>Whether a loaded-row action and a query-backed action read as deliberately different scopes.</td>
+            <td>Authorization, workflow approval rules, or real query execution.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
