@@ -186,7 +186,7 @@ host app が使ってよい入口:
 - `data-tree-view-selection-cascade-value`
 - `data-tree-view-selection-indeterminate-value`
 
-これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。詳しくは [Selection](selection.md#通常form送信用の-hidden-input-同期)、[Selection](selection.md#最大選択数)、[Selection](selection.md#連動checkbox挙動)、[Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
+これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
 
 package-root の JavaScript export と bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
