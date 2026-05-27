@@ -186,7 +186,7 @@ The `tree-view-selection` controller's documented host-element value attributes 
 - `data-tree-view-selection-cascade-value`
 - `data-tree-view-selection-indeterminate-value`
 
-Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. See [Selection](selection.md#hidden-input-sync-for-regular-form-submit), [Selection](selection.md#selection-max-count), [Selection](selection.md#linked-checkbox-behavior), and [Host app extension points](host-app-extension-points.md#selection-builders).
+Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
 The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
