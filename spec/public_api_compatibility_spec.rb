@@ -11,10 +11,12 @@ JAVASCRIPT_CONTROLLER_PATHS = {
   "remote_state" => File.expand_path("../app/javascript/tree_view/remote_state_controller.js", __dir__),
   "transfer" => File.expand_path("../app/javascript/tree_view/transfer_controller.js", __dir__)
 }.freeze
-RENDER_STATE_GROUPED_OPTION_CONSTANTS = {
-  "initial_expansion" => :VALID_INITIAL_EXPANSION_KEYS,
-  "render_scope" => :VALID_RENDER_SCOPE_KEYS,
-  "toggle_scope" => :VALID_TOGGLE_SCOPE_KEYS
+RENDER_STATE_GROUPED_OPTION_KEY_RESOLVERS = {
+  "initial_expansion" => -> { TreeView::RenderState::VALID_INITIAL_EXPANSION_KEYS.map(&:to_s) },
+  "render_scope" => -> { TreeView::RenderState::VALID_RENDER_SCOPE_KEYS.map(&:to_s) },
+  "toggle_scope" => -> { TreeView::RenderState::VALID_TOGGLE_SCOPE_KEYS.map(&:to_s) },
+  "selection" => -> { TreeView::RenderState::SelectionConfig::VALID_KEYS.map(&:to_s) },
+  "lazy_loading" => -> { %w[enabled loaded_keys scope] }
 }.freeze
 
 RSpec.describe "Public API compatibility" do
@@ -111,10 +113,9 @@ RSpec.describe "Public API compatibility" do
 
   it "keeps documented RenderState grouped option keys available" do
     public_api_manifest.fetch("grouped_option_keys").each do |group_name, manifest_keys|
-      constant_name = RENDER_STATE_GROUPED_OPTION_CONSTANTS.fetch(group_name)
-      expected_keys = TreeView::RenderState.const_get(constant_name).map(&:to_s)
+      expected_keys = RENDER_STATE_GROUPED_OPTION_KEY_RESOLVERS.fetch(group_name).call
 
-      expect(manifest_keys).to eq(expected_keys), "expected #{group_name} keys to match TreeView::RenderState::#{constant_name}"
+      expect(manifest_keys).to eq(expected_keys), "expected #{group_name} keys to match the documented public grouped option contract"
     end
   end
 
