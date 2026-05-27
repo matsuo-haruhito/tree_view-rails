@@ -81,7 +81,9 @@ PR CI must pass before merge. Use the broader `main` CI for release decisions be
 
 When public usage or public options change, update related docs and CHANGELOG.
 
-When the change touches machine-readable public contract surfaces such as package-root JavaScript exports, controller identifiers, grouped option keys, or documented event names/detail keys, review `config/public_api_manifest.yml` together with the public API docs and any affected feature pages.
+When the change touches documented host-app wiring or machine-readable public contract surfaces such as package-root JavaScript exports, controller identifiers, grouped option keys, documented event names/detail keys, documented `data-tree-view-*` integration hooks, or selection controller host-element value attributes, review `config/public_api_manifest.yml` together with the public API docs and any affected feature pages.
+
+`config/public_api_manifest.yml` remains the machine-readable source of truth for package-root exports, controller identifiers, grouped option keys, and documented event detail keys. Public API and feature docs remain the source of truth for documented wiring attributes and hooks that are intentionally not exported there.
 
 - `README.md`
 - `docs/ja/README.md`

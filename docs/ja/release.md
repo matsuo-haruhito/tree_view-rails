@@ -81,7 +81,9 @@ merge前にPR CIを通します。互換性matrix、JavaScript coverage、packag
 
 Public usageや公開optionを変えた場合は、関連docsとCHANGELOGを更新します。
 
-package-root JavaScript export、controller identifier、grouped option key、documented event name / detail key のような machine-readable public contract surface を変える場合は、public API docs や関連feature page と一緒に `config/public_api_manifest.yml` も見直してください。
+documented な host-app wiring surface または machine-readable public contract surface、たとえば package-root JavaScript export、controller identifier、grouped option key、documented event name / detail key、documented `data-tree-view-*` integration hook、selection controller の host-element value attribute を変更する場合は、public API docs や関連feature page と一緒に `config/public_api_manifest.yml` も見直してください。
+
+`config/public_api_manifest.yml` は、package-root export、controller identifier、grouped option key、documented event detail key の machine-readable source of truth です。一方で、そこに export していない documented wiring attribute や hook については、public API docs と feature docs を source of truth として扱います。
 
 - `README.md`
 - `docs/ja/README.md`
