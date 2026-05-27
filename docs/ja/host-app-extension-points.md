@@ -85,6 +85,29 @@ selection: {
 }
 ```
 
+`selection:` 設定は、`TreeView::RenderState` 内で row ごとの payload 生成、disabled-state 判定、selected keys、checkbox visibility を決める側の設定です。
+
+host element に `tree-view-selection` controller を設定するときは、次の documented value attribute が stable な wiring surface に含まれます。
+
+- `data-tree-view-selection-hidden-input-name-value`: 最寄り form への hidden input sync
+- `data-tree-view-selection-max-count-value`: client-side の最大選択数制限
+- `data-tree-view-selection-cascade-value`: 描画済み行どうしの cascade 挙動
+- `data-tree-view-selection-indeterminate-value`: 親 checkbox の mixed-state 更新
+
+```erb
+<tbody
+  data-controller="tree-view-selection"
+  data-action="change->tree-view-selection#toggle"
+  data-tree-view-selection-hidden-input-name-value="selected_nodes[]"
+  data-tree-view-selection-max-count-value="10"
+  data-tree-view-selection-cascade-value="true"
+  data-tree-view-selection-indeterminate-value="true">
+  <%= tree_view_rows(@render_state) %>
+</tbody>
+```
+
+row ごとの意味づけは render-state 側の `selection:` option で行い、Stimulus controller が既に描画された checkbox をどう同期・制約するかは host-element value attribute 側で設定します。event や挙動の詳細は [Selection](selection.md) を参照してください。
+
 ## path builders
 
 Turboやlazy loadingのURLはhost appが作ります。
