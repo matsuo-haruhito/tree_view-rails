@@ -41,6 +41,13 @@ export const TreeViewControllerIdentifiers = Object.freeze({
   remoteState: "tree-view-remote-state"
 })
 
+export const TreeViewIntegrationHooks = Object.freeze({
+  interactive: Object.freeze({
+    marker: "data-tree-view-interactive",
+    ignoreDrag: "data-tree-view-ignore-drag"
+  })
+})
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-client", TreeViewClientController)
