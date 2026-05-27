@@ -65,7 +65,7 @@ Pull Request CI の確認項目:
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
-- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile` と `gemfiles/rails_8_0.gemfile`
+- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
 - JavaScript tests: `npm install`、Playwright browser setup、`npm run test:js`
 
 `main` push CI の確認項目:
