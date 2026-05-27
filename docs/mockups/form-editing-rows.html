@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView form-editing rows mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-editing-page {
+  max-width: 1280px;
+}
+
+.mock-editing-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.mock-editing-state {
+  display: grid;
+  gap: 16px;
+}
+
+.mock-editing-state__header {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-editing-eyebrow {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-editing-note {
+  margin: 0;
+  color: #52606d;
+}
+
+.mock-editing-frame {
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-editing-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mock-editing-toolbar__copy {
+  display: grid;
+  gap: 2px;
+}
+
+.mock-editing-toolbar__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-editing-toolbar__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-editing-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f4c81;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.mock-editing-chip--secondary {
+  background: #e9ecef;
+  color: #334155;
+}
+
+.mock-editing-body {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.mock-editing-callout {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.mock-editing-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-editing-table th,
+.mock-editing-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-editing-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mock-editing-input,
+.mock-editing-select,
+.mock-editing-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #102a43;
+  font: inherit;
+}
+
+.mock-editing-input,
+.mock-editing-select {
+  min-height: 2.4rem;
+  padding: 0.45rem 0.65rem;
+}
+
+.mock-editing-textarea {
+  min-height: 4.4rem;
+  padding: 0.6rem 0.65rem;
+  resize: vertical;
+}
+
+.mock-editing-stack {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-editing-field-meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-editing-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+
+.mock-editing-badge--selection {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.mock-editing-badge--business {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-editing-badge--interactive {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-editing-badge--mode {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.mock-editing-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #102a43;
+}
+
+.mock-editing-choice input {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.mock-editing-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-editing-actions a,
+.mock-editing-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.46rem 0.72rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mock-editing-actions .is-primary {
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.mock-editing-actions .is-danger {
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.tree-row.is-editing-row {
+  background: #fffbeb;
+}
+
+.tree-row.is-editing-row td {
+  border-bottom-color: #fde68a;
+}
+
+.tree-row.is-current-preview {
+  background: #eff6ff;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-editing-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView form-editing rows mock</h1>
+      <p>
+        Static reference for comparing editing-oriented row layouts without turning the mock into a real form workflow.
+        TreeView owns the row structure, hierarchy cues, and selection surface. The host app still owns edit mode, validation, persistence, and final action wiring.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-editing-grid" aria-labelledby="editing-states-heading">
+      <div class="mock-editing-state">
+        <div class="mock-editing-state__header">
+          <p class="mock-editing-eyebrow">Mode A</p>
+          <h2 id="editing-states-heading">Bulk edit rows</h2>
+          <p class="mock-editing-note">
+            Use this state when every visible row is editable and the host app submits them together.
+          </p>
+        </div>
+
+        <div class="mock-editing-frame">
+          <div class="mock-editing-toolbar">
+            <div class="mock-editing-toolbar__copy">
+              <p class="mock-editing-toolbar__title">Selection for row choice, inputs for business edits</p>
+            </div>
+            <div class="mock-editing-toolbar__meta" aria-label="Representative edit metadata">
+              <span class="mock-editing-chip">mode: bulk_edit</span>
+              <span class="mock-editing-chip mock-editing-chip--secondary">save: single submit</span>
+            </div>
+          </div>
+          <div class="mock-editing-body">
+            <p class="mock-editing-callout">
+              The first checkbox column is TreeView selection. Business fields stay inside host-app-owned cells and use their own params.
+            </p>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">status</th>
+                  <th scope="col">featured</th>
+                  <th scope="col">notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-expanded" aria-level="1" aria-expanded="true">
+                  <td class="tree-toggle-cell">
+                    <div class="mock-editing-stack">
+                      <label class="mock-editing-choice">
+                        <input type="checkbox" checked>
+                        <span>Select row</span>
+                      </label>
+                      <span class="mock-editing-badge mock-editing-badge--selection">TreeView selection</span>
+                      <span class="tree-toggle" aria-label="Root row">
+                        <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                        <span class="tree-toggle__control">
+                          <a class="tree-toggle__action" href="#">hide</a>
+                          <span class="tree-toggle__level">root</span>
+                        </span>
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="mock-editing-stack">
+                      <input class="mock-editing-input" type="text" value="Operations manual" data-tree-view-interactive="true">
+                      <div class="mock-editing-field-meta">
+                        <span class="mock-editing-badge mock-editing-badge--interactive">interactive marker</span>
+                        <span class="mock-editing-badge mock-editing-badge--mode">row_partial field</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <select class="mock-editing-select" data-tree-view-interactive="true">
+                      <option>draft</option>
+                      <option selected>review</option>
+                      <option>published</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="mock-editing-stack">
+                      <label class="mock-editing-choice">
+                        <input type="checkbox" checked data-tree-view-interactive="true">
+                        <span>Featured</span>
+                      </label>
+                      <span class="mock-editing-badge mock-editing-badge--business">Business field</span>
+                    </div>
+                  </td>
+                  <td>
+                    <textarea class="mock-editing-textarea" data-tree-view-interactive="true">Visible in the bulk editor. Validation and persistence remain host-app responsibilities.</textarea>
+                  </td>
+                </tr>
+                <tr class="tree-row" aria-level="2">
+                  <td class="tree-toggle-cell">
+                    <div class="mock-editing-stack">
+                      <label class="mock-editing-choice">
+                        <input type="checkbox">
+                        <span>Select row</span>
+                      </label>
+                      <span class="tree-toggle" aria-label="Child row">
+                        <span class="tree-toggle__branches" aria-hidden="true">
+                          <span class="tree-toggle__branch-slot has-line"></span>
+                          <span class="tree-toggle__branch-slot is-current is-last"></span>
+                        </span>
+                        <span class="tree-toggle__control">
+                          <span class="tree-depth-label">child</span>
+                        </span>
+                      </span>
+                    </div>
+                  </td>
+                  <td><input class="mock-editing-input" type="text" value="Approval checklist" data-tree-view-interactive="true"></td>
+                  <td>
+                    <select class="mock-editing-select" data-tree-view-interactive="true">
+                      <option selected>draft</option>
+                      <option>review</option>
+                      <option>published</option>
+                    </select>
+                  </td>
+                  <td>
+                    <label class="mock-editing-choice">
+                      <input type="checkbox" data-tree-view-interactive="true">
+                      <span>Featured</span>
+                    </label>
+                  </td>
+                  <td><textarea class="mock-editing-textarea" data-tree-view-interactive="true">Child rows can edit their own fields without reusing the TreeView selection checkbox.</textarea></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-editing-state">
+        <div class="mock-editing-state__header">
+          <p class="mock-editing-eyebrow">Mode B</p>
+          <h2>Per-row edit action placement</h2>
+          <p class="mock-editing-note">
+            Use this state when the host app swaps a single row into editing UI while neighboring rows stay in display mode.
+          </p>
+        </div>
+
+        <div class="mock-editing-frame">
+          <div class="mock-editing-toolbar">
+            <div class="mock-editing-toolbar__copy">
+              <p class="mock-editing-toolbar__title">Display rows stay readable while one row enters edit mode</p>
+            </div>
+            <div class="mock-editing-toolbar__meta" aria-label="Representative row edit metadata">
+              <span class="mock-editing-chip">mode: per_row_edit</span>
+              <span class="mock-editing-chip mock-editing-chip--secondary">swap target: host app</span>
+            </div>
+          </div>
+          <div class="mock-editing-body">
+            <p class="mock-editing-callout">
+              TreeView can keep hierarchy cues and row actions in place, but the host app decides when a row enters edit mode and how the save or cancel response returns.
+            </p>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">owner</th>
+                  <th scope="col">actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row" aria-level="1">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Display row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#">hide</a>
+                        <span class="tree-toggle__level">root</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Policy library</td>
+                  <td>Knowledge team</td>
+                  <td>
+                    <div class="mock-editing-actions">
+                      <a class="is-primary" href="#" data-tree-view-interactive="true">Edit</a>
+                      <a href="#" data-tree-view-interactive="true">Show</a>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="tree-row is-editing-row is-current-preview" aria-level="2" aria-current="page">
+                  <td class="tree-toggle-cell">
+                    <div class="mock-editing-stack">
+                      <span class="tree-toggle" aria-label="Editing row">
+                        <span class="tree-toggle__branches" aria-hidden="true">
+                          <span class="tree-toggle__branch-slot has-line"></span>
+                          <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                        </span>
+                        <span class="tree-toggle__control">
+                          <span class="tree-depth-label">child</span>
+                        </span>
+                      </span>
+                      <span class="mock-editing-badge mock-editing-badge--mode">editing row</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="mock-editing-stack">
+                      <input class="mock-editing-input" type="text" value="Escalation matrix" data-tree-view-interactive="true">
+                      <label class="mock-editing-choice">
+                        <input type="checkbox" checked data-tree-view-interactive="true">
+                        <span>Billable review</span>
+                      </label>
+                    </div>
+                  </td>
+                  <td>
+                    <select class="mock-editing-select" data-tree-view-interactive="true">
+                      <option>Knowledge team</option>
+                      <option selected>Operations</option>
+                      <option>Compliance</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div class="mock-editing-actions">
+                      <button type="button" class="is-primary" data-tree-view-interactive="true">Save</button>
+                      <button type="button" data-tree-view-interactive="true">Cancel</button>
+                      <button type="button" class="is-danger" data-tree-view-interactive="true">Delete</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="tree-row" aria-level="2">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Sibling row">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td>Training checklist</td>
+                  <td>Operations</td>
+                  <td>
+                    <div class="mock-editing-actions">
+                      <a href="#" data-tree-view-interactive="true">Edit</a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="editing-boundary-heading">
+      <h2 id="editing-boundary-heading">What this mock compares</h2>
+      <table class="mock-editing-table">
+        <thead>
+          <tr>
+            <th scope="col">Surface</th>
+            <th scope="col">Best for</th>
+            <th scope="col">Keep outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bulk edit rows</td>
+            <td>Selection versus business-field separation, editable cells, and all-rows submit framing.</td>
+            <td>Validation persistence, params parsing, authorization, and save semantics.</td>
+          </tr>
+          <tr>
+            <td>Per-row edit placement</td>
+            <td>Showing one editing row beside display rows without losing hierarchy cues.</td>
+            <td>Turbo replacement timing, dirty-state guards, and optimistic update behavior.</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li><code>data-tree-view-interactive="true"</code> is shown as a representative marker only. Event handling still belongs to the host app.</li>
+        <li>Selection checkboxes belong to TreeView row-selection payloads. Business checkboxes belong to the host app form.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
