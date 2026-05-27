@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, filtered-tree mode differences, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -246,6 +246,27 @@
         </div>
       </article>
 
+      <article class="mock-gallery-card" aria-labelledby="gallery-filtered-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused filtering</p>
+          <h2 id="gallery-filtered-heading">Filtered tree modes</h2>
+          <p>
+            Use this surface to compare how `filtered_tree_for` keeps only matches, matches with ancestors, or matches with descendants without adding host-app search UI.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Matched-only versus ancestor or descendant context</li>
+            <li>Representative mode framing without highlighting</li>
+            <li>Clear boundary between TreeView output and host-app search behavior</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="filtered-tree-modes.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="filtered-tree-modes.html" title="Filtered tree modes mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
       <article class="mock-gallery-card" aria-labelledby="gallery-toolbar-heading">
         <div class="mock-gallery-copy">
           <p class="mock-gallery-eyebrow">Focused controls</p>
@@ -319,6 +340,11 @@
             <td>Interaction states</td>
             <td>Loading, retry, pagination, and drag or drop status cues.</td>
             <td>Real Turbo responses, route wiring, or persistence behavior.</td>
+          </tr>
+          <tr>
+            <td>Filtered tree modes</td>
+            <td>Comparing matched-only, ancestor-retaining, and descendant-retaining output.</td>
+            <td>Search forms, highlighting, ranking, and authorization-aware filtering.</td>
           </tr>
           <tr>
             <td>Toolbar actions</td>
