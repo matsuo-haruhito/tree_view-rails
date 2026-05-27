@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView drag interactive controls mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-drag-controls-page {
+  max-width: 1280px;
+}
+
+.mock-drag-controls-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.mock-drag-controls-frame {
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-drag-controls-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mock-drag-controls-toolbar__copy {
+  display: grid;
+  gap: 4px;
+}
+
+.mock-drag-controls-toolbar__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-drag-controls-toolbar__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-drag-controls-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.mock-drag-controls-chip--drag {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.mock-drag-controls-chip--marker {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.mock-drag-controls-chip--narrow {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-drag-controls-body {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.mock-drag-controls-callout {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.mock-drag-controls-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-drag-controls-table th,
+.mock-drag-controls-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.72rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-drag-controls-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mock-drag-controls-stack {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-drag-controls-widget {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #102a43;
+  font-weight: 600;
+}
+
+.mock-drag-controls-widget--interactive {
+  border-color: #c4b5fd;
+  background: #f5f3ff;
+}
+
+.mock-drag-controls-widget--ignore-drag {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.mock-drag-controls-input,
+.mock-drag-controls-select,
+.mock-drag-controls-button,
+.mock-drag-controls-link {
+  font: inherit;
+}
+
+.mock-drag-controls-input,
+.mock-drag-controls-select {
+  min-height: 2.35rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  color: #102a43;
+  background: #fff;
+}
+
+.mock-drag-controls-button,
+.mock-drag-controls-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.42rem 0.72rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mock-drag-controls-link {
+  color: #1d4ed8;
+}
+
+.mock-drag-controls-badge-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-drag-controls-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+
+.mock-drag-controls-badge--native {
+  background: #e0f2fe;
+  color: #0f4c81;
+}
+
+.mock-drag-controls-badge--custom {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.mock-drag-controls-badge--drag {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.mock-drag-controls-badge--safe {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-drag-controls-note-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #334155;
+}
+
+.tree-row.is-dragging-preview {
+  background: #eff6ff;
+}
+
+.tree-row.is-dragging-preview td {
+  border-bottom-color: #bfdbfe;
+}
+
+.tree-row.is-marker-preview {
+  background: #faf5ff;
+}
+
+.tree-row.is-marker-preview td {
+  border-bottom-color: #ddd6fe;
+}
+
+.tree-row.is-ignore-drag-preview {
+  background: #f0fdf4;
+}
+
+.tree-row.is-ignore-drag-preview td {
+  border-bottom-color: #bbf7d0;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-drag-controls-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView drag interactive controls mock</h1>
+      <p>
+        Static reference for comparing draggable rows that contain native controls, custom interactive markers,
+        and drag-only ignore markers. TreeView owns the reusable guard markers and transfer boundary; the host app still owns
+        drag wiring, drop targets, permissions, and business behavior.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-drag-controls-grid" aria-labelledby="drag-controls-heading">
+      <div class="mock-drag-controls-frame">
+        <div class="mock-drag-controls-toolbar">
+          <div class="mock-drag-controls-toolbar__copy">
+            <p class="mock-drag-controls-toolbar__title">Compare drag-start guard surfaces inside draggable rows</p>
+          </div>
+          <div class="mock-drag-controls-toolbar__meta" aria-label="Representative drag marker metadata">
+            <span class="mock-drag-controls-chip mock-drag-controls-chip--drag">behavior: drag start</span>
+            <span class="mock-drag-controls-chip mock-drag-controls-chip--marker">custom marker</span>
+            <span class="mock-drag-controls-chip mock-drag-controls-chip--narrow">narrow ignore marker</span>
+          </div>
+        </div>
+        <div class="mock-drag-controls-body">
+          <p class="mock-drag-controls-callout">
+            Use this page when review needs a focused pass on whether a row should start transfer, or whether an embedded control
+            should stay safe to click, type into, or open without accidental dragging.
+          </p>
+          <table class="tree-view-table" data-controller="tree-view-transfer">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">embedded control</th>
+                <th scope="col">drag-start result</th>
+                <th scope="col">why this state matters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-dragging-preview" draggable="true" data-tree-node-key="doc:plain" data-tree-transfer-payload='{"key":"doc:plain","type":"Document"}' aria-level="1">
+                <td class="tree-toggle-cell">
+                  <div class="mock-drag-controls-stack">
+                    <span class="tree-toggle" aria-label="Plain draggable row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">drag</span></span>
+                    </span>
+                    <div class="mock-drag-controls-badge-row">
+                      <span class="mock-drag-controls-badge mock-drag-controls-badge--drag">no marker</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mock-drag-controls-stack">
+                    <span>Plain row content only</span>
+                    <span class="mock-status mock-status--pending">Pointer down can begin row transfer.</span>
+                  </div>
+                </td>
+                <td><span class="mock-status mock-status--pending">drag starts</span></td>
+                <td>Baseline reference for a row that should remain draggable when the pointer is not inside a control.</td>
+              </tr>
+
+              <tr class="tree-row" draggable="true" data-tree-node-key="doc:native" data-tree-transfer-payload='{"key":"doc:native","type":"Document"}' aria-level="1">
+                <td class="tree-toggle-cell">
+                  <div class="mock-drag-controls-stack">
+                    <span class="tree-toggle" aria-label="Native control row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">native</span></span>
+                    </span>
+                    <div class="mock-drag-controls-badge-row">
+                      <span class="mock-drag-controls-badge mock-drag-controls-badge--native">native guard</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mock-drag-controls-stack">
+                    <label>
+                      <span class="sr-only">Owner</span>
+                      <input class="mock-drag-controls-input" type="text" value="Operations" aria-label="Owner">
+                    </label>
+                    <div class="mock-drag-controls-badge-row">
+                      <a class="mock-drag-controls-link" href="#">Open</a>
+                      <button class="mock-drag-controls-button" type="button">Assign</button>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="mock-status mock-status--active">drag ignored</span></td>
+                <td>Inputs, links, buttons, selects, textareas, and editable labels should stay usable without an extra marker.</td>
+              </tr>
+
+              <tr class="tree-row is-marker-preview" draggable="true" data-tree-node-key="doc:interactive" data-tree-transfer-payload='{"key":"doc:interactive","type":"Document"}' aria-level="1">
+                <td class="tree-toggle-cell">
+                  <div class="mock-drag-controls-stack">
+                    <span class="tree-toggle" aria-label="Custom interactive marker row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">marker</span></span>
+                    </span>
+                    <div class="mock-drag-controls-badge-row">
+                      <span class="mock-drag-controls-badge mock-drag-controls-badge--custom">data-tree-view-interactive</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mock-drag-controls-stack">
+                    <span class="mock-drag-controls-widget mock-drag-controls-widget--interactive" data-tree-view-interactive="true">
+                      Custom color picker
+                    </span>
+                    <span class="mock-status mock-status--active">Use when the widget is not a native input or button.</span>
+                  </div>
+                </td>
+                <td><span class="mock-status mock-status--active">drag ignored</span></td>
+                <td>Marks a host-app widget as interactive for TreeView behaviors, including drag-start guard.</td>
+              </tr>
+
+              <tr class="tree-row is-ignore-drag-preview" draggable="true" data-tree-node-key="doc:ignore-drag" data-tree-transfer-payload='{"key":"doc:ignore-drag","type":"Document"}' aria-level="1">
+                <td class="tree-toggle-cell">
+                  <div class="mock-drag-controls-stack">
+                    <span class="tree-toggle" aria-label="Ignore-drag marker row">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">drag-safe</span></span>
+                    </span>
+                    <div class="mock-drag-controls-badge-row">
+                      <span class="mock-drag-controls-badge mock-drag-controls-badge--safe">data-tree-view-ignore-drag</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="mock-drag-controls-stack">
+                    <span class="mock-drag-controls-widget mock-drag-controls-widget--ignore-drag" data-tree-view-ignore-drag="true">
+                      Range scrubber
+                    </span>
+                    <span class="mock-status mock-status--active">Ignore drag start only; narrower than the generic interactive marker.</span>
+                  </div>
+                </td>
+                <td><span class="mock-status mock-status--active">drag ignored</span></td>
+                <td>Use when the widget only needs drag protection and other TreeView behaviors may still apply elsewhere in the row.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="drag-controls-boundary-heading">
+      <h2 id="drag-controls-boundary-heading">What this mock compares</h2>
+      <table class="mock-drag-controls-table">
+        <thead>
+          <tr>
+            <th scope="col">Surface</th>
+            <th scope="col">Best for</th>
+            <th scope="col">Keep outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Plain draggable row</td>
+            <td>Confirming the baseline row stays draggable when no control marker is present.</td>
+            <td>Drop targets, persistence, authorization, and route wiring.</td>
+          </tr>
+          <tr>
+            <td>Native interactive controls</td>
+            <td>Checking that built-in controls remain safe to click or edit without extra TreeView markers.</td>
+            <td>Host-app validation, save timing, or business copy.</td>
+          </tr>
+          <tr>
+            <td><code>data-tree-view-interactive</code></td>
+            <td>Showing the broad custom-widget marker for non-native controls inside a draggable row.</td>
+            <td>Widget implementation details or unrelated keyboard and row-click policy changes.</td>
+          </tr>
+          <tr>
+            <td><code>data-tree-view-ignore-drag</code></td>
+            <td>Showing the narrower marker when drag start alone should be ignored.</td>
+            <td>Business-specific drag affordances, recovery UI, or drop sequencing rules.</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul class="mock-drag-controls-note-list">
+        <li>These markers are shown as reusable TreeView guard hooks, not as a full drag-and-drop workflow.</li>
+        <li>Final labels, permissions, destination rules, and save behavior remain host-app responsibilities.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
