@@ -38,6 +38,10 @@ RSpec.describe "Public API compatibility" do
     public_javascript_manifest.fetch("event_detail_keys")
   end
 
+  def public_javascript_event_detail_values
+    public_javascript_manifest.fetch("event_detail_values")
+  end
+
   def javascript_entrypoint_source
     @javascript_entrypoint_source ||= File.read(JAVASCRIPT_ENTRYPOINT_PATH)
   end
@@ -293,6 +297,55 @@ RSpec.describe "Public API compatibility" do
         detail_keys.each do |detail_key|
           expect(source_mentions_detail_key?(source, detail_key)).to be(true),
             "expected #{group_name} controller source to keep #{detail_key} in the documented #{event_key} detail"
+        end
+      end
+    end
+  end
+
+  it "keeps documented JavaScript event detail values available through TreeViewEventDetailValues" do
+    source = javascript_entrypoint_source
+
+    expect(source).to include("export const TreeViewEventDetailValues = Object.freeze({")
+
+    public_javascript_event_detail_values.each do |group_name, events|
+      group_key = javascript_manifest_key(group_name)
+      expect(source).to include("#{group_key}: Object.freeze({")
+
+      events.each do |event_key, fields|
+        event_name = javascript_manifest_key(event_key)
+        expect(source).to include("#{event_name}: Object.freeze({")
+
+        fields.each do |field_name, values|
+          field_key = javascript_manifest_key(field_name)
+          expect(source).to include("#{field_key}: Object.freeze([")
+
+          values.each do |value|
+            expect(source).to include(%("#{value}")),
+              "expected TreeViewEventDetailValues.#{group_key}.#{event_name}.#{field_key} to include #{value}"
+          end
+        end
+      end
+    end
+  end
+
+  it "keeps documented JavaScript event detail values aligned with controller sources" do
+    public_javascript_event_detail_values.each do |group_name, events|
+      source = javascript_controller_source(group_name)
+
+      events.each do |event_key, fields|
+        dispatch_name = event_dispatch_name(event_key)
+
+        expect(source_dispatches_event?(source, dispatch_name)).to be(true),
+          "expected #{group_name} controller to dispatch #{dispatch_name}"
+
+        fields.each do |field_name, values|
+          expect(source_mentions_detail_key?(source, field_name)).to be(true),
+            "expected #{group_name} controller source to keep #{field_name} in the documented #{event_key} detail"
+
+          values.each do |value|
+            expect(source).to include(%("#{value}")),
+              "expected #{group_name} controller source to keep #{value} in the documented #{event_key}.#{field_name} values"
+          end
         end
       end
     end
