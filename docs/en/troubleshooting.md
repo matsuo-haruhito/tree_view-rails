@@ -114,11 +114,16 @@ Check these points.
 - Parse submitted values with `TreeView.parse_selection_params` on the server side.
 - In JavaScript, remember that TreeView only reports checked and enabled checkboxes.
 - Invalid JSON payloads are omitted from the selected payload array and reported through `tree-view-selection:invalid-payload`.
+- Use grouped `selection:` options for row payload generation, disabled-state decisions, and checkbox visibility.
+- If the tree sits inside a regular form, configure `data-tree-view-selection-hidden-input-name-value` on the `tree-view-selection` host element so checked payloads are mirrored into hidden inputs.
+- If you expect client-side max-count limits or linked checkbox behavior, configure `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, and `data-tree-view-selection-indeterminate-value` on the same host element.
 - Cascade and indeterminate behavior only affects rendered rows in the current DOM.
 
 Read next:
 
 - [Selection](selection.md)
+- [Host App Extension Points](host-app-extension-points.md)
+- [Public API](public-api.md)
 - [JavaScript event contract](js-events.md)
 
 ## Persisted state does not save or restore as expected
