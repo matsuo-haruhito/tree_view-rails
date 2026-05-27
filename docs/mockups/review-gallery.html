@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, windowed rendering cues, filtered-tree mode differences, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, windowed rendering cues, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -288,6 +288,27 @@
         </div>
       </article>
 
+      <article class="mock-gallery-card" aria-labelledby="gallery-editing-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused editing</p>
+          <h2 id="gallery-editing-heading">Form-editing rows</h2>
+          <p>
+            Use this surface to compare bulk edit rows, per-row edit placement, and the boundary between TreeView row selection and host-app business form controls.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Selection checkbox versus business checkbox roles</li>
+            <li>Editable text, select, and textarea cells inside rows</li>
+            <li>Per-row action placement without modeling save behavior</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="form-editing-rows.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="form-editing-rows.html" title="Form editing rows mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
       <article class="mock-gallery-card" aria-labelledby="gallery-toolbar-heading">
         <div class="mock-gallery-copy">
           <p class="mock-gallery-eyebrow">Focused controls</p>
@@ -371,6 +392,11 @@
             <td>Filtered tree modes</td>
             <td>Comparing matched-only, ancestor-retaining, and descendant-retaining output.</td>
             <td>Search forms, highlighting, ranking, and authorization-aware filtering.</td>
+          </tr>
+          <tr>
+            <td>Form-editing rows</td>
+            <td>Bulk edit rows, per-row edit placement, and selection-versus-business control separation.</td>
+            <td>Validation persistence, params parsing, Turbo replacement timing, and save workflows.</td>
           </tr>
           <tr>
             <td>Toolbar actions</td>
