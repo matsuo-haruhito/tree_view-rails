@@ -35,8 +35,9 @@ They are **not** a complete Rails application and should not grow into host-app 
 7. Use [breadcrumb-paths.html](breadcrumb-paths.html) when review needs to compare breadcrumb-path context against the tree's own current-row cue without modeling host-app route design.
 8. Use [filtered-tree-modes.html](filtered-tree-modes.html) when review needs to compare matched nodes against ancestor or descendant context without adding host-app search UI.
 9. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
-10. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on tree-wide expand / collapse affordances instead of row-by-row hierarchy layout.
-11. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+10. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
+11. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on tree-wide expand / collapse affordances instead of row-by-row hierarchy layout.
+12. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Copy and language policy
 
