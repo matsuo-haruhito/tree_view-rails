@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView filtered tree modes mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-filtered-page {
+  max-width: 1240px;
+}
+
+.mock-filtered-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.mock-filtered-state {
+  display: grid;
+  gap: 16px;
+}
+
+.mock-filtered-state__header {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-filtered-state__eyebrow {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-filtered-note {
+  margin: 0;
+  color: #52606d;
+}
+
+.mock-filtered-frame {
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-filtered-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mock-filtered-toolbar__copy {
+  display: grid;
+  gap: 2px;
+}
+
+.mock-filtered-toolbar__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-filtered-toolbar__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-filtered-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f4c81;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.mock-filtered-chip--mode {
+  background: #e9ecef;
+  color: #334155;
+}
+
+.mock-filtered-summary {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: #fff;
+}
+
+.mock-filtered-summary ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.mock-filtered-callout {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.tree-row.is-match {
+  background: #ecfdf5;
+}
+
+.tree-row.is-context {
+  background: #fffaf0;
+}
+
+.tree-row.is-descendant {
+  background: #eef2ff;
+}
+
+.tree-node-badge--match {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tree-node-badge--context {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.tree-node-badge--descendant {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.mock-filtered-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-filtered-table th,
+.mock-filtered-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-filtered-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-filtered-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Filtered tree modes mock</h1>
+      <p>
+        Static reference for comparing how filtered trees keep only matches, matches with ancestors,
+        or matches with descendants. The page stays focused on reusable TreeView output and keeps
+        search forms, ranking, highlighting, and authorization copy outside the mock.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-filtered-grid" aria-labelledby="filtered-modes-heading">
+      <div class="mock-filtered-state">
+        <div class="mock-filtered-state__header">
+          <p class="mock-filtered-state__eyebrow">Mode A</p>
+          <h2 id="filtered-modes-heading">Matched only</h2>
+          <p class="mock-filtered-note">
+            Use this when the host app wants the narrowest result set and does not need surrounding hierarchy for review.
+          </p>
+        </div>
+
+        <div class="mock-filtered-frame">
+          <div class="mock-filtered-toolbar">
+            <div class="mock-filtered-toolbar__copy">
+              <p class="mock-filtered-toolbar__title">Only the matched node stays visible</p>
+            </div>
+            <div class="mock-filtered-toolbar__meta" aria-label="Representative filter context">
+              <span class="mock-filtered-chip">query: billing</span>
+              <span class="mock-filtered-chip mock-filtered-chip--mode">mode: matched_only</span>
+            </div>
+          </div>
+          <div class="mock-filtered-summary">
+            <p class="mock-filtered-callout">
+              TreeView keeps the matching row itself. Any explanation of why it matched or how to refine the query stays in the host app.
+            </p>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">owner</th>
+                  <th scope="col">state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-match" aria-level="1">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Matched node">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">leaf</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--match">match</span>
+                  </td>
+                  <td>Billing reports</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status mock-status--active">matched</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-filtered-state">
+        <div class="mock-filtered-state__header">
+          <p class="mock-filtered-state__eyebrow">Mode B</p>
+          <h2>Matched with ancestors</h2>
+          <p class="mock-filtered-note">
+            Use this when reviewers need the path back to the root so the matching result keeps its hierarchy context.
+          </p>
+        </div>
+
+        <div class="mock-filtered-frame">
+          <div class="mock-filtered-toolbar">
+            <div class="mock-filtered-toolbar__copy">
+              <p class="mock-filtered-toolbar__title">Matched node plus the path that leads to it</p>
+            </div>
+            <div class="mock-filtered-toolbar__meta" aria-label="Representative filter context">
+              <span class="mock-filtered-chip">query: billing</span>
+              <span class="mock-filtered-chip mock-filtered-chip--mode">mode: with_ancestors</span>
+            </div>
+          </div>
+          <div class="mock-filtered-summary">
+            <p class="mock-filtered-callout">
+              Ancestors remain visible so the host app can show where the result lives, but the mock still avoids highlighting or ranked result copy.
+            </p>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">owner</th>
+                  <th scope="col">state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-context" aria-level="1">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Ancestor node">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-toggle__action tree-toggle__action--pending">open</span>
+                        <span class="tree-toggle__level">root</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--context">ancestor</span>
+                  </td>
+                  <td>Operations</td>
+                  <td>Platform</td>
+                  <td><span class="mock-status mock-status--pending">context</span></td>
+                </tr>
+                <tr class="tree-row is-match" aria-level="2">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Matched node with ancestor">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--match">match</span>
+                  </td>
+                  <td>Billing reports</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status mock-status--active">matched</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-filtered-state">
+        <div class="mock-filtered-state__header">
+          <p class="mock-filtered-state__eyebrow">Mode C</p>
+          <h2>Matched with descendants</h2>
+          <p class="mock-filtered-note">
+            Use this when the host app wants the matching parent to stay visible together with its visible children or follow-on rows.
+          </p>
+        </div>
+
+        <div class="mock-filtered-frame">
+          <div class="mock-filtered-toolbar">
+            <div class="mock-filtered-toolbar__copy">
+              <p class="mock-filtered-toolbar__title">Matched parent plus the rows underneath it</p>
+            </div>
+            <div class="mock-filtered-toolbar__meta" aria-label="Representative filter context">
+              <span class="mock-filtered-chip">query: billing</span>
+              <span class="mock-filtered-chip mock-filtered-chip--mode">mode: with_descendants</span>
+            </div>
+          </div>
+          <div class="mock-filtered-summary">
+            <p class="mock-filtered-callout">
+              Descendants stay visible after the match so reviewers can inspect downstream rows, while sort order and query semantics remain host-app choices.
+            </p>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">owner</th>
+                  <th scope="col">state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-match" aria-level="1">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Matched parent node">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-toggle__action tree-toggle__action--pending">open</span>
+                        <span class="tree-toggle__level">root</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--match">match</span>
+                  </td>
+                  <td>Billing</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status mock-status--active">matched</span></td>
+                </tr>
+                <tr class="tree-row is-descendant" aria-level="2">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Descendant node">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--descendant">descendant</span>
+                  </td>
+                  <td>Invoices</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr class="tree-row is-descendant" aria-level="2">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Descendant node">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">child</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--descendant">descendant</span>
+                  </td>
+                  <td>Refund queue</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="filtered-boundary-heading">
+      <h2 id="filtered-boundary-heading">What this mock compares</h2>
+      <table class="mock-filtered-table">
+        <thead>
+          <tr>
+            <th scope="col">Mode</th>
+            <th scope="col">Best for</th>
+            <th scope="col">Keep outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>:matched_only</code></td>
+            <td>The tightest result set when only the matched row itself should remain visible.</td>
+            <td>Result ranking, highlighting, and final search-result messaging.</td>
+          </tr>
+          <tr>
+            <td><code>:with_ancestors</code></td>
+            <td>Keeping the path back to the root visible for hierarchy review.</td>
+            <td>Authorization, breadcrumb wording, and query explanations.</td>
+          </tr>
+          <tr>
+            <td><code>:with_descendants</code></td>
+            <td>Keeping a matched parent together with visible rows beneath it.</td>
+            <td>Downstream sorting rules, pagination, or fetch behavior.</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li><code>:with_ancestors_and_descendants</code> remains part of the documented API and can combine these cues in a host app.</li>
+        <li>This focused page keeps the minimum comparison set narrow so reviewers can inspect mode differences without extra product behavior.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
