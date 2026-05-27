@@ -41,6 +41,13 @@ export const TreeViewControllerIdentifiers = Object.freeze({
   remoteState: "tree-view-remote-state"
 })
 
+export const TreeViewSelectionValueAttributes = Object.freeze({
+  hiddenInputName: "data-tree-view-selection-hidden-input-name-value",
+  maxCount: "data-tree-view-selection-max-count-value",
+  cascade: "data-tree-view-selection-cascade-value",
+  indeterminate: "data-tree-view-selection-indeterminate-value"
+})
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-client", TreeViewClientController)
