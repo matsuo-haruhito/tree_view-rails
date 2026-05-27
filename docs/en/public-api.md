@@ -179,13 +179,22 @@ Documented keys on `TreeViewControllerIdentifiers`:
 - `transfer`
 - `remoteState`
 
+The `tree-view-selection` controller's documented host-element value attributes are also part of the stable host-app wiring surface:
+
+- `data-tree-view-selection-hidden-input-name-value`
+- `data-tree-view-selection-max-count-value`
+- `data-tree-view-selection-cascade-value`
+- `data-tree-view-selection-indeterminate-value`
+
+Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. See [Selection](selection.md#hidden-input-sync-for-regular-form-submit), [Selection](selection.md#selection-max-count), [Selection](selection.md#linked-checkbox-behavior), and [Host app extension points](host-app-extension-points.md#selection-builders).
+
 The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
 - private controller methods
 - file layout under `app/javascript/tree_view/`
-- undocumented `data-*` attributes
+- undocumented `data-*` attributes outside the documented host-app wiring surface
 - DOM traversal details inside controllers
 
 ## CSS and DOM surface
