@@ -362,14 +362,14 @@ store.save(expanded_keys: expanded_keys)
 |---|---|
 | `tree_view_rows(render_state, window: nil)` | Renders TreeView rows. |
 | `tree_view_window(render_state, offset:, limit:)` | Returns windowing metadata. |
-| `tree_view_state_data(render_state)` | Builds root data attributes. |
-| `tree_node_dom_id(item, tree:, ui_config:)` | Builds a node DOM ID. |
-| `tree_turbo_frame(ui:)` | Returns the configured Turbo Frame target for the resolved UI config, or `nil`. |
-| `tree_selection_value(item, tree:, render_state:)` | Builds JSON for checkbox values. |
+| `tree_node_dom_id(item_or_id, ui: @tree_ui)` | Builds a node DOM ID through the resolved `UiConfig`. |
+| `tree_selection_value(item, tree, builder = nil)` | Builds the JSON checkbox value from the default or custom selection payload builder. |
 | `tree_view_breadcrumb(tree, item, ...)` | Renders breadcrumbs. |
 | `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` | Renders TreeView's bundled toolbar markup. |
 | `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` | Returns toolbar action hashes so the host app can render its own markup. |
 | `tree_view_toolbar_action_metadata(render_state, action, label: nil)` | Returns metadata for one supported toolbar action. |
+
+The public helper compatibility contract follows the documented helper-method set in `config/public_api_manifest.yml`. Internal helper plumbing used by bundled partials is intentionally omitted from this table.
 
 ### Toolbar helpers
 
