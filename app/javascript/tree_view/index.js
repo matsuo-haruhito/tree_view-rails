@@ -51,6 +51,11 @@ export const TreeViewIntegrationHooks = Object.freeze({
   }),
   transfer: Object.freeze({
     payload: "data-tree-transfer-payload"
+  }),
+  emptyState: Object.freeze({
+    contentClass: "tree-view-empty-row__content",
+    messageClass: "tree-view-empty-row__message",
+    stateAttribute: "data-tree-view-empty-state"
   })
 })
 
