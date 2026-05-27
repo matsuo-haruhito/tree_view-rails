@@ -74,6 +74,7 @@ javascript_package_root:
   named_exports:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
+    - TreeViewSelectionValueAttributes
     - TreeViewStateController
     - TreeViewClientController
     - TreeViewSelectionController
@@ -96,6 +97,11 @@ javascript_package_root:
     - key: remoteState
       identifier: tree-view-remote-state
       export: TreeViewRemoteStateController
+  selection_value_attributes:
+    hidden_input_name: data-tree-view-selection-hidden-input-name-value
+    max_count: data-tree-view-selection-max-count-value
+    cascade: data-tree-view-selection-cascade-value
+    indeterminate: data-tree-view-selection-indeterminate-value
   event_names:
     state:
       state_changed: tree-view-state:state-changed
