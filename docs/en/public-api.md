@@ -155,13 +155,13 @@ Stable enough for host apps to use:
   - `TreeViewTransferController`
   - `TreeViewRemoteStateController`
 - documented JavaScript events and payload keys
-- documented `data-tree-view-*` integration hooks
+- documented integration hooks for `data-tree-view-*`, `data-tree-*`, and bundled empty-state wrapper markup
 
 `registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
 
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
-`TreeViewIntegrationHooks` exposes the small documented `data-tree-view-*` and `data-tree-*` hook names as a machine-readable object. Use it when custom controllers, browser assertions, or host-app wiring need the same documented attribute names without repeating raw strings.
+`TreeViewIntegrationHooks` exposes the small documented integration hook names as a machine-readable object. Use it when custom controllers, browser assertions, host-app CSS, or host-app wiring need the same attribute or wrapper-class names without repeating raw strings. The `emptyState` group is intentionally limited to the bundled empty-row wrapper hooks documented in [Accessibility semantics](accessibility-semantics.md).
 
 Documented keys on `TreeViewControllerIdentifiers`:
 
@@ -177,6 +177,9 @@ Documented keys on `TreeViewIntegrationHooks`:
 - `state.nodeKey`
 - `remoteState.childrenUrl`
 - `transfer.payload`
+- `emptyState.contentClass`
+- `emptyState.messageClass`
+- `emptyState.stateAttribute`
 
 The machine-readable source of truth for the package-root JavaScript exports, documented integration hooks, and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
