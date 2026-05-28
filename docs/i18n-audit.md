@@ -89,6 +89,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | `docs/mockups/review-gallery.html` | Technical asset | Comparison hub for the current static mockup set. No translation needed. |
 | `docs/mockups/default-tree.html` | Technical asset | No translation needed. |
 | `docs/mockups/selection-visibility.html` | Technical asset | No translation needed. |
+| `docs/mockups/selection-controller-states.html` | Technical asset | No translation needed. |
 | `docs/mockups/resource-table-bridge.html` | Technical asset | No translation needed. |
 | `docs/mockups/toolbar-actions.html` | Technical asset | No translation needed. |
 | `docs/mockups/narrow-sidebar-tree.html` | Technical asset | No translation needed. |
