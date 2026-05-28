@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selection controller-side states mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-controller-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.mock-controller-card {
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.mock-controller-card__header {
+  display: grid;
+  gap: 8px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #e4e7eb;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mock-controller-card__header h2,
+.mock-controller-card__header p,
+.mock-controller-card__body p,
+.mock-controller-card__body ul {
+  margin: 0;
+}
+
+.mock-controller-eyebrow {
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-controller-card__body {
+  display: grid;
+  gap: 14px;
+  padding: 18px 20px 20px;
+}
+
+.mock-controller-note {
+  color: #52606d;
+}
+
+.mock-controller-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-controller-table th,
+.mock-controller-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.72rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-controller-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mock-controller-chip-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-controller-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+
+.mock-controller-chip--muted {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.mock-controller-chip--warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-controller-code {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.mock-controller-hidden-inputs {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.mock-controller-input-list {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-controller-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #dbe2ea;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.mock-controller-input-row code {
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.mock-controller-kv {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.mock-controller-kv-card {
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #f8fafc;
+  padding: 14px;
+}
+
+.mock-controller-kv-card h3,
+.mock-controller-kv-card p {
+  margin: 0;
+}
+
+.mock-controller-kv-card {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-controller-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.77rem;
+  font-weight: 700;
+}
+
+.mock-controller-status--ok {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-controller-status--warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-controller-status--muted {
+  background: #e2e8f0;
+  color: #475569;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Selection controller-side states mock</h1>
+      <p>
+        Static reference for comparing TreeView's form bridge and controller-side selection states.
+        This page keeps the focus on hidden input sync, max-count guardrails, and rendered cascade or indeterminate cues without turning the mockup into a real submit flow or business-action demo.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-controller-grid" aria-labelledby="controller-states-heading">
+      <div class="mock-controller-card">
+        <div class="mock-controller-card__header">
+          <p class="mock-controller-eyebrow">Mode A</p>
+          <h2 id="controller-states-heading">Hidden input sync inside a regular form</h2>
+          <p>Use this state when the tree lives inside a normal HTML form and the controller mirrors valid checked payloads into hidden inputs.</p>
+        </div>
+        <div class="mock-controller-card__body">
+          <p class="mock-controller-note">
+            The visible checkbox column belongs to TreeView. The form-owned hidden inputs stay nearby so reviewers can confirm that checked payloads, skipped disabled rows, and the host-app controlled input name remain readable in one surface.
+          </p>
+          <table class="tree-view-table mock-controller-table" aria-label="Hidden input sync state">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">tree</th>
+                <th scope="col">name</th>
+                <th scope="col">payload cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-expanded is-selected">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Select root policy bundle"></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">root</span></td>
+                <td>Policy bundle</td>
+                <td><span class="mock-controller-code">id: 12</span></td>
+              </tr>
+              <tr class="tree-row is-leaf is-selected">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Select child checklist"></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">leaf</span></td>
+                <td>Approval checklist</td>
+                <td><span class="mock-controller-code">id: 19</span></td>
+              </tr>
+              <tr class="tree-row is-leaf">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" disabled title="Archived rows stay outside the form payload" aria-label="Disabled archived row"></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">leaf</span></td>
+                <td>Archived note</td>
+                <td><span class="mock-controller-status mock-controller-status--muted">skipped</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mock-controller-hidden-inputs" aria-label="Mirrored hidden inputs">
+            <div class="mock-controller-chip-row">
+              <span class="mock-controller-chip">data-tree-view-selection-hidden-input-name-value</span>
+              <span class="mock-controller-chip mock-controller-chip--muted">selected_nodes[]</span>
+            </div>
+            <div class="mock-controller-input-list">
+              <div class="mock-controller-input-row"><strong>hidden input</strong><code>selected_nodes[]</code><span>value = {"id":12,"kind":"folder"}</span></div>
+              <div class="mock-controller-input-row"><strong>hidden input</strong><code>selected_nodes[]</code><span>value = {"id":19,"kind":"document"}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-controller-card">
+        <div class="mock-controller-card__header">
+          <p class="mock-controller-eyebrow">Mode B</p>
+          <h2>Max-count reached on the attempted checkbox</h2>
+          <p>Use this state when the controller guards the number of checked rows and leaves the business-specific warning copy outside the reusable surface.</p>
+        </div>
+        <div class="mock-controller-card__body">
+          <div class="mock-controller-chip-row">
+            <span class="mock-controller-chip">data-tree-view-selection-max-count-value</span>
+            <span class="mock-controller-chip mock-controller-chip--warn">2</span>
+          </div>
+          <table class="tree-view-table mock-controller-table" aria-label="Selection max count state">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">tree</th>
+                <th scope="col">name</th>
+                <th scope="col">state cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="First selected row"></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">root</span></td>
+                <td>Operations board</td>
+                <td><span class="mock-controller-status mock-controller-status--ok">count 1</span></td>
+              </tr>
+              <tr class="tree-row is-selected">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Second selected row"></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">child</span></td>
+                <td>Release queue</td>
+                <td><span class="mock-controller-status mock-controller-status--ok">count 2</span></td>
+              </tr>
+              <tr class="tree-row">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Attempted third row"></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">leaf</span></td>
+                <td>Hotfix note</td>
+                <td><span class="mock-controller-status mock-controller-status--warn">attempt reverted</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mock-controller-kv">
+            <div class="mock-controller-kv-card">
+              <h3>Controller event</h3>
+              <p><span class="mock-controller-code">tree-view-selection:limit-exceeded</span></p>
+            </div>
+            <div class="mock-controller-kv-card">
+              <h3>TreeView owns</h3>
+              <p>Unchecking the attempted row and reporting <code>maxCount</code> plus <code>attemptedCount</code>.</p>
+            </div>
+            <div class="mock-controller-kv-card">
+              <h3>Host app owns</h3>
+              <p>Warning copy, button disabling, and any business rule beyond the raw count limit.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-controller-card">
+        <div class="mock-controller-card__header">
+          <p class="mock-controller-eyebrow">Mode C</p>
+          <h2>Rendered cascade and indeterminate cues</h2>
+          <p>Use this state when review needs the DOM-only relationship between a selected branch, rendered descendants, and an unloaded descendant boundary.</p>
+        </div>
+        <div class="mock-controller-card__body">
+          <div class="mock-controller-chip-row">
+            <span class="mock-controller-chip">data-tree-view-selection-cascade-value</span>
+            <span class="mock-controller-chip mock-controller-chip--muted">true</span>
+            <span class="mock-controller-chip">data-tree-view-selection-indeterminate-value</span>
+            <span class="mock-controller-chip mock-controller-chip--muted">true</span>
+          </div>
+          <table class="tree-view-table mock-controller-table" aria-label="Cascade and indeterminate state">
+            <thead>
+              <tr>
+                <th scope="col">select</th>
+                <th scope="col">tree</th>
+                <th scope="col">name</th>
+                <th scope="col">rendered cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-expanded">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-checked="mixed" aria-label="Mixed parent row"></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">root</span></td>
+                <td>Quarter plan</td>
+                <td><span class="mock-controller-status mock-controller-status--warn">mixed parent</span></td>
+              </tr>
+              <tr class="tree-row is-selected">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Rendered child row"></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">child</span></td>
+                <td>Approved branch</td>
+                <td><span class="mock-controller-status mock-controller-status--ok">cascaded on</span></td>
+              </tr>
+              <tr class="tree-row">
+                <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Rendered sibling row"></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">child</span></td>
+                <td>Waiting branch</td>
+                <td><span class="mock-controller-status mock-controller-status--muted">still off</span></td>
+              </tr>
+              <tr class="tree-row">
+                <td class="tree-selection-cell"><span class="mock-controller-code">next page</span></td>
+                <td class="tree-toggle-cell"><span class="tree-toggle__level">descendants</span></td>
+                <td>Unloaded descendants stay outside the rendered cascade boundary.</td>
+                <td><span class="mock-controller-status mock-controller-status--muted">host app decides later</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="mock-controller-note">
+            TreeView updates only the rendered DOM. Server-side meaning for unloaded descendants, bulk actions, and follow-up messaging stays with the host app.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="controller-coverage-heading">
+      <h2 id="controller-coverage-heading">What this mock covers</h2>
+      <ul>
+        <li>Hidden input sync with a host-app controlled input name and one hidden input per valid checked payload</li>
+        <li>Max-count guardrails that revert the attempted checkbox without inventing business-specific warning UI</li>
+        <li>Rendered cascade and indeterminate cues, plus the boundary where unloaded descendants stop being TreeView's reusable responsibility</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
