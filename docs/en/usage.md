@@ -89,6 +89,8 @@ Each action hash includes:
 
 TreeView only supplies the metadata. Final HTML structure, styling, icons, and authorization rules stay in the host app.
 
+For a focused visual reference of enabled, disabled, and current-state toolbar variants without host-app routes or authorization copy, see [toolbar-actions.html](../mockups/toolbar-actions.html).
+
 ## Client-side expand/collapse
 
 Use `build_client_side` when all nodes in the render scope can be included in the initial HTML and you only need browser-local expand/collapse.
