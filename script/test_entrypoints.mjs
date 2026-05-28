@@ -59,6 +59,12 @@ assert(
   "TreeViewControllerIdentifiers export is out of sync"
 )
 
+const expectedSelectionCheckboxHooks = deepCamelizeKeys(javascriptPackageManifest.selection_checkbox_hooks)
+assert(
+  JSON.stringify(entrypointModule.TreeViewSelectionCheckboxHooks) === JSON.stringify(expectedSelectionCheckboxHooks),
+  "TreeViewSelectionCheckboxHooks export is out of sync"
+)
+
 const expectedRegistrations = javascriptPackageManifest.controller_registrations.map(({ identifier, export: exportName }) => {
   assert(exportName in entrypointModule, `${exportName} export is missing`)
   return [identifier, entrypointModule[exportName]]
