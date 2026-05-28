@@ -107,6 +107,19 @@ document.addEventListener("tree-view-selection:change", (event) => {
 
 Only checked and enabled `.tree-selection-checkbox` elements are included. Invalid JSON values are skipped and reported through `tree-view-selection:invalid-payload`.
 
+When host-app code or browser assertions need the documented selection-checkbox DOM hooks, use `TreeViewSelectionCheckboxHooks` from the package root instead of hand-copying `.tree-selection-checkbox` or `data-tree-selection-disabled-reason`.
+
+```js
+import { TreeViewSelectionCheckboxHooks } from "tree_view"
+
+const checkbox = document.querySelector(TreeViewSelectionCheckboxHooks.checkboxSelector)
+const disabledReason = checkbox?.getAttribute(
+  TreeViewSelectionCheckboxHooks.disabledReasonAttribute
+)
+```
+
+This keeps DOM queries aligned with the same public surface described in [Public API](public-api.md) while leaving selection payload semantics and business behavior in the host app.
+
 ## Hidden input sync for regular form submit
 
 When the tree sits inside a normal HTML form, the same controller can mirror checked payloads into hidden inputs on the nearest form.
