@@ -24,6 +24,12 @@ export const TreeViewEventNames = Object.freeze({
     change: "tree-view-remote-state:change",
     retry: "tree-view-remote-state:retry"
   }),
+  hostLifecycle: Object.freeze({
+    loading: "tree-view:loading",
+    loaded: "tree-view:loaded",
+    error: "tree-view:error",
+    retry: "tree-view:retry"
+  }),
   transfer: Object.freeze({
     dragStart: "tree-view-transfer:drag-start",
     dragOver: "tree-view-transfer:drag-over",
