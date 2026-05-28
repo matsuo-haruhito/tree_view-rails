@@ -50,6 +50,8 @@ This keeps the responsibilities separate:
 - TreeView owns tree structure and hierarchical row rendering.
 - The host app can override partials for presentation, queries, authorization, and business behavior.
 
+For a focused visual reference that compares shared hierarchy rows across fuller and narrower visible-column sets without adding host-app table logic, see [resource-table-bridge.html](../mockups/resource-table-bridge.html).
+
 ## When to use it
 
 For a regular TreeView integration, `TreeView::RenderState` is still the default choice.
