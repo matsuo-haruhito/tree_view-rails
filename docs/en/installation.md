@@ -15,13 +15,14 @@ GitHub Actions runs the following checks on pull requests:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
-- JavaScript tests through `npm install`
+- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
+- JavaScript tests through `npm install`, Playwright browser setup, and `npm run test:js`
 
 Pushes to `main` keep the heavier compatibility and release checks:
 
 - Ruby version matrix
-- Rails version matrix
-- JavaScript tests through `npm install`
+- Full Rails version matrix
+- JavaScript tests through `npm install` and `npm run test:js` until the lockfile is refreshed in sync with `package.json`
 - gem package verification
 
 The repository keeps a committed `package-lock.json`, but CI stays on `npm install` until that lockfile is refreshed in sync with `package.json`.
@@ -172,6 +173,11 @@ Use `.devcontainer/devcontainer.json` for VS Code Dev Containers.
 
 ## CI
 
-GitHub Actions runs `bundle exec standardrb`, `bundle exec rspec`, and JavaScript checks on pull requests.
+GitHub Actions runs the following on pull requests:
 
-On pushes to `main`, GitHub Actions runs the Ruby/Rails matrices, JavaScript tests, and gem package verification.
+- `bundle exec standardrb`
+- `bundle exec rspec`
+- representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
+- JavaScript checks through `npm install`, Playwright browser setup, and `npm run test:js`
+
+On pushes to `main`, GitHub Actions runs the Ruby version matrix, full Rails version matrix, JavaScript tests, and gem package verification.
