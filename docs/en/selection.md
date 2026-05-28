@@ -131,6 +131,19 @@ With `data-tree-view-selection-hidden-input-name-value`, TreeView writes one hid
 - Disabled checkboxes and invalid JSON payloads are skipped, matching the existing event payload behavior.
 - If the tree is not inside a form, TreeView keeps dispatching selection events and does not create hidden inputs.
 
+## Machine-readable value attribute names
+
+If the host app already imports `tree_view/index.js`, prefer `TreeViewSelectionValueAttributes` for JavaScript wiring and browser assertions instead of hand-copying selection-controller host-element attribute names. The raw HTML attribute names remain part of the documented contract.
+
+| Export key | Raw attribute | Used for |
+|---|---|---|
+| `TreeViewSelectionValueAttributes.hiddenInputName` | `data-tree-view-selection-hidden-input-name-value` | Hidden-input sync into the nearest form |
+| `TreeViewSelectionValueAttributes.maxCount` | `data-tree-view-selection-max-count-value` | Client-side selection limit |
+| `TreeViewSelectionValueAttributes.cascade` | `data-tree-view-selection-cascade-value` | Rendered-row cascade behavior |
+| `TreeViewSelectionValueAttributes.indeterminate` | `data-tree-view-selection-indeterminate-value` | Parent mixed-state updates |
+
+Use those host-element value attributes to configure the Stimulus controller. Keep row-level payload meaning, disabled-state decisions, and checkbox visibility in the render-state `selection:` builders.
+
 ## Selection max count
 
 Host apps can limit the number of checked boxes on the JavaScript controller.
