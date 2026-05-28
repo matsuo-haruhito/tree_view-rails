@@ -3,7 +3,9 @@
 require "spec_helper"
 
 RSpec.describe "packaged gem files" do
-  subject(:files) { Gem::Specification.load("tree_view.gemspec").files }
+  let(:specification) { Gem::Specification.load("tree_view.gemspec") }
+
+  subject(:files) { specification.files }
 
   let(:entrypoint_controller_files) do
     %w[
@@ -45,6 +47,15 @@ RSpec.describe "packaged gem files" do
     )
     expect(files.grep(/\ALICENSE/)).not_to be_empty
     expect(files.grep(%r{\Adocs/})).not_to be_empty
+  end
+
+  it "includes bug tracker metadata for RubyGems consumers" do
+    expect(specification.metadata).to include(
+      "homepage_uri" => specification.homepage,
+      "source_code_uri" => specification.homepage,
+      "changelog_uri" => "#{specification.homepage}/blob/main/CHANGELOG.md",
+      "bug_tracker_uri" => "#{specification.homepage}/issues"
+    )
   end
 
   it "excludes development-only files" do
