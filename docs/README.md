@@ -23,6 +23,8 @@
 
 ## Maintainer entry points
 
+- [English documentation](en/README.md): full English docs map, reading order, and maintainer-facing entry points within the English tree.
+- [日本語ドキュメント](ja/README.md): 日本語 docs tree の full map、reading order、maintainer-facing entry points。
 - [Product Profile](../Product%20Profile.md): repository positioning, source-of-truth order, host app responsibilities, and non-goals.
 - [AGENTS.md](../AGENTS.md): repository-specific maintainer workflow, first-read order, and documentation update rules.
 - [Documentation maintenance checklist](i18n-audit.md): language-sync rules, technical-asset inventory, and cross-language update coverage.
