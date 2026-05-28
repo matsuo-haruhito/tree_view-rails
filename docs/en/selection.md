@@ -89,10 +89,14 @@ The return value from `disabled_reason_builder` is rendered as the checkbox `tit
 </button>
 ```
 
+If your host app already imports `tree_view/index.js`, prefer `TreeViewEventNames` when wiring listeners so you do not have to hand-copy raw event-name strings. The raw strings remain part of the documented event contract. See [JavaScript event contract](js-events.md) and [Public API](public-api.md).
+
 When `submit` runs, the controller dispatches a `tree-view-selection:selected` event.
 
 ```js
-document.addEventListener("tree-view-selection:selected", (event) => {
+import { TreeViewEventNames } from "tree_view"
+
+document.addEventListener(TreeViewEventNames.selection.selected, (event) => {
   console.log(event.detail.payloads)
 })
 ```
@@ -100,12 +104,14 @@ document.addEventListener("tree-view-selection:selected", (event) => {
 When the controller connects or selection changes, it dispatches `tree-view-selection:change`.
 
 ```js
-document.addEventListener("tree-view-selection:change", (event) => {
+import { TreeViewEventNames } from "tree_view"
+
+document.addEventListener(TreeViewEventNames.selection.change, (event) => {
   const { selectedCount, selectedValues, selectedPayloads } = event.detail
 })
 ```
 
-Only checked and enabled `.tree-selection-checkbox` elements are included. Invalid JSON values are skipped and reported through `tree-view-selection:invalid-payload`.
+Only checked and enabled `.tree-selection-checkbox` elements are included. Invalid JSON values are skipped and reported through the same documented invalid-payload event (`TreeViewEventNames.selection.invalidPayload` or raw `tree-view-selection:invalid-payload`).
 
 ## Hidden input sync for regular form submit
 
@@ -147,7 +153,9 @@ Host apps can limit the number of checked boxes on the JavaScript controller.
 When a user exceeds the limit, TreeView unchecks the attempted checkbox and dispatches `tree-view-selection:limit-exceeded`.
 
 ```js
-document.addEventListener("tree-view-selection:limit-exceeded", (event) => {
+import { TreeViewEventNames } from "tree_view"
+
+document.addEventListener(TreeViewEventNames.selection.limitExceeded, (event) => {
   const { maxCount, attemptedCount } = event.detail
 })
 ```

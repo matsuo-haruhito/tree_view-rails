@@ -29,11 +29,13 @@ host app が直接使ってよい主な入口は以下です。
 - `TreeView::UiConfig`
 - `TreeView::UiConfigBuilder`
 - `TreeView::GraphAdapter`
+- `TreeView::NodePresenter`
 - `TreeView::PathTree`
 - `TreeView::PathTreeBuilder`
 - `TreeView::ReverseTree`
 - `TreeView::PersistedState`
 - `TreeView::StateStore`
+- `TreeView::Diagnostics`
 - `tree_view_rows(render_state)`
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
