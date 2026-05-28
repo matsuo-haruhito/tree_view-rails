@@ -45,6 +45,12 @@ tree_ui = TreeView::UiConfigBuilder.new(
 
 `collapse_all_except_current_path` はhost appとのcontractです。TreeViewはtoolbar actionとstate値を出すだけです。
 
+## Visual reference
+
+expand-all、collapse-all、current path を残す toolbar state を静的に見比べたい場合は [toolbar-actions.html](../mockups/toolbar-actions.html) を参照してください。
+
+この mockup は、この helper の責務境界を視覚的に補うためのものです。action の見え方と `:current_path` contract を確認できますが、route、authorization copy、Turbo response behavior 自体を定義するものではありません。
+
 ## label と class の変更
 
 ```erb

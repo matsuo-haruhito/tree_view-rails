@@ -39,6 +39,10 @@ TreeView は host app の業務columnsをtable row内に描画するため、現
 - 空状態 row は、message を `.tree-view-empty-row__content` と `.tree-view-empty-row__message` で包み、wrapper に `data-tree-view-empty-state="true"` を付けます。host app は partial override なしで空状態を装飾・target できます。
 - static hidden count の screen reader 向け suffix は `tree_view.accessibility.hidden_descendants` から取得します。default は ` descendants` で、host app 側 locale で差し替えできます。
 
+no-root-items と no-results row、再利用可能な empty-row wrapper hook、host-app-owned copy boundary を静的に見比べたい場合は [empty-state.html](../mockups/empty-state.html) を参照してください。
+
+この mockup は、この policy を視覚的に補うためのものです。ARIA behavior、CTA copy、filter-reset workflow を定義し直すものではありません。
+
 ## 対応している描画例
 
 ### Static table rows

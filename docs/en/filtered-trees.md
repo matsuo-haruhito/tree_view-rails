@@ -36,6 +36,12 @@ render_state = TreeView::RenderState.new(
 | `:with_descendants` | Include matched nodes and descendants. |
 | `:with_ancestors_and_descendants` | Include matched nodes, ancestors, and descendants. |
 
+## Visual reference
+
+For a static comparison of representative matched-only, ancestor-retaining, and descendant-retaining output, see [filtered-tree-modes.html](../mockups/filtered-tree-modes.html).
+
+Use that mockup together with the mode table above. `:with_ancestors_and_descendants` remains the combined case described on this page, while search queries, ranking, and highlighting stay host-app concerns.
+
 ## Difference from PathTree
 
 `path_tree_for` fills paths from roots to specified items.

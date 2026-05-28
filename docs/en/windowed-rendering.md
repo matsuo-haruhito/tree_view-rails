@@ -46,6 +46,12 @@ Main metadata:
 | `has_previous?` | Whether a previous window exists. |
 | `has_next?` | Whether a next window exists. |
 
+## Visual reference
+
+For a static side-by-side comparison of `offset` / `limit` slices, current-row anchoring, and previous or next metadata without host-app pagination behavior, see [windowed-rendering.html](../mockups/windowed-rendering.html).
+
+Use that mockup together with the API examples on this page; the host app still owns offset persistence, pagination controls, and route/query design.
+
 ## Keep the current row inside the window
 
 For navigation-heavy trees, the host app often wants to keep the currently selected row near the middle of the rendered window instead of always starting from offset `0`.

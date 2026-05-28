@@ -46,6 +46,12 @@ window = tree_view_window(@render_state, offset: 0, limit: 50)
 | `has_previous?` | 前のwindowが存在するか。 |
 | `has_next?` | 次のwindowが存在するか。 |
 
+## Visual reference
+
+`offset` / `limit` による切り出し、current-row anchoring、previous / next metadata を host-app 側の pagination behavior なしで静的に見比べたい場合は [windowed-rendering.html](../mockups/windowed-rendering.html) を参照してください。
+
+この mockup は、このページの API 例を視覚的に補うためのものです。offset の持ち回り、pagination controls、route / query 設計は引き続き host app 側の責務です。
+
 ## current row を window 内に寄せる
 
 navigation が多いtreeでは、常に offset `0` から始めるよりも、現在選択中の行を window の中央付近に保ちたいことがあります。
