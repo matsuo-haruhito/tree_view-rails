@@ -141,6 +141,8 @@ host app側のplaceholder領域を描画するときは、TreeView helper で ch
 <span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent)) %>></span>
 ```
 
+これらの helper 名も documented public helper surface の一部です。placeholder region や Turbo Stream replacement を組むとき、host app はこれらを直接使ってかまいません。
+
 ## Turbo Stream response pattern
 
 host appが所有するsubtreeやplaceholder領域だけを返します。

@@ -188,6 +188,26 @@ RSpec.describe "Public API compatibility" do
     end
   end
 
+  it "keeps documented lazy-loading helper behavior available through TreeViewHelper" do
+    helper_class = Class.new do
+      include TreeViewHelper
+
+      attr_accessor :tree_ui
+    end
+
+    item = PublicApiCompatibilityTestNode.new(id: 1, parent_id: nil, name: "Root")
+    helper = helper_class.new
+    helper.tree_ui = public_ui_config
+
+    expect(helper.tree_children_container_dom_id(item)).to eq("node_1_children")
+    expect(helper.tree_remote_state_placeholder_dom_id(item)).to eq("node_1_remote_state")
+    expect(helper.tree_remote_state_placeholder_attributes(item)).to eq({id: "node_1_remote_state"})
+    expect(helper.tree_remote_state_placeholder_attributes(item, state: :loading)).to eq({
+      id: "node_1_remote_state",
+      data: {tree_remote_state: "loading"}
+    })
+  end
+
   it "keeps documented JavaScript package-root exports available" do
     source = javascript_entrypoint_source
 
