@@ -74,12 +74,16 @@ javascript_package_root:
   named_exports:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
+    - TreeViewSelectionCheckboxHooks
     - TreeViewStateController
     - TreeViewClientController
     - TreeViewSelectionController
     - TreeViewTransferController
     - TreeViewRemoteStateController
     - TreeViewEventNames
+  selection_checkbox_hooks:
+    checkbox_selector: .tree-selection-checkbox
+    disabled_reason_attribute: data-tree-selection-disabled-reason
   controller_registrations:
     - key: state
       identifier: tree-view-state
