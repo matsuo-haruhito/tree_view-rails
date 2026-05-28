@@ -50,6 +50,8 @@ render_state = TreeView::ResourceTableRenderState.call(
 - TreeView: tree構造と階層行の描画
 - host app: 必要に応じたpartial差し替え、query、認可、業務処理
 
+shared hierarchy rows と、より多い visible column / より少ない visible column の比較を host app 側の table logic なしで見たい場合は [resource-table-bridge.html](../mockups/resource-table-bridge.html) を参照してください。
+
 ## 使うべき場面
 
 通常のTreeViewでは、従来通り `TreeView::RenderState` を直接使って問題ありません。
