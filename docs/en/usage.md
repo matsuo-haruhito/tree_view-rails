@@ -261,6 +261,8 @@ Use narrower markers when only one tree behavior should ignore the control:
 - `data-tree-view-ignore-row-click="true"` is reserved for row-click integrations in host apps.
 - `data-tree-view-ignore-drag="true"` prevents TreeView transfer drag start from that control.
 
+The raw attribute names remain part of the documented integration contract, but host apps can avoid repeating them by using `TreeViewIntegrationHooks.interactive.marker`, `TreeViewIntegrationHooks.interactive.ignoreKeyboard`, `TreeViewIntegrationHooks.interactive.ignoreRowClick`, and `TreeViewIntegrationHooks.interactive.ignoreDrag` from the public package-root export described in [Public API](public-api.md).
+
 These markers only opt a control out of TreeView behavior. Validation, persistence, authorization, CRUD routes, and inline editing flows still belong to the host app.
 
 ## Grouped options
