@@ -97,6 +97,8 @@ TreeView はmetadataだけを提供します。最終的なHTML構造、style、
 
 TreeView が提供するのは metadata までです。最終的な HTML 構造、style、icon、authorization rule は host app 側で決めます。
 
+enabled / disabled / current-state の toolbar variation を、host app の route や authorization copy なしで見比べたい場合は [toolbar-actions.html](../mockups/toolbar-actions.html) を参照してください。
+
 ## client-side開閉
 
 `max_render_depth` / `max_leaf_distance` の範囲内のnodeを初期HTMLに含めても問題ない小〜中規模treeでは、`build_client_side` を使えます。Turbo routeやTurbo Stream responseを用意せず、browser内だけで開閉します。
