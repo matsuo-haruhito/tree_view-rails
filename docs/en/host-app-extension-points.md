@@ -46,6 +46,8 @@ The partial can include application-owned controls such as inputs, selects, butt
 
 See [Usage](usage.md#interactive-controls-inside-rows) for complete row-control examples.
 
+For static visual comparisons of these markers, use [interactive-marker-behaviors.html](../mockups/interactive-marker-behaviors.html) to compare the broad interactive marker against the narrower keyboard, row-click, and drag markers, and [drag-interactive-controls.html](../mockups/drag-interactive-controls.html) to inspect draggable rows that mix native controls with drag-safe custom widgets.
+
 ## Row class / data builders
 
 ```ruby
