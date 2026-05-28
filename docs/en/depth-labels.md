@@ -63,6 +63,12 @@ Common values:
 | `tree` | Current tree. |
 | `render_state` | Current RenderState. |
 
+## Focused visual reference
+
+For a static comparison of depth cues beside row-wide status states, see [row-status-depth-labels.html](../mockups/row-status-depth-labels.html).
+
+That mockup keeps labels product-neutral so you can review hierarchy cues separately from host-app business wording and authorization meaning.
+
 ## Responsibility boundary
 
 | Area | TreeView | Host app |
