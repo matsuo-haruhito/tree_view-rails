@@ -80,6 +80,8 @@ Drag startだけを無視し、他のTreeView動作は残したい場合は `dat
 
 keyboardやrow interaction向けのmarkerは [使い方](usage.md#行内のinteractive-control) を参照してください。
 
+静的な見比べ用リファレンスとして、native control と `data-tree-view-interactive` / `data-tree-view-ignore-drag` の共存は [drag-interactive-controls.html](../mockups/drag-interactive-controls.html) を参照し、keyboard・row-click・drag marker まで含めた広い比較が必要なときは [interactive-marker-behaviors.html](../mockups/interactive-marker-behaviors.html) を参照してください。
+
 ## drop処理
 
 drop先はhost app側で実装します。
