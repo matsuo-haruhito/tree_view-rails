@@ -68,6 +68,12 @@ breadcrumb helper は records mode のtreeを前提にします。
 
 resolver mode や adapter mode では、親方向のpathを一意に辿れない場合があります。そのため、unsupported modeでは `TreeView::Tree` 側のpath helper errorを使って明確に失敗します。
 
+## Visual reference
+
+breadcrumb path の文脈と tree 自体の current-row cue を静的に見比べたい場合は [breadcrumb-paths.html](../mockups/breadcrumb-paths.html) を参照してください。
+
+この mockup は、この helper の責務境界を視覚的に補うためのものです。path lookup の文脈、current item の描画、host app 側が持つ route / authorization の判断を見比べられますが、route や Turbo navigation 自体を定義するものではありません。
+
 ## 責務範囲
 
 | Area | TreeView | Host app |
