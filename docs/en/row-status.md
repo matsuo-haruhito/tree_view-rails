@@ -77,6 +77,12 @@ render_state = TreeView::RenderState.new(
 | Disable a checkbox | `selection[:disabled_builder]` |
 | Show an entire row as disabled or readonly | `row_status_builder` |
 
+## Focused visual reference
+
+For a static comparison of row-wide disabled or readonly cues, checkbox-only disabled reasons, and the structural role of depth labels, see [row-status-depth-labels.html](../mockups/row-status-depth-labels.html).
+
+Use that mockup as a visual companion to this guide. Business wording, authorization decisions, and action policy still belong to the host app.
+
 ## Responsibility boundary
 
 | Area | TreeView | Host app |
