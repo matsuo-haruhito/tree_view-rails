@@ -66,8 +66,13 @@ Documented non-toolbar helpers that are part of that public helper surface inclu
 - `tree_view_rows(render_state, window: nil)` renders TreeView rows, including opt-in windowed rendering.
 - `tree_view_window(render_state, offset:, limit:)` returns documented window metadata for visible rows.
 - `tree_node_dom_id(item_or_id, ui: @tree_ui)` builds node DOM IDs through the resolved `UiConfig`.
+- `tree_children_container_dom_id(item, ui: @tree_ui)` builds the stable children-container DOM ID used by lazy-loading host-app placeholder regions.
+- `tree_remote_state_placeholder_dom_id(item, ui: @tree_ui)` builds the stable remote-state placeholder DOM ID for one row.
+- `tree_remote_state_placeholder_attributes(item, state: nil, ui: @tree_ui)` returns the documented placeholder `id` and optional `data-tree-remote-state` attribute for host-app lazy-loading responses.
 - `tree_selection_value(item, tree, builder = nil)` serializes the documented checkbox payload contract for host-app selection wiring and assertions.
 - `tree_view_breadcrumb(tree, item, ...)` renders a breadcrumb path for a node.
+
+For host apps that own lazy-loading placeholder regions, these three lazy-loading helpers are part of the same stable helper surface described in [Lazy Loading](lazy-loading.md). Use them instead of reconstructing placeholder IDs or `data-tree-remote-state` attributes by hand.
 
 For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` rather than internal constants.
 Documented toolbar helpers are part of that public helper surface:
