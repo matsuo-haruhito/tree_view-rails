@@ -107,6 +107,19 @@ document.addEventListener("tree-view-selection:change", (event) => {
 
 対象になるのは、checked かつ enabled な `.tree-selection-checkbox` だけです。不正なJSON値はskipされ、`tree-view-selection:invalid-payload` で通知されます。
 
+host app 側の code や browser assertion が documented な selection checkbox DOM hook を使いたい場合は、`.tree-selection-checkbox` や `data-tree-selection-disabled-reason` を直書きせず、package root の `TreeViewSelectionCheckboxHooks` を使ってください。
+
+```js
+import { TreeViewSelectionCheckboxHooks } from "tree_view"
+
+const checkbox = document.querySelector(TreeViewSelectionCheckboxHooks.checkboxSelector)
+const disabledReason = checkbox?.getAttribute(
+  TreeViewSelectionCheckboxHooks.disabledReasonAttribute
+)
+```
+
+これで DOM query を [Public API](public-api.md) で管理している同じ公開 surface にそろえつつ、selection payload semantics や business behavior は host app 側の責務のまま保てます。
+
 ## 通常form送信用の hidden input 同期
 
 tree が通常の HTML form の中にある場合、同じ controller で checked payload を最寄りの form に hidden input としてミラーできます。
