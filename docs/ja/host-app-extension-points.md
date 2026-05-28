@@ -46,6 +46,8 @@ row_partial: "documents/tree_columns"
 
 詳しいrow control例は [使い方](usage.md#行内のinteractive-control) を参照してください。
 
+これらのmarkerを静的に見比べたいときは、広い interactive marker と keyboard / row-click / drag 用の狭い marker の役割差分を [interactive-marker-behaviors.html](../mockups/interactive-marker-behaviors.html) で確認し、draggable row の中で native control と drag-safe custom widget がどう共存するかは [drag-interactive-controls.html](../mockups/drag-interactive-controls.html) を参照してください。
+
 ## row class / data builders
 
 ```ruby
