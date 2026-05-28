@@ -45,6 +45,12 @@ Supported actions:
 
 `collapse_all_except_current_path` is a host-app contract. TreeView only emits the toolbar action and state value.
 
+## Visual reference
+
+For a static comparison of expand-all, collapse-all, and current-path-preserving toolbar states, see [toolbar-actions.html](../mockups/toolbar-actions.html).
+
+Use that mockup as a visual companion to this helper boundary: it highlights action affordances and the `:current_path` contract without defining routes, authorization copy, or Turbo response behavior.
+
 ## Custom labels and classes
 
 ```erb
