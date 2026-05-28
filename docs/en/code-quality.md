@@ -37,10 +37,10 @@ Pull request CI also runs Ruby specs before merge so Ruby behavior and public AP
 JavaScript tests:
 
 ```bash
-npm test
+npm run test:js
 ```
 
-JavaScript tests run in the broader `main` CI and should be run locally for JavaScript changes.
+This documented JavaScript lane runs the entrypoint smoke check (`npm run test:entrypoints`), Vitest unit tests (`npm test`), and Playwright browser smoke (`npm run test:browser`). Pull request CI and `main`-push CI both run this lane, and the same commands should be run locally when JavaScript behavior, documented exports, or browser interactions change.
 
 Package verification:
 
@@ -86,5 +86,5 @@ User-facing docs should include, when practical:
 - API names match existing docs.
 - Examples match the actual API.
 - Root docs, `docs/ja`, `docs/en`, and the i18n audit stay consistent.
-- PR CI lint and Ruby specs pass.
+- PR CI lint, Ruby specs, representative Rails checks, and JavaScript checks pass.
 - Full compatibility and package verification on `main` remains green before release decisions.
