@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Row status and depth labels mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.tree-row--readonly {
+  background: #f8fafc;
+}
+
+.tree-row--disabled {
+  background: #fff1f2;
+}
+
+.mock-inline-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.45rem;
+  color: #52606d;
+  font-size: 0.82rem;
+}
+
+.mock-inline-note strong {
+  color: #102a43;
+}
+
+.mock-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.mock-boundary-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #52606d;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Row status and depth labels</h1>
+      <p>
+        Focused static reference for comparing row-wide status cues, disabled selection checkboxes, and depth labels without turning the mockup into a host-app authorization or business-copy example.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="row-status-heading">
+      <h2 id="row-status-heading">Row status stays row-wide</h2>
+      <p>
+        Compare row-wide disabled and readonly cues against a disabled checkbox state. The status badge colors the row context; the checkbox-disabled reason only explains why selection is blocked for that row.
+      </p>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">select</th>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">status cue</th>
+            <th scope="col">review note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tree-row is-expanded" aria-level="1" aria-expanded="true">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" type="checkbox">
+            </td>
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Normal row expanded">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#">hide</a>
+                  <span class="tree-toggle__level">root</span>
+                </span>
+              </span>
+              <span class="tree-node-marker">folder</span>
+              <span class="tree-depth-label">L0</span>
+            </td>
+            <td>Operations workspace</td>
+            <td><span class="mock-status mock-status--active">active</span></td>
+            <td>Normal row without selection restrictions.</td>
+          </tr>
+          <tr class="tree-row tree-row--readonly" aria-level="2">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" type="checkbox">
+            </td>
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Readonly child row">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-last"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">child</span>
+                </span>
+              </span>
+              <span class="tree-node-marker">folder</span>
+              <span class="tree-depth-label">L1</span>
+            </td>
+            <td>Quarter close archive</td>
+            <td><span class="mock-status mock-status--pending">readonly</span></td>
+            <td>The row cue explains the broader state even though selection still uses the ordinary checkbox path.</td>
+          </tr>
+          <tr class="tree-row tree-row--disabled" aria-level="2">
+            <td class="tree-selection-cell">
+              <input class="tree-selection-checkbox" type="checkbox" disabled title="Disabled rows cannot be selected">
+            </td>
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Disabled child row">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-last"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">child</span>
+                </span>
+              </span>
+              <span class="tree-node-marker">folder</span>
+              <span class="tree-depth-label">L1</span>
+            </td>
+            <td>Security hold queue</td>
+            <td><span class="mock-status mock-status--error">disabled</span></td>
+            <td>The blocked checkbox is narrower than the row cue. It only explains selection, not every business action on the row.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="depth-label-heading">
+      <h2 id="depth-label-heading">Depth labels stay structural</h2>
+      <p>
+        Depth labels help reviewers see hierarchy position at a glance. They do not claim business meaning on their own, so the mock keeps them short and product-neutral.
+      </p>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">label cue</th>
+            <th scope="col">what stays outside TreeView</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tree-row" aria-level="1">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Root row">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">root</span>
+                </span>
+              </span>
+              <span class="tree-node-marker">folder</span>
+            </td>
+            <td><span class="tree-depth-label">L0</span></td>
+            <td>Whether the root means portfolio, region, or category stays host-app owned.</td>
+          </tr>
+          <tr class="tree-row" aria-level="2">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Child row">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">child</span>
+                </span>
+              </span>
+              <span class="tree-node-marker">folder</span>
+            </td>
+            <td><span class="tree-depth-label">L1</span></td>
+            <td>Styling and wording can change in the host app without changing the reusable hierarchy output.</td>
+          </tr>
+          <tr class="tree-row" aria-level="3">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Leaf row">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-last"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">leaf</span>
+                </span>
+              </span>
+              <span class="tree-node-marker">file</span>
+            </td>
+            <td><span class="tree-depth-label">L2</span></td>
+            <td>Depth cue remains separate from approval, archive, or permission states.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="combined-heading">
+      <h2 id="combined-heading">Combined cues still keep separate jobs</h2>
+      <div class="mock-grid">
+        <table class="tree-view-table">
+          <thead>
+            <tr>
+              <th scope="col">select</th>
+              <th scope="col">tree</th>
+              <th scope="col">name</th>
+              <th scope="col">status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tree-row tree-row--readonly" aria-level="3">
+              <td class="tree-selection-cell">
+                <input class="tree-selection-checkbox" type="checkbox" disabled title="Readonly rows are not selectable in this host app">
+              </td>
+              <td class="tree-toggle-cell">
+                <span class="tree-toggle" aria-label="Readonly leaf row">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot has-line"></span>
+                    <span class="tree-toggle__branch-slot has-line"></span>
+                    <span class="tree-toggle__branch-slot is-current is-last"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <span class="tree-toggle__level">leaf</span>
+                  </span>
+                </span>
+                <span class="tree-node-marker">file</span>
+                <span class="tree-depth-label">L2</span>
+                <span class="mock-inline-note"><strong>Disabled checkbox:</strong> selection only</span>
+              </td>
+              <td>Revenue workbook</td>
+              <td><span class="mock-status mock-status--pending">readonly</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <ul class="mock-boundary-list">
+          <li>Row status remains the broad row cue for the host-app state.</li>
+          <li>The disabled checkbox only explains why selection is blocked.</li>
+          <li>The depth label stays structural and does not replace business wording.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
