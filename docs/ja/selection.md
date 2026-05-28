@@ -131,6 +131,19 @@ tree が通常の HTML form の中にある場合、同じ controller で checke
 - disabled checkbox と不正な JSON payload は既存 event と同じく skip されます。
 - tree が form の外にある場合は、selection event だけを dispatch し、hidden input は生成しません。
 
+## machine-readable な value attribute 名
+
+host app がすでに `tree_view/index.js` を import しているなら、selection controller の host-element attribute 名を写経する代わりに `TreeViewSelectionValueAttributes` を使ってください。raw の HTML attribute 名も引き続き documented contract の一部です。
+
+| Export key | Raw attribute | 用途 |
+|---|---|---|
+| `TreeViewSelectionValueAttributes.hiddenInputName` | `data-tree-view-selection-hidden-input-name-value` | 最寄り form への hidden input sync |
+| `TreeViewSelectionValueAttributes.maxCount` | `data-tree-view-selection-max-count-value` | client-side の最大選択数制限 |
+| `TreeViewSelectionValueAttributes.cascade` | `data-tree-view-selection-cascade-value` | 描画済み行どうしの cascade 挙動 |
+| `TreeViewSelectionValueAttributes.indeterminate` | `data-tree-view-selection-indeterminate-value` | 親 checkbox の mixed-state 更新 |
+
+これらの host-element value attribute は Stimulus controller の設定に使います。row ごとの payload 意味づけ、disabled-state 判定、checkbox visibility は render-state 側の `selection:` builder に残してください。
+
 ## 最大選択数
 
 JavaScript controller側で、checked checkboxの最大数を制限できます。
