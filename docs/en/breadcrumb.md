@@ -68,6 +68,12 @@ The breadcrumb helper expects a records-mode tree.
 
 Resolver mode and adapter mode may not have a unique parent path. For unsupported modes, TreeView raises through the tree path helper so the failure is explicit.
 
+## Visual reference
+
+For a static comparison of breadcrumb-path context beside the tree's own current-row cue, see [breadcrumb-paths.html](../mockups/breadcrumb-paths.html).
+
+Use that mockup as a visual companion to this helper boundary: it highlights path lookup context, current-item rendering, and the host-app-owned route or authorization decisions without defining routes or Turbo navigation.
+
 ## Responsibility boundary
 
 | Area | TreeView | Host app |
