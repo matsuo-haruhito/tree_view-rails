@@ -77,6 +77,12 @@ row status は行全体の見た目や状態を表すためのhookです。
 | checkboxを選択不可にする | `selection[:disabled_builder]` |
 | 行全体をdisabled / readonly風に見せる | `row_status_builder` |
 
+## Focused visual reference
+
+行全体の disabled / readonly cue、checkbox だけの disabled reason、depth label が持つ構造的な役割を静的に見比べたい場合は [row-status-depth-labels.html](../mockups/row-status-depth-labels.html) を参照してください。
+
+この mockup は guide 本文の補助となる visual reference です。業務文言、認可判断、操作ポリシーは引き続き host app 側で扱います。
+
 ## 責務範囲
 
 | Area | TreeView | Host app |
