@@ -240,7 +240,7 @@
       <p class="mock-kicker">tree_view-rails</p>
       <h1>Toolbar action states mock</h1>
       <p>
-        Static reference for tree-wide expand and collapse actions. This page keeps the review surface focused on
+        Static reference for tree-wide expand, collapse, and current-path-preserving actions. This page keeps the review surface focused on
         enabled, disabled, and current-state cues without bringing in host-app routes, authorization, or business wording.
       </p>
     </header>
@@ -263,7 +263,7 @@
           <div class="mock-toolbar">
             <div class="mock-toolbar__copy">
               <p class="mock-toolbar__eyebrow">State A</p>
-              <p class="mock-toolbar__title">Mixed tree, both actions available</p>
+              <p class="mock-toolbar__title">Mixed tree, every action available</p>
             </div>
             <div class="mock-toolbar__actions" aria-label="Tree-wide actions">
               <a class="mock-toolbar-button" href="#" data-mock-state="expand-enabled">
@@ -273,6 +273,10 @@
               <a class="mock-toolbar-button" href="#" data-mock-state="collapse-enabled">
                 <span class="mock-toolbar-button__icon" aria-hidden="true">-</span>
                 <span>Collapse all</span>
+              </a>
+              <a class="mock-toolbar-button" href="#" data-mock-state="current-path-enabled">
+                <span class="mock-toolbar-button__icon" aria-hidden="true">=</span>
+                <span>Collapse to current path</span>
               </a>
             </div>
           </div>
@@ -290,13 +294,26 @@
               </div>
               <span class="mock-toolbar-pill">expanded</span>
             </div>
+            <div class="mock-toolbar-node is-expanded">
+              <div class="mock-toolbar-node__tree">
+                <span class="mock-toolbar-node__caret" aria-hidden="true">-</span>
+                <div>
+                  <strong>Operations</strong>
+                  <div class="mock-toolbar-node__meta">
+                    <span class="mock-toolbar-pill">current path</span>
+                    <span class="mock-toolbar-pill">children visible</span>
+                  </div>
+                </div>
+              </div>
+              <span class="mock-toolbar-pill">expanded</span>
+            </div>
             <div class="mock-toolbar-node is-collapsed">
               <div class="mock-toolbar-node__tree">
                 <span class="mock-toolbar-node__caret" aria-hidden="true">+</span>
                 <div>
-                  <strong>Operations</strong>
+                  <strong>Billing</strong>
                   <div class="mock-toolbar-node__meta">
-                    <span class="mock-toolbar-pill">child</span>
+                    <span class="mock-toolbar-pill">sibling</span>
                     <span class="mock-toolbar-pill">12 hidden rows</span>
                   </div>
                 </div>
@@ -320,6 +337,10 @@
               <a class="mock-toolbar-button mock-toolbar-button--current" href="#" data-mock-state="collapse-current">
                 <span class="mock-toolbar-button__icon" aria-hidden="true">-</span>
                 <span>Collapse all</span>
+              </a>
+              <a class="mock-toolbar-button" href="#" data-mock-state="current-path-ready">
+                <span class="mock-toolbar-button__icon" aria-hidden="true">=</span>
+                <span>Collapse to current path</span>
               </a>
             </div>
           </div>
@@ -368,6 +389,10 @@
                 <span class="mock-toolbar-button__icon" aria-hidden="true">-</span>
                 <span>Collapse all</span>
               </button>
+              <button class="mock-toolbar-button" type="button" aria-disabled="true">
+                <span class="mock-toolbar-button__icon" aria-hidden="true">=</span>
+                <span>Collapse to current path</span>
+              </button>
             </div>
           </div>
           <div class="mock-toolbar-preview" aria-label="All collapsed tree preview">
@@ -399,6 +424,70 @@
             </div>
           </div>
         </div>
+
+        <div class="mock-toolbar-frame">
+          <div class="mock-toolbar">
+            <div class="mock-toolbar__copy">
+              <p class="mock-toolbar__eyebrow">State D</p>
+              <p class="mock-toolbar__title">Only the current path stays open</p>
+            </div>
+            <div class="mock-toolbar__actions" aria-label="Tree-wide actions">
+              <a class="mock-toolbar-button" href="#" data-mock-state="expand-ready">
+                <span class="mock-toolbar-button__icon" aria-hidden="true">+</span>
+                <span>Expand all</span>
+              </a>
+              <a class="mock-toolbar-button" href="#" data-mock-state="collapse-ready">
+                <span class="mock-toolbar-button__icon" aria-hidden="true">-</span>
+                <span>Collapse all</span>
+              </a>
+              <a class="mock-toolbar-button mock-toolbar-button--current" href="#" data-mock-state="current-path-current">
+                <span class="mock-toolbar-button__icon" aria-hidden="true">=</span>
+                <span>Collapse to current path</span>
+              </a>
+            </div>
+          </div>
+          <div class="mock-toolbar-preview" aria-label="Current path preserved tree preview">
+            <div class="mock-toolbar-node is-expanded">
+              <div class="mock-toolbar-node__tree">
+                <span class="mock-toolbar-node__caret" aria-hidden="true">-</span>
+                <div>
+                  <strong>Platform</strong>
+                  <div class="mock-toolbar-node__meta">
+                    <span class="mock-toolbar-pill">root</span>
+                    <span class="mock-toolbar-pill">current path kept open</span>
+                  </div>
+                </div>
+              </div>
+              <span class="mock-toolbar-pill">expanded</span>
+            </div>
+            <div class="mock-toolbar-node is-expanded">
+              <div class="mock-toolbar-node__tree">
+                <span class="mock-toolbar-node__caret" aria-hidden="true">-</span>
+                <div>
+                  <strong>Invoices</strong>
+                  <div class="mock-toolbar-node__meta">
+                    <span class="mock-toolbar-pill">current row branch</span>
+                    <span class="mock-toolbar-pill">siblings stay closed</span>
+                  </div>
+                </div>
+              </div>
+              <span class="mock-toolbar-pill">expanded</span>
+            </div>
+            <div class="mock-toolbar-node is-collapsed">
+              <div class="mock-toolbar-node__tree">
+                <span class="mock-toolbar-node__caret" aria-hidden="true">+</span>
+                <div>
+                  <strong>Support</strong>
+                  <div class="mock-toolbar-node__meta">
+                    <span class="mock-toolbar-pill">sibling branch</span>
+                    <span class="mock-toolbar-pill">collapsed on purpose</span>
+                  </div>
+                </div>
+              </div>
+              <span class="mock-toolbar-pill">collapsed</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -414,19 +503,24 @@
         </thead>
         <tbody>
           <tr>
-            <td>Enabled pair</td>
-            <td>Both actions available while the tree contains a mix of expanded and collapsed branches.</td>
+            <td>Enabled set</td>
+            <td>Expand all, collapse all, and collapse to current path are all available while the tree contains a mix of open and closed branches.</td>
             <td>Route names, Turbo wiring, or action sequencing rules.</td>
           </tr>
           <tr>
             <td>Expand disabled</td>
-            <td>The tree is already fully expanded, so only collapse remains actionable.</td>
+            <td>The tree is already fully expanded, so collapse all and collapse to current path remain actionable.</td>
             <td>Business copy about why a branch is open or who may collapse it.</td>
           </tr>
           <tr>
             <td>Collapse disabled</td>
             <td>The tree is already fully collapsed, so only expand remains actionable.</td>
             <td>Authorization, saved preferences, or persistence across visits.</td>
+          </tr>
+          <tr>
+            <td>Current path preserved</td>
+            <td>The current row branch stays open while unrelated sibling branches stay collapsed, making the current-path action distinct from full collapse.</td>
+            <td>How the host app chooses the current row or persists path state.</td>
           </tr>
         </tbody>
       </table>
