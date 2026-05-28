@@ -6,6 +6,7 @@ require "yaml"
 PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
 PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 JAVASCRIPT_ENTRYPOINT_PATH = File.expand_path("../app/javascript/tree_view/index.js", __dir__)
+SELECTION_CELL_PARTIAL_PATH = File.expand_path("../app/views/tree_view/_tree_selection_cell.html.erb", __dir__)
 JAVASCRIPT_CONTROLLER_PATHS = {
   "selection" => File.expand_path("../app/javascript/tree_view/selection_controller.js", __dir__),
   "remote_state" => File.expand_path("../app/javascript/tree_view/remote_state_controller.js", __dir__),
@@ -39,13 +40,25 @@ RSpec.describe "Public API compatibility" do
     public_javascript_manifest.fetch("event_detail_keys")
   end
 
+  def public_javascript_selection_checkbox_hooks
+    public_javascript_manifest.fetch("selection_checkbox_hooks")
+  end
+
   def javascript_entrypoint_source
     @javascript_entrypoint_source ||= File.read(JAVASCRIPT_ENTRYPOINT_PATH)
+  end
+
+  def selection_cell_partial_source
+    @selection_cell_partial_source ||= File.read(SELECTION_CELL_PARTIAL_PATH)
   end
 
   def javascript_controller_source(group_name)
     @javascript_controller_sources ||= {}
     @javascript_controller_sources[group_name] ||= File.read(JAVASCRIPT_CONTROLLER_PATHS.fetch(group_name))
+  end
+
+  def camelize_manifest_key(value)
+    value.gsub(/_([a-z])/) { Regexp.last_match(1).upcase }
   end
 
   def event_dispatch_name(event_key)
@@ -217,6 +230,24 @@ RSpec.describe "Public API compatibility" do
       expect(source).to include("#{key}: \"#{identifier}\""),
         "expected TreeViewControllerIdentifiers.#{key} to remain mapped to #{identifier}"
     end
+  end
+
+  it "keeps documented selection checkbox hooks available for host apps" do
+    source = javascript_entrypoint_source
+
+    expect(source).to include("export const TreeViewSelectionCheckboxHooks = Object.freeze({")
+
+    public_javascript_selection_checkbox_hooks.each do |key, value|
+      expect(source).to include(%(#{camelize_manifest_key(key)}: "#{value}")),
+        "expected TreeViewSelectionCheckboxHooks.#{camelize_manifest_key(key)} to remain mapped to #{value}"
+    end
+  end
+
+  it "keeps documented selection checkbox hooks aligned with bundled selection markup" do
+    expect(selection_cell_partial_source).to include(
+      %(class: "#{public_javascript_selection_checkbox_hooks.fetch("checkbox_selector").delete_prefix(".")}")
+    )
+    expect(selection_cell_partial_source).to include("tree_selection_disabled_reason:")
   end
 
   it "keeps documented JavaScript controller identifiers wired through registerTreeViewControllers" do
