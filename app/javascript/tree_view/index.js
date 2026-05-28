@@ -41,6 +41,11 @@ export const TreeViewControllerIdentifiers = Object.freeze({
   remoteState: "tree-view-remote-state"
 })
 
+export const TreeViewSelectionCheckboxHooks = Object.freeze({
+  checkboxSelector: ".tree-selection-checkbox",
+  disabledReasonAttribute: "data-tree-selection-disabled-reason"
+})
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-client", TreeViewClientController)
