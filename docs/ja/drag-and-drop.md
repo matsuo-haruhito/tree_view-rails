@@ -78,6 +78,8 @@ Drag startだけを無視し、他のTreeView動作は残したい場合は `dat
 </td>
 ```
 
+raw attribute 名自体も documented integration hook として有効ですが、host app 側の wiring や browser assertion では [Public API](public-api.md) にある `TreeViewIntegrationHooks.interactive.marker` と `TreeViewIntegrationHooks.interactive.ignoreDrag` を使うと写経を避けられます。
+
 keyboardやrow interaction向けのmarkerは [使い方](usage.md#行内のinteractive-control) を参照してください。
 
 ## drop処理
