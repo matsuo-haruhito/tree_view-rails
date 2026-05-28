@@ -23,6 +23,8 @@
 
 ## Maintainer entry points
 
+- [English documentation](en/README.md): full English docs map, reading order, and maintainer-facing entry points within the English tree.
+- [日本語ドキュメント](ja/README.md): 日本語 docs tree の full map、reading order、maintainer-facing entry points。
 - [Product Profile](../Product%20Profile.md): repository positioning, source-of-truth order, host app responsibilities, and non-goals.
 - [AGENTS.md](../AGENTS.md): repository-specific maintainer workflow, first-read order, and documentation update rules.
 - [Documentation maintenance checklist](i18n-audit.md): language-sync rules, technical-asset inventory, and cross-language update coverage.
@@ -52,4 +54,4 @@ Documentation language-sync rules and ongoing maintenance checks are tracked in 
 - `docs/ja/` は日本語ドキュメントです。日本語側の内容がより充実している間は、主なcanonical sourceとして扱います。
 - `docs/en/` は英語ドキュメントです。
 - root直下のdocsは、意図した入口、保守メモ、technical asset に限定します。
-- 利用者向けdocsを新規追加または大きく更新する場合は、可能な限り `docs/ja/` と `docs/en/` の両方に追加します。
+- 利用者向けdocsを新規追加または大きく更新する場合は、可能な限り `docs/ja/` と `docs/en/` の両方に追加します.
