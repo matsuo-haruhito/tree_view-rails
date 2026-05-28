@@ -63,6 +63,12 @@ depth_label_builder = ->(_item, context) {
 | `tree` | 現在のtree。 |
 | `render_state` | 現在のRenderState。 |
 
+## Focused visual reference
+
+depth cue と row-wide status state の見え方を静的に見比べたい場合は [row-status-depth-labels.html](../mockups/row-status-depth-labels.html) を参照してください。
+
+この mockup では label を product-neutral に保ち、階層の手がかりと host app 側の業務文言や認可意味付けを分けて確認しやすくしています。
+
 ## 責務範囲
 
 | Area | TreeView | Host app |
