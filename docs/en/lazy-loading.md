@@ -141,6 +141,8 @@ When you render the host-app placeholder regions, TreeView can also generate the
 <span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent)) %>></span>
 ```
 
+These helper names are part of the documented public helper surface. Host apps may depend on them directly when wiring placeholder regions or Turbo Stream replacements.
+
 ## Turbo Stream response pattern
 
 Return only the subtree or placeholder region the host app owns. For example:
