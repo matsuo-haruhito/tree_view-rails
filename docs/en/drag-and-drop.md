@@ -80,6 +80,8 @@ Use `data-tree-view-ignore-drag="true"` when only drag start should be ignored a
 
 See [Usage](usage.md#interactive-controls-inside-rows) for keyboard and row interaction markers.
 
+For static visual references, use [drag-interactive-controls.html](../mockups/drag-interactive-controls.html) for draggable rows that mix native controls with `data-tree-view-interactive` or `data-tree-view-ignore-drag`, and [interactive-marker-behaviors.html](../mockups/interactive-marker-behaviors.html) when you need the broader comparison across keyboard, row-click, and drag markers.
+
 ## Drop behavior
 
 Drop targets are implemented by the host app.
