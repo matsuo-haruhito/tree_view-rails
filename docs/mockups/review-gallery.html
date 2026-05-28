@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, selection visibility and disabled-state cues, narrow layouts, interaction states, focused children-pagination placement, windowed rendering cues, filtered-tree mode differences, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, selection visibility and controller-side cues, narrow layouts, interaction states, focused children-pagination placement, windowed rendering cues, filtered-tree mode differences, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -201,6 +201,27 @@
         </div>
         <div class="mock-gallery-preview">
           <iframe src="selection-visibility.html" title="Selection visibility mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-controller-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused controller bridge</p>
+          <h2 id="gallery-controller-heading">Selection controller states</h2>
+          <p>
+            Use this surface to compare hidden input sync, max-count guardrails, and rendered cascade or indeterminate cues without turning the review into a real submit workflow.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Form-backed hidden inputs beside checked payload cues</li>
+            <li>Max-count attempt rollback without business warning copy</li>
+            <li>Rendered cascade boundary versus unloaded descendants</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="selection-controller-states.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="selection-controller-states.html" title="Selection controller states mock preview" loading="lazy"></iframe>
         </div>
       </article>
 
@@ -393,6 +414,11 @@
             <td>Selection visibility</td>
             <td>Comparing <code>:all</code>, <code>:roots</code>, <code>:leaves</code>, and <code>:none</code> alongside disabled reasons and mixed parent cues.</td>
             <td>Hidden input sync, submit semantics, bulk action policy, and business-specific authorization copy.</td>
+          </tr>
+          <tr>
+            <td>Selection controller states</td>
+            <td>Comparing hidden input sync, max-count guardrails, and rendered cascade or indeterminate cues in one static review lane.</td>
+            <td>Real form submit, controller actions, business-specific warning copy, and unloaded server-side semantics.</td>
           </tr>
           <tr>
             <td>Resource table bridge</td>
