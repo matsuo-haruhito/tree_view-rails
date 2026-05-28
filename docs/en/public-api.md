@@ -157,6 +157,7 @@ Stable enough for host apps to use:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
+- `TreeViewSelectionCheckboxHooks`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -170,6 +171,7 @@ Stable enough for host apps to use:
 
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
+`TreeViewSelectionCheckboxHooks` exposes the documented selection-checkbox DOM hooks as a machine-readable object. Use `checkboxSelector` for browser assertions or lightweight DOM integration that needs the bundled checkbox selector, and use `disabledReasonAttribute` when reading the documented disabled-reason data hook without hand-copying attribute names.
 
 Documented keys on `TreeViewControllerIdentifiers`:
 
@@ -179,13 +181,27 @@ Documented keys on `TreeViewControllerIdentifiers`:
 - `transfer`
 - `remoteState`
 
+Documented keys on `TreeViewSelectionCheckboxHooks`:
+
+- `checkboxSelector`
+- `disabledReasonAttribute`
+
+The `tree-view-selection` controller's documented host-element value attributes are also part of the stable host-app wiring surface:
+
+- `data-tree-view-selection-hidden-input-name-value`
+- `data-tree-view-selection-max-count-value`
+- `data-tree-view-selection-cascade-value`
+- `data-tree-view-selection-indeterminate-value`
+
+Use those attributes when configuring the controller on the host element. Use `TreeViewSelectionCheckboxHooks` when host-app code needs the row-level checkbox selector or disabled-reason data attribute. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
+
 The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
 - private controller methods
 - file layout under `app/javascript/tree_view/`
-- undocumented `data-*` attributes
+- undocumented `data-*` attributes outside the documented host-app wiring surface
 - DOM traversal details inside controllers
 
 ## CSS and DOM surface
