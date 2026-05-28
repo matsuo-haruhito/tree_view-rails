@@ -236,6 +236,8 @@ npm install
 npm run test:js
 ```
 
+Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version.
+
 `npm run test:js` runs the documented JavaScript pull-request checks together: entrypoint smoke (`npm run test:entrypoints`), Vitest (`npm test`), and Playwright browser smoke (`npm run test:browser`). See the [English development guide](docs/en/development.md) and [日本語の開発・保守方針](docs/ja/development.md) for details.
 
 A committed `package-lock.json` is present, but it is not yet in sync with `package.json`, so CI and local setup keep using `npm install` until that lockfile is refreshed in a registry-enabled environment.
