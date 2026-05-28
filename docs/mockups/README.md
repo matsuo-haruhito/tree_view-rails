@@ -21,7 +21,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [breadcrumb-paths.html](breadcrumb-paths.html) | Focused comparison for breadcrumb-path context beside the tree's own current-row cue, without modeling host-app routes or Turbo navigation. |
 | [filtered-tree-modes.html](filtered-tree-modes.html) | Focused comparison for `filtered_tree_for` modes, showing matched-only, ancestor-retaining, and descendant-retaining output without host-app search behavior. |
 | [form-editing-rows.html](form-editing-rows.html) | Focused comparison for bulk-edit rows, per-row edit placement, and the boundary between TreeView selection checkboxes and host-app business controls. |
-| [toolbar-actions.html](toolbar-actions.html) | Expand-all / collapse-all toolbar reference showing enabled, disabled, and current-state variants without host-app routes or authorization copy. |
+| [toolbar-actions.html](toolbar-actions.html) | Expand-all, collapse-all, and collapse-to-current-path toolbar reference showing enabled, disabled, and current-state variants without host-app routes or authorization copy. |
 | [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
 
@@ -38,7 +38,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 9. Use [filtered-tree-modes.html](filtered-tree-modes.html) when review needs to compare matched nodes against ancestor or descendant context without adding host-app search UI.
 10. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
 11. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
-12. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on tree-wide expand / collapse affordances instead of row-by-row hierarchy layout.
+12. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on tree-wide expand, collapse, or collapse-to-current-path affordances instead of row-by-row hierarchy layout.
 13. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Copy and language policy
