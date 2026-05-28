@@ -64,11 +64,10 @@ Good errors should make clear:
 
 When a public API changes, check:
 
-- `docs/public-api.md`
-- `docs/ja/api-overview.md`
-- `docs/en/api-overview.md`
-- `docs/api.md`
-- CHANGELOG
+- `docs/en/public-api.md` and `docs/ja/public-api.md`
+- `docs/en/api.md` and `docs/ja/api.md`
+- `docs/en/api-overview.md` and `docs/ja/api-overview.md` when the change affects high-level API orientation or recommended entry points
+- `CHANGELOG.md`
 
 When a breaking change is necessary, release notes should include migration guidance.
 
