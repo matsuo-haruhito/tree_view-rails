@@ -157,6 +157,7 @@ host app が使ってよい入口:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
+- `TreeViewSelectionCheckboxHooks`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -170,6 +171,7 @@ host app が使ってよい入口:
 
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
+`TreeViewSelectionCheckboxHooks` は、documented selection checkbox DOM hook を machine-readable な object として公開します。bundled checkbox selector が必要な browser assertion や軽い DOM integration では `checkboxSelector` を使い、documented disabled-reason data hook を読むときは `disabledReasonAttribute` を使って attribute 名の写経を避けてください。
 
 `TreeViewControllerIdentifiers` の documented key:
 
@@ -179,13 +181,27 @@ host app が使ってよい入口:
 - `transfer`
 - `remoteState`
 
+`TreeViewSelectionCheckboxHooks` の documented key:
+
+- `checkboxSelector`
+- `disabledReasonAttribute`
+
+`tree-view-selection` controller の documented host-element value attribute も、stable な host-app wiring surface の一部です。
+
+- `data-tree-view-selection-hidden-input-name-value`
+- `data-tree-view-selection-max-count-value`
+- `data-tree-view-selection-cascade-value`
+- `data-tree-view-selection-indeterminate-value`
+
+これらの attribute は host element 上で controller を設定するときに使います。行ごとの checkbox selector や disabled-reason data attribute が必要なときは `TreeViewSelectionCheckboxHooks` を使ってください。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
+
 package-root の JavaScript export と bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
 内部扱い:
 
 - private controller methods
 - `app/javascript/tree_view/` 以下の file layout
-- undocumented `data-*` attributes
+- documented host-app wiring surface に含まれない undocumented `data-*` attributes
 - controller 内部の DOM traversal details
 
 ## CSS and DOM surface
