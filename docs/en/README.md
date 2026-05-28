@@ -71,7 +71,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Migration guide](migration.md) | Upgrade-oriented summary of compatibility promises, deprecations, and release-note expectations |
 | [Release checklist](release.md) | Release tests, documentation, and gem package checklist |
 | [Design policy](design-policy.md) | Gem responsibilities, included scope, excluded scope, and design decisions |
-| [Development](development.md) | Tests, CI, documentation updates, and future work |
+| [Development](development.md) | Tests, CI, documentation updates, future work, and the current `npm install` exception while `package-lock.json` remains out of sync |
 | [Code quality](code-quality.md) | Lint, tests, error messages, and documentation quality policy |
 
 ## Reading order
