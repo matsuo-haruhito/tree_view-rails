@@ -78,6 +78,8 @@ Use `data-tree-view-ignore-drag="true"` when only drag start should be ignored a
 </td>
 ```
 
+Both raw attribute names remain documented integration hooks, but host apps can avoid hand-copying them by using `TreeViewIntegrationHooks.interactive.marker` and `TreeViewIntegrationHooks.interactive.ignoreDrag` from the public package-root export described in [Public API](public-api.md).
+
 See [Usage](usage.md#interactive-controls-inside-rows) for keyboard and row interaction markers.
 
 ## Drop behavior
