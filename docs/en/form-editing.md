@@ -4,6 +4,12 @@ TreeView rows can contain Rails form controls and action links, but TreeView doe
 
 Use this page when you want editing-oriented tree/table screens such as bulk edit pages, inline-edit style rows, or per-row edit actions.
 
+## Visual reference
+
+For a static side-by-side comparison of bulk edit rows, per-row edit actions, and the boundary between TreeView selection checkboxes and host-app business controls, see [form-editing-rows.html](../mockups/form-editing-rows.html).
+
+Use the mockup as a visual companion to the responsibility guidance on this page; save workflow, Turbo responses, authorization, and persistence remain host-app concerns.
+
 ## Responsibility boundary
 
 TreeView supports inline-editing layouts. It does not provide an inline-editing workflow.
