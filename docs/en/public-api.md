@@ -77,10 +77,12 @@ For host apps that own lazy-loading placeholder regions, these three lazy-loadin
 For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` rather than internal constants.
 Documented toolbar helpers are part of that public helper surface:
 
-- `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` renders TreeView's bundled toolbar markup.
+- `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ..., html: ..., action_html: ...)` renders TreeView's bundled toolbar markup and accepts documented additive HTML attributes for the toolbar container and action elements.
 - `tree_view_toolbar_supported_actions` returns the supported toolbar action symbols for app-owned toolbar builders.
 - `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` returns action hashes so the host app can render its own toolbar markup.
 - `tree_view_toolbar_action_metadata(render_state, action, label: nil)` returns metadata for one supported action.
+
+`html:` adds container attributes such as `class`, `data`, or `aria` while preserving TreeView's required toolbar data hook. `action_html:` adds attributes to each action link or disabled button through an action-aware Proc, action-keyed Hash, or flat Hash while preserving TreeView's required action and disabled data hooks. Use custom rendering helpers when the host app needs different markup, authorization copy, or additional controls.
 
 Supported toolbar action symbols are `:expand_all`, `:collapse_all`, and `:collapse_all_except_current_path`.
 
