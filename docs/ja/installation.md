@@ -131,7 +131,7 @@ asset または JavaScript の配置を変更した場合は、release 前に以
 
 - `tree_view.gemspec` がCSS、JavaScript、importmapファイルを含んでいる
 - README の導入例がこのファイルと一致している
-- `docs/ja/release.md` または `docs/release.md` の package checklist が更新されている
+- `docs/ja/release.md` の package checklist が更新されている
 - static表示がJavaScriptなしでも利用できる、という前提を壊していない
 - JavaScriptが必要な機能は、必要なimportmap pinやdata属性をdocsに書いている
 
@@ -145,10 +145,10 @@ bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
 npm install
-npm test
+npm run test:js
 ```
 
-ローカル手順も CI と同じく `npm install` を使います。理由は、commit 済みの `package-lock.json` を `npm ci` で安全に使うには、まだ lockfile refresh が必要だからです。
+ローカル手順も CI と同じく `npm install` を使います。理由は、commit 済みの `package-lock.json` を `npm ci` で安全に使うには、まだ lockfile refresh が必要だからです。`npm run test:js` は CI lane と同じく entrypoint smoke、Vitest suite、Playwright browser smoke をまとめて実行します。
 
 Rails互換性確認用のGemfileは `gemfiles/` 配下にあります。
 
