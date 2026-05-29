@@ -201,6 +201,7 @@ Key documents:
 | Installation | [Installation](docs/en/installation.md) | [導入手順](docs/ja/installation.md) |
 | Minimal usage | [Minimal usage](docs/en/minimal-usage.md) | [最小利用例](docs/ja/minimal-usage.md) |
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
+| Toolbar helper (`tree_view_toolbar`) | [Toolbar helper](docs/en/toolbar.md) | [Toolbar helper](docs/ja/toolbar.md) |
 | Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
 | FAQ | [FAQ](docs/en/faq.md) | [FAQ](docs/ja/faq.md) |
 | Troubleshooting | [Troubleshooting](docs/en/troubleshooting.md) | [Troubleshooting](docs/ja/troubleshooting.md) |
