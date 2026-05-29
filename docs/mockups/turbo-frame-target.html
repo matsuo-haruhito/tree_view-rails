@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView Turbo Frame target mockup</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.turbo-frame-shell {
+  display: grid;
+  gap: 18px;
+}
+
+.turbo-frame-demo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.turbo-frame-box {
+  border: 2px solid #93c5fd;
+  border-radius: 14px;
+  background: #eff6ff;
+  overflow: hidden;
+}
+
+.turbo-frame-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #bfdbfe;
+  color: #1e3a8a;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.turbo-frame-label code,
+.turbo-link-marker code,
+.turbo-boundary-card code {
+  padding: 0.08rem 0.35rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.75);
+  color: inherit;
+}
+
+.turbo-frame-content {
+  padding: 12px;
+  background: #fff;
+}
+
+.turbo-link-marker {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.35rem;
+  color: #1d4ed8;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.turbo-boundary-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.turbo-boundary-card {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.turbo-boundary-card h3,
+.turbo-boundary-card p {
+  margin: 0;
+}
+
+.turbo-boundary-card h3 {
+  color: #102a43;
+  font-size: 1rem;
+}
+
+.turbo-boundary-card p {
+  color: #52606d;
+}
+
+.turbo-frame-note {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334e68;
+}
+
+@media (max-width: 820px) {
+  .turbo-frame-demo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <nav class="mock-return-nav" aria-label="Mockup navigation">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Mockup README</a>
+    </nav>
+
+    <header class="mock-header">
+      <p class="mock-kicker">Focused Turbo Frame boundary</p>
+      <h1>Turbo Frame target mockup</h1>
+      <p>
+        Static reference for the boundary between the TreeView-owned toggle link attribute and the host-app-owned Turbo Frame target, controller response, and authorization checks.
+      </p>
+    </header>
+
+    <section class="mock-section turbo-frame-shell" aria-labelledby="turbo-frame-target-heading">
+      <div>
+        <h2 id="turbo-frame-target-heading">Target frame and link attribute</h2>
+        <p>
+          The frame placement is supplied by the host app. TreeView only adds the configured <code>data-turbo-frame</code> value to expand or collapse links.
+        </p>
+      </div>
+
+      <div class="turbo-frame-demo-grid">
+        <div class="turbo-frame-box" aria-label="turbo-frame documents_tree static boundary">
+          <div class="turbo-frame-label">
+            <span>Host app frame target</span>
+            <code>&lt;turbo-frame id="documents_tree"&gt;</code>
+          </div>
+          <div class="turbo-frame-content">
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">Document</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Owner</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-selected">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle">
+                      <span class="tree-toggle__branches"></span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#" data-turbo-frame="documents_tree">Collapse</a>
+                        <span class="tree-node-title">Documents</span>
+                        <span class="tree-node-badge tree-node-badge--info">Current</span>
+                        <span class="turbo-link-marker"><code>data-turbo-frame="documents_tree"</code></span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="mock-status mock-status--active">Open</span></td>
+                  <td>Records team</td>
+                </tr>
+                <tr class="tree-row">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle">
+                      <span class="tree-toggle__branches">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#" data-turbo-frame="documents_tree">Expand</a>
+                        <span class="tree-node-title">Policies</span>
+                        <span class="turbo-link-marker"><code>data-turbo-frame="documents_tree"</code></span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="mock-status mock-status--pending">Collapsed</span></td>
+                  <td>Compliance</td>
+                </tr>
+                <tr class="tree-row">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle">
+                      <span class="tree-toggle__branches">
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">Leaf</span>
+                        <span class="tree-node-title">Quarterly review.pdf</span>
+                      </span>
+                    </span>
+                  </td>
+                  <td><span class="mock-status mock-status--archived">Read only</span></td>
+                  <td>Finance</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <aside class="turbo-boundary-stack" aria-label="Responsibility boundary notes">
+          <article class="turbo-boundary-card">
+            <h3>TreeView owns</h3>
+            <p>The configured <code>turbo_frame: "documents_tree"</code> value is rendered on toggle links as <code>data-turbo-frame</code>.</p>
+          </article>
+          <article class="turbo-boundary-card">
+            <h3>Host app owns</h3>
+            <p>The surrounding <code>&lt;turbo-frame&gt;</code>, route, controller action, authorization, and Turbo Stream or HTML response stay outside the gem.</p>
+          </article>
+          <article class="turbo-boundary-card">
+            <h3>Review focus</h3>
+            <p>Use this page to confirm that reviewers can see which links target the frame without implying that TreeView supplies navigation behavior.</p>
+          </article>
+        </aside>
+      </div>
+
+      <p class="turbo-frame-note">
+        This mockup is static. It does not perform Turbo navigation, fetch children, or model host-app permission copy.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
