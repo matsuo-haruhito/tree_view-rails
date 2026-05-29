@@ -133,7 +133,7 @@ When asset or JavaScript paths change, check these items before release:
 
 - `tree_view.gemspec` includes CSS, JavaScript, and importmap files
 - README installation examples match this file
-- the package checklist in `docs/en/release.md` or `docs/release.md` is updated
+- the package checklist in `docs/en/release.md` is updated
 - static rendering still works without JavaScript
 - JavaScript-dependent features document their importmap pin and data attributes
 
@@ -147,10 +147,10 @@ bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
 npm install
-npm test
+npm run test:js
 ```
 
-Use `npm install` here for the same reason as CI: the committed `package-lock.json` still needs a refresh before `npm ci` can be trusted.
+Use `npm install` here for the same reason as CI: the committed `package-lock.json` still needs a refresh before `npm ci` can be trusted. `npm run test:js` runs the entrypoint smoke, Vitest suite, and Playwright browser smoke checks documented in the CI lane.
 
 Rails compatibility Gemfiles live under `gemfiles/`.
 
