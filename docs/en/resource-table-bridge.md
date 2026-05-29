@@ -50,6 +50,8 @@ This keeps the responsibilities separate:
 - TreeView owns tree structure and hierarchical row rendering.
 - The host app can override partials for presentation, queries, authorization, and business behavior.
 
+For host apps that use both a regular table and a tree-table, start here to decide what TreeView owns, then read the table preferences layer docs for column state, widths, presets, export metadata, and preference UI. Keep TreeView responsible for row hierarchy, visible row order, expansion state, and rendering hooks; keep the table layer responsible for table-wide column and preference state.
+
 For a focused visual reference that compares shared hierarchy rows across fuller and narrower visible-column sets without adding host-app table logic, see [resource-table-bridge.html](../mockups/resource-table-bridge.html).
 
 ## When to use it
