@@ -14,6 +14,8 @@ TreeView gem が担当するのは以下です。
 
 実際の業務ルール、操作制御、認可、保存処理はhost app側で実装します。
 
+行全体のstatus cue、selection checkboxのdisabled state、depth labelを並べて確認したい場合は、[row status and depth label mockup](../mockups/row-status-depth-labels.html) を参照してください。mockupはstatic referenceであり、APIと責務境界の説明はこのguideを正とします。
+
 ## 基本例
 
 ```ruby
