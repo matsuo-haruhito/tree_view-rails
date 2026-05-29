@@ -50,6 +50,8 @@ render_state = TreeView::ResourceTableRenderState.call(
 - TreeView: tree構造と階層行の描画
 - host app: 必要に応じたpartial差し替え、query、認可、業務処理
 
+通常 table と tree-table の両方を使う host app では、まずこのページで TreeView が担当する範囲を決め、column state、width、preset、export metadata、preference UI の詳細は table preferences layer 側の docs を確認してください。TreeView には row hierarchy、visible row order、expansion state、rendering hook を任せ、table layer には table 全体の column / preference state を任せると、責務が重複しにくくなります。
+
 shared hierarchy rows と、より多い visible column / より少ない visible column の比較を host app 側の table logic なしで見たい場合は [resource-table-bridge.html](../mockups/resource-table-bridge.html) を参照してください。
 
 ## 使うべき場面
