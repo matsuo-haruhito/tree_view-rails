@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, drag-safe control markers, behavior-specific interactive marker boundaries, windowed rendering cues, breadcrumb path context, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, row status and depth-label boundaries, narrow layouts, interaction states, drag-safe control markers, behavior-specific interactive marker boundaries, windowed rendering cues, breadcrumb path context, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -180,6 +180,27 @@
         </div>
         <div class="mock-gallery-preview">
           <iframe src="default-tree.html" title="Default tree mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-status-depth-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused status cues</p>
+          <h2 id="gallery-status-depth-heading">Row status and depth labels</h2>
+          <p>
+            Use this surface to compare row-wide readonly or disabled cues, selection checkbox disabled state, and depth labels without adding authorization or business wording.
+          </p>
+          <ul class="mock-gallery-points">
+            <li>Normal, readonly, and disabled representative rows</li>
+            <li>Selection availability separated from row-wide status</li>
+            <li>Depth labels framed as host-app-owned meaning and styling</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="row-status-depth-labels.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="row-status-depth-labels.html" title="Row status and depth labels mock preview" loading="lazy"></iframe>
         </div>
       </article>
 
@@ -430,6 +451,11 @@
             <td>Default tree</td>
             <td>Baseline DOM shape, hierarchy path, selection cues, badges, and row actions.</td>
             <td>Host-app CRUD, queries, business labels, or authorization behavior.</td>
+          </tr>
+          <tr>
+            <td>Row status and depth labels</td>
+            <td>Comparing row-wide readonly or disabled cues, selection checkbox disabled state, and depth-label meaning boundaries.</td>
+            <td>Authorization policy, business-specific status meaning, final labels, or checkbox payload semantics.</td>
           </tr>
           <tr>
             <td>Resource table bridge</td>
