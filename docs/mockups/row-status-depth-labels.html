@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView row status and depth label mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.mock-boundary-card {
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #f8fafc;
+  padding: 16px;
+}
+
+.mock-boundary-card h3,
+.mock-boundary-card p {
+  margin: 0;
+}
+
+.mock-boundary-card h3 {
+  margin-bottom: 0.45rem;
+}
+
+.mock-boundary-card p {
+  color: #52606d;
+}
+
+.tree-row.is-readonly {
+  background: #f8fafc;
+}
+
+.tree-row.is-readonly .tree-toggle-cell,
+.tree-row.is-readonly td {
+  color: #52606d;
+}
+
+.tree-row.is-disabled {
+  background: #fff1f2;
+}
+
+.tree-row.is-disabled .tree-toggle-cell,
+.tree-row.is-disabled td {
+  color: #6b7280;
+}
+
+.mock-row-note {
+  margin: 0.45rem 0 0;
+  color: #52606d;
+  font-size: 0.9rem;
+}
+
+.mock-depth-label--team {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.mock-depth-label--folder {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-depth-label--leaf {
+  background: #ecfdf5;
+  color: #047857;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView row status and depth label mock</h1>
+      <p>
+        This static HTML compares row-wide status cues, selection checkbox disabled state, and depth labels
+        without running a Rails app. Business meaning, authorization rules, final copy, and status styling
+        remain host-app responsibilities.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="status-depth-comparison-heading">
+      <h2 id="status-depth-comparison-heading">Representative comparison</h2>
+      <p>
+        The first column keeps the reusable TreeView hierarchy cue. The selection column shows whether
+        selection is available. The status and depth labels are visible hints only; host apps decide what
+        each status means and when a row becomes readonly or disabled.
+      </p>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">select</th>
+            <th scope="col">tree</th>
+            <th scope="col">row status</th>
+            <th scope="col">depth cue</th>
+            <th scope="col">review note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tree-row is-expanded" data-tree-node-key="team:platform" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+            <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Select Platform team"></td>
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Expanded root">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                  <span class="tree-depth-label mock-depth-label--team">team</span>
+                  <span class="mock-node-title">Platform team</span>
+                </span>
+              </span>
+            </td>
+            <td><span class="mock-status mock-status--active">normal</span></td>
+            <td><span class="tree-depth-label mock-depth-label--team">team</span></td>
+            <td>Selection and row actions remain available.</td>
+          </tr>
+          <tr class="tree-row is-readonly" data-tree-node-key="folder:archive" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false">
+            <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Select Archived folder"></td>
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Readonly branch">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a>
+                  <span class="tree-depth-label mock-depth-label--folder">folder</span>
+                  <span class="mock-node-title">Archived work</span>
+                </span>
+              </span>
+            </td>
+            <td><span class="mock-status mock-status--pending">readonly</span></td>
+            <td><span class="tree-depth-label mock-depth-label--folder">folder</span></td>
+            <td>Readonly is a row-wide visual cue; selection can still be enabled when the host app allows it.</td>
+          </tr>
+          <tr class="tree-row is-disabled" data-tree-node-key="record:locked" data-tree-depth="2" aria-level="3">
+            <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Locked record unavailable" disabled></td>
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Disabled leaf">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">leaf</span>
+                  <span class="tree-depth-label mock-depth-label--leaf">record</span>
+                  <span class="mock-node-title">Locked record</span>
+                </span>
+              </span>
+            </td>
+            <td><span class="mock-status mock-status--error">disabled</span></td>
+            <td><span class="tree-depth-label mock-depth-label--leaf">record</span></td>
+            <td>Disabled row styling and disabled selection are related but separate cues.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">Responsibility boundary</h2>
+      <div class="mock-boundary-grid">
+        <article class="mock-boundary-card">
+          <h3>Row status</h3>
+          <p>Use for row-wide visual state such as normal, readonly, or disabled. The host app owns the rule and copy.</p>
+        </article>
+        <article class="mock-boundary-card">
+          <h3>Selection checkbox</h3>
+          <p>Use disabled form state only when selection itself is unavailable. Do not rely on row color alone.</p>
+        </article>
+        <article class="mock-boundary-card">
+          <h3>Depth label</h3>
+          <p>Use as a compact hierarchy cue. Meaning, label text, and color tokens stay host-app owned.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
