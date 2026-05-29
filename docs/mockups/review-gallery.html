@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, drag-safe control markers, behavior-specific interactive marker boundaries, windowed rendering cues, breadcrumb path context, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, narrow layouts, interaction states, Turbo Frame target boundaries, drag-safe control markers, behavior-specific interactive marker boundaries, windowed rendering cues, breadcrumb path context, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -243,6 +243,27 @@
         </div>
         <div class="mock-gallery-preview">
           <iframe src="interaction-states.html" title="Interaction states mock preview" loading="lazy"></iframe>
+        </div>
+      </article>
+
+      <article class="mock-gallery-card" aria-labelledby="gallery-turbo-frame-heading">
+        <div class="mock-gallery-copy">
+          <p class="mock-gallery-eyebrow">Focused Turbo boundary</p>
+          <h2 id="gallery-turbo-frame-heading">Turbo Frame target</h2>
+          <p>
+            Use this surface to compare the configured <code>data-turbo-frame</code> toggle-link attribute against the host-app-owned frame wrapper and response boundary.
+          </p>
+          <ul class="mock-gallery-points">
+            <li><code>&lt;turbo-frame id="documents_tree"&gt;</code> wrapper as host-app markup</li>
+            <li>Expand and collapse links targeting <code>documents_tree</code></li>
+            <li>Route, authorization, and Turbo response kept outside the mockup</li>
+          </ul>
+          <div class="mock-gallery-links">
+            <a href="turbo-frame-target.html">Open full mockup</a>
+          </div>
+        </div>
+        <div class="mock-gallery-preview">
+          <iframe src="turbo-frame-target.html" title="Turbo Frame target mock preview" loading="lazy"></iframe>
         </div>
       </article>
 
@@ -445,6 +466,11 @@
             <td>Interaction states</td>
             <td>Loading, retry, pagination, and drag or drop status cues.</td>
             <td>Real Turbo responses, route wiring, or persistence behavior.</td>
+          </tr>
+          <tr>
+            <td>Turbo Frame target</td>
+            <td>Configured <code>data-turbo-frame</code> link attributes beside the host-app-owned target frame.</td>
+            <td>Turbo Stream responses, Rails routes, controller actions, authorization, or frame placement policy.</td>
           </tr>
           <tr>
             <td>Drag interactive controls</td>
