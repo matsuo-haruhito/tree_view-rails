@@ -122,6 +122,10 @@ javascript_package_root:
       invalid_payload: tree-view-transfer:invalid-payload
       invalid_transfer: tree-view-transfer:invalid-transfer
   event_detail_keys:
+    state:
+      state_changed:
+        - viewKey
+        - expandedKeys
     selection:
       change:
         - selectedCount
