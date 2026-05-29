@@ -77,10 +77,12 @@ lazy-loading の placeholder region を host app 側で持つ場合、上の 3 h
 app-owned toolbar builder では、internal constant を直接参照せず、`tree_view_toolbar_supported_actions`、`tree_view_toolbar_actions`、`tree_view_toolbar_action_metadata` を使ってください。
 toolbar helper もこの公開 helper surface に含まれます。
 
-- `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` は TreeView bundled toolbar の HTML を描画します。
+- `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ..., html: ..., action_html: ...)` は TreeView bundled toolbar の HTML を描画し、toolbar container と action element へ documented な追加 HTML attribute を渡せます。
 - `tree_view_toolbar_supported_actions` は app-owned toolbar builder が使ってよい supported toolbar action symbol を返します。
 - `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` は host app が独自 toolbar markup を組み立てるための action hash 配列を返します。
 - `tree_view_toolbar_action_metadata(render_state, action, label: nil)` は 1 つの supported action 用 metadata を返します。
+
+`html:` は `class`、`data`、`aria` などの container attribute を追加しつつ、TreeView 必須の toolbar data hook を維持します。`action_html:` は action-aware Proc、action-keyed Hash、または flat Hash で各 action link / disabled button に attribute を追加しつつ、TreeView 必須の action / disabled data hook を維持します。markup、authorization copy、追加 control を変える必要がある場合は custom rendering helper を使ってください。
 
 公開されている toolbar action symbol は `:expand_all`、`:collapse_all`、`:collapse_all_except_current_path` です。
 

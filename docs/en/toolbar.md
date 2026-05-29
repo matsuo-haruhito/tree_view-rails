@@ -51,7 +51,7 @@ For a static comparison of expand-all, collapse-all, and current-path-preserving
 
 Use that mockup as a visual companion to this helper boundary: it highlights action affordances and the `:current_path` contract without defining routes, authorization copy, or Turbo response behavior.
 
-## Custom labels and classes
+## Custom labels, classes, and attributes
 
 ```erb
 <%= tree_view_toolbar(
@@ -59,9 +59,27 @@ Use that mockup as a visual companion to this helper boundary: it highlights act
   actions: [:expand_all],
   labels: { expand_all: "Open all" },
   class_name: "documents-toolbar",
-  button_class_name: "documents-toolbar__button"
+  button_class_name: "documents-toolbar__button",
+  html: {
+    data: { controller: "toolbar-analytics" },
+    aria: { label: "Document tree actions" }
+  },
+  action_html: ->(action) {
+    {
+      data: {
+        analytics_action: action.fetch(:action),
+        turbo_frame: "documents_tree"
+      }
+    }
+  }
 ) %>
 ```
+
+Use `html:` for additional attributes on the toolbar container. Its `class` is appended after `class_name`, and its `data` values are merged while keeping TreeView's `data-tree-view-toolbar="true"` hook.
+
+Use `action_html:` for additional attributes on each rendered action link or disabled button. It may be a Proc that receives the action metadata hash, an action-keyed Hash such as `{ expand_all: { data: ... } }`, or a flat Hash applied to every action. Host app attributes are merged with the existing action metadata, but TreeView keeps ownership of `data-tree-view-toolbar-action` and `data-tree-view-toolbar-disabled`.
+
+For heavier markup changes, custom authorization copy, extra controls, or a different button/link structure, keep using `tree_view_toolbar_actions` or `tree_view_toolbar_action_metadata` and render the toolbar in the host app.
 
 ## Responsibility boundary
 
@@ -74,4 +92,5 @@ Host apps own:
 - authorization
 - persistence of expanded keys
 - semantics of `:current_path`
+- analytics, test hooks, and screen-specific attributes passed through `html:` or `action_html:`
 - visual styling beyond default class names
