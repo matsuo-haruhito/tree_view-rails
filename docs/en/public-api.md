@@ -178,6 +178,15 @@ Stable enough for host apps to use:
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
 
+Within `TreeViewEventNames`, lazy-loading request lifecycle names live under `hostLifecycle`:
+
+- `loading`
+- `loaded`
+- `error`
+- `retry`
+
+Use `TreeViewEventNames.hostLifecycle.*` only for the host-app dispatch surface described in [Lazy Loading](lazy-loading.md). TreeView's own controller-emitted remote-state events remain under `TreeViewEventNames.remoteState.*`.
+
 Documented keys on `TreeViewControllerIdentifiers`:
 
 - `state`

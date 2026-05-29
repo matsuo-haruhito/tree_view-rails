@@ -209,6 +209,8 @@ tree-view:retry->tree-view-remote-state#retry
 
 host app側は、fetchやTurbo requestの状態に応じてこれらのeventをdispatchできます。
 
+これらの lifecycle event 名は package root から `TreeViewEventNames.hostLifecycle.loading` / `.loaded` / `.error` / `.retry` として参照できます。この group は host app 側の request-state dispatch 専用です。`TreeViewEventNames.remoteState.*` は引き続き TreeView controller が emit する event 用の別 surface として扱います。
+
 ## children pagination
 
 大量のchildrenを少しずつ読み込む場合は、server-side paginationをhost app側で実装します。

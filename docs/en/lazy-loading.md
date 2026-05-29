@@ -209,6 +209,8 @@ tree-view:retry->tree-view-remote-state#retry
 
 The host app can dispatch these events according to fetch or Turbo request state.
 
+To avoid hand-copying those lifecycle names, import them from the package root as `TreeViewEventNames.hostLifecycle.loading`, `.loaded`, `.error`, and `.retry`. That group is reserved for host-app request-state dispatch. `TreeViewEventNames.remoteState.*` remains the separate surface for events emitted by TreeView controllers.
+
 ## Children pagination
 
 For very large child sets, implement server-side pagination in the host app.

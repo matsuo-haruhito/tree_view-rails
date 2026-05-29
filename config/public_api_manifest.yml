@@ -110,6 +110,11 @@ javascript_package_root:
     remote_state:
       change: tree-view-remote-state:change
       retry: tree-view-remote-state:retry
+    host_lifecycle:
+      loading: tree-view:loading
+      loaded: tree-view:loaded
+      error: tree-view:error
+      retry: tree-view:retry
     transfer:
       drag_start: tree-view-transfer:drag-start
       drag_over: tree-view-transfer:drag-over
