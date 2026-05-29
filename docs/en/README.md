@@ -22,6 +22,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Installation](installation.md) | Gemfile, CSS, importmap, Propshaft / Sprockets, and development setup |
 | [Minimal usage](minimal-usage.md) | Minimal controller, view, and row partial setup in a host app |
 | [Usage](usage.md) | Tree basics, static rendering, Turbo rendering, RenderState, and view examples |
+| [Toolbar helper](toolbar.md) | `tree_view_toolbar`, expand/collapse actions, the `:current_path` contract, and the toolbar visual reference |
 | [Turbo Frame option](turbo-frame.md) | Target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript |
 | [Localized names](localized-names.md) | Resolve model, attribute, and node type labels through ActiveModel / I18n |
 | [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
@@ -83,6 +84,8 @@ When you know the use case but not the right API, start with the [Decision guide
 For common responsibility-boundary questions before choosing an API, read the [FAQ](faq.md).
 
 When you already know the symptom but need the fastest path to the relevant page, start with [Troubleshooting](troubleshooting.md).
+
+For tree-wide expand/collapse controls, see [Toolbar helper](toolbar.md). Use [toolbar-actions.html](../mockups/toolbar-actions.html) as the static visual companion for supported toolbar actions and the `:current_path` contract.
 
 For static visual references of baseline DOM structure and interaction states, see [Visual reference mockups](../mockups/README.md). Start with [review-gallery.html](../mockups/review-gallery.html) for the fastest first look, open [default-tree.html](../mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
 
