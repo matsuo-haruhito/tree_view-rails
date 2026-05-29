@@ -18,6 +18,8 @@
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
 - [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure and interaction states. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
+- [English Turbo Frame option](en/turbo-frame.md): target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript.
+- [日本語Turbo Frame オプション](ja/turbo-frame.md): TreeView の Turbo toggle link を host app の Turbo Frame に向ける設定。
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.
 - [日本語Resource table bridge](ja/resource-table-bridge.md): 別table layerが列推論やtable stateを持つ場合のTreeView連携。
 
