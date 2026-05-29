@@ -83,6 +83,55 @@ RSpec.describe TreeViewBreadcrumbHelper do
     expect(rendered).to include('aria-label="Node path"')
   end
 
+  it "merges additional HTML attributes into the breadcrumb container and list" do
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
+    helper = build_helper
+
+    rendered = helper.tree_view_breadcrumb(
+      tree,
+      child,
+      label_builder: ->(item) { item.name },
+      html: { class: "app-breadcrumb", data: { controller: "analytics" }, aria: { describedby: "breadcrumb-help" } },
+      list_html: { data: { testid: "node-path" } },
+      aria_label: "Node path"
+    )
+
+    expect(rendered).to include('class="tree-view-breadcrumb app-breadcrumb"')
+    expect(rendered).to include('data-controller="analytics"')
+    expect(rendered).to include('aria-describedby="breadcrumb-help"')
+    expect(rendered).to include('aria-label="Node path"')
+    expect(rendered).to include('data-testid="node-path"')
+  end
+
+  it "merges item-aware attributes into links and the current label" do
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
+    helper = build_helper
+
+    rendered = helper.tree_view_breadcrumb(
+      tree,
+      child,
+      label_builder: ->(item) { item.name },
+      path_builder: ->(item) { "/nodes/#{item.id}" },
+      item_html: ->(item) { { data: { node_id: item.id } } },
+      link_html: ->(item) { { rel: "up", data: { action_id: item.id } } },
+      current_html: ->(item) { { class: "is-current", data: { current_id: item.id }, aria: { label: "Current #{item.name}" } } }
+    )
+
+    expect(rendered).to include('data-node-id="1"')
+    expect(rendered).to include('data-node-id="2"')
+    expect(rendered).to include('href="/nodes/1"')
+    expect(rendered).to include('rel="up"')
+    expect(rendered).to include('data-action-id="1"')
+    expect(rendered).to include('class="tree-view-breadcrumb__current is-current"')
+    expect(rendered).to include('data-current-id="2"')
+    expect(rendered).to include('aria-label="Current Child"')
+    expect(rendered).to include('aria-current="page"')
+  end
+
   it "rejects invalid builders" do
     node = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
     tree = build_tree([node])
