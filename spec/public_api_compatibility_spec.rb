@@ -48,6 +48,14 @@ RSpec.describe "Public API compatibility" do
     @javascript_controller_sources[group_name] ||= File.read(JAVASCRIPT_CONTROLLER_PATHS.fetch(group_name))
   end
 
+  def camelize_manifest_key(value)
+    value.to_s.gsub(/_([a-z])/) { Regexp.last_match(1).upcase }
+  end
+
+  def event_names_by_export_group
+    public_javascript_event_names.transform_keys { |group_name| camelize_manifest_key(group_name) }
+  end
+
   def event_dispatch_name(event_key)
     event_key.tr("_", "-")
   end
@@ -255,23 +263,12 @@ RSpec.describe "Public API compatibility" do
     source = javascript_entrypoint_source
 
     expect(source).to include("export const TreeViewEventNames = Object.freeze({")
-    expect(source).to include("state: Object.freeze({")
-    expect(source).to include("selection: Object.freeze({")
-    expect(source).to include("remoteState: Object.freeze({")
-    expect(source).to include("hostLifecycle: Object.freeze({")
-    expect(source).to include("transfer: Object.freeze({")
-    expect(source).to include('stateChanged: "tree-view-state:state-changed"')
-    expect(source).to include('limitExceeded: "tree-view-selection:limit-exceeded"')
-    expect(source).to include('invalidPayload: "tree-view-selection:invalid-payload"')
-    expect(source).to include('loading: "tree-view:loading"')
-    expect(source).to include('loaded: "tree-view:loaded"')
-    expect(source).to include('error: "tree-view:error"')
-    expect(source).to include('dragStart: "tree-view-transfer:drag-start"')
-    expect(source).to include('dragOver: "tree-view-transfer:drag-over"')
-    expect(source).to include('invalidTransfer: "tree-view-transfer:invalid-transfer"')
 
-    public_javascript_event_names.each_value do |group|
-      group.each_value do |event_name|
+    event_names_by_export_group.each do |group_name, events|
+      expect(source).to include("#{group_name}: Object.freeze({"),
+        "expected TreeViewEventNames to keep the #{group_name} group"
+
+      events.each_value do |event_name|
         expect(source).to include(%("#{event_name}")),
           "expected TreeViewEventNames to include #{event_name}"
       end
