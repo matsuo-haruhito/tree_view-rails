@@ -18,10 +18,14 @@ TreeView gem が担当するのは以下です。
 ## 最小例
 
 ```erb
-<%= tree_view_breadcrumb(@tree, @document) %>
+<%= tree_view_breadcrumb(
+  @tree,
+  @document,
+  label_builder: ->(item) { item.name }
+) %>
 ```
 
-`path_builder` を省略した場合は、各nodeのlabelだけを描画します。
+TreeView は record の表示方法を仮定しないため、`label_builder:` は必須です。`path_builder` を省略した場合は、各nodeのlabelだけを描画します。
 
 ## link付きbreadcrumb
 
@@ -42,6 +46,7 @@ TreeView gem が担当するのは以下です。
 <%= tree_view_breadcrumb(
   @tree,
   @document,
+  label_builder: ->(item) { item.name },
   list_class: "breadcrumb",
   item_class: "breadcrumb-item",
   link_class: "breadcrumb-link",
@@ -54,7 +59,7 @@ TreeView gem が担当するのは以下です。
 
 | option | 意味 |
 |---|---|
-| `label_builder:` | 各itemの表示labelを返すcallable。 |
+| `label_builder:` | 各itemの表示labelを返す必須のcallable。 |
 | `path_builder:` | 各itemのURL/pathを返すcallable。省略時はplain label。 |
 | `list_class:` | root list要素のclass。 |
 | `item_class:` | 各item要素のclass。 |
