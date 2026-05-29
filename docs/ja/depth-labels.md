@@ -14,6 +14,8 @@ TreeView gem が担当するのは以下です。
 
 どのdepthにどの文言を出すか、業務上の意味付け、CSS表現はhost app側で決めます。
 
+depth labelを行全体のstatus cueやselection disabled stateと並べて確認したい場合は、[row status and depth label mockup](../mockups/row-status-depth-labels.html) を参照してください。mockupはstatic referenceであり、APIと責務境界の説明はこのguideを正とします。
+
 ## 基本例
 
 ```ruby
