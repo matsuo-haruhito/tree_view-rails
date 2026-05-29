@@ -14,6 +14,8 @@ TreeView is responsible for:
 
 The host app decides the label text, business meaning of each depth, and CSS styling.
 
+For a visual comparison of depth labels beside row-wide status cues and selection disabled state, see the [row status and depth label mockup](../mockups/row-status-depth-labels.html). The mockup is a static reference; this guide remains the source for API and responsibility-boundary wording.
+
 ## Basic example
 
 ```ruby
