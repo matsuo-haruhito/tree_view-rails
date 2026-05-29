@@ -14,6 +14,8 @@ TreeView is responsible for:
 
 Business rules, action blocking, authorization, and persistence remain host app responsibilities.
 
+For a visual comparison of row-wide status cues, selection checkbox disabled state, and depth labels, see the [row status and depth label mockup](../mockups/row-status-depth-labels.html). The mockup is a static reference; this guide remains the source for API and responsibility-boundary wording.
+
 ## Basic example
 
 ```ruby
