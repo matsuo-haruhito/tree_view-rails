@@ -18,10 +18,14 @@ The host app remains responsible for routes, authorization, choosing the current
 ## Minimal example
 
 ```erb
-<%= tree_view_breadcrumb(@tree, @document) %>
+<%= tree_view_breadcrumb(
+  @tree,
+  @document,
+  label_builder: ->(item) { item.name }
+) %>
 ```
 
-When `path_builder` is omitted, TreeView renders plain labels.
+`label_builder:` is required because TreeView does not assume how records should be displayed. When `path_builder` is omitted, TreeView renders plain labels.
 
 ## Breadcrumbs with links
 
@@ -42,6 +46,7 @@ The current item is rendered as a current label instead of a link.
 <%= tree_view_breadcrumb(
   @tree,
   @document,
+  label_builder: ->(item) { item.name },
   list_class: "breadcrumb",
   item_class: "breadcrumb-item",
   link_class: "breadcrumb-link",
@@ -54,7 +59,7 @@ The current item is rendered as a current label instead of a link.
 
 | option | meaning |
 |---|---|
-| `label_builder:` | Callable that returns the display label for each item. |
+| `label_builder:` | Required callable that returns the display label for each item. |
 | `path_builder:` | Callable that returns the URL/path for each item. Plain labels are rendered when omitted. |
 | `list_class:` | Class for the root list element. |
 | `item_class:` | Class for each item element. |
