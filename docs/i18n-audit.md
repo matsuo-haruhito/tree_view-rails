@@ -121,6 +121,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | `docs/mockups/filtered-tree-modes.html` | Technical asset | No translation needed. |
 | `docs/mockups/form-editing-rows.html` | Technical asset | No translation needed. |
 | `docs/mockups/empty-state.html` | Technical asset | No translation needed. |
+| `docs/mockups/row-status-depth-labels.html` | Technical asset | No translation needed. |
 | `docs/mockups/default-tree.css` | Technical asset | No translation needed. |
 
 ## Ongoing maintenance
