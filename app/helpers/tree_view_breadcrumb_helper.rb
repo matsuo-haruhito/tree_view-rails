@@ -21,42 +21,87 @@ module TreeViewBreadcrumbHelper
     link_class: DEFAULT_BREADCRUMB_CLASSES[:link],
     current_class: DEFAULT_BREADCRUMB_CLASSES[:current],
     separator_class: DEFAULT_BREADCRUMB_CLASSES[:separator],
-    aria_label: "Breadcrumb")
+    aria_label: "Breadcrumb",
+    html: {},
+    list_html: {},
+    item_html: {},
+    link_html: {},
+    current_html: {},
+    separator_html: {})
     validate_tree_view_breadcrumb_builder!(label_builder, :label_builder)
     validate_tree_view_breadcrumb_builder!(path_builder, :path_builder) if path_builder
 
     path_items = tree.path_for(item)
     list_items = path_items.each_with_index.map do |path_item, index|
       current = index == path_items.length - 1
-      tag.li(class: item_class) do
+      tag.li(**tree_view_breadcrumb_html_options(item_html, path_item, class_name: item_class)) do
         content = (current || path_builder.nil?) ?
-          tree_view_breadcrumb_current_label(path_item, label_builder, current_class) :
-          tree_view_breadcrumb_link(path_item, label_builder, path_builder, link_class)
+          tree_view_breadcrumb_current_label(path_item, label_builder, current_class, current_html) :
+          tree_view_breadcrumb_link(path_item, label_builder, path_builder, link_class, link_html)
 
         if current || separator.nil?
           content
         else
           safe_join([
             content,
-            tag.span(separator, class: separator_class, aria: {hidden: true})
+            tag.span(
+              separator,
+              **tree_view_breadcrumb_html_options(
+                separator_html,
+                path_item,
+                class_name: separator_class,
+                aria: {hidden: true}
+              )
+            )
           ], " ")
         end
       end
     end
 
-    tag.nav(class: nav_class, aria: {label: aria_label}) do
-      tag.ol(safe_join(list_items), class: list_class)
+    tag.nav(**tree_view_breadcrumb_html_options(html, item, class_name: nav_class, aria: {label: aria_label})) do
+      tag.ol(safe_join(list_items), **tree_view_breadcrumb_html_options(list_html, item, class_name: list_class))
     end
   end
 
   private
 
-  def tree_view_breadcrumb_link(item, label_builder, path_builder, link_class)
-    tag.a(label_builder.call(item), href: path_builder.call(item), class: link_class)
+  def tree_view_breadcrumb_link(item, label_builder, path_builder, link_class, link_html)
+    tag.a(
+      label_builder.call(item),
+      **tree_view_breadcrumb_html_options(
+        link_html,
+        item,
+        href: path_builder.call(item),
+        class_name: link_class
+      )
+    )
   end
 
-  def tree_view_breadcrumb_current_label(item, label_builder, current_class)
-    tag.span(label_builder.call(item), class: current_class, aria: {current: "page"})
+  def tree_view_breadcrumb_current_label(item, label_builder, current_class, current_html)
+    tag.span(
+      label_builder.call(item),
+      **tree_view_breadcrumb_html_options(
+        current_html,
+        item,
+        class_name: current_class,
+        aria: {current: "page"}
+      )
+    )
+  end
+
+  def tree_view_breadcrumb_html_options(source, item, class_name: nil, aria: {}, href: nil)
+    options = tree_view_breadcrumb_resolve_html_options(source, item)
+    options[:href] = href if href
+    options[:class] = [class_name, options[:class]].compact if class_name
+    options[:aria] = (options[:aria] || {}).merge(aria) if aria.any?
+    options
+  end
+
+  def tree_view_breadcrumb_resolve_html_options(source, item)
+    source = source.call(item) if source.respond_to?(:call)
+    return {} if source.nil?
+
+    source.to_h.deep_symbolize_keys
   end
 
   def validate_tree_view_breadcrumb_builder!(builder, name)
