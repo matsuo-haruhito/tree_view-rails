@@ -85,6 +85,15 @@ When the change touches documented host-app wiring or machine-readable public co
 
 `config/public_api_manifest.yml` remains the machine-readable source of truth for package-root exports, controller identifiers, grouped option keys, and documented event detail keys. Public API and feature docs remain the source of truth for documented wiring attributes and hooks that are intentionally not exported there.
 
+For any public API manifest change, confirm the release-facing trail is complete before tagging:
+
+- the manifest change is reflected in `docs/en/public-api.md`, `docs/ja/public-api.md`, and any affected feature page
+- `CHANGELOG.md` describes the user-visible compatibility surface under the appropriate release category
+- breaking changes, removals, or deprecations include migration notes rather than only manifest or spec wording
+- docs-only manifest guidance changes are listed as Documentation entries and do not imply runtime behavior changes
+
+Documentation files to review when public behavior or public compatibility surfaces change:
+
 - `README.md`
 - `docs/ja/README.md`
 - `docs/en/README.md`
@@ -109,6 +118,8 @@ Use these categories:
 - Deprecated
 - Removed
 - Documentation
+
+Record public API manifest changes by their user-visible effect. Use Added or Changed for backward-compatible public surface updates, Deprecated or Removed for compatibility changes that require migration notes, and Documentation only when the manifest or docs guidance changed without a runtime contract change.
 
 Include migration notes for breaking changes or deprecations.
 

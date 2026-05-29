@@ -85,6 +85,15 @@ documented な host-app wiring surface または machine-readable public contrac
 
 `config/public_api_manifest.yml` は、package-root export、controller identifier、grouped option key、documented event detail key の machine-readable source of truth です。一方で、そこに export していない documented wiring attribute や hook については、public API docs と feature docs を source of truth として扱います。
 
+public API manifest を変更する場合は、tag を打つ前に release-facing な導線も確認してください。
+
+- manifest の変更が `docs/en/public-api.md`、`docs/ja/public-api.md`、影響する feature page に反映されている
+- `CHANGELOG.md` が、user-visible な compatibility surface を適切な release category で説明している
+- breaking change、削除、deprecation には、manifest や spec の説明だけでなく migration note がある
+- docs-only の manifest guidance 変更は Documentation entry として扱い、runtime behavior の変更を示唆しない
+
+public behavior や public compatibility surface が変わるときに確認する docs:
+
 - `README.md`
 - `docs/ja/README.md`
 - `docs/en/README.md`
@@ -109,6 +118,8 @@ releaseごとに `CHANGELOG.md` へ日付付きentryを追加します。
 - Deprecated
 - Removed
 - Documentation
+
+public API manifest の変更は、user-visible な影響に合わせて記録します。後方互換な public surface 追加や変更は Added / Changed、migration note が必要な互換性変更は Deprecated / Removed、runtime contract を変えない manifest や docs guidance の変更は Documentation に入れてください。
 
 breaking changeやdeprecationにはmigration noteを書きます。
 
