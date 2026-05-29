@@ -93,8 +93,8 @@ RSpec.describe TreeViewBreadcrumbHelper do
       tree,
       child,
       label_builder: ->(item) { item.name },
-      html: { class: "app-breadcrumb", data: { controller: "analytics" }, aria: { describedby: "breadcrumb-help" } },
-      list_html: { data: { testid: "node-path" } },
+      html: {class: "app-breadcrumb", data: {controller: "analytics"}, aria: {describedby: "breadcrumb-help"}},
+      list_html: {data: {testid: "node-path"}},
       aria_label: "Node path"
     )
 
@@ -116,9 +116,9 @@ RSpec.describe TreeViewBreadcrumbHelper do
       child,
       label_builder: ->(item) { item.name },
       path_builder: ->(item) { "/nodes/#{item.id}" },
-      item_html: ->(item) { { data: { node_id: item.id } } },
-      link_html: ->(item) { { rel: "up", data: { action_id: item.id } } },
-      current_html: ->(item) { { class: "is-current", data: { current_id: item.id }, aria: { label: "Current #{item.name}" } } }
+      item_html: ->(item) { {data: {node_id: item.id}} },
+      link_html: ->(item) { {rel: "up", data: {action_id: item.id}} },
+      current_html: ->(item) { {class: "is-current", data: {current_id: item.id}, aria: {label: "Current #{item.name}"}} }
     )
 
     expect(rendered).to include('data-node-id="1"')
