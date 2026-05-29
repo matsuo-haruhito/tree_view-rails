@@ -7,6 +7,7 @@ PublicApiCompatibilityTestNode = Struct.new(:id, :parent_id, :name, keyword_init
 PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 JAVASCRIPT_ENTRYPOINT_PATH = File.expand_path("../app/javascript/tree_view/index.js", __dir__)
 JAVASCRIPT_CONTROLLER_PATHS = {
+  "state" => File.expand_path("../app/javascript/tree_view/state_controller.js", __dir__),
   "selection" => File.expand_path("../app/javascript/tree_view/selection_controller.js", __dir__),
   "remote_state" => File.expand_path("../app/javascript/tree_view/remote_state_controller.js", __dir__),
   "transfer" => File.expand_path("../app/javascript/tree_view/transfer_controller.js", __dir__)
