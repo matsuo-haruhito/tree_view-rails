@@ -166,6 +166,70 @@ RSpec.describe "tree_view_toolbar helper" do
     expect(html).to include("Open all")
   end
 
+  it "merges toolbar container HTML attributes without dropping TreeView data hooks" do
+    html = helper.tree_view_toolbar(
+      render_state,
+      actions: [:expand_all],
+      html: {
+        class: "documents-toolbar",
+        data: {controller: "analytics", tree_view_toolbar: "host-override"},
+        aria: {label: "Document tree actions"}
+      }
+    )
+
+    expect(html).to include("class=\"tree-view-toolbar documents-toolbar\"")
+    expect(html).to include("data-controller=\"analytics\"")
+    expect(html).to include("data-tree-view-toolbar=\"true\"")
+    expect(html).to include("aria-label=\"Document tree actions\"")
+  end
+
+  it "merges action HTML attributes from a proc while keeping TreeView action data" do
+    html = helper.tree_view_toolbar(
+      render_state,
+      actions: [:expand_all],
+      action_html: ->(action) {
+        {
+          class: "qa-#{action.fetch(:action)}",
+          data: {analytics_action: action.fetch(:action), tree_view_toolbar_action: "host-override"},
+          aria: {label: "Analytics #{action.fetch(:label)}"}
+        }
+      }
+    )
+
+    expect(html).to include("class=\"tree-view-toolbar__button qa-expand_all\"")
+    expect(html).to include("data-analytics-action=\"expand_all\"")
+    expect(html).to include("data-tree-view-toolbar-action=\"expand_all\"")
+    expect(html).to include("aria-label=\"Analytics Expand all\"")
+  end
+
+  it "merges action-specific HTML attributes for disabled buttons" do
+    static_ui_config = TreeView::UiConfig.new(
+      node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id}" },
+      button_dom_id_builder: ->(item_or_id) { "button_#{item_or_id}" },
+      show_button_dom_id_builder: ->(item_or_id) { "show_button_#{item_or_id}" }
+    )
+    static_render_state = instance_double(TreeView::RenderState, ui_config: static_ui_config)
+
+    html = helper.tree_view_toolbar(
+      static_render_state,
+      actions: [:collapse_all],
+      action_html: {
+        collapse_all: {
+          class: "qa-disabled-action",
+          data: {testid: "collapse-all"},
+          aria: {describedby: "toolbar-help"}
+        }
+      }
+    )
+
+    expect(html).to include("class=\"tree-view-toolbar__button qa-disabled-action\"")
+    expect(html).to include("data-testid=\"collapse-all\"")
+    expect(html).to include("data-tree-view-toolbar-action=\"collapse_all\"")
+    expect(html).to include("data-tree-view-toolbar-disabled=\"true\"")
+    expect(html).to include("aria-describedby=\"toolbar-help\"")
+    expect(html).to include("disabled=\"disabled\"")
+  end
+
   it "renders disabled buttons when no toggle_all_path is configured" do
     static_ui_config = TreeView::UiConfig.new(
       node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id}" },

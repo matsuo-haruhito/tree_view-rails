@@ -15,11 +15,11 @@ module TreeViewHelper
       collapse_all_except_current_path: :current_path
     }.freeze
 
-    def tree_view_toolbar(render_state, actions: DEFAULT_TREE_VIEW_TOOLBAR_ACTIONS, labels: {}, class_name: "tree-view-toolbar", button_class_name: "tree-view-toolbar__button")
-      content_tag(:div, class: class_name, data: {tree_view_toolbar: true}) do
+    def tree_view_toolbar(render_state, actions: DEFAULT_TREE_VIEW_TOOLBAR_ACTIONS, labels: {}, class_name: "tree-view-toolbar", button_class_name: "tree-view-toolbar__button", html: {}, action_html: nil)
+      content_tag(:div, tree_view_toolbar_html_options(class_name, html)) do
         safe_join(
           tree_view_toolbar_actions(render_state, actions: actions, labels: labels).map do |action|
-            tree_view_toolbar_action_tag(action, button_class_name)
+            tree_view_toolbar_action_tag(action, button_class_name, action_html)
           end
         )
       end
@@ -72,11 +72,13 @@ module TreeViewHelper
       I18n.t("tree_view.toolbar.labels.#{action}", default: default_label)
     end
 
-    def tree_view_toolbar_action_tag(action, button_class_name)
+    def tree_view_toolbar_action_tag(action, button_class_name, action_html)
+      options = tree_view_toolbar_action_html_options(action, button_class_name, action_html)
+
       if action[:path]
-        link_to(action[:label], action[:path], class: button_class_name, data: action[:data])
+        link_to(action[:label], action[:path], options)
       else
-        button_tag(action[:label], type: "button", class: button_class_name, disabled: true, data: action[:data])
+        button_tag(action[:label], options.merge(type: "button", disabled: true))
       end
     end
 
@@ -91,6 +93,32 @@ module TreeViewHelper
         tree_view_toolbar_action: action,
         tree_view_toolbar_disabled: disabled || nil
       }.compact
+    end
+
+    def tree_view_toolbar_html_options(class_name, html)
+      options = html.to_h.dup
+      options[:class] = class_names(class_name, options[:class])
+      options[:data] = options.fetch(:data, {}).to_h.merge(tree_view_toolbar: true)
+      options
+    end
+
+    def tree_view_toolbar_action_html_options(action, button_class_name, action_html)
+      options = resolve_tree_view_toolbar_action_html(action, action_html).to_h.dup
+      options[:class] = class_names(button_class_name, options[:class])
+      options[:data] = options.fetch(:data, {}).to_h.merge(action.fetch(:data))
+      options
+    end
+
+    def resolve_tree_view_toolbar_action_html(action, action_html)
+      case action_html
+      when nil
+        {}
+      when Proc
+        action_html.call(action) || {}
+      else
+        options = action_html.to_h
+        options.fetch(action.fetch(:action), options.fetch(action.fetch(:action).to_s, options))
+      end
     end
   end
 end
