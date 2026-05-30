@@ -37,6 +37,18 @@ function assert(condition, message) {
   if (!condition) throw new Error(message)
 }
 
+function assertFrozenObject(value, name, { deep = false } = {}) {
+  assert(Object.isFrozen(value), `${name} export is not frozen`)
+
+  if (!deep) return
+
+  Object.entries(value).forEach(([key, item]) => {
+    if (item && typeof item === "object") {
+      assert(Object.isFrozen(item), `${name}.${key} export group is not frozen`)
+    }
+  })
+}
+
 const javascriptPackageManifest = loadJavascriptPackageManifest()
 const entrypointModule = await import(new URL("../app/javascript/tree_view/index.js", import.meta.url).href)
 
@@ -58,6 +70,7 @@ assert(
   JSON.stringify(entrypointModule.TreeViewControllerIdentifiers) === JSON.stringify(expectedIdentifiers),
   "TreeViewControllerIdentifiers export is out of sync"
 )
+assertFrozenObject(entrypointModule.TreeViewControllerIdentifiers, "TreeViewControllerIdentifiers")
 
 const expectedRegistrations = javascriptPackageManifest.controller_registrations.map(({ identifier, export: exportName }) => {
   assert(exportName in entrypointModule, `${exportName} export is missing`)
@@ -86,3 +99,5 @@ assert(
   JSON.stringify(entrypointModule.TreeViewEventNames) === JSON.stringify(expectedEventNames),
   "TreeViewEventNames export is out of sync"
 )
+assertFrozenObject(entrypointModule.TreeViewEventNames, "TreeViewEventNames", { deep: true })
+assertFrozenObject(entrypointModule.TreeViewTransferDropPositions, "TreeViewTransferDropPositions")
