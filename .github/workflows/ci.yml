@@ -178,5 +178,6 @@ jobs:
           ruby-version: "3.3"
           bundler-cache: true
       - run: gem build tree_view.gemspec
+      - run: ruby script/check_gem_package_contents.rb tree_view-*.gem
       - run: gem install tree_view-*.gem
       - run: ruby -e "require 'tree_view'"

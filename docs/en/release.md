@@ -59,7 +59,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, verifies the gem can be built, confirms release-facing files are packaged, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. It skips tag alignment until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
+`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, verifies the gem can be built, confirms release-facing files are packaged, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The main-push `gem_package` CI job additionally runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem so JavaScript, CSS, and importmap entrypoints remain packaged. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
 
 Pull request CI checks:
 
@@ -73,7 +73,7 @@ Main-push CI checks:
 - Ruby version matrix
 - Rails version matrix
 - JavaScript tests through `npm install` and `npm run test:js` until the lockfile is refreshed in sync with `package.json`
-- Gem package verification
+- Gem package verification, including JavaScript, CSS, and importmap file contents
 
 PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes compatibility matrices, JavaScript coverage, and package verification.
 
@@ -129,10 +129,14 @@ Before release:
 
 - Confirm `TreeView::VERSION` matches the release version.
 - Run `gem build tree_view.gemspec`.
+- Run `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem.
 - Install the generated gem locally and confirm `require "tree_view"` works.
 - Confirm packaged files include:
   - `lib/**/*`
   - Rails helpers, views, stylesheets, JavaScript, and importmap files
+  - `app/javascript/tree_view/index.js`
+  - `app/assets/stylesheets/tree_view.scss`
+  - `config/importmap.tree_view.rb`
   - `README.md`
   - `CHANGELOG.md`
   - `docs/**/*`
