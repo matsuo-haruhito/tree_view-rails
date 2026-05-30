@@ -16,6 +16,8 @@ TreeView is responsible for:
 
 The host app remains responsible for storage ownership, authorization, save timing, controller actions, and UI wiring.
 
+For a static visual reference of the save/restore handoff, see [Persisted State boundary mockup](../mockups/persisted-state-boundary.html). The mockup shows representative before, changed, restored, save-failed, and retry cues without turning storage, save endpoints, authorization, or retry policy into gem-owned behavior.
+
 ## Generator
 
 Use the generator to create model and migration templates.
