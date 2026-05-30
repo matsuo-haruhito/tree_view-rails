@@ -89,6 +89,8 @@ Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-
 
 Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails and JavaScript jobs while preserving the same check names for branch protection. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.
 
+A green check suite does not by itself mean a pull request is ready to merge after `main` has moved. When a branch is `diverged`, check mergeability, changed files, risk, and how far the branch is behind. Prefer refreshing the branch and observing fresh CI when GitHub reports `mergeable: false`, when the branch is far behind, or when the pull request touches workflow definitions, public API, specs, or shared docs inventory. For small docs-only changes that are only a little behind, it is enough to confirm the changed files still apply cleanly, mergeability is true, and the named checks remain green.
+
 Pushes to `main` also run the broader compatibility and release checks:
 
 - Ruby version matrix
@@ -142,4 +144,5 @@ Pushes to `main` also run the broader compatibility and release checks:
 - PR CI must pass before merge.
 - Docs-only PRs may short-circuit the representative Rails and JavaScript jobs, but merge still waits for the named checks to stay green.
 - PRs that change workflow definitions should be observed on a fresh head SHA before merge.
+- If a PR is `diverged` from `main`, do not rely on old green CI alone; review mergeability, changed files, risk, and behind count before deciding whether to refresh.
 - Full compatibility and package verification is confirmed on `main` before release decisions.
