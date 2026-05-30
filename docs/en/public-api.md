@@ -139,6 +139,7 @@ See [API reference](api.md), [Localized names](localized-names.md), and [Turbo F
 | `toggle_scope` | `max_depth_from_root`, `max_leaf_distance` | Mirrors the documented tree-wide toggle depth and toggle leaf-distance controls. |
 | `selection` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | Mirrors `TreeView::RenderState::SelectionConfig` and keeps grouped selection wiring aligned with the documented flat selection keywords. |
 | `lazy_loading` | `enabled`, `loaded_keys`, `scope` | Mirrors the documented lazy-loading row-state hooks and optional host-app scope passthrough. |
+| `row_status` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | Mirrors the documented row disabled / readonly state hooks and disabled-reason surface. |
 
 ## Host app extension points
 
