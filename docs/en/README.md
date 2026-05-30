@@ -11,7 +11,7 @@ Documentation now lives in language-specific directories, and bilingual coverage
 - [Japanese documentation](../ja/README.md)
 - [Documentation i18n audit](../i18n-audit.md)
 
-Not every page has a complete English translation yet. English coverage is prioritized for entry points, installation, minimal usage, usage, and API overview first.
+Most user-facing, feature, release, and maintainer pages now exist in both language trees. When English detail lags behind Japanese wording, track that mismatch through the i18n audit rather than treating the English tree as entry-point-only coverage.
 
 ## For users
 
