@@ -32,21 +32,21 @@
   color: #52606d;
 }
 
-.tree-row.is-readonly {
+.tree-row.tree-view-row--readonly {
   background: #f8fafc;
 }
 
-.tree-row.is-readonly .tree-toggle-cell,
-.tree-row.is-readonly td {
+.tree-row.tree-view-row--readonly .tree-toggle-cell,
+.tree-row.tree-view-row--readonly td {
   color: #52606d;
 }
 
-.tree-row.is-disabled {
+.tree-row.tree-view-row--disabled {
   background: #fff1f2;
 }
 
-.tree-row.is-disabled .tree-toggle-cell,
-.tree-row.is-disabled td {
+.tree-row.tree-view-row--disabled .tree-toggle-cell,
+.tree-row.tree-view-row--disabled td {
   color: #6b7280;
 }
 
@@ -54,6 +54,44 @@
   margin: 0.45rem 0 0;
   color: #52606d;
   font-size: 0.9rem;
+}
+
+.mock-generated-hooks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mock-generated-hooks code {
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 6px;
+  background: #e2e8f0;
+  color: #1e293b;
+  padding: 0.12rem 0.35rem;
+  overflow-wrap: anywhere;
+  font-size: 0.82rem;
+}
+
+.mock-host-row--readonly .mock-node-title::after,
+.mock-host-row--disabled .mock-node-title::after {
+  display: inline-block;
+  margin-left: 0.45rem;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mock-host-row--readonly .mock-node-title::after {
+  content: "host readonly tone";
+}
+
+.mock-host-row--disabled .mock-node-title::after {
+  content: "host disabled tone";
 }
 
 .mock-depth-label--team {
@@ -78,8 +116,8 @@
       <p class="mock-kicker">tree_view-rails</p>
       <h1>TreeView row status and depth label mock</h1>
       <p>
-        This static HTML compares row-wide status cues, selection checkbox disabled state, and depth labels
-        without running a Rails app. Business meaning, authorization rules, final copy, and status styling
+        This static HTML compares row-wide status cues, generated row status hooks, selection checkbox disabled state,
+        and depth labels without running a Rails app. Business meaning, authorization rules, final copy, and status styling
         remain host-app responsibilities.
       </p>
     </header>
@@ -92,9 +130,8 @@
     <section class="mock-section" aria-labelledby="status-depth-comparison-heading">
       <h2 id="status-depth-comparison-heading">Representative comparison</h2>
       <p>
-        The first column keeps the reusable TreeView hierarchy cue. The selection column shows whether
-        selection is available. The status and depth labels are visible hints only; host apps decide what
-        each status means and when a row becomes readonly or disabled.
+        The first column keeps the reusable TreeView hierarchy cue. The generated hook column shows the class and data
+        attributes emitted by TreeView. Presentation classes in this mockup only demonstrate one possible host-app tone.
       </p>
       <table class="tree-view-table">
         <thead>
@@ -102,6 +139,7 @@
             <th scope="col">select</th>
             <th scope="col">tree</th>
             <th scope="col">row status</th>
+            <th scope="col">generated hook</th>
             <th scope="col">depth cue</th>
             <th scope="col">review note</th>
           </tr>
@@ -120,10 +158,15 @@
               </span>
             </td>
             <td><span class="mock-status mock-status--active">normal</span></td>
+            <td>
+              <ul class="mock-generated-hooks" aria-label="No row status hook">
+                <li><code>no generated row status hook</code></li>
+              </ul>
+            </td>
             <td><span class="tree-depth-label mock-depth-label--team">team</span></td>
             <td>Selection and row actions remain available.</td>
           </tr>
-          <tr class="tree-row is-readonly" data-tree-node-key="folder:archive" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false">
+          <tr class="tree-row tree-view-row--readonly mock-host-row--readonly" data-tree-node-key="folder:archive" data-tree-depth="1" data-tree-expanded="false" data-tree-view-row-readonly="true" aria-level="2" aria-expanded="false">
             <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Select Archived folder"></td>
             <td class="tree-toggle-cell">
               <span class="tree-toggle" aria-label="Readonly branch">
@@ -136,10 +179,16 @@
               </span>
             </td>
             <td><span class="mock-status mock-status--pending">readonly</span></td>
+            <td>
+              <ul class="mock-generated-hooks" aria-label="Readonly generated hooks">
+                <li><code>.tree-view-row--readonly</code></li>
+                <li><code>data-tree-view-row-readonly="true"</code></li>
+              </ul>
+            </td>
             <td><span class="tree-depth-label mock-depth-label--folder">folder</span></td>
-            <td>Readonly is a row-wide visual cue; selection can still be enabled when the host app allows it.</td>
+            <td>Readonly is a row-wide generated hook; selection can still be enabled when the host app allows it.</td>
           </tr>
-          <tr class="tree-row is-disabled" data-tree-node-key="record:locked" data-tree-depth="2" aria-level="3">
+          <tr class="tree-row tree-view-row--disabled mock-host-row--disabled" data-tree-node-key="record:locked" data-tree-depth="2" data-tree-view-row-disabled="true" data-tree-view-row-disabled-reason="Locked by archive policy" aria-level="3">
             <td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Locked record unavailable" disabled></td>
             <td class="tree-toggle-cell">
               <span class="tree-toggle" aria-label="Disabled leaf">
@@ -152,8 +201,15 @@
               </span>
             </td>
             <td><span class="mock-status mock-status--error">disabled</span></td>
+            <td>
+              <ul class="mock-generated-hooks" aria-label="Disabled generated hooks">
+                <li><code>.tree-view-row--disabled</code></li>
+                <li><code>data-tree-view-row-disabled="true"</code></li>
+                <li><code>data-tree-view-row-disabled-reason</code></li>
+              </ul>
+            </td>
             <td><span class="tree-depth-label mock-depth-label--leaf">record</span></td>
-            <td>Disabled row styling and disabled selection are related but separate cues.</td>
+            <td>Disabled row styling, disabled selection, and disabled reason metadata are related but separate cues.</td>
           </tr>
         </tbody>
       </table>
@@ -163,8 +219,12 @@
       <h2 id="boundary-heading">Responsibility boundary</h2>
       <div class="mock-boundary-grid">
         <article class="mock-boundary-card">
-          <h3>Row status</h3>
-          <p>Use for row-wide visual state such as normal, readonly, or disabled. The host app owns the rule and copy.</p>
+          <h3>Generated row hooks</h3>
+          <p>TreeView can emit readonly or disabled classes and data attributes for each row. These hooks are stable review targets, not final product wording.</p>
+        </article>
+        <article class="mock-boundary-card">
+          <h3>Host-app presentation</h3>
+          <p>Host apps own the visual tone, final copy, and policy that decide when a generated hook should be active.</p>
         </article>
         <article class="mock-boundary-card">
           <h3>Selection checkbox</h3>
