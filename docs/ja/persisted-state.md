@@ -48,6 +48,32 @@ bin/rails generate tree_view:state:install User
 
 owner model file が存在しない場合、model への注入は skip されます。その場合は concern を手動で include してください。
 
+### owner への注入が skip された場合
+
+owner model file が存在しないと表示された場合は、まず保存された tree state を所有する model を確認してください。そのうえで、生成済みの `app/models/concerns/tree_view_state_owner.rb` がある状態で、その model に `include TreeViewStateOwner` を追加します。
+
+通常の owner model では、手動で追加する行は generator が追加するものと同じです。
+
+```ruby
+# app/models/user.rb
+class User < ApplicationRecord
+  include TreeViewStateOwner
+end
+```
+
+namespace 付き、または `module` で囲まれた owner では、`TreeView::StateStore` の `owner:` に渡す実際の class の中に include します。
+
+```ruby
+# app/models/admin/user.rb
+module Admin
+  class User < ApplicationRecord
+    include TreeViewStateOwner
+  end
+end
+```
+
+owner model を後から作る場合、namespace 配下に置く場合、または project 固有の file layout により generator が更新しなかった場合は、手動 include が自然な follow-up です。このケースでは生成済み migration や `TreeViewState` model を変更する必要はありません。host app 側では、`tree_view_state_for`、`save_tree_view_state!`、または `TreeView::StateStore` へ owner を渡す前に、その owner class が concern を include していれば十分です。
+
 ## owner model
 
 host app側のowner modelに concern をincludeします。
