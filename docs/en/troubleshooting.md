@@ -46,6 +46,30 @@ Read next:
 - [Accessibility Semantics](accessibility-semantics.md)
 - [Tree diagnostics](tree-diagnostics.md)
 
+## Tree rendering triggers repeated queries or high ActiveRecord time
+
+Treat this as a host-app data loading and row partial problem first. TreeView can traverse the tree and render rows, but it does not choose eager-loading, authorization, caching, or derived-value strategies for application records.
+
+Check these signals in the Rails log while rendering the tree.
+
+- `ActiveRecord:` time is high compared with `Views:` time.
+- Similar `Document Load`, `DocumentVersion Load`, or application-specific query lines repeat while rows render.
+- Repeated queries are not marked `CACHE`.
+- The row partial calls helpers or associations that perform database work for every row.
+
+Then move the expensive work out of the render loop.
+
+- Materialize parent records before building the tree.
+- Return arrays, not lazy ActiveRecord relations, from `GraphAdapter` `children_resolver` callbacks.
+- Cache child collections by parent id in the host app.
+- Precompute authorization, version, or display metadata before the row partial renders.
+
+Read next:
+
+- [Cookbook: GraphAdapter and ActiveRecord performance](cookbook.md#graphadapter-and-activerecord-performance)
+- [Rendering Boundaries](rendering-boundaries.md)
+- [Tree diagnostics](tree-diagnostics.md)
+
 ## CSS or JavaScript integration does not seem to apply
 
 Start with installation wiring.

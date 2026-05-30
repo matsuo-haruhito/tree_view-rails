@@ -46,6 +46,30 @@ TreeView は row wrapper と共通 tree UI cell を担当し、`row_partial` の
 - [Accessibility Semantics](accessibility-semantics.md)
 - [Tree diagnostics](tree-diagnostics.md)
 
+## tree rendering 中に query が繰り返される / ActiveRecord time が大きい
+
+まず host app 側の data loading と row partial の問題として切り分けます。TreeView は tree traversal と row rendering を担いますが、application record の eager loading、authorization、caching、derived value の作り方は決めません。
+
+tree を描画しているときの Rails log で次を確認します。
+
+- `Views:` に比べて `ActiveRecord:` が大きい。
+- row render 中に `Document Load`、`DocumentVersion Load`、または host app 固有の query が同じ形で繰り返される。
+- 繰り返し出る query が `CACHE` になっていない。
+- row partial から呼ぶ helper や association access が row ごとに DB work を発生させている。
+
+高コストな処理は render loop の外へ移してください。
+
+- tree 構築前に親 record を確定する。
+- `GraphAdapter` の `children_resolver` から lazy な ActiveRecord relation ではなく配列を返す。
+- parent id ごとの children cache を host app 側で作る。
+- authorization、version、表示用 metadata は row partial の描画前に事前計算する。
+
+次に読む文書:
+
+- [Cookbook: GraphAdapter と ActiveRecord の性能](cookbook.md#graphadapter-と-activerecord-の性能)
+- [Rendering Boundaries](rendering-boundaries.md)
+- [Tree diagnostics](tree-diagnostics.md)
+
 ## CSS や JavaScript の統合が効いていないように見える
 
 まず導入 wiring を確認してください。
