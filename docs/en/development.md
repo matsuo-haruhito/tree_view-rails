@@ -38,6 +38,8 @@ For the Rails version matrix:
 ```bash
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
+BUNDLE_GEMFILE=gemfiles/rails_7_1.gemfile bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7_1.gemfile bundle exec rake
 BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle exec rake
 BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle install
@@ -87,6 +89,8 @@ Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-
 - Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
 - JavaScript entrypoint, unit, and browser smoke tests through `npm run test:js`
 
+The pull-request Rails lanes intentionally skip Rails 7.1 to keep PR feedback focused on representative lower, current, and next-major coverage; the `main` push full Rails matrix is the final compatibility gate that includes Rails 7.1.
+
 Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails and JavaScript jobs while preserving the same check names for branch protection. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.
 
 A green check suite does not by itself mean a pull request is ready to merge after `main` has moved. When a branch is `diverged`, check mergeability, changed files, risk, and how far the branch is behind. Prefer refreshing the branch and observing fresh CI when GitHub reports `mergeable: false`, when the branch is far behind, or when the pull request touches workflow definitions, public API, specs, or shared docs inventory. For small docs-only changes that are only a little behind, it is enough to confirm the changed files still apply cleanly, mergeability is true, and the named checks remain green.
@@ -94,7 +98,7 @@ A green check suite does not by itself mean a pull request is ready to merge aft
 Pushes to `main` also run the broader compatibility and release checks:
 
 - Ruby version matrix
-- Full Rails version matrix
+- Full Rails version matrix, including Rails 7.1
 - gem package verification
 
 ## Change checklist

@@ -38,6 +38,8 @@ Rails version matrixを確認する場合:
 ```bash
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
+BUNDLE_GEMFILE=gemfiles/rails_7_1.gemfile bundle install
+BUNDLE_GEMFILE=gemfiles/rails_7_1.gemfile bundle exec rake
 BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle exec rake
 BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle install
@@ -87,6 +89,8 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
 - JavaScript entrypoint、unit、browser smoke tests: `npm run test:js`
 
+Pull Request の Rails lanes では、lower / current / next-major の代表範囲に絞るため Rails 7.1 は意図的に含めていません。Rails 7.1 は `main` push の full Rails matrix で確認する最終互換ゲートです。
+
 `README.md`、`docs/**`、`Product Profile.md`、`CHANGELOG.md`、`AGENTS.md` だけに触れる docs-only Pull Request では、`lint` と `pr_specs` はそのまま残しつつ、representative Rails job と JavaScript job を short-circuit します。branch protection のため、check 名はそのまま維持します。`.github/workflows/**` も変更する Pull Request ではこの shortcut を使わず、通常の PR lanes を確認します。
 
 `main` が進んで branch が `diverged` になった後は、green checks だけでは merge ready と判断しません。`mergeable`、changed files、risk、behind の大きさを確認します。GitHub が `mergeable: false` を返す場合、behind が大きい場合、または workflow 定義、public API、spec、shared docs inventory に触れる Pull Request では、branch refresh 後に fresh CI を観測することを優先します。小さく少しだけ behind している docs-only 変更では、changed files が clean に適用でき、`mergeable` が true で、同じ check 名が green のままなら、過度に重い refresh を必須にしなくてかまいません。
@@ -94,7 +98,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 `main` へのpushでは、より広い互換性確認とrelease向けのchecksも実行します。
 
 - Ruby version matrix
-- full Rails version matrix
+- full Rails version matrix（Rails 7.1 を含む）
 - gem package verification
 
 ## 変更時の確認ポイント
