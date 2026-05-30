@@ -127,6 +127,8 @@ Pushes to `main` also run the broader compatibility and release checks:
 - Decide whether root compatibility docs should remain or point to language-specific docs.
 - When a pull request touches only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md`, confirm that the docs-only CI short-circuit is still the intended policy before relying on it.
 - If a pull request also changes `.github/workflows/**`, treat it as a full CI change rather than a docs-only shortcut candidate.
+- When a pull request adds, renames, or removes a focused mockup under `docs/mockups/`, keep the mockup inventory trail synchronized: update `docs/mockups/README.md`, add or adjust the `docs/mockups/review-gallery.html` card, review README and language README entry points when the recommended review flow changes, and add feature-guide links when a mockup is meant to accompany a specific guide.
+- Docs-only CI does not verify mockup inventory drift automatically. If the existing mockup files and docs indexes already disagree, handle that as a separate docs follow-up instead of mixing gallery redesign or mockup HTML/CSS changes into a checklist-only PR.
 
 ## Before release
 
