@@ -25,7 +25,6 @@ test.describe("docs mockup browser smoke", () => {
 
     await expect(page.getByRole("heading", { name: "TreeView mockup review gallery", level: 1 })).toBeVisible()
     await expect(page.getByRole("navigation", { name: "Documentation entry points" })).toBeVisible()
-    await expect(page.getByRole("navigation", { name: "Mockup comparison gallery" })).toBeHidden({ timeout: 1 }).catch(() => {})
     await expect(page.getByRole("link", { name: "Baseline" })).toHaveAttribute("href", "#gallery-default-heading")
     await expect(page.getByRole("link", { name: "Interaction states" })).toHaveAttribute("href", "#gallery-interaction-heading")
     await expect(page.frameLocator("iframe[title='Default tree mock preview']").getByRole("heading", { name: "Default TreeView rendering mock", level: 1 })).toBeVisible()
@@ -73,7 +72,7 @@ test.describe("docs mockup browser smoke", () => {
 
       await expect(page.getByRole("heading", { name: mockup.heading, level: 1 })).toBeVisible()
       await expect(page.getByRole("heading", { name: mockup.section })).toBeVisible()
-      await expect(page.locator(mockup.sample)).toHaveCount(mockup.minimumCount)
+      expect(await page.locator(mockup.sample).count()).toBeGreaterThanOrEqual(mockup.minimumCount)
       await expect(page.getByRole("link", { name: "Back to review gallery" })).toHaveAttribute("href", "review-gallery.html")
     })
   }
