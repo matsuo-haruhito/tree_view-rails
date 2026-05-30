@@ -76,6 +76,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Pull requests run representative edge and current Rails lanes; Rails 7.1 stays in the main-branch full matrix.
         include:
           - rails: "7.0"
             gemfile: gemfiles/rails_7_0.gemfile
