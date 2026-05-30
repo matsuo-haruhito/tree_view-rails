@@ -48,6 +48,32 @@ This still creates the same migration, model, and concern files. If `app/models/
 
 If the owner model file does not exist, the generator skips model injection and you can include the concern manually.
 
+### If owner injection is skipped
+
+When the generator reports that the owner model file does not exist, first confirm which model should own the saved tree state. Then add `include TreeViewStateOwner` to that existing model after the generated concern exists at `app/models/concerns/tree_view_state_owner.rb`.
+
+For a plain owner model, the manual include is the same line the generator would add:
+
+```ruby
+# app/models/user.rb
+class User < ApplicationRecord
+  include TreeViewStateOwner
+end
+```
+
+For a namespaced or module-wrapped owner, add the include inside the actual class that will be passed as the `owner:` to `TreeView::StateStore`:
+
+```ruby
+# app/models/admin/user.rb
+module Admin
+  class User < ApplicationRecord
+    include TreeViewStateOwner
+  end
+end
+```
+
+Manual include is the expected follow-up when the owner model is generated later, lives in a namespace, or uses a project-specific file layout that the generator did not update. Do not change the generated migration or `TreeViewState` model for this case; the host app only needs the owner class to include the concern before it calls `tree_view_state_for`, `save_tree_view_state!`, or passes the owner into `TreeView::StateStore`.
+
 ## Owner model
 
 Include the concern in the host app owner model.
