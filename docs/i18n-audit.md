@@ -114,6 +114,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | `docs/mockups/narrow-sidebar-tree.html` | Technical asset | No translation needed. |
 | `docs/mockups/interaction-states.html` | Technical asset | No translation needed. |
 | `docs/mockups/drop-positions.html` | Technical asset | No translation needed. |
+| `docs/mockups/persisted-state-boundary.html` | Technical asset | No translation needed. |
 | `docs/mockups/turbo-frame-target.html` | Technical asset | No translation needed. |
 | `docs/mockups/drag-interactive-controls.html` | Technical asset | No translation needed. |
 | `docs/mockups/interactive-marker-behaviors.html` | Technical asset | No translation needed. |
