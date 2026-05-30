@@ -93,6 +93,29 @@ function onDrop(event) {
 }
 ```
 
+Host apps can also listen for the public transfer events dispatched by the `tree-view-transfer` controller instead of reading controller internals directly.
+
+```js
+document.addEventListener("tree-view-transfer:drop", (event) => {
+  const { sourcePayload, targetPayload, position } = event.detail
+  // Apply host-app authorization, ordering, persistence, and error handling here.
+})
+```
+
+The transfer controller exposes these reader-facing details:
+
+| Event | Main `event.detail` fields | Meaning |
+|---|---|---|
+| `tree-view-transfer:drag-start` | `sourcePayload`, `sourceRow` | A draggable TreeView row started a transfer and its payload was copied to `DataTransfer` when available. |
+| `tree-view-transfer:drag-over` | `targetPayload`, `targetRow`, `position` | The pointer is over a valid target row. TreeView reports the target payload and coarse drop position. |
+| `tree-view-transfer:drop` | `sourcePayload`, `targetPayload`, `position`, `targetRow` | A payload was dropped on a target row. Host apps decide whether the requested move is allowed and how to persist it. |
+| `tree-view-transfer:invalid-payload` | `value`, `row` | A target row's `data-tree-transfer-payload` could not be parsed as JSON. |
+| `tree-view-transfer:invalid-transfer` | `value` | The transferred JSON value from `DataTransfer` could not be parsed. |
+
+`position` is a TreeView-owned coarse cue for where the pointer sits inside the target row: the top third is `before`, the middle third is `inside`, and the bottom third is `after`. Treat it as input to host-app business rules, not as final authorization or persistence policy. For example, a host app may ignore `inside` for leaf-only trees, reject drops across projects, or translate `before` / `after` into an ordering update.
+
+For the full JavaScript event contract, see [JavaScript event contract](js-events.md#transfer-events).
+
 ## Responsibility boundary
 
 | Area | TreeView | Host app |
@@ -101,6 +124,8 @@ function onDrop(event) {
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
 | interactive-control drag-start guard | yes | marks custom widgets when needed |
+| transfer event detail | yes | listens and applies business behavior |
+| coarse drop position | reports `before`, `inside`, or `after` | decides whether the position is allowed and how to persist it |
 | drop target | no | yes |
 | reorder / move persistence | no | yes |
 | authorization | no | yes |
