@@ -14,6 +14,16 @@ language-specific docs 全体の入口と関連ガイドは [docs index](../READ
 
 TreeView gem はツリーUIの基盤を提供します。CRUD、認可、保存、server-side query、Turbo Stream response、業務固有actionはhost app側で実装します。
 
+## root items が空の場合 / no-results row
+
+root items が空の画面や、filter / search の結果が0件になった画面では、empty copy、CTA、permission messaging、filter reset behavior は host app 側で決めます。通常 `tree_view_rows(@render_state)` を置く table body の位置に empty state を描画し、共通 mockup と同じ見た目に寄せたい場合は TreeView の documented baseline hook を再利用してください。
+
+- `data-tree-view-empty-state="true"`
+- `.tree-view-empty-row__content`
+- `.tree-view-empty-row__message`
+
+focused visual reference と hook boundary は [empty-state.html](../mockups/empty-state.html) と [mockup empty-state guidance](../mockups/README.md#empty-state-guidance) を参照してください。
+
 ## toggle mode
 
 開閉方式はtree instanceごとに選びます。1つのhost app内で画面ごとに使い分けたり、同じpage内に異なるmodeのtreeを並べたりできます。
