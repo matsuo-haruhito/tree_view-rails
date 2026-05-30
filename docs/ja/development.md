@@ -40,6 +40,8 @@ BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_0.gemfile bundle exec rake
 BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle install
 BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile bundle exec rake
+BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle install
+BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rake
 ```
 
 ## Public API compatibility specs
