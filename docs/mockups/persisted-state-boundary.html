@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView Persisted State boundary mockup</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.persisted-shell {
+  display: grid;
+  gap: 20px;
+}
+
+.persisted-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.persisted-state-card,
+.persisted-boundary-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.persisted-state-card h3,
+.persisted-state-card p,
+.persisted-boundary-card h3,
+.persisted-boundary-card p,
+.persisted-state-card ul,
+.persisted-boundary-card ul {
+  margin: 0;
+}
+
+.persisted-state-card ul,
+.persisted-boundary-card ul {
+  padding-left: 1.2rem;
+  color: #334e68;
+}
+
+.persisted-step-label {
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.persisted-snapshot {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #334e68;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.84rem;
+}
+
+.persisted-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.persisted-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.persisted-status--idle {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.persisted-status--pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.persisted-status--saved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.persisted-status--failed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.persisted-status--retry {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.persisted-boundary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.75fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.persisted-boundary-card {
+  background: #f8fafc;
+}
+
+.persisted-boundary-card code,
+.persisted-snapshot code {
+  padding: 0.08rem 0.35rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.8);
+  color: inherit;
+}
+
+.persisted-note {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334e68;
+}
+
+@media (max-width: 860px) {
+  .persisted-boundary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <nav class="mock-return-nav" aria-label="Mockup navigation">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Mockup README</a>
+    </nav>
+
+    <header class="mock-header">
+      <p class="mock-kicker">Focused persisted state boundary</p>
+      <h1>Persisted State boundary mockup</h1>
+      <p>
+        Static reference for reviewing the TreeView-owned expansion state event beside host-app-owned storage, save endpoint, error copy, and retry policy.
+      </p>
+    </header>
+
+    <section class="mock-section persisted-shell" aria-labelledby="persisted-flow-heading">
+      <div>
+        <h2 id="persisted-flow-heading">Expansion state flow</h2>
+        <p>
+          The representative states show how <code>tree_instance_key</code> and expanded keys move from first render to changed state, saved state, restored state, and save failure without modeling a real network request.
+        </p>
+      </div>
+
+      <div class="persisted-flow-grid" aria-label="Persisted state representative flow">
+        <article class="persisted-state-card">
+          <p class="persisted-step-label">First render</p>
+          <h3>Unsaved expansion state</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--idle">No snapshot yet</span>
+            <span class="mock-status mock-status--pending">Host storage empty</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Node</th>
+                <th scope="col">Visible cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Expand</a>
+                      <span class="tree-node-title">Documents</span>
+                      <span class="tree-node-badge tree-node-badge--info">tree:docs</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Default collapsed root</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="persisted-snapshot">
+            <span>tree_instance_key: documents_tree</span>
+            <span>expanded_keys: []</span>
+          </div>
+        </article>
+
+        <article class="persisted-state-card">
+          <p class="persisted-step-label">Changed event</p>
+          <h3>User expands rows</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--pending">Save pending</span>
+            <span class="mock-status mock-status--active">Event emitted</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Node</th>
+                <th scope="col">Visible cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Collapse</a>
+                      <span class="tree-node-title">Documents</span>
+                      <span class="tree-node-badge tree-node-badge--info">Current</span>
+                    </span>
+                  </span>
+                </td>
+                <td><code>tree-view-state:state-changed</code></td>
+              </tr>
+              <tr class="tree-row">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Collapse</a>
+                      <span class="tree-node-title">Policies</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Expanded child branch</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="persisted-snapshot">
+            <span>viewKey: documents_tree</span>
+            <span>expandedKeys: ["documents", "policies"]</span>
+          </div>
+        </article>
+
+        <article class="persisted-state-card">
+          <p class="persisted-step-label">Later render</p>
+          <h3>Saved state restored</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--saved">Saved</span>
+            <span class="mock-status mock-status--active">Restored</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Node</th>
+                <th scope="col">Visible cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Collapse</a>
+                      <span class="tree-node-title">Documents</span>
+                      <span class="tree-node-badge tree-node-badge--success">Restored</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Snapshot applied before review</td>
+              </tr>
+              <tr class="tree-row">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches">
+                      <span class="tree-toggle__branch-slot is-current is-last"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-depth-label">Leaf</span>
+                      <span class="tree-node-title">Retention schedule</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Leaf visible through restored parent path</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="persisted-snapshot">
+            <span>stored expanded_keys: ["documents", "policies"]</span>
+            <span>render_state: restored</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section persisted-boundary-grid" aria-labelledby="failure-boundary-heading">
+      <div class="persisted-state-card">
+        <p class="persisted-step-label">Failure / retry cue</p>
+        <h2 id="failure-boundary-heading">Host app save status</h2>
+        <p>
+          Save errors belong to the host app because endpoint semantics, authorization, retry timing, and user-facing copy vary by product.
+        </p>
+        <div class="persisted-status-row">
+          <span class="persisted-status persisted-status--failed">Save failed</span>
+          <span class="persisted-status persisted-status--retry">Retry available</span>
+        </div>
+        <div class="persisted-snapshot" role="note" aria-label="Example host app error copy">
+          <span>endpoint: PATCH /tree_states/documents_tree</span>
+          <span>message: Expansion is still visible. Save did not complete.</span>
+          <span>next_action: Retry save</span>
+        </div>
+        <ul>
+          <li>The expanded row stays visible because TreeView already rendered the changed state.</li>
+          <li>The host app decides whether to retry, show a toast, block navigation, or ignore the failed save.</li>
+          <li>The mockup keeps final error wording product-neutral.</li>
+        </ul>
+      </div>
+
+      <aside class="persisted-boundary-card" aria-label="Responsibility boundary summary">
+        <h3>Responsibility boundary</h3>
+        <ul>
+          <li><strong>TreeView owns:</strong> expansion state rendering and <code>tree-view-state:state-changed</code> event details.</li>
+          <li><strong>Host app owns:</strong> persistence storage, save endpoint, authorization, retry policy, and visible error copy.</li>
+          <li><strong>Review focus:</strong> compare state cues without implying that the gem ships a browser save helper.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <p class="persisted-note">
+      This mockup is static. It does not add a database table, controller action, debounce helper, retry loop, authorization policy, or persisted state runtime behavior.
+    </p>
+  </main>
+</body>
+</html>
