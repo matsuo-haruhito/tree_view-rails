@@ -47,11 +47,14 @@ The current item is rendered as a current label instead of a link.
   @tree,
   @document,
   label_builder: ->(item) { item.name },
+  nav_class: "breadcrumb-nav",
   list_class: "breadcrumb",
   item_class: "breadcrumb-item",
   link_class: "breadcrumb-link",
   current_class: "breadcrumb-current",
-  separator: "/"
+  separator: "/",
+  separator_class: "breadcrumb-separator",
+  aria_label: "Node path"
 ) %>
 ```
 
@@ -87,11 +90,14 @@ For markup changes that need custom wrappers, conditional authorization copy, or
 | `link_html:` | Additional attributes for link elements. A callable receives the item. |
 | `current_html:` | Additional attributes for the current label element. A callable receives the item. |
 | `separator_html:` | Additional attributes for separator elements. A callable receives the previous item. |
+| `nav_class:` | Class for the breadcrumb `<nav>` container. |
 | `list_class:` | Class for the root list element. |
 | `item_class:` | Class for each item element. |
 | `link_class:` | Class for link elements. |
 | `current_class:` | Class for the current node label. |
+| `separator_class:` | Class for separator elements. |
 | `separator:` | Separator between items. |
+| `aria_label:` | Accessible label for the breadcrumb `<nav>` element. |
 
 ## Supported mode
 
