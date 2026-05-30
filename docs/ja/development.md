@@ -89,6 +89,8 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 
 `README.md`、`docs/**`、`Product Profile.md`、`CHANGELOG.md`、`AGENTS.md` だけに触れる docs-only Pull Request では、`lint` と `pr_specs` はそのまま残しつつ、representative Rails job と JavaScript job を short-circuit します。branch protection のため、check 名はそのまま維持します。`.github/workflows/**` も変更する Pull Request ではこの shortcut を使わず、通常の PR lanes を確認します。
 
+Green CI は、その run を作った exact head SHA に対する結果です。その後 `main` が進んで Pull Request が diverged になった場合は、merge-ready と扱う前に mergeability と changed files を確認してください。`mergeable` が false の場合、workflow files を変更している場合、public API や shared specs を変更している場合、mockup gallery や i18n audit のような shared docs inventory が衝突しうる場合は、branch refresh 後に CI を取り直します。重なりのない小さな docs-only PR なら、狭い docs-only update で refresh し、同じ check 名が green になることを確認すれば十分です。
+
 `main` へのpushでは、より広い互換性確認とrelease向けのchecksも実行します。
 
 - Ruby version matrix
@@ -140,6 +142,7 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - 小さな機能変更は小さなPRにする
 - docs-onlyで単純な分割や棚卸しは大きめのPRでもよい
 - merge前にPR CIを通す
+- CI status、mergeability、`main...branch` の divergence を合わせて確認する。PR がすでに mergeable でない場合、green だった古い head だけでは十分ではない
 - docs-only PR では representative Rails / JavaScript job を short-circuit できるが、merge は同じ check 名が green のままで待つ
 - workflow 定義を変えるPRは、merge前に fresh な head SHA で Checks を観測する
 - release判定前に `main` でfull compatibility / package verificationを確認する
