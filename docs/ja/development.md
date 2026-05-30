@@ -89,6 +89,8 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 
 `README.md`、`docs/**`、`Product Profile.md`、`CHANGELOG.md`、`AGENTS.md` だけに触れる docs-only Pull Request では、`lint` と `pr_specs` はそのまま残しつつ、representative Rails job と JavaScript job を short-circuit します。branch protection のため、check 名はそのまま維持します。`.github/workflows/**` も変更する Pull Request ではこの shortcut を使わず、通常の PR lanes を確認します。
 
+`main` が進んで branch が `diverged` になった後は、green checks だけでは merge ready と判断しません。`mergeable`、changed files、risk、behind の大きさを確認します。GitHub が `mergeable: false` を返す場合、behind が大きい場合、または workflow 定義、public API、spec、shared docs inventory に触れる Pull Request では、branch refresh 後に fresh CI を観測することを優先します。小さく少しだけ behind している docs-only 変更では、changed files が clean に適用でき、`mergeable` が true で、同じ check 名が green のままなら、過度に重い refresh を必須にしなくてかまいません。
+
 `main` へのpushでは、より広い互換性確認とrelease向けのchecksも実行します。
 
 - Ruby version matrix
@@ -142,4 +144,5 @@ Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScrip
 - merge前にPR CIを通す
 - docs-only PR では representative Rails / JavaScript job を short-circuit できるが、merge は同じ check 名が green のままで待つ
 - workflow 定義を変えるPRは、merge前に fresh な head SHA で Checks を観測する
+- PR が `main` から `diverged` している場合は、古い green CI だけに頼らず、refresh するかを決める前に mergeability、changed files、risk、behind count を確認する
 - release判定前に `main` でfull compatibility / package verificationを確認する
