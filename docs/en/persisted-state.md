@@ -88,21 +88,25 @@ The owner can be a user, workspace, project, or any model that should own the sc
 
 ## StateStore
 
-`TreeView::StateStore` loads and saves persisted state using an owner and tree instance key.
+`TreeView::StateStore` reads and writes persisted state through the generated host app model. The store is initialized with the model, and each read or write receives the owner and tree instance key.
 
 ```ruby
-store = TreeView::StateStore.new(
+store = TreeView::StateStore.new(model: TreeViewState)
+
+persisted_state = store.find(
   owner: current_user,
   tree_instance_key: "documents:index"
 )
-
-persisted_state = store.load
 ```
 
 Save expansion state:
 
 ```ruby
-persisted_state = store.save(expanded_keys: expanded_keys)
+persisted_state = store.save!(
+  owner: current_user,
+  tree_instance_key: "documents:index",
+  expanded_keys: expanded_keys
+)
 ```
 
 ## Minimal controller concern
@@ -176,7 +180,12 @@ A few practical notes:
 Pass the loaded state to `RenderState`.
 
 ```ruby
-persisted_state = store.load
+store = TreeView::StateStore.new(model: TreeViewState)
+
+persisted_state = store.find(
+  owner: current_user,
+  tree_instance_key: "documents:index"
+)
 
 render_state = TreeView::RenderState.new(
   tree: tree,
@@ -217,19 +226,17 @@ Use different keys for different screens or trees, even when the owner is the sa
 A host app can render more than one persisted tree for the same owner. A common pattern is a sidebar tree plus a detail tree on the main content area.
 
 ```ruby
-sidebar_store = TreeView::StateStore.new(
+store = TreeView::StateStore.new(model: TreeViewState)
+
+sidebar_state = store.find(
   owner: current_user,
   tree_instance_key: "projects:sidebar"
 )
 
-detail_store = TreeView::StateStore.new(
+detail_state = store.find(
   owner: current_user,
   tree_instance_key: "projects:#{project.id}:detail"
 )
-
-sidebar_state = sidebar_store.load
-
-detail_state = detail_store.load
 ```
 
 Pass each loaded state to the matching render state.
