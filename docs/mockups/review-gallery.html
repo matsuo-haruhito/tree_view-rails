@@ -144,7 +144,7 @@
       <h1>TreeView mockup review gallery</h1>
       <p>
         Static review hub for comparing the current TreeView mockup set without running a Rails app.
-        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, row status and depth-label boundaries, narrow layouts, interaction states, Turbo Frame target boundaries, drag-safe control markers, behavior-specific interactive marker boundaries, windowed rendering cues, breadcrumb path context, filtered-tree mode differences, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
+        Each card keeps the existing mockup as the source of truth and adds just enough framing to compare baseline structure, row status and depth-label boundaries, narrow layouts, interaction states, Turbo Frame target boundaries, drag-safe control markers, behavior-specific interactive marker boundaries, windowed rendering cues, breadcrumb path context, filtered-tree mode differences, PathTreeBuilder folder-versus-record rows, editing-oriented row layouts, empty-state spacing, table-bridge column sharing, and toolbar state cues in one session.
       </p>
       <nav class="mock-gallery-return-nav" aria-label="Documentation entry points">
         <a href="README.md">Back to mockup README</a>
@@ -163,383 +163,71 @@
 
     <section class="mock-gallery-grid" aria-label="Mockup comparison gallery">
       <article class="mock-gallery-card" aria-labelledby="gallery-default-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Baseline structure</p>
-          <h2 id="gallery-default-heading">Default tree</h2>
-          <p>
-            Use this surface to inspect representative root, child, leaf, selected, collapsed, and disabled rows in the default table-first presentation.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Expanded and collapsed hierarchy cues</li>
-            <li>Selection, badges, and status placement</li>
-            <li>Baseline row-actions column layout</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="default-tree.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="default-tree.html" title="Default tree mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Baseline structure</p><h2 id="gallery-default-heading">Default tree</h2><p>Use this surface to inspect representative root, child, leaf, selected, collapsed, and disabled rows in the default table-first presentation.</p><ul class="mock-gallery-points"><li>Expanded and collapsed hierarchy cues</li><li>Selection, badges, and status placement</li><li>Baseline row-actions column layout</li></ul><div class="mock-gallery-links"><a href="default-tree.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="default-tree.html" title="Default tree mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-status-depth-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused status cues</p>
-          <h2 id="gallery-status-depth-heading">Row status and depth labels</h2>
-          <p>
-            Use this surface to compare row-wide readonly or disabled cues, selection checkbox disabled state, and depth labels without adding authorization or business wording.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Normal, readonly, and disabled representative rows</li>
-            <li>Selection availability separated from row-wide status</li>
-            <li>Depth-label meaning kept host-app owned</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="row-status-depth-labels.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="row-status-depth-labels.html" title="Row status and depth labels mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused status cues</p><h2 id="gallery-status-depth-heading">Row status and depth labels</h2><p>Use this surface to compare row-wide readonly or disabled cues, selection checkbox disabled state, and depth labels without adding authorization or business wording.</p><ul class="mock-gallery-points"><li>Normal, readonly, and disabled representative rows</li><li>Selection availability separated from row-wide status</li><li>Depth-label meaning kept host-app owned</li></ul><div class="mock-gallery-links"><a href="row-status-depth-labels.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="row-status-depth-labels.html" title="Row status and depth labels mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-bridge-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused integration</p>
-          <h2 id="gallery-bridge-heading">Resource table bridge</h2>
-          <p>
-            Use this surface when review needs tree-owned hierarchy rows alongside table-owned visible columns, without pulling in saved table state or host-app business logic.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Shared desktop and compact column sets</li>
-            <li>Hierarchy readability in the first data column</li>
-            <li>Clear table-versus-tree responsibility boundary</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="resource-table-bridge.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="resource-table-bridge.html" title="Resource table bridge mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused integration</p><h2 id="gallery-bridge-heading">Resource table bridge</h2><p>Use this surface when review needs tree-owned hierarchy rows alongside table-owned visible columns, without pulling in saved table state or host-app business logic.</p><ul class="mock-gallery-points"><li>Shared desktop and compact column sets</li><li>Hierarchy readability in the first data column</li><li>Clear table-versus-tree responsibility boundary</li></ul><div class="mock-gallery-links"><a href="resource-table-bridge.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="resource-table-bridge.html" title="Resource table bridge mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-narrow-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Responsive reference</p>
-          <h2 id="gallery-narrow-heading">Narrow sidebar</h2>
-          <p>
-            Use this surface to compare how hierarchy cues stay visible when width gets tight and secondary metadata needs to stack below the primary label.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>22rem and 18rem representative frames</li>
-            <li>Current, archived, and loading cues in compressed rows</li>
-            <li>Compact action treatment without hiding the tree path</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="narrow-sidebar-tree.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="narrow-sidebar-tree.html" title="Narrow sidebar tree mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Responsive reference</p><h2 id="gallery-narrow-heading">Narrow sidebar</h2><p>Use this surface to compare how hierarchy cues stay visible when width gets tight and secondary metadata needs to stack below the primary label.</p><ul class="mock-gallery-points"><li>22rem and 18rem representative frames</li><li>Current, archived, and loading cues in compressed rows</li><li>Compact action treatment without hiding the tree path</li></ul><div class="mock-gallery-links"><a href="narrow-sidebar-tree.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="narrow-sidebar-tree.html" title="Narrow sidebar tree mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-interaction-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">State transitions</p>
-          <h2 id="gallery-interaction-heading">Interaction states</h2>
-          <p>
-            Use this surface to review lazy loading, retry, pagination, and drag or drop cues without bringing in Turbo responses, controllers, or host-app behavior.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Loaded, loading, and error or retry rows</li>
-            <li>Children pagination placeholder rows</li>
-            <li>Dragging, valid drop, and blocked drop states</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="interaction-states.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="interaction-states.html" title="Interaction states mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">State transitions</p><h2 id="gallery-interaction-heading">Interaction states</h2><p>Use this surface to review lazy loading, retry, pagination, and drag or drop cues without bringing in Turbo responses, controllers, or host-app behavior.</p><ul class="mock-gallery-points"><li>Loaded, loading, and error or retry rows</li><li>Children pagination placeholder rows</li><li>Dragging, valid drop, and blocked drop states</li></ul><div class="mock-gallery-links"><a href="interaction-states.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="interaction-states.html" title="Interaction states mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-turbo-frame-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused Turbo boundary</p>
-          <h2 id="gallery-turbo-frame-heading">Turbo Frame target</h2>
-          <p>
-            Use this surface to compare the configured <code>data-turbo-frame</code> toggle-link attribute against the host-app-owned frame wrapper and response boundary.
-          </p>
-          <ul class="mock-gallery-points">
-            <li><code>&lt;turbo-frame id="documents_tree"&gt;</code> wrapper as host-app markup</li>
-            <li>Expand and collapse links targeting <code>documents_tree</code></li>
-            <li>Route, authorization, and Turbo response kept outside the mockup</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="turbo-frame-target.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="turbo-frame-target.html" title="Turbo Frame target mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused Turbo boundary</p><h2 id="gallery-turbo-frame-heading">Turbo Frame target</h2><p>Use this surface to compare the configured <code>data-turbo-frame</code> toggle-link attribute against the host-app-owned frame wrapper and response boundary.</p><ul class="mock-gallery-points"><li><code>&lt;turbo-frame id="documents_tree"&gt;</code> wrapper as host-app markup</li><li>Expand and collapse links targeting <code>documents_tree</code></li><li>Route, authorization, and Turbo response kept outside the mockup</li></ul><div class="mock-gallery-links"><a href="turbo-frame-target.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="turbo-frame-target.html" title="Turbo Frame target mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-drag-controls-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused drag guards</p>
-          <h2 id="gallery-drag-controls-heading">Drag interactive controls</h2>
-          <p>
-            Use this surface to compare plain draggable rows against native controls, broad interactive markers, and drag-only ignore markers inside the same tree layout.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Native input, link, and button drag-start guard</li>
-            <li><code>data-tree-view-interactive</code> for custom widgets</li>
-            <li><code>data-tree-view-ignore-drag</code> for narrower drag-safe controls</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="drag-interactive-controls.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="drag-interactive-controls.html" title="Drag interactive controls mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused drag guards</p><h2 id="gallery-drag-controls-heading">Drag interactive controls</h2><p>Use this surface to compare plain draggable rows against native controls, broad interactive markers, and drag-only ignore markers inside the same tree layout.</p><ul class="mock-gallery-points"><li>Native input, link, and button drag-start guard</li><li><code>data-tree-view-interactive</code> for custom widgets</li><li><code>data-tree-view-ignore-drag</code> for narrower drag-safe controls</li></ul><div class="mock-gallery-links"><a href="drag-interactive-controls.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="drag-interactive-controls.html" title="Drag interactive controls mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-marker-behavior-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused behavior markers</p>
-          <h2 id="gallery-marker-behavior-heading">Interactive marker behaviors</h2>
-          <p>
-            Use this surface to compare the broad interactive marker against the narrower keyboard, row-click, and drag behavior markers without expanding into host-app wiring.
-          </p>
-          <ul class="mock-gallery-points">
-            <li><code>data-tree-view-interactive</code> as the broad opt-out</li>
-            <li><code>data-tree-view-ignore-keyboard</code> for key handling only</li>
-            <li><code>data-tree-view-ignore-row-click</code> and <code>data-tree-view-ignore-drag</code> as narrower boundaries</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="interactive-marker-behaviors.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="interactive-marker-behaviors.html" title="Interactive marker behaviors mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused behavior markers</p><h2 id="gallery-marker-behavior-heading">Interactive marker behaviors</h2><p>Use this surface to compare the broad interactive marker against the narrower keyboard, row-click, and drag behavior markers without expanding into host-app wiring.</p><ul class="mock-gallery-points"><li><code>data-tree-view-interactive</code> as the broad opt-out</li><li><code>data-tree-view-ignore-keyboard</code> for key handling only</li><li><code>data-tree-view-ignore-row-click</code> and <code>data-tree-view-ignore-drag</code> as narrower boundaries</li></ul><div class="mock-gallery-links"><a href="interactive-marker-behaviors.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="interactive-marker-behaviors.html" title="Interactive marker behaviors mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-windowed-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused rendering</p>
-          <h2 id="gallery-windowed-heading">Windowed rendering</h2>
-          <p>
-            Use this surface to compare visible-row slices, current-row anchoring, and previous or next availability without introducing host-app paging controls or loading behavior.
-          </p>
-          <ul class="mock-gallery-points">
-            <li><code>offset</code> and <code>limit</code> window slices</li>
-            <li>Current-row anchoring inside the rendered window</li>
-            <li>Boundary between TreeView metadata and host-app paging UI</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="windowed-rendering.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="windowed-rendering.html" title="Windowed rendering mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused rendering</p><h2 id="gallery-windowed-heading">Windowed rendering</h2><p>Use this surface to compare visible-row slices, current-row anchoring, and previous or next availability without introducing host-app paging controls or loading behavior.</p><ul class="mock-gallery-points"><li><code>offset</code> and <code>limit</code> window slices</li><li>Current-row anchoring inside the rendered window</li><li>Boundary between TreeView metadata and host-app paging UI</li></ul><div class="mock-gallery-links"><a href="windowed-rendering.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="windowed-rendering.html" title="Windowed rendering mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-breadcrumb-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused navigation context</p>
-          <h2 id="gallery-breadcrumb-heading">Breadcrumb paths</h2>
-          <p>
-            Use this surface to compare breadcrumb-path context against the tree's own current-row cue without turning the mockup into a route-design or Turbo-navigation review.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Shallow and deep representative paths</li>
-            <li>Current item at the end of the breadcrumb chain</li>
-            <li>Role split between path context and row-local hierarchy cues</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="breadcrumb-paths.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="breadcrumb-paths.html" title="Breadcrumb paths mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused navigation context</p><h2 id="gallery-breadcrumb-heading">Breadcrumb paths</h2><p>Use this surface to compare breadcrumb-path context against the tree's own current-row cue without turning the mockup into a route-design or Turbo-navigation review.</p><ul class="mock-gallery-points"><li>Shallow and deep representative paths</li><li>Current item at the end of the breadcrumb chain</li><li>Role split between path context and row-local hierarchy cues</li></ul><div class="mock-gallery-links"><a href="breadcrumb-paths.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="breadcrumb-paths.html" title="Breadcrumb paths mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-filtered-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused filtering</p>
-          <h2 id="gallery-filtered-heading">Filtered tree modes</h2>
-          <p>
-            Use this surface to compare how `filtered_tree_for` keeps only matches, matches with ancestors, or matches with descendants without adding host-app search UI.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Matched-only versus ancestor or descendant context</li>
-            <li>Representative mode framing without highlighting</li>
-            <li>Clear boundary between TreeView output and host-app search behavior</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="filtered-tree-modes.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="filtered-tree-modes.html" title="Filtered tree modes mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused filtering</p><h2 id="gallery-filtered-heading">Filtered tree modes</h2><p>Use this surface to compare how `filtered_tree_for` keeps only matches, matches with ancestors, or matches with descendants without adding host-app search UI.</p><ul class="mock-gallery-points"><li>Matched-only versus ancestor or descendant context</li><li>Representative mode framing without highlighting</li><li>Clear boundary between TreeView output and host-app search behavior</li></ul><div class="mock-gallery-links"><a href="filtered-tree-modes.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="filtered-tree-modes.html" title="Filtered tree modes mock preview" loading="lazy"></iframe></div>
       </article>
-
+      <article class="mock-gallery-card" aria-labelledby="gallery-path-builder-heading">
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused path builder</p><h2 id="gallery-path-builder-heading">PathTreeBuilder rows</h2><p>Use this surface to compare generated folder rows against record-backed rows without turning the reference into a file-manager application.</p><ul class="mock-gallery-points"><li>Generated folder cue, depth, toggle, and hidden-count placement</li><li>Record rows beside host-app-owned columns and actions</li><li>Boundary between public node shape and final business behavior</li></ul><div class="mock-gallery-links"><a href="path-tree-builder-rows.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="path-tree-builder-rows.html" title="PathTreeBuilder rows mock preview" loading="lazy"></iframe></div>
+      </article>
       <article class="mock-gallery-card" aria-labelledby="gallery-editing-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused editing</p>
-          <h2 id="gallery-editing-heading">Form-editing rows</h2>
-          <p>
-            Use this surface to compare bulk edit rows, per-row edit placement, and the boundary between TreeView row selection and host-app business form controls.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Selection checkbox versus business checkbox roles</li>
-            <li>Editable text, select, and textarea cells inside rows</li>
-            <li>Per-row action placement without modeling save behavior</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="form-editing-rows.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="form-editing-rows.html" title="Form editing rows mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused editing</p><h2 id="gallery-editing-heading">Form-editing rows</h2><p>Use this surface to compare bulk edit rows, per-row edit placement, and the boundary between TreeView row selection and host-app business form controls.</p><ul class="mock-gallery-points"><li>Selection checkbox versus business checkbox roles</li><li>Editable text, select, and textarea cells inside rows</li><li>Per-row action placement without modeling save behavior</li></ul><div class="mock-gallery-links"><a href="form-editing-rows.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="form-editing-rows.html" title="Form editing rows mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-toolbar-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Focused controls</p>
-          <h2 id="gallery-toolbar-heading">Toolbar actions</h2>
-          <p>
-            Use this surface to compare tree-wide expand, collapse, and collapse-to-current-path affordances, including enabled, current, and disabled states, without adding real routes or authorization copy.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Mixed-tree all-actions state</li>
-            <li>All-expanded and all-collapsed variants</li>
-            <li>Current-path-preserving cue beside full collapse</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="toolbar-actions.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="toolbar-actions.html" title="Toolbar actions mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused controls</p><h2 id="gallery-toolbar-heading">Toolbar actions</h2><p>Use this surface to compare tree-wide expand, collapse, and collapse-to-current-path affordances, including enabled, current, and disabled states, without adding real routes or authorization copy.</p><ul class="mock-gallery-points"><li>Mixed-tree all-actions state</li><li>All-expanded and all-collapsed variants</li><li>Current-path-preserving cue beside full collapse</li></ul><div class="mock-gallery-links"><a href="toolbar-actions.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="toolbar-actions.html" title="Toolbar actions mock preview" loading="lazy"></iframe></div>
       </article>
-
       <article class="mock-gallery-card" aria-labelledby="gallery-empty-heading">
-        <div class="mock-gallery-copy">
-          <p class="mock-gallery-eyebrow">Spacing and fallback</p>
-          <h2 id="gallery-empty-heading">Empty state</h2>
-          <p>
-            Use this surface to compare no-root-items and no-results rows against a populated row so wrapper spacing and the full-width message slot stay easy to inspect.
-          </p>
-          <ul class="mock-gallery-points">
-            <li>Reusable empty-row wrapper hook</li>
-            <li>Full-width message slot behavior</li>
-            <li>Difference from a populated row with controls</li>
-          </ul>
-          <div class="mock-gallery-links">
-            <a href="empty-state.html">Open full mockup</a>
-          </div>
-        </div>
-        <div class="mock-gallery-preview">
-          <iframe src="empty-state.html" title="Empty state mock preview" loading="lazy"></iframe>
-        </div>
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Spacing and fallback</p><h2 id="gallery-empty-heading">Empty state</h2><p>Use this surface to compare no-root-items and no-results rows against a populated row so wrapper spacing and the full-width message slot stay easy to inspect.</p><ul class="mock-gallery-points"><li>Reusable empty-row wrapper hook</li><li>Full-width message slot behavior</li><li>Difference from a populated row with controls</li></ul><div class="mock-gallery-links"><a href="empty-state.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="empty-state.html" title="Empty state mock preview" loading="lazy"></iframe></div>
       </article>
     </section>
 
     <section class="mock-section" aria-labelledby="comparison-cues-heading">
       <h2 id="comparison-cues-heading">Comparison cues</h2>
-      <table class="mock-comparison-table">
-        <thead>
-          <tr>
-            <th scope="col">Surface</th>
-            <th scope="col">Best for</th>
-            <th scope="col">Keep outside scope</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Default tree</td>
-            <td>Baseline DOM shape, hierarchy path, selection cues, badges, and row actions.</td>
-            <td>Host-app CRUD, queries, business labels, or authorization behavior.</td>
-          </tr>
-          <tr>
-            <td>Row status and depth labels</td>
-            <td>Comparing row-wide readonly or disabled cues, selection checkbox disabled state, and depth-label meaning boundaries.</td>
-            <td>Authorization policy, business-specific status meaning, final labels, or checkbox payload semantics.</td>
-          </tr>
-          <tr>
-            <td>Resource table bridge</td>
-            <td>Shared hierarchy rows across fuller and narrower table-owned column sets.</td>
-            <td>Saved table state, host-app queries, or business-specific row actions.</td>
-          </tr>
-          <tr>
-            <td>Narrow sidebar</td>
-            <td>Hierarchy readability when width shrinks and metadata needs to wrap.</td>
-            <td>Exact breakpoints, truncation rules, or a shipped responsive design system.</td>
-          </tr>
-          <tr>
-            <td>Interaction states</td>
-            <td>Loading, retry, pagination, and drag or drop status cues.</td>
-            <td>Real Turbo responses, route wiring, or persistence behavior.</td>
-          </tr>
-          <tr>
-            <td>Turbo Frame target</td>
-            <td>Configured <code>data-turbo-frame</code> link attributes beside the host-app-owned target frame.</td>
-            <td>Turbo Stream responses, Rails routes, controller actions, authorization, or frame placement policy.</td>
-          </tr>
-          <tr>
-            <td>Drag interactive controls</td>
-            <td>Comparing plain draggable rows against native controls, broad interactive markers, and drag-only ignore markers.</td>
-            <td>Drop targets, widget implementation details, permission rules, or business-specific drag affordances.</td>
-          </tr>
-          <tr>
-            <td>Interactive marker behaviors</td>
-            <td>Comparing the broad interactive marker against the narrower keyboard, row-click, and drag behavior markers.</td>
-            <td>Host-app row-click implementation, widget internals, or broader keyboard and drag policy changes.</td>
-          </tr>
-          <tr>
-            <td>Windowed rendering</td>
-            <td>Visible-row slicing, current-row anchoring, and previous or next metadata framing.</td>
-            <td>Pagination controls, infinite scroll, query state, or data fetching behavior.</td>
-          </tr>
-          <tr>
-            <td>Breadcrumb paths</td>
-            <td>Comparing breadcrumb lineage outside the tree against the current-row cue inside the hierarchy.</td>
-            <td>Route helpers, Turbo navigation, responsive overflow rules, and permission-aware labels.</td>
-          </tr>
-          <tr>
-            <td>Filtered tree modes</td>
-            <td>Comparing matched-only, ancestor-retaining, and descendant-retaining output.</td>
-            <td>Search forms, highlighting, ranking, and authorization-aware filtering.</td>
-          </tr>
-          <tr>
-            <td>Form-editing rows</td>
-            <td>Bulk edit rows, per-row edit placement, and selection-versus-business control separation.</td>
-            <td>Validation persistence, params parsing, Turbo replacement timing, and save workflows.</td>
-          </tr>
-          <tr>
-            <td>Toolbar actions</td>
-            <td>Tree-wide expand, collapse, and collapse-to-current-path affordances across enabled, current, and disabled states.</td>
-            <td>Authorization, route names, current-path semantics, or action sequencing rules.</td>
-          </tr>
-          <tr>
-            <td>Empty state</td>
-            <td>Spacing, wrapper hooks, and the full-width empty-row slot.</td>
-            <td>Final onboarding copy, CTA wording, permission messaging, or filter reset logic.</td>
-          </tr>
-        </tbody>
-      </table>
+      <table class="mock-comparison-table"><thead><tr><th scope="col">Surface</th><th scope="col">Best for</th><th scope="col">Keep outside scope</th></tr></thead><tbody>
+        <tr><td>Default tree</td><td>Baseline DOM shape, hierarchy path, selection cues, badges, and row actions.</td><td>Host-app CRUD, queries, business labels, or authorization behavior.</td></tr>
+        <tr><td>Row status and depth labels</td><td>Comparing row-wide readonly or disabled cues, selection checkbox disabled state, and depth-label meaning boundaries.</td><td>Authorization policy, business-specific status meaning, final labels, or checkbox payload semantics.</td></tr>
+        <tr><td>Resource table bridge</td><td>Shared hierarchy rows across fuller and narrower table-owned column sets.</td><td>Saved table state, host-app queries, or business-specific row actions.</td></tr>
+        <tr><td>Narrow sidebar</td><td>Hierarchy readability when width shrinks and metadata needs to wrap.</td><td>Exact breakpoints, truncation rules, or a shipped responsive design system.</td></tr>
+        <tr><td>Interaction states</td><td>Loading, retry, pagination, and drag or drop status cues.</td><td>Real Turbo responses, route wiring, or persistence behavior.</td></tr>
+        <tr><td>Turbo Frame target</td><td>Configured <code>data-turbo-frame</code> link attributes beside the host-app-owned target frame.</td><td>Turbo Stream responses, Rails routes, controller actions, authorization, or frame placement policy.</td></tr>
+        <tr><td>Drag interactive controls</td><td>Comparing plain draggable rows against native controls, broad interactive markers, and drag-only ignore markers.</td><td>Drop targets, widget implementation details, permission rules, or business-specific drag affordances.</td></tr>
+        <tr><td>Interactive marker behaviors</td><td>Comparing the broad interactive marker against the narrower keyboard, row-click, and drag behavior markers.</td><td>Host-app row-click implementation, widget internals, or broader keyboard and drag policy changes.</td></tr>
+        <tr><td>Windowed rendering</td><td>Visible-row slicing, current-row anchoring, and previous or next metadata framing.</td><td>Pagination controls, infinite scroll, query state, or data fetching behavior.</td></tr>
+        <tr><td>Breadcrumb paths</td><td>Comparing breadcrumb lineage outside the tree against the current-row cue inside the hierarchy.</td><td>Route helpers, Turbo navigation, responsive overflow rules, and permission-aware labels.</td></tr>
+        <tr><td>Filtered tree modes</td><td>Comparing matched-only, ancestor-retaining, and descendant-retaining output.</td><td>Search forms, highlighting, ranking, and authorization-aware filtering.</td></tr>
+        <tr><td>PathTreeBuilder rows</td><td>Generated folder row cues compared with record-backed rows and host-app-owned columns or actions.</td><td>File-manager routes, download behavior, record authorization, or public API changes.</td></tr>
+        <tr><td>Form-editing rows</td><td>Bulk edit rows, per-row edit placement, and selection-versus-business control separation.</td><td>Validation persistence, params parsing, Turbo replacement timing, and save workflows.</td></tr>
+        <tr><td>Toolbar actions</td><td>Tree-wide expand, collapse, and collapse-to-current-path affordances across enabled, current, and disabled states.</td><td>Authorization, route names, current-path semantics, or action sequencing rules.</td></tr>
+        <tr><td>Empty state</td><td>Spacing, wrapper hooks, and the full-width empty-row slot.</td><td>Final onboarding copy, CTA wording, permission messaging, or filter reset logic.</td></tr>
+      </tbody></table>
     </section>
   </main>
 </body>

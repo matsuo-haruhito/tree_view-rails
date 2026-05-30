@@ -119,6 +119,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | `docs/mockups/windowed-rendering.html` | Technical asset | No translation needed. |
 | `docs/mockups/breadcrumb-paths.html` | Technical asset | No translation needed. |
 | `docs/mockups/filtered-tree-modes.html` | Technical asset | No translation needed. |
+| `docs/mockups/path-tree-builder-rows.html` | Technical asset | No translation needed. |
 | `docs/mockups/form-editing-rows.html` | Technical asset | No translation needed. |
 | `docs/mockups/empty-state.html` | Technical asset | No translation needed. |
 | `docs/mockups/row-status-depth-labels.html` | Technical asset | No translation needed. |
