@@ -219,8 +219,9 @@ Key documents:
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
 | PathTreeBuilder | [PathTreeBuilder](docs/en/path-tree-builder.md) | [PathTreeBuilder](docs/ja/path-tree-builder.md) |
-| Public API | [Public API](docs/en/public-api.md) | [Public API](docs/ja/public-api.md) |
-| Migration guide | [Migration guide](docs/en/migration.md) | [移行ガイド](docs/ja/migration.md) |
+| Public API compatibility policy | [Public API](docs/en/public-api.md) | [Public API](docs/ja/public-api.md) |
+| Host app extension boundary | [Host App Extension Points](docs/en/host-app-extension-points.md) | [Host App 拡張ポイント](docs/ja/host-app-extension-points.md) |
+| Migration and upgrade guide | [Migration guide](docs/en/migration.md) | [移行ガイド](docs/ja/migration.md) |
 | Release checklist | [Release checklist](docs/en/release.md) | [Release checklist](docs/ja/release.md) |
 
 Additional docs:
