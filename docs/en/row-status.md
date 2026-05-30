@@ -1,6 +1,6 @@
 # Row status
 
-This page explains hooks for marking an entire TreeView row as disabled, readonly, or another status.
+This page explains hooks for marking an entire TreeView row as disabled or readonly, with an optional disabled reason.
 
 ## Overview
 
@@ -8,7 +8,7 @@ Row status is a display hook for expressing node-level row state.
 
 TreeView is responsible for:
 
-- invoking the row status builder
+- invoking `row_disabled_builder`, `row_readonly_builder`, and `row_disabled_reason_builder` when they are configured
 - adding status classes and data attributes to rows
 - merging status output with host app row class/data builders
 
@@ -18,43 +18,31 @@ For a visual comparison of row-wide status cues, selection checkbox disabled sta
 
 ## Basic example
 
+Use the dedicated builders for each row-wide state. Each builder receives the row item and should return `true` only when that state applies.
+
 ```ruby
 render_state = TreeView::RenderState.new(
   tree: tree,
   root_items: tree.root_items,
   row_partial: "documents/tree_columns",
   ui_config: tree_ui,
-  row_status_builder: ->(document) {
-    if document.archived?
-      :disabled
-    elsif document.locked?
-      :readonly
-    end
+  row_disabled_builder: ->(document) { document.archived? },
+  row_readonly_builder: ->(document) { document.locked? },
+  row_disabled_reason_builder: ->(document) {
+    document.archived? ? "Archived documents cannot be changed" : nil
   }
 )
 ```
 
-## Return a hash
+A disabled row receives the `tree-view-row--disabled` class and `data-tree-view-row-disabled="true"`.
 
-Return a hash-like value when multiple attributes should be controlled.
+A readonly row receives the `tree-view-row--readonly` class and `data-tree-view-row-readonly="true"`.
 
-```ruby
-row_status_builder = ->(document) {
-  next unless document.archived?
-
-  {
-    status: :disabled,
-    class: "is-archived",
-    data: {
-      reason: "archived"
-    }
-  }
-}
-```
+When `row_disabled_reason_builder` returns a present value, TreeView adds `data-tree-view-row-disabled-reason` with that value. How the reason is shown to users remains host-app-owned.
 
 ## Relationship to row_class_builder and row_data_builder
 
-Classes and data from `row_status_builder` are merged with host app `row_class_builder` and `row_data_builder` output.
+TreeView merges row status output with host app `row_class_builder` and `row_data_builder` output.
 
 ```ruby
 render_state = TreeView::RenderState.new(
@@ -62,30 +50,37 @@ render_state = TreeView::RenderState.new(
   root_items: tree.root_items,
   row_partial: "documents/tree_columns",
   ui_config: tree_ui,
-  row_status_builder: ->(document) { document.archived? ? :disabled : nil },
+  row_disabled_builder: ->(document) { document.archived? },
+  row_readonly_builder: ->(document) { document.locked? },
+  row_disabled_reason_builder: ->(document) { document.archived? ? "archived" : nil },
   row_class_builder: ->(document) { ["document-row", document.status] },
   row_data_builder: ->(document) { { document_id: document.id } }
 )
 ```
 
+TreeView keeps existing host app classes and data, then adds the documented TreeView status class/data keys when `row_disabled_builder` or `row_readonly_builder` returns `true`. Disabled reasons are added when `row_disabled_reason_builder` returns a present value.
+
 ## Difference from selection disabled state
 
 `selection[:disabled_builder]` disables a checkbox.
 
-`row_status_builder` expresses state for the whole row.
+Row status expresses state for the whole row.
 
 | Goal | API |
 |---|---|
 | Disable a checkbox | `selection[:disabled_builder]` |
-| Show an entire row as disabled or readonly | `row_status_builder` |
+| Show an entire row as disabled | `row_disabled_builder` |
+| Show an entire row as readonly | `row_readonly_builder` |
+| Attach a row-wide disabled reason | `row_disabled_reason_builder` |
 
 ## Responsibility boundary
 
 | Area | TreeView | Host app |
 |---|---|---|
-| status builder invocation | yes | provides builder |
+| status builder invocation | yes | provides builders |
 | row class/data merge | yes | provides additional attributes |
 | business rule | no | yes |
 | authorization | no | yes |
 | action disabling | no | yes |
+| disabled reason display | no | yes |
 | CSS styling | no | yes |

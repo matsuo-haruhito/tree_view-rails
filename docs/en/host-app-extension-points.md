@@ -13,7 +13,9 @@ Main extension points:
 - `row_data_builder`
 - `badge_builder`
 - `depth_label_builder`
-- `row_status_builder`
+- `row_disabled_builder`
+- `row_readonly_builder`
+- `row_disabled_reason_builder`
 - transfer payload builders
 - selection builders
 - lazy loading path builders
@@ -67,6 +69,18 @@ Use `badge_builder` for row badge or marker display. `icon_builder` remains avai
 badge_builder: ->(document) { document.status },
 depth_label_builder: ->(_document, context) { "Level #{context.depth}" }
 ```
+
+## Row status builders
+
+Use the dedicated row status builders when the host app needs to expose row-wide disabled or readonly state.
+
+```ruby
+row_disabled_builder: ->(document) { document.archived? },
+row_readonly_builder: ->(document) { document.locked? },
+row_disabled_reason_builder: ->(document) { document.archived? ? "archived" : nil }
+```
+
+TreeView evaluates these builders and merges the documented status classes/data attributes with `row_class_builder` and `row_data_builder`. Business rules, action blocking, and reason display remain host app responsibilities. See [Row status](row-status.md) for the full contract and selection-state comparison.
 
 ## Transfer payload builders
 

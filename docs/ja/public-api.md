@@ -139,6 +139,7 @@ toolbar helper もこの公開 helper surface に含まれます。
 | `toggle_scope` | `max_depth_from_root`, `max_leaf_distance` | tree-wide toggle の documented depth / leaf-distance control に対応します。 |
 | `selection` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | `TreeView::RenderState::SelectionConfig` と同じ grouped key を machine-readable に追跡し、documented な flat selection keyword との対応も崩れないようにします。 |
 | `lazy_loading` | `enabled`, `loaded_keys`, `scope` | documented lazy-loading row-state hook と optional な host-app scope passthrough に対応します。 |
+| `row_status` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | documented row disabled / readonly state hook と disabled reason surface に対応します。 |
 
 ## Host app extension points
 
