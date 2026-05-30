@@ -50,6 +50,26 @@ describe("TreeViewRemoteStateController remote state details", () => {
     })
   })
 
+  it("dispatches loaded details and marks the row as loaded", () => {
+    const element = document.querySelector("[data-controller='tree-view-remote-state']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-remote-state")
+    const eventSpy = vi.fn()
+    element.addEventListener("tree-view-remote-state:change", eventSpy)
+    const row = document.querySelector("#remote-row")
+
+    controller.loaded({ target: document.querySelector("#remote-button"), detail: {} })
+
+    expect(row.dataset.remoteState).toBe("loaded")
+    expect(row.dataset.treeLoaded).toBe("true")
+    expect(eventSpy).toHaveBeenCalledOnce()
+    expect(eventSpy.mock.calls[0][0].detail).toMatchObject({
+      row,
+      state: "loaded",
+      childrenUrl: "/projects/1/children",
+      nodeKey: "project:1"
+    })
+  })
+
   it("dispatches error details from an explicit detail row with null URL fallbacks", () => {
     const element = document.querySelector("[data-controller='tree-view-remote-state']")
     const controller = application.getControllerForElementAndIdentifier(element, "tree-view-remote-state")
@@ -67,6 +87,25 @@ describe("TreeViewRemoteStateController remote state details", () => {
       state: "error",
       childrenUrl: null,
       nodeKey: null
+    })
+  })
+
+  it("dispatches retry details and returns the row to loading state", () => {
+    const element = document.querySelector("[data-controller='tree-view-remote-state']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-remote-state")
+    const eventSpy = vi.fn()
+    element.addEventListener("tree-view-remote-state:retry", eventSpy)
+    const row = document.querySelector("#remote-row")
+    row.dataset.remoteState = "error"
+
+    controller.retry({ target: document.querySelector("#remote-button"), detail: {} })
+
+    expect(row.dataset.remoteState).toBe("loading")
+    expect(eventSpy).toHaveBeenCalledOnce()
+    expect(eventSpy.mock.calls[0][0].detail).toMatchObject({
+      row,
+      childrenUrl: "/projects/1/children",
+      nodeKey: "project:1"
     })
   })
 })
