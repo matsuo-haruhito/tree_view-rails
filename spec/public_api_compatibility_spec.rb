@@ -92,11 +92,17 @@ RSpec.describe "Public API compatibility" do
     end
   end
 
+  def dom_id_suffix(item_or_id)
+    return item_or_id.id if item_or_id.respond_to?(:id)
+
+    item_or_id
+  end
+
   def public_ui_config
     TreeView::UiConfig.new(
-      node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
-      button_dom_id_builder: ->(item_or_id) { "node_button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
-      show_button_dom_id_builder: ->(item_or_id) { "node_show_button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" }
+      node_dom_id_builder: ->(item_or_id) { "node_#{dom_id_suffix(item_or_id)}" },
+      button_dom_id_builder: ->(item_or_id) { "node_button_#{dom_id_suffix(item_or_id)}" },
+      show_button_dom_id_builder: ->(item_or_id) { "node_show_button_#{dom_id_suffix(item_or_id)}" }
     )
   end
 
