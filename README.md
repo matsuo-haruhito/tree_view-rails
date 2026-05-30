@@ -204,6 +204,7 @@ Key documents:
 | Toolbar helper (`tree_view_toolbar`) | [Toolbar helper](docs/en/toolbar.md) | [Toolbar helper](docs/ja/toolbar.md) |
 | Turbo Frame option | [Turbo Frame option](docs/en/turbo-frame.md) | [Turbo Frame オプション](docs/ja/turbo-frame.md) |
 | Persisted State | [Persisted State](docs/en/persisted-state.md) | [Persisted State](docs/ja/persisted-state.md) |
+| Localized names | [Localized names](docs/en/localized-names.md) | [ローカライズされた名前](docs/ja/localized-names.md) |
 | Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
 | FAQ | [FAQ](docs/en/faq.md) | [FAQ](docs/ja/faq.md) |
 | Troubleshooting | [Troubleshooting](docs/en/troubleshooting.md) | [Troubleshooting](docs/ja/troubleshooting.md) |
@@ -213,6 +214,8 @@ Key documents:
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
 | Forms and editing rows | [Forms and editing rows](docs/en/form-editing.md) | [Form と編集行](docs/ja/form-editing.md) |
 | Resource table bridge | [Resource table bridge](docs/en/resource-table-bridge.md) | [Resource table bridge](docs/ja/resource-table-bridge.md) |
+| Tree identity and diagnostics | [Node keys](docs/en/node-keys.md) and [Tree diagnostics](docs/en/tree-diagnostics.md) | [Node key 設計](docs/ja/node-keys.md) and [Tree diagnostics](docs/ja/tree-diagnostics.md) |
+| Rendering scale and boundaries | [Render Scale](docs/en/render-scale.md), [Rendering Boundaries](docs/en/rendering-boundaries.md), and [Render log level](docs/en/render-log-level.md) | [描画スケール](docs/ja/render-scale.md), [描画責務の境界](docs/ja/rendering-boundaries.md), and [render log レベル](docs/ja/render-log-level.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
 | PathTreeBuilder | [PathTreeBuilder](docs/en/path-tree-builder.md) | [PathTreeBuilder](docs/ja/path-tree-builder.md) |
