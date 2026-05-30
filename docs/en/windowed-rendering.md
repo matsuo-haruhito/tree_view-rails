@@ -43,8 +43,12 @@ Main metadata:
 | `offset` | Start offset. |
 | `limit` | Maximum number of rows. |
 | `total_count` | Visible row count before windowing. |
+| `before_count` | Visible row count before the current window. |
+| `after_count` | Visible row count after the current window. |
 | `has_previous?` | Whether a previous window exists. |
 | `has_next?` | Whether a next window exists. |
+
+Use `before_count` and `after_count` for lightweight summaries such as "showing 51-100 of 238" or "138 rows after this window". They describe the already-computed visible rows only; pagination controls, URL state, data fetching, and any server-side paging policy remain host-app responsibilities.
 
 ## Visual reference
 
