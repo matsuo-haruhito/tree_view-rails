@@ -143,6 +143,8 @@ host app側のplaceholder領域を描画するときは、TreeView helper で ch
 
 これらの helper 名も documented public helper surface の一部です。placeholder region や Turbo Stream replacement を組むとき、host app はこれらを直接使ってかまいません。
 
+この境界を静的に確認する visual companion として、[lazy-loading-handoff.html](../mockups/lazy-loading-handoff.html) も参照してください。この mockup は Rails routes、fetch behavior、authorization policy を追加せず、children container の所有、remote-state placeholder の handoff、error / retry slot の境界だけを切り出しています。
+
 ## Turbo Stream response pattern
 
 host appが所有するsubtreeやplaceholder領域だけを返します。
