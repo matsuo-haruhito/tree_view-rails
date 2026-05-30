@@ -10,7 +10,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 
 | File | Covers |
 |---|---|
-| [review-gallery.html](review-gallery.html) | Single-surface comparison hub for the current baseline and focused mockup references, with embedded previews and links to each full page. |
+| [review-gallery.html](review-gallery.html) | Single-surface comparison hub for the current baseline and focused mockup references, with review-path jump links, embedded previews, and links to each full page. |
 | [default-tree.html](default-tree.html) | Default table/tree output, checkbox selection, expanded/collapsed rows, badges, depth labels, row actions, and baseline CSS. |
 | [resource-table-bridge.html](resource-table-bridge.html) | Resource table bridge reference showing shared hierarchy rows across fuller and narrower visible column sets without host-app table logic. |
 | [narrow-sidebar-tree.html](narrow-sidebar-tree.html) | Narrow sidebar and small-width reference that keeps toggle controls, primary labels, and current or selection cues visible while secondary metadata wraps below. |
@@ -33,7 +33,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 
 ## Recommended review flow
 
-1. Start with [review-gallery.html](review-gallery.html) when you want a quick side-by-side pass across the current mockup set.
+1. Start with [review-gallery.html](review-gallery.html) when you want a quick side-by-side pass across the current mockup set, or use its review-path links to jump directly to a state family.
 2. Open the linked full mockup page when one surface needs deeper inspection or longer notes.
 3. Use [narrow-sidebar-tree.html](narrow-sidebar-tree.html) when review needs a focused pass on 22rem or 18rem frames where hierarchy cues stay visible while secondary metadata wraps below the primary label.
 4. Use [row-status-depth-labels.html](row-status-depth-labels.html) when review needs to compare row-wide readonly/disabled cues, selection checkbox disabled state, and depth-label meaning boundaries.
