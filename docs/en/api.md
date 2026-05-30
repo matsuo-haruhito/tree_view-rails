@@ -322,7 +322,7 @@ tree_ui = TreeView::UiConfigBuilder.new(
   node_prefix: "document"
 ).build_turbo(
   hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth: depth, scope: scope) },
-  show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth: depth, scope: scope) },
+  show_descendants_path_builder: ->(item, depth: depth, scope: scope) { show_document_path(item, depth: depth, scope: scope) },
   load_children_path_builder: ->(item, depth, scope) { children_document_path(item, depth: depth, scope: scope) },
   toggle_all_path_builder: ->(state) { documents_path(state: state) },
   turbo_frame: "documents_tree"
@@ -344,16 +344,21 @@ Client-side mode renders collapsed descendants inside the render scope into the 
 
 ## TreeView::PersistedState / StateStore
 
-APIs for saving and restoring expansion state through the host app.
+APIs for saving and restoring expansion state through the generated host app model.
 
 ```ruby
-store = TreeView::StateStore.new(
+store = TreeView::StateStore.new(model: TreeViewState)
+
+persisted_state = store.find(
   owner: current_user,
   tree_instance_key: "documents:index"
 )
 
-persisted_state = store.load
-store.save(expanded_keys: expanded_keys)
+store.save!(
+  owner: current_user,
+  tree_instance_key: "documents:index",
+  expanded_keys: expanded_keys
+)
 ```
 
 ## Helpers
