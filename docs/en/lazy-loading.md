@@ -143,6 +143,8 @@ When you render the host-app placeholder regions, TreeView can also generate the
 
 These helper names are part of the documented public helper surface. Host apps may depend on them directly when wiring placeholder regions or Turbo Stream replacements.
 
+For a static visual companion to this boundary, see [lazy-loading-handoff.html](../mockups/lazy-loading-handoff.html). The mockup isolates children container ownership, remote-state placeholder handoff, and error/retry slots without adding Rails routes, fetch behavior, or authorization policy.
+
 ## Turbo Stream response pattern
 
 Return only the subtree or placeholder region the host app owns. For example:
