@@ -93,6 +93,29 @@ function onDrop(event) {
 }
 ```
 
+host appは controller 内部に直接依存せず、`tree-view-transfer` controller がdispatchする公開transfer eventをlistenできます。
+
+```js
+document.addEventListener("tree-view-transfer:drop", (event) => {
+  const { sourcePayload, targetPayload, position } = event.detail
+  // 認可、並び替え、保存、エラー表示などのhost app側処理をここで行う
+})
+```
+
+transfer controller が読者向けに公開する主なdetailは次のとおりです。
+
+| Event | Main `event.detail` fields | Meaning |
+|---|---|---|
+| `tree-view-transfer:drag-start` | `sourcePayload`, `sourceRow` | draggable な TreeView row のtransferが開始され、可能な場合はpayloadが `DataTransfer` にコピーされた。 |
+| `tree-view-transfer:drag-over` | `targetPayload`, `targetRow`, `position` | pointer がvalidなtarget row上にある。TreeView はtarget payloadと粗いdrop位置を返す。 |
+| `tree-view-transfer:drop` | `sourcePayload`, `targetPayload`, `position`, `targetRow` | payloadがtarget rowへdropされた。host app がそのmoveを許可するか、どう保存するかを決める。 |
+| `tree-view-transfer:invalid-payload` | `value`, `row` | target row の `data-tree-transfer-payload` をJSONとしてparseできなかった。 |
+| `tree-view-transfer:invalid-transfer` | `value` | `DataTransfer` から取得したJSON値をparseできなかった。 |
+
+`position` は、target row内でpointerがどこにあるかを示すTreeView側の粗いcueです。上 1/3 は `before`、中央 1/3 は `inside`、下 1/3 は `after` になります。これはhost appの業務ルールへの入力として扱い、最終的な許可・保存方針として扱わないでください。たとえば、leaf-only treeでは `inside` を無視したり、projectをまたぐdropを拒否したり、`before` / `after` を並び順更新へ変換したりできます。
+
+JavaScript event contract全体は [JavaScript event contract](js-events.md#transfer-events) を参照してください。
+
 ## 責務範囲
 
 | Area | TreeView | Host app |
@@ -101,6 +124,8 @@ function onDrop(event) {
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
 | interactive-control drag-start guard | yes | marks custom widgets when needed |
+| transfer event detail | yes | listens and applies business behavior |
+| coarse drop position | `before`, `inside`, `after` を返す | そのpositionを許可するか、どう保存するかを決める |
 | drop target | no | yes |
 | reorder / move persistence | no | yes |
 | authorization | no | yes |
