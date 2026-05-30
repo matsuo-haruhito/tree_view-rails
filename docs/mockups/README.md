@@ -54,6 +54,11 @@ They are **not** a complete Rails application and should not grow into host-app 
 19. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, or collapse-to-current-path affordances instead of row-by-row hierarchy layout.
 20. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
+## Automated smoke coverage
+
+- `npm run test:browser` opens representative mockup pages in Playwright and checks the review gallery, key local links, main headings, and sample regions.
+- The smoke coverage is intentionally narrow. It catches broken HTML, blank pages, missing review links, and missing representative regions without adding screenshot baselines or visual diff review.
+
 ## Copy and language policy
 
 - Mockups use short, product-neutral English copy so reviewers can compare layout and state cues without language changes becoming visual noise.
