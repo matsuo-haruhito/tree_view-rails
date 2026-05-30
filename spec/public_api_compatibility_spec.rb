@@ -65,8 +65,30 @@ RSpec.describe "Public API compatibility" do
     source.match?(/\b(?:dispatch|dispatch[A-Za-z]*)\("#{Regexp.escape(dispatch_name)}"/)
   end
 
+  def source_dispatch_windows(source, dispatch_name)
+    matcher = /\b(?:dispatch|dispatch[A-Za-z]*)\("#{Regexp.escape(dispatch_name)}"/
+
+    source.to_enum(:scan, matcher).map do
+      start_index = Regexp.last_match.begin(0)
+      end_index = source.index(/\n  }\n/, start_index) || source.length
+
+      source[start_index...end_index]
+    end
+  end
+
   def source_mentions_detail_key?(source, detail_key)
     source.match?(/#{Regexp.escape(detail_key)}\s*:/) || source.match?(/(?:^|[\s,{])#{Regexp.escape(detail_key)}(?:$|[\s,}])/)
+  end
+
+  def source_mentions_shorthand_detail?(source)
+    source.match?(/detail\s*[},]/)
+  end
+
+  def source_mentions_detail_key_for_dispatch?(source, dispatch_name, detail_key)
+    source_dispatch_windows(source, dispatch_name).any? do |dispatch_source|
+      source_mentions_detail_key?(dispatch_source, detail_key) ||
+        (source_mentions_shorthand_detail?(dispatch_source) && source_mentions_detail_key?(source, detail_key))
+    end
   end
 
   def public_ui_config
@@ -276,6 +298,40 @@ RSpec.describe "Public API compatibility" do
     end
   end
 
+  it "checks JavaScript event detail keys inside the matching dispatch source" do
+    source = <<~JAVASCRIPT
+      export class ExampleController {
+        first() {
+          this.dispatch("one", {
+            detail: {
+              sharedKey: true,
+              oneOnly: true
+            }
+          })
+        }
+
+        second() {
+          this.dispatch("two", {
+            detail: {
+              sharedKey: true,
+              twoOnly: true
+            }
+          })
+        }
+
+        wrapped() {
+          this.dispatchTransferEvent("wrapped", {
+            wrappedOnly: true
+          })
+        }
+      }
+    JAVASCRIPT
+
+    expect(source_mentions_detail_key_for_dispatch?(source, "one", "oneOnly")).to be(true)
+    expect(source_mentions_detail_key_for_dispatch?(source, "one", "twoOnly")).to be(false)
+    expect(source_mentions_detail_key_for_dispatch?(source, "wrapped", "wrappedOnly")).to be(true)
+  end
+
   it "keeps documented JavaScript event detail keys aligned with controller dispatch sources" do
     public_javascript_event_detail_keys.each do |group_name, events|
       source = javascript_controller_source(group_name)
@@ -287,7 +343,7 @@ RSpec.describe "Public API compatibility" do
           "expected #{group_name} controller to dispatch #{dispatch_name}"
 
         detail_keys.each do |detail_key|
-          expect(source_mentions_detail_key?(source, detail_key)).to be(true),
+          expect(source_mentions_detail_key_for_dispatch?(source, dispatch_name, detail_key)).to be(true),
             "expected #{group_name} controller source to keep #{detail_key} in the documented #{event_key} detail"
         end
       end
