@@ -24,6 +24,7 @@ Use render controls first when the data is already available. Use lazy loading o
 | Add full virtual scrolling | Host-app JavaScript | Scroll observers, virtualization library, URL/window state | TreeView does not provide built-in DOM virtualization or infinite-scroll control. Combine it with render metadata only when useful. |
 | Show search results with ancestors | `path_tree_for` | `tree.path_tree_for(matches)` | Use when matched records need enough ancestors to preserve context from root to match. |
 | Show child-to-parent paths | `reverse_tree_for` | `tree.reverse_tree_for(items)` | Use when the primary display starts from children and expands toward parents. |
+| Render heterogeneous or graph-like nodes | [API overview: adapter mode](api-overview.md#adapter-mode) | `TreeView::GraphAdapter`, `TreeView::Tree.new(adapter:)`, `children_resolver`, `node_key_resolver` | Use when one tree mixes different record classes or derives children from graph-like edges instead of one parent-id column. TreeView traverses roots and children supplied by the host app; data model, authorization, cycle policy, and persistence stay in the host app. |
 | Add checkbox selection | `selection:` options plus host-element `tree-view-selection` wiring | `enabled`, `checkbox_name`, `selected_keys`, `disabled_builder`, `disabled_reason_builder`, `visibility`, `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | Use grouped `selection:` options for row payload generation, disabled reasons, and checkbox visibility. Use the controller value attributes for hidden-input sync, client-side max-count limits, and rendered-row cascade / indeterminate behavior. TreeView renders selection state and values; the host app still owns the submitted business action. |
 | Add editable fields inside rows | [Forms and editing rows](form-editing.md) and [Cookbook](cookbook.md#row-customization-quick-guide) | `row_partial`, `row_actions_partial`, Rails `form_with`, `fields_for`, host-app Form Objects | TreeView supports inline-editing layouts. The host app owns edit mode, validation, persistence, authorization, dirty-state handling, and Turbo workflows. |
 | Add row action buttons | [Cookbook](cookbook.md#row-customization-quick-guide) | `row_actions_partial` | Recommended slot for Edit, Show, Delete, Archive, and custom host-app actions. |
@@ -55,6 +56,7 @@ flowchart TD
   A --> M{Is the tree derived from a subset?}
   M -->|Search matches need ancestors| N[path_tree_for]
   M -->|Children should point back to parents| O[reverse_tree_for]
+  M -->|Mixed node classes or graph-like edges| GA[GraphAdapter with host-app roots, children_resolver, and node_key_resolver]
   A --> P{Need interaction state?}
   P -->|Checkboxes| Q[selection: options]
   P -->|Editable fields or row actions| X[row_partial / row_actions_partial plus host-app workflows]
@@ -84,10 +86,11 @@ flowchart TD
 2. Add [API overview](api-overview.md) concepts only when the use case needs them.
 3. Use [Render Scale](render-scale.md) when HTML size or visible row count becomes the issue.
 4. Use [Lazy Loading](lazy-loading.md) and [Children Pagination](children-pagination.md) when query volume or child count is the issue; those pages include copyable host-app controller, Turbo Stream, cursor, and retry patterns.
-5. Use `build_client_side` when the data is already available, initial HTML volume is acceptable, and Turbo endpoints would be unnecessary overhead.
-6. Add host-app virtual scrolling only when scroll-position-driven DOM virtualization is a product requirement.
-7. Add [Selection](selection.md), [Forms and editing rows](form-editing.md), [Cookbook row customization](cookbook.md#row-customization-quick-guide), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction and row customization requirements are clear.
-8. Use [Tree diagnostics](tree-diagnostics.md) when node keys, DOM IDs, or tree structure need validation.
+5. Use [GraphAdapter adapter mode](api-overview.md#adapter-mode) when the tree mixes different record classes or graph-like edges and cannot be represented cleanly by one parent-id column.
+6. Use `build_client_side` when the data is already available, initial HTML volume is acceptable, and Turbo endpoints would be unnecessary overhead.
+7. Add host-app virtual scrolling only when scroll-position-driven DOM virtualization is a product requirement.
+8. Add [Selection](selection.md), [Forms and editing rows](form-editing.md), [Cookbook row customization](cookbook.md#row-customization-quick-guide), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction and row customization requirements are clear.
+9. Use [Tree diagnostics](tree-diagnostics.md) when node keys, DOM IDs, or tree structure need validation.
 
 ## Common combinations
 
@@ -96,6 +99,7 @@ flowchart TD
 | Small admin taxonomy | Static tree + `max_initial_depth` if needed |
 | Small docs sidebar with local opening | Client-side mode + `initial_state: :collapsed` + render scope as needed |
 | Large folder browser | Lazy Loading + Children Pagination + Persisted State |
+| Heterogeneous project workspace | GraphAdapter + stable `node_key_resolver` + host-app row partial / presenter |
 | Large scrolling browser | Host-app virtual scrolling + render/window metadata as needed |
 | Search page | `path_tree_for` + render scope around matches |
 | Breadcrumb-like reverse view | `reverse_tree_for` + custom row partial |
@@ -109,6 +113,7 @@ flowchart TD
 ## Related docs
 
 - [API overview](api-overview.md)
+- [API overview: adapter mode](api-overview.md#adapter-mode)
 - [API reference](api.md)
 - [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide)
 - [Render Scale](render-scale.md)
