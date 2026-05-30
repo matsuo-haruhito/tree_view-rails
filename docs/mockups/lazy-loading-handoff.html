@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView lazy-loading handoff mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.handoff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.handoff-note {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid #d8e0ea;
+  background: #f8fafc;
+}
+
+.handoff-note h3,
+.handoff-note p {
+  margin: 0;
+}
+
+.handoff-note h3 {
+  font-size: 0.95rem;
+}
+
+.handoff-note code {
+  overflow-wrap: anywhere;
+}
+
+.handoff-slot {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px dashed #9fb1c7;
+  background: #f8fafc;
+  color: #334e68;
+}
+
+.handoff-slot dt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.handoff-slot dd {
+  margin: 0;
+}
+
+.handoff-boundary-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView lazy-loading handoff mock</h1>
+      <p>
+        Static reference for comparing the host-app-owned children container and remote-state placeholder that the lazy-loading guide describes.
+        It shows initial, loaded, and error/retry states without modeling fetch behavior, Turbo Stream responses, authorization, or cursor policy.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="handoff-boundary-heading">
+      <h2 id="handoff-boundary-heading">Responsibility boundary</h2>
+      <div class="handoff-grid">
+        <article class="handoff-note">
+          <h3>TreeView-owned cues</h3>
+          <p>Row depth, expansion state, toggle cell structure, and current hierarchy cues stay in the tree row markup.</p>
+        </article>
+        <article class="handoff-note">
+          <h3>Host-app-owned slots</h3>
+          <p><code>tree_children_container_dom_id</code> and <code>tree_remote_state_placeholder_dom_id</code> give the host app stable targets to replace.</p>
+        </article>
+        <article class="handoff-note">
+          <h3>Out of scope here</h3>
+          <p>Requests, authorization, retries, cursor math, and final business copy are intentionally not represented as working behavior.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="initial-heading">
+      <h2 id="initial-heading">Initial unloaded parent</h2>
+      <table class="tree-view-table" data-controller="tree-view-state tree-view-remote-state">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">handoff slots</th>
+            <th scope="col">state</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="project_alpha" class="tree-row" data-tree-node-key="project:alpha" data-tree-depth="0" data-tree-expanded="false" data-tree-remote-state="idle" aria-level="1" aria-expanded="false">
+            <td class="btn-cell tree-toggle-cell" id="project_alpha_button">
+              <span class="tree-toggle" aria-label="Collapsed remote branch">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true" aria-controls="project_alpha_children project_alpha_remote_state">load</a>
+                  <span class="tree-toggle__level">remote</span>
+                </span>
+              </span>
+            </td>
+            <td>Project Alpha</td>
+            <td>
+              <dl class="handoff-slot">
+                <dt>children container</dt>
+                <dd><code>project_alpha_children</code> is present but waiting for host-app replacement.</dd>
+                <dt>remote-state slot</dt>
+                <dd><code>project_alpha_remote_state</code> can receive loading or error copy.</dd>
+              </dl>
+            </td>
+            <td><span class="mock-status mock-status--pending">unloaded</span></td>
+          </tr>
+          <tr id="project_alpha_children" class="tree-row tree-row--placeholder" data-tree-parent-key="project:alpha" data-tree-depth="1" aria-level="2">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">slot</span></span></span></td>
+            <td colspan="3">Host app owns the placeholder content until children are loaded.</td>
+          </tr>
+          <tr id="project_alpha_remote_state" class="tree-row tree-row--placeholder" data-tree-parent-key="project:alpha" data-tree-depth="1" aria-level="2">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">state</span></span></span></td>
+            <td colspan="3"><span class="mock-status mock-status--pending">remote-state placeholder is reserved</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="loaded-heading">
+      <h2 id="loaded-heading">Loaded children replacement</h2>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">replacement result</th>
+            <th scope="col">state</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="project_beta" class="tree-row is-expanded" data-tree-node-key="project:beta" data-tree-depth="0" data-tree-expanded="true" data-tree-remote-state="loaded" aria-level="1" aria-expanded="true">
+            <td class="btn-cell tree-toggle-cell" id="project_beta_button">
+              <span class="tree-toggle" aria-label="Loaded remote branch">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a><span class="tree-toggle__level">loaded</span></span>
+              </span>
+            </td>
+            <td>Project Beta</td>
+            <td>Children rows replaced the placeholder region.</td>
+            <td><span class="mock-status mock-status--active">loaded</span></td>
+          </tr>
+          <tr id="project_beta_task_1" class="tree-row" data-tree-parent-key="project:beta" data-tree-node-key="task:1" data-tree-depth="1" aria-level="2">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">child</span></span></span></td>
+            <td>Loaded task one</td>
+            <td>Tree row depth and parent key stay visible in the DOM.</td>
+            <td><span class="mock-status mock-status--active">child row</span></td>
+          </tr>
+          <tr id="project_beta_task_2" class="tree-row" data-tree-parent-key="project:beta" data-tree-node-key="task:2" data-tree-depth="1" aria-level="2">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">child</span></span></span></td>
+            <td>Loaded task two</td>
+            <td>Remote-state placeholder is cleared or replaced by the host app.</td>
+            <td><span class="mock-status mock-status--active">child row</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="error-heading">
+      <h2 id="error-heading">Error and retry handoff</h2>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">remote-state slot</th>
+            <th scope="col">state</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="project_gamma" class="tree-row is-error" data-tree-node-key="project:gamma" data-tree-depth="0" data-tree-expanded="false" data-tree-remote-state="error" aria-level="1" aria-expanded="false">
+            <td class="btn-cell tree-toggle-cell" id="project_gamma_button">
+              <span class="tree-toggle" aria-label="Remote branch failed">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true" aria-controls="project_gamma_remote_state">retry</a><span class="tree-toggle__level">error</span></span>
+              </span>
+            </td>
+            <td>Project Gamma</td>
+            <td>
+              <dl class="handoff-slot">
+                <dt>remote-state slot</dt>
+                <dd><code>project_gamma_remote_state</code> carries host-app retry copy and action placement.</dd>
+              </dl>
+            </td>
+            <td><span class="mock-status mock-status--error">load failed</span></td>
+          </tr>
+          <tr id="project_gamma_remote_state" class="tree-row tree-row--placeholder" data-tree-parent-key="project:gamma" data-tree-depth="1" aria-level="2">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">retry</span></span></span></td>
+            <td colspan="3">
+              <span class="mock-status mock-status--error">Could not load children.</span>
+              <button type="button">Retry loading</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="scope-heading">
+      <h2 id="scope-heading">What this mockup does not claim</h2>
+      <ul class="handoff-boundary-list">
+        <li>No real Turbo request, fetch controller, or retry implementation is included.</li>
+        <li>No authorization, query policy, cursor policy, or host-app business label is modeled.</li>
+        <li>The static rows only show which DOM region the host app is expected to replace or annotate.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
