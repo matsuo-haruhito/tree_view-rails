@@ -17,7 +17,8 @@ RENDER_STATE_GROUPED_OPTION_KEY_RESOLVERS = {
   "render_scope" => -> { TreeView::RenderState::VALID_RENDER_SCOPE_KEYS.map(&:to_s) },
   "toggle_scope" => -> { TreeView::RenderState::VALID_TOGGLE_SCOPE_KEYS.map(&:to_s) },
   "selection" => -> { TreeView::RenderState::SelectionConfig::VALID_KEYS.map(&:to_s) },
-  "lazy_loading" => -> { %w[enabled loaded_keys scope] }
+  "lazy_loading" => -> { %w[enabled loaded_keys scope] },
+  "row_status" => -> { %w[row_disabled_builder row_readonly_builder row_disabled_reason_builder] }
 }.freeze
 
 RSpec.describe "Public API compatibility" do
@@ -91,11 +92,17 @@ RSpec.describe "Public API compatibility" do
     end
   end
 
+  def dom_id_suffix(item_or_id)
+    return item_or_id.id if item_or_id.respond_to?(:id)
+
+    item_or_id
+  end
+
   def public_ui_config
     TreeView::UiConfig.new(
-      node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
-      button_dom_id_builder: ->(item_or_id) { "node_button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
-      show_button_dom_id_builder: ->(item_or_id) { "node_show_button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" }
+      node_dom_id_builder: ->(item_or_id) { "node_#{dom_id_suffix(item_or_id)}" },
+      button_dom_id_builder: ->(item_or_id) { "node_button_#{dom_id_suffix(item_or_id)}" },
+      show_button_dom_id_builder: ->(item_or_id) { "node_show_button_#{dom_id_suffix(item_or_id)}" }
     )
   end
 
@@ -153,6 +160,9 @@ RSpec.describe "Public API compatibility" do
   it "keeps representative grouped option behavior available" do
     tree = instance_double(TreeView::Tree)
     ui_config = instance_double(TreeView::UiConfig)
+    row_disabled_builder = ->(item) { item == :disabled }
+    row_readonly_builder = ->(item) { item == :readonly }
+    row_disabled_reason_builder = ->(item) { (item == :disabled) ? "archived" : nil }
 
     state = TreeView::RenderState.new(
       tree: tree,
@@ -188,7 +198,10 @@ RSpec.describe "Public API compatibility" do
         enabled: true,
         loaded_keys: ["node:1"],
         scope: "children"
-      }
+      },
+      row_disabled_builder: row_disabled_builder,
+      row_readonly_builder: row_readonly_builder,
+      row_disabled_reason_builder: row_disabled_reason_builder
     )
 
     expect(state.initial_state).to eq(:collapsed)
@@ -211,6 +224,9 @@ RSpec.describe "Public API compatibility" do
     expect(state.lazy_loading_enabled?).to eq(true)
     expect(state.lazy_loading_loaded_keys).to eq(["node:1"])
     expect(state.lazy_loading_scope).to eq("children")
+    expect(state.row_disabled_builder).to eq(row_disabled_builder)
+    expect(state.row_readonly_builder).to eq(row_readonly_builder)
+    expect(state.row_disabled_reason_builder).to eq(row_disabled_reason_builder)
   end
 
   it "keeps documented helper method names available through TreeViewHelper" do
