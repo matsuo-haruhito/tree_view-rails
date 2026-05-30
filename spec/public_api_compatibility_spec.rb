@@ -162,7 +162,7 @@ RSpec.describe "Public API compatibility" do
     ui_config = instance_double(TreeView::UiConfig)
     row_disabled_builder = ->(item) { item == :disabled }
     row_readonly_builder = ->(item) { item == :readonly }
-    row_disabled_reason_builder = ->(item) { item == :disabled ? "archived" : nil }
+    row_disabled_reason_builder = ->(item) { (item == :disabled) ? "archived" : nil }
 
     state = TreeView::RenderState.new(
       tree: tree,
