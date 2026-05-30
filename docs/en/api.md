@@ -322,7 +322,7 @@ tree_ui = TreeView::UiConfigBuilder.new(
   node_prefix: "document"
 ).build_turbo(
   hide_descendants_path_builder: ->(item, depth, scope) { hide_document_path(item, depth: depth, scope: scope) },
-  show_descendants_path_builder: ->(item, depth: depth, scope: scope) { show_document_path(item, depth: depth, scope: scope) },
+  show_descendants_path_builder: ->(item, depth, scope) { show_document_path(item, depth: depth, scope: scope) },
   load_children_path_builder: ->(item, depth, scope) { children_document_path(item, depth: depth, scope: scope) },
   toggle_all_path_builder: ->(state) { documents_path(state: state) },
   turbo_frame: "documents_tree"
