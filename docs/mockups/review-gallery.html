@@ -35,6 +35,47 @@
   color: #1d4ed8;
 }
 
+.mock-gallery-review-paths {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid #d8e0ea;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.mock-gallery-review-paths h2,
+.mock-gallery-review-paths p {
+  margin: 0;
+}
+
+.mock-gallery-review-path-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mock-gallery-review-path-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.35rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mock-gallery-review-path-links a:hover,
+.mock-gallery-review-path-links a:focus {
+  border-color: #1d4ed8;
+  background: #eff6ff;
+  outline: 2px solid transparent;
+}
+
 .mock-gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -159,6 +200,19 @@
         <li>Open the linked full mockup when you want the complete page context or longer notes for one state family.</li>
         <li>Treat final business copy, routes, permissions, and actions as host-app responsibilities. This gallery stays product-neutral on purpose.</li>
       </ul>
+      <nav class="mock-gallery-review-paths" aria-labelledby="gallery-review-paths-heading">
+        <h2 id="gallery-review-paths-heading">Review paths</h2>
+        <p>Jump to the first card in a state family, then continue through nearby cards for related comparisons.</p>
+        <div class="mock-gallery-review-path-links">
+          <a href="#gallery-default-heading">Baseline</a>
+          <a href="#gallery-interaction-heading">Interaction states</a>
+          <a href="#gallery-narrow-heading">Responsive and scale</a>
+          <a href="#gallery-breadcrumb-heading">Navigation context</a>
+          <a href="#gallery-path-builder-heading">Generated rows</a>
+          <a href="#gallery-form-heading">Editing and controls</a>
+          <a href="#gallery-empty-heading">Empty and fallback states</a>
+        </div>
+      </nav>
     </section>
 
     <section class="mock-gallery-grid" aria-label="Mockup comparison gallery">
