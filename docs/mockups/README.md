@@ -16,6 +16,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [narrow-sidebar-tree.html](narrow-sidebar-tree.html) | Narrow sidebar and small-width reference that keeps toggle controls, primary labels, and current or selection cues visible while secondary metadata wraps below. |
 | [row-status-depth-labels.html](row-status-depth-labels.html) | Focused comparison for row-wide status cues, selection checkbox disabled state, and depth labels without host-app authorization or business wording. |
 | [interaction-states.html](interaction-states.html) | Lazy-loading, loading, error/retry, next-page, and drag/drop visual states. |
+| [lazy-loading-handoff.html](lazy-loading-handoff.html) | Focused lazy-loading reference showing children container ownership, remote-state placeholder handoff, and error/retry slot boundaries. |
 | [drop-positions.html](drop-positions.html) | Focused comparison for before, inside, and after drop-position cues plus the host-app-owned move policy boundary. |
 | [persisted-state-boundary.html](persisted-state-boundary.html) | Focused persisted-state reference showing before, changed, restored, save-failed, and retry cues while keeping storage and retry policy host-app owned. |
 | [turbo-frame-target.html](turbo-frame-target.html) | Focused Turbo Frame target boundary showing `data-turbo-frame` on TreeView toggle links beside the host-app-owned frame wrapper. |
@@ -38,19 +39,20 @@ They are **not** a complete Rails application and should not grow into host-app 
 4. Use [row-status-depth-labels.html](row-status-depth-labels.html) when review needs to compare row-wide readonly/disabled cues, selection checkbox disabled state, and depth-label meaning boundaries.
 5. Use [resource-table-bridge.html](resource-table-bridge.html) when review needs a focused pass on table-owned columns plus TreeView-owned hierarchy cues.
 6. Use [interaction-states.html](interaction-states.html) when review needs a focused pass on lazy loading, retry, pagination placeholders, or drag/drop states.
-7. Use [drop-positions.html](drop-positions.html) when review needs to compare before, inside, and after drop cues without modeling host-app reorder rules or persistence.
-8. Use [persisted-state-boundary.html](persisted-state-boundary.html) when review needs to compare persisted expansion state before, changed, restored, save-failed, and retry cues without adding host-app persistence behavior.
-9. Use [turbo-frame-target.html](turbo-frame-target.html) when review needs a focused pass on the configured `data-turbo-frame` link attribute and the host-app-owned frame target boundary.
-10. Use [drag-interactive-controls.html](drag-interactive-controls.html) when review needs a focused pass on draggable rows that contain native controls, custom interactive markers, or drag-only ignore markers.
-11. Use [interactive-marker-behaviors.html](interactive-marker-behaviors.html) when review needs to compare the broad interactive marker against the narrower keyboard, row-click, and drag behavior markers.
-12. Use [windowed-rendering.html](windowed-rendering.html) when review needs to compare visible-row slicing and current-row anchoring without adding host-app paging controls.
-13. Use [breadcrumb-paths.html](breadcrumb-paths.html) when review needs to compare breadcrumb-path context against the tree's own current-row cue without modeling host-app route design.
-14. Use [filtered-tree-modes.html](filtered-tree-modes.html) when review needs to compare matched nodes against ancestor or descendant context without adding host-app search UI.
-15. Use [path-tree-builder-rows.html](path-tree-builder-rows.html) when review needs to compare generated folder rows with record-backed rows without designing a file-manager application.
-16. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
-17. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
-18. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, or collapse-to-current-path affordances instead of row-by-row hierarchy layout.
-19. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+7. Use [lazy-loading-handoff.html](lazy-loading-handoff.html) when review needs to isolate children container ownership and remote-state slot handoff from the broader interaction-state page.
+8. Use [drop-positions.html](drop-positions.html) when review needs to compare before, inside, and after drop cues without modeling host-app reorder rules or persistence.
+9. Use [persisted-state-boundary.html](persisted-state-boundary.html) when review needs to compare persisted expansion state before, changed, restored, save-failed, and retry cues without adding host-app persistence behavior.
+10. Use [turbo-frame-target.html](turbo-frame-target.html) when review needs a focused pass on the configured `data-turbo-frame` link attribute and the host-app-owned frame target boundary.
+11. Use [drag-interactive-controls.html](drag-interactive-controls.html) when review needs a focused pass on draggable rows that contain native controls, custom interactive markers, or drag-only ignore markers.
+12. Use [interactive-marker-behaviors.html](interactive-marker-behaviors.html) when review needs to compare the broad interactive marker against the narrower keyboard, row-click, and drag behavior markers.
+13. Use [windowed-rendering.html](windowed-rendering.html) when review needs to compare visible-row slicing and current-row anchoring without adding host-app paging controls.
+14. Use [breadcrumb-paths.html](breadcrumb-paths.html) when review needs to compare breadcrumb-path context against the tree's own current-row cue without modeling host-app route design.
+15. Use [filtered-tree-modes.html](filtered-tree-modes.html) when review needs to compare matched nodes against ancestor or descendant context without adding host-app search UI.
+16. Use [path-tree-builder-rows.html](path-tree-builder-rows.html) when review needs to compare generated folder rows with record-backed rows without designing a file-manager application.
+17. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
+18. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
+19. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, or collapse-to-current-path affordances instead of row-by-row hierarchy layout.
+20. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Copy and language policy
 
