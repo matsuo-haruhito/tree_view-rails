@@ -16,6 +16,8 @@ TreeView gem が担当するのは以下です。
 
 実際の保存先、owner model、認可、保存タイミング、controller action、UI更新はhost app側で実装します。
 
+保存・復元の受け渡しを静的な visual reference で確認したい場合は、[Persisted State boundary mockup](../mockups/persisted-state-boundary.html) を参照してください。この mockup は、保存前、変更後、復元後、保存失敗、retry の代表的な見え方を示しますが、storage、save endpoint、認可、retry policy を gem 側の責務として扱うものではありません。
+
 ## generator
 
 保存用modelとmigrationの雛形は generator で作成できます。
