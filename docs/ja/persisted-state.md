@@ -111,6 +111,19 @@ persisted_state = store.save!(
 )
 ```
 
+同じ owner と tree instance key の保存済み開閉状態をクリアする例:
+
+```ruby
+persisted_state = store.clear!(
+  owner: current_user,
+  tree_instance_key: "documents:index"
+)
+```
+
+`clear!` は一致する persisted-state record があれば削除します。record が存在しない場合も例外にせず、指定した key と空の `expanded_keys` を持つ `TreeView::PersistedState` を返します。これは `find` の empty-state behavior と同じ扱いです。
+
+TreeView が提供するのは store API までです。reset route、認可、確認 UI、retry、response shape は引き続き host app 側が持ちます。
+
 ## 最小 controller concern
 
 保存 endpoint を小さく保ちたい host app では、controller に `TreeView::PersistedStateController` を include して、raw request values から `StateStore#save!` への橋渡しだけ gem 側へ寄せられます。

@@ -4,6 +4,11 @@ DummyRecord = Struct.new(:owner, :tree_instance_key, :expanded_keys) do
   def save!
     true
   end
+
+  def destroy!
+    DummyModel.record = nil
+    true
+  end
 end
 
 class DummyModel
@@ -55,5 +60,27 @@ RSpec.describe TreeView::StateStore do
     expect(DummyModel.record.expanded_keys).to eq(["node-1"])
     expect(state.tree_instance_key).to eq("documents")
     expect(state.expanded_keys).to eq(["node-1"])
+  end
+
+  it "clears an existing record and returns an empty persisted state" do
+    DummyModel.record = DummyRecord.new(:user, "documents", ["node-1"])
+    store = described_class.new(model: DummyModel)
+
+    state = store.clear!(owner: :user, tree_instance_key: "documents")
+
+    expect(DummyModel.record).to be_nil
+    expect(state).to be_a(TreeView::PersistedState)
+    expect(state.tree_instance_key).to eq("documents")
+    expect(state.expanded_keys).to eq([])
+    expect(store.find(owner: :user, tree_instance_key: "documents").expanded_keys).to eq([])
+  end
+
+  it "treats clearing a missing record as idempotent" do
+    store = described_class.new(model: DummyModel)
+
+    state = store.clear!(owner: :user, tree_instance_key: "documents")
+
+    expect(state.tree_instance_key).to eq("documents")
+    expect(state.expanded_keys).to eq([])
   end
 end

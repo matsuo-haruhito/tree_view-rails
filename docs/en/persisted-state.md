@@ -111,6 +111,19 @@ persisted_state = store.save!(
 )
 ```
 
+Clear saved expansion state for the same owner and tree instance key:
+
+```ruby
+persisted_state = store.clear!(
+  owner: current_user,
+  tree_instance_key: "documents:index"
+)
+```
+
+`clear!` deletes the matching persisted-state record when one exists. When no record exists, it still returns a `TreeView::PersistedState` for the requested key with empty `expanded_keys`, matching the empty-state behavior of `find`.
+
+TreeView only provides the store API. The host app still owns the reset route, authorization, confirmation UI, retry behavior, and response shape.
+
 ## Minimal controller concern
 
 If your host app wants to keep the save endpoint small, include `TreeView::PersistedStateController` in the controller and let it bridge the raw request values to `StateStore#save!`.
