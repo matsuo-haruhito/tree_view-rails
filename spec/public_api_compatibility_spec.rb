@@ -255,6 +255,43 @@ RSpec.describe "Public API compatibility" do
     })
   end
 
+  it "keeps lazy-loading state actions aligned with host lifecycle manifest events" do
+    helper_class = Class.new do
+      include TreeViewHelper
+    end
+    helper = helper_class.new
+    tree = public_tree
+    lazy_render_state = TreeView::RenderState.new(
+      tree: tree,
+      root_items: tree.root_items,
+      row_partial: "items/tree_columns",
+      ui_config: public_ui_config,
+      lazy_loading: {enabled: true}
+    )
+    eager_render_state = TreeView::RenderState.new(
+      tree: tree,
+      root_items: tree.root_items,
+      row_partial: "items/tree_columns",
+      ui_config: public_ui_config
+    )
+
+    lazy_data = helper.tree_view_state_data(lazy_render_state)
+    lazy_actions = lazy_data.fetch(:action).split
+
+    expect(lazy_data.fetch(:controller).split).to include("tree-view-remote-state")
+    public_javascript_event_names.fetch("host_lifecycle").each do |state, event_name|
+      expected_action = "#{event_name}->tree-view-remote-state##{state}"
+
+      expect(lazy_actions).to include(expected_action),
+        "expected lazy-loading data-action to include #{expected_action} from the host_lifecycle manifest"
+    end
+
+    eager_data = helper.tree_view_state_data(eager_render_state)
+
+    expect(eager_data.fetch(:controller).split).not_to include("tree-view-remote-state")
+    expect(eager_data.fetch(:action, "").split.grep(/\Atree-view:/)).to be_empty
+  end
+
   it "keeps documented JavaScript package-root exports available" do
     source = javascript_entrypoint_source
 
