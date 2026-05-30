@@ -10,10 +10,28 @@ RSpec.describe TreeView::RenderWindow do
 
     expect(window.to_a).to eq([3, 4, 5])
     expect(window.total_count).to eq(10)
+    expect(window.before_count).to eq(2)
+    expect(window.after_count).to eq(5)
     expect(window.start_index).to eq(2)
     expect(window.end_index).to eq(5)
     expect(window.previous_offset).to eq(0)
     expect(window.next_offset).to eq(5)
+  end
+
+  it "reports counts before and after edge windows" do
+    empty = described_class.new([], offset: 0, limit: 4)
+    first = described_class.new(rows, offset: 0, limit: 4)
+    middle = described_class.new(rows, offset: 4, limit: 4)
+    last = described_class.new(rows, offset: 8, limit: 4)
+
+    expect(empty.before_count).to eq(0)
+    expect(empty.after_count).to eq(0)
+    expect(first.before_count).to eq(0)
+    expect(first.after_count).to eq(6)
+    expect(middle.before_count).to eq(4)
+    expect(middle.after_count).to eq(2)
+    expect(last.before_count).to eq(8)
+    expect(last.after_count).to eq(0)
   end
 
   it "reports previous and next availability" do
@@ -35,6 +53,8 @@ RSpec.describe TreeView::RenderWindow do
     expect(window).to be_empty
     expect(window.to_a).to eq([])
     expect(window.total_count).to eq(10)
+    expect(window.before_count).to eq(10)
+    expect(window.after_count).to eq(0)
     expect(window.start_index).to eq(10)
     expect(window.end_index).to eq(0)
     expect(window.next_offset).to be_nil
