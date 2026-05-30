@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView drop position mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.drop-position-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.drop-position-card {
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.drop-position-card__header {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1rem 0.8rem;
+  border-bottom: 1px solid #e4e7eb;
+  background: #f8fafc;
+}
+
+.drop-position-card__header h3,
+.drop-position-card__header p {
+  margin: 0;
+}
+
+.drop-position-card__header p {
+  color: #52606d;
+  font-size: 0.92rem;
+}
+
+.drop-position-card__body {
+  padding: 1rem;
+}
+
+.drop-position-table {
+  table-layout: fixed;
+}
+
+.drop-position-table .tree-toggle-cell {
+  min-width: 0;
+  width: 58%;
+  white-space: normal;
+}
+
+.drop-position-table td:last-child,
+.drop-position-table th:last-child {
+  width: 42%;
+}
+
+.drop-position-row {
+  position: relative;
+}
+
+.drop-position-row::before,
+.drop-position-row::after {
+  pointer-events: none;
+}
+
+.drop-position-row--before::before,
+.drop-position-row--after::after {
+  content: "";
+  position: absolute;
+  left: 0.65rem;
+  right: 0.65rem;
+  height: 0.22rem;
+  border-radius: 999px;
+  background: #2563eb;
+  box-shadow: 0 0 0 2px #dbeafe;
+}
+
+.drop-position-row--before::before {
+  top: -0.12rem;
+}
+
+.drop-position-row--after::after {
+  bottom: -0.12rem;
+}
+
+.drop-position-row--inside {
+  background: #ecfdf5;
+  outline: 2px solid #86efac;
+  outline-offset: -2px;
+}
+
+.drop-position-row--invalid {
+  background: #fff1f2;
+  outline: 2px dashed #fda4af;
+  outline-offset: -2px;
+}
+
+.drop-position-note-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #334e68;
+}
+
+.drop-position-boundary {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.drop-position-boundary p {
+  margin: 0;
+}
+
+@media (max-width: 680px) {
+  .drop-position-table {
+    table-layout: auto;
+  }
+
+  .drop-position-table .tree-toggle-cell,
+  .drop-position-table td:last-child,
+  .drop-position-table th:last-child {
+    width: auto;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView drop position mock</h1>
+      <p>
+        Static reference for comparing the coarse drop positions emitted by TreeView transfer handling.
+        TreeView exposes before, inside, and after cues; final move permission, persistence, and business copy remain host-app responsibilities.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="position-cues-heading">
+      <h2 id="position-cues-heading">Position cue comparison</h2>
+      <div class="drop-position-grid">
+        <article class="drop-position-card" aria-labelledby="before-heading">
+          <div class="drop-position-card__header">
+            <h3 id="before-heading">Before target row</h3>
+            <p>Use a leading insertion line when the dragged item will become the previous sibling.</p>
+          </div>
+          <div class="drop-position-card__body">
+            <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+              <thead><tr><th scope="col">tree</th><th scope="col">drop cue</th></tr></thead>
+              <tbody>
+                <tr class="tree-row" draggable="true" data-tree-node-key="task:incoming" aria-level="1">
+                  <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">drag</span><span class="mock-node-title">Incoming task</span></span></span></td>
+                  <td><span class="mock-status mock-status--pending">dragging</span></td>
+                </tr>
+                <tr class="tree-row drop-position-row drop-position-row--before" data-tree-node-key="task:alpha" data-tree-drop-position="before" aria-level="1">
+                  <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">target</span><span class="mock-node-title">Alpha brief</span></span></span></td>
+                  <td><span class="mock-status mock-status--active">drop before</span></td>
+                </tr>
+                <tr class="tree-row" data-tree-node-key="task:beta" aria-level="1">
+                  <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">peer</span><span class="mock-node-title">Beta brief</span></span></span></td>
+                  <td><span class="mock-status">unchanged</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="drop-position-card" aria-labelledby="inside-heading">
+          <div class="drop-position-card__header">
+            <h3 id="inside-heading">Inside target row</h3>
+            <p>Use a row-wide target cue when the dragged item will become a child of the target node.</p>
+          </div>
+          <div class="drop-position-card__body">
+            <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+              <thead><tr><th scope="col">tree</th><th scope="col">drop cue</th></tr></thead>
+              <tbody>
+                <tr class="tree-row is-expanded drop-position-row drop-position-row--inside" data-tree-node-key="folder:planning" data-tree-drop-position="inside" aria-level="1" aria-expanded="true">
+                  <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">hide</span><span class="tree-toggle__level">target</span><span class="mock-node-title">Planning folder</span></span></span></td>
+                  <td><span class="mock-status mock-status--active">drop inside</span></td>
+                </tr>
+                <tr class="tree-row" data-tree-parent-key="folder:planning" data-tree-node-key="task:child" aria-level="2">
+                  <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">child</span><span class="mock-node-title">Existing child</span></span></span></td>
+                  <td><span class="mock-status">current child</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="drop-position-card" aria-labelledby="after-heading">
+          <div class="drop-position-card__header">
+            <h3 id="after-heading">After target row</h3>
+            <p>Use a trailing insertion line when the dragged item will become the next sibling.</p>
+          </div>
+          <div class="drop-position-card__body">
+            <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+              <thead><tr><th scope="col">tree</th><th scope="col">drop cue</th></tr></thead>
+              <tbody>
+                <tr class="tree-row" data-tree-node-key="task:alpha" aria-level="1">
+                  <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">peer</span><span class="mock-node-title">Alpha brief</span></span></span></td>
+                  <td><span class="mock-status">unchanged</span></td>
+                </tr>
+                <tr class="tree-row drop-position-row drop-position-row--after" data-tree-node-key="task:beta" data-tree-drop-position="after" aria-level="1">
+                  <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">target</span><span class="mock-node-title">Beta brief</span></span></span></td>
+                  <td><span class="mock-status mock-status--active">drop after</span></td>
+                </tr>
+                <tr class="tree-row" draggable="true" data-tree-node-key="task:incoming" aria-level="1">
+                  <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">drag</span><span class="mock-node-title">Incoming task</span></span></span></td>
+                  <td><span class="mock-status mock-status--pending">dragging</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">Disabled and responsibility boundary</h2>
+      <div class="drop-position-boundary">
+        <p>TreeView can show a coarse target cue, but it does not decide whether a move is allowed for the host application's business rules.</p>
+        <ul class="drop-position-note-list">
+          <li>Use <code>data-tree-drop-position</code> for visual comparison of before, inside, and after positions.</li>
+          <li>Use disabled or invalid styling only as representative host-app policy output in this static reference.</li>
+          <li>Keep final permission wording, persistence, audit trails, and reorder rules outside this mockup.</li>
+        </ul>
+      </div>
+      <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+        <thead><tr><th scope="col">tree</th><th scope="col">policy cue</th></tr></thead>
+        <tbody>
+          <tr class="tree-row drop-position-row drop-position-row--invalid" data-tree-node-key="folder:archive" data-tree-drop-position="inside" data-tree-drop-disabled-reason="Readonly target" aria-level="1" aria-disabled="true">
+            <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">blocked</span><span class="mock-node-title">Archived folder</span></span></span></td>
+            <td><span class="mock-status mock-status--error">host app rejects move</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
