@@ -80,9 +80,14 @@ RSpec.describe "Public API compatibility" do
     source.match?(/#{Regexp.escape(detail_key)}\s*:/) || source.match?(/(?:^|[\s,{])#{Regexp.escape(detail_key)}(?:$|[\s,}])/)
   end
 
+  def source_mentions_shorthand_detail?(source)
+    source.match?(/detail\s*[},]/)
+  end
+
   def source_mentions_detail_key_for_dispatch?(source, dispatch_name, detail_key)
     source_dispatch_windows(source, dispatch_name).any? do |dispatch_source|
-      source_mentions_detail_key?(dispatch_source, detail_key)
+      source_mentions_detail_key?(dispatch_source, detail_key) ||
+        (source_mentions_shorthand_detail?(dispatch_source) && source_mentions_detail_key?(source, detail_key))
     end
   end
 
