@@ -73,6 +73,10 @@ grouped_option_keys:
     - enabled
     - loaded_keys
     - scope
+  row_status:
+    - row_disabled_builder
+    - row_readonly_builder
+    - row_disabled_reason_builder
 javascript_package_root:
   named_exports:
     - registerTreeViewControllers
