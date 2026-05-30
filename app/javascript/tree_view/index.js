@@ -39,6 +39,12 @@ export const TreeViewEventNames = Object.freeze({
   })
 })
 
+export const TreeViewTransferDropPositions = Object.freeze({
+  before: "before",
+  inside: "inside",
+  after: "after"
+})
+
 export const TreeViewControllerIdentifiers = Object.freeze({
   state: "tree-view-state",
   client: "tree-view-client",
