@@ -16,6 +16,16 @@ The usual flow is:
 
 TreeView renders the tree UI primitives. Host apps remain responsible for application-specific CRUD, authorization, persistence, server-side queries, Turbo Stream responses, and business actions.
 
+## Empty root and no-results rows
+
+When a screen has no root items or a filtered search returns no rows, keep the empty copy, CTA, permission messaging, and filter-reset behavior in the host app. Render the empty state in the table body at the same point where the screen would normally render `tree_view_rows(@render_state)`, then reuse TreeView's documented baseline hooks when the row should match the shared mockup:
+
+- `data-tree-view-empty-state="true"`
+- `.tree-view-empty-row__content`
+- `.tree-view-empty-row__message`
+
+For the focused visual reference and hook boundary, see [empty-state.html](../mockups/empty-state.html) and the [mockup empty-state guidance](../mockups/README.md#empty-state-guidance).
+
 ## Toggle modes
 
 Choose the toggle mode per tree instance. One host app can use different modes on different screens, or even render multiple trees with different modes on the same page.
