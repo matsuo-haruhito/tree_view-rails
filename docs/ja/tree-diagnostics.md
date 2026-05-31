@@ -51,6 +51,29 @@ render_state.validate_unique_dom_ids!
 
 これにより、host appは不正または意図しないtree dataを描画する前に、具体的なvalidation pointを持てます。
 
+複数の確認をまとめて実行したい場合は、treeとrender stateを作ったあとに `TreeView::Diagnostics.run` を使えます。
+
+```ruby
+result = TreeView::Diagnostics.run(
+  tree: tree,
+  render_state: render_state,
+  checks: %i[node_keys dom_ids orphans cycles],
+  raise_errors: false
+)
+
+unless result.success?
+  Rails.logger.warn(result.errors.map { |entry| entry[:message] })
+end
+
+result.warnings.each do |warning|
+  Rails.logger.info(warning[:message])
+end
+```
+
+`checks:` には実行したいdiagnosticsを指定できます。省略すると、defaultの `node_keys`、`dom_ids`、`orphans`、`cycles` が実行されます。host appのtestで一部だけ確認したい場合は、より小さいlistを渡してください。`raise_errors: false` のままなら `errors` と `warnings` を持つ `Result` が返り、`raise_errors: true` にすると失敗したcheckが即座に例外をraiseします。
+
+`Result#success?` は収集されたerrorsだけを見ます。orphan reportはwarningsとして返るため、filter、import、permission scopeによって描画対象外のrecordsが生じる可能性がある場合は `warnings` も確認してください。
+
 ## node key uniqueness
 
 node keyの重複を検出したい場合は、tree作成時にvalidationを有効にします。

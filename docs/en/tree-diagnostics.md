@@ -51,6 +51,29 @@ render_state.validate_unique_dom_ids!
 
 This gives host apps a concrete validation point before rendering invalid or surprising tree data.
 
+For an aggregate check, use `TreeView::Diagnostics.run` after building the tree and render state:
+
+```ruby
+result = TreeView::Diagnostics.run(
+  tree: tree,
+  render_state: render_state,
+  checks: %i[node_keys dom_ids orphans cycles],
+  raise_errors: false
+)
+
+unless result.success?
+  Rails.logger.warn(result.errors.map { |entry| entry[:message] })
+end
+
+result.warnings.each do |warning|
+  Rails.logger.info(warning[:message])
+end
+```
+
+`checks:` accepts the diagnostics you want to run. Omit it to run the default `node_keys`, `dom_ids`, `orphans`, and `cycles` checks, or pass a smaller list when a host-app test only needs part of the pre-render validation. Keep `raise_errors: false` when you want a `Result` object with `errors` and `warnings`; set `raise_errors: true` when a failing check should raise immediately.
+
+`Result#success?` only reflects collected errors. Orphan reports are warnings, so review `warnings` when filtered, imported, or permission-scoped data can leave records outside the rendered tree.
+
 ## Node key uniqueness
 
 Enable validation when building the tree to catch duplicate node keys early.
