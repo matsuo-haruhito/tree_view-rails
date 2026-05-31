@@ -23,6 +23,19 @@ TreeView は、業務固有の表示や挙動を gem 内に持ち込まず、hos
 
 `icon_builder` の compatibility status を含む公開名の判断は [Public Name Decisions](public-name-decisions.md) を参照してください。
 
+## hook 逆引き
+
+host app integration point をどの hook で扱うか迷うときは、この表から辿ります。
+
+| 目的 | Extension point | 詳細 guide |
+|---|---|---|
+| 業務固有の cell や control を描画する | `row_partial`; 必要に応じて custom widget に `data-tree-view-interactive`、`data-tree-view-ignore-keyboard`、`data-tree-view-ignore-row-click`、`data-tree-view-ignore-drag` を付ける | [使い方](usage.md#行内のinteractive-control)、[Drag and Drop](drag-and-drop.md#draggable-row内のinteractive-control) |
+| host app 固有の row metadata を足す | host app 所有の data attribute は `row_data_builder`; TreeView はその後に lazy-loading、row status、transfer、client-mode data を merge する | [Row status](row-status.md)、[Drag and Drop](drag-and-drop.md) |
+| 行全体を disabled / readonly として表す | `row_disabled_builder`、`row_readonly_builder`、`row_disabled_reason_builder`; TreeView が documented な row status class/data 属性を出す | [Row status](row-status.md) |
+| drag/drop transfer data を提供する | `row_event_payload_builder`; TreeView が payload を `data-tree-transfer-payload` に serialize し、`data-tree-transfer-node-key` を足す。transfer controller は `data-tree-transfer-disabled="true"` の行を skip する | [Drag and Drop](drag-and-drop.md)、[JavaScript event contract](js-events.md#transfer-events) |
+| selection payload や row ごとの selection state を設定する | `payload_builder`、`disabled_builder`、`disabled_reason_builder`、`selected_keys`、`visibility` などの render-state `selection:` option | [Selection](selection.md)、[Row status](row-status.md#selectionとの違い) |
+| 描画済み row に対する selection controller の挙動を設定する | `data-tree-view-selection-hidden-input-name-value`、`data-tree-view-selection-max-count-value`、`data-tree-view-selection-cascade-value`、`data-tree-view-selection-indeterminate-value` などの host-element `tree-view-selection` value attribute | [Selection](selection.md#通常-form-submit-向けのhidden-input-sync)、[JavaScript event contract](js-events.md#selection-events) |
+
 ## row_partial
 
 業務固有の columns は host app partial で描画します。
@@ -92,6 +105,8 @@ row_event_payload_builder: ->(document) {
 }
 ```
 
+TreeView は返された payload を transfer 対象の各 row に `data-tree-transfer-payload` として描画し、`data-tree-transfer-node-key` も追加します。`tree-view-transfer` controller はそれらの属性を読んで transfer event を dispatch し、`data-tree-transfer-disabled="true"` が付いた行は skip します。row wiring、transfer event、host app の責務範囲は [Drag and Drop](drag-and-drop.md) を参照してください。
+
 ## selection builders
 
 ```ruby
@@ -123,6 +138,8 @@ host element に `tree-view-selection` controller を設定するときは、次
 ```
 
 row ごとの意味づけは render-state 側の `selection:` option で行い、Stimulus controller が既に描画された checkbox をどう同期・制約するかは host-element value attribute 側で設定します。event や挙動の詳細は [Selection](selection.md) を参照してください。
+
+Selection disabled state は checkbox に対する状態です。行全体の disabled / readonly state は row status builders、drag/drop transfer の可否は transfer row data hooks の領域です。これらの境界を比較するときは [Row status](row-status.md#selectionとの違い) と [Drag and Drop](drag-and-drop.md) を参照してください。
 
 ## path builders
 
