@@ -48,11 +48,19 @@ bin/rails generate tree_view:state:install User
 
 This still creates the same migration, model, and concern files. If `app/models/user.rb` exists and does not already include `TreeViewStateOwner`, the generator adds the include line.
 
-If the owner model file does not exist, the generator skips model injection and you can include the concern manually.
+For a namespaced owner, pass the constant name. The generator resolves the conventional file path and can update both `class Admin::User < ApplicationRecord` and module-wrapped `module Admin; class User < ApplicationRecord` style definitions.
+
+```bash
+bin/rails generate tree_view:state:install Admin::User
+```
+
+If `app/models/admin/user.rb` exists and contains one of those representative class definitions, the generator adds the include line inside the owner class.
+
+If the owner model file does not exist, or the class definition is too custom for the generator to find safely, the generator skips model injection and you can include the concern manually.
 
 ### If owner injection is skipped
 
-When the generator reports that the owner model file does not exist, first confirm which model should own the saved tree state. Then add `include TreeViewStateOwner` to that existing model after the generated concern exists at `app/models/concerns/tree_view_state_owner.rb`.
+When the generator reports that the owner model file does not exist or the class definition was not found, first confirm which model should own the saved tree state. Then add `include TreeViewStateOwner` to that existing model after the generated concern exists at `app/models/concerns/tree_view_state_owner.rb`.
 
 For a plain owner model, the manual include is the same line the generator would add:
 
@@ -74,7 +82,7 @@ module Admin
 end
 ```
 
-Manual include is the expected follow-up when the owner model is generated later, lives in a namespace, or uses a project-specific file layout that the generator did not update. Do not change the generated migration or `TreeViewState` model for this case; the host app only needs the owner class to include the concern before it calls `tree_view_state_for`, `save_tree_view_state!`, or passes the owner into `TreeView::StateStore`.
+Manual include is the expected follow-up when the owner model is generated later or uses a project-specific file layout or class definition that the generator did not update. Do not change the generated migration or `TreeViewState` model for this case; the host app only needs the owner class to include the concern before it calls `tree_view_state_for`, `save_tree_view_state!`, or passes the owner into `TreeView::StateStore`.
 
 ## Owner model
 
