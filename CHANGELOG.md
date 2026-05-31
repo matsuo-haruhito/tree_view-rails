@@ -58,6 +58,11 @@ Breaking changes and required migration notes should be called out explicitly in
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
+- Added `TreeView::Diagnostics.run` documentation in Japanese and English for aggregate pre-render validation results.
+- Added FAQ guidance for keyboard behavior and `treegrid` responsibility boundaries in Japanese and English.
+- Added a host-app extension hook reverse lookup table in Japanese and English.
+- Added toolbar disabled-action troubleshooting guidance in Japanese and English.
+- Added transfer disabled / invalid boundary states to the drop-position mockup and updated the mockup review guidance.
 
 ### Tests
 
@@ -73,6 +78,8 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added Ruby and JavaScript specs for client-side toggle mode, mode builders, public API exports, and browser-local descendant visibility updates.
 - Added specs for RenderState internal configuration objects and the consolidated diagnostics entrypoint.
 - Added JavaScript public event contract specs for selection, remote state, and transfer events.
+- Added package-root frozen object contract coverage for public JavaScript object exports.
+- Added browser smoke coverage for representative docs mockup pages and the review gallery.
 
 ## 0.1.0 - 2026-05-07
 
