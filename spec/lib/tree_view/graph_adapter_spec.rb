@@ -1,5 +1,6 @@
 require "spec_helper"
 GraphAdapterNode = Struct.new(:id, :children)
+GraphAdapterSingleChild = Struct.new(:id)
 
 RSpec.describe TreeView::GraphAdapter do
   it "provides roots, children, and node_key" do
@@ -20,7 +21,7 @@ RSpec.describe TreeView::GraphAdapter do
   end
 
   it "wraps a single child object in an array" do
-    child = GraphAdapterNode.new(2, [])
+    child = GraphAdapterSingleChild.new(2)
     root = GraphAdapterNode.new(1, child)
     adapter = described_class.new(roots: [root], children_resolver: ->(node) { node.children })
 
