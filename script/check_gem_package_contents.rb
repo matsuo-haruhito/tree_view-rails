@@ -4,9 +4,13 @@
 require "rubygems/package"
 
 REQUIRED_PACKAGED_PATHS = %w[
-  app/javascript/tree_view/index.js
+  app/helpers/tree_view_helper.rb
+  app/views/tree_view/_tree_row.html.erb
   app/assets/stylesheets/tree_view.scss
+  app/javascript/tree_view/index.js
   config/importmap.tree_view.rb
+  config/locales/tree_view.toolbar.en.yml
+  docs/en/release.md
 ].freeze
 
 root = File.expand_path("..", __dir__)
