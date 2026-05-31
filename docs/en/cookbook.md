@@ -16,6 +16,7 @@ For API details, see:
 - [Lazy Loading](lazy-loading.md)
 - [Windowed Rendering](windowed-rendering.md)
 - [Localized names](localized-names.md)
+- [Toggle icon customization](toggle-icons.md)
 
 ## Row customization quick guide
 
@@ -30,6 +31,7 @@ Use the smallest TreeView extension point that matches the UI you are adding.
 | Badges, status pills, or marker-like labels | `badge_builder` | Status names, classes, and product semantics |
 | Locale-aware row labels, type badges, or tooltips | `TreeView::NodePresenter` plus LocalizedNames helpers | Locale files, final copy, and business wording |
 | Legacy/direct toggle-cell marker text | `marker_builder` when rendering toggle cells directly | Marker naming and classes |
+| Expand/collapse control icons | `toggle_icons` or `toggle_icon_builder` | Icon set, tooltip/title copy, and accessibility copy |
 | Folder/file icons or type labels | `badge_builder`, `icon_builder`, or a cell in `row_partial` | Icon set, labels, and accessibility copy |
 | Current row highlighting or archived/disabled styling | `row_class_builder`, `row_data_builder`, and row-status docs | State rules and behavior |
 
@@ -128,6 +130,8 @@ badge_builder = ->(document) {
 ```
 
 `badge_builder` may return text or a hash-like object with `text` or `label`, optional `class`, `title`, and `data`. For legacy direct rendering of toggle cells, `marker_builder` follows the same marker-style idea; prefer `badge_builder` with `RenderState` in new code.
+
+Use `toggle_icons:` or `toggle_icon_builder:` when you want to replace the expand/collapse control's own visual content while TreeView keeps ownership of the toggle link, ARIA state, lazy-loading semantics, and branch layout. See [Toggle icon customization](toggle-icons.md) for state, depth, and node-type examples. Keep the icon set, title/tooltip copy, and accessibility wording in the host app.
 
 Use a badge or icon builder for compact folder/file type labels, or put richer icon markup in `row_partial` so the host app controls the HTML and accessibility copy.
 
