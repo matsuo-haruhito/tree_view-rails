@@ -18,7 +18,6 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [row-status-depth-labels.html](row-status-depth-labels.html) | Focused comparison for row-wide status cues, selection checkbox disabled state, and depth labels without host-app authorization or business wording. |
 | [interaction-states.html](interaction-states.html) | Lazy-loading, loading, error/retry, next-page, and drag/drop visual states. |
 | [keyboard-focus-states.html](keyboard-focus-states.html) | Focused keyboard reference showing static focus-visible samples for toggle links, native controls, toolbar actions, and row actions without promising a full keyboard model. |
-| [keyboard-current-row.html](keyboard-current-row.html) | Focused comparison for keyboard focus, `aria-current="page"`, expanded/collapsed rows, and host-app-owned row actions in the same tree. |
 | [lazy-loading-handoff.html](lazy-loading-handoff.html) | Focused lazy-loading reference showing children container ownership, remote-state placeholder handoff, and error/retry slot boundaries. |
 | [drop-positions.html](drop-positions.html) | Focused comparison for before, inside, and after drop-position cues plus transfer disabled / invalid payload boundary states. |
 | [persisted-state-boundary.html](persisted-state-boundary.html) | Focused persisted-state reference showing before, changed, restored, save-failed, and retry cues while keeping storage and retry policy host-app owned. |
@@ -45,7 +44,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 6. Use [resource-table-bridge.html](resource-table-bridge.html) when review needs a focused pass on table-owned columns plus TreeView-owned hierarchy cues.
 7. Use [interaction-states.html](interaction-states.html) when review needs a focused pass on lazy loading, retry, pagination placeholders, or drag/drop states.
 8. Use [keyboard-focus-states.html](keyboard-focus-states.html) when review needs to compare visible focus cues across toggle links, native controls, toolbar actions, and row actions without treating the mockup as a keyboard navigation contract.
-9. Use [keyboard-current-row.html](keyboard-current-row.html) when review needs to compare focus-visible cues beside `aria-current="page"`, expanded/collapsed rows, and host-app-owned row actions in the same tree.
+9. Use [keyboard-current-row/index.html](keyboard-current-row/index.html) when review needs to compare focus-visible cues beside `aria-current="page"`, expanded/collapsed rows, and host-app-owned row actions in the same tree.
 10. Use [lazy-loading-handoff.html](lazy-loading-handoff.html) when review needs to isolate children container ownership and remote-state slot handoff from the broader interaction-state page.
 11. Use [drop-positions.html](drop-positions.html) when review needs to compare before, inside, after, transfer disabled, and invalid transfer boundary cues without modeling host-app reorder rules or persistence.
 12. Use [persisted-state-boundary.html](persisted-state-boundary.html) when review needs to compare persisted expansion state before, changed, restored, save-failed, and retry cues without adding host-app persistence behavior.
@@ -103,7 +102,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 ## Keyboard focus guidance
 
 - Use `keyboard-focus-states.html` to review static focus-visible cues across representative focus targets.
-- Use `keyboard-current-row.html` when the review needs to compare focus, current-row, expansion, and row-action cues together.
+- Use `keyboard-current-row/index.html` when the review needs to compare focus, current-row, expansion, and row-action cues together.
 - Keep tab order, shortcut keys, roving tabindex, and full treegrid keyboard behavior in the host app or a separate implementation issue.
 
 ## Review policy
