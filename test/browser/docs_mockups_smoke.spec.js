@@ -27,7 +27,9 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("navigation", { name: "Documentation entry points" })).toBeVisible()
     await expect(page.getByRole("link", { name: "Baseline" })).toHaveAttribute("href", "#gallery-default-heading")
     await expect(page.getByRole("link", { name: "Interaction states" })).toHaveAttribute("href", "#gallery-interaction-heading")
+    await expect(page.getByRole("link", { name: "Current branch" })).toHaveAttribute("href", "#gallery-current-branch-heading")
     await expect(page.frameLocator("iframe[title='Default tree mock preview']").getByRole("heading", { name: "Default TreeView rendering mock", level: 1 })).toBeVisible()
+    await expect(page.frameLocator("iframe[title='Current branch sidebar mock preview']").getByRole("heading", { name: "Current branch sidebar mock", level: 1 })).toBeVisible()
 
     const linkedFiles = await page.locator("a[href]").evaluateAll((anchors) =>
       Array.from(new Set(
@@ -40,6 +42,7 @@ test.describe("docs mockup browser smoke", () => {
 
     expect(linkedFiles).toContain("default-tree.html")
     expect(linkedFiles).toContain("interaction-states.html")
+    expect(linkedFiles).toContain("current-branch-sidebar.html")
     expect(linkedFiles).toContain("empty-state.html")
     expect(missingLinks).toEqual([])
   })
@@ -58,6 +61,13 @@ test.describe("docs mockup browser smoke", () => {
       section: "Lazy loading and retry states",
       sample: ".tree-view-table tbody tr",
       minimumCount: 5
+    },
+    {
+      file: "current-branch-sidebar.html",
+      heading: "Current branch sidebar mock",
+      section: "Current branch only expanded",
+      sample: ".tree-row.is-selected[aria-current='page']",
+      minimumCount: 1
     },
     {
       file: "empty-state.html",

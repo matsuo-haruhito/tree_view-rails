@@ -112,6 +112,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | `docs/mockups/resource-table-bridge.html` | Technical asset | No translation needed. |
 | `docs/mockups/toolbar-actions.html` | Technical asset | No translation needed. |
 | `docs/mockups/narrow-sidebar-tree.html` | Technical asset | No translation needed. |
+| `docs/mockups/current-branch-sidebar.html` | Technical asset | No translation needed. |
 | `docs/mockups/interaction-states.html` | Technical asset | No translation needed. |
 | `docs/mockups/lazy-loading-handoff.html` | Technical asset | No translation needed. |
 | `docs/mockups/drop-positions.html` | Technical asset | No translation needed. |
