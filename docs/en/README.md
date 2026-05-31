@@ -25,16 +25,16 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Toolbar helper](toolbar.md) | `tree_view_toolbar`, expand/collapse actions, the `:current_path` contract, and the toolbar visual reference |
 | [Turbo Frame option](turbo-frame.md) | Target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript |
 | [Localized names](localized-names.md) | Resolve model, attribute, and node type labels through ActiveModel / I18n |
-| [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option |
+| [Decision guide](decision-guide.md) | Use-case flowchart and table for choosing the right API or option, including GraphAdapter adapter mode |
 | [FAQ](faq.md) | Short answers about responsibility boundaries, query expectations, and common misunderstandings |
 | [Troubleshooting](troubleshooting.md) | Symptom-based entry point for common integration problems before diving into API-specific pages |
 | [Visual reference mockups](../mockups/README.md) | Static HTML/CSS references for baseline output and interaction states without running a Rails app. Start with [review-gallery.html](../mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](../mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role. |
 | [Accessibility Semantics](accessibility-semantics.md) | First-class accessibility guidance for table-first rows, ARIA placement, keyboard boundaries, and host-app responsibilities |
-| [Cookbook](cookbook.md) | Common patterns composed from existing APIs |
+| [Cookbook](cookbook.md) | Common patterns composed from existing APIs, including GraphAdapter ActiveRecord performance notes |
 | [NodePresenter row partial patterns](node-presenter-row-partials.md) | Use NodePresenter from host-app row partials instead of adding app-specific Column / Action DSLs |
 | [Forms and editing rows](form-editing.md) | Bulk edit forms, inline-editing layouts, Form Objects, row actions, and responsibility boundaries |
 | [Resource table bridge](resource-table-bridge.md) | Bridge TreeView row rendering with a separate table layer that owns columns and table state |
-| [API overview](api-overview.md) | Overview of the main public APIs |
+| [API overview](api-overview.md) | Overview of the main public APIs, including records, resolver, and GraphAdapter adapter modes |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
 | [PathTreeBuilder](path-tree-builder.md) | Build generated folder nodes and record nodes from path-like record values |
 | [Error hierarchy](errors.md) | Public TreeView error classes and rescue guidance |
@@ -90,6 +90,8 @@ For tree-wide expand/collapse controls, see [Toolbar helper](toolbar.md). Use [t
 For static visual references of baseline DOM structure and interaction states, see [Visual reference mockups](../mockups/README.md). Start with [review-gallery.html](../mockups/review-gallery.html) for the fastest first look, open [default-tree.html](../mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
 
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
+
+For heterogeneous or graph-like nodes that do not fit one parent-id column, start with [Decision guide](decision-guide.md), then read [API overview: adapter mode](api-overview.md#adapter-mode), [API reference: TreeView::Tree](api.md#treeviewtree), and [Cookbook: GraphAdapter and ActiveRecord performance](cookbook.md#graphadapter-and-activerecord-performance) as needed.
 
 For Turbo Frame targeting from TreeView toggle links, see [Turbo Frame option](turbo-frame.md).
 
