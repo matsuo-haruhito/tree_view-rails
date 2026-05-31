@@ -13,6 +13,8 @@ This page gives an overview of the main public APIs. See [API reference](api.md)
 | `TreeView::UiConfigBuilder` | Builds `UiConfig` objects from a Rails view context, including `build_turbo`, `build_static`, and `build_client_side`. |
 | `TreeView::VisibleRows` | Flattens currently visible rows from a render state. |
 | `TreeView::RenderWindow` | Slices visible rows by `offset` and `limit` and exposes pagination metadata. |
+| `TreeView::PathTree` | Wraps records-mode paths so matches can render inside the normal root-to-match hierarchy. |
+| `TreeView::ReverseTree` | Wraps records-mode paths so matched records render as roots and ancestors appear below them. |
 | `TreeView::PersistedState` | Represents persisted expansion state. |
 | `TreeView::StateStore` | Loads and saves persisted state through a host app model. |
 
@@ -217,7 +219,7 @@ Records mode provides helpers for inspecting parent paths.
 | `path_for(item)` | Returns the path from root to item. |
 | `paths_for(items)` | Returns paths for multiple items. |
 | `path_tree_for(items)` | Builds a root-to-match `PathTree`. |
-| `reverse_tree_for(items)` | Builds a match-to-root `ReverseTree`. |
+| `reverse_tree_for(items)` | Builds a match-to-root `ReverseTree`. See [ReverseTree](reverse-tree.md) for use cases, records-mode constraints, and shared-ancestor behavior. |
 
 ## Public helper entrypoints
 
@@ -252,5 +254,6 @@ Exported controller classes are documented as the stable entrypoints. Individual
 - Error hierarchy: [errors.md](errors.md)
 - Public API compatibility policy: [public-api.md](public-api.md)
 - Resource table bridge: [resource-table-bridge.md](resource-table-bridge.md)
+- ReverseTree: [reverse-tree.md](reverse-tree.md)
 - Minimal usage: [minimal-usage.md](minimal-usage.md)
 - Main usage guide: [usage.md](usage.md)
