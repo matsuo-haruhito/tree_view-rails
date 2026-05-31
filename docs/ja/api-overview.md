@@ -182,6 +182,7 @@ window.has_next?
 | `toggle_scope:` | 開閉path builderへ渡すdepth / leaf距離の制限。 |
 | `selection:` | checkbox selectionの挙動とpayload設定。 |
 | `lazy_loading:` | remote children読み込みの状態とscope設定。 |
+| `row_status:` | row disabled、readonly、disabled reason builder の設定。 |
 
 個別keyword optionとgrouped optionを同時に指定した場合は、後方互換性のため個別keyword optionが優先されます。
 

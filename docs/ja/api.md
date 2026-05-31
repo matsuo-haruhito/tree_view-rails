@@ -291,6 +291,9 @@ render_state = TreeView::RenderState.new(
 | `initial_expansion:` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | 個別 keyword option と両方書いた場合でも、優先されるのは個別 keyword option です。 |
 | `render_scope:` | `max_depth`, `max_leaf_distance` | `TreeView::RenderState` で documented されている render-depth / leaf-distance control と同じ契約です。 |
 | `toggle_scope:` | `max_depth_from_root`, `max_leaf_distance` | `TreeView::RenderState` で documented されている toggle-depth / toggle leaf-distance control と同じ契約です。 |
+| `selection:` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | documented された `TreeView::RenderState::SelectionConfig` key と対応します。挙動と host app の責務は [Selection](selection.md) を参照してください。 |
+| `lazy_loading:` | `enabled`, `loaded_keys`, `scope` | lazy-loading row-state hook と任意の host-app scope passthrough に対応します。詳細は [Lazy Loading](lazy-loading.md) を参照してください。 |
+| `row_status:` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | row disabled / readonly state hook と disabled reason surface に対応します。 |
 
 ## TreeView::UiConfig / UiConfigBuilder
 

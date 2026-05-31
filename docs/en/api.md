@@ -291,6 +291,9 @@ The exact machine-readable grouped-option contract for `TreeView::RenderState` l
 | `initial_expansion:` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | Equivalent flat keyword options still take priority when both forms are supplied. |
 | `render_scope:` | `max_depth`, `max_leaf_distance` | Use these grouped keys for the same render-depth and leaf-distance controls documented for `TreeView::RenderState`. |
 | `toggle_scope:` | `max_depth_from_root`, `max_leaf_distance` | Use these grouped keys for the same toggle-depth and toggle leaf-distance controls documented for `TreeView::RenderState`. |
+| `selection:` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | Mirrors the documented `TreeView::RenderState::SelectionConfig` keys. See [Selection](selection.md) for behavior and host-app responsibilities. |
+| `lazy_loading:` | `enabled`, `loaded_keys`, `scope` | Mirrors the documented lazy-loading row-state hooks and optional host-app scope passthrough. See [Lazy Loading](lazy-loading.md). |
+| `row_status:` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | Mirrors the documented row disabled / readonly state hooks and disabled-reason surface. |
 
 ## TreeView::UiConfig / UiConfigBuilder
 
