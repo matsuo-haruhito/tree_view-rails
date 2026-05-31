@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView selection max-count mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-limit-page {
+  max-width: 1280px;
+}
+
+.mock-limit-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.mock-limit-state {
+  display: grid;
+  gap: 14px;
+}
+
+.mock-limit-state__header {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-limit-eyebrow {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-limit-note {
+  margin: 0;
+  color: #52606d;
+}
+
+.mock-limit-frame {
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-limit-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mock-limit-toolbar__copy {
+  display: grid;
+  gap: 2px;
+}
+
+.mock-limit-toolbar__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-limit-toolbar__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-limit-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f4c81;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.mock-limit-chip--neutral {
+  background: #e9ecef;
+  color: #334155;
+}
+
+.mock-limit-chip--warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-limit-chip--success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-limit-body {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.mock-limit-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid #d8e0ea;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.mock-limit-summary__copy {
+  display: grid;
+  gap: 4px;
+}
+
+.mock-limit-summary__title,
+.mock-limit-summary__meta {
+  margin: 0;
+}
+
+.mock-limit-summary__title {
+  color: #102a43;
+  font-weight: 700;
+}
+
+.mock-limit-summary__meta {
+  color: #52606d;
+  font-size: 0.92rem;
+}
+
+.mock-limit-count {
+  min-width: 4.8rem;
+  padding: 0.38rem 0.62rem;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 800;
+  text-align: center;
+}
+
+.mock-limit-count--reached {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-limit-count--open {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-limit-message {
+  margin: 0;
+  padding: 0.82rem 0.95rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  color: #334155;
+}
+
+.mock-limit-message--warning {
+  border-color: #f59e0b;
+  background: #fffbeb;
+  color: #78350f;
+}
+
+.mock-limit-table-wrap {
+  overflow-x: auto;
+}
+
+.mock-limit-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #102a43;
+}
+
+.mock-limit-choice input {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.mock-limit-choice input:disabled + span {
+  color: #64748b;
+}
+
+.mock-limit-row-note {
+  display: block;
+  margin-top: 0.3rem;
+  color: #52606d;
+  font-size: 0.86rem;
+}
+
+.mock-limit-event {
+  display: grid;
+  gap: 8px;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  background: #fffbeb;
+}
+
+.mock-limit-event code {
+  overflow-wrap: anywhere;
+}
+
+.mock-limit-boundary-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-limit-boundary-table th,
+.mock-limit-boundary-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-limit-boundary-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .mock-limit-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .mock-limit-count {
+    justify-self: start;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-limit-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView selection max-count mock</h1>
+      <p>
+        Static reference for comparing max-count and limit-exceeded feedback without turning the page into a real bulk action workflow.
+        TreeView owns checkbox state and public events. The host app owns final message text, action blocking, routing, and business policy.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-limit-grid" aria-labelledby="selection-limit-states-heading">
+      <div class="mock-limit-state">
+        <div class="mock-limit-state__header">
+          <p class="mock-limit-eyebrow">State A</p>
+          <h2 id="selection-limit-states-heading">Selected count below the limit</h2>
+          <p class="mock-limit-note">The count is visible, but the host app still decides what action the selection enables.</p>
+        </div>
+
+        <div class="mock-limit-frame">
+          <div class="mock-limit-toolbar">
+            <div class="mock-limit-toolbar__copy">
+              <p class="mock-limit-toolbar__title">Selection group: review candidates</p>
+            </div>
+            <div class="mock-limit-toolbar__meta" aria-label="Representative selection metadata">
+              <span class="mock-limit-chip mock-limit-chip--success">2 selected</span>
+              <span class="mock-limit-chip mock-limit-chip--neutral">max: 3</span>
+            </div>
+          </div>
+          <div class="mock-limit-body">
+            <div class="mock-limit-summary" aria-labelledby="below-limit-summary">
+              <div class="mock-limit-summary__copy">
+                <p id="below-limit-summary" class="mock-limit-summary__title">Additional rows can still be selected</p>
+                <p class="mock-limit-summary__meta">This area is host-app-owned copy listening to TreeView selection events.</p>
+              </div>
+              <span class="mock-limit-count mock-limit-count--open">2 / 3</span>
+            </div>
+            <div class="mock-limit-table-wrap">
+              <table class="tree-view-table">
+                <thead>
+                  <tr>
+                    <th scope="col">select</th>
+                    <th scope="col">tree row</th>
+                    <th scope="col">status</th>
+                    <th scope="col">note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="tree-row is-expanded" aria-level="1" aria-expanded="true">
+                    <td><label class="mock-limit-choice"><input type="checkbox" checked><span>Select</span></label></td>
+                    <td class="tree-toggle-cell">
+                      <span class="tree-toggle" aria-label="Policy folder">
+                        <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                        <span class="tree-toggle__control"><a class="tree-toggle__action" href="#">hide</a><span class="tree-toggle__level">root</span></span>
+                      </span>
+                    </td>
+                    <td><span class="tree-badge">selected</span></td>
+                    <td>TreeView provides checkbox state; action copy is outside scope.</td>
+                  </tr>
+                  <tr class="tree-row" aria-level="2">
+                    <td><label class="mock-limit-choice"><input type="checkbox" checked><span>Select</span></label></td>
+                    <td class="tree-toggle-cell">
+                      <span class="tree-toggle" aria-label="Child row">
+                        <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                        <span class="tree-toggle__control"><span class="tree-depth-label">child</span></span>
+                      </span>
+                    </td>
+                    <td><span class="tree-badge">selected</span></td>
+                    <td>Selected count can update nearby host-app summary text.</td>
+                  </tr>
+                  <tr class="tree-row" aria-level="2">
+                    <td><label class="mock-limit-choice"><input type="checkbox"><span>Select</span></label></td>
+                    <td class="tree-toggle-cell">
+                      <span class="tree-toggle" aria-label="Available child row">
+                        <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                        <span class="tree-toggle__control"><span class="tree-depth-label">child</span></span>
+                      </span>
+                    </td>
+                    <td><span class="tree-badge tree-badge--muted">available</span></td>
+                    <td>Unchecked rows remain available while selected count is below max.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-limit-state">
+        <div class="mock-limit-state__header">
+          <p class="mock-limit-eyebrow">State B</p>
+          <h2>Limit reached</h2>
+          <p class="mock-limit-note">The page can show a gentle reached state without implying TreeView owns final business blocking.</p>
+        </div>
+
+        <div class="mock-limit-frame">
+          <div class="mock-limit-toolbar">
+            <div class="mock-limit-toolbar__copy">
+              <p class="mock-limit-toolbar__title">Selection group: review candidates</p>
+            </div>
+            <div class="mock-limit-toolbar__meta" aria-label="Representative limit metadata">
+              <span class="mock-limit-chip mock-limit-chip--warning">limit reached</span>
+              <span class="mock-limit-chip mock-limit-chip--neutral">max: 3</span>
+            </div>
+          </div>
+          <div class="mock-limit-body">
+            <div class="mock-limit-summary" aria-labelledby="limit-reached-summary">
+              <div class="mock-limit-summary__copy">
+                <p id="limit-reached-summary" class="mock-limit-summary__title">Maximum selection reached</p>
+                <p class="mock-limit-summary__meta">Keep the cue near the tree, but avoid product-specific action promises.</p>
+              </div>
+              <span class="mock-limit-count mock-limit-count--reached">3 / 3</span>
+            </div>
+            <p class="mock-limit-message">Host app message slot: deselect one row before choosing another.</p>
+            <div class="mock-limit-table-wrap">
+              <table class="tree-view-table">
+                <thead>
+                  <tr>
+                    <th scope="col">select</th>
+                    <th scope="col">tree row</th>
+                    <th scope="col">status</th>
+                    <th scope="col">note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="tree-row is-selected" aria-level="1">
+                    <td><label class="mock-limit-choice"><input type="checkbox" checked><span>Select</span></label></td>
+                    <td>Policy library</td>
+                    <td><span class="tree-badge">selected</span></td>
+                    <td>Selected rows remain editable by the host app only if the app chooses that pattern.</td>
+                  </tr>
+                  <tr class="tree-row is-selected" aria-level="2">
+                    <td><label class="mock-limit-choice"><input type="checkbox" checked><span>Select</span></label></td>
+                    <td>Escalation matrix</td>
+                    <td><span class="tree-badge">selected</span></td>
+                    <td>The max count is a TreeView guard, not a bulk action design.</td>
+                  </tr>
+                  <tr class="tree-row is-selected" aria-level="2">
+                    <td><label class="mock-limit-choice"><input type="checkbox" checked><span>Select</span></label></td>
+                    <td>Training checklist</td>
+                    <td><span class="tree-badge">selected</span></td>
+                    <td>The summary can announce the reached state in host-owned UI.</td>
+                  </tr>
+                  <tr class="tree-row" aria-level="2">
+                    <td><label class="mock-limit-choice"><input type="checkbox"><span>Select</span></label><span class="mock-limit-row-note">would exceed max</span></td>
+                    <td>Archive checklist</td>
+                    <td><span class="tree-badge tree-badge--muted">not selected</span></td>
+                    <td>Do not style this as a disabled permission state unless the host app owns that decision.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-limit-state">
+        <div class="mock-limit-state__header">
+          <p class="mock-limit-eyebrow">State C</p>
+          <h2>Limit-exceeded feedback</h2>
+          <p class="mock-limit-note">After an over-limit attempt, the attempted checkbox is shown returned to unchecked and the host app owns message placement.</p>
+        </div>
+
+        <div class="mock-limit-frame">
+          <div class="mock-limit-toolbar">
+            <div class="mock-limit-toolbar__copy">
+              <p class="mock-limit-toolbar__title">Selection group: review candidates</p>
+            </div>
+            <div class="mock-limit-toolbar__meta" aria-label="Representative exceeded metadata">
+              <span class="mock-limit-chip mock-limit-chip--warning">event: limit-exceeded</span>
+              <span class="mock-limit-chip mock-limit-chip--neutral">checkbox restored</span>
+            </div>
+          </div>
+          <div class="mock-limit-body">
+            <div class="mock-limit-summary" aria-labelledby="limit-exceeded-summary">
+              <div class="mock-limit-summary__copy">
+                <p id="limit-exceeded-summary" class="mock-limit-summary__title">Selection stayed at the maximum</p>
+                <p class="mock-limit-summary__meta">The attempted row is not selected after TreeView restores the checkbox.</p>
+              </div>
+              <span class="mock-limit-count mock-limit-count--reached">3 / 3</span>
+            </div>
+            <div class="mock-limit-event" role="status" aria-live="polite">
+              <strong>Host app feedback slot</strong>
+              <span>Show a neutral message here after <code>tree-view-selection:limit-exceeded</code>. Final wording and action blocking remain outside TreeView.</span>
+            </div>
+            <div class="mock-limit-table-wrap">
+              <table class="tree-view-table">
+                <thead>
+                  <tr>
+                    <th scope="col">select</th>
+                    <th scope="col">tree row</th>
+                    <th scope="col">status</th>
+                    <th scope="col">event cue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="tree-row is-selected" aria-level="1">
+                    <td><label class="mock-limit-choice"><input type="checkbox" checked><span>Select</span></label></td>
+                    <td>Policy library</td>
+                    <td><span class="tree-badge">selected</span></td>
+                    <td>Selected value remains in the payload.</td>
+                  </tr>
+                  <tr class="tree-row is-selected" aria-level="2">
+                    <td><label class="mock-limit-choice"><input type="checkbox" checked><span>Select</span></label></td>
+                    <td>Escalation matrix</td>
+                    <td><span class="tree-badge">selected</span></td>
+                    <td>Selected count remains stable.</td>
+                  </tr>
+                  <tr class="tree-row is-selected" aria-level="2">
+                    <td><label class="mock-limit-choice"><input type="checkbox" checked><span>Select</span></label></td>
+                    <td>Training checklist</td>
+                    <td><span class="tree-badge">selected</span></td>
+                    <td>Host app can keep action controls unchanged.</td>
+                  </tr>
+                  <tr class="tree-row" aria-level="2">
+                    <td><label class="mock-limit-choice"><input type="checkbox"><span>Select</span></label><span class="mock-limit-row-note">attempt was restored</span></td>
+                    <td>Archive checklist</td>
+                    <td><span class="tree-badge tree-badge--muted">not selected</span></td>
+                    <td><code>attemptedChecked: true</code>, final checkbox unchecked.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="selection-limit-boundary-heading">
+      <h2 id="selection-limit-boundary-heading">What this mock compares</h2>
+      <table class="mock-limit-boundary-table">
+        <thead>
+          <tr>
+            <th scope="col">Surface</th>
+            <th scope="col">Best for</th>
+            <th scope="col">Keep outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Selected count</td>
+            <td>Showing the current count and max near the tree in a product-neutral way.</td>
+            <td>Final localized copy, action availability, and bulk action policy.</td>
+          </tr>
+          <tr>
+            <td>Limit reached</td>
+            <td>Making the max-count state visible without turning every unchecked row into a permission problem.</td>
+            <td>Authorization, disabled business controls, and route-specific submit behavior.</td>
+          </tr>
+          <tr>
+            <td>Limit exceeded</td>
+            <td>Showing that TreeView restores the attempted checkbox and emits a public event.</td>
+            <td>Toast frameworks, modal dialogs, retry flows, or server-side validation policy.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
