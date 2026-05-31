@@ -81,9 +81,9 @@ TreeView only publishes the event. If your host app should save only user-initia
 
 See also:
 
-- [Persisted State](persisted-state.md#browser-event-wiring)
-- [JavaScript event contract](js-events.md#tree-view-statestate-changed)
-- [Troubleshooting](troubleshooting.md#persisted-state-does-not-save-or-restore-as-expected)
+- [Persisted State](persisted-state.md)
+- [JavaScript event contract](js-events.md)
+- [Troubleshooting](troubleshooting.md)
 
 ## Does TreeView choose the SQL or cursor strategy for children pagination?
 
