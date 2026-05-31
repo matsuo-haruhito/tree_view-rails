@@ -67,7 +67,7 @@
       <h1>TreeView lazy-loading handoff mock</h1>
       <p>
         Static reference for comparing the host-app-owned children container and remote-state placeholder that the lazy-loading guide describes.
-        It shows initial, loaded, and error/retry states without modeling fetch behavior, Turbo Stream responses, authorization, or cursor policy.
+        It shows initial, loading-in-progress, loaded, and error/retry states without modeling fetch behavior, Turbo Stream responses, authorization, or cursor policy.
       </p>
     </header>
 
@@ -134,6 +134,51 @@
           <tr id="project_alpha_remote_state" class="tree-row tree-row--placeholder" data-tree-parent-key="project:alpha" data-tree-depth="1" aria-level="2">
             <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">state</span></span></span></td>
             <td colspan="3"><span class="mock-status mock-status--pending">remote-state placeholder is reserved</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="loading-heading">
+      <h2 id="loading-heading">Loading in progress</h2>
+      <table class="tree-view-table" data-controller="tree-view-state tree-view-remote-state">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">handoff slots</th>
+            <th scope="col">state</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="project_delta" class="tree-row is-loading" data-tree-node-key="project:delta" data-tree-depth="0" data-tree-expanded="true" data-tree-remote-state="loading" aria-level="1" aria-expanded="true" aria-busy="true">
+            <td class="btn-cell tree-toggle-cell" id="project_delta_button">
+              <span class="tree-toggle" aria-label="Remote branch loading">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true" aria-controls="project_delta_children project_delta_remote_state">loading</a>
+                  <span class="tree-toggle__level">remote</span>
+                </span>
+              </span>
+            </td>
+            <td>Project Delta</td>
+            <td>
+              <dl class="handoff-slot">
+                <dt>children container</dt>
+                <dd><code>project_delta_children</code> remains the host-app replacement target while the request is in flight.</dd>
+                <dt>remote-state slot</dt>
+                <dd><code>project_delta_remote_state</code> carries the loading cue after <code>tree-view:loading</code> is dispatched.</dd>
+              </dl>
+            </td>
+            <td><span class="mock-status mock-status--pending">loading</span></td>
+          </tr>
+          <tr id="project_delta_children" class="tree-row tree-row--placeholder" data-tree-parent-key="project:delta" data-tree-depth="1" aria-level="2">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">slot</span></span></span></td>
+            <td colspan="3">Children are not committed yet; the host app can keep the reserved row stable.</td>
+          </tr>
+          <tr id="project_delta_remote_state" class="tree-row tree-row--placeholder" data-tree-parent-key="project:delta" data-tree-depth="1" aria-level="2">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">loading</span></span></span></td>
+            <td colspan="3"><span class="mock-status mock-status--pending">Loading child rows...</span> Host app owns this copy and placement.</td>
           </tr>
         </tbody>
       </table>
