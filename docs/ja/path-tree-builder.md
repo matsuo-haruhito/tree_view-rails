@@ -27,24 +27,23 @@ builder は以下の2種類の公開node形状を作ります。
 
 | Node | fields | 説明 |
 |---|---|---|
-| `TreeView::PathTreeBuilder::FolderNode` | `key`, `parent_key`, `label`, `path`, `node_type` | 生成された中間フォルダ。 |
-| `TreeView::PathTreeBuilder::RecordNode` | `key`, `parent_key`, `label`, `path`, `record`, `node_type` | host app recordを包むleaf node。 |
+| `TreeView::PathTreeBuilder::FolderNode` | `key`, `parent_key`, `label`, `path`, `node_type`, `folder_node?`, `record_node?` | 生成された中間フォルダ。 |
+| `TreeView::PathTreeBuilder::RecordNode` | `key`, `parent_key`, `label`, `path`, `record`, `node_type`, `folder_node?`, `record_node?` | host app recordを包むleaf node。 |
 
 `RecordNode#record` には元のobjectが残るため、row partial 側で application-specific な列、link、status、action を描画できます。
 
 ## folder row と record row を描画する
 
-同じ `row_partial` には、生成された folder node と record node の両方が渡されます。folder row は汎用metadataだけを表示し、record row は host app 固有の列やactionを出したい場合、`node_type` で分岐します。
+同じ `row_partial` には、生成された folder node と record node の両方が渡されます。folder row は汎用metadataだけを表示し、record row は host app 固有の列やactionを出したい場合、`folder_node?` / `record_node?` で分岐します。
 
 ```erb
 <!-- app/views/documents/_tree_columns.html.erb -->
-<% case item.node_type %>
-<% when :folder %>
+<% if item.folder_node? %>
   <td><%= item.label %></td>
   <td><%= item.path %></td>
   <td>Folder</td>
   <td></td>
-<% when :record %>
+<% elsif item.record_node? %>
   <% document = item.record %>
   <td><%= item.label %></td>
   <td><%= item.path %></td>
@@ -55,7 +54,7 @@ builder は以下の2種類の公開node形状を作ります。
 
 `FolderNode` は TreeView が path segment から生成するため、folder row は汎用的な表示に留めます。record row では `item.record` を使って、product 固有の field、link、permission、status badge、action を host app 側で描画できます。
 
-`folder_node_type:` や `record_node_type:` を custom 値にしている場合は、`:folder` / `:record` ではなく、その設定値で分岐してください。
+predicate method は生成された node shape を判定するためのものなので、`folder_node_type:` や `record_node_type:` に custom 値を渡しても意味は変わりません。設定した type label を表示またはserializeしたい場合だけ、`node_type` を直接使ってください。
 
 ## path入力
 

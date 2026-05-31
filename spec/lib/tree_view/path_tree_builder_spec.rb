@@ -32,6 +32,29 @@ RSpec.describe TreeView::PathTreeBuilder do
     expect(install.record).to eq(documents.first)
   end
 
+  it "exposes public predicates for generated folder and record nodes" do
+    documents = [
+      PathTreeBuilderDocument.new(id: 1, source_relative_path: "guides/setup/install.md", title: "Install")
+    ]
+
+    builder = described_class.new(
+      records: documents,
+      path_resolver: ->(document) { document.source_relative_path },
+      folder_node_type: "directory",
+      record_node_type: "document"
+    )
+
+    folder = builder.nodes.find { |node| node.key == "folder:guides" }
+    record = builder.nodes.find { |node| node.key == "record:1" }
+
+    expect(folder.node_type).to eq("directory")
+    expect(folder.folder_node?).to be(true)
+    expect(folder.record_node?).to be(false)
+    expect(record.node_type).to eq("document")
+    expect(record.folder_node?).to be(false)
+    expect(record.record_node?).to be(true)
+  end
+
   it "deduplicates shared folder nodes" do
     documents = [
       PathTreeBuilderDocument.new(id: 1, source_relative_path: "guides/setup/install.md", title: "Install"),
