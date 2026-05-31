@@ -43,8 +43,14 @@ Main metadata:
 | `offset` | Start offset. |
 | `limit` | Maximum number of rows. |
 | `total_count` | Visible row count before windowing. |
+| `before_count` | Number of visible rows before the current window. |
+| `after_count` | Number of visible rows after the current window. |
 | `has_previous?` | Whether a previous window exists. |
 | `has_next?` | Whether a next window exists. |
+
+`before_count` and `after_count` are summary metadata. Use them when the host app wants to show labels such as "20 rows before this window" or "35 rows remaining after this window" without recalculating those counts from `offset`, `limit`, and `total_count`.
+
+They never return negative values. If the requested offset is beyond the visible row count, `before_count` is capped at `total_count` and `after_count` is `0`.
 
 ## Visual reference
 
