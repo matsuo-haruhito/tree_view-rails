@@ -442,3 +442,33 @@ Rails log では次を見ます。
 - row render 中に `Document Load` や `DocumentVersion Load` が繰り返される。
 - `CACHE` ではない同形queryが大量に出る。
 - row partial から呼ぶ helper が association を繰り返し触っている。
+
+host app 側の対策は、children を配列で事前計算する、row partial で使う derived value をcacheする、DB query 調査中だけ development の view log ノイズを抑える、などです。recursive partial log は想定内で、問題は繰り返し発生する uncached query です。
+
+## 行に状態classを付ける
+
+```ruby
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  row_class_builder: ->(document) {
+    ["document-row", ("is-archived" if document.archived?)]
+  }
+)
+```
+
+行全体のdisabled / readonly状態を表す場合は [Row status](row-status.md) も参照してください。
+
+## node_key衝突を避ける
+
+異種nodeを同じtreeで扱う場合は、class名などを含めます。
+
+```ruby
+node_key_resolver = ->(node) {
+  TreeView.node_key(node.class.name, node.id)
+}
+```
+
+詳細は [Node keys](node-keys.md) を参照してください。
