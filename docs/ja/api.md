@@ -347,7 +347,7 @@ client-side mode では、render scope 内の collapsed descendants を初期 HT
 
 ## TreeView::PersistedState / StateStore
 
-生成された host app model 経由で開閉状態を保存・復元するための API です。
+生成された host app model 経由で開閉状態を保存・復元・クリアするための API です。
 
 ```ruby
 store = TreeView::StateStore.new(model: TreeViewState)
@@ -362,7 +362,14 @@ store.save!(
   tree_instance_key: "documents:index",
   expanded_keys: expanded_keys
 )
+
+store.clear!(
+  owner: current_user,
+  tree_instance_key: "documents:index"
+)
 ```
+
+`clear!` は一致する保存済み展開状態 record があれば削除します。record が存在しない場合も、指定した owner と `tree_instance_key` の空の `TreeView::PersistedState` を返します。reset route と authorization の責務は [Persisted State](persisted-state.md#statestore) を参照してください。
 
 ## Helpers
 
@@ -439,5 +446,6 @@ registerTreeViewControllers(application)
 - [Error hierarchy](errors.md)
 - [render log level](render-log-level.md)
 - [Node keys](node-keys.md)
+- [Persisted State](persisted-state.md)
 - [Tree diagnostics](tree-diagnostics.md)
 - [Public API policy](public-api.md)

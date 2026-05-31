@@ -347,7 +347,7 @@ Client-side mode renders collapsed descendants inside the render scope into the 
 
 ## TreeView::PersistedState / StateStore
 
-APIs for saving and restoring expansion state through the generated host app model.
+APIs for saving, restoring, and clearing expansion state through the generated host app model.
 
 ```ruby
 store = TreeView::StateStore.new(model: TreeViewState)
@@ -362,7 +362,14 @@ store.save!(
   tree_instance_key: "documents:index",
   expanded_keys: expanded_keys
 )
+
+store.clear!(
+  owner: current_user,
+  tree_instance_key: "documents:index"
+)
 ```
+
+`clear!` deletes the matching saved expansion-state record when one exists. When no record exists, it still returns an empty `TreeView::PersistedState` for the requested owner and `tree_instance_key`. See [Persisted State](persisted-state.md#statestore) for reset-route and authorization responsibilities.
 
 ## Helpers
 
@@ -439,5 +446,6 @@ Main controllers:
 - [Error hierarchy](errors.md)
 - [Render log level](render-log-level.md)
 - [Node keys](node-keys.md)
+- [Persisted State](persisted-state.md)
 - [Tree diagnostics](tree-diagnostics.md)
 - [Public API policy](public-api.md)
