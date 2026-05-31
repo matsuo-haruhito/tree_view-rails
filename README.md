@@ -214,6 +214,8 @@ Key documents:
 | Cookbook | [Cookbook](docs/en/cookbook.md) | [Cookbook](docs/ja/cookbook.md) |
 | Forms and editing rows | [Forms and editing rows](docs/en/form-editing.md) | [Form と編集行](docs/ja/form-editing.md) |
 | Resource table bridge | [Resource table bridge](docs/en/resource-table-bridge.md) | [Resource table bridge](docs/ja/resource-table-bridge.md) |
+| Drag and drop | [Drag and Drop](docs/en/drag-and-drop.md) | [Drag and Drop](docs/ja/drag-and-drop.md) |
+| Children pagination | [Children Pagination](docs/en/children-pagination.md) | [Children Pagination](docs/ja/children-pagination.md) |
 | Tree identity and diagnostics | [Node keys](docs/en/node-keys.md) and [Tree diagnostics](docs/en/tree-diagnostics.md) | [Node key 設計](docs/ja/node-keys.md) and [Tree diagnostics](docs/ja/tree-diagnostics.md) |
 | Rendering scale and boundaries | [Render Scale](docs/en/render-scale.md), [Rendering Boundaries](docs/en/rendering-boundaries.md), and [Render log level](docs/en/render-log-level.md) | [描画スケール](docs/ja/render-scale.md), [描画責務の境界](docs/ja/rendering-boundaries.md), and [render log レベル](docs/ja/render-log-level.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
