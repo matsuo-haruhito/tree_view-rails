@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import {
   TreeViewRemoteStateController,
   TreeViewSelectionController,
+  TreeViewStateController,
   TreeViewTransferController
 } from "./index.js"
 
@@ -15,6 +16,7 @@ describe("TreeView JavaScript public event contract", () => {
 
   beforeEach(() => {
     application = Application.start()
+    application.register("tree-view-state", TreeViewStateController)
     application.register("tree-view-selection", TreeViewSelectionController)
     application.register("tree-view-remote-state", TreeViewRemoteStateController)
     application.register("tree-view-transfer", TreeViewTransferController)
@@ -23,6 +25,48 @@ describe("TreeView JavaScript public event contract", () => {
   afterEach(() => {
     application.stop()
     document.body.innerHTML = ""
+  })
+
+  it("dispatches tree-view-state:state-changed with stable view and expansion detail", async () => {
+    document.body.innerHTML = `
+      <section id="root">
+        <table data-controller="tree-view-state" data-tree-view-state-view-key-value="projects">
+          <tbody>
+            <tr id="alpha" data-tree-view-state-target="node" data-tree-view-state-node-key="project:1" data-tree-view-state-expanded="true">
+              <td><button id="alpha-toggle">Project 1</button></td>
+            </tr>
+            <tr id="beta" data-tree-view-state-target="node" data-tree-view-state-node-key="project:2" data-tree-view-state-expanded="false">
+              <td><button id="beta-toggle">Project 2</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    `
+    const stateSpy = vi.fn()
+    document.querySelector("#root").addEventListener("tree-view-state:state-changed", stateSpy)
+    await nextFrame()
+
+    const initialEvent = stateSpy.mock.calls[0][0]
+    expect(initialEvent.bubbles).toBe(true)
+    expect(initialEvent.cancelable).toBe(true)
+    expect(initialEvent.detail).toEqual({
+      viewKey: "projects",
+      expandedKeys: ["project:1"]
+    })
+
+    const element = document.querySelector("[data-controller='tree-view-state']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    controller.markCollapsed({ target: document.querySelector("#alpha-toggle") })
+    controller.markExpanded({ target: document.querySelector("#beta-toggle") })
+
+    expect(stateSpy.mock.calls.at(-2)[0].detail).toEqual({
+      viewKey: "projects",
+      expandedKeys: []
+    })
+    expect(stateSpy.mock.calls.at(-1)[0].detail).toEqual({
+      viewKey: "projects",
+      expandedKeys: ["project:2"]
+    })
   })
 
   it("dispatches tree-view-selection:change with stable selection detail", async () => {
