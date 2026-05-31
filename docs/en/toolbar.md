@@ -45,6 +45,12 @@ Supported actions:
 
 `collapse_all_except_current_path` is a host-app contract. TreeView only emits the toolbar action and state value.
 
+## Machine-readable contract
+
+The toolbar action surface is also tracked in `config/public_api_manifest.yml` under `toolbar_actions`. That manifest lists the supported action names, their `toggle_all_path` states, and the documented data hooks `data-tree-view-toolbar-action` and `data-tree-view-toolbar-disabled`.
+
+Host apps should prefer `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, or `tree_view_toolbar_action_metadata` when building custom toolbar markup. The manifest exists for compatibility checks and integration audits; internal constants remain implementation details.
+
 ## Visual reference
 
 For a static comparison of expand-all, collapse-all, and current-path-preserving toolbar states, see [toolbar-actions.html](../mockups/toolbar-actions.html).
