@@ -54,6 +54,34 @@ RSpec.describe TreeView::Generators::State::InstallGenerator do
     expect(File.read(user_model)).to include("class User < ApplicationRecord\n  include TreeViewStateOwner\nend")
   end
 
+  it "includes the owner concern in a namespaced class-line owner model" do
+    FileUtils.mkdir_p(File.join(destination_root, "app/models/admin"))
+    admin_user_model = File.join(destination_root, "app/models/admin/user.rb")
+    File.write(admin_user_model, <<~RUBY)
+      class Admin::User < ApplicationRecord
+      end
+    RUBY
+
+    run_generator("Admin::User")
+
+    expect(File.read(admin_user_model)).to include("class Admin::User < ApplicationRecord\n  include TreeViewStateOwner\nend")
+  end
+
+  it "includes the owner concern in a module-wrapped namespaced owner model" do
+    FileUtils.mkdir_p(File.join(destination_root, "app/models/admin"))
+    admin_user_model = File.join(destination_root, "app/models/admin/user.rb")
+    File.write(admin_user_model, <<~RUBY)
+      module Admin
+        class User < ApplicationRecord
+        end
+      end
+    RUBY
+
+    run_generator("Admin::User")
+
+    expect(File.read(admin_user_model)).to include("  class User < ApplicationRecord\n    include TreeViewStateOwner\n  end")
+  end
+
   it "does not duplicate the owner concern include" do
     FileUtils.mkdir_p(File.join(destination_root, "app/models"))
     user_model = File.join(destination_root, "app/models/user.rb")
