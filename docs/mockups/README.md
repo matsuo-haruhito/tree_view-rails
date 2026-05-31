@@ -17,7 +17,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [row-status-depth-labels.html](row-status-depth-labels.html) | Focused comparison for row-wide status cues, selection checkbox disabled state, and depth labels without host-app authorization or business wording. |
 | [interaction-states.html](interaction-states.html) | Lazy-loading, loading, error/retry, next-page, and drag/drop visual states. |
 | [keyboard-focus-states.html](keyboard-focus-states.html) | Focused comparison for keyboard focus and focus-visible cues across toggle links, selection checkboxes, toolbar actions, and row actions. |
-| [lazy-loading-handoff.html](lazy-loading-handoff.html) | Focused lazy-loading reference showing children container ownership, remote-state placeholder handoff, and error/retry slot boundaries. |
+| [lazy-loading-handoff.html](lazy-loading-handoff.html) | Focused lazy-loading reference showing initial, loading-in-progress, loaded, and error/retry states across children container ownership and remote-state placeholder handoff boundaries. |
 | [drop-positions.html](drop-positions.html) | Focused comparison for before, inside, and after drop-position cues plus the host-app-owned move policy boundary. |
 | [persisted-state-boundary.html](persisted-state-boundary.html) | Focused persisted-state reference showing before, changed, restored, save-failed, and retry cues while keeping storage and retry policy host-app owned. |
 | [turbo-frame-target.html](turbo-frame-target.html) | Focused Turbo Frame target boundary showing `data-turbo-frame` on TreeView toggle links beside the host-app-owned frame wrapper. |
@@ -41,7 +41,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 5. Use [resource-table-bridge.html](resource-table-bridge.html) when review needs a focused pass on table-owned columns plus TreeView-owned hierarchy cues.
 6. Use [interaction-states.html](interaction-states.html) when review needs a focused pass on lazy loading, retry, pagination placeholders, or drag/drop states.
 7. Use [keyboard-focus-states.html](keyboard-focus-states.html) when review needs to compare visible keyboard focus cues across toggles, checkboxes, toolbar actions, and row actions without implying a full treegrid keyboard model.
-8. Use [lazy-loading-handoff.html](lazy-loading-handoff.html) when review needs to isolate children container ownership and remote-state slot handoff from the broader interaction-state page.
+8. Use [lazy-loading-handoff.html](lazy-loading-handoff.html) when review needs to isolate initial, loading-in-progress, loaded, and error/retry remote-state handoff from the broader interaction-state page.
 9. Use [drop-positions.html](drop-positions.html) when review needs to compare before, inside, and after drop cues without modeling host-app reorder rules or persistence.
 10. Use [persisted-state-boundary.html](persisted-state-boundary.html) when review needs to compare persisted expansion state before, changed, restored, save-failed, and retry cues without adding host-app persistence behavior.
 11. Use [turbo-frame-target.html](turbo-frame-target.html) when review needs a focused pass on the configured `data-turbo-frame` link attribute and the host-app-owned frame target boundary.
@@ -87,6 +87,11 @@ They are **not** a complete Rails application and should not grow into host-app 
 
 - Use focused static mockups to compare coarse visual cues such as dragging, valid target, blocked target, and drop position.
 - Treat final move authorization, persistence, audit trails, and business copy as host-app responsibilities.
+
+## Lazy-loading guidance
+
+- Use the focused handoff mockup when reviewers need to compare initial, loading-in-progress, loaded, and error/retry states without running a remote request.
+- Treat final spinner copy, request timing, authorization, retry policy, and Turbo response behavior as host-app responsibilities.
 
 ## Keyboard focus guidance
 
