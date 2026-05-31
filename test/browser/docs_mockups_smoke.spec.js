@@ -19,6 +19,11 @@ async function openMockup(page, file) {
   await expect(page.locator("main.mock-page")).toBeVisible()
 }
 
+async function expectNoDocumentHorizontalOverflow(page) {
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+  expect(overflow).toBeLessThanOrEqual(1)
+}
+
 test.describe("docs mockup browser smoke", () => {
   test("review gallery loads representative navigation, previews, and local links", async ({ page }) => {
     await openMockup(page, "review-gallery.html")
@@ -70,6 +75,13 @@ test.describe("docs mockup browser smoke", () => {
       minimumCount: 1
     },
     {
+      file: "lazy-loading-handoff.html",
+      heading: "TreeView lazy-loading handoff mock",
+      section: "Loading in progress",
+      sample: "tr[aria-busy='true']",
+      minimumCount: 1
+    },
+    {
       file: "empty-state.html",
       heading: "TreeView empty state mock",
       section: "No root items",
@@ -84,6 +96,21 @@ test.describe("docs mockup browser smoke", () => {
       await expect(page.getByRole("heading", { name: mockup.section })).toBeVisible()
       expect(await page.locator(mockup.sample).count()).toBeGreaterThanOrEqual(mockup.minimumCount)
       await expect(page.getByRole("link", { name: "Back to review gallery" })).toHaveAttribute("href", "review-gallery.html")
+    })
+  }
+
+  for (const viewport of [
+    { name: "desktop", width: 1280, height: 900 },
+    { name: "narrow", width: 390, height: 900 }
+  ]) {
+    test(`lazy-loading-handoff.html keeps loading state readable at ${viewport.name} width`, async ({ page }) => {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height })
+      await openMockup(page, "lazy-loading-handoff.html")
+
+      await expect(page.getByRole("heading", { name: "Loading in progress" })).toBeVisible()
+      await expect(page.locator("#project_delta[aria-busy='true']")).toBeVisible()
+      await expect(page.getByText("Loading child rows...")).toBeVisible()
+      await expectNoDocumentHorizontalOverflow(page)
     })
   }
 })
