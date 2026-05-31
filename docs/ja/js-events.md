@@ -64,7 +64,7 @@ checkbox value をJSON parseできないときに発火します。
 
 ### `tree-view-remote-state:change`
 
-row が `loading`, `loaded`, `error` に変更されたときに発火します。
+row が `loading`, `loaded`, `error` に変更されたときに発火します。retry action も row を `loading` に戻し、retry event の前にこの event を発火します。
 
 `event.detail` は次を含みます。
 

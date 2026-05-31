@@ -132,6 +132,13 @@ describe("TreeView JavaScript public event contract", () => {
       childrenUrl: "/projects/1/children",
       nodeKey: "project:1"
     })
+    expect(changeSpy.mock.calls[1][0].detail).toMatchObject({
+      row,
+      state: "loading",
+      childrenUrl: "/projects/1/children",
+      nodeKey: "project:1"
+    })
+    expect(row.dataset.remoteState).toBe("loading")
     expect(retrySpy.mock.calls[0][0].detail).toMatchObject({
       row,
       childrenUrl: "/projects/1/children",
