@@ -43,8 +43,14 @@ window = tree_view_window(@render_state, offset: 0, limit: 50)
 | `offset` | 開始位置。 |
 | `limit` | 最大件数。 |
 | `total_count` | window適用前のvisible row数。 |
+| `before_count` | 現在のwindowより前にあるvisible row数。 |
+| `after_count` | 現在のwindowより後ろに残るvisible row数。 |
 | `has_previous?` | 前のwindowが存在するか。 |
 | `has_next?` | 次のwindowが存在するか。 |
+
+`before_count` / `after_count` は summary 用metadataです。host app が「このwindowの前に20件ある」「このwindowの後ろに35件残っている」のような表示を作るとき、`offset` / `limit` / `total_count` から毎回再計算せずに利用できます。
+
+どちらも負の値は返しません。指定されたoffsetがvisible row数を超える場合、`before_count` は `total_count` で止まり、`after_count` は `0` になります。
 
 ## Visual reference
 
