@@ -16,6 +16,7 @@ cookbook は、個別APIの詳細仕様ではなく、host appでよく使う構
 - [Lazy Loading](lazy-loading.md)
 - [Windowed Rendering](windowed-rendering.md)
 - [Localized names](localized-names.md)
+- [toggle icon のカスタマイズ](toggle-icons.md)
 
 ## 行customization quick guide
 
@@ -30,6 +31,7 @@ cookbook は、個別APIの詳細仕様ではなく、host appでよく使う構
 | badge、status pill、marker風label | `badge_builder` | status名、class、product semantics |
 | localeに沿ったrow label、type badge、tooltip | `TreeView::NodePresenter` と LocalizedNames helpers | locale file、最終copy、業務文言 |
 | legacy / direct toggle-cell marker text | toggle cellを直接描画する場合の `marker_builder` | marker名とclass |
+| expand / collapse control icon | `toggle_icons` または `toggle_icon_builder` | icon set、tooltip / title copy、accessibility文言 |
 | folder/file iconやtype label | `badge_builder`、`icon_builder`、または `row_partial` 内のcell | icon set、label、accessibility文言 |
 | current row highlight、archived / disabled styling | `row_class_builder`、`row_data_builder`、Row status docs | 状態判定ruleとbehavior |
 
@@ -128,6 +130,8 @@ badge_builder = ->(document) {
 ```
 
 `badge_builder` はtext、または `text` / `label`、任意の `class`、`title`、`data` を持つHash-like objectを返せます。toggle cellをlegacy / direct renderingする場合は `marker_builder` も同じmarker風labelとして使えます。新しい `RenderState` codeでは `badge_builder` を優先します。
+
+expand / collapse control 自体の見た目を差し替えたい場合は `toggle_icons:` または `toggle_icon_builder:` を使います。TreeView は toggle link、ARIA state、lazy-loading semantics、branch layout を引き続き管理し、host app は icon set、title / tooltip copy、accessibility文言を所有します。state、depth、node type ごとの例は [toggle icon のカスタマイズ](toggle-icons.md) を参照してください。
 
 folder/file type labelを小さく表示する場合は badge / icon builder を使えます。より複雑なicon markupが必要なら、HTMLとaccessibility文言をhost appが管理できるよう `row_partial` に置きます。
 
