@@ -123,11 +123,18 @@ lazy loading は Turbo / server-driven 前提です。
 
 loading や error の見た目だけは出るのに完了しない場合は、row partial より先に host app の request / response lifecycle を確認してください。
 
+host app が retry event や remote-state event を購読している場合は、browser 側の detail と row wiring も確認します。
+
+- `tree-view-remote-state:retry` の `event.detail` には `row`、`childrenUrl`、`nodeKey` が入ります。
+- `childrenUrl` は row の `data-tree-children-url` から来ます。
+- `nodeKey` は row の `data-tree-view-state-node-key` から来ます。
+- どちらかが `null` の場合は、retry handler を直す前に描画済み row の data attribute を確認してください。
+
 次に読む文書:
 
 - [Lazy Loading](lazy-loading.md)
 - [Children Pagination](children-pagination.md)
-- [JavaScript event contract](js-events.md)
+- [JavaScript event contract](js-events.md#tree-view-remote-stateretry)
 
 ## selection payload が足りない / 想定と違う
 
