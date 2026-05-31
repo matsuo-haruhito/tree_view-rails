@@ -81,6 +81,7 @@ javascript_package_root:
   named_exports:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
+    - TreeViewSelectionDataHooks
     - TreeViewTransferDropPositions
     - TreeViewStateController
     - TreeViewClientController
@@ -88,6 +89,11 @@ javascript_package_root:
     - TreeViewTransferController
     - TreeViewRemoteStateController
     - TreeViewEventNames
+  selection_data_hooks:
+    hidden_input_name_value: data-tree-view-selection-hidden-input-name-value
+    max_count_value: data-tree-view-selection-max-count-value
+    cascade_value: data-tree-view-selection-cascade-value
+    indeterminate_value: data-tree-view-selection-indeterminate-value
   transfer_drop_positions:
     before: before
     inside: inside
