@@ -161,10 +161,12 @@ Check these points.
 - Use a stable `tree_instance_key` per screen or per tree placement.
 - Confirm the host app save endpoint chooses the owner, authorizes the request, and calls `StateStore` or `TreeView::PersistedStateController` correctly.
 - If explicit `expanded_keys` are passed into `RenderState`, they override the persisted state.
+- If a browser listener saves immediately on page load, remember that `tree-view-state:state-changed` is also dispatched on initial connect. Treat the first event as the current expanded-state snapshot, then debounce, ignore the first event, or use a host-app dirty-state policy when only user-initiated saves should be sent.
 
 Read next:
 
 - [Persisted State](persisted-state.md)
+- [JavaScript event contract](js-events.md)
 - [Tree diagnostics](tree-diagnostics.md)
 
 ## Duplicate node keys, orphan records, DOM ID collisions, or cycles appear

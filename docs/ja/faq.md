@@ -73,6 +73,18 @@ TreeView は host app の path builder を呼んだり、host app の row partia
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Host App Extension Points](host-app-extension-points.md)
 
+## persisted state が画面表示直後に保存されるのはなぜですか？
+
+`tree-view-state:state-changed` event は、初回 connect 時にも、`refresh` や expand/collapse update 後にも dispatch されます。最初の event は現在の展開状態の snapshot であり、ユーザーが tree を変更した証拠ではありません。
+
+TreeView は event を publish するだけです。host app がユーザー操作による変更だけを保存したい場合は、listener を debounce する、最初の event を無視する、host app 側の dirty-state policy で save を gate する、といった方針を host app 側で持ってください。
+
+関連:
+
+- [Persisted State](persisted-state.md)
+- [JavaScript event contract](js-events.md)
+- [Troubleshooting](troubleshooting.md)
+
 ## children pagination の SQL / cursor strategy は TreeView が決めますか？
 
 いいえ。大きな child set に対する pagination algorithm、SQL の形、cursor 設計、ordering、next-page 判定は TreeView が決めません。
