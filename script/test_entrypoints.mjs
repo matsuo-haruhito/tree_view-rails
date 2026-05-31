@@ -100,4 +100,10 @@ assert(
   "TreeViewEventNames export is out of sync"
 )
 assertFrozenObject(entrypointModule.TreeViewEventNames, "TreeViewEventNames", { deep: true })
+
+const expectedTransferDropPositions = javascriptPackageManifest.transfer_drop_positions
+assert(
+  JSON.stringify(entrypointModule.TreeViewTransferDropPositions) === JSON.stringify(expectedTransferDropPositions),
+  "TreeViewTransferDropPositions export is out of sync"
+)
 assertFrozenObject(entrypointModule.TreeViewTransferDropPositions, "TreeViewTransferDropPositions")
