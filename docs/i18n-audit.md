@@ -23,7 +23,7 @@ Use this table when you need a quick answer to "which user-facing pages must sta
 Japanese remains the more complete canonical prose source when English wording lags, but the pages below are the current cross-language planning baseline promised by `docs/en/README.md`, `docs/ja/README.md`, and `docs/README.md`.
 
 | Docs lane | Current coverage status | Priority | Maintenance expectation |
-|---|---|---|---|
+|---|---|---|
 | `docs/README.md`, `docs/en/README.md`, `docs/ja/README.md` | Published entry points for cross-language navigation and language-status guidance | High | Update in the same docs lane whenever reading order, docs map, or language-status promises change |
 | `docs/en/installation.md`, `docs/ja/installation.md` | Published in both trees | High | Keep setup, asset, importmap, and first-run instructions aligned before release-facing docs changes land |
 | `docs/en/minimal-usage.md`, `docs/ja/minimal-usage.md` | Published in both trees | High | Keep the first working host-app example aligned with installation and usage docs |
@@ -126,6 +126,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | `docs/mockups/filtered-tree-modes.html` | Technical asset | No translation needed. |
 | `docs/mockups/path-tree-builder-rows.html` | Technical asset | No translation needed. |
 | `docs/mockups/form-editing-rows.html` | Technical asset | No translation needed. |
+| `docs/mockups/selection-max-count.html` | Technical asset | No translation needed. |
 | `docs/mockups/empty-state.html` | Technical asset | No translation needed. |
 | `docs/mockups/row-status-depth-labels.html` | Technical asset | No translation needed. |
 | `docs/mockups/default-tree.css` | Technical asset | No translation needed. |
