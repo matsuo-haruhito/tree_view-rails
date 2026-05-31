@@ -66,6 +66,10 @@ Example:
 @import "tree_view";
 ```
 
+The packaged stylesheet is a quick-start baseline for TreeView's reusable structure and lightweight state cues. It covers common row states such as selected, current, collapsed, loading, error, and drop target rows, but the final theme, density, brand colors, and product wording remain host-app responsibilities.
+
+When the host app needs a different visual language, keep the import and override the documented row, toggle, and table selectors in the host app stylesheet after the TreeView import. Do not treat the packaged colors as a required public theme API; they are defaults that host apps may replace with their own class selector rules.
+
 ## JavaScript / importmap
 
 Add the TreeView importmap pin when the JavaScript controllers are needed.
