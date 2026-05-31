@@ -15,6 +15,7 @@ cookbook は、個別APIの詳細仕様ではなく、host appでよく使う構
 - [Selection](selection.md)
 - [Lazy Loading](lazy-loading.md)
 - [Windowed Rendering](windowed-rendering.md)
+- [Localized names](localized-names.md)
 
 ## 行customization quick guide
 
@@ -27,6 +28,7 @@ cookbook は、個別APIの詳細仕様ではなく、host appでよく使う構
 | input、select、inline編集label | `row_partial` または `row_actions_partial` | Form Object、validation、dirty state、保存 |
 | level label | `depth_label_builder` | label文言とlocalization |
 | badge、status pill、marker風label | `badge_builder` | status名、class、product semantics |
+| localeに沿ったrow label、type badge、tooltip | `TreeView::NodePresenter` と LocalizedNames helpers | locale file、最終copy、業務文言 |
 | legacy / direct toggle-cell marker text | toggle cellを直接描画する場合の `marker_builder` | marker名とclass |
 | folder/file iconやtype label | `badge_builder`、`icon_builder`、または `row_partial` 内のcell | icon set、label、accessibility文言 |
 | current row highlight、archived / disabled styling | `row_class_builder`、`row_data_builder`、Row status docs | 状態判定ruleとbehavior |
@@ -134,6 +136,28 @@ icon_builder = ->(document) {
   document.folder? ? { text: "Folder", class: "is-folder" } : { text: "File", class: "is-file" }
 }
 ```
+
+## row label、badge、tooltipをlocalizeする
+
+row copyをhard-coded stringではなくhost appのlocale fileに合わせたい場合は、[Localized names](localized-names.md) を使います。`TreeView::NodePresenter` と組み合わせると、rowごとの値を使いながら、最終copy、translation、業務文言はhost app側に残せます。
+
+```ruby
+presenter = TreeView::NodePresenter.define do
+  label { |item| item.respond_to?(:title) ? item.title : TreeView.model_name_for(item) }
+  tooltip { |item| TreeView.type_name_for(item) }
+  badge { |item| TreeView.attribute_name_for(item, :status) if item.respond_to?(:status) }
+end
+
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  presenter: presenter
+)
+```
+
+model label には `TreeView.model_name_for`、attribute label には `TreeView.attribute_name_for`、異種nodeのtype labelには `TreeView.type_name_for` を使います。TreeViewは表示名を解決するだけで、どのlocale keyを用意するか、row partial、badge、title、tooltipのどこに表示するかはhost appが決めます。
 
 ## current / archived / disabled / status rowを強調する
 
@@ -418,33 +442,3 @@ Rails log では次を見ます。
 - row render 中に `Document Load` や `DocumentVersion Load` が繰り返される。
 - `CACHE` ではない同形queryが大量に出る。
 - row partial から呼ぶ helper が association を繰り返し触っている。
-
-host app 側の対策は、children を配列で事前計算する、row partial で使う derived value をcacheする、DB query 調査中だけ development の view log ノイズを抑える、などです。recursive partial log は想定内で、問題は繰り返し発生する uncached query です。
-
-## 行に状態classを付ける
-
-```ruby
-render_state = TreeView::RenderState.new(
-  tree: tree,
-  root_items: tree.root_items,
-  row_partial: "documents/tree_columns",
-  ui_config: tree_ui,
-  row_class_builder: ->(document) {
-    ["document-row", ("is-archived" if document.archived?)]
-  }
-)
-```
-
-行全体のdisabled / readonly状態を表す場合は [Row status](row-status.md) も参照してください。
-
-## node_key衝突を避ける
-
-異種nodeを同じtreeで扱う場合は、class名などを含めます。
-
-```ruby
-node_key_resolver = ->(node) {
-  TreeView.node_key(node.class.name, node.id)
-}
-```
-
-詳細は [Node keys](node-keys.md) を参照してください。
