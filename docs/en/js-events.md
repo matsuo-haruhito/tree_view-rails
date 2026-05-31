@@ -64,7 +64,7 @@ Dispatched when a checkbox value cannot be parsed as JSON.
 
 ### `tree-view-remote-state:change`
 
-Dispatched when a row is marked `loading`, `loaded`, or `error`.
+Dispatched when a row is marked `loading`, `loaded`, or `error`. A retry action also marks the row `loading` and dispatches this event before the retry event.
 
 `event.detail` contains:
 
