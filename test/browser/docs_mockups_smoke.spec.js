@@ -128,6 +128,11 @@ const focusedMockupSmokeTargets = [
     minimumCount: 3
   },
   {
+    file: "selection-max-count.html",
+    sample: ".mock-limit-state",
+    minimumCount: 3
+  },
+  {
     file: "empty-state.html",
     sample: "[data-tree-view-empty-state='true']",
     minimumCount: 2
