@@ -2,8 +2,25 @@
 
 module TreeView
   class PathTreeBuilder
-    FolderNode = Struct.new(:key, :parent_key, :label, :path, :node_type, keyword_init: true)
-    RecordNode = Struct.new(:key, :parent_key, :label, :path, :record, :node_type, keyword_init: true)
+    FolderNode = Struct.new(:key, :parent_key, :label, :path, :node_type, keyword_init: true) do
+      def folder_node?
+        true
+      end
+
+      def record_node?
+        false
+      end
+    end
+
+    RecordNode = Struct.new(:key, :parent_key, :label, :path, :record, :node_type, keyword_init: true) do
+      def folder_node?
+        false
+      end
+
+      def record_node?
+        true
+      end
+    end
 
     DEFAULT_FOLDER_KEY_PREFIX = "folder"
     DEFAULT_RECORD_KEY_PREFIX = "record"
