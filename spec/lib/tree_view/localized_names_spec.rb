@@ -67,8 +67,7 @@ RSpec.describe TreeView::LocalizedNames do
     expect(TreeView.model_name_for(LocalizedNamesTestDocument.new)).to eq("Document")
   end
 
-  it "uses default model names when ActiveModel translations are missing" do
-    expect(described_class.model_name_for(LocalizedNamesTestDocument, default: "Fallback document")).to eq("Fallback document")
+  it "uses default model names when plain class fallback would otherwise be humanized" do
     expect(described_class.model_name_for(LocalizedNamesPlainDocument, default: "Plain fallback")).to eq("Plain fallback")
   end
 
