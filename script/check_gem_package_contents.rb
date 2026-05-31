@@ -8,6 +8,11 @@ REQUIRED_PACKAGED_PATHS = %w[
   app/views/tree_view/_tree_row.html.erb
   app/assets/stylesheets/tree_view.scss
   app/javascript/tree_view/index.js
+  app/javascript/tree_view/client_controller.js
+  app/javascript/tree_view/remote_state_controller.js
+  app/javascript/tree_view/selection_controller.js
+  app/javascript/tree_view/state_controller.js
+  app/javascript/tree_view/transfer_controller.js
   config/importmap.tree_view.rb
   config/locales/tree_view.toolbar.en.yml
   docs/en/release.md
