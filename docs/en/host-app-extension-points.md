@@ -23,6 +23,19 @@ Main extension points:
 
 For focused naming decisions, including the compatibility status of `icon_builder`, see [Public Name Decisions](public-name-decisions.md).
 
+## Hook reverse lookup
+
+Use this table when deciding which hook owns a host-app integration point.
+
+| Goal | Extension point | Detailed guide |
+|---|---|---|
+| Render business-specific cells or controls | `row_partial`; mark custom widgets with `data-tree-view-interactive`, `data-tree-view-ignore-keyboard`, `data-tree-view-ignore-row-click`, or `data-tree-view-ignore-drag` when needed | [Usage](usage.md#interactive-controls-inside-rows), [Drag and Drop](drag-and-drop.md#interactive-controls-inside-draggable-rows) |
+| Add host-app row metadata | `row_data_builder` for host-owned data attributes; TreeView merges lazy-loading, row status, transfer, and client-mode data after host data | [Row status](row-status.md), [Drag and Drop](drag-and-drop.md) |
+| Mark an entire row disabled or readonly | `row_disabled_builder`, `row_readonly_builder`, and `row_disabled_reason_builder`; TreeView emits the documented row status classes and data attributes | [Row status](row-status.md) |
+| Provide drag/drop transfer data | `row_event_payload_builder`; TreeView serializes the payload into `data-tree-transfer-payload`, adds `data-tree-transfer-node-key`, and the transfer controller skips rows with `data-tree-transfer-disabled="true"` | [Drag and Drop](drag-and-drop.md), [JavaScript event contract](js-events.md#transfer-events) |
+| Configure selection payloads or row-level selection state | Render-state `selection:` options such as `payload_builder`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, and `visibility` | [Selection](selection.md), [Row status](row-status.md#difference-from-selection-disabled-state) |
+| Configure selection controller behavior on already-rendered rows | Host-element `tree-view-selection` value attributes such as `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, and `data-tree-view-selection-indeterminate-value` | [Selection](selection.md#hidden-input-sync-for-regular-form-submit), [JavaScript event contract](js-events.md#selection-events) |
+
 ## row_partial
 
 Application-specific columns are rendered by the host app partial.
@@ -92,6 +105,8 @@ row_event_payload_builder: ->(document) {
 }
 ```
 
+TreeView renders the returned payload onto each transfer-enabled row as `data-tree-transfer-payload` and includes `data-tree-transfer-node-key`. The `tree-view-transfer` controller reads those attributes when dispatching transfer events and skips rows marked with `data-tree-transfer-disabled="true"`. See [Drag and Drop](drag-and-drop.md) for row wiring, transfer events, and host-app responsibility boundaries.
+
 ## Selection builders
 
 ```ruby
@@ -123,6 +138,8 @@ When the host app configures the `tree-view-selection` controller on the host el
 ```
 
 Use the render-state `selection:` options for what each row means, and use the host-element value attributes for how the Stimulus controller mirrors or constrains already-rendered checkboxes. For complete event and behavior details, see [Selection](selection.md).
+
+Selection disabled state applies to the checkbox. Row-wide disabled or readonly state belongs to the row status builders, and drag/drop transfer availability belongs to the transfer row data hooks. Use [Row status](row-status.md#difference-from-selection-disabled-state) and [Drag and Drop](drag-and-drop.md) when you need to compare those boundaries.
 
 ## Path builders
 
