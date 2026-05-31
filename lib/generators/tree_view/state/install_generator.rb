@@ -29,11 +29,33 @@ module TreeView
           content = File.read(owner_file)
           return if content.include?("include TreeViewStateOwner")
 
-          updated = content.sub(/^class #{Regexp.escape(owner_model_name)}\b.*$/, "\\0\n  include TreeViewStateOwner")
+          updated = inject_owner_concern(content)
+          if updated == content
+            say_status :skip, "#{owner_path} class definition not found"
+            return
+          end
+
           File.write(owner_file, updated)
         end
 
         private
+
+        def inject_owner_concern(content)
+          owner_class_candidates.each do |class_name|
+            pattern = /^(\s*)class #{Regexp.escape(class_name)}\b.*$/
+            next unless content.match?(pattern)
+
+            return content.sub(pattern) do |line|
+              "#{line}\n#{Regexp.last_match(1)}  include TreeViewStateOwner"
+            end
+          end
+
+          content
+        end
+
+        def owner_class_candidates
+          [owner_model_name, owner_model_name.demodulize].uniq
+        end
 
         def migration_path
           "db/migrate/#{migration_number}_create_tree_view_states.rb"
