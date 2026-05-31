@@ -72,6 +72,10 @@ adapter = TreeView::GraphAdapter.new(
 tree = TreeView::Tree.new(adapter: adapter)
 ```
 
+1つの parent id column では表しにくい project workspace、project / document / folder / external node の混在、edge 由来の children を扱う場合は adapter mode を選びます。TreeView は host app が渡した roots と children 配列を辿ります。data loading、authorization、cycle policy、persistence、row presentation は引き続き host app の責務です。
+
+引数と安定 method の詳細は [API仕様: TreeView::Tree](api.md#treeviewtree) を参照してください。ActiveRecord-backed adapter の性能面は [Cookbook: GraphAdapter と ActiveRecord の性能](cookbook.md#graphadapter-と-activerecord-の性能) を参照してください。
+
 ### Resource table bridge
 
 `TreeView::ResourceTableRenderState.call(...)` は、別の table-oriented layer が visible columns や保存済み table state を管理していて、TreeView には階層行の描画 state だけを組み立てさせたい場合に使います。

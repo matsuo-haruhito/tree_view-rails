@@ -72,6 +72,10 @@ adapter = TreeView::GraphAdapter.new(
 tree = TreeView::Tree.new(adapter: adapter)
 ```
 
+Choose adapter mode when one parent-id column is not a good fit, such as project workspaces that mix projects, documents, folders, external nodes, or edge-derived children. TreeView traverses the roots and child arrays that the host app supplies; the host app still owns data loading, authorization, cycle policy, persistence, and row presentation.
+
+For the full argument list and stable methods, see [API reference: TreeView::Tree](api.md#treeviewtree). For ActiveRecord-backed adapters, see [Cookbook: GraphAdapter and ActiveRecord performance](cookbook.md#graphadapter-and-activerecord-performance).
+
 ### Resource-table bridge
 
 Use `TreeView::ResourceTableRenderState.call(...)` when another table-oriented layer already owns visible columns, saved table preferences, or table state, and TreeView only needs to build hierarchical row rendering.
