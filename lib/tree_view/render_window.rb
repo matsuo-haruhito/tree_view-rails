@@ -24,6 +24,14 @@ module TreeView
       visible_rows.length
     end
 
+    def before_count
+      [offset, total_count].min
+    end
+
+    def after_count
+      [total_count - [offset + rows.length, total_count].min, 0].max
+    end
+
     def start_index
       return total_count if total_count.zero?
 
