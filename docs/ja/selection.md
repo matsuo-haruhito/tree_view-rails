@@ -132,10 +132,19 @@ tree が通常の HTML form の中にある場合、同じ controller で checke
 
 `data-tree-view-selection-hidden-input-name-value` を指定すると、TreeView は valid な checked payload ごとに hidden input を 1 つずつ生成し、connect / change / submit / manual refresh に追従して同期します。
 
+host app が package root をすでに import している場合、JavaScript から host-authored attribute name を参照するときは `TreeViewSelectionDataHooks.hiddenInputNameValue` を使うと raw string の写経を避けられます。
+
+```js
+import { TreeViewSelectionDataHooks } from "tree_view"
+
+const hiddenInputNameAttribute = TreeViewSelectionDataHooks.hiddenInputNameValue
+```
+
 - hidden input の `name` は host app 側で決められます。
 - value は JSON 文字列で書き込まれるため、`TreeView.parse_selection_params(params[:selected_nodes])` をそのまま使えます。
 - disabled checkbox と不正な JSON payload は既存 event と同じく skip されます。
 - tree が form の外にある場合は、selection event だけを dispatch し、hidden input は生成しません。
+- generated hidden input marker attribute と source-id attribute は TreeView が生成・管理する内部寄りの属性であり、host app が authoring する public hook ではありません。
 
 ## 最大選択数
 

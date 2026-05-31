@@ -132,10 +132,19 @@ When the tree sits inside a normal HTML form, the same controller can mirror che
 
 With `data-tree-view-selection-hidden-input-name-value`, TreeView writes one hidden input per valid checked payload and keeps those inputs in sync on connect, change, submit, and manual refresh.
 
+If your host app already imports the package root, use `TreeViewSelectionDataHooks.hiddenInputNameValue` when you need to reference the host-authored attribute name from JavaScript without hand-copying the raw string.
+
+```js
+import { TreeViewSelectionDataHooks } from "tree_view"
+
+const hiddenInputNameAttribute = TreeViewSelectionDataHooks.hiddenInputNameValue
+```
+
 - The hidden input `name` stays host-app controlled.
 - Values are written as JSON strings, so `TreeView.parse_selection_params(params[:selected_nodes])` keeps working.
 - Disabled checkboxes and invalid JSON payloads are skipped, matching the existing event payload behavior.
 - If the tree is not inside a form, TreeView keeps dispatching selection events and does not create hidden inputs.
+- Generated hidden input marker attributes and source-id attributes are managed by TreeView and are not host-authored public hooks.
 
 ## Selection max count
 

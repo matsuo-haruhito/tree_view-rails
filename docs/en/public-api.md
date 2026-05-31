@@ -167,6 +167,7 @@ Stable enough for host apps to use:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
+- `TreeViewSelectionDataHooks`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -180,6 +181,7 @@ Stable enough for host apps to use:
 
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
+`TreeViewSelectionDataHooks` exposes the documented `tree-view-selection` host-element value attribute names as a machine-readable object. Use it when JavaScript needs to author or query those host-owned attributes without hand-copying strings such as `TreeViewSelectionDataHooks.hiddenInputNameValue`.
 
 Within `TreeViewEventNames`, lazy-loading request lifecycle names live under `hostLifecycle`:
 
@@ -198,6 +200,13 @@ Documented keys on `TreeViewControllerIdentifiers`:
 - `transfer`
 - `remoteState`
 
+Documented keys on `TreeViewSelectionDataHooks`:
+
+- `hiddenInputNameValue`
+- `maxCountValue`
+- `cascadeValue`
+- `indeterminateValue`
+
 The `tree-view-selection` controller's documented host-element value attributes are also part of the stable host-app wiring surface:
 
 - `data-tree-view-selection-hidden-input-name-value`
@@ -205,9 +214,9 @@ The `tree-view-selection` controller's documented host-element value attributes 
 - `data-tree-view-selection-cascade-value`
 - `data-tree-view-selection-indeterminate-value`
 
-Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
+Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. Generated hidden input marker attributes and source-id attributes are managed by TreeView and are not host-authored public hooks. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
-The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, and selection data hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
@@ -227,12 +236,12 @@ Representative documented hooks are tracked where their feature behavior is expl
 | Hook area | Representative hooks | Contract boundary |
 |---|---|---|
 | Toolbar | `data-tree-view-toolbar`, `data-tree-view-toolbar-action`, `data-tree-view-toolbar-disabled` | TreeView-owned hooks documented in [Toolbar](toolbar.md). Use helper methods for supported actions and metadata instead of internal constants. |
-| Selection | `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | Stable host-element controller values documented in [Selection](selection.md). Row payloads and disabled decisions stay with `selection:` render-state builders. |
+| Selection | `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | Stable host-element controller values documented in [Selection](selection.md) and mirrored by `TreeViewSelectionDataHooks`. Generated hidden input marker and source-id attributes remain TreeView-managed implementation details. |
 | Lazy loading | `data-tree-remote-state`, remote placeholder IDs, lazy-loading lifecycle events | Stable placeholder and event hooks documented in [Lazy Loading](lazy-loading.md). Host apps still own request dispatch and response handling. |
 | Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | Reusable baseline hooks documented in the [mockup inventory](../mockups/README.md). They describe the shipped empty-state reference pattern, not every internal row class. |
 | Interaction markers | marker row classes and `data-*` hooks shown in focused mockups | Reference hooks documented through [mockups](../mockups/README.md) for review and adoption. Promote any hook to a machine-readable contract in `config/public_api_manifest.yml` only when it needs compatibility checks. |
 
-This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, JavaScript package-root exports, controller identifiers, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
+This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, JavaScript package-root exports, controller identifiers, selection data hooks, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
 
 Undocumented CSS helper classes, data attributes, DOM structure details, and gem partial locals are implementation details.
 
