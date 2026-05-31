@@ -59,7 +59,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。main-push の `gem_package` CI job では、built gem に JavaScript / CSS / importmap entrypoint が残っていることを `ruby script/check_gem_package_contents.rb tree_view-*.gem` でも確認します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
+`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。main-push の `gem_package` CI job では、built gem に Rails helper / view partial / locale / docs / JavaScript / CSS / importmap の代表ファイルが残っていることを `ruby script/check_gem_package_contents.rb tree_view-*.gem` でも確認します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
 
 Pull Request CI の確認項目:
 
@@ -73,7 +73,7 @@ Pull Request CI の確認項目:
 - Ruby version matrix
 - Rails version matrix
 - `package-lock.json` が `package.json` と同期するまでの間は、`npm install` と `npm run test:js` による JavaScript tests
-- JavaScript / CSS / importmap file contents を含む Gem package verification
+- Rails helper / view partial / locale / docs / JavaScript / CSS / importmap の代表ファイルを含む Gem package verification
 
 merge前にPR CIを通します。互換性matrix、JavaScript coverage、package verificationを含むため、release判定にはより広い `main` CIを使います。
 
@@ -134,12 +134,16 @@ release前に確認すること:
 - packaged filesに以下が含まれることを確認する
   - `lib/**/*`
   - Rails helpers, views, stylesheets, JavaScript, importmap files
+  - `app/helpers/tree_view_helper.rb`
+  - `app/views/tree_view/_tree_row.html.erb`
   - `app/javascript/tree_view/index.js`
   - `app/assets/stylesheets/tree_view.scss`
   - `config/importmap.tree_view.rb`
+  - `config/locales/tree_view.toolbar.en.yml`
   - `README.md`
   - `CHANGELOG.md`
   - `docs/**/*`
+  - `docs/en/release.md`
   - `LICENSE*`
 
 ## Repository
