@@ -222,6 +222,18 @@ Host apps may rely on documented CSS classes, data attributes, and JavaScript ev
 
 `data-turbo-frame` emitted from configured Turbo toggle links is part of the documented host-app integration surface.
 
+Representative documented hooks are tracked where their feature behavior is explained:
+
+| Hook area | Representative hooks | Contract boundary |
+|---|---|---|
+| Toolbar | `data-tree-view-toolbar`, `data-tree-view-toolbar-action`, `data-tree-view-toolbar-disabled` | TreeView-owned hooks documented in [Toolbar](toolbar.md). Use helper methods for supported actions and metadata instead of internal constants. |
+| Selection | `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | Stable host-element controller values documented in [Selection](selection.md). Row payloads and disabled decisions stay with `selection:` render-state builders. |
+| Lazy loading | `data-tree-remote-state`, remote placeholder IDs, lazy-loading lifecycle events | Stable placeholder and event hooks documented in [Lazy Loading](lazy-loading.md). Host apps still own request dispatch and response handling. |
+| Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | Reusable baseline hooks documented in the [mockup inventory](../mockups/README.md). They describe the shipped empty-state reference pattern, not every internal row class. |
+| Interaction markers | marker row classes and `data-*` hooks shown in focused mockups | Reference hooks documented through [mockups](../mockups/README.md) for review and adoption. Promote any hook to a machine-readable contract in `config/public_api_manifest.yml` only when it needs compatibility checks. |
+
+This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, JavaScript package-root exports, controller identifiers, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
+
 Undocumented CSS helper classes, data attributes, DOM structure details, and gem partial locals are implementation details.
 
 ## Breaking change criteria
