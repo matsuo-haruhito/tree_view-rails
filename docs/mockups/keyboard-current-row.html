@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView keyboard focus and current-row mockup</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.keyboard-current-page { max-width: 1180px; }
+.keyboard-current-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 18px; }
+.keyboard-current-summary__item { border: 1px solid #d8e0ea; border-radius: 8px; background: #fff; padding: 14px; }
+.keyboard-current-summary__item strong { display: block; margin-bottom: 0.35rem; color: #102a43; }
+.keyboard-current-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr); gap: 20px; align-items: start; }
+.keyboard-current-demo { overflow-x: auto; border: 1px solid #d8e0ea; border-radius: 8px; background: #fff; }
+.keyboard-current-demo .tree-view { min-width: 820px; margin: 0; }
+.keyboard-current-focus { outline: 3px solid #2563eb; outline-offset: 3px; box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.16); }
+.keyboard-current-row { background: #eff6ff; }
+.keyboard-current-row .tree-leaf-label, .keyboard-current-row .tree-toggle__action { font-weight: 700; }
+.keyboard-current-note-list { display: grid; gap: 12px; }
+.keyboard-current-note { border: 1px solid #d8e0ea; border-radius: 8px; background: #f8fafc; padding: 14px; }
+.keyboard-current-note h3, .keyboard-current-note p { margin: 0; }
+.keyboard-current-note h3 { margin-bottom: 0.4rem; color: #102a43; }
+.keyboard-current-state-list { margin: 0; padding-left: 1.2rem; }
+.keyboard-current-action { display: inline-flex; align-items: center; min-height: 1.9rem; padding: 0.3rem 0.55rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; color: #1d4ed8; font: inherit; font-weight: 700; }
+.keyboard-current-action[data-tree-view-interactive]::after { content: "interactive"; margin-left: 0.45rem; color: #64748b; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
+@media (max-width: 760px) { .keyboard-current-layout { grid-template-columns: 1fr; } .keyboard-current-demo .tree-view { min-width: 720px; } }
+</style>
+</head>
+<body>
+  <main class="mock-page keyboard-current-page">
+    <header class="mock-header">
+      <p class="mock-kicker">focused mockup</p>
+      <h1>Keyboard focus and current-row cues</h1>
+      <p>Static reference for comparing focus-visible rings, the current-row cue, expanded or collapsed rows, and host-app-owned row actions in one scan. The page does not add keyboard behavior; it only keeps the visual states reviewable.</p>
+      <nav class="mock-page-nav" aria-label="Mockup navigation">
+        <a href="review-gallery.html">Back to gallery</a>
+        <a href="README.md">Mockup README</a>
+        <a href="keyboard-focus-states.html">Focus-only reference</a>
+      </nav>
+      <div class="keyboard-current-summary" aria-label="Review summary">
+        <div class="keyboard-current-summary__item"><strong>TreeView-owned cues</strong>Expanded, collapsed, current row, and visible focus markers remain readable without changing public behavior.</div>
+        <div class="keyboard-current-summary__item"><strong>Host-app boundary</strong>Row actions and interactive controls stay marked as app-owned behavior, not a TreeView routing or permission contract.</div>
+        <div class="keyboard-current-summary__item"><strong>Static comparison</strong>Representative rings and current-row highlights are shown at once so review does not depend on live keyboard interaction.</div>
+      </div>
+    </header>
+
+    <section class="mock-section keyboard-current-layout" aria-labelledby="current-focus-heading">
+      <div>
+        <h2 id="current-focus-heading">Current row beside focused row</h2>
+        <div class="keyboard-current-demo">
+          <table class="tree-view" aria-label="Keyboard focus and current-row comparison">
+            <thead><tr><th scope="col">Node</th><th scope="col">Visual state</th><th scope="col">ARIA sample</th><th scope="col">Row action</th></tr></thead>
+            <tbody>
+              <tr class="tree-row tree-row--expanded"><td><a href="#" class="tree-toggle__action keyboard-current-focus" aria-expanded="true">Operations handbook</a></td><td><span class="tree-badge">Focused expanded parent</span></td><td><code>aria-expanded="true"</code></td><td><button type="button" class="keyboard-current-action" data-tree-view-interactive>Open</button></td></tr>
+              <tr class="tree-row tree-row--child keyboard-current-row" aria-current="page"><td><span class="tree-leaf-label">Release checklist</span></td><td><span class="tree-badge">Current row</span></td><td><code>aria-current="page"</code></td><td><button type="button" class="keyboard-current-action" data-tree-view-interactive>Preview</button></td></tr>
+              <tr class="tree-row tree-row--child tree-row--expanded keyboard-current-row" aria-current="page"><td><a href="#" class="tree-toggle__action keyboard-current-focus" aria-expanded="true">Incident response</a></td><td><span class="tree-badge">Current and focused</span></td><td><code>aria-current="page" aria-expanded="true"</code></td><td><button type="button" class="keyboard-current-action" data-tree-view-interactive>Assign</button></td></tr>
+              <tr class="tree-row tree-row--child tree-row--collapsed"><td><a href="#" class="tree-toggle__action" aria-expanded="false">Archived playbooks</a></td><td><span class="tree-muted">Collapsed sibling</span></td><td><code>aria-expanded="false"</code></td><td><button type="button" class="keyboard-current-action" data-tree-view-interactive>Open</button></td></tr>
+              <tr class="tree-row tree-row--leaf"><td><span class="tree-leaf-label">Postmortem template</span></td><td><span class="tree-muted">Leaf row with action focus</span></td><td><span class="tree-muted">No expansion attribute</span></td><td><button type="button" class="keyboard-current-action keyboard-current-focus" data-tree-view-interactive>Copy</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <aside class="keyboard-current-note-list" aria-label="Responsibility notes">
+        <div class="keyboard-current-note"><h3>Focus versus current</h3><p>The focus ring marks the active keyboard target. The current-row cue marks the app's current item. They can appear on different rows or on the same row.</p></div>
+        <div class="keyboard-current-note"><h3>Expanded and collapsed rows</h3><p>The mockup keeps expansion icons and state text visible so current or focus styling does not hide the hierarchy cue.</p></div>
+        <div class="keyboard-current-note"><h3>Interactive controls</h3><p>Buttons marked with <code>data-tree-view-interactive</code> represent host-app-owned actions. The mockup does not define routes, authorization, or final action copy.</p></div>
+      </aside>
+    </section>
+
+    <section class="mock-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">Review boundaries</h2>
+      <ul class="keyboard-current-state-list">
+        <li>Use this page to compare focus-visible and current-row styling when both cues are present in the same tree.</li>
+        <li>Use <a href="keyboard-focus-states.html">keyboard-focus-states.html</a> when review only needs representative focus targets without current-row context.</li>
+        <li>Keep tab order, arrow-key behavior, roving tabindex, routes, permissions, and business actions outside this static mockup.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
