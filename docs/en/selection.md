@@ -137,6 +137,8 @@ With `data-tree-view-selection-hidden-input-name-value`, TreeView writes one hid
 - Disabled checkboxes and invalid JSON payloads are skipped, matching the existing event payload behavior.
 - If the tree is not inside a form, TreeView keeps dispatching selection events and does not create hidden inputs.
 
+When one form contains multiple `tree-view-selection` controllers, TreeView tags each generated hidden input with `data-tree-view-selection-source-id` so one controller only removes and rewrites its own generated inputs. If the controller element already has `data-tree-view-selection-source-id`, TreeView reuses that value; otherwise it assigns a generated source id on connect. Use separate `data-tree-view-selection-hidden-input-name-value` names when the host app wants separate submitted params for each tree. Reuse a name only when the server-side action intentionally accepts one combined array.
+
 ## Selection max count
 
 Host apps can limit the number of checked boxes on the JavaScript controller.
