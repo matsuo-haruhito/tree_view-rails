@@ -17,9 +17,10 @@ It packages tree traversal, render state, helpers, partials, CSS baseline, and J
 When implementation and docs drift, use this order:
 
 1. Current code in `lib/`, `app/helpers/`, `app/views/`, `app/assets/`, and `app/javascript/`
-2. Explicit decisions in the relevant issue and pull request
-3. Durable docs under `docs/`, especially the relevant guides in `docs/en/` and `docs/ja/`
-4. Entry-point summaries in `README.md`, `docs/README.md`, `AGENTS.md`, and this profile
+2. Machine-readable public API contracts in `config/public_api_manifest.yml` and the compatibility checks that read them
+3. Explicit decisions in the relevant issue and pull request
+4. Durable docs under `docs/`, especially the relevant guides in `docs/en/` and `docs/ja/`
+5. Entry-point summaries in `README.md`, `docs/README.md`, `AGENTS.md`, and this profile
 
 Treat `CHANGELOG.md` as a release-facing summary of shipped public changes, not as the primary source for current behavior.
 
@@ -28,6 +29,7 @@ Treat `CHANGELOG.md` as a release-facing summary of shipped public changes, not 
 - Tree traversal and structure helpers
 - Render state and row rendering helpers
 - Generic UI configuration builders and hooks
+- Public API compatibility manifests and checks for documented helpers, grouped options, and JavaScript entrypoints
 - Selection, lazy loading, windowed rendering, persisted state, and diagnostics
 - Bundled CSS baseline and JavaScript controller entrypoints that support those primitives
 - Documentation for public APIs and responsibility boundaries
@@ -58,6 +60,7 @@ Use these durable entry points together when you are checking scope, docs sync, 
 - `docs/en/README.md` or `docs/ja/README.md` for language-specific docs navigation
 - `docs/i18n-audit.md` for cross-language maintenance rules and docs update coverage
 - `docs/en/release.md` or `docs/ja/release.md` for release checklist, release consistency checks, and changelog expectations
+- `config/public_api_manifest.yml` for machine-readable public API contracts that specs and entrypoint smoke checks compare against current code
 - `CHANGELOG.md` for shipped public changes, compatibility notes, and notable docs additions
 
 ## Recommended first reads
@@ -70,5 +73,6 @@ For maintainers making changes, start in this order:
 4. `docs/en/README.md` or `docs/ja/README.md` for language-specific docs navigation
 5. `docs/en/design-policy.md` or `docs/ja/design-policy.md` for responsibility boundaries
 6. `docs/i18n-audit.md` when the task changes public docs or language coverage
-7. `docs/en/release.md` or `docs/ja/release.md` when the task affects release-facing docs, compatibility notes, or package verification workflow
-8. `CHANGELOG.md` when the task affects release-facing public behavior or compatibility notes
+7. `config/public_api_manifest.yml` when the task changes documented helper methods, grouped options, JavaScript entrypoints, controller identifiers, or event contracts
+8. `docs/en/release.md` or `docs/ja/release.md` when the task affects release-facing docs, compatibility notes, or package verification workflow
+9. `CHANGELOG.md` when the task affects release-facing public behavior or compatibility notes
