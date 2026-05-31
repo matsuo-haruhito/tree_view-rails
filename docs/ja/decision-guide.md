@@ -15,6 +15,7 @@ TreeViewのAPIは大きく分けると次の2種類です。
 |---|---|---|---|
 | 単純なstatic treeを描画したい | `TreeView::Tree`, `TreeView::RenderState`, `tree_view_rows` | `records:`, `parent_id_method:`, `row_partial:`, `UiConfigBuilder#build_static` | 全nodeが取得済みでremote expand/collapseが不要な場合の最初の実装です。 |
 | Turboでexpand/collapseしたい | `TreeView::UiConfigBuilder#build_turbo` | `show_descendants_path_builder`, `hide_descendants_path_builder`, `toggle_all_path_builder` | `build` は後方互換aliasです。host appのroutesとTurbo Stream actionがresponseを担当します。 |
+| tree全体のexpand/collapse toolbar actionを追加したい | [Toolbar helper](toolbar.md) | `tree_view_toolbar`, `tree_view_toolbar_actions`, `tree_view_toolbar_action_metadata`, `toggle_all_path_builder` | Expand all、Collapse all、Collapse all except current path の操作を画面に置きたい場合に使います。TreeViewはaction metadataとtoggle-all state valueを提供し、placement、label、authorization copy、route、Turbo responseはhost appが担当します。 |
 | Turbo endpointなしでbrowser内だけで開閉したい | `TreeView::UiConfigBuilder#build_client_side` | `initial_state`, `initial_expansion:`, `render_scope:` | render scope内の全行を初期HTMLに含められる小〜中規模treeに向いています。 |
 | 初期描画を小さくしたい | `TreeView::RenderState` | `max_initial_depth`, `initial_expansion:`, `render_scope:` | これは描画制御です。初期HTML量は減りますが、それだけでdatabase query量が減るわけではありません。 |
 | 描画対象の子孫範囲を制限したい | `render_scope:` | `max_depth`, `max_leaf_distance` | ページ上で一定のdepthやmatched leavesからの距離を超えて描画したくない場合に使います。 |
@@ -29,6 +30,7 @@ TreeViewのAPIは大きく分けると次の2種類です。
 | 行内に編集fieldを置きたい | [Form と編集行](form-editing.md) と [Cookbook](cookbook.md#行customization-quick-guide) | `row_partial`, `row_actions_partial`, Rails `form_with`, `fields_for`, host-app Form Object | TreeViewはinline-editing layoutを支援します。edit mode、validation、persistence、authorization、dirty-state handling、Turbo workflowはhost appが担当します。 |
 | 行action buttonを追加したい | [Cookbook](cookbook.md#行customization-quick-guide) | `row_actions_partial` | Edit、Show、Delete、Archive、host app固有actionの推奨slotです。 |
 | level label、badge、icon、status visualをcustomizeしたい | [Cookbook](cookbook.md#行customization-quick-guide) | `depth_label_builder`, `badge_builder`, `icon_builder`, `row_class_builder`, `row_data_builder` | TreeViewは描画hookを提供します。product固有label、status、permissionはhost app側に残します。 |
+| Rails I18nに沿ったrow label、badge、tooltipを出したい | [Localized names](localized-names.md) と [Cookbook](cookbook.md#row-labelbadgetooltipをlocalizeする) | `TreeView.model_name_for`, `TreeView.attribute_name_for`, `TreeView.type_name_for`, `TreeView::NodePresenter` | row visualをhost appのlocale fileに合わせたい場合に使います。TreeViewは表示名を解決し、locale内容、業務文言、どこへ表示するかはhost appが担当します。 |
 | drag-and-dropを追加したい | Drag/drop row hooks | drag属性とrow event payload | TreeViewは連携hookを出します。移動のvalidationと永続化はhost appが担当します。 |
 | 開閉状態を保存したい | `TreeView::PersistedState`, `TreeView::StateStore` | `rails g tree_view:state:install`, persisted state model | ユーザが再訪したときに同じ開閉状態へ戻したい場合に使います。 |
 | tree dataや識別子を検証したい | Diagnostics APIs | node key、DOM ID、orphan、cycle diagnostics | integration時、test時、invalidな構造の描画前確認に使います。 |
@@ -44,6 +46,7 @@ flowchart TD
   C -->|いいえ、browser上で開かない| D[Static rendering: Tree + RenderState + tree_view_rows]
   C -->|いいえ、browser内開閉で十分| CL[Client-side rendering: UiConfigBuilder#build_client_side]
   C -->|はい| E[Turbo rendering: UiConfigBuilder#build_turbo と show/hide path builders]
+  C -->|はい、tree全体の操作も必要| TB[Toolbar helper と toggle_all_path_builder]
   B -->|いいえ、全取得が重い| F[Lazy Loading または Children Pagination]
   F --> G{親ごとの子要素数が非常に多い?}
   G -->|はい| H[host app側のChildren Paginationをlazy-loading URL経由で連携]
@@ -64,6 +67,7 @@ flowchart TD
   P -->|drag/drop| S[Drag/drop hooks と host-app handlers]
   A --> Y{row visualが必要?}
   Y -->|level label, badge, icon, status| Z[Cookbook row customization hooks]
+  Y -->|localeに沿ったlabelやtype名| LN[LocalizedNames helpers と NodePresenter]
   A --> T{input dataを検証したい?}
   T -->|はい| U[Diagnostics APIs]
 ```
@@ -89,7 +93,7 @@ flowchart TD
 5. 1つのparent id columnだけでは扱いにくい異種recordやgraph-like edgeがある場合は [GraphAdapter adapter mode](api-overview.md#adapter-mode) を使います。
 6. dataは取得済みで、初期HTML量を許容でき、Turbo endpointが過剰な場合は `build_client_side` を使います。
 7. scroll位置に応じたDOM仮想化がproduct要件になった場合だけ、host app側でvirtual scrollingを追加します。
-8. interaction要件やrow customization要件が固まったら [Selection](selection.md)、[Form と編集行](form-editing.md)、[Cookbook row customization](cookbook.md#行customization-quick-guide)、[Drag and Drop](drag-and-drop.md)、[Persisted State](persisted-state.md) を追加します。
+8. interaction要件やrow customization要件が固まったら [Selection](selection.md)、[Form と編集行](form-editing.md)、[Cookbook row customization](cookbook.md#行customization-quick-guide)、[Localized names](localized-names.md)、[Toolbar helper](toolbar.md)、[Drag and Drop](drag-and-drop.md)、[Persisted State](persisted-state.md) を追加します。
 9. node key、DOM ID、tree構造を検証したい場合は [Tree diagnostics](tree-diagnostics.md) を使います。
 
 ## よくある組み合わせ
@@ -106,8 +110,10 @@ flowchart TD
 | bulk action page | StaticまたはTurbo rendering + `selection:` + host-app form action |
 | bulk edit page | StaticまたはTurbo rendering + row partial form controls + host-app Form Object |
 | per-row inline edit page | 表示用row partial + `row_actions_partial` + host-app edit action / Turbo response + 編集用row partial |
+| tree全体のaction toolbar | Turbo rendering + `toggle_all_path_builder` + `tree_view_toolbar` + host-app placement / authorization |
 | row action menu | `row_actions_partial` + host-app route、authorization、action handler |
 | statusが多いtree table | `row_class_builder` + `badge_builder` + host-app status rules |
+| localized row display | `TreeView::NodePresenter` + LocalizedNames helpers + host-app locale files |
 | 並び替え可能な階層 | StaticまたはTurbo rendering + drag/drop hooks + host-app move endpoint |
 
 ## 関連docs
@@ -116,6 +122,9 @@ flowchart TD
 - [API概要: adapter mode](api-overview.md#adapter-mode)
 - [API仕様](api.md)
 - [Cookbook: 行customization quick guide](cookbook.md#行customization-quick-guide)
+- [Localized names](localized-names.md)
+- [Toolbar helper](toolbar.md)
+- [Toolbar actions mockup](../mockups/toolbar-actions.html)
 - [Render Scale](render-scale.md)
 - [Lazy Loading](lazy-loading.md)
 - [Children Pagination](children-pagination.md)

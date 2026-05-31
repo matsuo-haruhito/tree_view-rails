@@ -15,6 +15,7 @@ For API details, see:
 - [Selection](selection.md)
 - [Lazy Loading](lazy-loading.md)
 - [Windowed Rendering](windowed-rendering.md)
+- [Localized names](localized-names.md)
 
 ## Row customization quick guide
 
@@ -27,6 +28,7 @@ Use the smallest TreeView extension point that matches the UI you are adding.
 | Inputs, selects, or inline editable labels | `row_partial` or `row_actions_partial` | Form object, validation, dirty state, persistence |
 | Level labels | `depth_label_builder` | Label wording and localization |
 | Badges, status pills, or marker-like labels | `badge_builder` | Status names, classes, and product semantics |
+| Locale-aware row labels, type badges, or tooltips | `TreeView::NodePresenter` plus LocalizedNames helpers | Locale files, final copy, and business wording |
 | Legacy/direct toggle-cell marker text | `marker_builder` when rendering toggle cells directly | Marker naming and classes |
 | Folder/file icons or type labels | `badge_builder`, `icon_builder`, or a cell in `row_partial` | Icon set, labels, and accessibility copy |
 | Current row highlighting or archived/disabled styling | `row_class_builder`, `row_data_builder`, and row-status docs | State rules and behavior |
@@ -134,6 +136,28 @@ icon_builder = ->(document) {
   document.folder? ? { text: "Folder", class: "is-folder" } : { text: "File", class: "is-file" }
 }
 ```
+
+## Localize row labels, badges, and tooltips
+
+Use [Localized names](localized-names.md) when row copy should follow the host app locale files instead of hard-coded strings. `TreeView::NodePresenter` can compose those helpers with row-specific values while leaving the final copy, translations, and business wording in the host app.
+
+```ruby
+presenter = TreeView::NodePresenter.define do
+  label { |item| item.respond_to?(:title) ? item.title : TreeView.model_name_for(item) }
+  tooltip { |item| TreeView.type_name_for(item) }
+  badge { |item| TreeView.attribute_name_for(item, :status) if item.respond_to?(:status) }
+end
+
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  presenter: presenter
+)
+```
+
+Use `TreeView.model_name_for` for model labels, `TreeView.attribute_name_for` for attribute labels, and `TreeView.type_name_for` for heterogeneous node type labels. TreeView only resolves display names; the host app decides which locale keys exist and where the labels appear in row partials, badges, titles, or tooltips.
 
 ## Highlight current, archived, disabled, or status rows
 

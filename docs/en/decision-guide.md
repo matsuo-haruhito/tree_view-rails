@@ -15,6 +15,7 @@ Use render controls first when the data is already available. Use lazy loading o
 |---|---|---|---|
 | Render a simple static tree | `TreeView::Tree`, `TreeView::RenderState`, `tree_view_rows` | `records:`, `parent_id_method:`, `row_partial:`, `UiConfigBuilder#build_static` | Best first implementation when all nodes are already available and no remote expand/collapse is needed. |
 | Add Turbo expand/collapse | `TreeView::UiConfigBuilder#build_turbo` | `show_descendants_path_builder`, `hide_descendants_path_builder`, `toggle_all_path_builder` | `build` remains a backward-compatible alias. Host app routes and Turbo Stream actions own the response. |
+| Add tree-wide expand/collapse toolbar actions | [Toolbar helper](toolbar.md) | `tree_view_toolbar`, `tree_view_toolbar_actions`, `tree_view_toolbar_action_metadata`, `toggle_all_path_builder` | Use when the screen needs Expand all, Collapse all, or Collapse all except current path controls. TreeView supplies action metadata and toggle-all state values; the host app owns placement, labels, authorization copy, routes, and Turbo responses. |
 | Add browser-local expand/collapse without Turbo endpoints | `TreeView::UiConfigBuilder#build_client_side` | `initial_state`, `initial_expansion:`, `render_scope:` | Good for small to medium trees where all rows in the render scope can be included in the initial HTML. |
 | Keep the first render small | `TreeView::RenderState` | `max_initial_depth`, `initial_expansion:`, `render_scope:` | These are render controls. They reduce initial HTML volume, not database query volume by themselves. |
 | Limit which descendants can be rendered | `render_scope:` | `max_depth`, `max_leaf_distance` | Use when a page should never render beyond a chosen depth or distance from matched leaves. |
@@ -29,6 +30,7 @@ Use render controls first when the data is already available. Use lazy loading o
 | Add editable fields inside rows | [Forms and editing rows](form-editing.md) and [Cookbook](cookbook.md#row-customization-quick-guide) | `row_partial`, `row_actions_partial`, Rails `form_with`, `fields_for`, host-app Form Objects | TreeView supports inline-editing layouts. The host app owns edit mode, validation, persistence, authorization, dirty-state handling, and Turbo workflows. |
 | Add row action buttons | [Cookbook](cookbook.md#row-customization-quick-guide) | `row_actions_partial` | Recommended slot for Edit, Show, Delete, Archive, and custom host-app actions. |
 | Customize level labels, badges, icons, or status visuals | [Cookbook](cookbook.md#row-customization-quick-guide) | `depth_label_builder`, `badge_builder`, `icon_builder`, `row_class_builder`, `row_data_builder` | TreeView provides rendering hooks; product-specific labels, statuses, and permissions stay in the host app. |
+| Localize row labels, badges, or tooltips with Rails I18n | [Localized names](localized-names.md) and [Cookbook](cookbook.md#localize-row-labels-badges-and-tooltips) | `TreeView.model_name_for`, `TreeView.attribute_name_for`, `TreeView.type_name_for`, `TreeView::NodePresenter` | Use when row visuals should follow host app locale files. TreeView resolves display names; the host app owns locale content, business wording, and where labels are rendered. |
 | Add drag-and-drop | Drag/drop row hooks | Drag attributes and row event payloads | TreeView exposes integration hooks. The host app validates and persists the move. |
 | Persist expansion state | `TreeView::PersistedState`, `TreeView::StateStore` | `rails g tree_view:state:install`, persisted state model | Use when users should return to the same expanded/collapsed tree state. |
 | Validate tree data and identifiers | Diagnostics APIs | node key, DOM ID, orphan, and cycle diagnostics | Use during integration, tests, or admin diagnostics before rendering invalid structures. |
@@ -44,6 +46,7 @@ flowchart TD
   C -->|No, no browser opening| D[Static rendering: Tree + RenderState + tree_view_rows]
   C -->|No, browser-local opening is enough| CL[Client-side rendering: UiConfigBuilder#build_client_side]
   C -->|Yes| E[Turbo rendering: UiConfigBuilder#build_turbo with show/hide path builders]
+  C -->|Yes, plus tree-wide controls| TB[Toolbar helper with toggle_all_path_builder]
   B -->|No, fetching everything is too expensive| F[Lazy Loading or Children Pagination]
   F --> G{Are child sets huge per parent?}
   G -->|Yes| H[Children Pagination in the host app, exposed through lazy-loading URLs]
@@ -64,6 +67,7 @@ flowchart TD
   P -->|Drag/drop| S[Drag/drop hooks plus host-app handlers]
   A --> Y{Need row visuals?}
   Y -->|Level labels, badges, icons, status| Z[Cookbook row customization hooks]
+  Y -->|Locale-aware labels or type names| LN[LocalizedNames helpers with NodePresenter]
   A --> T{Need confidence in input data?}
   T -->|Yes| U[Diagnostics APIs]
 ```
@@ -89,7 +93,7 @@ flowchart TD
 5. Use [GraphAdapter adapter mode](api-overview.md#adapter-mode) when the tree mixes different record classes or graph-like edges and cannot be represented cleanly by one parent-id column.
 6. Use `build_client_side` when the data is already available, initial HTML volume is acceptable, and Turbo endpoints would be unnecessary overhead.
 7. Add host-app virtual scrolling only when scroll-position-driven DOM virtualization is a product requirement.
-8. Add [Selection](selection.md), [Forms and editing rows](form-editing.md), [Cookbook row customization](cookbook.md#row-customization-quick-guide), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction and row customization requirements are clear.
+8. Add [Selection](selection.md), [Forms and editing rows](form-editing.md), [Cookbook row customization](cookbook.md#row-customization-quick-guide), [Localized names](localized-names.md), [Toolbar helper](toolbar.md), [Drag and Drop](drag-and-drop.md), or [Persisted State](persisted-state.md) when interaction and row customization requirements are clear.
 9. Use [Tree diagnostics](tree-diagnostics.md) when node keys, DOM IDs, or tree structure need validation.
 
 ## Common combinations
@@ -106,8 +110,10 @@ flowchart TD
 | Bulk action page | Static or Turbo rendering + `selection:` + host-app form action |
 | Bulk edit page | Static or Turbo rendering + row partial form controls + host-app Form Object |
 | Per-row inline edit page | Display row partials + `row_actions_partial` + host-app edit action / Turbo response + editing row partial |
+| Tree-wide action toolbar | Turbo rendering + `toggle_all_path_builder` + `tree_view_toolbar` + host-app placement and authorization |
 | Row action menu | `row_actions_partial` + host-app routes, authorization, and action handlers |
 | Status-heavy tree table | `row_class_builder` + `badge_builder` + host-app status rules |
+| Localized row display | `TreeView::NodePresenter` + LocalizedNames helpers + host-app locale files |
 | Reorderable hierarchy | Static or Turbo rendering + drag/drop hooks + host-app move endpoint |
 
 ## Related docs
@@ -116,6 +122,9 @@ flowchart TD
 - [API overview: adapter mode](api-overview.md#adapter-mode)
 - [API reference](api.md)
 - [Cookbook: Row customization quick guide](cookbook.md#row-customization-quick-guide)
+- [Localized names](localized-names.md)
+- [Toolbar helper](toolbar.md)
+- [Toolbar actions mockup](../mockups/toolbar-actions.html)
 - [Render Scale](render-scale.md)
 - [Lazy Loading](lazy-loading.md)
 - [Children Pagination](children-pagination.md)
