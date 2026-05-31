@@ -123,11 +123,18 @@ Check these points.
 
 If the row shows loading or error state but never settles, inspect the host-app request/response lifecycle rather than the row partial first.
 
+When the host app listens for retry or remote-state events, also confirm the browser-side detail matches the row wiring.
+
+- `tree-view-remote-state:retry` carries `row`, `childrenUrl`, and `nodeKey` in `event.detail`.
+- `childrenUrl` comes from the row's `data-tree-children-url` attribute.
+- `nodeKey` comes from the row's `data-tree-view-state-node-key` attribute.
+- If either value is `null`, inspect the rendered row attributes before changing retry handling.
+
 Read next:
 
 - [Lazy Loading](lazy-loading.md)
 - [Children Pagination](children-pagination.md)
-- [JavaScript event contract](js-events.md)
+- [JavaScript event contract](js-events.md#tree-view-remote-stateretry)
 
 ## Selection payloads are missing or not what the host app expects
 
