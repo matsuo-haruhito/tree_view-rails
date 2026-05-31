@@ -45,6 +45,12 @@ tree_ui = TreeView::UiConfigBuilder.new(
 
 `collapse_all_except_current_path` はhost appとのcontractです。TreeViewはtoolbar actionとstate値を出すだけです。
 
+## machine-readable contract
+
+toolbar action surface は `config/public_api_manifest.yml` の `toolbar_actions` でも管理します。この manifest には supported action names、対応する `toggle_all_path` state、documented data hooks の `data-tree-view-toolbar-action` / `data-tree-view-toolbar-disabled` を載せます。
+
+host app が独自 toolbar markup を組み立てる場合は、raw string を手書きするより `tree_view_toolbar_supported_actions`、`tree_view_toolbar_actions`、`tree_view_toolbar_action_metadata` を使ってください。manifest は compatibility check と integration audit のための source of truth であり、internal constants は引き続き implementation detail です。
+
 ## Visual reference
 
 expand-all、collapse-all、current path を残す toolbar state を静的に見比べたい場合は [toolbar-actions.html](../mockups/toolbar-actions.html) を参照してください。
