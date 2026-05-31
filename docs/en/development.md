@@ -147,6 +147,8 @@ Pushes to `main` also run the broader compatibility and release checks:
 
 - Keep functional changes small.
 - Larger docs-only inventory or split PRs are acceptable.
+- Before opening a pull request, check whether an open pull request already closes the same issue. Look for the same `Closes #NNN` line, linked issue, and overlapping changed files.
+- If a duplicate close-check finds an existing candidate, stop the new PR path and either add review/follow-up/supersede context to the existing PR or ask a maintainer to choose the adoption path.
 - PR CI must pass before merge.
 - Docs-only PRs may short-circuit the representative Rails and JavaScript jobs, but merge still waits for the named checks to stay green.
 - PRs that change workflow definitions should be observed on a fresh head SHA before merge.
