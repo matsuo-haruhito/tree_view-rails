@@ -371,11 +371,17 @@ store.save!(
 | `tree_view_rows(render_state, window: nil)` | TreeView rows を描画する。 |
 | `tree_view_window(render_state, offset:, limit:)` | windowing metadata を返す。 |
 | `tree_node_dom_id(item_or_id, ui: @tree_ui)` | 解決された `UiConfig` を通して node DOM ID を組み立てる。 |
+| `tree_children_container_dom_id(item_or_id, ui: @tree_ui)` | lazy-loading placeholder region と Turbo Stream replacement で使う children container DOM ID を組み立てる。 |
+| `tree_remote_state_placeholder_dom_id(item_or_id, ui: @tree_ui)` | lazy-loaded row 用の remote-state placeholder DOM ID を組み立てる。 |
+| `tree_remote_state_placeholder_attributes(item_or_id, state: nil, ui: @tree_ui)` | remote-state placeholder element 用の documented data 属性を返す。 |
 | `tree_selection_value(item, tree, builder = nil)` | default または custom の selection payload builder から checkbox value 用 JSON を作る。 |
 | `tree_view_breadcrumb(tree, item, ...)` | breadcrumb を描画する。 |
 | `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` | TreeView bundled toolbar の markup を描画する。 |
+| `tree_view_toolbar_supported_actions` | TreeView が validate / describe できる documented toolbar action key を返す。 |
 | `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` | host app が独自 markup を組み立てるための toolbar action hash を返す。 |
 | `tree_view_toolbar_action_metadata(render_state, action, label: nil)` | 1 つの supported toolbar action 用 metadata を返す。 |
+
+remote-state placeholder helpers は [Lazy Loading](lazy-loading.md) の placeholder / Turbo Stream pattern と合わせて使います。toolbar helper family は [Toolbar helper](toolbar.md) の supported action と metadata boundary を参照してください。
 
 public helper の compatibility contract は `config/public_api_manifest.yml` に documented された helper-method set に従います。bundled partial の内部 plumbing 用 helper は、この表から意図的に外しています。
 

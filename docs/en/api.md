@@ -371,11 +371,17 @@ store.save!(
 | `tree_view_rows(render_state, window: nil)` | Renders TreeView rows. |
 | `tree_view_window(render_state, offset:, limit:)` | Returns windowing metadata. |
 | `tree_node_dom_id(item_or_id, ui: @tree_ui)` | Builds a node DOM ID through the resolved `UiConfig`. |
+| `tree_children_container_dom_id(item_or_id, ui: @tree_ui)` | Builds the children container DOM ID used by lazy-loading placeholder regions and Turbo Stream replacements. |
+| `tree_remote_state_placeholder_dom_id(item_or_id, ui: @tree_ui)` | Builds the remote-state placeholder DOM ID for a lazy-loaded row. |
+| `tree_remote_state_placeholder_attributes(item_or_id, state: nil, ui: @tree_ui)` | Returns the documented data attributes for the remote-state placeholder element. |
 | `tree_selection_value(item, tree, builder = nil)` | Builds the JSON checkbox value from the default or custom selection payload builder. |
 | `tree_view_breadcrumb(tree, item, ...)` | Renders breadcrumbs. |
 | `tree_view_toolbar(render_state, actions: ..., labels: ..., class_name: ..., button_class_name: ...)` | Renders TreeView's bundled toolbar markup. |
+| `tree_view_toolbar_supported_actions` | Returns the documented toolbar action keys TreeView can validate and describe. |
 | `tree_view_toolbar_actions(render_state, actions: ..., labels: {})` | Returns toolbar action hashes so the host app can render its own markup. |
 | `tree_view_toolbar_action_metadata(render_state, action, label: nil)` | Returns metadata for one supported toolbar action. |
+
+Use the remote-state placeholder helpers with the lazy-loading placeholder and Turbo Stream patterns in [Lazy Loading](lazy-loading.md). Use the toolbar helper family with the supported action and metadata boundary in [Toolbar helper](toolbar.md).
 
 The public helper compatibility contract follows the documented helper-method set in `config/public_api_manifest.yml`. Internal helper plumbing used by bundled partials is intentionally omitted from this table.
 
