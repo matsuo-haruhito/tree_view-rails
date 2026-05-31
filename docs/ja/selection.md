@@ -137,6 +137,8 @@ tree が通常の HTML form の中にある場合、同じ controller で checke
 - disabled checkbox と不正な JSON payload は既存 event と同じく skip されます。
 - tree が form の外にある場合は、selection event だけを dispatch し、hidden input は生成しません。
 
+1つの form に複数の `tree-view-selection` controller がある場合、TreeView は生成した hidden input に `data-tree-view-selection-source-id` を付けます。これにより、各 controller は自分が生成した hidden input だけを削除・再生成します。controller element に `data-tree-view-selection-source-id` がすでにある場合はその値を使い、なければ connect 時に自動生成します。tree ごとに別々の params として受け取りたい場合は、`data-tree-view-selection-hidden-input-name-value` に別々の名前を指定してください。同じ名前を使うのは、server-side action が1つの配列としてまとめて受け取る設計のときに限ります。
+
 ## 最大選択数
 
 JavaScript controller側で、checked checkboxの最大数を制限できます。
