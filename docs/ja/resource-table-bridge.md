@@ -52,6 +52,18 @@ render_state = TreeView::ResourceTableRenderState.call(
 
 通常 table と tree-table の両方を使う host app では、まずこのページで TreeView が担当する範囲を決め、column state、width、preset、export metadata、preference UI の詳細は table preferences layer 側の docs を確認してください。TreeView には row hierarchy、visible row order、expansion state、rendering hook を任せ、table layer には table 全体の column / preference state を任せると、責務が重複しにくくなります。
 
+### 責務境界
+
+TreeView と table preferences layer を組み合わせる場合は、永続化する state を目的別に分けてください。
+
+| 担当 | 担当するもの | 担当しないもの |
+| --- | --- | --- |
+| TreeView | row hierarchy、visible row order、expansion state、selection state、lazy-loading hook、render hook | column visibility、column order、column width、filter、sort、preset |
+| table preferences layer | column key、visibility、order、width、filter、sort、preset state | node key、row identity、expansion state、selection state |
+| host app | query execution、authorization、preload policy、business action、partial差し替え | gem間で暗黙に共有する hidden state |
+
+node key と row DOM id は TreeView 側の identity として扱います。`data-rails-table-preferences-column-key` は table column 側の identity です。同じ row markup の中に出てきても、互いの代用として使わないでください。
+
 shared hierarchy rows と、より多い visible column / より少ない visible column の比較を host app 側の table logic なしで見たい場合は [resource-table-bridge.html](../mockups/resource-table-bridge.html) を参照してください。
 
 ## 使うべき場面

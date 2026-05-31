@@ -52,6 +52,18 @@ This keeps the responsibilities separate:
 
 For host apps that use both a regular table and a tree-table, start here to decide what TreeView owns, then read the table preferences layer docs for column state, widths, presets, export metadata, and preference UI. Keep TreeView responsible for row hierarchy, visible row order, expansion state, and rendering hooks; keep the table layer responsible for table-wide column and preference state.
 
+### Ownership boundary
+
+When combining TreeView with a table preferences layer, keep the persisted state split by purpose:
+
+| Owner | Owns | Does not own |
+| --- | --- | --- |
+| TreeView | row hierarchy, visible row order, expansion state, selection state, lazy-loading hooks, render hooks | column visibility, column order, column width, filters, sorts, presets |
+| Table preferences layer | column key, visibility, order, width, filter, sort, preset state | node keys, row identity, expansion state, selection state |
+| Host app | query execution, authorization, preload policy, business actions, partial overrides | hidden cross-gem state coupling |
+
+Treat node keys and row DOM ids as TreeView identity. Treat `data-rails-table-preferences-column-key` as table-column identity. They may appear in the same row markup, but they should not be reused for each other.
+
 For a focused visual reference that compares shared hierarchy rows across fuller and narrower visible-column sets without adding host-app table logic, see [resource-table-bridge.html](../mockups/resource-table-bridge.html).
 
 ## When to use it
