@@ -13,6 +13,8 @@
 | `TreeView::UiConfigBuilder` | Rails view contextから `build_turbo`、`build_static`、`build_client_side` で `UiConfig` を組み立てます。 |
 | `TreeView::VisibleRows` | 現在のrender stateで表示対象となる行を一次元化します。 |
 | `TreeView::RenderWindow` | visible rowsを `offset` / `limit` で切り出し、ページング用metadataを提供します。 |
+| `TreeView::PathTree` | records-mode path を wrapper にして、match を通常の root-to-match hierarchy 内で描画します。 |
+| `TreeView::ReverseTree` | records-mode path を wrapper にして、matched record を root とし、ancestor をその下に描画します。 |
 | `TreeView::PersistedState` | 保存された開閉状態を表します。 |
 | `TreeView::StateStore` | host app側のmodelを通じて開閉状態を読み書きします。 |
 
@@ -217,7 +219,7 @@ records modeでは、親方向のpathを確認するhelperを使えます。
 | `path_for(item)` | rootから対象itemまでのpathを返します。 |
 | `paths_for(items)` | 複数itemのpathを返します。 |
 | `path_tree_for(items)` | rootからmatched itemへ向かう `PathTree` を作ります。 |
-| `reverse_tree_for(items)` | matched itemからroot方向へ向かう `ReverseTree` を作ります。 |
+| `reverse_tree_for(items)` | matched itemからroot方向へ向かう `ReverseTree` を作ります。使う場面、records mode 制約、shared ancestor の扱いは [ReverseTree](reverse-tree.md) を参照してください。 |
 
 ## 公開helper入口
 
@@ -252,5 +254,6 @@ exportされるcontroller classは安定入口として扱います。個別cont
 - Error hierarchy: [errors.md](errors.md)
 - Public API互換性方針: [public-api.md](public-api.md)
 - Resource table bridge: [resource-table-bridge.md](resource-table-bridge.md)
+- ReverseTree: [reverse-tree.md](reverse-tree.md)
 - 最小利用例: [minimal-usage.md](minimal-usage.md)
 - 使い方: [usage.md](usage.md)

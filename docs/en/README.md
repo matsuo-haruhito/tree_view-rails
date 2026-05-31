@@ -37,6 +37,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [API overview](api-overview.md) | Overview of the main public APIs, including records, resolver, and GraphAdapter adapter modes |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
 | [PathTreeBuilder](path-tree-builder.md) | Build generated folder nodes and record nodes from path-like record values |
+| [ReverseTree](reverse-tree.md) | Render child-to-parent paths when matched records should be roots and ancestors should appear below them |
 | [Error hierarchy](errors.md) | Public TreeView error classes and rescue guidance |
 | [JavaScript event contract](js-events.md) | Public Stimulus event names, detail payloads, and compatibility policy |
 | [Migration guide](migration.md) | Upgrade-oriented compatibility, deprecation, rename, and release-note guidance |
@@ -98,6 +99,8 @@ For Turbo Frame targeting from TreeView toggle links, see [Turbo Frame option](t
 For localized model, attribute, and node type labels, see [Localized names](localized-names.md).
 
 For generated folder trees from path-like records, see [PathTreeBuilder](path-tree-builder.md).
+
+For child-to-parent paths where matched records should become the visible roots, see [ReverseTree](reverse-tree.md).
 
 When a separate table layer owns columns or saved table state, see [Resource table bridge](resource-table-bridge.md).
 
