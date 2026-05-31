@@ -48,11 +48,19 @@ bin/rails generate tree_view:state:install User
 
 この場合も、migration、model、concern は通常どおり生成されます。`app/models/user.rb` が存在し、まだ `TreeViewStateOwner` を include していなければ、generator が include 行を追加します。
 
-owner model file が存在しない場合、model への注入は skip されます。その場合は concern を手動で include してください。
+namespace 付き owner では constant 名を渡します。generator は慣例的な file path を解決し、`class Admin::User < ApplicationRecord` 形式と、`module Admin; class User < ApplicationRecord` のような module-wrapped 形式の代表例を更新できます。
+
+```bash
+bin/rails generate tree_view:state:install Admin::User
+```
+
+`app/models/admin/user.rb` が存在し、これらの代表的な class 定義がある場合、generator は owner class の中に include 行を追加します。
+
+owner model file が存在しない場合、または class 定義が project 固有で generator が安全に見つけられない場合、model への注入は skip されます。その場合は concern を手動で include してください。
 
 ### owner への注入が skip された場合
 
-owner model file が存在しないと表示された場合は、まず保存された tree state を所有する model を確認してください。そのうえで、生成済みの `app/models/concerns/tree_view_state_owner.rb` がある状態で、その model に `include TreeViewStateOwner` を追加します。
+owner model file が存在しない、または class 定義が見つからないと表示された場合は、まず保存された tree state を所有する model を確認してください。そのうえで、生成済みの `app/models/concerns/tree_view_state_owner.rb` がある状態で、その model に `include TreeViewStateOwner` を追加します。
 
 通常の owner model では、手動で追加する行は generator が追加するものと同じです。
 
@@ -74,7 +82,7 @@ module Admin
 end
 ```
 
-owner model を後から作る場合、namespace 配下に置く場合、または project 固有の file layout により generator が更新しなかった場合は、手動 include が自然な follow-up です。このケースでは生成済み migration や `TreeViewState` model を変更する必要はありません。host app 側では、`tree_view_state_for`、`save_tree_view_state!`、または `TreeView::StateStore` へ owner を渡す前に、その owner class が concern を include していれば十分です。
+owner model を後から作る場合、または project 固有の file layout / class definition により generator が更新しなかった場合は、手動 include が自然な follow-up です。このケースでは生成済み migration や `TreeViewState` model を変更する必要はありません。host app 側では、`tree_view_state_for`、`save_tree_view_state!`、または `TreeView::StateStore` へ owner を渡す前に、その owner class が concern を include していれば十分です。
 
 ## owner model
 
