@@ -27,7 +27,12 @@ ja:
       document: "ドキュメント"
 ```
 
-ActiveModel naming が使えない場合は、class名を素朴に humanize します。
+ActiveModel naming が使えない場合は、class名を素朴に humanize します。translation が無い場合や plain Ruby object に明示的な表示名を出したい場合は `default:` を渡せます。
+
+```ruby
+TreeView.model_name_for(Document, default: "ファイル")
+TreeView.model_name_for(ExternalItem, default: "外部項目")
+```
 
 ## Attribute names
 
@@ -52,7 +57,11 @@ ja:
         published_at: "公開日時"
 ```
 
-ActiveModel attribute naming が使えない場合は、attribute名を素朴に humanize します。
+ActiveModel attribute naming が使えない場合は、attribute名を素朴に humanize します。translation が無い可能性がある field に安定した label を出したい場合は `default:` を渡せます。
+
+```ruby
+TreeView.attribute_name_for(Document, :status, default: "状態")
+```
 
 ## Node type names
 
@@ -72,7 +81,11 @@ ja:
       document: "ドキュメント"
 ```
 
-translation が見つからない場合は、`node_type` の値を humanize します。
+translation が見つからない場合は、`node_type` の値を humanize します。caller 側で最適な fallback label を持っている場合や `node_type` が空の node を扱う場合は `default:` を渡せます。
+
+```ruby
+TreeView.type_name_for(node, default: "ワークスペース項目")
+```
 
 ## Toolbar action labels
 
