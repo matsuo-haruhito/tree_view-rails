@@ -178,6 +178,7 @@ window.has_next?
 | `toggle_scope:` | Depth and leaf-distance limits passed to toggle path builders. |
 | `selection:` | Checkbox selection behavior and payload options. |
 | `lazy_loading:` | Remote children state and scope options. |
+| `row_status:` | Row disabled, readonly, and disabled-reason builder options. |
 
 Flat keyword options take precedence when both forms are provided.
 
