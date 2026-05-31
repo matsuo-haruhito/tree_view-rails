@@ -442,3 +442,33 @@ Look for these signals in the Rails log:
 - Repeated `Document Load` or `DocumentVersion Load` lines while rows render.
 - Many same-shaped queries that are not marked `CACHE`.
 - Derived helper calls from the row partial that repeatedly touch associations.
+
+Host-app mitigations include precomputing children as arrays, caching derived values used by the row partial, and temporarily reducing noisy development view logs while investigating database queries. Recursive partial logs are expected; repeated uncached queries are the problem.
+
+## Add row state classes
+
+```ruby
+render_state = TreeView::RenderState.new(
+  tree: tree,
+  root_items: tree.root_items,
+  row_partial: "documents/tree_columns",
+  ui_config: tree_ui,
+  row_class_builder: ->(document) {
+    ["document-row", ("is-archived" if document.archived?)]
+  }
+)
+```
+
+See [Row status](row-status.md) when the whole row should express disabled or readonly state.
+
+## Avoid node_key collisions
+
+For heterogeneous nodes in one tree, include the class name or another namespace.
+
+```ruby
+node_key_resolver = ->(node) {
+  TreeView.node_key(node.class.name, node.id)
+}
+```
+
+See [Node keys](node-keys.md) for details.
