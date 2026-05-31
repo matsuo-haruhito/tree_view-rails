@@ -97,6 +97,18 @@
   outline-offset: -2px;
 }
 
+.drop-position-row--disabled {
+  background: #f8fafc;
+  color: #64748b;
+  outline: 2px dashed #cbd5e1;
+  outline-offset: -2px;
+}
+
+.drop-position-row--disabled .tree-toggle,
+.drop-position-row--invalid .tree-toggle {
+  opacity: 0.78;
+}
+
 .drop-position-note-list {
   margin: 0;
   padding-left: 1.2rem;
@@ -110,6 +122,31 @@
 
 .drop-position-boundary p {
   margin: 0;
+}
+
+.drop-position-boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.drop-position-boundary-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #dde4ec;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.drop-position-boundary-card h3,
+.drop-position-boundary-card p {
+  margin: 0;
+}
+
+.drop-position-boundary-card p {
+  color: #52606d;
+  font-size: 0.92rem;
 }
 
 @media (max-width: 680px) {
@@ -221,24 +258,58 @@
     </section>
 
     <section class="mock-section" aria-labelledby="boundary-heading">
-      <h2 id="boundary-heading">Disabled and responsibility boundary</h2>
+      <h2 id="boundary-heading">Transfer boundary states</h2>
       <div class="drop-position-boundary">
-        <p>TreeView can show a coarse target cue, but it does not decide whether a move is allowed for the host application's business rules.</p>
+        <p>These static states show how transfer guards and invalid events can be reviewed without making TreeView responsible for final move policy.</p>
         <ul class="drop-position-note-list">
-          <li>Use <code>data-tree-drop-position</code> for visual comparison of before, inside, and after positions.</li>
-          <li>Use disabled or invalid styling only as representative host-app policy output in this static reference.</li>
+          <li>Use <code>data-tree-transfer-disabled="true"</code> as a representative disabled target cue.</li>
+          <li>Use invalid styling to show the event boundary for malformed row payloads or transferred values.</li>
           <li>Keep final permission wording, persistence, audit trails, and reorder rules outside this mockup.</li>
         </ul>
       </div>
-      <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
-        <thead><tr><th scope="col">tree</th><th scope="col">policy cue</th></tr></thead>
-        <tbody>
-          <tr class="tree-row drop-position-row drop-position-row--invalid" data-tree-node-key="folder:archive" data-tree-drop-position="inside" data-tree-drop-disabled-reason="Readonly target" aria-level="1" aria-disabled="true">
-            <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">blocked</span><span class="mock-node-title">Archived folder</span></span></span></td>
-            <td><span class="mock-status mock-status--error">host app rejects move</span></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="drop-position-boundary-grid">
+        <article class="drop-position-boundary-card" aria-labelledby="transfer-disabled-heading">
+          <h3 id="transfer-disabled-heading">Transfer disabled target</h3>
+          <p>The row exposes a disabled transfer guard; authorization and exact explanation stay in the host app.</p>
+          <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+            <thead><tr><th scope="col">tree</th><th scope="col">boundary cue</th></tr></thead>
+            <tbody>
+              <tr class="tree-row drop-position-row drop-position-row--disabled" data-tree-node-key="folder:archive" data-tree-transfer-disabled="true" aria-level="1" aria-disabled="true">
+                <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">blocked</span><span class="mock-node-title">Archived folder</span></span></span></td>
+                <td><span class="mock-status">transfer disabled</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="drop-position-boundary-card" aria-labelledby="invalid-row-heading">
+          <h3 id="invalid-row-heading">Invalid row payload</h3>
+          <p>A malformed source row can be surfaced as an invalid transfer event without changing drop-position cues.</p>
+          <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+            <thead><tr><th scope="col">tree</th><th scope="col">boundary cue</th></tr></thead>
+            <tbody>
+              <tr class="tree-row drop-position-row drop-position-row--invalid" draggable="true" data-tree-node-key="task:missing-payload" aria-level="1">
+                <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">drag</span><span class="mock-node-title">Missing payload row</span></span></span></td>
+                <td><span class="mock-status mock-status--error">invalid row payload</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="drop-position-boundary-card" aria-labelledby="invalid-transfer-heading">
+          <h3 id="invalid-transfer-heading">Invalid transferred value</h3>
+          <p>When the transferred value cannot be read, show the failed boundary separately from host-app move failure.</p>
+          <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+            <thead><tr><th scope="col">tree</th><th scope="col">boundary cue</th></tr></thead>
+            <tbody>
+              <tr class="tree-row drop-position-row drop-position-row--invalid" data-tree-node-key="folder:planning" data-tree-drop-position="inside" aria-level="1">
+                <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">target</span><span class="mock-node-title">Planning folder</span></span></span></td>
+                <td><span class="mock-status mock-status--error">invalid transfer data</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
     </section>
   </main>
 </body>
