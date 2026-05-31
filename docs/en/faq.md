@@ -73,6 +73,18 @@ See also:
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Host App Extension Points](host-app-extension-points.md)
 
+## Why does persisted state save as soon as the page loads?
+
+The `tree-view-state:state-changed` event is dispatched on initial connect as well as after `refresh` and expand/collapse updates. The first event is a snapshot of the current expanded state, not proof that the user changed the tree.
+
+TreeView only publishes the event. If your host app should save only user-initiated changes, debounce the listener, ignore the first event, or gate saves behind a dirty-state policy in the host app.
+
+See also:
+
+- [Persisted State](persisted-state.md#browser-event-wiring)
+- [JavaScript event contract](js-events.md#tree-view-statestate-changed)
+- [Troubleshooting](troubleshooting.md#persisted-state-does-not-save-or-restore-as-expected)
+
 ## Does TreeView choose the SQL or cursor strategy for children pagination?
 
 No. TreeView does not choose the pagination algorithm, SQL shape, cursor design, ordering, or next-page checks for large child sets.
