@@ -67,6 +67,9 @@ Pull request CI checks:
 - Ruby specs through `bundle exec rspec`
 - Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
 - JavaScript tests through `npm install`, Playwright browser setup, and `npm run test:js`
+- Gem package verification when the PR touches package-sensitive paths
+
+Package-sensitive PR paths include `tree_view.gemspec`, `script/check_gem_package_contents.rb`, `.github/workflows/ci.yml`, `lib/**`, Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`, plus `config/importmap.tree_view.rb` and `config/locales/**`. Those PRs run `gem build tree_view.gemspec`, `ruby script/check_gem_package_contents.rb tree_view-*.gem`, `gem install tree_view-*.gem`, and `ruby -e "require 'tree_view'"`. Prose-only docs PRs keep the lighter docs-only behavior unless they also touch one of those package-sensitive paths.
 
 Main-push CI checks:
 
@@ -75,7 +78,7 @@ Main-push CI checks:
 - JavaScript tests through `npm install` and `npm run test:js` until the lockfile is refreshed in sync with `package.json`
 - Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, and importmap file contents
 
-PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes compatibility matrices, JavaScript coverage, and package verification.
+PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes full compatibility matrices, JavaScript coverage, and unconditional package verification.
 
 ## Documentation
 

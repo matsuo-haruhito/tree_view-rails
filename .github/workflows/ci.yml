@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       docs_only: ${{ steps.detect.outputs.docs_only }}
+      package_sensitive: ${{ steps.detect.outputs.package_sensitive }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -20,6 +21,7 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" != "pull_request" ]; then
             echo "docs_only=false" >> "$GITHUB_OUTPUT"
+            echo "package_sensitive=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -32,6 +34,7 @@ jobs:
           fi
 
           docs_only=true
+          package_sensitive=false
           while IFS= read -r file; do
             [ -z "$file" ] && continue
             # Root maintainer prose docs linked from the docs indexes are still docs-only changes.
@@ -39,7 +42,12 @@ jobs:
               README.md|docs/*|Product\ Profile.md|CHANGELOG.md|AGENTS.md) ;;
               *)
                 docs_only=false
-                break
+                ;;
+            esac
+
+            case "$file" in
+              tree_view.gemspec|script/check_gem_package_contents.rb|.github/workflows/ci.yml|config/importmap.tree_view.rb|lib/*|lib/**|app/helpers/*|app/helpers/**|app/views/*|app/views/**|app/assets/*|app/assets/**|app/javascript/*|app/javascript/**|config/locales/*|config/locales/**)
+                package_sensitive=true
                 ;;
             esac
           done <<EOF
@@ -47,6 +55,7 @@ jobs:
           EOF
 
           echo "docs_only=$docs_only" >> "$GITHUB_OUTPUT"
+          echo "package_sensitive=$package_sensitive" >> "$GITHUB_OUTPUT"
 
   lint:
     runs-on: ubuntu-latest
@@ -169,7 +178,8 @@ jobs:
         run: npm run test:js
 
   gem_package:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'pull_request' && needs.changes.outputs.package_sensitive == 'true'
+    needs: changes
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
