@@ -67,9 +67,19 @@ RSpec.describe TreeView::LocalizedNames do
     expect(TreeView.model_name_for(LocalizedNamesTestDocument.new)).to eq("Document")
   end
 
+  it "uses default model names when ActiveModel translations are missing" do
+    expect(described_class.model_name_for(LocalizedNamesTestDocument, default: "Fallback document")).to eq("Fallback document")
+    expect(described_class.model_name_for(LocalizedNamesPlainDocument, default: "Plain fallback")).to eq("Plain fallback")
+  end
+
   it "resolves attribute names through ActiveModel-compatible naming and I18n" do
     expect(described_class.attribute_name_for(LocalizedNamesTestDocument, :title)).to eq("Title")
     expect(TreeView.attribute_name_for(LocalizedNamesTestDocument.new, :title)).to eq("Title")
+  end
+
+  it "uses default attribute names when translations are missing" do
+    expect(described_class.attribute_name_for(LocalizedNamesTestDocument, :status, default: "Lifecycle status")).to eq("Lifecycle status")
+    expect(described_class.attribute_name_for(LocalizedNamesPlainDocument, :published_at, default: "Publication date")).to eq("Publication date")
   end
 
   it "resolves node type names through tree_view.node_types translations" do
@@ -77,6 +87,14 @@ RSpec.describe TreeView::LocalizedNames do
 
     expect(described_class.type_name_for(node)).to eq("Folder")
     expect(TreeView.type_name_for(node)).to eq("Folder")
+  end
+
+  it "uses default node type names when node type translations are missing" do
+    generated_node = LocalizedNamesTypedNode.new(node_type: :generated_folder)
+    blank_node = LocalizedNamesTypedNode.new(node_type: "")
+
+    expect(described_class.type_name_for(generated_node, default: "Generated folder fallback")).to eq("Generated folder fallback")
+    expect(described_class.type_name_for(blank_node, default: "Untyped node")).to eq("Untyped node")
   end
 
   it "falls back to humanized class and attribute names" do
