@@ -38,6 +38,17 @@ See also:
 - [Render Scale](render-scale.md)
 - [Host App Extension Points](host-app-extension-points.md)
 
+## Does TreeView provide full keyboard navigation or `treegrid` semantics?
+
+No. TreeView provides table-based row markup with expansion controls, selection state, row-level ARIA state, and lightweight focus styling for toggle actions. It does not currently provide a full WAI-ARIA treegrid role model, roving tabindex, page-level focus order, or shortcut behavior.
+
+Host apps own keyboard flow, captions, surrounding controls, shortcuts, and any full treegrid interaction model they choose to add.
+
+See also:
+
+- [Accessibility semantics](accessibility-semantics.md)
+- [Host App Extension Points](host-app-extension-points.md)
+
 ## Can I use TreeView as a CRUD file manager out of the box?
 
 Not by itself. TreeView is a rendering primitive for tree and tree-table interfaces, not a complete file-manager application.
