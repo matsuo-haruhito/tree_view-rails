@@ -19,10 +19,19 @@ export class TreeViewRemoteStateController extends Controller {
 
     row.dataset.remoteState = "loading"
     this.dispatch("change", {
-      detail: this.remoteStateDetail(row, "loading")
+      detail: {
+        row,
+        state: "loading",
+        childrenUrl: row.dataset.treeChildrenUrl || null,
+        nodeKey: row.dataset.treeViewStateNodeKey || null
+      }
     })
     this.dispatch("retry", {
-      detail: this.remoteStateDetail(row)
+      detail: {
+        row,
+        childrenUrl: row.dataset.treeChildrenUrl || null,
+        nodeKey: row.dataset.treeViewStateNodeKey || null
+      }
     })
   }
 
@@ -34,20 +43,13 @@ export class TreeViewRemoteStateController extends Controller {
     if (options.loaded) row.dataset.treeLoaded = "true"
 
     this.dispatch("change", {
-      detail: this.remoteStateDetail(row, state)
+      detail: {
+        row,
+        state,
+        childrenUrl: row.dataset.treeChildrenUrl || null,
+        nodeKey: row.dataset.treeViewStateNodeKey || null
+      }
     })
-  }
-
-  remoteStateDetail(row, state = null) {
-    const detail = {
-      row,
-      childrenUrl: row.dataset.treeChildrenUrl || null,
-      nodeKey: row.dataset.treeViewStateNodeKey || null
-    }
-
-    if (state) detail.state = state
-
-    return detail
   }
 
   rowFromEvent(event) {
