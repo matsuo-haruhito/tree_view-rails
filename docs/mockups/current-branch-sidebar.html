@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Current branch sidebar TreeView mock</title>
+<link rel="stylesheet" href="default-tree.css">
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Current branch sidebar mock</h1>
+      <p>
+        Static HTML for reviewing an initial sidebar state where the current row and its ancestors are expanded,
+        while sibling branches stay collapsed. The mock keeps route policy, Turbo navigation, and product-specific sidebar behavior outside the gem.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="branch-sidebar-heading">
+      <h2 id="branch-sidebar-heading">Current branch only expanded</h2>
+      <p class="mock-narrow-note">
+        The current page sits under Workspace / Docs / API. Those ancestors are open so the path is scannable,
+        while adjacent Products, Guides, and Examples branches remain collapsed.
+      </p>
+      <div class="mock-narrow-frame">
+        <p class="mock-narrow-caption">Representative frame width: 22rem</p>
+        <table class="tree-view-table tree-view-table--narrow" data-controller="tree-view-state" data-tree-view-state-keyboard-value="true">
+          <thead>
+            <tr>
+              <th scope="col">tree</th>
+              <th scope="col">navigation item</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="sidebar_workspace" class="tree-row is-expanded" data-tree-node-key="workspace" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_workspace_button">
+                <span class="tree-toggle" aria-label="Workspace ancestor expanded">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a><span class="tree-toggle__level">root</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Workspace</span><span class="tree-node-badge tree-node-badge--info">ancestor</span></div>
+                  <div class="mock-node-secondary">Top-level section kept open for the current path.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_products" class="tree-row is-collapsed" data-tree-node-key="products" data-tree-parent-key="workspace" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_products_button">
+                <span class="tree-toggle" aria-label="Collapsed sibling branch">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a><span class="tree-toggle__level">child</span><span class="tree-toggle__hidden-count" title="Hidden descendants">6</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Products</span><span class="mock-status mock-status--pending">sibling</span></div>
+                  <div class="mock-node-secondary">Collapsed because it is outside the current branch.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_docs" class="tree-row is-expanded" data-tree-node-key="docs" data-tree-parent-key="workspace" data-tree-depth="1" data-tree-expanded="true" aria-level="2" aria-expanded="true" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_docs_button">
+                <span class="tree-toggle" aria-label="Docs ancestor expanded">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a><span class="tree-toggle__level">child</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Docs</span><span class="tree-node-badge tree-node-badge--info">ancestor</span></div>
+                  <div class="mock-node-secondary">Open because it contains the current page.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_guides" class="tree-row is-collapsed" data-tree-node-key="guides" data-tree-parent-key="docs" data-tree-depth="2" data-tree-expanded="false" aria-level="3" aria-expanded="false" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_guides_button">
+                <span class="tree-toggle" aria-label="Collapsed sibling under current ancestor">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a><span class="tree-toggle__level">branch</span><span class="tree-toggle__hidden-count" title="Hidden descendants">4</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Guides</span><span class="mock-status mock-status--pending">sibling</span></div>
+                  <div class="mock-node-secondary">Sibling branch stays collapsed.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_api" class="tree-row is-expanded" data-tree-node-key="api" data-tree-parent-key="docs" data-tree-depth="2" data-tree-expanded="true" aria-level="3" aria-expanded="true" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_api_button">
+                <span class="tree-toggle" aria-label="API ancestor expanded">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a><span class="tree-toggle__level">branch</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">API</span><span class="tree-node-badge tree-node-badge--info">ancestor</span></div>
+                  <div class="mock-node-secondary">Last expanded ancestor before the current row.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_controller_helpers" class="tree-row is-selected is-leaf" data-tree-node-key="controller-helpers" data-tree-parent-key="api" data-tree-depth="3" aria-level="4" aria-selected="true" aria-current="page">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_controller_helpers_button">
+                <span class="tree-toggle" aria-label="Current leaf row">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                  <span class="tree-toggle__control"><span class="tree-toggle__level">leaf</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Controller helpers</span><span class="mock-status mock-status--active">current</span></div>
+                  <div class="mock-node-secondary">Rendered with <code>aria-current="page"</code> and selected row color.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_examples" class="tree-row is-collapsed" data-tree-node-key="examples" data-tree-parent-key="api" data-tree-depth="3" data-tree-expanded="false" aria-level="4" aria-expanded="false" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_examples_button">
+                <span class="tree-toggle" aria-label="Collapsed sibling near current row">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a><span class="tree-toggle__level">branch</span><span class="tree-toggle__hidden-count" title="Hidden descendants">3</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Examples</span><span class="mock-status mock-status--pending">sibling</span></div>
+                  <div class="mock-node-secondary">Nearby sibling branch remains collapsed.</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="branch-rules-heading">
+      <h2 id="branch-rules-heading">Review cues</h2>
+      <ul>
+        <li>Expanded rows should communicate the current path, not a full sidebar product policy.</li>
+        <li>Collapsed sibling branches should keep toggle, depth, and hidden-count cues visible without exposing their children.</li>
+        <li>Current-row copy, routes, permissions, and final sidebar behavior remain host-app responsibilities.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
