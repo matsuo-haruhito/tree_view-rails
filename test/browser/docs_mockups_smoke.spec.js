@@ -94,7 +94,7 @@ const focusedMockupSmokeTargets = [
   },
   {
     file: "breadcrumb-paths.html",
-    sample: ".mock-breadcrumb-paths",
+    sample: ".mock-breadcrumb-path",
     minimumCount: 2
   },
   {
@@ -114,7 +114,7 @@ const focusedMockupSmokeTargets = [
   },
   {
     file: "toolbar-actions.html",
-    sample: ".mock-toolbar-row",
+    sample: ".mock-toolbar-frame",
     minimumCount: 3
   },
   {
