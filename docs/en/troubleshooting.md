@@ -27,6 +27,24 @@ Read next:
 - [Lazy Loading](lazy-loading.md)
 - [Installation](installation.md)
 
+## Toolbar actions render as disabled buttons
+
+Toolbar actions become disabled buttons when TreeView cannot build a path for that action. This is usually a host-app routing or state contract issue, not a toolbar styling issue.
+
+Check these points.
+
+- Confirm the render state was built with a `UiConfig` that responds to `toggle_all_path`.
+- In Turbo mode, pass `toggle_all_path_builder:` to `build_turbo` so `UiConfig#toggle_all_path(state:)` can return a path for `:expanded`, `:collapsed`, and any optional `:current_path` action.
+- If a single action is disabled, confirm the host app builder returns a non-`nil` path for that action's state value.
+- For `collapse_all_except_current_path`, confirm the host app has a clear `:current_path` policy and knows which branch should remain open.
+- Keep route, authorization, Turbo Stream response, and expanded-key persistence checks in the host app; TreeView only emits the toolbar action and target state.
+
+Read next:
+
+- [Toolbar helper](toolbar.md)
+- [Turbo Frame option](turbo-frame.md)
+- [Usage](usage.md)
+
 ## Row partial output looks broken or table cells do not line up
 
 TreeView owns the row wrapper and common tree UI cells. The host app owns the contents of `row_partial`, action cells, and the surrounding table layout.
