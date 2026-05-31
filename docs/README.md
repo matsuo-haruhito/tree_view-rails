@@ -20,6 +20,8 @@
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
 - [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure and interaction states. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
+- [English demo application boundary](en/demo-application-boundary.md): decide when to use static mockups versus a real Rails demo app, without adding private or unavailable demo links.
+- [日本語Demo application boundary](ja/demo-application-boundary.md): static mockup と real Rails demo app の役割分担、未公開 demo link を増やさない方針。
 - [English Turbo Frame option](en/turbo-frame.md): target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript.
 - [日本語Turbo Frame オプション](ja/turbo-frame.md): TreeView の Turbo toggle link を host app の Turbo Frame に向ける設定。
 - [English Persisted State](en/persisted-state.md): save and restore TreeView expansion state through host-app-owned storage.
@@ -37,6 +39,7 @@
 - [Public API](en/public-api.md) / [公開 API](ja/public-api.md): compatibility contract and the surfaces host apps may use directly.
 - [Migration guide](en/migration.md) / [移行ガイド](ja/migration.md): upgrade expectations, deprecations, and release-note reading order.
 - [Design policy](en/design-policy.md) / [設計思想と責務範囲](ja/design-policy.md): repository scope, responsibility boundaries, and non-goals.
+- [Demo application boundary](en/demo-application-boundary.md) / [Demo application boundary](ja/demo-application-boundary.md): handoff policy between static gem mockups and a future public Rails demo application.
 - [Development](en/development.md) / [開発・保守方針](ja/development.md): CI, local checks, documentation update workflow, and maintenance habits.
 - [Code quality](en/code-quality.md) / [コード品質](ja/code-quality.md): lint, tests, error message quality, and documentation quality policy.
 - [Release checklist](en/release.md) / [リリースチェックリスト](ja/release.md): release workflow, CI and package verification, and changelog expectations.
