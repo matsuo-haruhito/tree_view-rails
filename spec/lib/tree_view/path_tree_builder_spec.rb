@@ -83,9 +83,45 @@ RSpec.describe TreeView::PathTreeBuilder do
     expect(builder.children_for(builder.root_items.first).map(&:label)).to eq(["Nested document"])
   end
 
+  it "uses custom separators and ignores blank path segments" do
+    document = PathTreeBuilderDocument.new(
+      id: 1,
+      source_relative_path: "docs :: guides ::  :: intro.md",
+      title: "Intro"
+    )
+
+    builder = described_class.new(
+      records: [document],
+      path_resolver: ->(record) { record.source_relative_path },
+      separator: "::"
+    )
+
+    docs = builder.nodes.find { |node| node.key == "folder:docs" }
+    guides = builder.nodes.find { |node| node.key == "folder:docs::guides" }
+    intro = builder.nodes.find { |node| node.key == "record:1" }
+
+    expect(docs.label).to eq("docs")
+    expect(docs.parent_key).to be_nil
+    expect(guides.label).to eq("guides")
+    expect(guides.parent_key).to eq("folder:docs")
+    expect(intro.label).to eq("intro.md")
+    expect(intro.path).to eq("docs::guides::intro.md")
+    expect(intro.parent_key).to eq("folder:docs::guides")
+  end
+
   it "raises a configuration error for invalid resolvers" do
     expect do
       described_class.new(records: [], path_resolver: :source_relative_path)
     end.to raise_error(TreeView::ConfigurationError, /path_resolver must respond to call/)
+  end
+
+  it "raises a configuration error for unsupported sort keys" do
+    expect do
+      described_class.new(
+        records: [],
+        path_resolver: ->(record) { record.source_relative_path },
+        sort: {folders_last: true}
+      )
+    end.to raise_error(TreeView::ConfigurationError, /sort contains unknown keys: folders_last/)
   end
 end
