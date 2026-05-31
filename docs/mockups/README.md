@@ -60,7 +60,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 
 ## Automated smoke coverage
 
-- `npm run test:browser` opens representative mockup pages in Playwright and checks the review gallery, key local links, main headings, and sample regions.
+- `npm run test:browser` opens every HTML mockup listed in the Files table and checks the review gallery, local links, main headings, back-to-gallery links, representative sample regions, and the existing lazy-loading viewport overflow smoke.
 - The smoke coverage is intentionally narrow. It catches broken HTML, blank pages, missing review links, and missing representative regions without adding screenshot baselines or visual diff review.
 
 ## Copy and language policy
