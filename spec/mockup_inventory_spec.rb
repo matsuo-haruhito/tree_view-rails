@@ -35,12 +35,8 @@ RSpec.describe "mockup inventory" do
       .sort
   end
 
-  def audit_inventory
+  def audit_inventory_policy
     File.read(audit_path)
-      .scan(/`docs\/mockups\/([A-Za-z0-9._-]+\.(?:html|css|md))`/)
-      .flatten
-      .uniq
-      .sort
   end
 
   it "keeps the mockup README inventory aligned with the actual asset set" do
@@ -51,7 +47,13 @@ RSpec.describe "mockup inventory" do
     expect(review_gallery_inventory).to eq(actual_gallery_pages)
   end
 
-  it "keeps the documentation maintenance checklist aligned with the actual mockup assets" do
-    expect(audit_inventory).to eq(actual_mockup_assets)
+  it "keeps the documentation maintenance checklist pointed at the mockup README as the inventory source" do
+    expect(audit_inventory_policy).to include(
+      "`docs/mockups/README.md` is the source of truth for the current static mockup file inventory",
+      "Its Files table is also the source read by the browser smoke target list",
+      "Top-level `docs/mockups/*.html` files listed in the mockup README",
+      "Focused subpage assets linked from the mockup README",
+      "Update this technical-assets section only when the source-of-truth rule or asset-group responsibility changes"
+    )
   end
 end
