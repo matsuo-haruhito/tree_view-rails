@@ -19,6 +19,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [toggle-icon-states.html](toggle-icon-states.html) | Focused comparison for expanded, collapsed, leaf, loading, and depth/type-based toggle icon states without choosing a host-app icon library. |
 | [interaction-states.html](interaction-states.html) | Lazy-loading, loading, error/retry, next-page, and drag/drop visual states. |
 | [keyboard-focus-states.html](keyboard-focus-states.html) | Focused keyboard reference showing static focus-visible samples for toggle links, native controls, toolbar actions, and row actions without promising a full keyboard model. |
+| [high-contrast-state-cues/index.html](high-contrast-state-cues/index.html) | Focused high-contrast reference for current, selected, focus-visible, error/retry, and drop-target cues that remain distinguishable beyond color alone. |
 | [lazy-loading-handoff.html](lazy-loading-handoff.html) | Focused lazy-loading reference showing children container ownership, remote-state placeholder handoff, and error/retry slot boundaries. |
 | [drop-positions.html](drop-positions.html) | Focused comparison for before, inside, and after drop-position cues plus transfer disabled / invalid payload boundary states. |
 | [persisted-state-boundary.html](persisted-state-boundary.html) | Focused persisted-state reference showing before, changed, restored, save-failed, and retry cues while keeping storage and retry policy host-app owned. |
