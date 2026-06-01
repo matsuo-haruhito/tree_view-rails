@@ -3,14 +3,13 @@
 require "pathname"
 
 RSpec.describe "docs i18n page pairing" do
-  DOCS_LOCALES = %w[en ja].freeze
-  INTENTIONALLY_ONE_SIDED_BILINGUAL_DOCS = [].freeze
-
+  let(:docs_locales) { %w[en ja] }
+  let(:intentionally_one_sided_bilingual_docs) { [] }
   let(:docs_root) { Pathname.new(__dir__).parent.join("docs") }
 
   it "keeps user-facing English and Japanese docs pages paired" do
     aggregate_failures do
-      DOCS_LOCALES.permutation(2) do |source_locale, target_locale|
+      docs_locales.permutation(2) do |source_locale, target_locale|
         missing_paths = missing_paths(source_locale:, target_locale:)
 
         expect(missing_paths).to be_empty, <<~MESSAGE
@@ -22,7 +21,7 @@ RSpec.describe "docs i18n page pairing" do
   end
 
   def page_names_for(locale)
-    docs_root.join(locale).glob("*.md").map { |path| path.basename.to_s }.sort - INTENTIONALLY_ONE_SIDED_BILINGUAL_DOCS
+    docs_root.join(locale).glob("*.md").map { |path| path.basename.to_s }.sort - intentionally_one_sided_bilingual_docs
   end
 
   def missing_paths(source_locale:, target_locale:)
