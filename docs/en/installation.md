@@ -99,12 +99,16 @@ The gem package should include the files needed by Rails host apps:
 - `app/javascript/tree_view/**/*`
 - `app/views/tree_view/**/*`
 - `config/importmap.tree_view.rb`
+- `config/locales/**/*`
+- `config/public_api_manifest.yml`
 - `lib/**/*`
 - `README.md`
 - `CHANGELOG.md`
 - `docs/**/*`
 
-When installation behavior changes, keep this list aligned with the packaged file list in `tree_view.gemspec`.
+`config/public_api_manifest.yml` is packaged as a machine-readable audit artifact for the documented public surface. Host apps do not need to load it at runtime to render TreeView.
+
+When installation behavior changes, keep this list aligned with the packaged file list in `tree_view.gemspec` and the required paths in `script/check_gem_package_contents.rb`.
 
 ## Propshaft
 
