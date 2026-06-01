@@ -29,7 +29,12 @@ en:
         other: "Documents"
 ```
 
-If ActiveModel naming is unavailable, TreeView falls back to a humanized class name.
+If ActiveModel naming is unavailable, TreeView falls back to a humanized class name. Pass `default:` when a host app wants a specific label for missing translations or plain Ruby objects:
+
+```ruby
+TreeView.model_name_for(Document, default: "File")
+TreeView.model_name_for(ExternalItem, default: "External item")
+```
 
 ## Attribute names
 
@@ -54,7 +59,11 @@ en:
         published_at: "Published at"
 ```
 
-If ActiveModel attribute naming is unavailable, TreeView falls back to a humanized attribute name.
+If ActiveModel attribute naming is unavailable, TreeView falls back to a humanized attribute name. Pass `default:` to provide a stable label when the translation may be missing:
+
+```ruby
+TreeView.attribute_name_for(Document, :status, default: "Lifecycle status")
+```
 
 ## Node type names
 
@@ -74,7 +83,11 @@ en:
       document: "Document"
 ```
 
-If the translation is missing, TreeView falls back to a humanized `node_type` value.
+If the translation is missing, TreeView falls back to a humanized `node_type` value. Pass `default:` when the caller already has the best fallback label, including nodes whose `node_type` is blank:
+
+```ruby
+TreeView.type_name_for(node, default: "Workspace item")
+```
 
 ## Toolbar action labels
 
