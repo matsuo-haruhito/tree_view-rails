@@ -49,6 +49,16 @@ function assertFrozenObject(value, name, { deep = false } = {}) {
   })
 }
 
+function assertFrozenEventDetailKeys(value, name) {
+  assertFrozenObject(value, name, { deep: true })
+
+  Object.entries(value).forEach(([group, events]) => {
+    Object.entries(events).forEach(([eventKey, detailKeys]) => {
+      assert(Object.isFrozen(detailKeys), `${name}.${group}.${eventKey} detail key list is not frozen`)
+    })
+  })
+}
+
 function assertUniqueStringList(values, name) {
   assert(Array.isArray(values), `${name} must be an array`)
   assert(values.length > 0, `${name} must not be empty`)
@@ -62,9 +72,7 @@ function assertUniqueStringList(values, name) {
   })
 }
 
-function assertEventDetailKeysMatchEventNames(eventNames, eventDetailKeysManifest) {
-  const eventDetailKeys = deepCamelizeKeys(eventDetailKeysManifest)
-
+function assertEventDetailKeysMatchEventNames(eventNames, eventDetailKeys) {
   Object.entries(eventDetailKeys).forEach(([group, events]) => {
     assert(group in eventNames, `event_detail_keys.${group} does not match an exported event group`)
     assert(events && typeof events === "object" && !Array.isArray(events), `event_detail_keys.${group} must be an object`)
@@ -130,7 +138,14 @@ assert(
   "TreeViewEventNames export is out of sync"
 )
 assertFrozenObject(entrypointModule.TreeViewEventNames, "TreeViewEventNames", { deep: true })
-assertEventDetailKeysMatchEventNames(entrypointModule.TreeViewEventNames, javascriptPackageManifest.event_detail_keys)
+
+const expectedEventDetailKeys = deepCamelizeKeys(javascriptPackageManifest.event_detail_keys)
+assert(
+  JSON.stringify(entrypointModule.TreeViewEventDetailKeys) === JSON.stringify(expectedEventDetailKeys),
+  "TreeViewEventDetailKeys export is out of sync"
+)
+assertFrozenEventDetailKeys(entrypointModule.TreeViewEventDetailKeys, "TreeViewEventDetailKeys")
+assertEventDetailKeysMatchEventNames(entrypointModule.TreeViewEventNames, entrypointModule.TreeViewEventDetailKeys)
 
 const expectedTransferDropPositions = javascriptPackageManifest.transfer_drop_positions
 assert(
