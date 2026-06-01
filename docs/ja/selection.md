@@ -139,6 +139,8 @@ tree が通常の HTML form の中にある場合、同じ controller で checke
 
 1つの form に複数の `tree-view-selection` controller がある場合、TreeView は生成した hidden input に `data-tree-view-selection-source-id` を付けます。これにより、各 controller は自分が生成した hidden input だけを削除・再生成します。controller element に `data-tree-view-selection-source-id` がすでにある場合はその値を使い、なければ connect 時に自動生成します。tree ごとに別々の params として受け取りたい場合は、`data-tree-view-selection-hidden-input-name-value` に別々の名前を指定してください。同じ名前を使うのは、server-side action が1つの配列としてまとめて受け取る設計のときに限ります。
 
+[selection-multi-tree-form.html](../mockups/selection-multi-tree-form.html) などの static mockup は generated hidden input を review aid として見せることがありますが、送信 contract の正本はこの節です。TreeView は 1 hidden input に 1 JSON payload をミラーし、最終的な params grouping と summary copy は host app 側で決めます。
+
 ## 最大選択数
 
 JavaScript controller側で、checked checkboxの最大数を制限できます。
