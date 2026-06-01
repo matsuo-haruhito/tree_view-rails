@@ -59,7 +59,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, verifies the gem can be built, confirms release-facing files are packaged, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The main-push `gem_package` CI job additionally runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem so representative Rails helper, view partial, locale, docs, JavaScript, CSS, and importmap files remain packaged. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
+`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, verifies the gem can be built, confirms release-facing files are packaged, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The main-push `gem_package` CI job additionally runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem so representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, and public API manifest files remain packaged. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
 
 Pull request CI checks:
 
@@ -69,14 +69,14 @@ Pull request CI checks:
 - JavaScript tests through `npm install`, Playwright browser setup, and `npm run test:js`
 - Gem package verification when the PR touches package-sensitive paths
 
-Package-sensitive PR paths include `tree_view.gemspec`, `script/check_gem_package_contents.rb`, `.github/workflows/ci.yml`, `lib/**`, Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`, plus `config/importmap.tree_view.rb` and `config/locales/**`. Those PRs run `gem build tree_view.gemspec`, `ruby script/check_gem_package_contents.rb tree_view-*.gem`, `gem install tree_view-*.gem`, and `ruby -e "require 'tree_view'"`. Prose-only docs PRs keep the lighter docs-only behavior unless they also touch one of those package-sensitive paths.
+Package-sensitive PR paths include `tree_view.gemspec`, `script/check_gem_package_contents.rb`, `.github/workflows/ci.yml`, `lib/**`, Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`, plus `config/importmap.tree_view.rb`, `config/public_api_manifest.yml`, and `config/locales/**`. Those PRs run `gem build tree_view.gemspec`, `ruby script/check_gem_package_contents.rb tree_view-*.gem`, `gem install tree_view-*.gem`, and `ruby -e "require 'tree_view'"`. Prose-only docs PRs keep the lighter docs-only behavior unless they also touch one of those package-sensitive paths.
 
 Main-push CI checks:
 
 - Ruby version matrix
 - Rails version matrix
 - JavaScript tests through `npm install` and `npm run test:js` until the lockfile is refreshed in sync with `package.json`
-- Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, and importmap file contents
+- Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, and public API manifest file contents
 
 PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes full compatibility matrices, JavaScript coverage, and unconditional package verification.
 
@@ -142,6 +142,7 @@ Before release:
   - `app/javascript/tree_view/index.js`
   - `app/assets/stylesheets/tree_view.scss`
   - `config/importmap.tree_view.rb`
+  - `config/public_api_manifest.yml`
   - `config/locales/tree_view.toolbar.en.yml`
   - `README.md`
   - `CHANGELOG.md`
