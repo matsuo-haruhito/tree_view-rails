@@ -63,12 +63,15 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added a host-app extension hook reverse lookup table in Japanese and English.
 - Added toolbar disabled-action troubleshooting guidance in Japanese and English.
 - Added transfer disabled / invalid boundary states to the drop-position mockup and updated the mockup review guidance.
+- Added static mockup references for multi-tree selection forms, toggle icon states, and high-contrast state cues.
+- Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
 
 ### Tests
 
 - Added localized names specs and public API compatibility coverage.
 - Added Turbo Frame option unit and integration specs.
 - Added toolbar helper specs.
+- Added toolbar action/state manifest and docs drift guard coverage.
 - Added `NodePresenter` specs and `RenderState` integration specs.
 - Added generator specs for persisted state owner concern injection.
 - Added RenderState specs for current node ancestor auto-expansion.
