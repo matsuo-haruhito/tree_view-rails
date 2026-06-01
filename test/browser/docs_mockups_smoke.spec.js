@@ -73,6 +73,11 @@ const focusedMockupSmokeTargets = [
     minimumCount: 5
   },
   {
+    file: "high-contrast-state-cues.html",
+    sample: "[data-tree-view-sample='high-contrast-state-cues'] .tree-view tbody tr",
+    minimumCount: 5
+  },
+  {
     file: "lazy-loading-handoff.html",
     sample: ".tree-view-table tbody tr",
     minimumCount: 4
