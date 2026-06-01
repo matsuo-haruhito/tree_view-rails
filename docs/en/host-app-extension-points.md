@@ -29,7 +29,7 @@ Use this table when deciding which hook owns a host-app integration point.
 
 | Goal | Extension point | Detailed guide |
 |---|---|---|
-| Render business-specific cells or controls | `row_partial`; mark custom widgets with `data-tree-view-interactive`, `data-tree-view-ignore-keyboard`, `data-tree-view-ignore-row-click`, or `data-tree-view-ignore-drag` when needed | [Usage](usage.md#interactive-controls-inside-rows), [Drag and Drop](drag-and-drop.md#interactive-controls-inside-draggable-rows) |
+| Render business-specific cells or controls | `row_partial`; use `TreeView::NodePresenter` for shared row labels, badges, tooltips, or actions; mark custom widgets with `data-tree-view-interactive`, `data-tree-view-ignore-keyboard`, `data-tree-view-ignore-row-click`, or `data-tree-view-ignore-drag` when needed | [NodePresenter row partial patterns](node-presenter-row-partials.md), [Localized names](localized-names.md), [Usage](usage.md#interactive-controls-inside-rows), [Drag and Drop](drag-and-drop.md#interactive-controls-inside-draggable-rows) |
 | Add host-app row metadata | `row_data_builder` for host-owned data attributes; TreeView merges lazy-loading, row status, transfer, and client-mode data after host data | [Row status](row-status.md), [Drag and Drop](drag-and-drop.md) |
 | Mark an entire row disabled or readonly | `row_disabled_builder`, `row_readonly_builder`, and `row_disabled_reason_builder`; TreeView emits the documented row status classes and data attributes | [Row status](row-status.md) |
 | Provide drag/drop transfer data | `row_event_payload_builder`; TreeView serializes the payload into `data-tree-transfer-payload`, adds `data-tree-transfer-node-key`, and the transfer controller skips rows with `data-tree-transfer-disabled="true"` | [Drag and Drop](drag-and-drop.md), [JavaScript event contract](js-events.md#transfer-events) |
@@ -48,6 +48,8 @@ row_partial: "documents/tree_columns"
 <td><%= item.name %></td>
 <td><%= item.owner_name %></td>
 ```
+
+Use `TreeView::NodePresenter` when multiple row partials need the same label, tooltip, badge, href, row data, or action resolver. Use [Localized names](localized-names.md) inside those resolvers when the displayed model, attribute, or node type name should follow Rails / I18n. The host app still owns the actual cells, controls, authorization, formatting, and domain-specific action wiring.
 
 The partial can include application-owned controls such as inputs, selects, buttons, links, and inline editable labels. TreeView ignores keyboard navigation and transfer drag start when events originate from native interactive controls. For custom controls, add `data-tree-view-interactive="true"` or a narrower marker such as `data-tree-view-ignore-keyboard="true"`, `data-tree-view-ignore-row-click="true"`, or `data-tree-view-ignore-drag="true"`.
 
