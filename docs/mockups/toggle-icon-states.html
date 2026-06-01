@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView toggle icon states mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-icon-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.mock-icon-note-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.mock-icon-note {
+  border: 1px solid #d8e0ea;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 14px;
+}
+
+.mock-icon-note h3,
+.mock-icon-note p {
+  margin: 0;
+}
+
+.mock-icon-note h3 {
+  margin-bottom: 0.4rem;
+}
+
+.mock-icon-note p {
+  color: #52606d;
+}
+
+.mock-toggle-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.mock-toggle-chip--expanded {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.mock-toggle-chip--collapsed {
+  border-color: #0f766e;
+  background: #f0fdfa;
+  color: #0f766e;
+}
+
+.mock-toggle-chip--leaf {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.mock-toggle-chip--loading {
+  border-color: #d97706;
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.mock-toggle-chip--type-root {
+  border-color: #4f46e5;
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.mock-toggle-chip--type-folder {
+  border-color: #0891b2;
+  background: #ecfeff;
+  color: #155e75;
+}
+
+.mock-toggle-chip--type-record {
+  border-color: #16a34a;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.mock-icon-code-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mock-icon-code-list code {
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 6px;
+  background: #e2e8f0;
+  color: #1e293b;
+  padding: 0.12rem 0.35rem;
+  overflow-wrap: anywhere;
+  font-size: 0.82rem;
+}
+
+.mock-icon-table-note {
+  margin: 0.35rem 0 0;
+  color: #52606d;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 760px) {
+  .tree-view-table {
+    min-width: 720px;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView toggle icon states mock</h1>
+      <p>
+        This static HTML compares custom toggle icon states for expanded, collapsed, leaf, and loading rows.
+        It also shows one depth or node-type variation pass without choosing a final icon set for host apps.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-icon-layout" aria-labelledby="state-comparison-heading">
+      <div>
+        <h2 id="state-comparison-heading">State-based icon comparison</h2>
+        <p>
+          The toggle cell keeps the same hierarchy branch slots while the visible icon changes by state.
+          Copy and final icon artwork remain host-app responsibilities.
+        </p>
+      </div>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">icon state</th>
+            <th scope="col">generated boundary</th>
+            <th scope="col">review note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tree-row is-expanded" data-tree-node-key="root:workspace" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Expanded workspace">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true" aria-label="Collapse Workspace"><span class="mock-toggle-chip mock-toggle-chip--expanded" aria-hidden="true">-</span></a>
+                  <span class="mock-node-title">Workspace root</span>
+                </span>
+              </span>
+            </td>
+            <td><span class="mock-status mock-status--active">expanded</span></td>
+            <td>
+              <ul class="mock-icon-code-list" aria-label="Expanded icon hooks">
+                <li><code>toggle_icons[:expanded]</code></li>
+                <li><code>aria-expanded="true"</code></li>
+              </ul>
+            </td>
+            <td>Expanded rows still expose the collapse action; icon shape should not be the only cue.</td>
+          </tr>
+          <tr class="tree-row" data-tree-node-key="folder:planning" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Collapsed planning folder">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true" aria-label="Expand Planning"><span class="mock-toggle-chip mock-toggle-chip--collapsed" aria-hidden="true">+</span></a>
+                  <span class="mock-node-title">Planning folder</span>
+                </span>
+              </span>
+            </td>
+            <td><span class="mock-status mock-status--pending">collapsed</span></td>
+            <td>
+              <ul class="mock-icon-code-list" aria-label="Collapsed icon hooks">
+                <li><code>toggle_icons[:collapsed]</code></li>
+                <li><code>aria-expanded="false"</code></li>
+              </ul>
+            </td>
+            <td>Collapsed rows keep the branch path visible before the icon so depth stays readable.</td>
+          </tr>
+          <tr class="tree-row" data-tree-node-key="record:notes" data-tree-depth="2" aria-level="3">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Leaf notes record">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level"><span class="mock-toggle-chip mock-toggle-chip--leaf" aria-hidden="true">leaf</span></span>
+                  <span class="mock-node-title">Notes record</span>
+                </span>
+              </span>
+            </td>
+            <td><span class="mock-status">leaf</span></td>
+            <td>
+              <ul class="mock-icon-code-list" aria-label="Leaf icon hooks">
+                <li><code>toggle_icons[:leaf]</code></li>
+                <li><code>no expand action</code></li>
+              </ul>
+            </td>
+            <td>Leaf rows can carry a placeholder icon, but should not look actionable unless the host app adds an action.</td>
+          </tr>
+          <tr class="tree-row is-loading" data-tree-node-key="folder:loading" data-tree-depth="2" data-tree-loading="true" aria-level="3" aria-busy="true">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Loading child folder">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level"><span class="mock-toggle-chip mock-toggle-chip--loading" aria-hidden="true">...</span></span>
+                  <span class="mock-node-title">Loading children</span>
+                </span>
+              </span>
+            </td>
+            <td><span class="mock-status mock-status--pending">loading</span></td>
+            <td>
+              <ul class="mock-icon-code-list" aria-label="Loading icon hooks">
+                <li><code>toggle_icons[:loading]</code></li>
+                <li><code>aria-busy="true"</code></li>
+              </ul>
+            </td>
+            <td>Loading icon is a temporary state cue; fetch timing and retry behavior stay outside this mockup.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section mock-icon-layout" aria-labelledby="variation-heading">
+      <div>
+        <h2 id="variation-heading">Depth and type variation</h2>
+        <p>
+          This pass shows how state icons can vary by depth or node type while using the same table and branch structure.
+          It is a visual boundary reference, not a shipped icon pack.
+        </p>
+      </div>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">variation source</th>
+            <th scope="col">review note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tree-row is-expanded" data-tree-node-key="type:root" data-tree-depth="0" data-tree-node-type="root" aria-level="1" aria-expanded="true">
+            <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#" aria-label="Collapse root"><span class="mock-toggle-chip mock-toggle-chip--type-root" aria-hidden="true">R-</span></a><span class="mock-node-title">Root type</span></span></span></td>
+            <td><code>by_type[:root][:expanded]</code></td>
+            <td>Type-specific root icon can be distinct without changing row structure.</td>
+          </tr>
+          <tr class="tree-row" data-tree-node-key="type:folder" data-tree-depth="1" data-tree-node-type="folder" aria-level="2" aria-expanded="false">
+            <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#" aria-label="Expand folder"><span class="mock-toggle-chip mock-toggle-chip--type-folder" aria-hidden="true">F+</span></a><span class="mock-node-title">Folder type</span></span></span></td>
+            <td><code>by_type[:folder][:collapsed]</code></td>
+            <td>Folder icon can communicate grouping while final labels and color stay host-app owned.</td>
+          </tr>
+          <tr class="tree-row" data-tree-node-key="type:record" data-tree-depth="2" data-tree-node-type="record" aria-level="3">
+            <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level"><span class="mock-toggle-chip mock-toggle-chip--type-record" aria-hidden="true">R</span></span><span class="mock-node-title">Record type</span></span></span></td>
+            <td><code>by_depth[2][:leaf]</code></td>
+            <td>Depth variation should help scanning, not replace the branch line or accessible label.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">Responsibility boundary</h2>
+      <div class="mock-icon-note-grid">
+        <article class="mock-icon-note">
+          <h3>TreeView-owned</h3>
+          <p>Stable slots, state lookup order, branch structure, and rendered action or leaf placement.</p>
+        </article>
+        <article class="mock-icon-note">
+          <h3>Host-app-owned</h3>
+          <p>Final icon set, color tokens, business copy, tooltip wording, and product-specific state meaning.</p>
+        </article>
+        <article class="mock-icon-note">
+          <h3>Accessibility</h3>
+          <p>Do not rely on icon shape alone. Pair icon changes with text, ARIA state, or host-owned labels where needed.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
