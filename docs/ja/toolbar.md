@@ -51,6 +51,27 @@ expand-all、collapse-all、current path を残す toolbar state を静的に見
 
 この mockup は、この helper の責務境界を視覚的に補うためのものです。action の見え方と `:current_path` contract を確認できますが、route、authorization copy、Turbo response behavior 自体を定義するものではありません。
 
+## label resolution
+
+`tree_view_toolbar`、`tree_view_toolbar_actions`、`tree_view_toolbar_action_metadata` は、action label を次の順で解決します。
+
+1. `labels:` に渡した action 別の明示 override。例: `{ expand_all: "Open all" }`
+2. current locale の `tree_view.toolbar.labels.*` translation
+3. TreeView に組み込まれている英語 fallback label
+
+対応する translation key は以下です。
+
+```yml
+tree_view:
+  toolbar:
+    labels:
+      expand_all: "Expand all"
+      collapse_all: "Collapse all"
+      collapse_all_except_current_path: "Collapse all except current path"
+```
+
+host app の通常の toolbar 文言は locale file で管理してください。`labels:` は画面固有の文言で locale default を上書きしたい場合だけ使います。TreeView は key と fallback label を提供しますが、最終文言、locale file policy、product-specific terminology は host app 側の責務です。
+
 ## label、class、attribute の変更
 
 ```erb
@@ -92,5 +113,6 @@ host appは以下を担当します。
 - authorization
 - expanded keys の保存
 - `:current_path` の意味づけ
+- final label、locale file、`labels:` で渡す screen-specific wording
 - `html:` / `action_html:` で渡す analytics、test hook、screen-specific attribute
 - default class names 以上の見た目調整
