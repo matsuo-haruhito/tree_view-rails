@@ -14,6 +14,7 @@ REQUIRED_PACKAGED_PATHS = %w[
   app/javascript/tree_view/state_controller.js
   app/javascript/tree_view/transfer_controller.js
   config/importmap.tree_view.rb
+  config/public_api_manifest.yml
   config/locales/tree_view.toolbar.en.yml
   docs/en/release.md
 ].freeze
