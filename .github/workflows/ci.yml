@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       docs_only: ${{ steps.detect.outputs.docs_only }}
+      mockups_changed: ${{ steps.detect.outputs.mockups_changed }}
       package_sensitive: ${{ steps.detect.outputs.package_sensitive }}
     steps:
       - uses: actions/checkout@v6
@@ -21,6 +22,7 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" != "pull_request" ]; then
             echo "docs_only=false" >> "$GITHUB_OUTPUT"
+            echo "mockups_changed=false" >> "$GITHUB_OUTPUT"
             echo "package_sensitive=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -34,6 +36,7 @@ jobs:
           fi
 
           docs_only=true
+          mockups_changed=false
           package_sensitive=false
           while IFS= read -r file; do
             [ -z "$file" ] && continue
@@ -42,6 +45,12 @@ jobs:
               README.md|docs/*|Product\ Profile.md|CHANGELOG.md|AGENTS.md) ;;
               *)
                 docs_only=false
+                ;;
+            esac
+
+            case "$file" in
+              docs/mockups/*|docs/mockups/**)
+                mockups_changed=true
                 ;;
             esac
 
@@ -55,6 +64,7 @@ jobs:
           EOF
 
           echo "docs_only=$docs_only" >> "$GITHUB_OUTPUT"
+          echo "mockups_changed=$mockups_changed" >> "$GITHUB_OUTPUT"
           echo "package_sensitive=$package_sensitive" >> "$GITHUB_OUTPUT"
 
   lint:
@@ -161,21 +171,23 @@ jobs:
     needs: changes
     runs-on: ubuntu-latest
     steps:
-      - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true'
-        run: 'echo "Docs-only PR: skipping JavaScript browser and entrypoint checks."'
-      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
+      - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.mockups_changed != 'true'
+        run: 'echo "Docs-only PR without mockup changes: skipping JavaScript browser and entrypoint checks."'
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true'
         uses: actions/checkout@v6
-      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: "22"
           cache: npm
-      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true'
         run: npm install
-      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true'
         run: npx playwright install --with-deps chromium
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
         run: npm run test:js
+      - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.mockups_changed == 'true'
+        run: npm run test:browser
 
   gem_package:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'pull_request' && needs.changes.outputs.package_sensitive == 'true'
