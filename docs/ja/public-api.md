@@ -20,6 +20,7 @@ host app が直接使ってよい主な入口は以下です。
 - `TreeView::DuplicateNodeKeyError`
 - `TreeView::CycleDetectedError`
 - `TreeView::InvalidRenderWindowError`
+- `TreeView::Configuration`
 - `TreeView::LocalizedNames`
 - `TreeView::Tree`
 - `TreeView::RenderState`
@@ -46,6 +47,8 @@ host app が直接使ってよい主な入口は以下です。
 - `tree_view_toolbar_action_metadata(render_state, action, ...)`
 
 `TreeView::ResourceTableRenderState.call` は、別の table layer が列推論や table state を持っていて、TreeView には階層 render state の組み立てだけを任せたい場合の公開入口です。詳細は [Resource table bridge](resource-table-bridge.md) を参照してください。
+
+`TreeView::Configuration` は TreeView の configuration option surface を所有する documented class です。host app は通常 `TreeView.configure` と `TreeView.configuration` を使ってください。class constant は互換性のため public ですが、private normalization method や内部 constant は public contract に含めません。
 
 ## Public error surface
 
@@ -113,6 +116,8 @@ toolbar helper もこの公開 helper surface に含まれます。
 
 - `initial_state`
 - `render_log_level`
+
+`TreeView::Configuration` はこれらの documented option の reader / writer を公開しますが、host app の通常の統合経路は `TreeView.configure` / `TreeView.configuration` です。option ごとの挙動は [Render log level](render-log-level.md) などの dedicated configuration docs に委譲します。
 
 公開 localized display-name helper には以下を含めます。
 
