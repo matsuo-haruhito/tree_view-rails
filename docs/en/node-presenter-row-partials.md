@@ -4,6 +4,11 @@ This cookbook shows how to use `TreeView::NodePresenter` from host-app row parti
 
 The goal is to keep shared tree concepts in the gem and leave app-specific table cells, actions, permissions, formatting, modals, downloads, and inline editing in the host app.
 
+## Related guides
+
+- Use [Localized names](localized-names.md) when presenter labels, tooltips, badges, or node type names should follow the host app locale.
+- Use [Host app extension points](host-app-extension-points.md#row_partial) to decide whether a concern belongs in `row_partial`, a builder, or host-app UI code.
+
 ## Why not a Column / Action DSL yet?
 
 Columns and actions vary quickly by product:
