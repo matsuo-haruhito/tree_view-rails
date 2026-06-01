@@ -114,6 +114,20 @@ transfer controller が読者向けに公開する主なdetailは次のとおり
 
 `position` は、target row内でpointerがどこにあるかを示すTreeView側の粗いcueです。上 1/3 は `before`、中央 1/3 は `inside`、下 1/3 は `after` になります。これはhost appの業務ルールへの入力として扱い、最終的な許可・保存方針として扱わないでください。たとえば、leaf-only treeでは `inside` を無視したり、projectをまたぐdropを拒否したり、`before` / `after` を並び順更新へ変換したりできます。
 
+### transfer operation と outcome の境界
+
+TreeView は drag start 時の `DataTransfer.effectAllowed` と、valid row 上で hover している間の `DataTransfer.dropEffect` を `move` に設定します。この cue は、現在の TreeView helper が row transfer 向けであることを示すだけで、host app の業務上の operation を決めるものではありません。
+
+| Question | TreeView boundary | Host app boundary |
+|---|---|---|
+| これは TreeView 由来の row transfer か | 可能な場合に row payload を `DataTransfer` へコピーし、transfer event を通知する | その target で TreeView row transfer を受け入れるか決める |
+| 業務上は reorder、parent move、copy、attach、link のどれか | browser の `move` cue と `sourcePayload` / `targetPayload` / `position` を返す | detail を業務 operation に対応づけるか、非対応 operation として拒否する |
+| drop 後に何を表示・保存するか | drop event と parse / integration signal を dispatch する | pending、accepted、rejected、retry、undo などのUIを表示し、保存や失敗記録を行う |
+
+製品上の意味として drop を copy、attach、link、または別の operation として扱う場合、その方針は host app 側に置いてください。TreeView は現在 transfer operation kind を公開していません。また `move` cue を、保存成功や認可結果の保証として読まないでください。
+
+pending、accepted、rejected、retry、undo などの drop 後状態は、host app の UI / workflow 判断です。TreeView が担当するのは transfer 境界の通知までであり、それらの状態の runtime state model や最終的な表示文言は定義しません。
+
 ### source payload がない、または壊れている場合
 
 source payload が取れるかどうかと、host app の move validation は別の論点です。
@@ -133,12 +147,15 @@ JavaScript event contract全体は [JavaScript event contract](js-events.md#tran
 | row transfer payload builder validation | yes | provides builder |
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
+| browser transfer cue | 現在の helper cue を `move` にする | 業務 operation と最終UXを決める |
 | interactive-control drag-start guard | yes | marks custom widgets when needed |
 | transfer event detail | yes | listens and applies business behavior |
 | source payload parse failure | 空ではない invalid JSON では `invalid-transfer` を通知する | user-facing rejection、logging、recovery を決める |
 | missing source payload | drop event で `sourcePayload: null` を返す | unsupported drop を reject / handle する policy を決める |
 | coarse drop position | `before`, `inside`, `after` を返す | そのpositionを許可するか、どう保存するかを決める |
 | drop target | no | yes |
+| operation kind | no | reorder、move、copy、attach、link、rejection などに対応づける |
+| post-drop outcome UI | no | pending、accepted、rejected、retry、undo などの product-specific state を表示する |
 | reorder / move persistence | no | yes |
 | authorization | no | yes |
 | validation | no | yes |
