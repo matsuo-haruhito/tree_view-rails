@@ -42,6 +42,7 @@ const focusedMockupSmokeTargets = [
   { file: "resource-table-bridge.html", sample: ".mock-bridge-table tbody tr", minimumCount: 4 },
   { file: "narrow-sidebar-tree.html", sample: ".mock-narrow-frame", minimumCount: 2 },
   { file: "current-branch-sidebar.html", sample: ".tree-row.is-selected[aria-current='page']", minimumCount: 1 },
+  { file: "table-caption-context.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "row-status-depth-labels.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "toggle-icon-states.html", sample: ".tree-view-table tbody tr", minimumCount: 7 },
   { file: "interaction-states.html", sample: ".tree-view-table tbody tr", minimumCount: 5 },
