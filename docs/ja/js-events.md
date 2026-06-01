@@ -81,6 +81,14 @@ remote row のretryが要求されたときに発火します。
 
 `event.detail` は `row`, `childrenUrl`, `nodeKey` を含みます。
 
+## Host lifecycle events
+
+### `tree-view:loading` / `tree-view:loaded` / `tree-view:error` / `tree-view:retry`
+
+host app は、lazy-loading TreeView row 上でこれらの lifecycle event を発火し、remote-state controller にその row を loading、loaded、error、retrying として扱わせることができます。
+
+これらの event は、manifest 上で公開 `event.detail` field を定義していません。payload field に依存せず、lazy loading docs で案内している row attribute に remote-state data を置いてください。
+
 ## Transfer events
 
 ### `tree-view-transfer:drag-start`
@@ -111,6 +119,10 @@ payloadがtarget rowにdropされたときに発火します。
 ### `tree-view-transfer:invalid-payload` / `tree-view-transfer:invalid-transfer`
 
 row payload JSON または transferred JSON をparseできないときに発火します。
+
+`tree-view-transfer:invalid-payload` の detail は `value` と `row` を含みます。
+
+`tree-view-transfer:invalid-transfer` の detail は `value` を含みます。
 
 ## 互換性方針
 
