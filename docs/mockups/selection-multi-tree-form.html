@@ -312,14 +312,18 @@
     <section class="mock-section" aria-labelledby="hidden-sync-heading">
       <div class="mock-selection-hidden-stack">
         <h2 id="hidden-sync-heading">Generated hidden input boundary</h2>
-        <p class="mock-selection-note">These rows are shown as a review aid only. In a real form, generated hidden inputs stay internal and the host app decides how much summary copy to expose.</p>
+        <p class="mock-selection-note">Each row below represents one generated hidden input for one checked payload. Source ids keep each TreeView controller separated; the host app decides how to group submitted values.</p>
         <div class="mock-selection-hidden-row">
-          <strong>Policy source</strong>
-          <span class="mock-selection-code">name="bulk_review[policy_ids]" data-tree-view-selection-source-id="policies" value='["policy-101","policy-122"]'</span>
+          <strong>Policy payload 1 of 2</strong>
+          <span class="mock-selection-code">name="bulk_review[policy_ids][]" data-tree-view-selection-source-id="policies" value='{"id":"policy-101","label":"Operations handbook"}'</span>
         </div>
         <div class="mock-selection-hidden-row">
-          <strong>Asset source</strong>
-          <span class="mock-selection-code">name="bulk_review[asset_ids]" data-tree-view-selection-source-id="assets" value='["asset-folder-204"]'</span>
+          <strong>Policy payload 2 of 2</strong>
+          <span class="mock-selection-code">name="bulk_review[policy_ids][]" data-tree-view-selection-source-id="policies" value='{"id":"policy-122","label":"Escalation matrix"}'</span>
+        </div>
+        <div class="mock-selection-hidden-row">
+          <strong>Asset payload 1 of 1</strong>
+          <span class="mock-selection-code">name="bulk_review[asset_ids][]" data-tree-view-selection-source-id="assets" value='{"id":"asset-folder-204","label":"Launch banners"}'</span>
         </div>
       </div>
     </section>
