@@ -138,6 +138,11 @@ const focusedMockupSmokeTargets = [
     minimumCount: 3
   },
   {
+    file: "selection-multi-tree-form.html",
+    sample: ".mock-selection-group",
+    minimumCount: 2
+  },
+  {
     file: "empty-state.html",
     sample: "[data-tree-view-empty-state='true']",
     minimumCount: 2
@@ -153,8 +158,10 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("link", { name: "Baseline" })).toHaveAttribute("href", "#gallery-default-heading")
     await expect(page.getByRole("link", { name: "Interaction states" })).toHaveAttribute("href", "#gallery-interaction-heading")
     await expect(page.getByRole("link", { name: "Current branch" })).toHaveAttribute("href", "#gallery-current-branch-heading")
+    await expect(page.getByRole("link", { name: "Selection form" })).toHaveAttribute("href", "#gallery-selection-form-heading")
     await expect(page.frameLocator("iframe[title='Default tree mock preview']").getByRole("heading", { name: "Default TreeView rendering mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Current branch sidebar mock preview']").getByRole("heading", { name: "Current branch sidebar mock", level: 1 })).toBeVisible()
+    await expect(page.frameLocator("iframe[title='Multi-tree selection form mock preview']").getByRole("heading", { name: "TreeView multi-tree selection form mock", level: 1 })).toBeVisible()
 
     const linkedFiles = await page.locator("a[href]").evaluateAll((anchors) =>
       Array.from(new Set(
@@ -168,6 +175,7 @@ test.describe("docs mockup browser smoke", () => {
     expect(linkedFiles).toContain("default-tree.html")
     expect(linkedFiles).toContain("interaction-states.html")
     expect(linkedFiles).toContain("current-branch-sidebar.html")
+    expect(linkedFiles).toContain("selection-multi-tree-form.html")
     expect(linkedFiles).toContain("empty-state.html")
     expect(missingLinks).toEqual([])
   })
