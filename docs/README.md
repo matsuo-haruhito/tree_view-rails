@@ -15,6 +15,8 @@
 - [日本語API判断ガイド](ja/decision-guide.md): use caseからAPIやoptionを選ぶための入口。異種node混在やgraph-like nodeでGraphAdapter adapter modeを選ぶ場面も確認できます。
 - [English API overview: adapter mode](en/api-overview.md#adapter-mode): quick GraphAdapter entry point before moving to the full API reference or cookbook performance notes.
 - [日本語API概要: adapter mode](ja/api-overview.md#adapter-mode): API仕様やCookbookの性能メモへ進む前に確認するGraphAdapterの短い入口。
+- [English ReverseTree](en/reverse-tree.md): child-to-parent path entry point when matched records should be visible roots and ancestors should appear below them.
+- [日本語ReverseTree](ja/reverse-tree.md): matched recordを表示上のrootにし、ancestorをその下に並べるchild-to-parent pathの入口。
 - [English FAQ](en/faq.md): quick answers about responsibility boundaries and common misunderstandings.
 - [日本語FAQ](ja/faq.md): 責務境界とよくある誤解を短く確認する入口。
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
