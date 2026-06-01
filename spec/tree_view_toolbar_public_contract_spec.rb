@@ -31,10 +31,16 @@ RSpec.describe "TreeView toolbar public contract" do
     Struct.new(:ui_config).new(ui_config)
   end
 
+  def stringified_toolbar_states
+    TreeViewHelper::Toolbar::TREE_VIEW_TOOLBAR_STATES.to_h do |action, state|
+      [action.to_s, state.to_s]
+    end
+  end
+
   it "keeps toolbar action names and toggle states aligned with the public API manifest" do
     manifest_actions = toolbar_manifest_actions
 
-    expect(TreeViewHelper::Toolbar::TREE_VIEW_TOOLBAR_STATES.transform_values(&:to_s)).to eq(manifest_actions)
+    expect(stringified_toolbar_states).to eq(manifest_actions)
     expect(toolbar_helper.tree_view_toolbar_supported_actions.map(&:to_s)).to eq(manifest_actions.keys)
   end
 
