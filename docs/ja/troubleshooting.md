@@ -164,7 +164,10 @@ selection checkbox の送信値は plain ID ではなく JSON string です。
 - JavaScript では checked かつ enabled な checkbox だけが対象になる
 - JSON が壊れている値は selected payload array から除外され、`tree-view-selection:invalid-payload` で通知される
 - row payload 生成、disabled-state 判定、checkbox visibility は grouped `selection:` option 側で設定する
-- tree が通常 form の中にある場合は、`tree-view-selection` host element に `data-tree-view-selection-hidden-input-name-value` を設定し、checked payload を hidden input に同期させる
+- checkbox は見えているのに通常 form submit で selection params が送られない場合は、`tree-view-selection` host element に `data-tree-view-selection-hidden-input-name-value` を設定する。`tree-view-selection:selected` や `tree-view-selection:change` を listen するだけでは form params は作られません
+- hidden input 同期は、valid な checked payload ごとに hidden input を 1 つずつ最寄りの form に書き込みます。tree が form の外にある場合、TreeView は selection event だけを dispatch し、hidden input は生成しません
+- disabled checkbox と不正な JSON payload は、JavaScript event payload と同じく hidden input でも skip されます
+- 1つの form に複数 tree がある場合、server 側で別々の params として受け取りたいなら hidden input name を分ける。同じ name を使うのは、host app が1つの配列としてまとめて受け取る設計のときだけです。TreeView の source id は、各 controller が他 controller の generated input を消さないために使われます
 - client-side の最大選択数制限や連動 checkbox 挙動を使う場合は、同じ host element に `data-tree-view-selection-max-count-value`、`data-tree-view-selection-cascade-value`、`data-tree-view-selection-indeterminate-value` を設定する
 - cascade と indeterminate は、現在 DOM に描画されている row にだけ効く
 
