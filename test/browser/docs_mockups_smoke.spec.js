@@ -32,30 +32,126 @@ async function expectNoDocumentHorizontalOverflow(page) {
 }
 
 const focusedMockupSmokeTargets = [
-  { file: "default-tree.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "resource-table-bridge.html", sample: ".mock-bridge-table tbody tr", minimumCount: 4 },
-  { file: "narrow-sidebar-tree.html", sample: ".mock-narrow-frame", minimumCount: 2 },
-  { file: "current-branch-sidebar.html", sample: ".tree-row.is-selected[aria-current='page']", minimumCount: 1 },
-  { file: "row-status-depth-labels.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
-  { file: "toggle-icon-states.html", sample: ".tree-view-table tbody tr", minimumCount: 7 },
-  { file: "interaction-states.html", sample: ".tree-view-table tbody tr", minimumCount: 5 },
-  { file: "keyboard-focus-states.html", sample: ".focus-sample, .focus-sample--soft", minimumCount: 5 },
-  { file: "lazy-loading-handoff.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "drop-positions.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
-  { file: "persisted-state-boundary.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "turbo-frame-target.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
-  { file: "drag-interactive-controls.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "interactive-marker-behaviors.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "windowed-rendering.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "breadcrumb-paths.html", sample: ".mock-breadcrumb-path", minimumCount: 2 },
-  { file: "filtered-tree-modes.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "path-tree-builder-rows.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "node-presenter-row-partials.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
-  { file: "form-editing-rows.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
-  { file: "toolbar-actions.html", sample: ".mock-toolbar-frame", minimumCount: 3 },
-  { file: "selection-max-count.html", sample: ".mock-limit-state", minimumCount: 3 },
-  { file: "selection-multi-tree-form.html", sample: ".mock-selection-group", minimumCount: 2 },
-  { file: "empty-state.html", sample: "[data-tree-view-empty-state='true']", minimumCount: 2 }
+  {
+    file: "default-tree.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "resource-table-bridge.html",
+    sample: ".mock-bridge-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "narrow-sidebar-tree.html",
+    sample: ".mock-narrow-frame",
+    minimumCount: 2
+  },
+  {
+    file: "current-branch-sidebar.html",
+    sample: ".tree-row.is-selected[aria-current='page']",
+    minimumCount: 1
+  },
+  {
+    file: "row-status-depth-labels.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 3
+  },
+  {
+    file: "toggle-icon-states.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 7
+  },
+  {
+    file: "interaction-states.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 5
+  },
+  {
+    file: "keyboard-focus-states.html",
+    sample: ".focus-sample, .focus-sample--soft",
+    minimumCount: 5
+  },
+  {
+    file: "lazy-loading-handoff.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "drop-positions.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 3
+  },
+  {
+    file: "persisted-state-boundary.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "turbo-frame-target.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 3
+  },
+  {
+    file: "drag-interactive-controls.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "interactive-marker-behaviors.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "windowed-rendering.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "breadcrumb-paths.html",
+    sample: ".mock-breadcrumb-path",
+    minimumCount: 2
+  },
+  {
+    file: "filtered-tree-modes.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "path-tree-builder-rows.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "node-presenter-row-partials.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 3
+  },
+  {
+    file: "form-editing-rows.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 4
+  },
+  {
+    file: "toolbar-actions.html",
+    sample: ".mock-toolbar-frame",
+    minimumCount: 3
+  },
+  {
+    file: "selection-max-count.html",
+    sample: ".mock-limit-state",
+    minimumCount: 3
+  },
+  {
+    file: "selection-multi-tree-form.html",
+    sample: ".mock-selection-group",
+    minimumCount: 2
+  },
+  {
+    file: "empty-state.html",
+    sample: "[data-tree-view-empty-state='true']",
+    minimumCount: 2
+  }
 ]
 
 test.describe("docs mockup browser smoke", () => {
