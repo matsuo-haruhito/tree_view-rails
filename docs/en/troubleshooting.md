@@ -123,7 +123,7 @@ Check these points.
 
 Read next:
 
-- [Render log silencing](render-log-silencing.md)
+- [Render log level](render-log-level.md)
 - [Usage](usage.md)
 - [Rendering Boundaries](rendering-boundaries.md)
 
