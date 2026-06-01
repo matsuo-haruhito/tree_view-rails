@@ -4,6 +4,11 @@ TreeView provides small helpers for resolving model, attribute, and node type na
 
 Use these helpers when a row partial or `NodePresenter` needs a human-readable label that should follow the host app locale.
 
+## Use with row partials
+
+- For complete `NodePresenter` and `row_partial` composition examples, see [NodePresenter row partial patterns](node-presenter-row-partials.md).
+- For the broader boundary between TreeView hooks and host-app rendering code, see [Host app extension points](host-app-extension-points.md#row_partial).
+
 ## Model names
 
 ```ruby
