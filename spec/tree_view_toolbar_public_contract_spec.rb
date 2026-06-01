@@ -3,15 +3,15 @@
 require "spec_helper"
 require "yaml"
 
-RSpec.describe "TreeView toolbar public contract" do
-  MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-  TOOLBAR_DOC_PATHS = [
-    File.expand_path("../docs/en/toolbar.md", __dir__),
-    File.expand_path("../docs/ja/toolbar.md", __dir__)
-  ].freeze
+TREE_VIEW_TOOLBAR_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+TREE_VIEW_TOOLBAR_DOC_PATHS = [
+  File.expand_path("../docs/en/toolbar.md", __dir__),
+  File.expand_path("../docs/ja/toolbar.md", __dir__)
+].freeze
 
+RSpec.describe "TreeView toolbar public contract" do
   def toolbar_manifest_actions
-    YAML.safe_load_file(MANIFEST_PATH).fetch("toolbar_actions")
+    YAML.safe_load_file(TREE_VIEW_TOOLBAR_MANIFEST_PATH).fetch("toolbar_actions")
   end
 
   def toolbar_helper
@@ -58,7 +58,7 @@ RSpec.describe "TreeView toolbar public contract" do
   it "keeps toolbar docs aligned with manifest action and state values" do
     manifest_actions = toolbar_manifest_actions
 
-    TOOLBAR_DOC_PATHS.each do |path|
+    TREE_VIEW_TOOLBAR_DOC_PATHS.each do |path|
       docs = File.read(path)
 
       manifest_actions.each do |action, state|
