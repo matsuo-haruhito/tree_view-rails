@@ -73,6 +73,20 @@ TreeView は host app の path builder を呼んだり、host app の row partia
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Host App Extension Points](host-app-extension-points.md)
 
+## row が重複する / 消える / 描画前に失敗する場合はどこを見ますか？
+
+row partial や JavaScript wiring を変える前に tree diagnostics から確認してください。node key の重複は展開状態や persisted state を不安定に見せることがあり、filter や permission scope で親が隠れると orphan が出ます。DOM ID collision は browser 向け target を壊し、cycle は parent path traversal を不正にします。
+
+単一のリスクを test したい場合は、個別の描画前チェックを使います。`validate_node_keys: true`、`orphan_strategy:`、`render_state.validate_unique_dom_ids!`、`TreeView::CycleDiagnostics.new(tree).report`、大きな tree の戦略確認には `tree.stats` が入口です。複数の check をまとめて errors / warnings として見たい場合は `TreeView::Diagnostics.run` を使います。
+
+TreeView はリスクを報告します。data correction、filtering policy、authorization scope、大きな tree の rendering strategy は host app 側の責務です。
+
+関連:
+
+- [Tree diagnostics](tree-diagnostics.md)
+- [Troubleshooting](troubleshooting.md#duplicate-node-key--orphan--dom-id-collision--cycle-が出る)
+- [Node keys](node-keys.md)
+
 ## persisted state が画面表示直後に保存されるのはなぜですか？
 
 `tree-view-state:state-changed` event は、初回 connect 時にも、`refresh` や expand/collapse update 後にも dispatch されます。最初の event は現在の展開状態の snapshot であり、ユーザーが tree を変更した証拠ではありません。

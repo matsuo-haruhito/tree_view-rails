@@ -73,6 +73,20 @@ See also:
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Host App Extension Points](host-app-extension-points.md)
 
+## Why do rows look duplicated, disappear, or fail before rendering?
+
+Start with tree diagnostics before changing the row partial or JavaScript wiring. Duplicate node keys can make expansion and persisted state look unstable, orphan records can appear when filtering or permission scopes hide parents, DOM ID collisions can break browser-facing targets, and cycles can make parent-path traversal invalid.
+
+Use the focused pre-render checks when a test targets one risk: `validate_node_keys: true`, `orphan_strategy:`, `render_state.validate_unique_dom_ids!`, `TreeView::CycleDiagnostics.new(tree).report`, or `tree.stats` for large-tree strategy review. Use `TreeView::Diagnostics.run` when you want one aggregate result with errors and warnings from multiple checks.
+
+TreeView reports the risk. The host app still owns data correction, filtering policy, authorization scope, and the chosen large-tree rendering strategy.
+
+See also:
+
+- [Tree diagnostics](tree-diagnostics.md)
+- [Troubleshooting](troubleshooting.md#duplicate-node-keys-orphan-records-dom-id-collisions-or-cycles-appear)
+- [Node keys](node-keys.md)
+
 ## Why does persisted state save as soon as the page loads?
 
 The `tree-view-state:state-changed` event is dispatched on initial connect as well as after `refresh` and expand/collapse updates. The first event is a snapshot of the current expanded state, not proof that the user changed the tree.
