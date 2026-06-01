@@ -99,6 +99,8 @@ TreeView は、これらの属性をbuilt-in classやaccessibility属性とmerge
 | `separator:` | item間のseparator。 |
 | `aria_label:` | breadcrumb の `<nav>` 要素に付与するaccessible label。 |
 
+この表の option 名は、`config/public_api_manifest.yml` の `helper_option_keys.tree_view_breadcrumb` にも載っています。この manifest-backed list は既存 helper option surface の互換性 contract であり、markup、route、authorization behavior を追加するものではありません。
+
 ## 対応mode
 
 breadcrumb helper は records mode のtreeを前提にします。
