@@ -123,6 +123,11 @@ const focusedMockupSmokeTargets = [
     minimumCount: 4
   },
   {
+    file: "node-presenter-row-partials.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 3
+  },
+  {
     file: "form-editing-rows.html",
     sample: ".tree-view-table tbody tr",
     minimumCount: 4
