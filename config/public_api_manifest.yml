@@ -92,6 +92,7 @@ javascript_package_root:
     - TreeViewTransferController
     - TreeViewRemoteStateController
     - TreeViewEventNames
+    - TreeViewEventDetailKeys
   transfer_drop_positions:
     before: before
     inside: inside
