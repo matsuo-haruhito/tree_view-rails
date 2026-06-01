@@ -2,9 +2,9 @@
 
 require "spec_helper"
 
-RSpec.describe TreeView::Diagnostics do
-  TestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
+DiagnosticsPublicApiTestNode = Struct.new(:id, :parent_id, :name, keyword_init: true)
 
+RSpec.describe TreeView::Diagnostics do
   def dom_id_suffix(item_or_id)
     return item_or_id.id if item_or_id.respond_to?(:id)
 
@@ -12,8 +12,8 @@ RSpec.describe TreeView::Diagnostics do
   end
 
   def public_tree
-    root = TestNode.new(id: 1, parent_id: nil, name: "Root")
-    child = TestNode.new(id: 2, parent_id: 1, name: "Child")
+    root = DiagnosticsPublicApiTestNode.new(id: 1, parent_id: nil, name: "Root")
+    child = DiagnosticsPublicApiTestNode.new(id: 2, parent_id: 1, name: "Child")
 
     TreeView::Tree.new(records: [root, child], parent_id_method: :parent_id)
   end
