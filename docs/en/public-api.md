@@ -20,6 +20,7 @@ Host apps may use these entry points directly:
 - `TreeView::DuplicateNodeKeyError`
 - `TreeView::CycleDetectedError`
 - `TreeView::InvalidRenderWindowError`
+- `TreeView::Configuration`
 - `TreeView::LocalizedNames`
 - `TreeView::Tree`
 - `TreeView::RenderState`
@@ -46,6 +47,8 @@ Host apps may use these entry points directly:
 - `tree_view_toolbar_action_metadata(render_state, action, ...)`
 
 Use `TreeView::ResourceTableRenderState.call` when another table layer already owns column inference and table state, and TreeView should only build the hierarchical render state. See [Resource table bridge](resource-table-bridge.md).
+
+`TreeView::Configuration` is the documented owner of TreeView's configuration option surface. Host apps should normally use `TreeView.configure` and `TreeView.configuration`; the class constant is public for compatibility, but its private normalization helpers and internal constants are not part of the public contract.
 
 ## Public error surface
 
@@ -113,6 +116,8 @@ Documented configuration options include:
 
 - `initial_state`
 - `render_log_level`
+
+`TreeView::Configuration` exposes these documented option readers and writers, and `TreeView.configure` / `TreeView.configuration` remain the preferred host-app integration path. Option-specific behavior is described in the dedicated configuration docs, such as [Render log level](render-log-level.md).
 
 Documented localized display-name helpers include:
 
