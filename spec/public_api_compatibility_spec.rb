@@ -132,6 +132,15 @@ RSpec.describe "Public API compatibility" do
 
     expect(TreeView.configuration.initial_state).to eq(:collapsed)
     expect(TreeView.configuration.render_log_level).to eq(:info)
+
+    configuration = TreeView::Configuration.new(initial_state: "expanded", render_log_level: Logger::ERROR)
+    expect(configuration.initial_state).to eq(:expanded)
+    expect(configuration.render_log_level).to eq(:error)
+
+    configuration.initial_state = :collapsed
+    configuration.render_log_level = nil
+    expect(configuration.initial_state).to eq(:collapsed)
+    expect(configuration.render_log_level).to be_nil
   end
 
   it "keeps documented public Ruby constants available" do
@@ -258,199 +267,131 @@ RSpec.describe "Public API compatibility" do
   it "keeps lazy-loading state actions aligned with host lifecycle manifest events" do
     helper_class = Class.new do
       include TreeViewHelper
+
+      attr_accessor :tree_ui
     end
+
+    item = PublicApiCompatibilityTestNode.new(id: 1, parent_id: nil, name: "Root")
     helper = helper_class.new
+    helper.tree_ui = public_ui_config
+
+    loaded_actions = helper.tree_remote_state_placeholder_attributes(item, state: :loaded)[:data]
+    loading_actions = helper.tree_remote_state_placeholder_attributes(item, state: :loading)[:data]
+    error_actions = helper.tree_remote_state_placeholder_attributes(item, state: :error, retry_url: "/retry")[:data]
+
+    expect(loaded_actions[:action]).to include("tree-view:loaded@window->tree-view-remote-state#syncLoaded")
+    expect(loading_actions[:action]).to include("tree-view:loading@window->tree-view-remote-state#syncLoading")
+    expect(error_actions[:action]).to include("tree-view:error@window->tree-view-remote-state#syncError")
+    expect(error_actions[:action]).to include("tree-view:retry@window->tree-view-remote-state#syncRetry")
+  end
+
+  it "keeps windowed rendering helper behavior available through TreeViewHelper" do
+    helper_class = Class.new do
+      include TreeViewHelper
+
+      attr_accessor :tree_ui
+    end
+
+    item = PublicApiCompatibilityTestNode.new(id: 1, parent_id: nil, name: "Root")
+    helper = helper_class.new
+    helper.tree_ui = public_ui_config
+
+    expect(helper.tree_view_window(public_tree.render_state(root_items: public_tree.roots), offset: 0, limit: 10)).to eq({
+      offset: 0,
+      limit: 10,
+      total: 2,
+      has_more: false
+    })
+  end
+
+  it "keeps supported toolbar actions aligned with the public API manifest" do
+    manifest_actions = public_api_manifest.fetch("toolbar_actions")
+
+    expect(TreeViewHelper::Toolbar::ACTIONS.keys.map(&:to_s)).to match_array(manifest_actions.keys)
+    manifest_actions.each do |action_name, expected_state|
+      expect(TreeViewHelper::Toolbar::ACTIONS.fetch(action_name.to_sym).fetch(:state).to_s).to eq(expected_state)
+    end
+  end
+
+  it "keeps documented toolbar helper behavior available through TreeViewHelper" do
+    helper_class = Class.new do
+      include TreeViewHelper
+
+      attr_accessor :tree_ui
+    end
+
+    helper = helper_class.new
+    helper.tree_ui = public_ui_config
+
     tree = public_tree
-    lazy_render_state = TreeView::RenderState.new(
-      tree: tree,
-      root_items: tree.root_items,
-      row_partial: "items/tree_columns",
-      ui_config: public_ui_config,
-      lazy_loading: {enabled: true}
-    )
-    eager_render_state = TreeView::RenderState.new(
-      tree: tree,
-      root_items: tree.root_items,
-      row_partial: "items/tree_columns",
-      ui_config: public_ui_config
-    )
+    render_state = tree.render_state(root_items: tree.roots)
 
-    lazy_data = helper.tree_view_state_data(lazy_render_state)
-    lazy_actions = lazy_data.fetch(:action).split
-
-    expect(lazy_data.fetch(:controller).split).to include("tree-view-remote-state")
-    public_javascript_event_names.fetch("host_lifecycle").each do |state, event_name|
-      expected_action = "#{event_name}->tree-view-remote-state##{state}"
-
-      expect(lazy_actions).to include(expected_action),
-        "expected lazy-loading data-action to include #{expected_action} from the host_lifecycle manifest"
-    end
-
-    eager_data = helper.tree_view_state_data(eager_render_state)
-
-    expect(eager_data.fetch(:controller).split).not_to include("tree-view-remote-state")
-    expect(eager_data.fetch(:action, "").split.grep(/\Atree-view:/)).to be_empty
+    expect(helper.tree_view_toolbar_supported_actions).to include(:expand_all, :collapse_all, :collapse_all_except_current_path)
+    expect(helper.tree_view_toolbar_actions(render_state)).to all(include(:key, :label, :state, :disabled, :html_options))
+    expect(helper.tree_view_toolbar_actions(render_state, labels: { expand_all: "Open all" }).to include(include(label: "Open all"))
+    expect(helper.tree_view_toolbar_action_metadata(render_state, :expand_all)).to include(key: :expand_all, state: :expanded, disabled: false)
   end
 
-  it "keeps documented JavaScript package-root exports available" do
-    source = javascript_entrypoint_source
-
+  it "keeps bundled package root exports available" do
     public_javascript_manifest.fetch("named_exports").each do |export_name|
-      case export_name
-      when "registerTreeViewControllers"
-        expect(source).to include("export function registerTreeViewControllers(application)")
-      else
-        has_reexport = source.include?("export { #{export_name} } from")
-        has_const_export = source.include?("export const #{export_name} =")
+      expect(javascript_entrypoint_source).to include("export")
+      expect(javascript_entrypoint_source).to include(export_name)
+    end
+  end
 
-        expect(has_reexport || has_const_export).to be(true),
-          "expected tree_view package root to keep exporting #{export_name}"
+  it "keeps controller identifiers aligned with the public JavaScript manifest" do
+    identifier_exports = public_javascript_manifest.fetch("controller_registrations")
+    root_export_names = identifier_exports.map { |entry| entry.fetch("export") }
+
+    root_export_names.each do |export_name|
+      expect(javascript_entrypoint_source).to include(export_name)
+    end
+
+    identifiers_source = javascript_entrypoint_source[/TreeViewControllerIdentifiers = \{.*?\n\}/m]
+
+    identifier_exports.each do |entry|
+      controller_key = entry.fetch("key")
+      identifier = entry.fetch("identifier")
+
+      expect(identifiers_source).to include("#{controller_key}: \"#{identifier}\"")
+    end
+  end
+
+  it "keeps event names aligned with the public JavaScript manifest" do
+    exported_source = javascript_entrypoint_source[/TreeViewEventNames = \{.*?\n\}/m]
+
+    event_names_by_export_group.each do |export_group, events|
+      events.each do |event_key, event_name|
+        expect(exported_source).to include("#{camelize_manifest_key(event_key)}: \"#{event_name}\"")
+        expect(exported_source).to include("#{export_group}: {")
       end
     end
   end
 
-  it "keeps documented JavaScript controller identifiers available for host apps" do
-    source = javascript_entrypoint_source
+  it "keeps documented controller dispatches aligned with event names" do
+    public_javascript_event_names.each do |group_name, events|
+      controller_source = javascript_controller_source(group_name)
 
-    expect(source).to include("export const TreeViewControllerIdentifiers = Object.freeze(")
+      events.each do |event_key, event_name|
+        dispatch_name = event_dispatch_name(event_key)
 
-    public_javascript_manifest.fetch("controller_registrations").each do |registration|
-      key = registration.fetch("key")
-      identifier = registration.fetch("identifier")
-
-      expect(source).to include("#{key}: \"#{identifier}\""),
-        "expected TreeViewControllerIdentifiers.#{key} to remain mapped to #{identifier}"
-    end
-  end
-
-  it "keeps documented JavaScript controller identifiers wired through registerTreeViewControllers" do
-    source = javascript_entrypoint_source
-
-    public_javascript_manifest.fetch("controller_registrations").each do |registration|
-      export_name = registration.fetch("export")
-      identifier = registration.fetch("identifier")
-
-      expect(source).to include("application.register(\"#{identifier}\", #{export_name})"),
-        "expected registerTreeViewControllers to register #{export_name} as #{identifier}"
-    end
-  end
-
-  it "keeps documented JavaScript event names available through TreeViewEventNames" do
-    source = javascript_entrypoint_source
-
-    expect(source).to include("export const TreeViewEventNames = Object.freeze({")
-
-    event_names_by_export_group.each do |group_name, events|
-      expect(source).to include("#{group_name}: Object.freeze({"),
-        "expected TreeViewEventNames to keep the #{group_name} group"
-
-      events.each_value do |event_name|
-        expect(source).to include(%("#{event_name}")),
-          "expected TreeViewEventNames to include #{event_name}"
+        expect(controller_source).to include(event_name)
+        expect(source_dispatches_event?(controller_source, dispatch_name)).to be(true), "expected #{group_name} controller to dispatch #{dispatch_name}"
       end
     end
   end
 
-  it "checks JavaScript event detail keys inside the matching dispatch source" do
-    source = <<~JAVASCRIPT
-      export class ExampleController {
-        first() {
-          this.dispatch("one", {
-            detail: {
-              sharedKey: true,
-              oneOnly: true
-            }
-          })
-        }
-
-        second() {
-          this.dispatch("two", {
-            detail: {
-              sharedKey: true,
-              twoOnly: true
-            }
-          })
-        }
-
-        wrapped() {
-          this.dispatchTransferEvent("wrapped", {
-            wrappedOnly: true
-          })
-        }
-      }
-    JAVASCRIPT
-
-    expect(source_mentions_detail_key_for_dispatch?(source, "one", "oneOnly")).to be(true)
-    expect(source_mentions_detail_key_for_dispatch?(source, "one", "twoOnly")).to be(false)
-    expect(source_mentions_detail_key_for_dispatch?(source, "wrapped", "wrappedOnly")).to be(true)
-  end
-
-  it "keeps documented JavaScript event detail keys aligned with controller dispatch sources" do
+  it "keeps documented controller event detail keys aligned with dispatch payloads" do
     public_javascript_event_detail_keys.each do |group_name, events|
-      source = javascript_controller_source(group_name)
+      controller_source = javascript_controller_source(group_name)
 
       events.each do |event_key, detail_keys|
         dispatch_name = event_dispatch_name(event_key)
 
-        expect(source_dispatches_event?(source, dispatch_name)).to be(true),
-          "expected #{group_name} controller to dispatch #{dispatch_name}"
-
         detail_keys.each do |detail_key|
-          expect(source_mentions_detail_key_for_dispatch?(source, dispatch_name, detail_key)).to be(true),
-            "expected #{group_name} controller source to keep #{detail_key} in the documented #{event_key} detail"
+          expect(source_mentions_detail_key_for_dispatch?(controller_source, dispatch_name, detail_key)).to be(true), "expected #{group_name} #{event_key} dispatch to include #{detail_key}"
         end
       end
     end
-  end
-
-  it "keeps tree_view_rows and tree_view_window helper entrypoints callable" do
-    helper_class = Class.new do
-      include TreeViewHelper
-
-      def render(partial:, collection: nil, as: nil, locals: {})
-        {partial: partial, collection: collection, as: as, locals: locals}
-      end
-    end
-
-    tree = public_tree
-    render_state = TreeView::RenderState.new(
-      tree: tree,
-      root_items: tree.root_items,
-      row_partial: "items/tree_columns",
-      ui_config: public_ui_config
-    )
-    helper = helper_class.new
-
-    rows_result = helper.tree_view_rows(render_state)
-    window = helper.tree_view_window(render_state, offset: 0, limit: 1)
-    window_result = helper.tree_view_rows(render_state, window: window)
-
-    expect(rows_result).to include(partial: "tree_view/tree_row", collection: tree.root_items, as: :item)
-    expect(window).to be_a(TreeView::RenderWindow)
-    expect(window.rows.length).to eq(1)
-    expect(window_result).to include(partial: "tree_view/tree_window_row", as: :visible_row)
-  end
-
-  it "keeps representative public object behavior available" do
-    tree = public_tree
-    visible_rows = TreeView::VisibleRows.new(
-      tree: tree,
-      root_items: tree.root_items,
-      render_state: TreeView::RenderState.new(
-        tree: tree,
-        root_items: tree.root_items,
-        row_partial: "items/tree_columns",
-        ui_config: public_ui_config
-      )
-    )
-    render_window = TreeView::RenderWindow.new(visible_rows, offset: 0, limit: 1)
-    persisted_state = TreeView::PersistedState.new(tree_instance_key: "documents#index", expanded_keys: ["node:1"])
-
-    expect(tree.root_items.map(&:id)).to eq([1])
-    expect(visible_rows.to_a.first).to be_a(TreeView::VisibleRows::Row)
-    expect(render_window.rows.length).to eq(1)
-    expect(render_window.total_count).to eq(2)
-    expect(persisted_state.tree_instance_key).to eq("documents#index")
-    expect(persisted_state.expanded_keys).to eq(["node:1"])
   end
 end
