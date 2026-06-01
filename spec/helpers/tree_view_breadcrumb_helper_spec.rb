@@ -132,6 +132,46 @@ RSpec.describe TreeViewBreadcrumbHelper do
     expect(rendered).to include('aria-current="page"')
   end
 
+  it "rejects invalid HTML option values" do
+    node = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    tree = build_tree([node])
+    helper = build_helper
+
+    expect do
+      helper.tree_view_breadcrumb(tree, node, label_builder: ->(item) { item.name }, html: "nav")
+    end.to raise_error(ArgumentError, /html must be a Hash-like object or callable returning one/)
+
+    expect do
+      helper.tree_view_breadcrumb(tree, node, label_builder: ->(item) { item.name }, list_html: "list")
+    end.to raise_error(ArgumentError, /list_html must be a Hash-like object or callable returning one/)
+  end
+
+  it "rejects invalid item-aware HTML option return values" do
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
+    helper = build_helper
+
+    expect do
+      helper.tree_view_breadcrumb(
+        tree,
+        child,
+        label_builder: ->(item) { item.name },
+        path_builder: ->(item) { "/nodes/#{item.id}" },
+        link_html: ->(_item) { "link" }
+      )
+    end.to raise_error(ArgumentError, /link_html must be a Hash-like object or callable returning one/)
+
+    expect do
+      helper.tree_view_breadcrumb(
+        tree,
+        child,
+        label_builder: ->(item) { item.name },
+        current_html: ->(_item) { "current" }
+      )
+    end.to raise_error(ArgumentError, /current_html must be a Hash-like object or callable returning one/)
+  end
+
   it "rejects invalid builders" do
     node = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
     tree = build_tree([node])
