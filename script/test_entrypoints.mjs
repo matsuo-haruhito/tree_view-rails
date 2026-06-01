@@ -49,6 +49,36 @@ function assertFrozenObject(value, name, { deep = false } = {}) {
   })
 }
 
+function assertUniqueStringList(values, name) {
+  assert(Array.isArray(values), `${name} must be an array`)
+  assert(values.length > 0, `${name} must not be empty`)
+
+  const seenValues = new Set()
+
+  values.forEach((value) => {
+    assert(typeof value === "string" && value.length > 0, `${name} contains a non-string detail key`)
+    assert(!seenValues.has(value), `${name} contains duplicate detail key: ${value}`)
+    seenValues.add(value)
+  })
+}
+
+function assertEventDetailKeysMatchEventNames(eventNames, eventDetailKeysManifest) {
+  const eventDetailKeys = deepCamelizeKeys(eventDetailKeysManifest)
+
+  Object.entries(eventDetailKeys).forEach(([group, events]) => {
+    assert(group in eventNames, `event_detail_keys.${group} does not match an exported event group`)
+    assert(events && typeof events === "object" && !Array.isArray(events), `event_detail_keys.${group} must be an object`)
+
+    Object.entries(events).forEach(([eventKey, detailKeys]) => {
+      assert(
+        eventKey in eventNames[group],
+        `event_detail_keys.${group}.${eventKey} does not match an exported event name`
+      )
+      assertUniqueStringList(detailKeys, `event_detail_keys.${group}.${eventKey}`)
+    })
+  })
+}
+
 const javascriptPackageManifest = loadJavascriptPackageManifest()
 const entrypointModule = await import(new URL("../app/javascript/tree_view/index.js", import.meta.url).href)
 
@@ -100,6 +130,7 @@ assert(
   "TreeViewEventNames export is out of sync"
 )
 assertFrozenObject(entrypointModule.TreeViewEventNames, "TreeViewEventNames", { deep: true })
+assertEventDetailKeysMatchEventNames(entrypointModule.TreeViewEventNames, javascriptPackageManifest.event_detail_keys)
 
 const expectedTransferDropPositions = javascriptPackageManifest.transfer_drop_positions
 assert(
