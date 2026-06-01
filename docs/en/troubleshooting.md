@@ -164,7 +164,10 @@ Check these points.
 - In JavaScript, remember that TreeView only reports checked and enabled checkboxes.
 - Invalid JSON payloads are omitted from the selected payload array and reported through `tree-view-selection:invalid-payload`.
 - Use grouped `selection:` options for row payload generation, disabled-state decisions, and checkbox visibility.
-- If the tree sits inside a regular form, configure `data-tree-view-selection-hidden-input-name-value` on the `tree-view-selection` host element so checked payloads are mirrored into hidden inputs.
+- If a user can check boxes but a regular HTML form submit sends no selection params, configure `data-tree-view-selection-hidden-input-name-value` on the `tree-view-selection` host element. Listening for `tree-view-selection:selected` or `tree-view-selection:change` alone does not create form params.
+- Hidden input sync writes one hidden input per valid checked payload to the nearest form. If the tree is outside the form, TreeView still dispatches selection events but does not create hidden inputs.
+- Disabled checkboxes and invalid JSON payloads are skipped for hidden inputs, matching the JavaScript event payload behavior.
+- When one form contains multiple trees, use separate hidden input names when the server should receive separate params. Reuse a name only when the host app intentionally accepts one combined array; TreeView uses source ids only to keep each controller from removing another controller's generated inputs.
 - If you expect client-side max-count limits or linked checkbox behavior, configure `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, and `data-tree-view-selection-indeterminate-value` on the same host element.
 - Cascade and indeterminate behavior only affects rendered rows in the current DOM.
 
