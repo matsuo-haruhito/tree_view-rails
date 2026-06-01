@@ -126,7 +126,7 @@ TreeView sets the browser transfer cue to `move` by using `DataTransfer.effectAl
 
 If a product conceptually treats a drop as copy, attach, link, or another operation, keep that policy in the host app. TreeView does not expose a transfer operation kind today, and the `move` cue should not be read as a persistence guarantee or authorization result.
 
-For static review of possible post-drop UI states, see [post-drop-outcome-states.html](../mockups/post-drop-outcome-states.html). That page is a visual reference only; the runtime state model and final outcome copy remain host-app decisions.
+Post-drop states such as pending, accepted, rejected, retry, or undo are host-app UI and workflow decisions. TreeView only reports the transfer boundary; it does not define a runtime state model or final outcome copy for those states.
 
 ### Missing or invalid source payloads
 
