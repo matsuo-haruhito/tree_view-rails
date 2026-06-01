@@ -53,6 +53,11 @@ const focusedMockupSmokeTargets = [
     minimumCount: 1
   },
   {
+    file: "table-caption-context.html",
+    sample: ".tree-view-table caption, .tree-view-table tbody tr",
+    minimumCount: 5
+  },
+  {
     file: "row-status-depth-labels.html",
     sample: ".tree-view-table tbody tr",
     minimumCount: 3
