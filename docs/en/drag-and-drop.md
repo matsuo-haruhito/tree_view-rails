@@ -114,6 +114,20 @@ The transfer controller exposes these reader-facing details:
 
 `position` is a TreeView-owned coarse cue for where the pointer sits inside the target row: the top third is `before`, the middle third is `inside`, and the bottom third is `after`. Treat it as input to host-app business rules, not as final authorization or persistence policy. For example, a host app may ignore `inside` for leaf-only trees, reject drops across projects, or translate `before` / `after` into an ordering update.
 
+### Transfer operation and outcome boundary
+
+TreeView sets the browser transfer cue to `move` by using `DataTransfer.effectAllowed` on drag start and `DataTransfer.dropEffect` while hovering over a valid row. That cue only says the current TreeView helper is row-transfer oriented; it does not decide the host app's business operation.
+
+| Question | TreeView boundary | Host app boundary |
+|---|---|---|
+| Is this a row transfer from TreeView? | Copies a row payload to `DataTransfer` when available and reports transfer events. | Decides whether to accept TreeView row transfers on a given target. |
+| Is the business operation a reorder, parent move, copy, attach, or link? | Uses the browser `move` cue and reports `sourcePayload`, `targetPayload`, and `position`. | Maps those details to the domain operation, or rejects operations that are not supported. |
+| What happens after drop? | Dispatches the drop event and parse/integration signals. | Shows pending, accepted, rejected, retry, or undo UI; persists changes; logs failures. |
+
+If a product conceptually treats a drop as copy, attach, link, or another operation, keep that policy in the host app. TreeView does not expose a transfer operation kind today, and the `move` cue should not be read as a persistence guarantee or authorization result.
+
+For static review of possible post-drop UI states, see [post-drop-outcome-states.html](../mockups/post-drop-outcome-states.html). That page is a visual reference only; the runtime state model and final outcome copy remain host-app decisions.
+
 ### Missing or invalid source payloads
 
 Source payload availability is separate from host-app move validation.
@@ -133,12 +147,15 @@ For the full JavaScript event contract, see [JavaScript event contract](js-event
 | row transfer payload builder validation | yes | provides builder |
 | transfer data attributes | yes | consumes them |
 | dragstart helper | yes | wires action |
+| browser transfer cue | sets the current helper cue to `move` | decides the business operation and final UX |
 | interactive-control drag-start guard | yes | marks custom widgets when needed |
 | transfer event detail | yes | listens and applies business behavior |
 | source payload parse failure | reports `invalid-transfer` for non-empty invalid JSON | decides user-facing rejection, logging, and recovery |
 | missing source payload | reports `sourcePayload: null` on drop | rejects or handles unsupported drops according to host-app policy |
 | coarse drop position | reports `before`, `inside`, or `after` | decides whether the position is allowed and how to persist it |
 | drop target | no | yes |
+| operation kind | no | maps the drop to reorder, move, copy, attach, link, or rejection |
+| post-drop outcome UI | no | shows pending, accepted, rejected, retry, undo, or other product-specific states |
 | reorder / move persistence | no | yes |
 | authorization | no | yes |
 | validation | no | yes |
