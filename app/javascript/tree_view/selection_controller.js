@@ -136,11 +136,13 @@ export class TreeViewSelectionController extends Controller {
   }
 
   removeSyncedHiddenInputs(form) {
+    const sourceId = this.hiddenInputSourceId()
+
     form
-      .querySelectorAll(
-        `[data-tree-view-selection-generated-hidden-input="true"][data-tree-view-selection-source-id="${this.hiddenInputSourceId()}"]`
-      )
-      .forEach((input) => input.remove())
+      .querySelectorAll("[data-tree-view-selection-generated-hidden-input=\"true\"]")
+      .forEach((input) => {
+        if (input.dataset.treeViewSelectionSourceId === sourceId) input.remove()
+      })
   }
 
   enforceMaxCount(checkbox, attemptedChecked) {
