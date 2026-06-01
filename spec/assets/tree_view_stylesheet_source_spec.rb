@@ -20,4 +20,33 @@ RSpec.describe "tree_view stylesheet source" do
       expect(stylesheet_source).to include(".tree-toggle__action:focus:not(:focus-visible)")
     end
   end
+
+  it "keeps the LTR branch connector selectors visible for future direction-aware review" do
+    aggregate_failures do
+      expect(stylesheet_source).to include(<<~CSS.strip)
+        .tree-toggle__branch-slot.has-line::before{
+          content: "";
+          position: absolute;
+          top: -0.35rem;
+          bottom: -0.35rem;
+          left: 50%;
+      CSS
+      expect(stylesheet_source).to include(<<~CSS.strip)
+        .tree-toggle__branch-slot.is-current::after{
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          right: 0;
+      CSS
+    end
+  end
+
+  it "keeps the current-row cue anchored to the first rendered table cell" do
+    expect(stylesheet_source).to include(<<~CSS.strip)
+      .tree-row[aria-current="page"] > td:first-child{
+        box-shadow: inset 3px 0 0 rgba(13, 110, 253, 0.45);
+      }
+    CSS
+  end
 end
