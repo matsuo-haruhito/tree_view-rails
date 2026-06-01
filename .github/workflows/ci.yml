@@ -55,7 +55,7 @@ jobs:
             esac
 
             case "$file" in
-              tree_view.gemspec|script/check_gem_package_contents.rb|.github/workflows/ci.yml|config/importmap.tree_view.rb|lib/*|lib/**|app/helpers/*|app/helpers/**|app/views/*|app/views/**|app/assets/*|app/assets/**|app/javascript/*|app/javascript/**|config/locales/*|config/locales/**)
+              tree_view.gemspec|script/check_gem_package_contents.rb|.github/workflows/ci.yml|config/importmap.tree_view.rb|config/public_api_manifest.yml|lib/*|lib/**|app/helpers/*|app/helpers/**|app/views/*|app/views/**|app/assets/*|app/assets/**|app/javascript/*|app/javascript/**|config/locales/*|config/locales/**)
                 package_sensitive=true
                 ;;
             esac
