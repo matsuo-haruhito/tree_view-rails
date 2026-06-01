@@ -54,6 +54,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Row Status](row-status.md) | Hook for disabled / readonly row state |
 | [Filtered Trees](filtered-trees.md) | APIs for rendering search or filter results as trees |
 | [Rendering Boundaries](rendering-boundaries.md) | Rendering responsibility boundaries between TreeView and host apps |
+| [Direction-aware styling boundary](direction-aware-styling.md) | Host-app override guidance and future criteria for direction-aware current-row, hierarchy connector, and toggle spacing hooks |
 | [Render Scale](render-scale.md) | Guidance for controlling HTML and rendering volume for large trees |
 | [Host App Extension Points](host-app-extension-points.md) | Hooks host apps can use to extend and integrate TreeView |
 | [Public Name Decisions](public-name-decisions.md) | Focused decisions for confusing public-facing builder names |
@@ -117,5 +118,7 @@ For upgrade planning, deprecations, and release-note expectations, see [Migratio
 For accessibility semantics, ARIA placement, and keyboard boundaries, see [Accessibility Semantics](accessibility-semantics.md).
 
 For TreeView render log verbosity in host app logs, see [Render log level](render-log-level.md).
+
+For host-app overrides of current-row cues, hierarchy connectors, toggle spacing, and future direction-aware styling hook criteria, see [Direction-aware styling boundary](direction-aware-styling.md).
 
 For translation priority and bilingual readiness, see [Documentation i18n audit](../i18n-audit.md).
