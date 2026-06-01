@@ -28,10 +28,13 @@ Keep using `npm install` for now. The repository has a committed `package-lock.j
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
+npm run test:js
 npm test
 npm run test:entrypoints
 npm run test:browser
 ```
+
+Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use the individual npm commands when you are narrowing a failure.
 
 For the Rails version matrix:
 
