@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
       "app/javascript/tree_view/**/*",
       "app/views/tree_view/**/*",
       "config/importmap.tree_view.rb",
+      "config/public_api_manifest.yml",
       "config/locales/**/*",
       "docs/**/*",
       "lib/**/*",
