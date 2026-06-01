@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView high-contrast state cue mockup</title>
+<link rel="stylesheet" href="../default-tree.css">
+<style>
+.high-contrast-page { max-width: 1180px; }
+.high-contrast-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 18px; }
+.high-contrast-summary__item { border: 1px solid #0f172a; border-radius: 8px; background: #fff; padding: 14px; }
+.high-contrast-summary__item strong { display: block; margin-bottom: 0.35rem; color: #0f172a; }
+.high-contrast-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr); gap: 20px; align-items: start; }
+.high-contrast-demo { overflow-x: auto; border: 2px solid #0f172a; border-radius: 8px; background: #fff; }
+.high-contrast-demo .tree-view { min-width: 860px; margin: 0; }
+.high-contrast-row { --cue-border: #0f172a; --cue-bg: #fff; --cue-text: #0f172a; background: var(--cue-bg); }
+.high-contrast-row td:first-child { border-left: 6px solid var(--cue-border); }
+.high-contrast-row--current { --cue-border: #1d4ed8; --cue-bg: #eff6ff; }
+.high-contrast-row--selected { --cue-border: #334155; --cue-bg: #f8fafc; }
+.high-contrast-row--focus { outline: 3px solid #111827; outline-offset: -4px; }
+.high-contrast-row--error { --cue-border: #991b1b; --cue-bg: #fef2f2; }
+.high-contrast-row--drop { --cue-border: #166534; --cue-bg: #f0fdf4; }
+.high-contrast-token { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 1.8rem; padding: 0.25rem 0.5rem; border: 1px solid currentColor; border-radius: 8px; color: var(--cue-text); font-weight: 700; }
+.high-contrast-token::before { content: attr(data-symbol); font-weight: 900; }
+.high-contrast-notes { display: grid; gap: 12px; }
+.high-contrast-note { border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; padding: 14px; }
+.high-contrast-note h3, .high-contrast-note p { margin: 0; }
+.high-contrast-note h3 { margin-bottom: 0.4rem; color: #0f172a; }
+.high-contrast-checklist { margin: 0; padding-left: 1.2rem; }
+@media (forced-colors: active) {
+  .high-contrast-summary__item, .high-contrast-demo, .high-contrast-note, .high-contrast-token { border-color: CanvasText; }
+  .high-contrast-row { background: Canvas; color: CanvasText; }
+  .high-contrast-row td:first-child { border-left-color: Highlight; }
+  .high-contrast-row--focus { outline-color: Highlight; }
+}
+@media (max-width: 760px) { .high-contrast-layout { grid-template-columns: 1fr; } .high-contrast-demo .tree-view { min-width: 760px; } }
+</style>
+</head>
+<body>
+  <main class="mock-page high-contrast-page">
+    <header class="mock-header">
+      <p class="mock-kicker">focused mockup</p>
+      <h1>High-contrast state cues</h1>
+      <p>Static reference for checking current, selected, focus-visible, error, retry, and drop-target cues when color alone is not enough. This page does not claim complete forced-colors support; it keeps representative states visible for design review.</p>
+      <nav class="mock-page-nav" aria-label="Mockup navigation">
+        <a href="../review-gallery.html">Back to gallery</a>
+        <a href="../README.md">Mockup README</a>
+        <a href="../keyboard-focus-states.html">Keyboard focus states</a>
+        <a href="../interaction-states.html">Interaction states</a>
+      </nav>
+      <div class="high-contrast-summary" aria-label="Review summary">
+        <div class="high-contrast-summary__item"><strong>Visible beyond color</strong>Each state combines a text token, left border cue, and row treatment so reviewers can compare more than hue.</div>
+        <div class="high-contrast-summary__item"><strong>TreeView-owned baseline</strong>Current, selected, focus, error, and drop-target examples reuse TreeView-like table rows without changing runtime behavior.</div>
+        <div class="high-contrast-summary__item"><strong>Host-app boundary</strong>Final palette, contrast policy, error copy, retry behavior, and move authorization remain app-owned decisions.</div>
+      </div>
+    </header>
+
+    <section class="mock-section high-contrast-layout" aria-labelledby="state-cue-heading">
+      <div>
+        <h2 id="state-cue-heading">Representative state comparison</h2>
+        <div class="high-contrast-demo" data-tree-view-sample="high-contrast-state-cues">
+          <table class="tree-view" aria-label="High contrast TreeView state cue comparison">
+            <thead><tr><th scope="col">Node</th><th scope="col">State cue</th><th scope="col">Non-color signal</th><th scope="col">Boundary</th></tr></thead>
+            <tbody>
+              <tr class="tree-row tree-row--expanded high-contrast-row high-contrast-row--current" aria-current="page"><td><a href="#" class="tree-toggle__action" aria-expanded="true">Operations handbook</a></td><td><span class="high-contrast-token" data-symbol="Current">Current row</span></td><td>Left border, token text, and <code>aria-current="page"</code></td><td>Route selection remains host-app owned.</td></tr>
+              <tr class="tree-row tree-row--child high-contrast-row high-contrast-row--selected"><td><span class="tree-leaf-label">Release checklist</span></td><td><span class="high-contrast-token" data-symbol="Selected">Selected</span></td><td>Token text and checkbox-like selection wording</td><td>Selection limits and submit behavior stay outside the mockup.</td></tr>
+              <tr class="tree-row tree-row--child high-contrast-row high-contrast-row--focus"><td><a href="#" class="tree-toggle__action" aria-expanded="false">Incident response</a></td><td><span class="high-contrast-token" data-symbol="Focus">Focus-visible</span></td><td>Outline plus text label, not background alone</td><td>Tab order and keyboard shortcuts are not defined here.</td></tr>
+              <tr class="tree-row tree-row--child high-contrast-row high-contrast-row--error"><td><span class="tree-leaf-label">Supplier import</span></td><td><span class="high-contrast-token" data-symbol="Error">Error / retry</span></td><td>Status token, border cue, and retry action</td><td>Error source, retry route, and final message copy are app-owned.</td></tr>
+              <tr class="tree-row high-contrast-row high-contrast-row--drop"><td><a href="#" class="tree-toggle__action" aria-expanded="true">Archive folder</a></td><td><span class="high-contrast-token" data-symbol="Drop">Drop target</span></td><td>Border cue and explicit target token</td><td>Authorization, validation, and persistence are app-owned.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <aside class="high-contrast-notes" aria-label="Review boundaries">
+        <div class="high-contrast-note"><h3>Forced-colors framing</h3><p>The sample includes a small <code>forced-colors</code> rule so borders and outlines remain inspectable, but it is still a static review surface rather than a complete theme system.</p></div>
+        <div class="high-contrast-note"><h3>State ownership</h3><p>TreeView can expose durable row hooks and baseline cues. The host app chooses final colors, status language, route policy, and business actions.</p></div>
+        <div class="high-contrast-note"><h3>Related pages</h3><p>Use keyboard focus and interaction-state mockups for deeper inspection of focus targets, loading, retry, and drag/drop behavior boundaries.</p></div>
+      </aside>
+    </section>
+
+    <section class="mock-section" aria-labelledby="review-checklist-heading">
+      <h2 id="review-checklist-heading">Review checklist</h2>
+      <ul class="high-contrast-checklist">
+        <li>Current, selected, focused, error, and drop-target rows remain distinguishable without relying only on fill color.</li>
+        <li>State text is visible in the table, so screenshots can be reviewed without knowing the color palette.</li>
+        <li>The page avoids changing runtime JavaScript, ARIA semantics, public API, route policy, or host-app authorization behavior.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
