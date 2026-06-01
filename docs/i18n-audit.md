@@ -127,6 +127,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 | `docs/mockups/path-tree-builder-rows.html` | Technical asset | No translation needed. |
 | `docs/mockups/form-editing-rows.html` | Technical asset | No translation needed. |
 | `docs/mockups/selection-max-count.html` | Technical asset | No translation needed. |
+| `docs/mockups/selection-multi-tree-form.html` | Technical asset | No translation needed. |
 | `docs/mockups/empty-state.html` | Technical asset | No translation needed. |
 | `docs/mockups/row-status-depth-labels.html` | Technical asset | No translation needed. |
 | `docs/mockups/toggle-icon-states.html` | Technical asset | No translation needed. |

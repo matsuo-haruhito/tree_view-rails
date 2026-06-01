@@ -31,6 +31,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [path-tree-builder-rows.html](path-tree-builder-rows.html) | Focused PathTreeBuilder comparison for generated folder rows versus record-backed rows, keeping host-app columns/actions outside the gem contract. |
 | [form-editing-rows.html](form-editing-rows.html) | Focused comparison for bulk-edit rows, per-row edit placement, and the boundary between TreeView selection checkboxes and host-app business controls. |
 | [selection-max-count.html](selection-max-count.html) | Focused selection max-count reference showing below-limit, limit-reached, and limit-exceeded feedback while keeping final action copy host-app owned. |
+| [selection-multi-tree-form.html](selection-multi-tree-form.html) | Focused multi-tree selection form reference showing source-specific selected counts, submit summary, empty state, and generated hidden input boundary. |
 | [toolbar-actions.html](toolbar-actions.html) | Expand-all, collapse-all, and collapse-to-current-path toolbar reference showing enabled, disabled, and current-state variants without host-app routes or authorization copy. |
 | [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
@@ -58,9 +59,10 @@ They are **not** a complete Rails application and should not grow into host-app 
 19. Use [path-tree-builder-rows.html](path-tree-builder-rows.html) when review needs to compare generated folder rows with record-backed rows without designing a file-manager application.
 20. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
 21. Use [selection-max-count.html](selection-max-count.html) when review needs to compare below-limit, limit-reached, and limit-exceeded selection feedback without adding runtime behavior or final bulk-action copy.
-22. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
-23. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, or collapse-to-current-path affordances instead of row-by-row hierarchy layout.
-24. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+22. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries.
+23. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
+24. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, or collapse-to-current-path affordances instead of row-by-row hierarchy layout.
+25. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Automated smoke coverage
 
