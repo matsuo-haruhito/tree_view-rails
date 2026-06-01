@@ -3,15 +3,15 @@
 require "spec_helper"
 require "yaml"
 
-RSpec.describe "JavaScript event docs compatibility" do
-  PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-  JAVASCRIPT_EVENT_DOC_PATHS = {
-    "English docs" => File.expand_path("../docs/en/js-events.md", __dir__),
-    "Japanese docs" => File.expand_path("../docs/ja/js-events.md", __dir__)
-  }.freeze
+PUBLIC_API_EVENT_DOCS_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+JAVASCRIPT_EVENT_DOC_PATHS = {
+  "English docs" => File.expand_path("../docs/en/js-events.md", __dir__),
+  "Japanese docs" => File.expand_path("../docs/ja/js-events.md", __dir__)
+}.freeze
 
+RSpec.describe "JavaScript event docs compatibility" do
   def public_api_manifest
-    @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
+    @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_EVENT_DOCS_MANIFEST_PATH)
   end
 
   def public_javascript_manifest
@@ -37,7 +37,7 @@ RSpec.describe "JavaScript event docs compatibility" do
     return nil unless start_index
 
     next_heading_offset = lines[(start_index + 1)..].index do |line|
-      line.start_with?("### ") || line.start_with?("## ")
+      line.start_with?("### ", "## ")
     end
     end_index = next_heading_offset ? start_index + 1 + next_heading_offset : lines.length
 
