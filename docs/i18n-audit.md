@@ -104,39 +104,21 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 
 ## Technical assets
 
-| Asset | Status | Notes |
+`docs/mockups/README.md` is the source of truth for the current static mockup file inventory. Its Files table is also the source read by the browser smoke target list, so this checklist should describe responsibility rather than repeat every individual mockup HTML page.
+
+| Asset group | Status | Notes |
 |---|---|---|
-| `docs/mockups/README.md` | Technical asset | Index for static mockup assets. Short bilingual-style prose is acceptable; no separate translation needed. |
-| `docs/mockups/review-gallery.html` | Technical asset | Comparison hub for the current static mockup set. No translation needed. |
-| `docs/mockups/default-tree.html` | Technical asset | No translation needed. |
-| `docs/mockups/resource-table-bridge.html` | Technical asset | No translation needed. |
-| `docs/mockups/toolbar-actions.html` | Technical asset | No translation needed. |
-| `docs/mockups/narrow-sidebar-tree.html` | Technical asset | No translation needed. |
-| `docs/mockups/current-branch-sidebar.html` | Technical asset | No translation needed. |
-| `docs/mockups/interaction-states.html` | Technical asset | No translation needed. |
-| `docs/mockups/keyboard-focus-states.html` | Technical asset | No translation needed. |
-| `docs/mockups/lazy-loading-handoff.html` | Technical asset | No translation needed. |
-| `docs/mockups/drop-positions.html` | Technical asset | No translation needed. |
-| `docs/mockups/persisted-state-boundary.html` | Technical asset | No translation needed. |
-| `docs/mockups/turbo-frame-target.html` | Technical asset | No translation needed. |
-| `docs/mockups/drag-interactive-controls.html` | Technical asset | No translation needed. |
-| `docs/mockups/interactive-marker-behaviors.html` | Technical asset | No translation needed. |
-| `docs/mockups/windowed-rendering.html` | Technical asset | No translation needed. |
-| `docs/mockups/breadcrumb-paths.html` | Technical asset | No translation needed. |
-| `docs/mockups/filtered-tree-modes.html` | Technical asset | No translation needed. |
-| `docs/mockups/path-tree-builder-rows.html` | Technical asset | No translation needed. |
-| `docs/mockups/form-editing-rows.html` | Technical asset | No translation needed. |
-| `docs/mockups/selection-max-count.html` | Technical asset | No translation needed. |
-| `docs/mockups/selection-multi-tree-form.html` | Technical asset | No translation needed. |
-| `docs/mockups/empty-state.html` | Technical asset | No translation needed. |
-| `docs/mockups/row-status-depth-labels.html` | Technical asset | No translation needed. |
-| `docs/mockups/toggle-icon-states.html` | Technical asset | No translation needed. |
-| `docs/mockups/default-tree.css` | Technical asset | No translation needed. |
+| `docs/mockups/README.md` | Technical asset source of truth | Index for static mockup assets, focused subpages, shared CSS, review flow, and automated smoke coverage. Short bilingual-style prose is acceptable; no separate translation needed. |
+| `docs/mockups/review-gallery.html` | Technical asset | Comparison hub for the current static mockup set. Keep it aligned with the README Files table and smoke coverage. No translation needed. |
+| Top-level `docs/mockups/*.html` files listed in the mockup README | Technical assets | Individual static review references. Add, rename, or remove these through the mockup README and review gallery first so browser smoke coverage can detect drift. No translation needed. |
+| Focused subpage assets linked from the mockup README, such as `docs/mockups/high-contrast-state-cues/index.html` | Technical assets | Keep subpages linked from the relevant README guidance rather than expanding this checklist into a second inventory. No translation needed. |
+| `docs/mockups/default-tree.css` | Technical asset | Shared CSS for the static mockups. Keep CSS ownership in the mockup README and focused pages. No translation needed. |
 
 ## Ongoing maintenance
 
 - Keep `docs/ja/` and `docs/en/` in sync for future user-facing changes.
 - If a temporary mismatch is unavoidable, leave a visible note and plan the follow-up.
 - Treat the High lane in the page-level coverage table above as the minimum same-sweep translation set promised by the language READMEs.
-- When `docs/mockups/` gains a new focused reference page, update this technical-assets table and confirm `docs/mockups/README.md` plus `docs/mockups/review-gallery.html` still describe the current set.
+- When `docs/mockups/` gains, renames, or removes a focused reference page, update `docs/mockups/README.md` first, then confirm `docs/mockups/review-gallery.html` and browser smoke coverage still describe the current set.
+- Update this technical-assets section only when the source-of-truth rule or asset-group responsibility changes, not for every individual mockup file addition.
 - Prefer updating this checklist by replacement when the maintenance rule changes, instead of stacking stale release-specific notes on top of it.
