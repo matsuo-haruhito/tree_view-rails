@@ -17,7 +17,8 @@ function mockupUrl(file) {
 
 function readmeMockupFiles() {
   const readme = readFileSync(mockupsReadmePath, "utf8")
-  const matches = readme.matchAll(/\[[^\]]+\.html\]\(([^)]+\.html)\)/g)
+  const filesTable = readme.split("## Recommended review flow")[0]
+  const matches = filesTable.matchAll(/\[[^\]]+\.html\]\(([^)]+\.html)\)/g)
   return Array.from(new Set(Array.from(matches, (match) => match[1])))
 }
 
@@ -32,121 +33,30 @@ async function expectNoDocumentHorizontalOverflow(page) {
 }
 
 const focusedMockupSmokeTargets = [
-  {
-    file: "default-tree.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "resource-table-bridge.html",
-    sample: ".mock-bridge-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "narrow-sidebar-tree.html",
-    sample: ".mock-narrow-frame",
-    minimumCount: 2
-  },
-  {
-    file: "current-branch-sidebar.html",
-    sample: ".tree-row.is-selected[aria-current='page']",
-    minimumCount: 1
-  },
-  {
-    file: "row-status-depth-labels.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 3
-  },
-  {
-    file: "toggle-icon-states.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 7
-  },
-  {
-    file: "interaction-states.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 5
-  },
-  {
-    file: "keyboard-focus-states.html",
-    sample: ".focus-sample, .focus-sample--soft",
-    minimumCount: 5
-  },
-  {
-    file: "lazy-loading-handoff.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "drop-positions.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 3
-  },
-  {
-    file: "persisted-state-boundary.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "turbo-frame-target.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 3
-  },
-  {
-    file: "drag-interactive-controls.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "interactive-marker-behaviors.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "windowed-rendering.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "breadcrumb-paths.html",
-    sample: ".mock-breadcrumb-path",
-    minimumCount: 2
-  },
-  {
-    file: "filtered-tree-modes.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "path-tree-builder-rows.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "form-editing-rows.html",
-    sample: ".tree-view-table tbody tr",
-    minimumCount: 4
-  },
-  {
-    file: "toolbar-actions.html",
-    sample: ".mock-toolbar-frame",
-    minimumCount: 3
-  },
-  {
-    file: "selection-max-count.html",
-    sample: ".mock-limit-state",
-    minimumCount: 3
-  },
-  {
-    file: "selection-multi-tree-form.html",
-    sample: ".mock-selection-group",
-    minimumCount: 2
-  },
-  {
-    file: "empty-state.html",
-    sample: "[data-tree-view-empty-state='true']",
-    minimumCount: 2
-  }
+  { file: "default-tree.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "resource-table-bridge.html", sample: ".mock-bridge-table tbody tr", minimumCount: 4 },
+  { file: "narrow-sidebar-tree.html", sample: ".mock-narrow-frame", minimumCount: 2 },
+  { file: "current-branch-sidebar.html", sample: ".tree-row.is-selected[aria-current='page']", minimumCount: 1 },
+  { file: "row-status-depth-labels.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
+  { file: "toggle-icon-states.html", sample: ".tree-view-table tbody tr", minimumCount: 7 },
+  { file: "interaction-states.html", sample: ".tree-view-table tbody tr", minimumCount: 5 },
+  { file: "keyboard-focus-states.html", sample: ".focus-sample, .focus-sample--soft", minimumCount: 5 },
+  { file: "lazy-loading-handoff.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "drop-positions.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
+  { file: "persisted-state-boundary.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "turbo-frame-target.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
+  { file: "drag-interactive-controls.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "interactive-marker-behaviors.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "windowed-rendering.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "breadcrumb-paths.html", sample: ".mock-breadcrumb-path", minimumCount: 2 },
+  { file: "filtered-tree-modes.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "path-tree-builder-rows.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "node-presenter-row-partials.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
+  { file: "form-editing-rows.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "toolbar-actions.html", sample: ".mock-toolbar-frame", minimumCount: 3 },
+  { file: "selection-max-count.html", sample: ".mock-limit-state", minimumCount: 3 },
+  { file: "selection-multi-tree-form.html", sample: ".mock-selection-group", minimumCount: 2 },
+  { file: "empty-state.html", sample: "[data-tree-view-empty-state='true']", minimumCount: 2 }
 ]
 
 test.describe("docs mockup browser smoke", () => {
@@ -158,9 +68,11 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("link", { name: "Baseline" })).toHaveAttribute("href", "#gallery-default-heading")
     await expect(page.getByRole("link", { name: "Interaction states" })).toHaveAttribute("href", "#gallery-interaction-heading")
     await expect(page.getByRole("link", { name: "Current branch" })).toHaveAttribute("href", "#gallery-current-branch-heading")
+    await expect(page.getByRole("link", { name: "Presenter row partials" })).toHaveAttribute("href", "#gallery-node-presenter-heading")
     await expect(page.getByRole("link", { name: "Selection form" })).toHaveAttribute("href", "#gallery-selection-form-heading")
     await expect(page.frameLocator("iframe[title='Default tree mock preview']").getByRole("heading", { name: "Default TreeView rendering mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Current branch sidebar mock preview']").getByRole("heading", { name: "Current branch sidebar mock", level: 1 })).toBeVisible()
+    await expect(page.frameLocator("iframe[title='NodePresenter row partials mock preview']").getByRole("heading", { name: "NodePresenter row partial mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Multi-tree selection form mock preview']").getByRole("heading", { name: "TreeView multi-tree selection form mock", level: 1 })).toBeVisible()
 
     const linkedFiles = await page.locator("a[href]").evaluateAll((anchors) =>
@@ -175,6 +87,7 @@ test.describe("docs mockup browser smoke", () => {
     expect(linkedFiles).toContain("default-tree.html")
     expect(linkedFiles).toContain("interaction-states.html")
     expect(linkedFiles).toContain("current-branch-sidebar.html")
+    expect(linkedFiles).toContain("node-presenter-row-partials.html")
     expect(linkedFiles).toContain("selection-multi-tree-form.html")
     expect(linkedFiles).toContain("empty-state.html")
     expect(missingLinks).toEqual([])
