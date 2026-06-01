@@ -4,6 +4,11 @@
 
 目的は、共通の tree 概念を gem 側に置きつつ、table cell、action、permission、formatting、modal、download、inline editing などの product-specific な描画を host app 側に残すことです。
 
+## 関連 guide
+
+- presenter の label、tooltip、badge、node type 名を host app の locale に合わせたい場合は [Localized names](localized-names.md) を参照してください。
+- その関心ごとを `row_partial`、builder、host app 側 UI code のどこに置くべきか迷う場合は [Host app extension points](host-app-extension-points.md#row_partial) を参照してください。
+
 ## なぜ今 Column / Action DSL を入れないのか
 
 column と action は product ごとの差分が広がりやすい領域です。
