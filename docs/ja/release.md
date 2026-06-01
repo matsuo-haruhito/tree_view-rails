@@ -59,7 +59,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。main-push の `gem_package` CI job では、built gem に Rails helper / view partial / locale / docs / JavaScript / CSS / importmap の代表ファイルが残っていることを `ruby script/check_gem_package_contents.rb tree_view-*.gem` でも確認します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
+`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。main-push の `gem_package` CI job では、built gem に Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest の代表ファイルが残っていることを `ruby script/check_gem_package_contents.rb tree_view-*.gem` でも確認します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
 
 Pull Request CI の確認項目:
 
@@ -69,14 +69,14 @@ Pull Request CI の確認項目:
 - JavaScript tests: `npm install`、Playwright browser setup、`npm run test:js`
 - package-sensitive path を触るPRでの Gem package verification
 
-package-sensitive path には、`tree_view.gemspec`、`script/check_gem_package_contents.rb`、`.github/workflows/ci.yml`、`lib/**`、Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`、さらに `config/importmap.tree_view.rb` と `config/locales/**` が含まれます。これらを触るPRでは `gem build tree_view.gemspec`、`ruby script/check_gem_package_contents.rb tree_view-*.gem`、`gem install tree_view-*.gem`、`ruby -e "require 'tree_view'"` を実行します。prose-only docs PR は、その package-sensitive path も触らない限り、従来どおり軽い docs-only 挙動を維持します。
+package-sensitive path には、`tree_view.gemspec`、`script/check_gem_package_contents.rb`、`.github/workflows/ci.yml`、`lib/**`、Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`、さらに `config/importmap.tree_view.rb`、`config/public_api_manifest.yml`、`config/locales/**` が含まれます。これらを触るPRでは `gem build tree_view.gemspec`、`ruby script/check_gem_package_contents.rb tree_view-*.gem`、`gem install tree_view-*.gem`、`ruby -e "require 'tree_view'"` を実行します。prose-only docs PR は、その package-sensitive path も触らない限り、従来どおり軽い docs-only 挙動を維持します。
 
 `main` push CI の確認項目:
 
 - Ruby version matrix
 - Rails version matrix
 - `package-lock.json` が `package.json` と同期するまでの間は、`npm install` と `npm run test:js` による JavaScript tests
-- Rails helper / view partial / locale / docs / JavaScript / CSS / importmap の代表ファイルを含む Gem package verification
+- Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest の代表ファイルを含む Gem package verification
 
 merge前にPR CIを通します。release判定には、full compatibility matrices、JavaScript coverage、unconditional package verificationを含む、より広い `main` CIを使います。
 
@@ -142,6 +142,7 @@ release前に確認すること:
   - `app/javascript/tree_view/index.js`
   - `app/assets/stylesheets/tree_view.scss`
   - `config/importmap.tree_view.rb`
+  - `config/public_api_manifest.yml`
   - `config/locales/tree_view.toolbar.en.yml`
   - `README.md`
   - `CHANGELOG.md`
