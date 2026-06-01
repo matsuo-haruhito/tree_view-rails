@@ -52,13 +52,25 @@ Dispatched by the selection controller `submit` and `refresh` actions.
 
 Dispatched when `max_count` would be exceeded.
 
-`event.detail` contains `maxCount`, `attemptedCount`, `attemptedChecked`, and `checkbox`.
+`event.detail` contains:
+
+| Field | Type | Description |
+|---|---|---|
+| `maxCount` | Number | Configured selection limit from `max_count`. |
+| `attemptedCount` | Number | Count that would result from the attempted toggle. |
+| `attemptedChecked` | Boolean | Whether the attempted checkbox action was checking a row. |
+| `checkbox` | HTMLInputElement | Checkbox that triggered the limit check. |
 
 ### `tree-view-selection:invalid-payload`
 
 Dispatched when a checkbox value cannot be parsed as JSON.
 
-`event.detail` contains `value` and `checkbox`.
+`event.detail` contains:
+
+| Field | Type | Description |
+|---|---|---|
+| `value` | String | Raw checkbox value that could not be parsed as JSON. |
+| `checkbox` | HTMLInputElement | Checkbox whose value could not be parsed. |
 
 ## Remote state events
 
@@ -79,7 +91,13 @@ Dispatched when a row is marked `loading`, `loaded`, or `error`.
 
 Dispatched when retry is requested for a remote row.
 
-`event.detail` contains `row`, `childrenUrl`, and `nodeKey`.
+`event.detail` contains:
+
+| Field | Type | Description |
+|---|---|---|
+| `row` | Element | The row whose remote load is being retried. |
+| `childrenUrl` | String or null | Value from `data-tree-children-url`, when present. |
+| `nodeKey` | String or null | Value from `data-tree-view-state-node-key`, when present. |
 
 ## Transfer events
 
@@ -87,13 +105,24 @@ Dispatched when retry is requested for a remote row.
 
 Dispatched when a TreeView row drag starts.
 
-`event.detail` contains `sourcePayload` and `sourceRow`.
+`event.detail` contains:
+
+| Field | Type | Description |
+|---|---|---|
+| `sourcePayload` | Object or null | Payload parsed from the dragged row's `data-tree-transfer-payload`. |
+| `sourceRow` | Element | The row where the drag started. |
 
 ### `tree-view-transfer:drag-over`
 
 Dispatched while dragging over a valid target row.
 
-`event.detail` contains `targetPayload`, `targetRow`, and `position`.
+`event.detail` contains:
+
+| Field | Type | Description |
+|---|---|---|
+| `targetPayload` | Object or null | Payload parsed from the target row's `data-tree-transfer-payload`. |
+| `targetRow` | Element | The row currently being dragged over. |
+| `position` | String | `before`, `inside`, or `after`. |
 
 ### `tree-view-transfer:drop`
 
@@ -108,9 +137,26 @@ Dispatched when a payload is dropped on a target row.
 | `position` | String | `before`, `inside`, or `after`. |
 | `targetRow` | Element | The row receiving the drop. |
 
-### `tree-view-transfer:invalid-payload` / `tree-view-transfer:invalid-transfer`
+### `tree-view-transfer:invalid-payload`
 
-Dispatched when row payload JSON or transferred JSON cannot be parsed.
+Dispatched when row payload JSON cannot be parsed.
+
+`event.detail` contains:
+
+| Field | Type | Description |
+|---|---|---|
+| `value` | String | Raw row payload value that could not be parsed as JSON. |
+| `row` | Element | Row whose payload could not be parsed. |
+
+### `tree-view-transfer:invalid-transfer`
+
+Dispatched when transferred JSON cannot be parsed.
+
+`event.detail` contains:
+
+| Field | Type | Description |
+|---|---|---|
+| `value` | String | Raw transferred value that could not be parsed as JSON. |
 
 ## Compatibility policy
 
