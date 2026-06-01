@@ -15,6 +15,11 @@ function mockupUrl(file) {
   return pathToFileURL(mockupPath(file)).toString()
 }
 
+function galleryReturnHref(file) {
+  const relativePath = path.posix.relative(path.posix.dirname(file), "review-gallery.html")
+  return relativePath || "review-gallery.html"
+}
+
 function readmeMockupFiles() {
   const readme = readFileSync(mockupsReadmePath, "utf8")
   const filesTable = readme.split("## Recommended review flow")[0]
@@ -41,6 +46,7 @@ const focusedMockupSmokeTargets = [
   { file: "toggle-icon-states.html", sample: ".tree-view-table tbody tr", minimumCount: 7 },
   { file: "interaction-states.html", sample: ".tree-view-table tbody tr", minimumCount: 5 },
   { file: "keyboard-focus-states.html", sample: ".focus-sample, .focus-sample--soft", minimumCount: 5 },
+  { file: "high-contrast-state-cues/index.html", sample: "[data-tree-view-sample='high-contrast-state-cues']", minimumCount: 1 },
   { file: "lazy-loading-handoff.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "drop-positions.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "persisted-state-boundary.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
@@ -105,7 +111,7 @@ test.describe("docs mockup browser smoke", () => {
       await openMockup(page, mockup.file)
 
       await expect(page.locator("h1").first()).toBeVisible()
-      await expect(page.locator("a[href='review-gallery.html']").first()).toBeVisible()
+      await expect(page.locator(`a[href='${galleryReturnHref(mockup.file)}']`).first()).toBeVisible()
       expect(await page.locator(mockup.sample).count()).toBeGreaterThanOrEqual(mockup.minimumCount)
     })
   }
