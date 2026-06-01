@@ -120,6 +120,52 @@ RSpec.describe TreeView::Tree do
       end.to raise_error(ArgumentError, /sorter must return an Array-like object/)
     end
 
+    it "raises clear errors for representative abnormal sorter return patterns" do
+      patterns = [
+        {
+          name: "nil return from root sorting",
+          sorter: ->(_items, _tree) {},
+          error: /sorter must return an Array-like object, got: NilClass/
+        },
+        {
+          name: "scalar return from root sorting",
+          sorter: ->(_items, _tree) { :not_array_like },
+          error: /sorter must return an Array-like object, got: Symbol/
+        }
+      ]
+
+      patterns.each do |pattern|
+        root = ItemNode.new(id: 1, parent_item_id: nil, name: pattern.fetch(:name))
+        tree = described_class.new(
+          records: [root],
+          parent_id_method: :parent_item_id,
+          sorter: pattern.fetch(:sorter)
+        )
+
+        expect do
+          tree.root_items
+        end.to raise_error(ArgumentError, pattern.fetch(:error)), pattern.fetch(:name)
+      end
+    end
+
+    it "sorts roots and each child collection independently for representative records" do
+      zeta_root = ItemNode.new(id: 1, parent_item_id: nil, name: "zeta-root")
+      alpha_root = ItemNode.new(id: 2, parent_item_id: nil, name: "alpha-root")
+      zeta_child_b = ItemNode.new(id: 3, parent_item_id: 1, name: "beta-child")
+      zeta_child_a = ItemNode.new(id: 4, parent_item_id: 1, name: "alpha-child")
+      alpha_child_b = ItemNode.new(id: 5, parent_item_id: 2, name: "delta-child")
+      alpha_child_a = ItemNode.new(id: 6, parent_item_id: 2, name: "gamma-child")
+      tree = described_class.new(
+        records: [zeta_root, alpha_root, zeta_child_b, zeta_child_a, alpha_child_b, alpha_child_a],
+        parent_id_method: :parent_item_id,
+        sorter: ->(items, _tree) { items.sort_by { |item| [item.name, item.id] } }
+      )
+
+      expect(tree.root_items.map(&:id)).to eq([2, 1])
+      expect(tree.sort_items(tree.children_for(zeta_root)).map(&:id)).to eq([4, 3])
+      expect(tree.sort_items(tree.children_for(alpha_root)).map(&:id)).to eq([5, 6])
+    end
+
     it "accepts array-like sorter return values" do
       root = ItemNode.new(id: 1, parent_item_id: nil, name: "root")
       array_like_items = Struct.new(:items) do

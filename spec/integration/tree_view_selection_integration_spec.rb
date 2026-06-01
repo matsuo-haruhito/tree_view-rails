@@ -30,9 +30,9 @@ RSpec.describe "TreeView selection integration" do
     view
   end
 
-  def render_rows(render_tree, root_items, selection_options = {})
+  def build_render_state(render_tree, root_items, selection_options = {})
     tree_ui = TreeView::UiConfigBuilder.new(context: Object.new, node_prefix: "project").build_static
-    render_state = TreeView::RenderState.new(
+    TreeView::RenderState.new(
       tree: render_tree,
       root_items: root_items,
       row_partial: "projects/tree_columns",
@@ -43,8 +43,10 @@ RSpec.describe "TreeView selection integration" do
         payload_builder: ->(item) { {key: render_tree.node_key_for(item), id: item.id, type: item.class.name} }
       }.merge(selection_options)
     )
+  end
 
-    build_view.tree_view_rows(render_state)
+  def render_rows(render_tree, root_items, selection_options = {})
+    build_view.tree_view_rows(build_render_state(render_tree, root_items, selection_options))
   end
 
   it "renders selection checkboxes with JSON payload values" do
@@ -138,6 +140,31 @@ RSpec.describe "TreeView selection integration" do
     expect(rendered).to include('id="project_2_selection"')
     expect(rendered).to include('checked="checked"')
     expect(rendered).to include('disabled="disabled"')
+  end
+
+  it "keeps cascade and disabled-state selection options stable for mixed rows" do
+    render_state = build_render_state(
+      tree,
+      tree.root_items,
+      selected_keys: [2, 3],
+      cascade: true,
+      indeterminate: true,
+      max_count: 2,
+      disabled_builder: ->(item) { item.id == 2 },
+      disabled_reason_builder: ->(item) { (item.id == 2) ? "Selection limit reached" : nil }
+    )
+
+    rendered = build_view.tree_view_rows(render_state)
+
+    expect(render_state.selection_cascade?).to eq(true)
+    expect(render_state.selection_indeterminate?).to eq(true)
+    expect(render_state.selection_max_count).to eq(2)
+    expect(render_state.selection_selected_keys).to eq([2, 3])
+    expect(rendered).to include('id="project_2_selection"')
+    expect(rendered).to include('id="project_3_selection"')
+    expect(rendered.scan('checked="checked"').size).to eq(2)
+    expect(rendered).to include('disabled="disabled"')
+    expect(rendered).to include('data-tree-selection-disabled-reason="Selection limit reached"')
   end
 
   it "renders selection checkboxes for PathTree rows" do
