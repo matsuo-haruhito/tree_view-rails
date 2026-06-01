@@ -49,7 +49,7 @@ RSpec.describe "Public API reference coverage" do
         signals = public_constant_reference_signals(constant_name)
 
         expect(signals.any? { |signal| source.include?(signal) }).to be(true),
-          "expected #{locale} API reference to mention #{constant_name} using one of: #{signals.join(', ')}"
+          "expected #{locale} API reference to mention #{constant_name} using one of: #{signals.join(", ")}"
       end
     end
   end
