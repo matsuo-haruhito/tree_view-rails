@@ -81,6 +81,14 @@ Dispatched when retry is requested for a remote row.
 
 `event.detail` contains `row`, `childrenUrl`, and `nodeKey`.
 
+## Host lifecycle events
+
+### `tree-view:loading` / `tree-view:loaded` / `tree-view:error` / `tree-view:retry`
+
+Host apps may dispatch these lifecycle events on a lazy-loading TreeView row so the remote-state controller can mark that row as loading, loaded, error, or retrying.
+
+These events do not define public `event.detail` fields in the manifest. Put row-specific remote-state data on the row attributes documented for lazy loading instead of relying on payload fields.
+
 ## Transfer events
 
 ### `tree-view-transfer:drag-start`
@@ -111,6 +119,10 @@ Dispatched when a payload is dropped on a target row.
 ### `tree-view-transfer:invalid-payload` / `tree-view-transfer:invalid-transfer`
 
 Dispatched when row payload JSON or transferred JSON cannot be parsed.
+
+`tree-view-transfer:invalid-payload` detail contains `value` and `row`.
+
+`tree-view-transfer:invalid-transfer` detail contains `value`.
 
 ## Compatibility policy
 
