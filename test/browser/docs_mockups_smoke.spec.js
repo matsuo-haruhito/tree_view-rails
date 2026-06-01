@@ -58,6 +58,11 @@ const focusedMockupSmokeTargets = [
     minimumCount: 3
   },
   {
+    file: "toggle-icon-states.html",
+    sample: ".tree-view-table tbody tr",
+    minimumCount: 7
+  },
+  {
     file: "interaction-states.html",
     sample: ".tree-view-table tbody tr",
     minimumCount: 5
