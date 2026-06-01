@@ -74,6 +74,31 @@ describe("TreeViewSelectionController integration contracts", () => {
     expect(new Set(hiddenInputs.map((input) => input.dataset.treeViewSelectionSourceId)).size).toBe(1)
   })
 
+  it("keeps selector-sensitive source ids isolated when syncing hidden inputs", () => {
+    const element = document.querySelector("[data-controller='tree-view-selection']")
+    element.dataset.treeViewSelectionSourceId = 'team "alpha" [owner]'
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-selection")
+    const [checkbox] = document.querySelectorAll(".tree-selection-checkbox")
+
+    const unrelatedInput = document.createElement("input")
+    unrelatedInput.type = "hidden"
+    unrelatedInput.name = "selected_projects[]"
+    unrelatedInput.value = JSON.stringify({ key: "keep-me" })
+    unrelatedInput.dataset.treeViewSelectionGeneratedHiddenInput = "true"
+    unrelatedInput.dataset.treeViewSelectionSourceId = "other source"
+    document.querySelector("#selection-form").appendChild(unrelatedInput)
+
+    checkbox.checked = true
+    controller.toggle({ target: checkbox })
+    checkbox.checked = false
+    controller.toggle({ target: checkbox })
+
+    const hiddenInputs = Array.from(
+      document.querySelectorAll("#selection-form input[type='hidden'][name='selected_projects[]']")
+    )
+    expect(hiddenInputs).toEqual([unrelatedInput])
+  })
+
   it("restores the attempted checkbox and reports max-count boundary detail", () => {
     const element = document.querySelector("[data-controller='tree-view-selection']")
     const controller = application.getControllerForElementAndIdentifier(element, "tree-view-selection")
