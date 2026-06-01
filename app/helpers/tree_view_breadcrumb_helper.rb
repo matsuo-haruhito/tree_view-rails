@@ -34,7 +34,7 @@ module TreeViewBreadcrumbHelper
     path_items = tree.path_for(item)
     list_items = path_items.each_with_index.map do |path_item, index|
       current = index == path_items.length - 1
-      tag.li(**tree_view_breadcrumb_html_options(item_html, path_item, class_name: item_class)) do
+      tag.li(**tree_view_breadcrumb_html_options(item_html, path_item, option_name: :item_html, class_name: item_class)) do
         content = (current || path_builder.nil?) ?
           tree_view_breadcrumb_current_label(path_item, label_builder, current_class, current_html) :
           tree_view_breadcrumb_link(path_item, label_builder, path_builder, link_class, link_html)
@@ -49,6 +49,7 @@ module TreeViewBreadcrumbHelper
               **tree_view_breadcrumb_html_options(
                 separator_html,
                 path_item,
+                option_name: :separator_html,
                 class_name: separator_class,
                 aria: {hidden: true}
               )
@@ -58,8 +59,8 @@ module TreeViewBreadcrumbHelper
       end
     end
 
-    tag.nav(**tree_view_breadcrumb_html_options(html, item, class_name: nav_class, aria: {label: aria_label})) do
-      tag.ol(safe_join(list_items), **tree_view_breadcrumb_html_options(list_html, item, class_name: list_class))
+    tag.nav(**tree_view_breadcrumb_html_options(html, item, option_name: :html, class_name: nav_class, aria: {label: aria_label})) do
+      tag.ol(safe_join(list_items), **tree_view_breadcrumb_html_options(list_html, item, option_name: :list_html, class_name: list_class))
     end
   end
 
@@ -71,6 +72,7 @@ module TreeViewBreadcrumbHelper
       **tree_view_breadcrumb_html_options(
         link_html,
         item,
+        option_name: :link_html,
         href: path_builder.call(item),
         class_name: link_class
       )
@@ -83,23 +85,28 @@ module TreeViewBreadcrumbHelper
       **tree_view_breadcrumb_html_options(
         current_html,
         item,
+        option_name: :current_html,
         class_name: current_class,
         aria: {current: "page"}
       )
     )
   end
 
-  def tree_view_breadcrumb_html_options(source, item, class_name: nil, aria: {}, href: nil)
-    options = tree_view_breadcrumb_resolve_html_options(source, item)
+  def tree_view_breadcrumb_html_options(source, item, option_name:, class_name: nil, aria: {}, href: nil)
+    options = tree_view_breadcrumb_resolve_html_options(source, item, option_name)
     options[:href] = href if href
     options[:class] = [class_name, options[:class]].compact if class_name
     options[:aria] = (options[:aria] || {}).merge(aria) if aria.any?
     options
   end
 
-  def tree_view_breadcrumb_resolve_html_options(source, item)
+  def tree_view_breadcrumb_resolve_html_options(source, item, option_name)
     source = source.call(item) if source.respond_to?(:call)
     return {} if source.nil?
+
+    unless source.respond_to?(:to_h)
+      raise ArgumentError, "#{option_name} must be a Hash-like object or callable returning one"
+    end
 
     source.to_h.deep_symbolize_keys
   end
