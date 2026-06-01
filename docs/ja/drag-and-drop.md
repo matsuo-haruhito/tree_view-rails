@@ -114,6 +114,16 @@ transfer controller が読者向けに公開する主なdetailは次のとおり
 
 `position` は、target row内でpointerがどこにあるかを示すTreeView側の粗いcueです。上 1/3 は `before`、中央 1/3 は `inside`、下 1/3 は `after` になります。これはhost appの業務ルールへの入力として扱い、最終的な許可・保存方針として扱わないでください。たとえば、leaf-only treeでは `inside` を無視したり、projectをまたぐdropを拒否したり、`before` / `after` を並び順更新へ変換したりできます。
 
+### source payload がない、または壊れている場合
+
+source payload が取れるかどうかと、host app の move validation は別の論点です。
+
+`DataTransfer` がない、または `application/json` / `text/plain` に値がない場合、TreeView は `tree-view-transfer:drop` event の `sourcePayload` を `null` にします。これは external drag source、empty transfer value、TreeView row payload を持たない browser event などを含みます。host app は `sourcePayload: null` を untrusted または unsupported な move として扱い、最終的な拒否文言、logging、UI response を決めてください。
+
+`DataTransfer` に空ではない値があるものの JSON として parse できない場合、TreeView は raw `value` を含む `tree-view-transfer:invalid-transfer` を dispatch し、source payload は利用不可のままにします。この event は integration signal であり、business-level authorization result ではありません。
+
+source payload が有効な場合でも、最終的な validation は host app の責務です。たとえば、現在ユーザーに権限がない、target project が違う、target row が children を受け付けない、`before` / `after` / `inside` の position がその画面では許可されない、といった理由で drop を拒否できます。
+
 JavaScript event contract全体は [JavaScript event contract](js-events.md#transfer-events) を参照してください。
 
 ## 責務範囲
@@ -125,6 +135,8 @@ JavaScript event contract全体は [JavaScript event contract](js-events.md#tran
 | dragstart helper | yes | wires action |
 | interactive-control drag-start guard | yes | marks custom widgets when needed |
 | transfer event detail | yes | listens and applies business behavior |
+| source payload parse failure | 空ではない invalid JSON では `invalid-transfer` を通知する | user-facing rejection、logging、recovery を決める |
+| missing source payload | drop event で `sourcePayload: null` を返す | unsupported drop を reject / handle する policy を決める |
 | coarse drop position | `before`, `inside`, `after` を返す | そのpositionを許可するか、どう保存するかを決める |
 | drop target | no | yes |
 | reorder / move persistence | no | yes |

@@ -114,6 +114,16 @@ The transfer controller exposes these reader-facing details:
 
 `position` is a TreeView-owned coarse cue for where the pointer sits inside the target row: the top third is `before`, the middle third is `inside`, and the bottom third is `after`. Treat it as input to host-app business rules, not as final authorization or persistence policy. For example, a host app may ignore `inside` for leaf-only trees, reject drops across projects, or translate `before` / `after` into an ordering update.
 
+### Missing or invalid source payloads
+
+Source payload availability is separate from host-app move validation.
+
+When `DataTransfer` is missing or does not contain `application/json` or `text/plain`, TreeView leaves `sourcePayload` as `null` on the `tree-view-transfer:drop` event. This covers cases such as an external drag source, an empty transfer value, or a browser event where no transferable TreeView row payload was available. The host app should treat `sourcePayload: null` as an untrusted or unsupported move and decide the final rejection copy, logging, and UI response.
+
+When `DataTransfer` contains a non-empty value but that value cannot be parsed as JSON, TreeView dispatches `tree-view-transfer:invalid-transfer` with the raw `value` and still leaves the source payload unavailable. That event is an integration signal, not a business-level authorization result.
+
+When a source payload is present and valid, the host app still owns final validation. For example, it may reject a drop because the current user lacks permission, the target project is different, the target row cannot accept children, or the requested `before` / `after` / `inside` position is not allowed.
+
 For the full JavaScript event contract, see [JavaScript event contract](js-events.md#transfer-events).
 
 ## Responsibility boundary
@@ -125,6 +135,8 @@ For the full JavaScript event contract, see [JavaScript event contract](js-event
 | dragstart helper | yes | wires action |
 | interactive-control drag-start guard | yes | marks custom widgets when needed |
 | transfer event detail | yes | listens and applies business behavior |
+| source payload parse failure | reports `invalid-transfer` for non-empty invalid JSON | decides user-facing rejection, logging, and recovery |
+| missing source payload | reports `sourcePayload: null` on drop | rejects or handles unsupported drops according to host-app policy |
 | coarse drop position | reports `before`, `inside`, or `after` | decides whether the position is allowed and how to persist it |
 | drop target | no | yes |
 | reorder / move persistence | no | yes |
