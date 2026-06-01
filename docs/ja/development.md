@@ -28,10 +28,13 @@ docker compose run --rm app npm install
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
+npm run test:js
 npm test
 npm run test:entrypoints
 npm run test:browser
 ```
+
+CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。失敗箇所を切り分ける場合は個別の npm command を使ってください。
 
 Rails version matrixを確認する場合:
 
