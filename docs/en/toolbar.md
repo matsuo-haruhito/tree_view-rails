@@ -51,6 +51,27 @@ For a static comparison of expand-all, collapse-all, and current-path-preserving
 
 Use that mockup as a visual companion to this helper boundary: it highlights action affordances and the `:current_path` contract without defining routes, authorization copy, or Turbo response behavior.
 
+## Label resolution
+
+`tree_view_toolbar`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` resolve action labels in this order:
+
+1. An explicit `labels:` entry for the action, such as `{ expand_all: "Open all" }`.
+2. The current locale's `tree_view.toolbar.labels.*` translation.
+3. TreeView's built-in English fallback label.
+
+Supported translation keys are:
+
+```yml
+tree_view:
+  toolbar:
+    labels:
+      expand_all: "Expand all"
+      collapse_all: "Collapse all"
+      collapse_all_except_current_path: "Collapse all except current path"
+```
+
+Use locale files for the host app's usual toolbar wording. Use `labels:` only for screen-specific copy that should override the locale default. TreeView provides the keys and fallback labels; the host app still owns final wording, locale-file policy, and any product-specific terminology.
+
 ## Custom labels, classes, and attributes
 
 ```erb
@@ -92,5 +113,6 @@ Host apps own:
 - authorization
 - persistence of expanded keys
 - semantics of `:current_path`
+- final labels, locale files, and screen-specific wording passed through `labels:`
 - analytics, test hooks, and screen-specific attributes passed through `html:` or `action_html:`
 - visual styling beyond default class names
