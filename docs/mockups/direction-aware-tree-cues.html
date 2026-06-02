@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView direction-aware hierarchy cue mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.direction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.direction-frame {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #d8e0ea;
+  background: #fff;
+}
+
+.direction-frame h3,
+.direction-frame p {
+  margin: 0;
+}
+
+.direction-note {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid #d8e0ea;
+  background: #f8fafc;
+}
+
+.direction-note h3,
+.direction-note p {
+  margin: 0;
+}
+
+.direction-frame[dir="rtl"] .tree-view-table th,
+.direction-frame[dir="rtl"] .tree-view-table td {
+  text-align: right;
+}
+
+.direction-frame[dir="rtl"] .tree-toggle {
+  flex-direction: row-reverse;
+}
+
+.direction-frame[dir="rtl"] .tree-toggle__control {
+  justify-content: flex-end;
+}
+
+.direction-frame[dir="rtl"] .tree-toggle__branch-slot.is-current::after {
+  left: 0;
+  right: 50%;
+}
+
+.direction-frame[dir="rtl"] .tree-row-actions {
+  text-align: left;
+}
+
+.direction-observation-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #334e68;
+}
+
+.direction-frame[dir="rtl"] .direction-observation-list {
+  padding-right: 1.2rem;
+  padding-left: 0;
+}
+
+.mock-section {
+  overflow-x: auto;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView direction-aware hierarchy cue mock</h1>
+      <p>
+        Static reference for comparing left-to-right and right-to-left hierarchy cues.
+        It keeps copy product-neutral while making branch lines, toggle controls, current state, selected rows, and row actions inspectable in both directions.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="direction-boundary-heading">
+      <h2 id="direction-boundary-heading">Responsibility boundary</h2>
+      <div class="direction-grid">
+        <article class="direction-note">
+          <h3>TreeView-owned cues</h3>
+          <p>Hierarchy depth, branch slots, toggle controls, current-row cue, and selection state should stay readable in either inline direction.</p>
+        </article>
+        <article class="direction-note">
+          <h3>Host-app-owned cues</h3>
+          <p>Locale selection, translations, route labels, permission copy, and final row actions remain outside this static reference.</p>
+        </article>
+        <article class="direction-note">
+          <h3>Out of scope here</h3>
+          <p>This page is not a full RTL support declaration and does not change runtime Ruby, JavaScript, or host-app localization policy.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="direction-comparison-heading" data-tree-view-sample="rtl-hierarchy-cues">
+      <h2 id="direction-comparison-heading">LTR and RTL comparison</h2>
+      <div class="direction-grid">
+        <article class="direction-frame" aria-labelledby="ltr-heading">
+          <h3 id="ltr-heading">Left-to-right baseline</h3>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">node</th>
+                <th scope="col">state</th>
+                <th scope="col">actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-expanded" data-tree-node-key="workspace" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Expanded root">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control"><a class="tree-toggle__action" href="#">hide</a><span class="tree-toggle__level">root</span></span>
+                  </span>
+                </td>
+                <td><span class="mock-node-title">Workspace</span></td>
+                <td><span class="mock-status mock-status--active">expanded</span></td>
+                <td class="tree-row-actions"><button type="button">Open</button></td>
+              </tr>
+              <tr class="tree-row is-selected" data-tree-parent-key="workspace" data-tree-node-key="workspace:current" data-tree-depth="1" aria-level="2" aria-current="page">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Current child">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control"><span class="tree-toggle__level">current</span></span>
+                  </span>
+                </td>
+                <td><span class="mock-node-title">Current folder</span></td>
+                <td><span class="mock-status mock-status--active">current</span></td>
+                <td class="tree-row-actions"><button type="button">View</button></td>
+              </tr>
+              <tr class="tree-row is-collapsed" data-tree-parent-key="workspace" data-tree-node-key="workspace:collapsed" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Collapsed child">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                    <span class="tree-toggle__control"><a class="tree-toggle__action" href="#">show</a><span class="tree-toggle__level">child</span></span>
+                  </span>
+                </td>
+                <td><span class="mock-node-title">Collapsed folder</span></td>
+                <td><span class="mock-status mock-status--pending">collapsed</span></td>
+                <td class="tree-row-actions"><button type="button">Open</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="direction-observation-list">
+            <li>Branch line and toggle action sit before the label in the inline-start scan.</li>
+            <li>Current and selected cues stay in the row, not only in the action column.</li>
+          </ul>
+        </article>
+
+        <article class="direction-frame" dir="rtl" aria-labelledby="rtl-heading">
+          <h3 id="rtl-heading">Right-to-left review frame</h3>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">node</th>
+                <th scope="col">state</th>
+                <th scope="col">actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-expanded" data-tree-node-key="workspace-rtl" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Expanded root in RTL">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control"><a class="tree-toggle__action" href="#">hide</a><span class="tree-toggle__level">root</span></span>
+                  </span>
+                </td>
+                <td><span class="mock-node-title">Workspace</span></td>
+                <td><span class="mock-status mock-status--active">expanded</span></td>
+                <td class="tree-row-actions"><button type="button">Open</button></td>
+              </tr>
+              <tr class="tree-row is-selected" data-tree-parent-key="workspace-rtl" data-tree-node-key="workspace-rtl:current" data-tree-depth="1" aria-level="2" aria-current="page">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Current child in RTL">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control"><span class="tree-toggle__level">current</span></span>
+                  </span>
+                </td>
+                <td><span class="mock-node-title">Current folder</span></td>
+                <td><span class="mock-status mock-status--active">current</span></td>
+                <td class="tree-row-actions"><button type="button">View</button></td>
+              </tr>
+              <tr class="tree-row is-collapsed" data-tree-parent-key="workspace-rtl" data-tree-node-key="workspace-rtl:collapsed" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Collapsed child in RTL">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                    <span class="tree-toggle__control"><a class="tree-toggle__action" href="#">show</a><span class="tree-toggle__level">child</span></span>
+                  </span>
+                </td>
+                <td><span class="mock-node-title">Collapsed folder</span></td>
+                <td><span class="mock-status mock-status--pending">collapsed</span></td>
+                <td class="tree-row-actions"><button type="button">Open</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="direction-observation-list">
+            <li>Branch connectors mirror toward inline-start so hierarchy does not depend on left-only placement.</li>
+            <li>Row action placement is visible without deciding final host-app localization or route labels.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
