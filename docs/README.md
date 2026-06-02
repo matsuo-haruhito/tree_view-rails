@@ -17,6 +17,8 @@
 - [日本語API概要: adapter mode](ja/api-overview.md#adapter-mode): API仕様やCookbookの性能メモへ進む前に確認するGraphAdapterの短い入口。
 - [English ReverseTree](en/reverse-tree.md): child-to-parent path entry point when matched records should be visible roots and ancestors should appear below them.
 - [日本語ReverseTree](ja/reverse-tree.md): matched recordを表示上のrootにし、ancestorをその下に並べるchild-to-parent pathの入口。
+- [English Filtered Trees](en/filtered-trees.md): render search or filter results as trees while keeping path-generated folders and child-to-parent paths separate.
+- [日本語Filtered Trees](ja/filtered-trees.md): 検索・絞り込み結果をtreeとして表示する入口。path生成folderやchild-to-parent pathとは使い分けます。
 - [English FAQ](en/faq.md): quick answers about responsibility boundaries and common misunderstandings.
 - [日本語FAQ](ja/faq.md): 責務境界とよくある誤解を短く確認する入口。
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
