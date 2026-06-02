@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 RSpec.describe "documentation drift guards" do
-  ROOT = File.expand_path("..", __dir__)
+  def repo_root
+    @repo_root ||= File.expand_path("..", __dir__)
+  end
 
   def read_repo_file(path)
-    File.read(File.join(ROOT, path))
+    File.read(File.join(repo_root, path))
   end
 
   def expect_link(markdown, target, source_path)
@@ -19,6 +21,12 @@ RSpec.describe "documentation drift guards" do
 
       line.scan(/`([^`]+)`/).flatten
     end.flatten.uniq
+  end
+
+  def language_docs_for(paths, language)
+    paths.grep(%r{\Adocs/#{language}/})
+      .map { |path| path.delete_prefix("docs/#{language}/") }
+      .reject { |path| path == "README.md" }
   end
 
   it "keeps i18n High lane pages present and reachable from docs entry points" do
@@ -39,7 +47,7 @@ RSpec.describe "documentation drift guards" do
     )
 
     paths.each do |path|
-      expect(File).to exist(File.join(ROOT, path)), "expected i18n High lane doc to exist: #{path}"
+      expect(File).to exist(File.join(repo_root, path)), "expected i18n High lane doc to exist: #{path}"
     end
 
     root_docs = read_repo_file("docs/README.md")
@@ -48,8 +56,8 @@ RSpec.describe "documentation drift guards" do
     expect_link(root_docs, "i18n-audit.md", "docs/README.md")
 
     {
-      "docs/en/README.md" => paths.grep(%r{\Adocs/en/}).map { |path| path.delete_prefix("docs/en/") },
-      "docs/ja/README.md" => paths.grep(%r{\Adocs/ja/}).map { |path| path.delete_prefix("docs/ja/") }
+      "docs/en/README.md" => language_docs_for(paths, "en"),
+      "docs/ja/README.md" => language_docs_for(paths, "ja")
     }.each do |entry_path, linked_paths|
       entry = read_repo_file(entry_path)
 
