@@ -88,6 +88,26 @@ tree を描画しているときの Rails log で次を確認します。
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Tree diagnostics](tree-diagnostics.md)
 
+## GraphAdapter の行が重複する / 足りない / 想定と違う形になる
+
+GraphAdapter で起きる症状は、多くの場合 host app 側の resolver 出力または node key strategy から来ます。TreeView は行を描画できるよう resolver 結果を正規化しますが、graph-like data の traversal policy、authorization、cycle handling、query planning は決めません。
+
+row partial や TreeView 内部を変える前に次を確認してください。
+
+- `children_resolver` の各 branch が、その画面で本当に描画したい child collection を返しているか。予測しやすい描画と性能のため、配列を返してください。
+- `nil` は空の child list になり、単一 object は 1 child として包まれます。その挙動が画面の期待と違う場合は resolver branch を明示してください。
+- 同じ logical node が複数 parent の下に出る場合、それを意図した duplicate path として扱うか、tree 構築前に host app 側で絞るかを決めてください。
+- heterogeneous node では、type や source system で namespace した `node_key_resolver:` を渡してください。
+- cycle や duplicate key が見える場合、GraphAdapter 固有の validation behavior を足す前に diagnostics を使ってください。
+- authorization、eager loading、cache、pagination、cycle policy は host app 側に置いてください。GraphAdapter は roots と child arrays を `TreeView::Tree` に渡すだけです。
+
+次に読む文書:
+
+- [GraphAdapter](graph-adapter.md)
+- [Cookbook: GraphAdapter と ActiveRecord の性能](cookbook.md#graphadapter-と-activerecord-の性能)
+- [Tree diagnostics](tree-diagnostics.md)
+- [Node keys](node-keys.md)
+
 ## CSS や JavaScript の統合が効いていないように見える
 
 まず導入 wiring を確認してください。
