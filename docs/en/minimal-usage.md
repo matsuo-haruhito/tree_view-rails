@@ -85,12 +85,12 @@ Set `selection.enabled` to `true` to enable checkbox selection.
 
 `visibility: :leaves` renders checkboxes only for leaf nodes.
 
-See [Selection](../selection.md) for details.
+See [Selection](selection.md) for details.
 
 ## Next steps
 
 - [Installation](installation.md)
 - [Usage](usage.md)
 - [API overview](api-overview.md)
-- [API reference](../api.md)
-- [Selection](../selection.md)
+- [API reference](api.md)
+- [Selection](selection.md)
