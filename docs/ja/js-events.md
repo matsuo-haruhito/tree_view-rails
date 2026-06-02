@@ -158,6 +158,19 @@ transferred JSON をparseできないときに発火します。
 |---|---|---|
 | `value` | String | JSON parse できなかった raw transferred value。 |
 
+## host app code で TreeViewEventNames を使う
+
+上記の raw event string は引き続き公開契約です。host app の JavaScript で listener を配線するときは、`tree_view/index.js` から `TreeViewEventNames` を import し、event name string を写経せずに対応する package-root export を使えます。
+
+```js
+import { TreeViewEventNames } from "tree_view/index.js"
+
+element.addEventListener(TreeViewEventNames.selection.change, handleSelectionChange)
+element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStateChange)
+```
+
+`TreeViewEventNames.hostLifecycle.*` は、`tree-view:loading` など lazy-loading request lifecycle event を host app 側で dispatch するための surface です。このページで説明している TreeView controller 自身が emit する remote-state event は `TreeViewEventNames.remoteState.*` を使います。
+
 ## 互換性方針
 
 machine-readable public API manifest は、このページで文書化している event name と代表的な必須 `event.detail` key を写して drift を検知するための guard です。一次の契約は引き続きこのページです。
