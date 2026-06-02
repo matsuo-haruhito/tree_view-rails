@@ -39,6 +39,12 @@ export const TreeViewEventNames = Object.freeze({
   })
 })
 
+export const TreeViewRemoteStateValues = Object.freeze({
+  loading: "loading",
+  loaded: "loaded",
+  error: "error"
+})
+
 export const TreeViewTransferDropPositions = Object.freeze({
   before: "before",
   inside: "inside",
