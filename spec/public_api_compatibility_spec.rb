@@ -41,6 +41,10 @@ RSpec.describe "Public API compatibility" do
     public_javascript_manifest.fetch("event_detail_keys")
   end
 
+  def public_javascript_remote_state_values
+    public_javascript_manifest.fetch("remote_state_values")
+  end
+
   def javascript_entrypoint_source
     @javascript_entrypoint_source ||= File.read(JAVASCRIPT_ENTRYPOINT_PATH)
   end
@@ -348,6 +352,17 @@ RSpec.describe "Public API compatibility" do
         expect(source).to include(%("#{event_name}")),
           "expected TreeViewEventNames to include #{event_name}"
       end
+    end
+  end
+
+  it "keeps documented remote-state values available through TreeViewRemoteStateValues" do
+    source = javascript_entrypoint_source
+
+    expect(source).to include("export const TreeViewRemoteStateValues = Object.freeze({")
+
+    public_javascript_remote_state_values.each do |key, value|
+      expect(source).to include("#{key}: \"#{value}\""),
+        "expected TreeViewRemoteStateValues.#{key} to remain mapped to #{value}"
     end
   end
 
