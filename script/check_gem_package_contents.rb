@@ -3,6 +3,8 @@
 
 require "rubygems/package"
 
+# Keep representative English and Japanese files in this list so package
+# verification covers the bilingual locale and release docs shipped by the gem.
 REQUIRED_PACKAGED_PATHS = %w[
   app/helpers/tree_view_helper.rb
   app/views/tree_view/_tree_row.html.erb
@@ -16,7 +18,9 @@ REQUIRED_PACKAGED_PATHS = %w[
   config/importmap.tree_view.rb
   config/public_api_manifest.yml
   config/locales/tree_view.toolbar.en.yml
+  config/locales/tree_view.toolbar.ja.yml
   docs/en/release.md
+  docs/ja/release.md
 ].freeze
 
 root = File.expand_path("..", __dir__)
