@@ -7,6 +7,17 @@ require "rubygems/package"
 # verification covers the bilingual locale and release docs shipped by the gem.
 REQUIRED_PACKAGED_PATHS = %w[
   app/helpers/tree_view_helper.rb
+  app/helpers/tree_view_helper/support.rb
+  app/helpers/tree_view_helper/rendering.rb
+  app/helpers/tree_view_helper/dom.rb
+  app/helpers/tree_view_helper/row_attributes.rb
+  app/helpers/tree_view_helper/selection.rb
+  app/helpers/tree_view_helper/transfer.rb
+  app/helpers/tree_view_helper/visuals.rb
+  app/helpers/tree_view_helper/render_scope.rb
+  app/helpers/tree_view_helper/lazy_loading.rb
+  app/helpers/tree_view_helper/toolbar.rb
+  app/helpers/tree_view_breadcrumb_helper.rb
   app/views/tree_view/_tree_row.html.erb
   app/assets/stylesheets/tree_view.scss
   app/javascript/tree_view/index.js
