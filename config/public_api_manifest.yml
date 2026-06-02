@@ -86,6 +86,7 @@ javascript_package_root:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
     - TreeViewTransferDropPositions
+    - TreeViewTransferDataMimeTypes
     - TreeViewStateController
     - TreeViewClientController
     - TreeViewSelectionController
@@ -96,6 +97,9 @@ javascript_package_root:
     before: before
     inside: inside
     after: after
+  transfer_data_mime_types:
+    application_json: application/json
+    text_plain: text/plain
   controller_registrations:
     - key: state
       identifier: tree-view-state
