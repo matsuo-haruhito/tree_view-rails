@@ -49,7 +49,7 @@ RSpec.describe "Public JavaScript event detail drift" do
     depth = 0
     body_start = open_brace_index + 1
 
-    source.each_char.with_index(open_brace_index) do |char, index|
+    source[open_brace_index..].each_char.with_index(open_brace_index) do |char, index|
       depth += 1 if char == "{"
       depth -= 1 if char == "}"
 
@@ -70,7 +70,7 @@ RSpec.describe "Public JavaScript event detail drift" do
     return bodies unless bodies.empty?
 
     # dispatchTransferEvent(name, detail) treats the second argument as the public detail object.
-    return [first_argument_object_body(window)].compact if window.match?(/\bdispatch[A-Za-z]*\("/)
+    return [first_argument_object_body(window)].compact if window.match?(/\bdispatchTransferEvent\("/)
 
     []
   end
