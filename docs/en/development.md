@@ -109,6 +109,8 @@ Pushes to `main` also run the broader compatibility and release checks:
 ### Ruby API changes
 
 - Add or update specs.
+- Run `bundle exec standardrb` after Ruby file or Ruby spec edits, including connector or GitHub API edits that may bypass local editor newline handling.
+- If Standard Ruby reports a mechanical formatting issue such as a missing final newline or trailing whitespace, apply the formatter or a minimal file rewrite before opening the pull request.
 - Check `docs/ja/api-overview.md` and `docs/en/api-overview.md`.
 - Update public API compatibility specs when documented entry points, helpers, or options are intentionally changed.
 - If `config/public_api_manifest.yml` changes, update `docs/en/public-api.md` / `docs/ja/public-api.md`, then review the related README, usage docs, feature docs, `CHANGELOG.md`, and `docs/en/release.md` / `docs/ja/release.md`.
