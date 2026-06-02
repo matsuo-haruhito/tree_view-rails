@@ -125,6 +125,14 @@ Pushes to `main` also run the broader compatibility and release checks:
 
 ### Documentation changes
 
+Before opening a docs pull request, do a short maintenance sweep using `docs/i18n-audit.md` as the cross-language checklist.
+
+- Confirm whether the change affects shared user-facing guidance and therefore needs matching Japanese and English updates.
+- Decide whether the change needs `CHANGELOG.md`, release docs, README/docs index links, or root-level docs policy updates.
+- For public API, compatibility, installation, release, or migration docs, check the update matrix in `docs/i18n-audit.md` before narrowing the PR scope.
+- For focused mockup additions, renames, or removals, confirm the `docs/mockups/README.md` Files table, `docs/mockups/review-gallery.html`, and browser smoke target list describe the same inventory.
+- If one language or one related doc intentionally lags, leave the mismatch visible in the PR body or a follow-up issue instead of silently relying on the docs-only CI shortcut.
+
 - Keep Japanese and English docs in sync when practical.
 - Update `docs/i18n-audit.md`.
 - Decide whether root compatibility docs should remain or point to language-specific docs.
