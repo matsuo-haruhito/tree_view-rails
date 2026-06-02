@@ -85,12 +85,12 @@ end
 
 `visibility: :leaves` はleaf nodeだけにcheckboxを表示します。
 
-詳しくは [Selection](../selection.md) を参照してください。
+詳しくは [Selection](selection.md) を参照してください。
 
 ## 次に読むもの
 
 - [導入手順](installation.md)
-- [使い方](../usage.md)
+- [使い方](usage.md)
 - [API概要](api-overview.md)
-- [API仕様](../api.md)
-- [Selection](../selection.md)
+- [API仕様](api.md)
+- [Selection](selection.md)
