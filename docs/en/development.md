@@ -94,7 +94,7 @@ Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-
 
 The pull-request Rails lanes intentionally skip Rails 7.1 to keep PR feedback focused on representative lower, current, and next-major coverage; the `main` push full Rails matrix is the final compatibility gate that includes Rails 7.1.
 
-Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails and JavaScript jobs while preserving the same check names for branch protection. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.
+Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails lanes while preserving the same check names for branch protection. The JavaScript job also short-circuits for docs-only pull requests unless `docs/mockups/**` changed; mockup changes still check out the branch, install Playwright, and run `npm run test:browser`. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.
 
 A green check suite does not by itself mean a pull request is ready to merge after `main` has moved. When a branch is `diverged`, check mergeability, changed files, risk, and how far the branch is behind. Prefer refreshing the branch and observing fresh CI when GitHub reports `mergeable: false`, when the branch is far behind, or when the pull request touches workflow definitions, public API, specs, or shared docs inventory. For small docs-only changes that are only a little behind, it is enough to confirm the changed files still apply cleanly, mergeability is true, and the named checks remain green.
 
@@ -139,7 +139,7 @@ Before opening a docs pull request, do a short maintenance sweep using `docs/i18
 - When a pull request touches only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md`, confirm that the docs-only CI short-circuit is still the intended policy before relying on it.
 - If a pull request also changes `.github/workflows/**`, treat it as a full CI change rather than a docs-only shortcut candidate.
 - When a pull request adds, renames, or removes a focused mockup under `docs/mockups/`, keep the mockup inventory trail synchronized: update `docs/mockups/README.md`, add or adjust the `docs/mockups/review-gallery.html` card, review README and language README entry points when the recommended review flow changes, and add feature-guide links when a mockup is meant to accompany a specific guide.
-- Docs-only CI does not verify mockup inventory drift automatically. If the existing mockup files and docs indexes already disagree, handle that as a separate docs follow-up instead of mixing gallery redesign or mockup HTML/CSS changes into a checklist-only PR.
+- Docs-only CI skips JavaScript only when `docs/mockups/**` is unchanged. When focused mockup files change, CI runs `npm run test:browser` against the browser smoke target list, but that smoke does not prove the README Files table, review gallery, existing mockup inventory, and visual correctness are fully synchronized. If the existing mockup files and docs indexes already disagree, handle that as a separate docs follow-up instead of mixing gallery redesign or mockup HTML/CSS changes into a checklist-only PR.
 
 ## Before release
 
