@@ -139,6 +139,8 @@ With `data-tree-view-selection-hidden-input-name-value`, TreeView writes one hid
 
 When one form contains multiple `tree-view-selection` controllers, TreeView tags each generated hidden input with `data-tree-view-selection-source-id` so one controller only removes and rewrites its own generated inputs. If the controller element already has `data-tree-view-selection-source-id`, TreeView reuses that value; otherwise it assigns a generated source id on connect. Use separate `data-tree-view-selection-hidden-input-name-value` names when the host app wants separate submitted params for each tree. Reuse a name only when the server-side action intentionally accepts one combined array.
 
+Static mockups such as [selection-multi-tree-form.html](../mockups/selection-multi-tree-form.html) can show generated hidden inputs as a review aid, but this section is the submission contract: TreeView mirrors one JSON payload per hidden input, while the host app owns final params grouping and summary copy.
+
 ## Selection max count
 
 Host apps can limit the number of checked boxes on the JavaScript controller.
