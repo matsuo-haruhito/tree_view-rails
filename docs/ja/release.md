@@ -80,6 +80,14 @@ package-sensitive path には、`tree_view.gemspec`、`script/check_gem_package_
 
 merge前にPR CIを通します。release判定には、full compatibility matrices、JavaScript coverage、unconditional package verificationを含む、より広い `main` CIを使います。
 
+## downstream host app evidence
+
+TreeView の release evidence はこの repository 側にあります。tag を打つ前は、public API manifest、package-root export、public API docs / feature docs、mockup README / review gallery、browser smoke target、package verification を upstream の確認対象として扱います。
+
+docs-portal のような downstream Rails application は、sidebar tree、detail tree、persisted state、selection、window offset、route、permission、icon、business row action など、app 固有 flow の adoption smoke と rollback note を自分の docs に残してください。それらは host app 側の採用証跡であり、TreeView の source of truth や TreeView 単体 release の必須条件ではありません。
+
+downstream smoke が失敗した場合は、まず upstream TreeView の contract / package の問題なのか、host app 側の wiring、query、route、authorization、copy、rollback policy の問題なのかを分類します。downstream の pinned SHA、app 固有の rollback note、未merge の downstream PR を、TreeView の release-facing source of truth として扱わないでください。
+
 ## ドキュメント
 
 Public usageや公開optionを変えた場合は、関連docsとCHANGELOGを更新します。
