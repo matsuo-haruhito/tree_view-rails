@@ -219,6 +219,7 @@ Key documents:
 | Tree identity and diagnostics | [Node keys](docs/en/node-keys.md) and [Tree diagnostics](docs/en/tree-diagnostics.md) | [Node key 設計](docs/ja/node-keys.md) and [Tree diagnostics](docs/ja/tree-diagnostics.md) |
 | Rendering scale and boundaries | [Render Scale](docs/en/render-scale.md), [Rendering Boundaries](docs/en/rendering-boundaries.md), and [Render log level](docs/en/render-log-level.md) | [描画スケール](docs/ja/render-scale.md), [描画責務の境界](docs/ja/rendering-boundaries.md), and [render log レベル](docs/ja/render-log-level.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
+| GraphAdapter | [GraphAdapter](docs/en/graph-adapter.md) | [GraphAdapter](docs/ja/graph-adapter.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
 | PathTreeBuilder | [PathTreeBuilder](docs/en/path-tree-builder.md) | [PathTreeBuilder](docs/ja/path-tree-builder.md) |
 | ReverseTree | [ReverseTree](docs/en/reverse-tree.md) | [ReverseTree](docs/ja/reverse-tree.md) |
