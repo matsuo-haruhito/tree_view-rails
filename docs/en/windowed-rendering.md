@@ -47,10 +47,31 @@ Main metadata:
 | `after_count` | Number of visible rows after the current window. |
 | `has_previous?` | Whether a previous window exists. |
 | `has_next?` | Whether a next window exists. |
+| `previous_offset` | Offset to pass back when rendering the previous window, or `nil` when there is no previous window. |
+| `next_offset` | Offset to pass forward when rendering the next window, or `nil` when there is no next window. |
 
 `before_count` and `after_count` are summary metadata. Use them when the host app wants to show labels such as "20 rows before this window" or "35 rows remaining after this window" without recalculating those counts from `offset`, `limit`, and `total_count`.
 
 They never return negative values. If the requested offset is beyond the visible row count, `before_count` is capped at `total_count` and `after_count` is `0`.
+
+A small host-app pagination cue can combine the summary counts and offsets without making TreeView own the route or UI policy:
+
+```ruby
+limit = 50
+window = tree_view_window(@render_state, offset: params.fetch(:tree_offset, 0).to_i, limit: limit)
+```
+
+```erb
+<p>
+  Showing <%= window.rows.size %> of <%= window.total_count %> visible rows
+  (<%= window.before_count %> before, <%= window.after_count %> after)
+</p>
+
+<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.has_previous? %>
+<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.has_next? %>
+```
+
+The label text, route helper, parameter name, disabled-button treatment, and whether this appears as links, buttons, or a Turbo Frame toolbar are all host-app decisions.
 
 ## Visual reference
 
