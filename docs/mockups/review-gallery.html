@@ -205,6 +205,7 @@
         <p>Jump to the first card in a state family, then continue through nearby cards for related comparisons.</p>
         <div class="mock-gallery-review-path-links">
           <a href="#gallery-default-heading">Baseline</a>
+          <a href="#gallery-table-caption-heading">Page structure</a>
           <a href="#gallery-interaction-heading">Interaction states</a>
           <a href="#gallery-keyboard-focus-heading">Keyboard focus</a>
           <a href="#gallery-toggle-icon-heading">Toggle icons</a>
@@ -233,6 +234,9 @@
       </article>
       <article class="mock-gallery-card" aria-labelledby="gallery-bridge-heading">
         <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused integration</p><h2 id="gallery-bridge-heading">Resource table bridge</h2><p>Review tree-owned hierarchy rows alongside table-owned visible columns, without pulling in saved table state or host-app business logic.</p><ul class="mock-gallery-points"><li>Shared desktop and compact column sets</li><li>Hierarchy readability in the first data column</li><li>Clear table-versus-tree boundary</li></ul><div class="mock-gallery-links"><a href="resource-table-bridge.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="resource-table-bridge.html" title="Resource table bridge mock preview" loading="lazy"></iframe></div>
+      </article>
+      <article class="mock-gallery-card" aria-labelledby="gallery-table-caption-heading">
+        <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Focused page structure</p><h2 id="gallery-table-caption-heading">Table caption context</h2><p>Compare host-app-owned heading, caption, summary, and adjacent actions around TreeView-owned row cues.</p><ul class="mock-gallery-points"><li>Host-owned page heading and table caption</li><li>Adjacent actions outside TreeView scope</li><li>TreeView row hierarchy cues inside the table body</li></ul><div class="mock-gallery-links"><a href="table-caption-context.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="table-caption-context.html" title="Table caption context mock preview" loading="lazy"></iframe></div>
       </article>
       <article class="mock-gallery-card" aria-labelledby="gallery-narrow-heading">
         <div class="mock-gallery-copy"><p class="mock-gallery-eyebrow">Responsive reference</p><h2 id="gallery-narrow-heading">Narrow sidebar</h2><p>Compare how hierarchy cues stay visible when width gets tight and secondary metadata needs to stack below the primary label.</p><ul class="mock-gallery-points"><li>22rem and 18rem representative frames</li><li>Current, archived, and loading cues</li><li>Compact actions without hiding the tree path</li></ul><div class="mock-gallery-links"><a href="narrow-sidebar-tree.html">Open full mockup</a></div></div><div class="mock-gallery-preview"><iframe src="narrow-sidebar-tree.html" title="Narrow sidebar tree mock preview" loading="lazy"></iframe></div>
@@ -303,6 +307,7 @@
         <tr><td>Row status and depth labels</td><td>Row-wide readonly or disabled cues, selection checkbox disabled state, and depth-label boundaries.</td><td>Authorization policy, business-specific status meaning, final labels, or checkbox payload semantics.</td></tr>
         <tr><td>Toggle icon states</td><td>Expanded, collapsed, leaf, loading, and depth/type icon variation boundaries.</td><td>Icon library choice, final artwork, tooltip copy, public API changes, or runtime behavior.</td></tr>
         <tr><td>Resource table bridge</td><td>Shared hierarchy rows across fuller and narrower table-owned column sets.</td><td>Saved table state, host-app queries, or business-specific row actions.</td></tr>
+        <tr><td>Table caption context</td><td>Host-app-owned heading, caption, summary, and adjacent actions around TreeView-owned row cues.</td><td>Caption helper APIs, treegrid semantics, CRUD routes, authorization, or final business copy.</td></tr>
         <tr><td>Narrow sidebar</td><td>Hierarchy readability when width shrinks and metadata needs to wrap.</td><td>Exact breakpoints, truncation rules, or a shipped responsive design system.</td></tr>
         <tr><td>Current branch sidebar</td><td>Current row, expanded ancestors, collapsed sibling branches, and depth/toggle cues.</td><td>Route selection, permission-aware labels, final sidebar ordering, or host-app navigation policy.</td></tr>
         <tr><td>Interaction states</td><td>Loading, retry, pagination, and general drag or drop status cues.</td><td>Real Turbo responses, route wiring, or persistence behavior.</td></tr>
