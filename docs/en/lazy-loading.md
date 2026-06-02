@@ -172,6 +172,8 @@ If a request fails, return a host-app retry affordance instead of hiding the err
 <% end %>
 ```
 
+The helper `state:` value remains a string-compatible Ruby argument. Host apps may keep using raw strings in ERB, while shared JavaScript can import `TreeViewRemoteStateValues.loaded` and `.error` from the package root to avoid duplicating the same state names.
+
 ## Loaded, error, and retry states
 
 Use clear state ownership:
@@ -213,23 +215,10 @@ The host app can dispatch these events according to fetch or Turbo request state
 
 To avoid hand-copying those lifecycle names, import them from the package root as `TreeViewEventNames.hostLifecycle.loading`, `.loaded`, `.error`, and `.retry`. That group is reserved for host-app request-state dispatch. `TreeViewEventNames.remoteState.*` remains the separate surface for events emitted by TreeView controllers.
 
+`TreeViewRemoteStateValues.loading`, `.loaded`, and `.error` are a separate package-root export for state values, not event names. Use them when shared JavaScript needs to compare or pass remote-state values; do not add `retry` there because retry is an action/event, not a row state value.
+
 ## Children pagination
 
 For very large child sets, implement server-side pagination in the host app.
 
 TreeView only provides URL generation and row data hooks. Cursor, page token, limit, offset, next-page checks, and Turbo Stream content are host app responsibilities.
-
-See [Children pagination](children-pagination.md) for details.
-
-## Responsibility boundary
-
-| Area | TreeView | Host app |
-|---|---|---|
-| child URL generation | yes | provides path builder |
-| row data attributes | yes | consumes them |
-| remote-state controller hooks | yes | dispatches events |
-| fetching children | no | yes |
-| Turbo Stream response | no | yes |
-| authorization | no | yes |
-| server-side pagination | no | yes |
-| retry / error messaging | hook only | yes |
