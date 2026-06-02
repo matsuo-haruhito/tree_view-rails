@@ -99,6 +99,14 @@ remote row のretryが要求されたときに発火します。
 | `childrenUrl` | String or null | `data-tree-children-url` の値。存在しなければ `null`。 |
 | `nodeKey` | String or null | `data-tree-view-state-node-key` の値。存在しなければ `null`。 |
 
+## Host lifecycle events
+
+### `tree-view:loading` / `tree-view:loaded` / `tree-view:error` / `tree-view:retry`
+
+host app は、lazy-loading TreeView row 上でこれらの lifecycle event を発火し、remote-state controller にその row を loading、loaded、error、retrying として扱わせることができます。
+
+これらの event は、manifest 上で公開 `event.detail` field を定義していません。payload field に依存せず、lazy loading docs で案内している row attribute に remote-state data を置いてください。
+
 ## Transfer events
 
 ### `tree-view-transfer:drag-start`
@@ -170,6 +178,10 @@ element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStat
 ```
 
 `TreeViewEventNames.hostLifecycle.*` は、`tree-view:loading` など lazy-loading request lifecycle event を host app 側で dispatch するための surface です。このページで説明している TreeView controller 自身が emit する remote-state event は `TreeViewEventNames.remoteState.*` を使います。
+
+`tree-view-transfer:invalid-payload` の detail は `value` と `row` を含みます。
+
+`tree-view-transfer:invalid-transfer` の detail は `value` を含みます。
 
 ## 互換性方針
 
