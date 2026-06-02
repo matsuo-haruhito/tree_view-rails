@@ -33,7 +33,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [node-presenter-row-partials.html](node-presenter-row-partials.html) | Focused NodePresenter row partial reference showing resolver-provided label, href, tooltip, badge, icon, and optional action beside host-app-owned columns and permissions. |
 | [form-editing-rows.html](form-editing-rows.html) | Focused comparison for bulk-edit rows, per-row edit placement, and the boundary between TreeView selection checkboxes and host-app business controls. |
 | [selection-max-count.html](selection-max-count.html) | Focused selection max-count reference showing below-limit, limit-reached, and limit-exceeded feedback while keeping final action copy host-app owned. |
-| [selection-multi-tree-form.html](selection-multi-tree-form.html) | Focused multi-tree selection form reference showing source-specific selected counts, submit summary, empty state, and generated hidden input boundary. |
+| [selection-multi-tree-form.html](selection-multi-tree-form.html) | Focused multi-tree selection form reference showing source-specific selected counts, submit summary, empty state, and generated hidden input boundary as a review aid. |
 | [toolbar-actions.html](toolbar-actions.html) | Expand-all, collapse-all, and collapse-to-current-path toolbar reference showing enabled, disabled, current-state, and long/localized label variants without host-app routes or authorization copy. |
 | [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
@@ -63,7 +63,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 21. Use [node-presenter-row-partials.html](node-presenter-row-partials.html) when review needs to compare NodePresenter-provided row partial values against host-app-owned columns, permissions, and final actions.
 22. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
 23. Use [selection-max-count.html](selection-max-count.html) when review needs to compare below-limit, limit-reached, and limit-exceeded selection feedback without adding runtime behavior or final bulk-action copy.
-24. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries.
+24. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
 25. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
 26. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
 27. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
@@ -79,6 +79,11 @@ They are **not** a complete Rails application and should not grow into host-app 
 - `toolbar-actions.html` intentionally includes a narrow long/localized label stress case so reviewers can inspect wrapping and disabled/current cues without choosing final translations.
 - Final labels, localization, permission messaging, and business wording remain host-app responsibilities.
 - If a future mockup intentionally uses another language, document that exception here so reviewers know it is deliberate.
+
+## Selection form guidance
+
+- Use selection form mockups to compare visible counts, source separation, and generated hidden input boundaries at review time.
+- Treat [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) as the source of truth for hidden input sync: TreeView mirrors one JSON payload per hidden input, and host apps own final params grouping, submit summaries, and business action copy.
 
 ## Narrow-width guidance
 
