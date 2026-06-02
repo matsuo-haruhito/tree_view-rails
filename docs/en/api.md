@@ -224,6 +224,38 @@ window = TreeView::RenderWindow.new(
 | `has_previous?` | Whether a previous window exists. |
 | `has_next?` | Whether a next window exists. |
 
+## TreeView::ResourceTableRenderState
+
+Builds a `TreeView::RenderState` for table-oriented screens where another layer already owns column definitions or table state.
+
+```ruby
+render_state = TreeView::ResourceTableRenderState.call(
+  records: @projects,
+  context: view_context,
+  table_key: "projects_tree",
+  parent_id_method: :parent_project_id,
+  table_state: table_state,
+  columns: columns
+)
+```
+
+| Argument | Required | Description |
+|---|---:|---|
+| `records:` | yes | Records to turn into a tree-backed table body. |
+| `context:` | yes | View context used to build the default `UiConfig` when `ui_config:` is not provided. |
+| `row_partial:` | no | Row partial used for business columns. Default: `tree_view/resource_table_row`. |
+| `parent_id_method:` | no | Method name that returns the parent ID. Default: `:parent_id`. |
+| `id_method:` | no | Method name that returns the item ID. Default: `:id`. |
+| `table_key:` | no | Stable table key used for DOM/data hooks and as the default node prefix. |
+| `columns:` | no | Column definitions supplied by the host app or table layer. |
+| `table_state:` | no | Table state supplied by the host app or table layer. |
+| `ui_config:` | no | Prebuilt `TreeView::UiConfig` when the host app needs custom modes or path builders. |
+| `**render_options` | no | Additional `TreeView::RenderState` options such as selection, lazy loading, row status, or render scope. |
+
+The default row partial reads `table_state["visible_columns"]`, then `table_state[:visible_columns]`, and then falls back to `columns`. TreeView owns hierarchy, visible row order, render state, and row hooks; column inference, saved table preferences, filters, sorts, and table-wide state remain owned by the host app or table layer.
+
+See [Resource table bridge](resource-table-bridge.md) for integration examples and responsibility boundaries.
+
 ## TreeView::RenderState
 
 Screen-level rendering state.
