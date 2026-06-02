@@ -58,6 +58,7 @@ const focusedMockupSmokeTargets = [
   { file: "filtered-tree-modes.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "path-tree-builder-rows.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "node-presenter-row-partials.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
+  { file: "localized-row-labels.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "form-editing-rows.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "toolbar-actions.html", sample: ".mock-toolbar-frame", minimumCount: 3 },
   { file: "selection-max-count.html", sample: ".mock-limit-state", minimumCount: 3 },
