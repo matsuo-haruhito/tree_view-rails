@@ -9,8 +9,19 @@ export class TreeViewSelectionController extends Controller {
   }
 
   connect() {
+    this.hiddenInputSyncedForm = null
     this.updateIndeterminateStates()
     this.dispatchSelectionChanged()
+  }
+
+  disconnect() {
+    if (!this.hiddenInputSyncEnabled()) return
+
+    const form = this.hiddenInputSyncedForm || this.hiddenInputForm()
+    if (!form) return
+
+    this.removeSyncedHiddenInputs(form)
+    this.hiddenInputSyncedForm = null
   }
 
   selectedPayloads() {
@@ -106,6 +117,7 @@ export class TreeViewSelectionController extends Controller {
     const form = this.hiddenInputForm()
     if (!form) return
 
+    this.hiddenInputSyncedForm = form
     this.removeSyncedHiddenInputs(form)
 
     payloads.forEach((payload) => {
