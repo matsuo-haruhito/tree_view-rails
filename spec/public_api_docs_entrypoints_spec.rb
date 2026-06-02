@@ -3,22 +3,17 @@
 require "spec_helper"
 require "yaml"
 
-RSpec.describe "Public API documentation entrypoints" do
-  repository_root = File.expand_path("..", __dir__)
-  manifest_path = File.join(repository_root, "config/public_api_manifest.yml")
-  docs_root = File.join(repository_root, "docs")
+PUBLIC_API_DOCS_REPOSITORY_ROOT = File.expand_path("..", __dir__)
+PUBLIC_API_DOCS_MANIFEST_PATH = File.join(PUBLIC_API_DOCS_REPOSITORY_ROOT, "config/public_api_manifest.yml")
+PUBLIC_API_DOCS_ROOT = File.join(PUBLIC_API_DOCS_REPOSITORY_ROOT, "docs")
 
+RSpec.describe "Public API documentation entrypoints" do
   def manifest
-    @manifest ||= YAML.safe_load_file(self.class.metadata.fetch(:manifest_path))
+    @manifest ||= YAML.safe_load_file(PUBLIC_API_DOCS_MANIFEST_PATH)
   end
 
   def read_doc(relative_path)
-    File.read(File.join(self.class.metadata.fetch(:docs_root), relative_path))
-  end
-
-  before do |example|
-    example.metadata[:manifest_path] = manifest_path
-    example.metadata[:docs_root] = docs_root
+    File.read(File.join(PUBLIC_API_DOCS_ROOT, relative_path))
   end
 
   it "keeps public API and JavaScript event docs reachable from the language docs indexes" do
