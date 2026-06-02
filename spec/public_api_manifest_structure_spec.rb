@@ -4,19 +4,19 @@ require "spec_helper"
 require "psych"
 require "yaml"
 
-RSpec.describe "Public API manifest structure" do
-  MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-  EXPECTED_TOP_LEVEL_KEYS = %w[
-    module_methods
-    public_constants
-    helper_methods
-    toolbar_actions
-    grouped_option_keys
-    javascript_package_root
-  ].freeze
+PUBLIC_API_MANIFEST_STRUCTURE_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
+  module_methods
+  public_constants
+  helper_methods
+  toolbar_actions
+  grouped_option_keys
+  javascript_package_root
+].freeze
 
+RSpec.describe "Public API manifest structure" do
   def manifest_source
-    @manifest_source ||= File.read(MANIFEST_PATH)
+    @manifest_source ||= File.read(PUBLIC_API_MANIFEST_STRUCTURE_PATH)
   end
 
   def manifest
@@ -54,7 +54,7 @@ RSpec.describe "Public API manifest structure" do
   end
 
   it "keeps expected top-level sections explicit" do
-    expect(manifest.keys).to eq(EXPECTED_TOP_LEVEL_KEYS)
+    expect(manifest.keys).to eq(PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS)
   end
 
   it "does not contain duplicate keys in any mapping" do
