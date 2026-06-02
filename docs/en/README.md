@@ -17,6 +17,17 @@ Most user-facing, feature, release, and maintainer pages now exist in both langu
 
 If you are integrating TreeView into a Rails host app, start with these documents.
 
+### Goal-based shortcuts
+
+| Goal | Start here |
+|---|---|
+| Set up TreeView for the first time | [Installation](installation.md), then [Minimal usage](minimal-usage.md) and [Usage](usage.md) |
+| Choose the right API or rendering mode | [Decision guide](decision-guide.md), then [API overview](api-overview.md) and [API reference](api.md) |
+| Render large or partial trees | [Render Scale](render-scale.md), [Lazy Loading](lazy-loading.md), [Windowed Rendering](windowed-rendering.md), and [Children Pagination](children-pagination.md) |
+| Wire selection, forms, or table-owned columns | [Selection](selection.md), [Forms and editing rows](form-editing.md), and [Resource table bridge](resource-table-bridge.md) |
+| Check public contracts and integration hooks | [Public API](public-api.md), [JavaScript event contract](js-events.md), and [Host App Extension Points](host-app-extension-points.md) |
+| Diagnose symptoms or responsibility boundaries | [Troubleshooting](troubleshooting.md), [FAQ](faq.md), and [Tree diagnostics](tree-diagnostics.md) |
+
 | Document | Description |
 |---|---|
 | [Installation](installation.md) | Gemfile, CSS, importmap, Propshaft / Sprockets, and development setup |
