@@ -37,6 +37,10 @@ Breaking changes and required migration notes should be called out explicitly in
 - Strengthened pull request CI to run Ruby specs alongside Standard Ruby lint while keeping broader compatibility and release checks on `main`.
 - Split RenderState selection and lazy-loading normalization into internal configuration objects while keeping the public RenderState API compatible.
 
+### Fixed
+
+- Fixed stale generated selection hidden inputs when a selection controller disconnects after its element is removed, scoped to the controller's own source id.
+
 ### Documentation
 
 - Added localized names docs in Japanese and English.
@@ -62,8 +66,15 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added FAQ guidance for keyboard behavior and `treegrid` responsibility boundaries in Japanese and English.
 - Added a host-app extension hook reverse lookup table in Japanese and English.
 - Added toolbar disabled-action troubleshooting guidance in Japanese and English.
+- Added GraphAdapter troubleshooting guidance in Japanese and English for resolver shape, heterogeneous node keys, and diagnostics handoff.
+- Clarified the LocalizedNames public API boundary in Japanese and English so helper fallback behavior stays separate from host-app row rendering.
+- Added ResourceTableRenderState API reference entries in Japanese and English for the bridge call signature, row partial fallback, and table-layer responsibility boundary.
+- Added glossary entries in Japanese and English for integration-surface terms such as remote state, transfer payloads, drop position, resource-table bridge, windowed rendering, and children pagination.
+- Added Standard Ruby preflight guidance to the development docs for connector or GitHub API edits to Ruby files.
+- Documented the bilingual page-set parity policy for `docs/en` and `docs/ja`, including technical-asset and temporary single-language exceptions.
+- Added release checklist guidance in Japanese and English that separates upstream TreeView release evidence from downstream host-app adoption smoke and rollback notes.
 - Added transfer disabled / invalid boundary states to the drop-position mockup and updated the mockup review guidance.
-- Added static mockup references for multi-tree selection forms, toggle icon states, and high-contrast state cues.
+- Added static mockup references for multi-tree selection forms, toggle icon states, high-contrast state cues, reduced-motion state cues, and localized row labels.
 - Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
 
 ### Tests
@@ -83,6 +94,9 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added JavaScript public event contract specs for selection, remote state, and transfer events.
 - Added package-root frozen object contract coverage for public JavaScript object exports.
 - Added browser smoke coverage for representative docs mockup pages and the review gallery.
+- Added transfer controller regression coverage for drop positions and invalid payload / transfer event boundaries.
+- Added selection hidden input disconnect cleanup coverage for multiple controllers and disabled sync.
+- Expanded package verification coverage for TreeViewHelper subfiles, the breadcrumb helper, representative Japanese toolbar locale, and Japanese release docs files.
 
 ## 0.1.0 - 2026-05-07
 
