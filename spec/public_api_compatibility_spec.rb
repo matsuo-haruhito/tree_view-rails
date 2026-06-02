@@ -24,9 +24,13 @@ RENDER_STATE_GROUPED_OPTION_KEY_RESOLVERS = {
 RSpec.describe "Public API compatibility" do
   def public_api_manifest
     # The machine-readable manifest covers Ruby/module/helper entrypoints,
-    # grouped option keys, package-root exports, and required JavaScript event
-    # detail keys. Broader behavior and docs sync stay explicit here.
+    # helper option keys, grouped option keys, package-root exports, and
+    # required JavaScript event detail keys. Broader behavior and docs sync stay explicit here.
     @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
+  end
+
+  def public_helper_option_keys
+    public_api_manifest.fetch("helper_option_keys")
   end
 
   def public_javascript_manifest
@@ -235,6 +239,21 @@ RSpec.describe "Public API compatibility" do
     end
   end
 
+  it "keeps documented helper option keys aligned with TreeViewHelper signatures" do
+    helper_class = Class.new do
+      include TreeViewHelper
+    end
+    helper = helper_class.new
+
+    expected_keywords = public_helper_option_keys.fetch("tree_view_window")
+    actual_required_keywords = helper.method(:tree_view_window).parameters.filter_map do |kind, name|
+      name.to_s if kind == :keyreq
+    end
+
+    expect(actual_required_keywords).to eq(expected_keywords),
+      "expected TreeViewHelper#tree_view_window required keywords to match the public helper option contract"
+  end
+
   it "keeps documented lazy-loading helper behavior available through TreeViewHelper" do
     helper_class = Class.new do
       include TreeViewHelper
@@ -425,8 +444,11 @@ RSpec.describe "Public API compatibility" do
     window = helper.tree_view_window(render_state, offset: 0, limit: 1)
     window_result = helper.tree_view_rows(render_state, window: window)
 
+    expect(public_helper_option_keys.fetch("tree_view_window")).to eq(%w[offset limit])
     expect(rows_result).to include(partial: "tree_view/tree_row", collection: tree.root_items, as: :item)
     expect(window).to be_a(TreeView::RenderWindow)
+    expect(window.offset).to eq(0)
+    expect(window.limit).to eq(1)
     expect(window.rows.length).to eq(1)
     expect(window_result).to include(partial: "tree_view/tree_window_row", as: :visible_row)
   end

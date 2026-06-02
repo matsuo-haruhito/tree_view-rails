@@ -43,6 +43,10 @@ helper_methods:
   - tree_view_toolbar_supported_actions
   - tree_view_toolbar_actions
   - tree_view_toolbar_action_metadata
+helper_option_keys:
+  tree_view_window:
+    - offset
+    - limit
 toolbar_actions:
   expand_all: expanded
   collapse_all: collapsed

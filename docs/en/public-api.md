@@ -72,6 +72,8 @@ Documented non-toolbar helpers that are part of that public helper surface inclu
 - `tree_selection_value(item, tree, builder = nil)` serializes the documented checkbox payload contract for host-app selection wiring and assertions.
 - `tree_view_breadcrumb(tree, item, ...)` renders a breadcrumb path for a node.
 
+`tree_view_window` also has a machine-readable helper option contract in `config/public_api_manifest.yml`; the supported required keywords are `offset` and `limit`.
+
 For host apps that own lazy-loading placeholder regions, these three lazy-loading helpers are part of the same stable helper surface described in [Lazy Loading](lazy-loading.md). Use them instead of reconstructing placeholder IDs or `data-tree-remote-state` attributes by hand.
 
 For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` rather than internal constants.
@@ -209,7 +211,7 @@ The `tree-view-selection` controller's documented host-element value attributes 
 
 Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
-The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+The machine-readable source of truth for helper methods, helper option keys, package-root JavaScript exports, and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
@@ -234,7 +236,7 @@ Representative documented hooks are tracked where their feature behavior is expl
 | Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | Reusable baseline hooks documented in the [mockup inventory](../mockups/README.md). They describe the shipped empty-state reference pattern, not every internal row class. |
 | Interaction markers | marker row classes and `data-*` hooks shown in focused mockups | Reference hooks documented through [mockups](../mockups/README.md) for review and adoption. Promote any hook to a machine-readable contract in `config/public_api_manifest.yml` only when it needs compatibility checks. |
 
-This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, JavaScript package-root exports, controller identifiers, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
+This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, helper option keys, JavaScript package-root exports, controller identifiers, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
 
 Undocumented CSS helper classes, data attributes, DOM structure details, and gem partial locals are implementation details.
 
