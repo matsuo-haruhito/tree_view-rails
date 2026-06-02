@@ -13,6 +13,13 @@ function nextFrame() {
   return new Promise((resolve) => setTimeout(resolve, 0))
 }
 
+function setOffsetParent(element, offsetParent) {
+  Object.defineProperty(element, "offsetParent", {
+    configurable: true,
+    get: () => offsetParent
+  })
+}
+
 describe("tree view interactive target helpers", () => {
   afterEach(() => {
     document.body.innerHTML = ""
@@ -166,6 +173,9 @@ describe("TreeViewStateController", () => {
           <tr id="row-1" data-tree-view-state-target="node" data-tree-view-state-node-key="project:1" data-tree-view-state-expanded="true">
             <td><button class="remove-button" type="button"></button></td>
           </tr>
+          <tr id="row-hidden" data-tree-view-state-target="node" data-tree-view-state-node-key="project:hidden" data-tree-view-state-expanded="false" hidden>
+            <td><button class="show-button" type="button"></button></td>
+          </tr>
           <tr id="row-2" data-tree-view-state-target="node" data-tree-view-state-node-key="project:2" data-tree-view-state-expanded="false">
             <td>
               <button class="show-button" type="button"></button>
@@ -208,6 +218,35 @@ describe("TreeViewStateController", () => {
 
     expect(row.dataset.treeViewStateExpanded).toBe("true")
     expect(controller.expandedKeys()).toEqual(["project:1", "project:2"])
+  })
+
+  it("moves keyboard focus through visible rows only", () => {
+    const element = document.querySelector("[data-controller='tree-view-state']")
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    const row1 = document.querySelector("#row-1")
+    const hiddenRow = document.querySelector("#row-hidden")
+    const row2 = document.querySelector("#row-2")
+    const preventDefault = vi.fn()
+
+    setOffsetParent(row1, element)
+    setOffsetParent(hiddenRow, null)
+    setOffsetParent(row2, element)
+
+    row1.focus()
+    controller.keydown({ key: "ArrowDown", preventDefault, target: row1 })
+
+    expect(preventDefault).toHaveBeenCalledOnce()
+    expect(document.activeElement).toBe(row2)
+
+    controller.keydown({ key: "ArrowUp", preventDefault, target: row2 })
+
+    expect(preventDefault).toHaveBeenCalledTimes(2)
+    expect(document.activeElement).toBe(row1)
+
+    controller.keydown({ key: "ArrowUp", preventDefault, target: row1 })
+
+    expect(preventDefault).toHaveBeenCalledTimes(3)
+    expect(document.activeElement).toBe(row1)
   })
 
   it("uses keyboard navigation to activate row toggles", () => {
