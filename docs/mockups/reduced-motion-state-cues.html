@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView reduced-motion state cue mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.motion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.motion-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #d8e0ea;
+  background: #fff;
+}
+
+.motion-card h3,
+.motion-card p {
+  margin: 0;
+}
+
+.motion-card h3 {
+  font-size: 1rem;
+}
+
+.motion-note {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid #d8e0ea;
+  background: #f8fafc;
+}
+
+.motion-note h3,
+.motion-note p {
+  margin: 0;
+}
+
+.motion-cue-stack {
+  display: grid;
+  gap: 6px;
+}
+
+.motion-cue-stack .mock-status {
+  justify-self: start;
+  margin-left: 0;
+}
+
+.motion-cue-label {
+  color: #52606d;
+  font-size: 0.88rem;
+}
+
+.motion-no-animation {
+  border-left: 4px solid #475569;
+}
+
+.motion-row-note {
+  color: #52606d;
+  font-size: 0.92rem;
+}
+
+.mock-section {
+  overflow-x: auto;
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView reduced-motion state cue mock</h1>
+      <p>
+        Static reference for reviewing loading, retry, selected/current, and drop-target cues when motion is reduced or unavailable.
+        The examples use text, row shape, borders, and adjacent status labels instead of animation-only feedback.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="motion-boundary-heading">
+      <h2 id="motion-boundary-heading">Responsibility boundary</h2>
+      <div class="motion-grid">
+        <article class="motion-note">
+          <h3>TreeView-owned cues</h3>
+          <p>Row state classes, depth structure, toggle cell layout, and ARIA state remain visible without requiring animation.</p>
+        </article>
+        <article class="motion-note">
+          <h3>Host-app-owned cues</h3>
+          <p>Final copy, retry wording, persistence status, and product-specific confirmation messages stay with the host app.</p>
+        </article>
+        <article class="motion-note">
+          <h3>Out of scope here</h3>
+          <p>No animation system, JavaScript timing, Turbo response, or visual regression baseline is introduced by this mockup.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="motion-comparison-heading" data-tree-view-sample="reduced-motion-cues">
+      <h2 id="motion-comparison-heading">Reduced-motion cue comparison</h2>
+      <div class="motion-grid">
+        <article class="motion-card motion-no-animation" aria-labelledby="loading-cue-heading">
+          <h3 id="loading-cue-heading">Loading without spinner motion</h3>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">node</th>
+                <th scope="col">state cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="motion_loading" class="tree-row is-loading" data-tree-node-key="project:loading" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true" aria-busy="true">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Loading remote branch">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control"><span class="tree-toggle__action tree-toggle__action--pending">wait</span><span class="tree-toggle__level">loading</span></span>
+                  </span>
+                </td>
+                <td>Project Alpha</td>
+                <td class="motion-cue-stack"><span class="mock-status mock-status--pending">Loading child rows</span><span class="motion-cue-label">Text label and aria-busy carry the state without a moving spinner.</span></td>
+              </tr>
+              <tr class="tree-row tree-row--placeholder" data-tree-parent-key="project:loading" data-tree-depth="1" aria-level="2">
+                <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">slot</span></span></span></td>
+                <td colspan="2"><span class="motion-row-note">Placeholder row keeps the future children region visible.</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="motion-card motion-no-animation" aria-labelledby="retry-cue-heading">
+          <h3 id="retry-cue-heading">Retry without pulsing alerts</h3>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">node</th>
+                <th scope="col">state cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="motion_retry" class="tree-row is-error" data-tree-node-key="project:retry" data-tree-depth="0" data-tree-expanded="false" aria-level="1" aria-expanded="false">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Remote branch failed">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control"><a class="tree-toggle__action" href="#">retry</a><span class="tree-toggle__level">error</span></span>
+                  </span>
+                </td>
+                <td>Project Beta</td>
+                <td class="motion-cue-stack"><span class="mock-status mock-status--error">Load failed</span><span class="motion-cue-label">Error row background, retry action, and label all remain static.</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="motion-card motion-no-animation" aria-labelledby="selection-cue-heading">
+          <h3 id="selection-cue-heading">Current and selected without transitions</h3>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">node</th>
+                <th scope="col">state cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="motion_current" class="tree-row is-selected" data-tree-node-key="project:current" data-tree-depth="0" aria-level="1" aria-current="page">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Current selected branch">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control"><span class="tree-toggle__level">current</span></span>
+                  </span>
+                </td>
+                <td>Project Gamma</td>
+                <td class="motion-cue-stack"><span class="mock-status mock-status--active">Current selection</span><span class="motion-cue-label">Row state, aria-current, and visible status label describe the selection.</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="motion-card motion-no-animation" aria-labelledby="drop-cue-heading">
+          <h3 id="drop-cue-heading">Drop target without animated hover</h3>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">node</th>
+                <th scope="col">state cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="motion_drop" class="tree-row is-drop-target" data-tree-node-key="project:drop" data-tree-depth="0" aria-level="1">
+                <td class="btn-cell tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Valid drop target">
+                    <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                    <span class="tree-toggle__control"><span class="tree-toggle__level">target</span></span>
+                  </span>
+                </td>
+                <td>Project Delta</td>
+                <td class="motion-cue-stack"><span class="mock-status mock-status--active">Drop target</span><span class="motion-cue-label">Static outline and adjacent label make the target readable without hover animation.</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
