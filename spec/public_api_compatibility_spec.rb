@@ -16,6 +16,7 @@ RENDER_STATE_GROUPED_OPTION_KEY_RESOLVERS = {
   "initial_expansion" => -> { TreeView::RenderState::VALID_INITIAL_EXPANSION_KEYS.map(&:to_s) },
   "render_scope" => -> { TreeView::RenderState::VALID_RENDER_SCOPE_KEYS.map(&:to_s) },
   "toggle_scope" => -> { TreeView::RenderState::VALID_TOGGLE_SCOPE_KEYS.map(&:to_s) },
+  "toggle_icons" => -> { TreeView::RenderState::VALID_TOGGLE_ICONS_KEYS.map(&:to_s) },
   "selection" => -> { TreeView::RenderState::SelectionConfig::VALID_KEYS.map(&:to_s) },
   "lazy_loading" => -> { %w[enabled loaded_keys scope] },
   "row_status" => -> { %w[row_disabled_builder row_readonly_builder row_disabled_reason_builder] }
@@ -185,6 +186,11 @@ RSpec.describe "Public API compatibility" do
         max_depth_from_root: 4,
         max_leaf_distance: 2
       },
+      toggle_icons: {
+        by_state: {
+          expanded: {text: "-", label: "Collapse"}
+        }
+      },
       selection: {
         enabled: true,
         visibility: :leaves,
@@ -214,6 +220,8 @@ RSpec.describe "Public API compatibility" do
     expect(state.max_leaf_distance).to eq(1)
     expect(state.max_toggle_depth_from_root).to eq(4)
     expect(state.max_toggle_leaf_distance).to eq(2)
+    expect(state.toggle_icons).to eq(by_state: {expanded: {text: "-", label: "Collapse"}})
+    expect(state.toggle_icon_builder.call(nil, :expanded, {depth: 0})).to eq(text: "-", label: "Collapse")
     expect(state.selection_enabled?).to eq(true)
     expect(state.selection_visibility).to eq(:leaves)
     expect(state.selection_checkbox_name).to eq("selected_documents[]")
