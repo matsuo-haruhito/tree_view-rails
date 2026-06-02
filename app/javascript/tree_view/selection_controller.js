@@ -13,6 +13,15 @@ export class TreeViewSelectionController extends Controller {
     this.dispatchSelectionChanged()
   }
 
+  disconnect() {
+    if (!this.hiddenInputSyncEnabled()) return
+
+    const form = this.hiddenInputForm()
+    if (!form) return
+
+    this.removeSyncedHiddenInputs(form)
+  }
+
   selectedPayloads() {
     return this.selectedCheckboxes()
       .map((checkbox) => this.parsePayload(checkbox))
