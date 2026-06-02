@@ -224,6 +224,38 @@ window = TreeView::RenderWindow.new(
 | `has_previous?` | 前 window があるか。 |
 | `has_next?` | 次 window があるか。 |
 
+## TreeView::ResourceTableRenderState
+
+別 layer が column definitions や table state を持つ table-oriented screen 向けに、`TreeView::RenderState` を組み立てる bridge API です。
+
+```ruby
+render_state = TreeView::ResourceTableRenderState.call(
+  records: @projects,
+  context: view_context,
+  table_key: "projects_tree",
+  parent_id_method: :parent_project_id,
+  table_state: table_state,
+  columns: columns
+)
+```
+
+| 引数 | 必須 | 説明 |
+|---|---:|---|
+| `records:` | yes | tree-backed table body にする records。 |
+| `context:` | yes | `ui_config:` を指定しない場合に default `UiConfig` を作るための view context。 |
+| `row_partial:` | no | business columns を描画する row partial。既定値は `tree_view/resource_table_row`。 |
+| `parent_id_method:` | no | 親 ID を返す method 名。既定値は `:parent_id`。 |
+| `id_method:` | no | 自身の ID を返す method 名。既定値は `:id`。 |
+| `table_key:` | no | DOM / data hook と default node prefix に使う安定した table key。 |
+| `columns:` | no | host app または table layer が渡す column definitions。 |
+| `table_state:` | no | host app または table layer が渡す table state。 |
+| `ui_config:` | no | host app が custom mode や path builder を必要とする場合の prebuilt `TreeView::UiConfig`。 |
+| `**render_options` | no | selection、lazy loading、row status、render scope など追加の `TreeView::RenderState` options。 |
+
+既定の row partial は `table_state["visible_columns"]`、次に `table_state[:visible_columns]` を読み、最後に `columns` へ fallback します。TreeView は hierarchy、visible row order、render state、row hooks を所有します。column inference、saved table preferences、filter、sort、table-wide state は host app または table layer の責務です。
+
+連携例と責務境界は [Resource table bridge](resource-table-bridge.md) を参照してください。
+
 ## TreeView::RenderState
 
 画面単位の描画状態をまとめるオブジェクトです。
