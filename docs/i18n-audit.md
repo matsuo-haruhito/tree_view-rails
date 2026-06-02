@@ -104,7 +104,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 
 ## Technical assets
 
-`docs/mockups/README.md` is the source of truth for the current static mockup file inventory. Its Files table feeds the expected file list used by browser smoke to check the separately maintained `focusedMockupSmokeTargets` array, so this checklist should describe responsibility rather than repeat every individual mockup HTML page.
+`docs/mockups/README.md` is the source of truth for the current static mockup file inventory. Its Files table is also the source read by the browser smoke target list, so this checklist should describe responsibility rather than repeat every individual mockup HTML page. Browser smoke reads that table as the expected file list, then checks it against the separately maintained `focusedMockupSmokeTargets` array.
 
 | Asset group | Status | Notes |
 |---|---|---|
