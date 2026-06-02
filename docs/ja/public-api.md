@@ -120,6 +120,8 @@ toolbar helper もこの公開 helper surface に含まれます。
 - `TreeView.attribute_name_for(item_or_class, attribute, default: nil)`
 - `TreeView.type_name_for(item, count: 1, default: nil)`
 
+localized display-name helper は、利用できる場合に host app の Rails / ActiveModel / I18n locale data から表示名を解決し、その後 humanize した名前または明示的な `default:` 値へ fallback します。これらは表示名を返すだけで、UI のどこに表示するかは host app の row partial、helper、presenter が決めます。fallback behavior と row rendering 例は [Localized names](localized-names.md) を参照してください。
+
 公開 Turbo UI option には以下を含めます。
 
 - `UiConfig#turbo_frame`
