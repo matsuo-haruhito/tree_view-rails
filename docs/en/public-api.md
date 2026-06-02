@@ -137,6 +137,7 @@ See [API reference](api.md), [Localized names](localized-names.md), and [Turbo F
 | `initial_expansion` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | When flat keyword options and `initial_expansion:` are both supplied, the flat keyword options still win. |
 | `render_scope` | `max_depth`, `max_leaf_distance` | Mirrors the documented render-depth and leaf-distance controls for `TreeView::RenderState`. |
 | `toggle_scope` | `max_depth_from_root`, `max_leaf_distance` | Mirrors the documented tree-wide toggle depth and toggle leaf-distance controls. |
+| `toggle_icons` | `by_state`, `by_depth`, `by_type` | Mirrors the documented declarative toggle icon map. `toggle_icon_builder` remains a callable escape hatch and is not manifest-backed. |
 | `selection` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | Mirrors `TreeView::RenderState::SelectionConfig` and keeps grouped selection wiring aligned with the documented flat selection keywords. |
 | `lazy_loading` | `enabled`, `loaded_keys`, `scope` | Mirrors the documented lazy-loading row-state hooks and optional host-app scope passthrough. |
 | `row_status` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | Mirrors the documented row disabled / readonly state hooks and disabled-reason surface. |
