@@ -38,6 +38,17 @@ Design `node_key` values so they do not collide when multiple trees or heterogen
 | render scope | Options that limit rendered rows by depth or leaf distance. |
 | toggle scope | Options that pass toggle boundaries to path builders. |
 
+## Integration surface
+
+| Term | Meaning |
+|---|---|
+| remote state / remote loading state | Loading, loaded, error, and retry signals rendered for lazy-loading rows and handled by the `tree-view-remote-state` controller. TreeView provides the row hooks and controller boundary; the host app owns fetch behavior, Turbo requests, authorization, queries, retry UI, and children pagination. See [Lazy Loading](lazy-loading.md). |
+| transfer payload | Hash-like row data copied to browser drag/drop transfer events through `row_event_payload_builder`. TreeView exposes the transfer boundary; the host app owns drop targets, authorization, persistence, and final outcome UI. See [Drag and Drop](drag-and-drop.md). |
+| drop position | A coarse transfer cue reported as `before`, `inside`, or `after` for the target row. Treat it as input to host-app business rules, not as final authorization or persistence policy. See [Drag and Drop](drag-and-drop.md). |
+| resource-table bridge / ResourceTableRenderState | A bridge for integrations where a table layer already owns column state while TreeView owns hierarchy and row rendering. Host apps and table layers remain responsible for columns, preferences, queries, authorization, and business actions. See [Resource table bridge](resource-table-bridge.md). |
+| windowed rendering | An opt-in rendering mode that slices currently visible rows by `offset` and `limit`. TreeView owns visible-row flattening and window metadata; the host app owns scroll observers, URL state, pagination controls, and data fetching. See [Windowed Rendering](windowed-rendering.md). |
+| children pagination | A host-app pattern for loading large child sets in pages while using TreeView lazy-loading hooks. TreeView provides child URL hooks and remote-state boundaries; the host app owns cursors, limits, next-page detection, queries, authorization, and Turbo Stream responses. See [Children Pagination](children-pagination.md). |
+
 ## Expansion
 
 | Term | Meaning |
