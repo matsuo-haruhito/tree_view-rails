@@ -158,6 +158,19 @@ Dispatched when transferred JSON cannot be parsed.
 |---|---|---|
 | `value` | String | Raw transferred value that could not be parsed as JSON. |
 
+## Using TreeViewEventNames in host-app code
+
+The raw event strings above remain the public contract. When wiring listeners in host-app JavaScript, you can import `TreeViewEventNames` from `tree_view/index.js` and use the matching package-root export instead of hand-copying strings:
+
+```js
+import { TreeViewEventNames } from "tree_view/index.js"
+
+element.addEventListener(TreeViewEventNames.selection.change, handleSelectionChange)
+element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStateChange)
+```
+
+`TreeViewEventNames.hostLifecycle.*` is for host apps dispatching lazy-loading request lifecycle events such as `tree-view:loading`; TreeView controller-emitted remote-state events on this page use `TreeViewEventNames.remoteState.*`.
+
 ## Compatibility policy
 
 The machine-readable public API manifest mirrors the event names and representative required `event.detail` keys documented on this page so compatibility specs can detect drift; this page remains the primary contract.
