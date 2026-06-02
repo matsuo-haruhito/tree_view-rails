@@ -7,9 +7,10 @@ const flush = async () => {
   await Promise.resolve()
 }
 
-const hiddenInputValues = (form) =>
+const hiddenInputs = (form) =>
   Array.from(form.querySelectorAll('input[type="hidden"][data-tree-view-selection-generated-hidden-input="true"]'))
-    .map((input) => input.value)
+
+const hiddenInputValues = (form) => hiddenInputs(form).map((input) => input.value)
 
 describe("TreeViewSelectionController", () => {
   let application
@@ -118,5 +119,83 @@ describe("TreeViewSelectionController", () => {
 
     const form = document.getElementById("bulk-form")
     expect(hiddenInputValues(form)).toEqual(['{"id":1}'])
+  })
+
+  it("removes only its own generated hidden inputs when disconnected", async () => {
+    document.body.innerHTML = `
+      <form id="bulk-form">
+        <table>
+          <tbody
+            id="first-selection"
+            data-controller="tree-view-selection"
+            data-tree-view-selection-hidden-input-name-value="selected_nodes[]">
+            <tr data-tree-depth="0">
+              <td>
+                <input
+                  class="tree-selection-checkbox"
+                  type="checkbox"
+                  checked
+                  value='{"id":1}'>
+              </td>
+            </tr>
+          </tbody>
+          <tbody
+            id="second-selection"
+            data-controller="tree-view-selection"
+            data-tree-view-selection-hidden-input-name-value="selected_nodes[]">
+            <tr data-tree-depth="0">
+              <td>
+                <input
+                  class="tree-selection-checkbox"
+                  type="checkbox"
+                  checked
+                  value='{"id":2}'>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    `
+
+    await flush()
+
+    const form = document.getElementById("bulk-form")
+    expect(hiddenInputValues(form)).toEqual(['{"id":1}', '{"id":2}'])
+
+    document.getElementById("first-selection").remove()
+    await flush()
+
+    expect(hiddenInputValues(form)).toEqual(['{"id":2}'])
+    expect(hiddenInputs(form)[0].dataset.treeViewSelectionSourceId).toBe(
+      document.getElementById("second-selection").dataset.treeViewSelectionSourceId
+    )
+  })
+
+  it("does not raise on disconnect when hidden input sync is disabled", async () => {
+    document.body.innerHTML = `
+      <form id="bulk-form">
+        <table>
+          <tbody id="selection" data-controller="tree-view-selection">
+            <tr data-tree-depth="0">
+              <td>
+                <input
+                  class="tree-selection-checkbox"
+                  type="checkbox"
+                  checked
+                  value='{"id":1}'>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    `
+
+    await flush()
+
+    const selection = document.getElementById("selection")
+    expect(() => selection.remove()).not.toThrow()
+    await flush()
+
+    expect(hiddenInputValues(document.getElementById("bulk-form"))).toEqual([])
   })
 })
