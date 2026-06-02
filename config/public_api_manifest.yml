@@ -62,6 +62,10 @@ grouped_option_keys:
   toggle_scope:
     - max_depth_from_root
     - max_leaf_distance
+  toggle_icons:
+    - by_state
+    - by_depth
+    - by_type
   selection:
     - enabled
     - visibility
