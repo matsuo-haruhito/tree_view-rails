@@ -18,6 +18,14 @@ export class TreeViewRemoteStateController extends Controller {
     if (!row) return
 
     row.dataset.remoteState = "loading"
+    this.dispatch("change", {
+      detail: {
+        row,
+        state: "loading",
+        childrenUrl: row.dataset.treeChildrenUrl || null,
+        nodeKey: row.dataset.treeViewStateNodeKey || null
+      }
+    })
     this.dispatch("retry", {
       detail: {
         row,
