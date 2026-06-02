@@ -88,6 +88,26 @@ Read next:
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Tree diagnostics](tree-diagnostics.md)
 
+## GraphAdapter rows look duplicated, incomplete, or shaped differently than expected
+
+GraphAdapter symptoms usually come from the host app's resolver output or node-key strategy. TreeView normalizes resolver results so it can render rows, but it does not decide traversal policy, authorization, cycle handling, or query planning for graph-like data.
+
+Check these points before changing row partials or TreeView internals.
+
+- Confirm each `children_resolver` branch returns the child collection the host app actually wants to render. Return arrays for predictable rendering and performance.
+- Remember that `nil` becomes an empty child list and a single object is wrapped as one child. If that surprises the screen, make the resolver branch explicit.
+- If the same logical node appears under multiple parents, decide in the host app whether that duplicate path is intentional or should be filtered before building the tree.
+- For heterogeneous nodes, pass a `node_key_resolver:` that namespaces node keys by type or source system.
+- If cycles or duplicate keys appear, use diagnostics first instead of adding GraphAdapter-specific validation behavior.
+- Keep authorization, eager loading, cache, pagination, and cycle policy in the host app; GraphAdapter only supplies roots and child arrays to `TreeView::Tree`.
+
+Read next:
+
+- [GraphAdapter](graph-adapter.md)
+- [Cookbook: GraphAdapter and ActiveRecord performance](cookbook.md#graphadapter-and-activerecord-performance)
+- [Tree diagnostics](tree-diagnostics.md)
+- [Node keys](node-keys.md)
+
 ## CSS or JavaScript integration does not seem to apply
 
 Start with installation wiring.
