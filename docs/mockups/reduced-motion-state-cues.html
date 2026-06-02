@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView low-motion state cues mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.low-motion-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.low-motion-panel {
+  border: 1px solid #d8e0ea;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.low-motion-panel__header {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #e4e7eb;
+  background: #f8fafc;
+}
+
+.low-motion-panel__header h3,
+.low-motion-panel__header p {
+  margin: 0;
+}
+
+.low-motion-panel__header p {
+  color: #52606d;
+}
+
+.low-motion-note-list {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0.85rem 1rem 1rem;
+  padding-left: 1.15rem;
+  color: #334e68;
+}
+
+.low-motion-table-wrap {
+  overflow-x: auto;
+}
+
+.low-motion-cue-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+}
+
+.low-motion-cue-label::before {
+  content: "";
+  inline-size: 0.65rem;
+  block-size: 0.65rem;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.low-motion-plain-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 1.45rem;
+  min-block-size: 1.45rem;
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  color: #334155;
+  font-weight: 800;
+}
+
+.tree-row.low-motion-row--current {
+  box-shadow: inset 4px 0 0 #1d4ed8;
+}
+
+.tree-row.low-motion-row--target {
+  outline: 2px solid #16a34a;
+  outline-offset: -3px;
+}
+
+@media (max-width: 720px) {
+  .low-motion-panel__header {
+    padding: 0.75rem;
+  }
+
+  .low-motion-note-list {
+    margin-inline: 0.75rem;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>TreeView low-motion state cues mock</h1>
+      <p>
+        Static HTML for reviewing loading, retry, current or selected, and drop-target cues when reviewers assume reduced or no animation.
+        The samples keep state differences visible through labels, borders, row shape, and adjacent explanatory copy rather than motion alone.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="low-motion-overview-heading" data-tree-view-sample="reduced-motion-state-cues">
+      <h2 id="low-motion-overview-heading">State cue comparison without animation</h2>
+      <div class="low-motion-grid">
+        <article class="low-motion-panel" aria-labelledby="low-motion-loading-heading">
+          <div class="low-motion-panel__header">
+            <h3 id="low-motion-loading-heading">Loading in progress</h3>
+            <p>Use a stable pending row, busy attribute, explicit status label, and disabled action instead of depending on a spinner.</p>
+          </div>
+          <div class="low-motion-table-wrap">
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">state cue</th>
+                  <th scope="col">action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-loading" id="low_motion_loading" data-tree-node-key="folder:loading" data-tree-depth="0" data-tree-remote-state="loading" aria-level="1" aria-expanded="false" aria-busy="true">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Loading children">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__action tree-toggle__action--pending">load</span><span class="tree-toggle__level">pending</span></span>
+                    </span>
+                  </td>
+                  <td><span class="low-motion-cue-label">Loading folder</span></td>
+                  <td><span class="mock-status mock-status--pending">loading children</span></td>
+                  <td class="tree-row-actions"><button type="button" disabled>Loading</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="low-motion-note-list">
+            <li>Stable text keeps the state readable if spinner animation is removed.</li>
+            <li><code>aria-busy="true"</code> and the disabled action describe the same pending boundary.</li>
+          </ul>
+        </article>
+
+        <article class="low-motion-panel" aria-labelledby="low-motion-retry-heading">
+          <div class="low-motion-panel__header">
+            <h3 id="low-motion-retry-heading">Retry or error state</h3>
+            <p>Combine the retry affordance with an error row shape and plain status text so the failed state is not color-only.</p>
+          </div>
+          <div class="low-motion-table-wrap">
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">state cue</th>
+                  <th scope="col">action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-error" id="low_motion_retry" data-tree-node-key="folder:retry" data-tree-depth="0" data-tree-remote-state="error" aria-level="1" aria-expanded="false">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Loading failed">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><a class="tree-toggle__action" href="#">retry</a><span class="tree-toggle__level">error</span></span>
+                    </span>
+                  </td>
+                  <td><span class="low-motion-cue-label">Failed folder</span></td>
+                  <td><span class="mock-status mock-status--error">load failed</span></td>
+                  <td class="tree-row-actions"><button type="button">Retry</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="low-motion-note-list">
+            <li>Retry copy appears in both the toggle control and the action column.</li>
+            <li>The row background, status pill, and explicit label carry the cue without motion.</li>
+          </ul>
+        </article>
+
+        <article class="low-motion-panel" aria-labelledby="low-motion-current-heading">
+          <div class="low-motion-panel__header">
+            <h3 id="low-motion-current-heading">Current and selected state</h3>
+            <p>Keep the current row visible through the row state, aria-current, a leading edge, and a selected label.</p>
+          </div>
+          <div class="low-motion-table-wrap">
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">state cue</th>
+                  <th scope="col">action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-selected low-motion-row--current" id="low_motion_current" data-tree-node-key="folder:current" data-tree-depth="1" aria-level="2" aria-current="page">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Current selection">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">current</span></span>
+                    </span>
+                  </td>
+                  <td><span class="low-motion-cue-label">Current branch</span></td>
+                  <td><span class="mock-status mock-status--active">selected current page</span></td>
+                  <td class="tree-row-actions"><button type="button">Open</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="low-motion-note-list">
+            <li>The cue combines row fill, leading edge, and <code>aria-current="page"</code>.</li>
+            <li>Final navigation and route selection remain host-app responsibilities.</li>
+          </ul>
+        </article>
+
+        <article class="low-motion-panel" aria-labelledby="low-motion-drop-heading">
+          <div class="low-motion-panel__header">
+            <h3 id="low-motion-drop-heading">Drop target or invalid transfer</h3>
+            <p>Show valid and blocked transfer outcomes through row outline, plain icons, and status labels instead of animated drag feedback.</p>
+          </div>
+          <div class="low-motion-table-wrap">
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">state cue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-drop-target low-motion-row--target" id="low_motion_drop_target" data-tree-node-key="folder:target" data-tree-drop-position="inside" aria-level="1">
+                  <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">target</span></span></span></td>
+                  <td><span class="low-motion-plain-icon" aria-hidden="true">+</span> Valid folder target</td>
+                  <td><span class="mock-status mock-status--active">drop inside</span></td>
+                </tr>
+                <tr class="tree-row is-drop-disabled" id="low_motion_drop_blocked" data-tree-node-key="folder:blocked" data-tree-drop-disabled-reason="Readonly branch" aria-level="1" aria-disabled="true">
+                  <td class="btn-cell tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">blocked</span></span></span></td>
+                  <td><span class="low-motion-plain-icon" aria-hidden="true">!</span> Readonly target</td>
+                  <td><span class="mock-status mock-status--error">drop disabled</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="low-motion-note-list">
+            <li>Shape and text differentiate valid and blocked transfer states.</li>
+            <li>Move authorization, persistence, and final business copy stay outside this mockup.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
