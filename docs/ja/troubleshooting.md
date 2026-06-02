@@ -45,6 +45,24 @@ toolbar action は、TreeView がその action の path を作れないと disab
 - [Turbo Frame option](turbo-frame.md)
 - [使い方](usage.md)
 
+## breadcrumb が失敗する / 親方向の path が見つからない
+
+breadcrumb の path lookup は records mode 専用です。TreeView は、現在 record から root まで `parent_id_method` の関係を辿れる場合に breadcrumb を描画できます。
+
+次を確認してください。
+
+- tree が `records:` と `parent_id_method:` から構築されているか。resolver mode と adapter mode は、bundled breadcrumb helper が使う一意な親方向 path を公開しません。
+- error が parent path helpers は records mode 専用だと示している場合は、graph-like data から親を推測しようとせず、mode 境界の signal として扱う。
+- data が graph-like、複数の parent 候補を持つ、または `GraphAdapter` 由来の場合は、host app 側で breadcrumb trail を選び、独自の link または label を描画する。
+- route、authorization、layout placement、analytics behavior は host app 側で管理する。TreeView が担当するのは records-mode path lookup と helper HTML です。
+
+次に読む文書:
+
+- [Breadcrumb](breadcrumb.md#対応mode)
+- [GraphAdapter](graph-adapter.md)
+- [Host App 拡張ポイント](host-app-extension-points.md)
+- [Rendering Boundaries](rendering-boundaries.md)
+
 ## row partial の表示が崩れる / table cell 数が合わない
 
 TreeView は row wrapper と共通 tree UI cell を担当し、`row_partial` の中身、action cell、周囲の table layout は host app が担当します。
