@@ -91,8 +91,8 @@ RSpec.describe "Public JavaScript event detail drift" do
   def object_key_names(body)
     return [] unless body
 
-    explicit_keys = body.scan(/(?:^|[,{]\s*)([A-Za-z_$][\w$]*)\s*:/m).flatten
-    shorthand_keys = body.scan(/(?:^|[,{]\s*)([A-Za-z_$][\w$]*)\s*(?=,|\z)/m).flatten
+    explicit_keys = body.scan(/(?:^|[,{])\s*([A-Za-z_$][\w$]*)\s*:/m).flatten
+    shorthand_keys = body.scan(/(?:^|[,{])\s*([A-Za-z_$][\w$]*)\s*(?=,|\z)/m).flatten
 
     (explicit_keys + shorthand_keys).uniq
   end
