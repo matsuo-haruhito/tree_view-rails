@@ -104,7 +104,7 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 
 ## Technical assets
 
-`docs/mockups/README.md` is the source of truth for the current static mockup file inventory. Its Files table is also the source read by the browser smoke target list, so this checklist should describe responsibility rather than repeat every individual mockup HTML page.
+`docs/mockups/README.md` is the source of truth for the current static mockup file inventory. Its Files table feeds the expected file list used by browser smoke to check the separately maintained `focusedMockupSmokeTargets` array, so this checklist should describe responsibility rather than repeat every individual mockup HTML page.
 
 | Asset group | Status | Notes |
 |---|---|---|
@@ -119,6 +119,6 @@ Before merging a doc-affecting PR or preparing a release, confirm:
 - Keep `docs/ja/` and `docs/en/` in sync for future user-facing changes.
 - If a temporary mismatch is unavoidable, leave a visible note and plan the follow-up.
 - Treat the High lane in the page-level coverage table above as the minimum same-sweep translation set promised by the language READMEs.
-- When `docs/mockups/` gains, renames, or removes a focused reference page, update `docs/mockups/README.md` first, then confirm `docs/mockups/review-gallery.html` and browser smoke coverage still describe the current set.
+- When `docs/mockups/` gains, renames, or removes a focused reference page, update `docs/mockups/README.md` first, then keep `docs/mockups/review-gallery.html` and the browser smoke `focusedMockupSmokeTargets` coverage aligned with the current set.
 - Update this technical-assets section only when the source-of-truth rule or asset-group responsibility changes, not for every individual mockup file addition.
 - Prefer updating this checklist by replacement when the maintenance rule changes, instead of stacking stale release-specific notes on top of it.
