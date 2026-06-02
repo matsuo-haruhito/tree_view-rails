@@ -45,6 +45,7 @@ const focusedMockupSmokeTargets = [
   { file: "row-status-depth-labels.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "toggle-icon-states.html", sample: ".tree-view-table tbody tr", minimumCount: 7 },
   { file: "interaction-states.html", sample: ".tree-view-table tbody tr", minimumCount: 5 },
+  { file: "reduced-motion-state-cues.html", sample: "[data-tree-view-sample='reduced-motion-state-cues'] .tree-view-table tbody tr", minimumCount: 5 },
   { file: "keyboard-focus-states.html", sample: ".focus-sample, .focus-sample--soft", minimumCount: 5 },
   { file: "high-contrast-state-cues/index.html", sample: "[data-tree-view-sample='high-contrast-state-cues']", minimumCount: 1 },
   { file: "lazy-loading-handoff.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
@@ -92,6 +93,7 @@ test.describe("docs mockup browser smoke", () => {
 
     expect(linkedFiles).toContain("default-tree.html")
     expect(linkedFiles).toContain("interaction-states.html")
+    expect(linkedFiles).toContain("reduced-motion-state-cues.html")
     expect(linkedFiles).toContain("current-branch-sidebar.html")
     expect(linkedFiles).toContain("node-presenter-row-partials.html")
     expect(linkedFiles).toContain("selection-multi-tree-form.html")
