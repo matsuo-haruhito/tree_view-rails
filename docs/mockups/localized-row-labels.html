@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Localized row labels mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-localized-note {
+  margin: 0;
+  color: #52606d;
+}
+
+.mock-localized-frame {
+  display: grid;
+  gap: 14px;
+}
+
+.mock-localized-table {
+  table-layout: fixed;
+}
+
+.mock-localized-name {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.mock-localized-primary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  min-width: 0;
+}
+
+.mock-localized-primary a {
+  color: #1d4ed8;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.mock-localized-primary a:hover,
+.mock-localized-primary a:focus {
+  text-decoration: underline;
+}
+
+.mock-localized-type {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.78rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.mock-localized-type--accent {
+  border-color: #bae6fd;
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.mock-localized-attribute {
+  display: inline-flex;
+  max-width: 100%;
+  color: #475569;
+  font-size: 0.84rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.mock-localized-secondary {
+  color: #52606d;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.mock-localized-tooltip-cue {
+  color: #0f766e;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.mock-localized-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.1rem;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #1d4ed8;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.mock-localized-action:hover,
+.mock-localized-action:focus {
+  border-color: #1d4ed8;
+  outline: 2px solid transparent;
+}
+
+.mock-localized-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 14px;
+}
+
+.mock-localized-card {
+  border: 1px solid #dde4ec;
+  border-radius: 8px;
+  background: #fff;
+  padding: 14px;
+}
+
+.mock-localized-card h3,
+.mock-localized-card p {
+  margin: 0;
+}
+
+.mock-localized-card h3 {
+  margin-bottom: 0.45rem;
+}
+
+@media (max-width: 760px) {
+  .mock-localized-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .mock-localized-table th,
+  .mock-localized-table td {
+    min-width: 10rem;
+  }
+
+  .mock-localized-table th:first-child,
+  .mock-localized-table td:first-child {
+    min-width: 18rem;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Localized row labels mock</h1>
+      <p>Focused static reference for reviewing long localized row labels, type badges, attribute labels, secondary metadata, and tooltip cues without choosing final host-app translations.</p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-localized-frame" aria-labelledby="localized-table-heading">
+      <h2 id="localized-table-heading">Long localized label stress sample</h2>
+      <p class="mock-localized-note">Rows use product-neutral, localized-style English copy. The goal is to inspect wrapping and cue placement, not to define final translations or truncation policy.</p>
+      <table class="tree-view-table mock-localized-table" data-controller="tree-view-state" data-tree-view-state-keyboard-value="true">
+        <thead>
+          <tr>
+            <th scope="col">tree node</th>
+            <th scope="col">localized attribute</th>
+            <th scope="col">secondary metadata</th>
+            <th scope="col">row action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="localized_node_1" class="tree-row is-expanded" data-tree-node-key="localized:portfolio" data-tree-parent-key="" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Expanded localized portfolio group"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#">hide</a><span class="tree-toggle__level">root</span></span></span><span class="mock-localized-name"><span class="mock-localized-primary"><a href="#portfolio" title="Open Quarterly Planning Portfolio With Region-Specific Review Naming">Quarterly Planning Portfolio With Region-Specific Review Naming</a><span class="mock-localized-type mock-localized-type--accent" title="Localized node type label">Translated portfolio type</span></span><span class="mock-localized-secondary">Tooltip cue stays available while the primary label wraps before hiding hierarchy controls.</span></span></td>
+            <td><span class="mock-localized-attribute">Localized attribute: Responsible review group</span></td>
+            <td><span class="mock-localized-secondary">Secondary metadata wraps under the same row without replacing TreeView current or depth cues.</span></td>
+            <td class="tree-row-actions"><a class="mock-localized-action" href="#portfolio-action">Review</a></td>
+          </tr>
+          <tr id="localized_node_2" class="tree-row is-selected" data-tree-node-key="localized:budget" data-tree-parent-key="localized:portfolio" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-current="page">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Current localized budget row"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">child</span></span></span><span class="mock-localized-name"><span class="mock-localized-primary"><a href="#budget" title="Current target: International Budget Approval Label That Must Stay Readable">International Budget Approval Label That Must Stay Readable</a><span class="tree-node-badge" title="Current row cue">current</span><span class="mock-localized-type" title="Localized type badge">Translated document type</span></span><span class="mock-localized-secondary">Current cue remains adjacent to the label instead of drifting into host-owned columns.</span></span></td>
+            <td><span class="mock-localized-attribute">Attribute label: Last translated approval stage</span></td>
+            <td><span class="mock-localized-tooltip-cue">Tooltip cue: full localized label is available on the primary link.</span></td>
+            <td class="tree-row-actions"><a class="mock-localized-action" href="#budget-action">Open</a></td>
+          </tr>
+          <tr id="localized_node_3" class="tree-row is-collapsed" data-tree-node-key="localized:archive" data-tree-parent-key="localized:portfolio" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Collapsed localized archive group"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#">show</a><span class="tree-toggle__level">child</span><span class="tree-toggle__hidden-count" title="Hidden localized descendants">6</span></span></span><span class="mock-localized-name"><span class="mock-localized-primary"><a href="#archive" title="Collapsed archive branch with localized long translated row label">Collapsed Archive Branch With Localized Long Translated Row Label</a><span class="mock-localized-type" title="Localized archive type">Translated archive type</span></span><span class="mock-localized-secondary">Hidden-count, badge, and secondary metadata remain scannable before final truncation decisions move to the host app.</span></span></td>
+            <td><span class="mock-localized-attribute">Attribute label: Localized retention category</span></td>
+            <td><span class="mock-localized-secondary">Host app owns final policy wording, permission copy, and route labels.</span></td>
+            <td class="tree-row-actions"><a class="mock-localized-action" href="#archive-action">Inspect</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section mock-localized-cards" aria-labelledby="localized-boundary-heading">
+      <div class="mock-localized-card">
+        <h2 id="localized-boundary-heading">TreeView-owned cues</h2>
+        <p>Hierarchy controls, current or selected state, depth labels, and toggle affordances must stay visible when labels wrap.</p>
+      </div>
+      <div class="mock-localized-card">
+        <h3>Host-app-owned copy</h3>
+        <p>Final translations, truncation rules, tooltip text, permission copy, and business-specific labels remain outside this mockup.</p>
+      </div>
+      <div class="mock-localized-card">
+        <h3>Review focus</h3>
+        <p>Inspect primary label wrapping, type badge placement, attribute label length, secondary metadata, and tooltip cue proximity.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
