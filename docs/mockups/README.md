@@ -32,6 +32,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [filtered-tree-modes.html](filtered-tree-modes.html) | Focused comparison for `filtered_tree_for` modes, showing matched-only, ancestor-retaining, and descendant-retaining output without host-app search behavior. |
 | [path-tree-builder-rows.html](path-tree-builder-rows.html) | Focused PathTreeBuilder comparison for generated folder rows versus record-backed rows, keeping host-app columns/actions outside the gem contract. |
 | [node-presenter-row-partials.html](node-presenter-row-partials.html) | Focused NodePresenter row partial reference showing resolver-provided label, href, tooltip, badge, icon, and optional action beside host-app-owned columns and permissions. |
+| [localized-row-labels.html](localized-row-labels.html) | Focused localized and long translated row label reference showing primary label, type badge, attribute label, secondary metadata, and tooltip cues without choosing final host-app translations. |
 | [form-editing-rows.html](form-editing-rows.html) | Focused comparison for bulk-edit rows, per-row edit placement, and the boundary between TreeView selection checkboxes and host-app business controls. |
 | [selection-max-count.html](selection-max-count.html) | Focused selection max-count reference showing below-limit, limit-reached, and limit-exceeded feedback while keeping final action copy host-app owned. |
 | [selection-multi-tree-form.html](selection-multi-tree-form.html) | Focused multi-tree selection form reference showing source-specific selected counts, submit summary, empty state, and generated hidden input boundary as a review aid. |
@@ -49,7 +50,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 6. Use [toggle-icon-states.html](toggle-icon-states.html) when review needs to compare `toggle_icons:` expanded, collapsed, leaf, loading, and depth/type variation without selecting a final icon library.
 7. Use [resource-table-bridge.html](resource-table-bridge.html) when review needs a focused pass on table-owned columns plus TreeView-owned hierarchy cues.
 8. Use [interaction-states.html](interaction-states.html) when review needs a focused pass on lazy loading, retry, pagination placeholders, or drag/drop states.
-9. Use [reduced-motion-state-cues.html](reduced-motion-state-cues.html) when review needs to compare loading, retry, current/selected, and drop-target cues without relying on animation.
+9. Use [reduced-motion-state-cues.html](reduced-motion-state-cues.html) when review needs to compare loading, retry, current/selected, and drop-target cues that remain readable without animation.
 10. Use [keyboard-focus-states.html](keyboard-focus-states.html) when review needs to compare visible focus cues across toggle links, native controls, toolbar actions, and row actions without treating the mockup as a keyboard navigation contract.
 11. Use [high contrast state cues](high-contrast-state-cues/index.html) when review needs to compare current, selected, focus-visible, error/retry, and drop-target cues without relying on color alone.
 12. Use [lazy-loading-handoff.html](lazy-loading-handoff.html) when review needs to isolate children container ownership and remote-state slot handoff from the broader interaction-state page.
@@ -63,12 +64,13 @@ They are **not** a complete Rails application and should not grow into host-app 
 20. Use [filtered-tree-modes.html](filtered-tree-modes.html) when review needs to compare matched nodes against ancestor or descendant context without adding host-app search UI.
 21. Use [path-tree-builder-rows.html](path-tree-builder-rows.html) when review needs to compare generated folder rows with record-backed rows without designing a file-manager application.
 22. Use [node-presenter-row-partials.html](node-presenter-row-partials.html) when review needs to compare NodePresenter-provided row partial values against host-app-owned columns, permissions, and final actions.
-23. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
-24. Use [selection-max-count.html](selection-max-count.html) when review needs to compare below-limit, limit-reached, and limit-exceeded selection feedback without adding runtime behavior or final bulk-action copy.
-25. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
-26. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
-27. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
-28. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+23. Use [localized-row-labels.html](localized-row-labels.html) when review needs to compare long localized row labels, type badges, attribute labels, secondary metadata, and tooltip cues without deciding final host-app translations.
+24. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
+25. Use [selection-max-count.html](selection-max-count.html) when review needs to compare below-limit, limit-reached, and limit-exceeded selection feedback without adding runtime behavior or final bulk-action copy.
+26. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
+27. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
+28. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
+29. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Automated smoke coverage
 
@@ -79,6 +81,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 
 - Mockups use short, product-neutral English copy so reviewers can compare layout and state cues without language changes becoming visual noise.
 - `toolbar-actions.html` intentionally includes a narrow long/localized label stress case so reviewers can inspect wrapping and disabled/current cues without choosing final translations.
+- `localized-row-labels.html` intentionally uses long localized-style English labels to stress row wrapping, badge placement, attribute labels, secondary metadata, and tooltip cues without choosing final translations.
 - Final labels, localization, permission messaging, and business wording remain host-app responsibilities.
 - If a future mockup intentionally uses another language, document that exception here so reviewers know it is deliberate.
 
