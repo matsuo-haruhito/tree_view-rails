@@ -120,6 +120,8 @@ Documented localized display-name helpers include:
 - `TreeView.attribute_name_for(item_or_class, attribute, default: nil)`
 - `TreeView.type_name_for(item, count: 1, default: nil)`
 
+Localized display-name helpers resolve labels through the host app's Rails / ActiveModel / I18n locale data when available, then fall back to humanized names or an explicit `default:` value. They only return display names; host app row partials, helpers, or presenters still decide where those names appear in the UI. See [Localized names](localized-names.md) for fallback behavior and row-rendering examples.
+
 Documented Turbo UI options include:
 
 - `UiConfig#turbo_frame`
