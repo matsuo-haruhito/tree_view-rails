@@ -3,15 +3,15 @@
 require "spec_helper"
 require "yaml"
 
-RSpec.describe "Public JavaScript event detail drift" do
-  EVENT_DETAIL_DRIFT_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-  EVENT_DETAIL_DRIFT_CONTROLLER_PATHS = {
-    "state" => File.expand_path("../app/javascript/tree_view/state_controller.js", __dir__),
-    "selection" => File.expand_path("../app/javascript/tree_view/selection_controller.js", __dir__),
-    "remote_state" => File.expand_path("../app/javascript/tree_view/remote_state_controller.js", __dir__),
-    "transfer" => File.expand_path("../app/javascript/tree_view/transfer_controller.js", __dir__)
-  }.freeze
+EVENT_DETAIL_DRIFT_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+EVENT_DETAIL_DRIFT_CONTROLLER_PATHS = {
+  "state" => File.expand_path("../app/javascript/tree_view/state_controller.js", __dir__),
+  "selection" => File.expand_path("../app/javascript/tree_view/selection_controller.js", __dir__),
+  "remote_state" => File.expand_path("../app/javascript/tree_view/remote_state_controller.js", __dir__),
+  "transfer" => File.expand_path("../app/javascript/tree_view/transfer_controller.js", __dir__)
+}.freeze
 
+RSpec.describe "Public JavaScript event detail drift" do
   def public_javascript_event_detail_keys
     YAML.safe_load_file(EVENT_DETAIL_DRIFT_MANIFEST_PATH).fetch("javascript_package_root").fetch("event_detail_keys")
   end
