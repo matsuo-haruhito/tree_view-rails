@@ -37,6 +37,18 @@ Japanese remains the more complete canonical prose source when English wording l
 
 If a page outside the High lane changes first, do not block the docs PR automatically. Instead, leave a visible note in the changed page or PR and add the follow-up to the next bilingual maintenance sweep.
 
+## Page-set parity checks
+
+Use the page-set check as a lightweight inventory guard before adding, renaming, or removing prose docs under `docs/en/` or `docs/ja/`. The baseline expectation is that user-facing Markdown pages in those two language trees have a matching peer with the same filename.
+
+Exceptions are allowed when the mismatch is intentional and visible:
+
+- root-level maintenance assets such as this checklist, `docs/README.md`, and technical asset indexes stay outside the language-tree parity set
+- `docs/mockups/**` is a technical visual reference area and is tracked through its own README, review gallery, and browser smoke inventory instead of language-tree parity
+- a page may temporarily exist in one language first when the PR or changed page leaves a visible follow-up note and does not change the High-lane entry-point promise
+
+When a lightweight automated parity check exists, use it as a first pass only. It should flag missing peer filenames and documented exceptions; it should not judge translation quality, wording equivalence, or whether Japanese or English is the canonical prose source for a disputed behavior.
+
 ## When to update both Japanese and English docs
 
 Update both language trees when the change affects user-facing behavior, public options, responsibility boundaries, or guidance that a reader would reasonably expect to match across languages.
