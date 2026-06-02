@@ -80,6 +80,14 @@ Main-push CI checks:
 
 PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes full compatibility matrices, JavaScript coverage, and unconditional package verification.
 
+## Downstream host-app evidence
+
+TreeView release evidence lives in this repository: the public API manifest, package-root exports, public API and feature docs, mockup README / review gallery, browser smoke targets, and package verification are the upstream sources to review before tagging.
+
+Downstream Rails applications, such as `docs-portal`, should keep their own adoption smoke and rollback notes for app-specific flows such as sidebar trees, detail trees, persisted state, selection, window offsets, routes, permissions, icons, and business row actions. Treat those notes as host-app adoption evidence, not as TreeView's source of truth or a TreeView-only release requirement.
+
+When a downstream smoke fails, first classify whether the finding points to an upstream TreeView contract/package issue or to host-app wiring, query, route, authorization, copy, or rollback policy. Do not use a downstream pinned SHA, application-specific rollback note, or unmerged downstream pull request as the release-facing source of truth for TreeView behavior.
+
 ## Documentation
 
 When public usage or public options change, update related docs and CHANGELOG.
