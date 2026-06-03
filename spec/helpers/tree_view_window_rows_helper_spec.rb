@@ -7,9 +7,9 @@ TreeViewWindowRowsHelperSpecNode = Struct.new(:id, :parent_item_id, :name, keywo
 RSpec.describe "tree_view_rows window option" do
   let(:ui_config) do
     TreeView::UiConfig.new(
-      node_dom_id_builder: ->(item_or_id) { "item_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
-      button_dom_id_builder: ->(item_or_id) { "item_button_box_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" },
-      show_button_dom_id_builder: ->(item_or_id) { "item_show_button_#{item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id}" }
+      node_dom_id_builder: ->(item_or_id) { dom_id_for(item_or_id, "item") },
+      button_dom_id_builder: ->(item_or_id) { dom_id_for(item_or_id, "item_button_box") },
+      show_button_dom_id_builder: ->(item_or_id) { dom_id_for(item_or_id, "item_show_button") }
     )
   end
 
@@ -38,7 +38,18 @@ RSpec.describe "tree_view_rows window option" do
       TreeViewWindowRowsHelperSpecNode.new(id: 3, parent_item_id: 1, name: "Child B")
     ]
   end
-  let(:tree) { TreeView::Tree.new(records: nodes, parent_id_method: :parent_item_id, sorter: ->(items, _tree) { items.sort_by(&:id) }) }
+  let(:tree) do
+    TreeView::Tree.new(
+      records: nodes,
+      parent_id_method: :parent_item_id,
+      sorter: ->(items, _tree) { items.sort_by(&:id) }
+    )
+  end
+
+  def dom_id_for(item_or_id, prefix)
+    identifier = item_or_id.respond_to?(:id) ? item_or_id.id : item_or_id
+    "#{prefix}_#{identifier}"
+  end
 
   def build_render_state(tree:, ui_config:, empty_message: nil)
     render_state = TreeView::RenderState.new(
