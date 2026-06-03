@@ -24,7 +24,7 @@ RSpec.describe "RenderState callback builder public manifest" do
   it "keeps the flat callback builder key list aligned with RenderState" do
     expect(manifest_callback_builder_keys).to eq(RENDER_STATE_CALLBACK_BUILDER_KEYS)
 
-    builders = manifest_callback_builder_keys.to_h { |key| [key.to_sym, ->(*) { nil }] }
+    builders = manifest_callback_builder_keys.to_h { |key| [key.to_sym, ->(*) {}] }
     state = TreeView::RenderState.new(
       tree: instance_double(TreeView::Tree),
       root_items: [],
