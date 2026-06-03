@@ -12,14 +12,17 @@ RSpec.describe "ResourceTableRenderState public call contract" do
     TreeView::ResourceTableRenderState.method(:call).parameters
   end
 
-  it "keeps required and optional call keywords aligned with the manifest" do
-    required_keywords = call_parameters.select { |kind, _name| kind == :keyreq }.map { |_kind, name| name.to_s }
-    optional_keywords = call_parameters.select { |kind, _name| kind == :key }.map { |_kind, name| name.to_s }
-    keyword_rest = call_parameters.select { |kind, _name| kind == :keyrest }.map { |_kind, name| name.to_s }
+  def keyword_parameter_names(kind)
+    call_parameters.each_with_object([]) do |parameter, names|
+      parameter_kind, name = parameter
+      names << name.to_s if parameter_kind == kind
+    end
+  end
 
-    expect(required_keywords).to eq(manifest.fetch("required_keywords"))
-    expect(optional_keywords).to eq(manifest.fetch("optional_keywords"))
-    expect(keyword_rest).to eq(["render_options"])
+  it "keeps required and optional call keywords aligned with the manifest" do
+    expect(keyword_parameter_names(:keyreq)).to eq(manifest.fetch("required_keywords"))
+    expect(keyword_parameter_names(:key)).to eq(manifest.fetch("optional_keywords"))
+    expect(keyword_parameter_names(:keyrest)).to eq(["render_options"])
   end
 
   it "documents render options as a RenderState pass-through instead of duplicating that surface" do
