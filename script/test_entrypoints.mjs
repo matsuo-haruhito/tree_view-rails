@@ -127,10 +127,20 @@ assert(
   "registerTreeViewControllers export is missing"
 )
 
+const documentedNamedExports = new Set(javascriptPackageManifest.named_exports)
 const missingNamedExports = javascriptPackageManifest.named_exports.filter((exportName) => !(exportName in entrypointModule))
 assert(
   missingNamedExports.length === 0,
   `named exports are out of sync: ${missingNamedExports.join(", ")}`
+)
+
+const undocumentedNamedExports = Object.keys(entrypointModule).filter((exportName) => !documentedNamedExports.has(exportName))
+assert(
+  undocumentedNamedExports.length === 0,
+  [
+    `entrypoint exports are missing from config/public_api_manifest.yml: ${undocumentedNamedExports.join(", ")}`,
+    "Add the export to javascript_package_root.named_exports and the relevant docs/smoke coverage, or stop exporting it from app/javascript/tree_view/index.js."
+  ].join("\n")
 )
 
 const expectedIdentifiers = Object.fromEntries(
