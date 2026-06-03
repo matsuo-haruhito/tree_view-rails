@@ -2,6 +2,12 @@
 
 このページでは、host Rails app が直接使ってよい公開API、内部API、互換性方針を整理します。
 
+## Public API manifest の位置づけ
+
+`config/public_api_manifest.yml` は、一部の documented surface の machine-readable source of truth であると同時に、release / compatibility review 用に gem package へ含める packaged audit artifact です。maintainer や downstream audit は、この manifest を helper method、grouped option、JavaScript export、controller identifier が docs と compatibility spec に揃っているか確認する材料として使えます。
+
+host app は、下で説明する documented Ruby helper、configuration option、JavaScript package-root export、event、CSS / DOM hook を通常利用してください。通常の TreeView 利用時に application code が manifest 自体を読み込む runtime API として扱うものではありません。
+
 ## 安定した公開入口
 
 host app が直接使ってよい主な入口は以下です。
