@@ -74,6 +74,8 @@ end
 
 `Result#success?` は収集されたerrorsだけを見ます。orphan reportはwarningsとして返るため、filter、import、permission scopeによって描画対象外のrecordsが生じる可能性がある場合は `warnings` も確認してください。
 
+manifest-backed な diagnostics contract は、accepted check names と `Result` の reader surface を対象にします。stable な check names は `node_keys`、`dom_ids`、`orphans`、`cycles` です。diagnostics `Result` は `checks`、`errors`、`warnings`、`success?` を公開します。一方で、個々の error entry 内部、warning detail shape、orphan warning semantics、cycle validation policy までは manifest で固定しません。これらは documented behavior と host app data policy の境界として扱い、manifest schema を広げすぎないようにします。
+
 ## node key uniqueness
 
 node keyの重複を検出したい場合は、tree作成時にvalidationを有効にします。
