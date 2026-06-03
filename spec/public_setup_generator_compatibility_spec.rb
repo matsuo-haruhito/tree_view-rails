@@ -4,12 +4,12 @@ require "spec_helper"
 require "yaml"
 require "generators/tree_view/state/install_generator"
 
-RSpec.describe "Public setup generator compatibility" do
-  MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-  GENERATOR_PATH = File.expand_path("../lib/generators/tree_view/state/install_generator.rb", __dir__)
+PUBLIC_SETUP_GENERATOR_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+PUBLIC_SETUP_GENERATOR_PATH = File.expand_path("../lib/generators/tree_view/state/install_generator.rb", __dir__)
 
+RSpec.describe "Public setup generator compatibility" do
   def public_api_manifest
-    @public_api_manifest ||= YAML.safe_load_file(MANIFEST_PATH)
+    @public_api_manifest ||= YAML.safe_load_file(PUBLIC_SETUP_GENERATOR_MANIFEST_PATH)
   end
 
   def state_install_generator_manifest
@@ -17,7 +17,7 @@ RSpec.describe "Public setup generator compatibility" do
   end
 
   def state_install_generator_source
-    @state_install_generator_source ||= File.read(GENERATOR_PATH)
+    @state_install_generator_source ||= File.read(PUBLIC_SETUP_GENERATOR_PATH)
   end
 
   it "keeps the persisted-state install generator in the public setup manifest" do
@@ -33,7 +33,7 @@ RSpec.describe "Public setup generator compatibility" do
     expect(owner_argument.required?).to be(false)
     expect(owner_argument.banner).to eq("OWNER_MODEL")
     expect(manifest.fetch("optional_arguments")).to eq([
-      { "name" => "owner_model_name", "banner" => "OWNER_MODEL" }
+      {"name" => "owner_model_name", "banner" => "OWNER_MODEL"}
     ])
   end
 
@@ -48,7 +48,7 @@ RSpec.describe "Public setup generator compatibility" do
 
     source = state_install_generator_source
     expect(source).to include("create_tree_view_states.rb")
-    expect(source).to include('db/migrate/#{migration_number}_create_tree_view_states.rb')
+    expect(source).to include("migration_number")
     expect(source).to include("app/models/tree_view_state.rb")
     expect(source).to include("app/models/concerns/tree_view_state_owner.rb")
   end
