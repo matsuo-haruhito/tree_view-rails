@@ -164,6 +164,8 @@ Host apps are expected to provide these pieces:
 
 The public JavaScript entrypoint is `tree_view/index.js`.
 
+The adjacent `tree_view/index.d.ts` declaration mirrors that package-root entrypoint for TypeScript-aware bundlers and editor tooling. It is a compile-time aid only: importmap and plain ESM integrations still use `tree_view/index.js` at runtime, and the manifest-backed runtime export contract remains the source of truth.
+
 Stable enough for host apps to use:
 
 - `registerTreeViewControllers(application)`
@@ -210,6 +212,8 @@ The `tree-view-selection` controller's documented host-element value attributes 
 Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
 The machine-readable source of truth for the package-root JavaScript exports and bundled controller identifiers lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+
+The entrypoint smoke also compares the declaration's exported names with `javascript_package_root.named_exports`, so declaration drift is caught without turning controller private methods or event payload typing into a broader TypeScript API.
 
 Internal by default:
 
