@@ -164,6 +164,8 @@ host app が提供する主な拡張点は以下です。
 
 公開 JavaScript entrypoint は `tree_view/index.js` です。
 
+隣接する `tree_view/index.d.ts` declaration は、この package-root entrypoint を TypeScript 対応 bundler や editor tooling から読みやすくするための補助です。これは compile-time aid に限られます。importmap や plain ESM の runtime integration は従来どおり `tree_view/index.js` を使い、manifest-backed runtime export contract が source of truth のままです。
+
 host app が使ってよい入口:
 
 - `registerTreeViewControllers(application)`
@@ -210,6 +212,8 @@ host app が使ってよい入口:
 これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
 
 package-root の JavaScript export と bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
+
+entrypoint smoke は declaration の export 名も `javascript_package_root.named_exports` と照合します。これにより、controller private methods や event payload typing まで TypeScript API として広げずに、declaration drift だけを検知します。
 
 内部扱い:
 
