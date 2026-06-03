@@ -81,6 +81,19 @@ grouped_option_keys:
     - row_disabled_builder
     - row_readonly_builder
     - row_disabled_reason_builder
+diagnostics:
+  accepted_checks:
+    - node_keys
+    - dom_ids
+    - orphans
+    - cycles
+  result_surface:
+    attributes:
+      - checks
+      - errors
+      - warnings
+    methods:
+      - success?
 javascript_package_root:
   named_exports:
     - registerTreeViewControllers
