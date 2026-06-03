@@ -55,6 +55,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Clarified release checklist guidance for documented JavaScript wiring surfaces, including `data-tree-view-*` integration hooks and selection controller host-element value attributes, alongside machine-readable package-root exports.
 - Added migration guides in Japanese and English to summarize compatibility promises, deprecations, rename handling, and release-note expectations.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
+- Clarified development docs for the Ruby-backed `npm run test:entrypoints` manifest loader path and setup expectations.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
@@ -82,6 +83,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added specs for RenderState internal configuration objects and the consolidated diagnostics entrypoint.
 - Added JavaScript public event contract specs for selection, remote state, and transfer events.
 - Added package-root frozen object contract coverage for public JavaScript object exports.
+- Improved entrypoint smoke diagnostics for Ruby manifest loader and JSON parse failures without changing public export assertions.
 - Added browser smoke coverage for representative docs mockup pages and the review gallery.
 
 ## 0.1.0 - 2026-05-07
