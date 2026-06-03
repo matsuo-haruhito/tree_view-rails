@@ -1,0 +1,53 @@
+import { Controller } from "@hotwired/stimulus"
+import type { Application } from "@hotwired/stimulus"
+
+export declare class TreeViewClientController extends Controller {}
+export declare class TreeViewRemoteStateController extends Controller {}
+export declare class TreeViewSelectionController extends Controller {}
+export declare class TreeViewStateController extends Controller {}
+export declare class TreeViewTransferController extends Controller {}
+
+export declare const TreeViewEventNames: Readonly<{
+  state: Readonly<{
+    stateChanged: "tree-view-state:state-changed"
+  }>
+  selection: Readonly<{
+    change: "tree-view-selection:change"
+    selected: "tree-view-selection:selected"
+    limitExceeded: "tree-view-selection:limit-exceeded"
+    invalidPayload: "tree-view-selection:invalid-payload"
+  }>
+  remoteState: Readonly<{
+    change: "tree-view-remote-state:change"
+    retry: "tree-view-remote-state:retry"
+  }>
+  hostLifecycle: Readonly<{
+    loading: "tree-view:loading"
+    loaded: "tree-view:loaded"
+    error: "tree-view:error"
+    retry: "tree-view:retry"
+  }>
+  transfer: Readonly<{
+    dragStart: "tree-view-transfer:drag-start"
+    dragOver: "tree-view-transfer:drag-over"
+    drop: "tree-view-transfer:drop"
+    invalidPayload: "tree-view-transfer:invalid-payload"
+    invalidTransfer: "tree-view-transfer:invalid-transfer"
+  }>
+}>
+
+export declare const TreeViewTransferDropPositions: Readonly<{
+  before: "before"
+  inside: "inside"
+  after: "after"
+}>
+
+export declare const TreeViewControllerIdentifiers: Readonly<{
+  state: "tree-view-state"
+  client: "tree-view-client"
+  selection: "tree-view-selection"
+  transfer: "tree-view-transfer"
+  remoteState: "tree-view-remote-state"
+}>
+
+export declare function registerTreeViewControllers(application: Application): void
