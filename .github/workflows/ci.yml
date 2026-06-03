@@ -186,7 +186,7 @@ jobs:
         run: npx playwright install --with-deps chromium
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
         run: npm run test:js
-      - if: github.event_name == 'pull_request' && needs.changes.outputs.mockups_changed == 'true'
+      - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.mockups_changed == 'true'
         run: npm run test:browser
 
   gem_package:
