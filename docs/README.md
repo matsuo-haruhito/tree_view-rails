@@ -11,6 +11,8 @@
 
 ## Recommended entry points
 
+- [English first-time setup](en/installation.md): install TreeView first, then continue to [Minimal usage](en/minimal-usage.md) and [Usage](en/usage.md) for the smallest working host-app wiring.
+- [日本語初回導入](ja/installation.md): まず TreeView を導入し、続けて [最小利用例](ja/minimal-usage.md) と [使い方](ja/usage.md) で host app の最小構成を確認します。
 - [English decision guide](en/decision-guide.md): choose APIs and options by use case, including when to use GraphAdapter adapter mode for heterogeneous or graph-like nodes.
 - [日本語API判断ガイド](ja/decision-guide.md): use caseからAPIやoptionを選ぶための入口。異種node混在やgraph-like nodeでGraphAdapter adapter modeを選ぶ場面も確認できます。
 - [English API overview: adapter mode](en/api-overview.md#adapter-mode): quick GraphAdapter entry point before moving to the full API reference or cookbook performance notes.
