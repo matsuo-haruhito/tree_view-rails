@@ -27,6 +27,13 @@ function readmeMockupFiles() {
   return Array.from(new Set(Array.from(matches, (match) => match[1])))
 }
 
+function reviewGalleryMockupFiles() {
+  const gallery = readFileSync(mockupPath("review-gallery.html"), "utf8")
+  const matches = gallery.matchAll(/\b(?:href|src)="([^"#?]+\.html)"/g)
+
+  return Array.from(new Set(Array.from(matches, (match) => match[1])))
+}
+
 async function openMockup(page, file) {
   await page.goto(mockupUrl(file))
   await expect(page.locator("main.mock-page")).toBeVisible()
@@ -110,6 +117,14 @@ test.describe("docs mockup browser smoke", () => {
     const coveredFiles = focusedMockupSmokeTargets.map((mockup) => mockup.file).sort()
 
     expect(coveredFiles).toEqual(expectedFiles)
+  })
+
+  test("review gallery links every focused mockup listed in README", () => {
+    const expectedFiles = readmeMockupFiles().filter((file) => file !== "review-gallery.html").sort()
+    const galleryFiles = reviewGalleryMockupFiles().sort()
+    const missingGalleryFiles = expectedFiles.filter((file) => !galleryFiles.includes(file))
+
+    expect(missingGalleryFiles).toEqual([])
   })
 
   for (const mockup of focusedMockupSmokeTargets) {
