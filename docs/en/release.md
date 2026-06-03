@@ -152,10 +152,12 @@ Before release:
   - `config/importmap.tree_view.rb`
   - `config/public_api_manifest.yml`
   - `config/locales/tree_view.toolbar.en.yml`
+  - `config/locales/tree_view.toolbar.ja.yml`
   - `README.md`
   - `CHANGELOG.md`
   - `docs/**/*`
   - `docs/en/release.md`
+  - `docs/ja/release.md`
   - `LICENSE*`
 
 ## Repository
