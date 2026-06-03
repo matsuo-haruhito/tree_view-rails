@@ -253,6 +253,21 @@ RSpec.describe "Public API compatibility" do
       "expected tree_view_breadcrumb option keys to stay aligned with the public keyword signature"
   end
 
+  it "keeps tree_view_window helper option keys aligned with the public helper signature" do
+    helper_class = Class.new do
+      include TreeViewHelper
+    end
+    helper = helper_class.new
+
+    expected_keywords = public_helper_option_keys.fetch("tree_view_window")
+    actual_required_keywords = helper.method(:tree_view_window).parameters.filter_map do |parameter_type, parameter_name|
+      parameter_name.to_s if parameter_type == :keyreq
+    end
+
+    expect(actual_required_keywords).to eq(expected_keywords),
+      "expected TreeViewHelper#tree_view_window required keywords to match the public helper option contract"
+  end
+
   it "keeps documented lazy-loading helper behavior available through TreeViewHelper" do
     helper_class = Class.new do
       include TreeViewHelper
@@ -443,8 +458,11 @@ RSpec.describe "Public API compatibility" do
     window = helper.tree_view_window(render_state, offset: 0, limit: 1)
     window_result = helper.tree_view_rows(render_state, window: window)
 
+    expect(public_helper_option_keys.fetch("tree_view_window")).to eq(%w[offset limit])
     expect(rows_result).to include(partial: "tree_view/tree_row", collection: tree.root_items, as: :item)
     expect(window).to be_a(TreeView::RenderWindow)
+    expect(window.offset).to eq(0)
+    expect(window.limit).to eq(1)
     expect(window.rows.length).to eq(1)
     expect(window_result).to include(partial: "tree_view/tree_window_row", as: :visible_row)
   end
