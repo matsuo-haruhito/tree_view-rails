@@ -71,7 +71,7 @@ A separate entrypoint smoke check loads `app/javascript/tree_view/index.js` dire
 npm run test:entrypoints
 ```
 
-That check keeps the documented controller exports and `registerTreeViewControllers` helper aligned with the importmap entrypoint.
+That check keeps the documented controller exports and `registerTreeViewControllers` helper aligned with the importmap entrypoint. It uses Ruby to load `config/public_api_manifest.yml` and print the `javascript_package_root` section as JSON before Node assertions run, so run it from the repository root with Ruby available when you are diagnosing manifest loader failures.
 
 Browser-level smoke tests run through Playwright with:
 
