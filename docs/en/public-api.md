@@ -143,6 +143,12 @@ See [API reference](api.md), [Localized names](localized-names.md), and [Turbo F
 | `lazy_loading` | `enabled`, `loaded_keys`, `scope` | Mirrors the documented lazy-loading row-state hooks and optional host-app scope passthrough. |
 | `row_status` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | Mirrors the documented row disabled / readonly state hooks and disabled-reason surface. |
 
+### RenderState flat callback builder keys
+
+`TreeView::RenderState` also exposes flat callback builder keywords for host-app rendering extensions. Their machine-readable key list lives under `render_state_callback_builder_keys` in `config/public_api_manifest.yml`, and the focused compatibility spec checks that each listed key remains both an initializer keyword and a public reader.
+
+These keys are a key-surface contract only: `row_class_builder`, `row_data_builder`, `row_event_payload_builder`, `loading_builder`, `error_builder`, `depth_label_builder`, `badge_builder`, `icon_builder`, and `toggle_icon_builder` remain distinct from grouped option hashes, individual scalar options, and the declarative `toggle_icons` map. This contract does not change callback arity, return-value validation, row rendering, `NodePresenter` fallback behavior, or toggle icon lookup priority.
+
 ## Host app extension points
 
 Host apps are expected to provide these pieces:
