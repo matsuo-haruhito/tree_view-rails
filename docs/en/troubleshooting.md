@@ -211,6 +211,10 @@ Check these points.
 - If explicit `expanded_keys` are passed into `RenderState`, they override the persisted state.
 - If a browser listener saves immediately on page load, remember that `tree-view-state:state-changed` is also dispatched on initial connect. Treat the first event as the current expanded-state snapshot, then debounce, ignore the first event, or use a host-app dirty-state policy when only user-initiated saves should be sent.
 - If the same `expandedKeys` snapshot is saved repeatedly, inspect the host-app listener before changing TreeView. TreeView publishes state changes; the host app owns autosave timing, duplicate suppression, retry behavior, authorization, and endpoint responses.
+- If `StateStore#save!` raises from the backing model, inspect the generated model validations, owner lookup, uniqueness constraints, and any database constraints for the same owner / `tree_instance_key` pair. TreeView calls the backing model's `save!`; it does not rescue validation failures or decide retry behavior.
+- If `StateStore#clear!` raises, inspect the matching persisted-state record's `destroy!` path, including host-app callbacks, constraints, transactions, and authorization around the reset endpoint. TreeView calls `destroy!` for the matching record and leaves failure handling to the host app.
+- If `clear!` returns an empty state when no record existed, treat that as the no-op boundary: the tree is already cleared for that owner / key. If the UI still shows old expansion, check the rendered `expanded_keys`, browser event listener, and host-app response rather than changing `clear!` behavior.
+- For the detailed StateStore boundary, read the save and clear examples in [Persisted State](persisted-state.md#server-side-storage-with-statestore).
 - For the detailed browser wiring boundary, read the practical notes in [Persisted State](persisted-state.md#browser-event-wiring).
 
 Read next:
