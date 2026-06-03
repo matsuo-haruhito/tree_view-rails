@@ -8,7 +8,7 @@ Direction-aware current-row and hierarchy cues are not a machine-readable public
 
 TreeView may show direction-aware visual references or selector guards in mockups and tests, but those references do not automatically promote every CSS class, pseudo-element, or directional selector into the compatibility contract. Host apps may override the bundled CSS when their locale, design system, or writing direction requires a different treatment.
 
-Use [`docs/mockups/direction-aware-cues.html`](../mockups/direction-aware-cues.html) when review needs a focused static comparison of TreeView-owned baseline cues against host-app-owned RTL or writing-direction overrides.
+Use [`docs/mockups/direction-aware-cues/index.html`](../mockups/direction-aware-cues/index.html) when review needs a focused static comparison of TreeView-owned baseline cues against host-app-owned RTL or writing-direction overrides.
 
 ## What is stable today
 
