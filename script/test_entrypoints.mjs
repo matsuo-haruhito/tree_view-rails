@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process"
+import { readFileSync } from "node:fs"
 
 function loadJavascriptPackageManifest() {
   const manifestJson = loadManifestJson()
@@ -48,6 +49,15 @@ function loadManifestJson() {
       { cause: error }
     )
   }
+}
+
+function loadDeclarationExportNames() {
+  const declarationPath = new URL("../app/javascript/tree_view/index.d.ts", import.meta.url)
+  const declarationSource = readFileSync(declarationPath, "utf8")
+  const exportPattern = /^export\s+declare\s+(?:class|const|function)\s+([A-Za-z0-9_]+)/gm
+  const exportNames = [...declarationSource.matchAll(exportPattern)].map((match) => match[1])
+
+  return [...new Set(exportNames)]
 }
 
 function camelizeKey(value) {
@@ -123,6 +133,22 @@ const missingNamedExports = javascriptPackageManifest.named_exports.filter((expo
 assert(
   missingNamedExports.length === 0,
   `named exports are out of sync: ${missingNamedExports.join(", ")}`
+)
+
+const declarationExportNames = loadDeclarationExportNames()
+const missingDeclarationExports = javascriptPackageManifest.named_exports.filter(
+  (exportName) => !declarationExportNames.includes(exportName)
+)
+const undocumentedDeclarationExports = declarationExportNames.filter(
+  (exportName) => !javascriptPackageManifest.named_exports.includes(exportName)
+)
+assert(
+  missingDeclarationExports.length === 0,
+  `TypeScript declaration exports are missing manifest exports: ${missingDeclarationExports.join(", ")}`
+)
+assert(
+  undocumentedDeclarationExports.length === 0,
+  `TypeScript declaration exports are not listed in the manifest: ${undocumentedDeclarationExports.join(", ")}`
 )
 
 const expectedIdentifiers = Object.fromEntries(
