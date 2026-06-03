@@ -71,7 +71,7 @@ npm test
 npm run test:entrypoints
 ```
 
-このcheckで、documented controller exports と `registerTreeViewControllers` helper が importmap entrypoint とずれないようにします。
+このcheckで、documented controller exports と `registerTreeViewControllers` helper が importmap entrypoint とずれないようにします。Node 側の assertions を実行する前に Ruby で `config/public_api_manifest.yml` を読み、`javascript_package_root` section を JSON として出力します。manifest loader failure を調べる場合は、repository root から Ruby が使える状態で実行してください。
 
 Browser-level smoke testsはPlaywrightで実行します。
 
