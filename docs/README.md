@@ -31,6 +31,8 @@
 - [日本語Lazy Loading](ja/lazy-loading.md): host app の route と TreeView remote-state hooks で子nodeを必要時に読み込む入口。
 - [English Windowed Rendering](en/windowed-rendering.md): render visible rows by offset and limit while host apps keep query and paging ownership.
 - [日本語Windowed Rendering](ja/windowed-rendering.md): offset / limit で visible rows を描画し、query や paging は host app が所有する前提の入口。
+- [English direction-aware styling boundary](en/direction-aware-styling.md): host-app override guidance for RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing.
+- [日本語Direction-aware styling boundary](ja/direction-aware-styling.md): RTL、writing direction、current-row cue、hierarchy connector、toggle spacing の host-app override guidance。
 - [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure and interaction states. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
 - [English demo application boundary](en/demo-application-boundary.md): decide when to use static mockups versus a real Rails demo app, without adding private or unavailable demo links.
 - [日本語Demo application boundary](ja/demo-application-boundary.md): static mockup と real Rails demo app の役割分担、未公開 demo link を増やさない方針。
