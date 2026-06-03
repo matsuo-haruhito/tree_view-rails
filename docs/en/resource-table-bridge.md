@@ -26,6 +26,22 @@ render_state = TreeView::ResourceTableRenderState.call(
 
 The default row partial is `tree_view/resource_table_row`. It reads `table_state["visible_columns"]` when provided, and falls back to `columns`. `ResourceTableRenderState` passes both values to the row partial through the render state.
 
+## Public call option contract
+
+`ResourceTableRenderState.call` is a manifest-backed public bridge. The required keywords are `records:` and `context:`.
+
+The documented optional bridge keywords are:
+
+- `row_partial:`
+- `parent_id_method:`
+- `id_method:`
+- `table_key:`
+- `columns:`
+- `table_state:`
+- `ui_config:`
+
+Other keyword options are accepted through `**render_options` and passed to `TreeView::RenderState`. Treat those options as the existing RenderState option surface, not as a separate resource-table-specific contract. For example, grouped options such as `initial_expansion:`, `selection:`, or `lazy_loading:` remain governed by the RenderState docs and manifest sections.
+
 ## Intended integration with Rails Table Preferences
 
 A table preferences layer can infer columns from Active Record, merge saved table settings into a table state, and then pass that table state to TreeView:
