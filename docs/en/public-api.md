@@ -2,6 +2,12 @@
 
 This page describes which APIs host Rails apps may depend on directly, which parts are internal, and how compatibility is handled.
 
+## Public API manifest role
+
+`config/public_api_manifest.yml` is both the machine-readable source of truth for selected documented surfaces and a packaged audit artifact for release and compatibility review. It is included in the gem package so maintainers and downstream audits can compare helper methods, grouped options, JavaScript exports, and controller identifiers against the docs and compatibility specs.
+
+Host apps should use the documented Ruby helpers, configuration options, JavaScript package-root exports, events, and CSS / DOM hooks described below. They should not treat the manifest itself as a runtime API that application code reads during normal TreeView usage.
+
 ## Stable public entry points
 
 Host apps may use these entry points directly:
