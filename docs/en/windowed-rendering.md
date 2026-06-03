@@ -29,7 +29,7 @@ This builds visible rows from the current expansion state and render scope, then
 
 ## tree_view_window helper
 
-Use `tree_view_window` when pagination metadata is needed.
+Use `tree_view_window` when pagination metadata is needed. Its supported helper keyword surface is `offset:` and `limit:`; those keys are tracked in `config/public_api_manifest.yml` so compatibility checks catch drift without making pagination policy a TreeView responsibility.
 
 ```ruby
 window = tree_view_window(@render_state, offset: 0, limit: 50)
