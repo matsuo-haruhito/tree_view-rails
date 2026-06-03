@@ -48,7 +48,7 @@ RSpec.describe "Public setup generator compatibility" do
 
     source = state_install_generator_source
     expect(source).to include("create_tree_view_states.rb")
-    expect(source).to include("db/migrate/#{migration_number}_create_tree_view_states.rb")
+    expect(source).to include('db/migrate/#{migration_number}_create_tree_view_states.rb')
     expect(source).to include("app/models/tree_view_state.rb")
     expect(source).to include("app/models/concerns/tree_view_state_owner.rb")
   end
