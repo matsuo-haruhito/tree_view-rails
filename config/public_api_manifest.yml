@@ -20,6 +20,7 @@ public_constants:
   - ResourceTableRenderState
   - VisibleRows
   - RenderWindow
+  - FilteredTree
   - UiConfig
   - UiConfigBuilder
   - GraphAdapter
@@ -43,6 +44,24 @@ helper_methods:
   - tree_view_toolbar_supported_actions
   - tree_view_toolbar_actions
   - tree_view_toolbar_action_metadata
+helper_option_keys:
+  tree_view_breadcrumb:
+    - label_builder
+    - path_builder
+    - separator
+    - nav_class
+    - list_class
+    - item_class
+    - link_class
+    - current_class
+    - separator_class
+    - aria_label
+    - html
+    - list_html
+    - item_html
+    - link_html
+    - current_html
+    - separator_html
 toolbar_actions:
   expand_all: expanded
   collapse_all: collapsed
@@ -92,6 +111,7 @@ javascript_package_root:
     - TreeViewTransferController
     - TreeViewRemoteStateController
     - TreeViewEventNames
+    - TreeViewEventDetailKeys
   transfer_drop_positions:
     before: before
     inside: inside

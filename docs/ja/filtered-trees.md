@@ -27,6 +27,8 @@ render_state = TreeView::RenderState.new(
 )
 ```
 
+`TreeView::FilteredTree` は manifest-backed public constant です。ただし host app は通常 `TreeView::Tree#filtered_tree_for` 経由で instance を取得し、mode validation と base-tree behavior を同じ入口に保ってください。
+
 ## mode
 
 | mode | 意味 |
