@@ -14,6 +14,7 @@ public_constants:
   - DuplicateNodeKeyError
   - CycleDetectedError
   - InvalidRenderWindowError
+  - Configuration
   - LocalizedNames
   - Tree
   - RenderState
@@ -121,8 +122,15 @@ javascript_package_root:
       limit_exceeded: tree-view-selection:limit-exceeded
       invalid_payload: tree-view-selection:invalid-payload
     remote_state:
-      change: tree-view-remote-state:change
-      retry: tree-view-remote-state:retry
+      change:
+        - row
+        - state
+        - childrenUrl
+        - nodeKey
+      retry:
+        - row
+        - childrenUrl
+        - nodeKey
     host_lifecycle:
       loading: tree-view:loading
       loaded: tree-view:loaded
