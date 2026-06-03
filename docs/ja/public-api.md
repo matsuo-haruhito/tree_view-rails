@@ -169,6 +169,7 @@ host app が使ってよい入口:
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
 - `TreeViewControllerIdentifiers`
+- `TreeViewSelectionDataHooks`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -182,6 +183,7 @@ host app が使ってよい入口:
 
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
+`TreeViewSelectionDataHooks` は、documented された `tree-view-selection` host-element value attribute names を machine-readable object として公開します。JavaScript が host-owned attribute を author / query するとき、`TreeViewSelectionDataHooks.hiddenInputNameValue` のように使うことで string の写経を避けられます。
 
 `TreeViewEventNames` のうち、lazy-loading の request lifecycle 名は `hostLifecycle` にまとめています。
 
@@ -200,6 +202,13 @@ host app が使ってよい入口:
 - `transfer`
 - `remoteState`
 
+`TreeViewSelectionDataHooks` の documented key:
+
+- `hiddenInputNameValue`
+- `maxCountValue`
+- `cascadeValue`
+- `indeterminateValue`
+
 `tree-view-selection` controller の documented host-element value attribute も、stable な host-app wiring surface の一部です。
 
 - `data-tree-view-selection-hidden-input-name-value`
@@ -207,9 +216,9 @@ host app が使ってよい入口:
 - `data-tree-view-selection-cascade-value`
 - `data-tree-view-selection-indeterminate-value`
 
-これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
+これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。generated hidden input marker attribute と source-id attribute は TreeView が生成・管理する内部寄りの属性であり、host app が authoring する public hook ではありません。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
 
-package-root の JavaScript export と bundled controller identifier の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
+package-root の JavaScript export、bundled controller identifier、selection data hook value の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
 内部扱い:
 
@@ -229,12 +238,12 @@ host app が依存してよい browser-facing surface は、documented された
 | hook area | 代表 hook | contract boundary |
 |---|---|---|
 | Toolbar | `data-tree-view-toolbar`, `data-tree-view-toolbar-action`, `data-tree-view-toolbar-disabled` | [Toolbar](toolbar.md) で説明している TreeView-owned hook です。supported action や metadata は internal constant ではなく helper method から取得してください。 |
-| Selection | `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | [Selection](selection.md) で説明している stable host-element controller value です。row payload や disabled 判定は `selection:` render-state builder 側に残ります。 |
+| Selection | `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | [Selection](selection.md) で説明している stable host-element controller value であり、`TreeViewSelectionDataHooks` からも参照できます。row payload や disabled 判定は `selection:` render-state builder 側に残ります。generated hidden input marker attribute と source-id attribute は TreeView-managed internal です。 |
 | Lazy loading | `data-tree-remote-state`, remote placeholder ID, lazy-loading lifecycle events | [Lazy Loading](lazy-loading.md) で説明している stable placeholder / event hook です。request dispatch と response handling は引き続き host app 側の責務です。 |
 | Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | [mockup inventory](../mockups/README.md) で説明している reusable baseline hook です。shipped empty-state reference pattern を示すもので、すべての internal row class を公開するものではありません。 |
 | Interaction markers | focused mockup に出てくる marker row classes / `data-*` hooks | review / adoption 用の reference hook として [mockups](../mockups/README.md) で説明します。compatibility check が必要な hook だけを `config/public_api_manifest.yml` の machine-readable contract へ昇格してください。 |
 
-この inventory は代表例であり、網羅一覧ではありません。`config/public_api_manifest.yml` は helper method、JavaScript package-root export、controller identifier、RenderState grouped option key の machine-readable source of truth です。docs-only の hook inventory は feature guide と mockup への導線を示すもので、出力されるすべての class や `data-*` attribute を compatibility contract にするものではありません。
+この inventory は代表例であり、網羅一覧ではありません。`config/public_api_manifest.yml` は helper method、JavaScript package-root export、controller identifier、selection data hook、RenderState grouped option key の machine-readable source of truth です。docs-only の hook inventory は feature guide と mockup への導線を示すもので、出力されるすべての class や `data-*` attribute を compatibility contract にするものではありません。
 
 undocumented な CSS helper class、data attribute、DOM 構造詳細、gem partial 内部 locals は内部実装です。
 
