@@ -1,21 +1,53 @@
 import { execFileSync } from "node:child_process"
 
 function loadJavascriptPackageManifest() {
-  const manifestJson = execFileSync(
-    "ruby",
-    [
-      "-e",
-      [
-        'require "json"',
-        'require "yaml"',
-        'data = YAML.load_file("config/public_api_manifest.yml")',
-        'print JSON.generate(data.fetch("javascript_package_root"))'
-      ].join("; ")
-    ],
-    { encoding: "utf8" }
-  )
+  const manifestJson = loadManifestJson()
 
-  return JSON.parse(manifestJson)
+  try {
+    return JSON.parse(manifestJson)
+  } catch (error) {
+    throw new Error(
+      [
+        "Could not parse config/public_api_manifest.yml javascript_package_root as JSON.",
+        "The entrypoint smoke uses Ruby to load YAML and prints that manifest section as JSON before Node assertions run.",
+        `Parser error: ${error.message}`
+      ].join("\n"),
+      { cause: error }
+    )
+  }
+}
+
+function loadManifestJson() {
+  try {
+    return execFileSync(
+      "ruby",
+      [
+        "-e",
+        [
+          'require "json"',
+          'require "yaml"',
+          'data = YAML.load_file("config/public_api_manifest.yml")',
+          'print JSON.generate(data.fetch("javascript_package_root"))'
+        ].join("; ")
+      ],
+      { encoding: "utf8" }
+    )
+  } catch (error) {
+    const rubyOutput = [error.stdout, error.stderr]
+      .filter((output) => output && output.length > 0)
+      .join("\n")
+      .trim()
+    const detail = rubyOutput || error.message
+
+    throw new Error(
+      [
+        "Could not load config/public_api_manifest.yml for the entrypoint smoke.",
+        "Run this command from the repository root with Ruby available, or inspect the manifest YAML around javascript_package_root.",
+        `Ruby loader output: ${detail}`
+      ].join("\n"),
+      { cause: error }
+    )
+  }
 }
 
 function camelizeKey(value) {
