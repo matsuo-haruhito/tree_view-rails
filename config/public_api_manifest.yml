@@ -81,6 +81,19 @@ grouped_option_keys:
     - row_disabled_builder
     - row_readonly_builder
     - row_disabled_reason_builder
+resource_table_render_state_call:
+  required_keywords:
+    - records
+    - context
+  optional_keywords:
+    - row_partial
+    - parent_id_method
+    - id_method
+    - table_key
+    - columns
+    - table_state
+    - ui_config
+  render_options_contract: render_state_pass_through
 javascript_package_root:
   named_exports:
     - registerTreeViewControllers
