@@ -47,6 +47,8 @@ host app が直接使ってよい主な入口は以下です。
 
 `TreeView::ResourceTableRenderState.call` は、別の table layer が列推論や table state を持っていて、TreeView には階層 render state の組み立てだけを任せたい場合の公開入口です。詳細は [Resource table bridge](resource-table-bridge.md) を参照してください。
 
+`TreeView::NodePresenter` は安定した public constant です。builder 名も manifest-backed public contract として扱い、`config/public_api_manifest.yml` の `node_presenter_builder_names` で管理し、`TreeView::NodePresenter::BUILDER_NAMES` と照合します。
+
 ## Public error surface
 
 host app は `TreeView::Error` を rescue することで、documented された TreeView の validation / configuration failure を、他の application error と分けて扱えます。
@@ -156,12 +158,15 @@ host app が提供する主な拡張点は以下です。
 - `row_partial`
 - Turbo mode path builders
 - `turbo_frame:` による任意の Turbo Frame target
+- label、href、row data、icon、badge、action identifier など、安定した node-level value 用の `TreeView::NodePresenter` builder block
 - row class / data builders
 - row event payload builders
 - selection payload / disabled builders
 - hidden message / breadcrumb / depth label / row status builders
 - lazy loading path builders and remote-state handling
 - persisted state storage model
+
+`TreeView::NodePresenter` builder 名は stable で manifest-backed な extension point です。一方で、builder の戻り値、table cell markup、action rendering、authorization、formatting、product-specific workflow は引き続き host app 側の責務です。row partial cookbook は使い方の pattern を示すもので、描画される cell や action すべてを TreeView API に昇格するものではありません。
 
 ## JavaScript surface
 
@@ -239,7 +244,7 @@ host app が依存してよい browser-facing surface は、documented された
 | Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | [mockup inventory](../mockups/README.md) で説明している reusable baseline hook です。shipped empty-state reference pattern を示すもので、すべての internal row class を公開するものではありません。 |
 | Interaction markers | focused mockup に出てくる marker row classes / `data-*` hooks | review / adoption 用の reference hook として [mockups](../mockups/README.md) で説明します。compatibility check が必要な hook だけを `config/public_api_manifest.yml` の machine-readable contract へ昇格してください。 |
 
-この inventory は代表例であり、網羅一覧ではありません。`config/public_api_manifest.yml` は helper method、JavaScript package-root export、controller identifier、RenderState grouped option key の machine-readable source of truth です。docs-only の hook inventory は feature guide と mockup への導線を示すもので、出力されるすべての class や `data-*` attribute を compatibility contract にするものではありません。
+この inventory は代表例であり、網羅一覧ではありません。`config/public_api_manifest.yml` は helper method、JavaScript package-root export、controller identifier、NodePresenter builder names、RenderState grouped option key の machine-readable source of truth です。docs-only の hook inventory は feature guide と mockup への導線を示すもので、出力されるすべての class や `data-*` attribute を compatibility contract にするものではありません。
 
 undocumented な CSS helper class、data attribute、DOM 構造詳細、gem partial 内部 locals は内部実装です。
 
