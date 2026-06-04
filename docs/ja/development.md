@@ -55,7 +55,7 @@ Public API compatibility specsは、documented Ruby entry points、helper method
 
 意図的なbreaking changeを受け入れる場合は、public API docsとcompatibility specsを同時に更新し、documented contractとtest coverageを同期させます。
 
-`config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、helper names、helper option keys、toolbar action/state mapping、grouped option keys、JavaScript package-root named exports、controller registrations、public event names、documented `event.detail` keys を追跡しています。ここに entry を追加・rename・削除する場合は、manifest 自体を更新したうえで `docs/en/public-api.md` と `docs/ja/public-api.md` をそろえ、同じ surface を名前で案内している README / usage docs / feature docs / JavaScript event docs を見直し、adopter に影響する変更なら利用者向けの変更点を `CHANGELOG.md` に残し、必要なら `docs/en/release.md` / `docs/ja/release.md` の release note や migration expectation も更新してください。
+`config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、configuration options、helper names、helper option keys、toolbar action/state mapping、grouped option keys、JavaScript package-root named exports、controller registrations、public event names、documented `event.detail` keys を追跡しています。ここに entry を追加・rename・削除する場合は、manifest 自体を更新したうえで `docs/en/public-api.md` と `docs/ja/public-api.md` をそろえ、同じ surface を名前で案内している README / usage docs / feature docs / configuration option docs / JavaScript event docs を見直し、adopter に影響する変更なら利用者向けの変更点を `CHANGELOG.md` に残し、必要なら `docs/en/release.md` / `docs/ja/release.md` の release note や migration expectation も更新してください。
 
 ## JavaScript browser smoke tests
 
