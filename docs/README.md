@@ -29,6 +29,8 @@
 - [日本語FAQ](ja/faq.md): 責務境界とよくある誤解を短く確認する入口。
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
+- [English Accessibility Semantics](en/accessibility-semantics.md): table-first ARIA policy, keyboard helper boundary, and intentional automated-check allowances.
+- [日本語Accessibility Semantics](ja/accessibility-semantics.md): table-first ARIA 方針、keyboard helper の責務境界、自動 accessibility check の意図的な許容事項。
 - [English Selection](en/selection.md): checkbox selection hooks, disabled state, cascade behavior, and submitted value parsing.
 - [日本語Selection](ja/selection.md): checkbox selection hooks、disabled state、cascade、submitted value parsing の入口。
 - [English Lazy Loading](en/lazy-loading.md): load children on demand through host-app routes and TreeView remote-state hooks.
