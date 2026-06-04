@@ -18,12 +18,12 @@ module NodeVersionSourcesSpec
 
   def package_engine_major
     engines = JSON.parse(read("package.json")).fetch("engines")
-    engines.fetch("node").match(/\A(?<major>\d+)/).fetch(:major)
+    engines.fetch("node").match(/\A(?<major>\d+)/)[:major]
   end
 
   def ci_node_major
     workflow = read(".github/workflows/ci.yml")
-    workflow.match(/node-version:\s*["']?(?<major>\d+)/).fetch(:major)
+    workflow.match(/node-version:\s*["']?(?<major>\d+)/)[:major]
   end
 
   def development_docs
