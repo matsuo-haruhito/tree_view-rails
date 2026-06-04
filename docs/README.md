@@ -39,6 +39,8 @@
 - [日本語Children Pagination](ja/children-pagination.md): direct children が多すぎる親nodeで、lazy loading と server-side child paging を組み合わせる入口。
 - [English Windowed Rendering](en/windowed-rendering.md): render visible rows by offset and limit while host apps keep query and paging ownership.
 - [日本語Windowed Rendering](ja/windowed-rendering.md): offset / limit で visible rows を描画し、query や paging は host app が所有する前提の入口。
+- [English Render log level](en/render-log-level.md): configure TreeView helper-rendered partial log verbosity without changing the host app's global Rails logger level.
+- [日本語Render log level](ja/render-log-level.md): host app 全体の Rails logger level を変えずに、TreeView helper-rendered partial log の出力を調整する入口。
 - [English direction-aware styling boundary](en/direction-aware-styling.md): host-app override guidance for RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing.
 - [日本語Direction-aware styling boundary](ja/direction-aware-styling.md): RTL、writing direction、current-row cue、hierarchy connector、toggle spacing の host-app override guidance。
 - [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure and interaction states. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
