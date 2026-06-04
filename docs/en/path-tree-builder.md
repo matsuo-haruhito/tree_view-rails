@@ -30,6 +30,8 @@ The builder creates two public node shapes:
 | `TreeView::PathTreeBuilder::FolderNode` | `key`, `parent_key`, `label`, `path`, `node_type`, `folder_node?`, `record_node?` | Generated intermediate folders. |
 | `TreeView::PathTreeBuilder::RecordNode` | `key`, `parent_key`, `label`, `path`, `record`, `node_type`, `folder_node?`, `record_node?` | Leaf nodes wrapping host-app records. |
 
+These field and predicate sets are tracked in the public API manifest as the node shape contract. The manifest fixes the readable shape of generated nodes, not the folder key generation strategy, sort algorithm, file-manager behavior, or host-app row action design.
+
 `RecordNode#record` keeps the original object so the row partial can render application-specific columns, links, status, or actions.
 
 ## Rendering folder and record rows
