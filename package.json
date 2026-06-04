@@ -8,7 +8,8 @@
   "scripts": {
     "test": "vitest run",
     "test:browser": "playwright test",
-    "test:entrypoints": "node script/test_entrypoints.mjs",
+    "test:docs-entrypoints": "node script/test_docs_entrypoints.mjs",
+    "test:entrypoints": "node script/test_entrypoints.mjs && npm run test:docs-entrypoints",
     "test:js": "npm run test:entrypoints && npm test && npm run test:browser"
   },
   "dependencies": {
