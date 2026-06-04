@@ -170,8 +170,8 @@ function assertUniqueStringList(values, name) {
   const seenValues = new Set()
 
   values.forEach((value) => {
-    assert(typeof value === "string" && value.length > 0, `${name} contains a non-string detail key`)
-    assert(!seenValues.has(value), `${name} contains duplicate detail key: ${value}`)
+    assert(typeof value === "string" && value.length > 0, `${name} contains a non-string value`)
+    assert(!seenValues.has(value), `${name} contains duplicate value: ${value}`)
     seenValues.add(value)
   })
 }
@@ -187,6 +187,44 @@ function assertEventDetailKeysMatchEventNames(eventNames, eventDetailKeys) {
         `event_detail_keys.${group}.${eventKey} does not match an exported event name`
       )
       assertUniqueStringList(detailKeys, `event_detail_keys.${group}.${eventKey}`)
+    })
+  })
+}
+
+function assertEventDetailCoverage(eventNames, eventDetailKeys, eventNamesWithoutDetail) {
+  assert(
+    eventNamesWithoutDetail && typeof eventNamesWithoutDetail === "object" && !Array.isArray(eventNamesWithoutDetail),
+    "event_names_without_detail must be an object"
+  )
+
+  Object.entries(eventNamesWithoutDetail).forEach(([group, eventKeys]) => {
+    assert(group in eventNames, `event_names_without_detail.${group} does not match an exported event group`)
+    assertUniqueStringList(eventKeys, `event_names_without_detail.${group}`)
+
+    eventKeys.forEach((eventKey) => {
+      assert(
+        eventKey in eventNames[group],
+        `event_names_without_detail.${group}.${eventKey} does not match an exported event name`
+      )
+      assert(
+        !(eventKey in (eventDetailKeys[group] || {})),
+        `event_names_without_detail.${group}.${eventKey} is also listed in event_detail_keys`
+      )
+    })
+  })
+
+  Object.entries(eventNames).forEach(([group, events]) => {
+    Object.keys(events).forEach((eventKey) => {
+      const hasDetailKeys = eventKey in (eventDetailKeys[group] || {})
+      const isMarkedWithoutDetail = (eventNamesWithoutDetail[group] || []).includes(eventKey)
+
+      assert(
+        hasDetailKeys || isMarkedWithoutDetail,
+        [
+          `event_names.${group}.${eventKey} is not classified for detail coverage`,
+          "List it under event_detail_keys when it has documented public detail fields, or under event_names_without_detail when it intentionally has no public detail fields."
+        ].join("\n")
+      )
     })
   })
 }
@@ -254,6 +292,13 @@ const expectedEventDetailKeys = deepCamelizeKeys(javascriptPackageManifest.event
 assertDeepEqualExport(entrypointModule.TreeViewEventDetailKeys, expectedEventDetailKeys, "TreeViewEventDetailKeys")
 assertFrozenEventDetailKeys(entrypointModule.TreeViewEventDetailKeys, "TreeViewEventDetailKeys")
 assertEventDetailKeysMatchEventNames(entrypointModule.TreeViewEventNames, entrypointModule.TreeViewEventDetailKeys)
+
+const expectedEventNamesWithoutDetail = deepCamelizeKeys(javascriptPackageManifest.event_names_without_detail)
+assertEventDetailCoverage(
+  entrypointModule.TreeViewEventNames,
+  entrypointModule.TreeViewEventDetailKeys,
+  expectedEventNamesWithoutDetail
+)
 
 const expectedTransferDropPositions = javascriptPackageManifest.transfer_drop_positions
 assertDeepEqualExport(
