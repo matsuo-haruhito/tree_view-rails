@@ -89,6 +89,16 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "Render log level",
+    rootPattern: /render log silencing|render_log_level/i,
+    links: [
+      ["README.md", "docs/en/render-log-level.md"],
+      ["README.md", "docs/ja/render-log-level.md"],
+      ["docs/en/README.md", "render-log-level.md"],
+      ["docs/ja/README.md", "render-log-level.md"]
+    ]
+  },
+  {
     feature: "JavaScript controllers and events",
     rootPattern: /Register JavaScript controllers/,
     links: [
