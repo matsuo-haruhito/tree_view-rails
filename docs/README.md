@@ -33,6 +33,8 @@
 - [日本語Selection](ja/selection.md): checkbox selection hooks、disabled state、cascade、submitted value parsing の入口。
 - [English Lazy Loading](en/lazy-loading.md): load children on demand through host-app routes and TreeView remote-state hooks.
 - [日本語Lazy Loading](ja/lazy-loading.md): host app の route と TreeView remote-state hooks で子nodeを必要時に読み込む入口。
+- [English Children Pagination](en/children-pagination.md): combine lazy loading with server-side child paging when a parent has too many direct children to return at once.
+- [日本語Children Pagination](ja/children-pagination.md): direct children が多すぎる親nodeで、lazy loading と server-side child paging を組み合わせる入口。
 - [English Windowed Rendering](en/windowed-rendering.md): render visible rows by offset and limit while host apps keep query and paging ownership.
 - [日本語Windowed Rendering](ja/windowed-rendering.md): offset / limit で visible rows を描画し、query や paging は host app が所有する前提の入口。
 - [English direction-aware styling boundary](en/direction-aware-styling.md): host-app override guidance for RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing.
