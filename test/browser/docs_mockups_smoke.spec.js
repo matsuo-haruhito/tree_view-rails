@@ -39,8 +39,12 @@ async function openMockup(page, file) {
   await expect(page.locator("main.mock-page")).toBeVisible()
 }
 
+async function documentHorizontalOverflow(page) {
+  return page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+}
+
 async function expectNoDocumentHorizontalOverflow(page) {
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+  const overflow = await documentHorizontalOverflow(page)
   expect(overflow).toBeLessThanOrEqual(1)
 }
 
@@ -74,6 +78,34 @@ const focusedMockupSmokeTargets = [
   { file: "selection-multi-tree-form.html", sample: ".mock-selection-group", minimumCount: 2 },
   { file: "empty-state.html", sample: "[data-tree-view-empty-state='true']", minimumCount: 2 }
 ]
+
+const narrowOverflowExpectedMockups = new Map([
+  ["default-tree.html", "wide baseline table columns are intentionally visible in the reference mockup"],
+  ["resource-table-bridge.html", "resource-table comparison keeps fuller columns visible for review"],
+  ["row-status-depth-labels.html", "status/depth table columns are intentionally preserved"],
+  ["toggle-icon-states.html", "toggle-state comparison uses a wide table matrix"],
+  ["interaction-states.html", "interaction-state table keeps multiple state columns visible"],
+  ["reduced-motion-state-cues.html", "state-cue comparison keeps the table matrix visible"],
+  ["keyboard-focus-states.html", "focus samples include multiple side-by-side controls"],
+  ["high-contrast-state-cues/index.html", "high-contrast state-cue panels stay side by side for comparison"],
+  ["direction-aware-cues/index.html", "direction-aware examples keep multiple writing directions visible for comparison"],
+  ["drop-positions.html", "drop-position comparison keeps before/inside/after states side by side"],
+  ["persisted-state-boundary.html", "persisted-state comparison keeps multiple state columns visible"],
+  ["turbo-frame-target.html", "Turbo Frame reference keeps target and row columns visible"],
+  ["drag-interactive-controls.html", "interactive-control rows keep native controls visible"],
+  ["interactive-marker-behaviors.html", "marker-behavior comparison keeps multiple controls visible"],
+  ["windowed-rendering.html", "window metadata columns are intentionally visible"],
+  ["breadcrumb-paths.html", "breadcrumb path examples keep long path segments inspectable"],
+  ["filtered-tree-modes.html", "filtered-mode comparison keeps mode columns visible"],
+  ["path-tree-builder-rows.html", "PathTreeBuilder examples keep generated path columns inspectable"],
+  ["node-presenter-row-partials.html", "NodePresenter partial examples keep host-owned columns visible"],
+  ["localized-row-labels.html", "localized label comparison keeps multilingual columns visible"],
+  ["form-editing-rows.html", "bulk-edit controls are intentionally visible in the reference"],
+  ["toolbar-actions.html", "toolbar action labels include long/localized stress cases"],
+  ["selection-max-count.html", "selection limit comparison keeps multiple state panels visible"],
+  ["selection-multi-tree-form.html", "multi-tree form comparison keeps source groups side by side"],
+  ["empty-state.html", "empty-state comparison keeps table wrappers inspectable"]
+])
 
 test.describe("docs mockup browser smoke", () => {
   test("review gallery loads representative navigation, previews, and local links", async ({ page }) => {
@@ -131,6 +163,19 @@ test.describe("docs mockup browser smoke", () => {
     expect(missingGalleryFiles).toEqual([])
   })
 
+  test("narrow overflow exceptions stay explicit and attached to focused smoke targets", () => {
+    const coveredFiles = focusedMockupSmokeTargets.map((mockup) => mockup.file)
+    const staleExceptions = [...narrowOverflowExpectedMockups.keys()].filter((file) => !coveredFiles.includes(file))
+    const uncheckedFiles = coveredFiles.filter((file) => !narrowOverflowExpectedMockups.has(file))
+
+    expect(staleExceptions).toEqual([])
+    expect(uncheckedFiles).toEqual([
+      "narrow-sidebar-tree.html",
+      "current-branch-sidebar.html",
+      "lazy-loading-handoff.html"
+    ])
+  })
+
   for (const mockup of focusedMockupSmokeTargets) {
     test(`${mockup.file} exposes its main heading, return link, and representative sample region`, async ({ page }) => {
       await openMockup(page, mockup.file)
@@ -140,6 +185,24 @@ test.describe("docs mockup browser smoke", () => {
       expect(await page.locator(mockup.sample).count()).toBeGreaterThanOrEqual(mockup.minimumCount)
     })
   }
+
+  test("non-exempt focused mockups avoid document-level horizontal overflow at narrow width", async ({ page }) => {
+    const overflowingMockups = []
+    const checkedMockups = focusedMockupSmokeTargets.filter((mockup) => !narrowOverflowExpectedMockups.has(mockup.file))
+
+    await page.setViewportSize({ width: 390, height: 900 })
+
+    for (const mockup of checkedMockups) {
+      await openMockup(page, mockup.file)
+      const overflow = await documentHorizontalOverflow(page)
+
+      if (overflow > 1) {
+        overflowingMockups.push(`${mockup.file} (${overflow}px)`)
+      }
+    }
+
+    expect(overflowingMockups).toEqual([])
+  })
 
   for (const viewport of [
     { name: "desktop", width: 1280, height: 900 },
