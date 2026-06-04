@@ -161,6 +161,13 @@ RSpec.describe "Public API compatibility" do
     expect(builder).to respond_to(:build_client_side)
   end
 
+  it "keeps documented NodePresenter builder names aligned with the public manifest" do
+    manifest_names = public_api_manifest.fetch("node_presenter_builder_names")
+
+    expect(manifest_names).to eq(TreeView::NodePresenter::BUILDER_NAMES.map(&:to_s)),
+      "expected NodePresenter builder names to stay aligned with the manifest-backed public contract"
+  end
+
   it "keeps documented RenderState grouped option keys available" do
     public_api_manifest.fetch("grouped_option_keys").each do |group_name, manifest_keys|
       expected_keys = RENDER_STATE_GROUPED_OPTION_KEY_RESOLVERS.fetch(group_name).call
