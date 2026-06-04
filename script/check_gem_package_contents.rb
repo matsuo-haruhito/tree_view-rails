@@ -34,6 +34,8 @@ REQUIRED_PACKAGED_PATHS = %w[
   CHANGELOG.md
   README.md
   docs/README.md
+  docs/en/installation.md
+  docs/ja/installation.md
   docs/en/public-api.md
   docs/ja/public-api.md
   docs/en/release.md
