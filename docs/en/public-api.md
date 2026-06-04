@@ -39,6 +39,11 @@ Host apps may use these entry points directly:
 - `tree_view_rows(render_state)`
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
+- `tree_node_dom_id(item_or_id, ui: @tree_ui)`
+- `tree_children_container_dom_id(item_or_id, ui: @tree_ui)`
+- `tree_remote_state_placeholder_dom_id(item_or_id, ui: @tree_ui)`
+- `tree_remote_state_placeholder_attributes(item_or_id, state: nil, ui: @tree_ui)`
+- `tree_selection_value(item, tree, builder = nil)`
 - `tree_view_breadcrumb(tree, item, ...)`
 - `tree_view_toolbar(render_state, ...)`
 - `tree_view_toolbar_supported_actions`
