@@ -3,11 +3,11 @@
 require "spec_helper"
 require "yaml"
 
-RSpec.describe "PathTreeBuilder public node shape contract" do
-  PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+PATH_TREE_BUILDER_PUBLIC_API_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 
+RSpec.describe "PathTreeBuilder public node shape contract" do
   def public_api_manifest
-    @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
+    @public_api_manifest ||= YAML.safe_load_file(PATH_TREE_BUILDER_PUBLIC_API_MANIFEST_PATH)
   end
 
   def path_tree_builder_node_shapes
