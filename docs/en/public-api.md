@@ -114,6 +114,8 @@ Documented configuration options include:
 - `initial_state`
 - `render_log_level`
 
+`TreeView.configure`, `TreeView.configuration`, and `TreeView.reset_configuration!` are the stable configuration entry points. Depend on documented option names and behavior rather than the internal shape of the configuration object. See [Render log level](render-log-level.md) for the `render_log_level` values, default, disable path, and host-app logging boundary.
+
 Documented localized display-name helpers include:
 
 - `TreeView.model_name_for(item_or_class, count: 1, default: nil)`
