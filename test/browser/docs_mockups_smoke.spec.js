@@ -76,6 +76,7 @@ const focusedMockupSmokeTargets = [
   { file: "toolbar-actions.html", sample: ".mock-toolbar-frame", minimumCount: 3 },
   { file: "selection-max-count.html", sample: ".mock-limit-state", minimumCount: 3 },
   { file: "selection-multi-tree-form.html", sample: ".mock-selection-group", minimumCount: 2 },
+  { file: "children-pagination-selection-boundary.html", sample: ".mock-pagination-selection-state", minimumCount: 3 },
   { file: "empty-state.html", sample: "[data-tree-view-empty-state='true']", minimumCount: 2 }
 ]
 
@@ -104,6 +105,7 @@ const narrowOverflowExpectedMockups = new Map([
   ["toolbar-actions.html", "toolbar action labels include long/localized stress cases"],
   ["selection-max-count.html", "selection limit comparison keeps multiple state panels visible"],
   ["selection-multi-tree-form.html", "multi-tree form comparison keeps source groups side by side"],
+  ["children-pagination-selection-boundary.html", "pagination selection boundary keeps rendered and unloaded state columns visible"],
   ["empty-state.html", "empty-state comparison keeps table wrappers inspectable"]
 ])
 
@@ -120,12 +122,14 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("link", { name: "Presenter row partials" })).toHaveAttribute("href", "#gallery-node-presenter-heading")
     await expect(page.getByRole("link", { name: "Localized labels" })).toHaveAttribute("href", "#gallery-localized-heading")
     await expect(page.getByRole("link", { name: "Selection form" })).toHaveAttribute("href", "#gallery-selection-form-heading")
+    await expect(page.getByRole("link", { name: "Pagination selection" })).toHaveAttribute("href", "#gallery-pagination-selection-heading")
     await expect(page.frameLocator("iframe[title='Default tree mock preview']").getByRole("heading", { name: "Default TreeView rendering mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Current branch sidebar mock preview']").getByRole("heading", { name: "Current branch sidebar mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Direction-aware cues mock preview']").getByRole("heading", { name: "Direction-aware current-row and hierarchy cues", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='NodePresenter row partials mock preview']").getByRole("heading", { name: "NodePresenter row partial mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Localized row labels mock preview']").getByRole("heading", { name: "Localized row labels mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Multi-tree selection form mock preview']").getByRole("heading", { name: "TreeView multi-tree selection form mock", level: 1 })).toBeVisible()
+    await expect(page.frameLocator("iframe[title='Children pagination selection boundary mock preview']").getByRole("heading", { name: "Children pagination selection boundary mock", level: 1 })).toBeVisible()
 
     const linkedFiles = await page.locator("a[href]").evaluateAll((anchors) =>
       Array.from(new Set(
@@ -144,6 +148,7 @@ test.describe("docs mockup browser smoke", () => {
     expect(linkedFiles).toContain("node-presenter-row-partials.html")
     expect(linkedFiles).toContain("localized-row-labels.html")
     expect(linkedFiles).toContain("selection-multi-tree-form.html")
+    expect(linkedFiles).toContain("children-pagination-selection-boundary.html")
     expect(linkedFiles).toContain("empty-state.html")
     expect(missingLinks).toEqual([])
   })
