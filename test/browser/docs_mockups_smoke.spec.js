@@ -58,6 +58,7 @@ const focusedMockupSmokeTargets = [
   { file: "interaction-states.html", sample: ".tree-view-table tbody tr", minimumCount: 5 },
   { file: "reduced-motion-state-cues.html", sample: "[data-tree-view-sample='reduced-motion-state-cues'] .tree-view-table tbody tr", minimumCount: 5 },
   { file: "keyboard-focus-states.html", sample: ".focus-sample, .focus-sample--soft", minimumCount: 5 },
+  { file: "keyboard-current-row/index.html", sample: ".keyboard-current-row, .keyboard-current-focus", minimumCount: 3 },
   { file: "high-contrast-state-cues/index.html", sample: "[data-tree-view-sample='high-contrast-state-cues']", minimumCount: 1 },
   { file: "direction-aware-cues/index.html", sample: ".direction-frame .tree-view-table tbody tr", minimumCount: 10 },
   { file: "lazy-loading-handoff.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
@@ -87,6 +88,7 @@ const narrowOverflowExpectedMockups = new Map([
   ["interaction-states.html", "interaction-state table keeps multiple state columns visible"],
   ["reduced-motion-state-cues.html", "state-cue comparison keeps the table matrix visible"],
   ["keyboard-focus-states.html", "focus samples include multiple side-by-side controls"],
+  ["keyboard-current-row/index.html", "keyboard current-row comparison keeps focus/current/action columns visible"],
   ["high-contrast-state-cues/index.html", "high-contrast state-cue panels stay side by side for comparison"],
   ["direction-aware-cues/index.html", "direction-aware examples keep multiple writing directions visible for comparison"],
   ["drop-positions.html", "drop-position comparison keeps before/inside/after states side by side"],
@@ -117,12 +119,14 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("link", { name: "Interaction states" })).toHaveAttribute("href", "#gallery-interaction-heading")
     await expect(page.getByRole("link", { name: "Current branch" })).toHaveAttribute("href", "#gallery-current-branch-heading")
     await expect(page.getByRole("link", { name: "Direction-aware cues" })).toHaveAttribute("href", "#gallery-direction-heading")
+    await expect(page.getByRole("link", { name: "Keyboard current row" })).toHaveAttribute("href", "#gallery-keyboard-current-heading")
     await expect(page.getByRole("link", { name: "Presenter row partials" })).toHaveAttribute("href", "#gallery-node-presenter-heading")
     await expect(page.getByRole("link", { name: "Localized labels" })).toHaveAttribute("href", "#gallery-localized-heading")
     await expect(page.getByRole("link", { name: "Selection form" })).toHaveAttribute("href", "#gallery-selection-form-heading")
     await expect(page.frameLocator("iframe[title='Default tree mock preview']").getByRole("heading", { name: "Default TreeView rendering mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Current branch sidebar mock preview']").getByRole("heading", { name: "Current branch sidebar mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Direction-aware cues mock preview']").getByRole("heading", { name: "Direction-aware current-row and hierarchy cues", level: 1 })).toBeVisible()
+    await expect(page.frameLocator("iframe[title='Keyboard current row mock preview']").getByRole("heading", { name: "Keyboard focus and current-row cues", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='NodePresenter row partials mock preview']").getByRole("heading", { name: "NodePresenter row partial mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Localized row labels mock preview']").getByRole("heading", { name: "Localized row labels mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Multi-tree selection form mock preview']").getByRole("heading", { name: "TreeView multi-tree selection form mock", level: 1 })).toBeVisible()
@@ -141,6 +145,7 @@ test.describe("docs mockup browser smoke", () => {
     expect(linkedFiles).toContain("reduced-motion-state-cues.html")
     expect(linkedFiles).toContain("current-branch-sidebar.html")
     expect(linkedFiles).toContain("direction-aware-cues/index.html")
+    expect(linkedFiles).toContain("keyboard-current-row/index.html")
     expect(linkedFiles).toContain("node-presenter-row-partials.html")
     expect(linkedFiles).toContain("localized-row-labels.html")
     expect(linkedFiles).toContain("selection-multi-tree-form.html")
