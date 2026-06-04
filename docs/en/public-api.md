@@ -47,6 +47,8 @@ Host apps may use these entry points directly:
 
 Use `TreeView::ResourceTableRenderState.call` when another table layer already owns column inference and table state, and TreeView should only build the hierarchical render state. See [Resource table bridge](resource-table-bridge.md).
 
+`TreeView::NodePresenter` is a stable public constant. Its builder names are also manifest-backed public contract entries, tracked by `node_presenter_builder_names` in `config/public_api_manifest.yml` and checked against `TreeView::NodePresenter::BUILDER_NAMES`.
+
 ## Public error surface
 
 Host apps may rescue `TreeView::Error` to handle documented TreeView validation and configuration failures separately from unrelated application errors.
@@ -156,12 +158,15 @@ Host apps are expected to provide these pieces:
 - `row_partial`
 - Turbo mode path builders
 - optional Turbo Frame targets through `turbo_frame:`
+- `TreeView::NodePresenter` builder blocks for stable node-level values such as labels, hrefs, row data, icons, badges, and action identifiers
 - row class / data builders
 - row event payload builders
 - selection payload / disabled builders
 - hidden message / breadcrumb / depth label / row status builders
 - lazy loading path builders and remote-state handling
 - persisted state storage model
+
+`TreeView::NodePresenter` builder names are stable, manifest-backed extension points. The builder return values, table cell markup, action rendering, authorization, formatting, and product-specific workflows remain host-app responsibilities; the row partial cookbook shows one usage pattern rather than turning every rendered cell or action into TreeView API.
 
 ## JavaScript surface
 
@@ -241,7 +246,7 @@ Representative documented hooks are tracked where their feature behavior is expl
 | Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | Reusable baseline hooks documented in the [mockup inventory](../mockups/README.md). They describe the shipped empty-state reference pattern, not every internal row class. |
 | Interaction markers | marker row classes and `data-*` hooks shown in focused mockups | Reference hooks documented through [mockups](../mockups/README.md) for review and adoption. Promote any hook to a machine-readable contract in `config/public_api_manifest.yml` only when it needs compatibility checks. |
 
-This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, JavaScript package-root exports, controller identifiers, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
+This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, JavaScript package-root exports, controller identifiers, NodePresenter builder names, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
 
 Undocumented CSS helper classes, data attributes, DOM structure details, and gem partial locals are implementation details.
 
