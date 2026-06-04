@@ -26,6 +26,7 @@ Host apps may use these entry points directly:
 - `TreeView::ResourceTableRenderState.call`
 - `TreeView::VisibleRows`
 - `TreeView::RenderWindow`
+- `TreeView::FilteredTree`
 - `TreeView::UiConfig`
 - `TreeView::UiConfigBuilder`
 - `TreeView::GraphAdapter`
