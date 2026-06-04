@@ -26,6 +26,7 @@ host app が直接使ってよい主な入口は以下です。
 - `TreeView::ResourceTableRenderState.call`
 - `TreeView::VisibleRows`
 - `TreeView::RenderWindow`
+- `TreeView::FilteredTree`
 - `TreeView::UiConfig`
 - `TreeView::UiConfigBuilder`
 - `TreeView::GraphAdapter`
