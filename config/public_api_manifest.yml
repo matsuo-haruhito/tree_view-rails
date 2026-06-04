@@ -218,3 +218,5 @@ javascript_package_root:
       invalid_payload:
         - value
         - row
+      invalid_transfer:
+        - value
