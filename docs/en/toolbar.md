@@ -100,6 +100,8 @@ Use `html:` for additional attributes on the toolbar container. Its `class` is a
 
 Use `action_html:` for additional attributes on each rendered action link or disabled button. It may be a Proc that receives the action metadata hash, an action-keyed Hash such as `{ expand_all: { data: ... } }`, or a flat Hash applied to every action. Host app attributes are merged with the existing action metadata, but TreeView keeps ownership of `data-tree-view-toolbar-action` and `data-tree-view-toolbar-disabled`.
 
+`actions:`, `labels:`, `class_name:`, `button_class_name:`, `html:`, and `action_html:` are tracked as the `tree_view_toolbar` helper option key set in `config/public_api_manifest.yml`. That option-key contract is separate from the `toolbar_actions` action-to-state map, which tracks supported action names and their `toggle_all_path` state values.
+
 For heavier markup changes, custom authorization copy, extra controls, or a different button/link structure, keep using `tree_view_toolbar_actions` or `tree_view_toolbar_action_metadata` and render the toolbar in the host app.
 
 ## Responsibility boundary
