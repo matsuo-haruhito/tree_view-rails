@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RenderWindow boundary metadata mock</title>
+<link rel="stylesheet" href="../default-tree.css">
+<style>
+.mock-boundary-page {
+  max-width: 1180px;
+}
+
+.mock-boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.mock-boundary-card {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.mock-boundary-card__header {
+  display: grid;
+  gap: 6px;
+}
+
+.mock-boundary-eyebrow {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-boundary-note {
+  margin: 0;
+  color: #52606d;
+}
+
+.mock-boundary-frame {
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-boundary-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: #f8fafc;
+}
+
+.mock-boundary-title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-boundary-meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.mock-boundary-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.16rem 0.58rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f4c81;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.mock-boundary-chip--muted {
+  border: 1px dashed #cbd5e1;
+  background: #fff;
+  color: #64748b;
+}
+
+.mock-boundary-body {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.mock-boundary-callout {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.mock-boundary-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-boundary-table th,
+.mock-boundary-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-boundary-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tree-row.tree-row--window-hint td {
+  background: #fffbeb;
+  color: #92400e;
+  font-style: italic;
+}
+
+@media (max-width: 760px) {
+  .mock-boundary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-boundary-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>RenderWindow boundary metadata mock</h1>
+      <p>
+        Static HTML for comparing the first and last visible-row windows. The examples show unavailable previous or next metadata without designing host-app pagination controls.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="../review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="../windowed-rendering.html">Open windowed rendering mock</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="../README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">Boundary windows</h2>
+      <p class="mock-boundary-note">
+        Treat these chips as RenderWindow metadata only. A host app may translate available offsets into links, buttons, or load-more triggers, but that behavior is outside this mockup.
+      </p>
+
+      <div class="mock-boundary-grid">
+        <article class="mock-boundary-card" aria-labelledby="first-window-heading">
+          <div class="mock-boundary-card__header">
+            <p class="mock-boundary-eyebrow">First window</p>
+            <h3 id="first-window-heading">Previous metadata is unavailable</h3>
+            <p class="mock-boundary-note">The window starts at offset 0, so there is no previous slice for the host app to expose.</p>
+          </div>
+
+          <div class="mock-boundary-frame">
+            <div class="mock-boundary-toolbar">
+              <p class="mock-boundary-title">Rows 1-5 of 24</p>
+              <div class="mock-boundary-meta" aria-label="First window metadata">
+                <span class="mock-boundary-chip">has_previous?: false</span>
+                <span class="mock-boundary-chip mock-boundary-chip--muted">previous_offset: nil</span>
+                <span class="mock-boundary-chip">has_next?: true</span>
+                <span class="mock-boundary-chip">next_offset: 5</span>
+              </div>
+            </div>
+            <div class="mock-boundary-body">
+              <p class="mock-boundary-callout">The unavailable previous values are visible as metadata, not as disabled pagination UI owned by the gem.</p>
+              <table class="tree-view-table">
+                <thead>
+                  <tr>
+                    <th scope="col">tree</th>
+                    <th scope="col">name</th>
+                    <th scope="col">owner</th>
+                    <th scope="col">state</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr id="first_1" class="tree-row is-expanded" data-tree-node-key="root:1" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                    <td class="btn-cell tree-toggle-cell">
+                      <span class="tree-toggle" aria-label="First window row 1">
+                        <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                        <span class="tree-toggle__control"><a class="tree-toggle__action" href="#">hide</a><span class="tree-toggle__level">root</span></span>
+                      </span>
+                    </td>
+                    <td>Overview</td>
+                    <td>Operations</td>
+                    <td><span class="mock-status mock-status--active">window start</span></td>
+                  </tr>
+                  <tr id="first_2" class="tree-row" data-tree-node-key="child:2" data-tree-parent-key="root:1" data-tree-depth="1" aria-level="2">
+                    <td class="btn-cell tree-toggle-cell">
+                      <span class="tree-toggle" aria-label="First window row 2">
+                        <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                        <span class="tree-toggle__control"><span class="tree-depth-label">child</span></span>
+                      </span>
+                    </td>
+                    <td>Queue health</td>
+                    <td>Support</td>
+                    <td><span class="mock-status">visible</span></td>
+                  </tr>
+                  <tr class="tree-row tree-row--window-hint" aria-level="1">
+                    <td colspan="4">Later visible rows exist after this first window.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <article class="mock-boundary-card" aria-labelledby="last-window-heading">
+          <div class="mock-boundary-card__header">
+            <p class="mock-boundary-eyebrow">Last window</p>
+            <h3 id="last-window-heading">Next metadata is unavailable</h3>
+            <p class="mock-boundary-note">The window reaches the final visible row, so there is no next slice for the host app to expose.</p>
+          </div>
+
+          <div class="mock-boundary-frame">
+            <div class="mock-boundary-toolbar">
+              <p class="mock-boundary-title">Rows 21-24 of 24</p>
+              <div class="mock-boundary-meta" aria-label="Last window metadata">
+                <span class="mock-boundary-chip">has_previous?: true</span>
+                <span class="mock-boundary-chip">previous_offset: 16</span>
+                <span class="mock-boundary-chip">has_next?: false</span>
+                <span class="mock-boundary-chip mock-boundary-chip--muted">next_offset: nil</span>
+              </div>
+            </div>
+            <div class="mock-boundary-body">
+              <p class="mock-boundary-callout">The unavailable next values are visible as metadata, while final link, button, or infinite-scroll behavior stays host-app owned.</p>
+              <table class="tree-view-table">
+                <thead>
+                  <tr>
+                    <th scope="col">tree</th>
+                    <th scope="col">name</th>
+                    <th scope="col">owner</th>
+                    <th scope="col">state</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="tree-row tree-row--window-hint" aria-level="1">
+                    <td colspan="4">Earlier visible rows exist before this last window.</td>
+                  </tr>
+                  <tr id="last_23" class="tree-row" data-tree-node-key="child:23" data-tree-parent-key="root:21" data-tree-depth="1" aria-level="2">
+                    <td class="btn-cell tree-toggle-cell">
+                      <span class="tree-toggle" aria-label="Last window row 23">
+                        <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                        <span class="tree-toggle__control"><span class="tree-depth-label">child</span></span>
+                      </span>
+                    </td>
+                    <td>Escalation archive</td>
+                    <td>Support</td>
+                    <td><span class="mock-status">visible</span></td>
+                  </tr>
+                  <tr id="last_24" class="tree-row" data-tree-node-key="root:24" data-tree-depth="0" aria-level="1">
+                    <td class="btn-cell tree-toggle-cell">
+                      <span class="tree-toggle" aria-label="Last window row 24">
+                        <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                        <span class="tree-toggle__control"><span class="tree-depth-label">root</span></span>
+                      </span>
+                    </td>
+                    <td>Completed reports</td>
+                    <td>Analytics</td>
+                    <td><span class="mock-status mock-status--active">window end</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
