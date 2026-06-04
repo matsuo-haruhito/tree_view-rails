@@ -18,6 +18,19 @@ TreeView gem が担当するのは以下です。
 
 保存・復元の受け渡しを静的な visual reference で確認したい場合は、[Persisted State boundary mockup](../mockups/persisted-state-boundary.html) を参照してください。この mockup は、保存前、変更後、復元後、保存失敗、retry の代表的な見え方を示しますが、storage、save endpoint、認可、retry policy を gem 側の責務として扱うものではありません。
 
+## PersistedState.from の正規化境界
+
+host app integration code が optional な persisted-state value を `RenderState` へ渡す前に正規化したい場合は、`TreeView::PersistedState.from(value)` を使えます。
+
+`from` が受け付けるのは、現在の persisted-state 境界で扱う次の形だけです。
+
+- `nil` は `nil` のまま返します。caller は optional persisted state を optional のまま扱えます。
+- 既存の `TreeView::PersistedState` instance は、その instance をそのまま返します。
+- Hash-like input は `to_h` で読み取り、key を symbol 化したうえで、`tree_instance_key` / `expanded_keys` から `TreeView::PersistedState` value object に変換します。
+- non Hash-like input は `ArgumentError` を投げ、message には `Hash-like` fragment が含まれます。
+
+この正規化境界は、`StateStore` の保存挙動、generator output、migration shape、storage lifecycle、host app の authorization policy を変更するものではありません。
+
 ## generator
 
 保存用modelとmigrationの雛形は generator で作成できます。
