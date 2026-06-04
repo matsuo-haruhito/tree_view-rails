@@ -35,6 +35,16 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+node_presenter_builder_names:
+  - key
+  - label
+  - href
+  - tooltip
+  - row_class
+  - row_data
+  - icon
+  - badge
+  - actions
 helper_methods:
   - tree_view_rows
   - tree_view_window
