@@ -87,6 +87,13 @@ They are **not** a complete Rails application and should not grow into host-app 
 - Final labels, localization, permission messaging, and business wording remain host-app responsibilities.
 - If a future mockup intentionally uses another language, document that exception here so reviewers know it is deliberate.
 
+Record deliberate copy or language exceptions in this list. Add a row when a mockup needs non-neutral copy, localized-style text, or another language for a review purpose; do not use this list to choose final host-app copy.
+
+| Mockup | Deliberate exception | Review reason |
+|---|---|---|
+| `toolbar-actions.html` | Long / localized-style toolbar labels | Stress wrapping, disabled state, and current-state cues without choosing final translations. |
+| `localized-row-labels.html` | Long localized-style row labels and metadata | Stress primary label wrapping, badge placement, attribute labels, secondary metadata, and tooltip cues without choosing final translations. |
+
 ## Selection form guidance
 
 - Use selection form mockups to compare visible counts, source separation, and generated hidden input boundaries at review time.
