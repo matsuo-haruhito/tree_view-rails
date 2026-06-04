@@ -7,6 +7,10 @@ module_methods:
   - model_name_for
   - attribute_name_for
   - type_name_for
+configuration_options:
+  tree_view_configure:
+    - initial_state
+    - render_log_level
 public_constants:
   - Error
   - ConfigurationError
