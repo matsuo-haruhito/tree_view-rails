@@ -195,3 +195,10 @@ assert(
   "TreeViewTransferDropPositions export is out of sync"
 )
 assertFrozenObject(entrypointModule.TreeViewTransferDropPositions, "TreeViewTransferDropPositions")
+
+const expectedTransferDataMimeTypes = deepCamelizeKeys(javascriptPackageManifest.transfer_data_mime_types)
+assert(
+  JSON.stringify(entrypointModule.TreeViewTransferDataMimeTypes) === JSON.stringify(expectedTransferDataMimeTypes),
+  "TreeViewTransferDataMimeTypes export is out of sync"
+)
+assertFrozenObject(entrypointModule.TreeViewTransferDataMimeTypes, "TreeViewTransferDataMimeTypes")
