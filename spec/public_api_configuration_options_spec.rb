@@ -3,9 +3,9 @@
 require "spec_helper"
 require "yaml"
 
-RSpec.describe "Public configuration option compatibility" do
-  PUBLIC_CONFIGURATION_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+PUBLIC_CONFIGURATION_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 
+RSpec.describe "Public configuration option compatibility" do
   def configuration_option_keys
     YAML.safe_load_file(PUBLIC_CONFIGURATION_MANIFEST_PATH).fetch("configuration_options").fetch("tree_view_configure")
   end
