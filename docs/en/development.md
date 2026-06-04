@@ -18,7 +18,7 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
-Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version.
+Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version. The Node version source drift spec keeps `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value aligned without changing the current install policy.
 
 Keep using `npm install` for now. The repository has a committed `package-lock.json`, but it is not yet refreshed in sync with `package.json`, so local setup and pull-request CI stay on `npm install` until that lockfile refresh is completed in a registry-enabled environment. See [Installation](installation.md) for the current CI and install-path summary.
 
