@@ -51,11 +51,11 @@ BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rake
 
 ## Public API compatibility specs
 
-Public API compatibility specs protect documented Ruby entry points, helper methods, grouped options, and JavaScript exports from accidental removals or renames. Keep these specs focused on API existence and representative behavior rather than full implementation details.
+Public API compatibility specs protect documented Ruby entry points, helper methods, helper option keys, grouped options, and JavaScript package-root exports from accidental removals or renames. The JavaScript entrypoint smoke also checks manifest-backed controller registrations, public event names, and documented `event.detail` key groups. Keep these specs focused on API existence and representative behavior rather than full implementation details.
 
 When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
 
-`config/public_api_manifest.yml` is the machine-readable source of truth for the current first slice of documented Ruby module methods, public constants, and helper names. When you add, rename, or remove one of those entries, update the manifest, keep `docs/en/public-api.md` and `docs/ja/public-api.md` aligned, check any README, usage page, or feature doc that names the same surface, add the user-facing note to `CHANGELOG.md`, and review `docs/en/release.md` / `docs/ja/release.md` when release notes or migration expectations need to change.
+`config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, helper names, helper option keys, toolbar action/state mapping, grouped option keys, JavaScript package-root named exports, controller registrations, public event names, and documented `event.detail` keys. When you add, rename, or remove one of those entries, update the manifest, keep `docs/en/public-api.md` and `docs/ja/public-api.md` aligned, check any README, usage page, feature doc, or JavaScript event doc that names the same surface, add the user-facing note to `CHANGELOG.md` when the change materially affects adopters, and review `docs/en/release.md` / `docs/ja/release.md` when release notes or migration expectations need to change.
 
 ## JavaScript browser smoke tests
 
@@ -113,7 +113,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 - If Standard Ruby reports a mechanical formatting issue such as a missing final newline or trailing whitespace, apply the formatter or a minimal file rewrite before opening the pull request.
 - Check `docs/ja/api-overview.md` and `docs/en/api-overview.md`.
 - Update public API compatibility specs when documented entry points, helpers, or options are intentionally changed.
-- If `config/public_api_manifest.yml` changes, update `docs/en/public-api.md` / `docs/ja/public-api.md`, then review the related README, usage docs, feature docs, `CHANGELOG.md`, and `docs/en/release.md` / `docs/ja/release.md`.
+- If `config/public_api_manifest.yml` changes, update `docs/en/public-api.md` / `docs/ja/public-api.md`, then review the related README, usage docs, feature docs, JavaScript event docs, `CHANGELOG.md`, and `docs/en/release.md` / `docs/ja/release.md`.
 - Update `docs/en/api.md` / `docs/ja/api.md` when needed.
 - Update CHANGELOG.
 
@@ -152,7 +152,7 @@ Before opening a docs pull request, do a short maintenance sweep using `docs/i18
 - `npm run test:browser`
 - `bundle exec rake build`
 - gem package contents
-- confirm `config/public_api_manifest.yml` still matches the documented Ruby / helper entry points and related public API docs
+- confirm `config/public_api_manifest.yml` still matches the documented Ruby, helper, option, JavaScript export, and event surfaces covered by public API docs
 - CHANGELOG
 - docs index / i18n audit
 
