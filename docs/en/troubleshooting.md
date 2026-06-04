@@ -45,6 +45,24 @@ Read next:
 - [Turbo Frame option](turbo-frame.md)
 - [Usage](usage.md)
 
+## Breadcrumbs fail or cannot find a parent path
+
+Breadcrumb path lookup is records-mode only. TreeView can render breadcrumbs when it can walk `parent_id_method` relationships from the current record back to a root.
+
+Check these points.
+
+- Confirm the tree was built from `records:` with `parent_id_method:`. Resolver mode and adapter mode do not expose a unique parent path to the bundled breadcrumb helper.
+- If the error says parent path helpers are only supported in records mode, keep the failure as a mode boundary signal instead of trying to infer parents from graph-like data.
+- If the data is graph-like, has multiple possible parents, or comes from `GraphAdapter`, let the host app choose the breadcrumb trail and render its own links or labels.
+- Keep route, authorization, layout placement, and analytics behavior in the host app; TreeView only owns records-mode path lookup and helper HTML.
+
+Read next:
+
+- [Breadcrumb](breadcrumb.md#supported-mode)
+- [GraphAdapter](graph-adapter.md)
+- [Host App Extension Points](host-app-extension-points.md)
+- [Rendering Boundaries](rendering-boundaries.md)
+
 ## Row partial output looks broken or table cells do not line up
 
 TreeView owns the row wrapper and common tree UI cells. The host app owns the contents of `row_partial`, action cells, and the surrounding table layout.
