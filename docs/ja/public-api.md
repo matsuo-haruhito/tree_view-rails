@@ -114,6 +114,8 @@ toolbar helper もこの公開 helper surface に含まれます。
 - `initial_state`
 - `render_log_level`
 
+`TreeView.configure`、`TreeView.configuration`、`TreeView.reset_configuration!` は安定した configuration entry point です。configuration object の内部形状ではなく、documented option name と documented behavior に依存してください。`render_log_level` の値、既定値、無効化方法、host app logging との責務境界は [render log level](render-log-level.md) を参照してください。
+
 公開 localized display-name helper には以下を含めます。
 
 - `TreeView.model_name_for(item_or_class, count: 1, default: nil)`
