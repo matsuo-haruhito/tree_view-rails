@@ -70,6 +70,17 @@ toolbar_actions:
   expand_all: expanded
   collapse_all: collapsed
   collapse_all_except_current_path: current_path
+setup_generators:
+  persisted_state_install:
+    name: tree_view:state:install
+    class_name: TreeView::Generators::State::InstallGenerator
+    optional_arguments:
+      - name: owner_model_name
+        banner: OWNER_MODEL
+    generated_paths:
+      - db/migrate/*_create_tree_view_states.rb
+      - app/models/tree_view_state.rb
+      - app/models/concerns/tree_view_state_owner.rb
 grouped_option_keys:
   initial_expansion:
     - default
