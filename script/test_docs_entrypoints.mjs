@@ -27,7 +27,70 @@ function assertRelativeLink(sourcePath, href, feature) {
   )
 }
 
+function assertRootSignal(feature, rootPattern, message) {
+  if (!rootPattern) return
+
+  assert(rootPattern.test(rootReadme), `${feature}: ${message}`)
+}
+
 const rootReadme = read("README.md")
+
+const foundationalEntrypoints = [
+  {
+    feature: "First-time setup docs",
+    rootPattern: /Installation[\s\S]*Minimal usage[\s\S]*Usage/,
+    links: [
+      ["README.md", "docs/en/installation.md"],
+      ["README.md", "docs/ja/installation.md"],
+      ["README.md", "docs/en/minimal-usage.md"],
+      ["README.md", "docs/ja/minimal-usage.md"],
+      ["README.md", "docs/en/usage.md"],
+      ["README.md", "docs/ja/usage.md"],
+      ["docs/README.md", "en/installation.md"],
+      ["docs/README.md", "ja/installation.md"],
+      ["docs/README.md", "en/minimal-usage.md"],
+      ["docs/README.md", "ja/minimal-usage.md"],
+      ["docs/README.md", "en/usage.md"],
+      ["docs/README.md", "ja/usage.md"],
+      ["docs/en/README.md", "installation.md"],
+      ["docs/en/README.md", "minimal-usage.md"],
+      ["docs/en/README.md", "usage.md"],
+      ["docs/ja/README.md", "installation.md"],
+      ["docs/ja/README.md", "minimal-usage.md"],
+      ["docs/ja/README.md", "usage.md"]
+    ]
+  },
+  {
+    feature: "Decision guide docs",
+    rootPattern: /Decision guide|API判断ガイド/,
+    links: [
+      ["README.md", "docs/en/decision-guide.md"],
+      ["README.md", "docs/ja/decision-guide.md"],
+      ["docs/README.md", "en/decision-guide.md"],
+      ["docs/README.md", "ja/decision-guide.md"],
+      ["docs/en/README.md", "decision-guide.md"],
+      ["docs/ja/README.md", "decision-guide.md"]
+    ]
+  },
+  {
+    feature: "FAQ and troubleshooting docs",
+    rootPattern: /FAQ[\s\S]*Troubleshooting|Troubleshooting[\s\S]*FAQ/,
+    links: [
+      ["README.md", "docs/en/faq.md"],
+      ["README.md", "docs/ja/faq.md"],
+      ["README.md", "docs/en/troubleshooting.md"],
+      ["README.md", "docs/ja/troubleshooting.md"],
+      ["docs/README.md", "en/faq.md"],
+      ["docs/README.md", "ja/faq.md"],
+      ["docs/README.md", "en/troubleshooting.md"],
+      ["docs/README.md", "ja/troubleshooting.md"],
+      ["docs/en/README.md", "faq.md"],
+      ["docs/en/README.md", "troubleshooting.md"],
+      ["docs/ja/README.md", "faq.md"],
+      ["docs/ja/README.md", "troubleshooting.md"]
+    ]
+  }
+]
 
 const featureEntrypoints = [
   {
@@ -107,10 +170,29 @@ const featureEntrypoints = [
     feature: "Selection",
     rootPattern: /checkbox selection|selection hooks/i,
     links: [
+      ["README.md", "docs/en/selection.md"],
+      ["README.md", "docs/ja/selection.md"],
       ["docs/README.md", "en/selection.md"],
       ["docs/README.md", "ja/selection.md"],
       ["docs/en/README.md", "selection.md"],
       ["docs/ja/README.md", "selection.md"]
+    ]
+  },
+  {
+    feature: "Toolbar helper",
+    rootPattern: /tree_view_toolbar|Toolbar helper/,
+    links: [
+      ["README.md", "docs/en/toolbar.md"],
+      ["README.md", "docs/ja/toolbar.md"],
+      ["docs/en/README.md", "toolbar.md"],
+      ["docs/ja/README.md", "toolbar.md"]
+    ]
+  },
+  {
+    feature: "Breadcrumb helper",
+    links: [
+      ["docs/en/README.md", "breadcrumb.md"],
+      ["docs/ja/README.md", "breadcrumb.md"]
     ]
   },
   {
@@ -184,8 +266,14 @@ const maintainerEntrypoints = [
   }
 ]
 
+foundationalEntrypoints.forEach(({ feature, rootPattern, links }) => {
+  assertRootSignal(feature, rootPattern, "README.md no longer exposes the representative docs signal")
+
+  links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
+})
+
 featureEntrypoints.forEach(({ feature, rootPattern, links }) => {
-  assert(rootPattern.test(rootReadme), `${feature}: README.md no longer exposes the representative feature signal`)
+  assertRootSignal(feature, rootPattern, "README.md no longer exposes the representative feature signal")
 
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
 })
