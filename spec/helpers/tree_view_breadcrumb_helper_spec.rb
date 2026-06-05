@@ -132,6 +132,25 @@ RSpec.describe TreeViewBreadcrumbHelper do
     expect(rendered).to include('aria-current="page"')
   end
 
+  it "merges item-aware attributes into separators while preserving hidden semantics" do
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    tree = build_tree([root, child])
+    helper = build_helper
+
+    rendered = helper.tree_view_breadcrumb(
+      tree,
+      child,
+      label_builder: ->(item) { item.name },
+      path_builder: ->(item) { "/nodes/#{item.id}" },
+      separator_html: ->(item) { {class: "app-separator", data: {after_node: item.id}} }
+    )
+
+    expect(rendered).to include('class="tree-view-breadcrumb__separator app-separator"')
+    expect(rendered).to include('data-after-node="1"')
+    expect(rendered).to include('aria-hidden="true"')
+  end
+
   it "rejects invalid HTML option values" do
     node = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
     tree = build_tree([node])
