@@ -15,8 +15,38 @@ cookbook は、個別APIの詳細仕様ではなく、host appでよく使う構
 - [Selection](selection.md)
 - [Lazy Loading](lazy-loading.md)
 - [Windowed Rendering](windowed-rendering.md)
+- [Breadcrumb](breadcrumb.md)
 - [Localized names](localized-names.md)
 - [toggle icon のカスタマイズ](toggle-icons.md)
+
+## 現在itemのbreadcrumbを追加する
+
+records mode のtreeと現在itemがあり、rootからそのitemまでの短いpathをUIに出したい場合は [Breadcrumb](breadcrumb.md) を使います。TreeView は `tree.path_for(item)` で祖先pathを解決し、`tree_view_breadcrumb` で標準的なbreadcrumb markupを描画します。
+
+```erb
+<%= tree_view_breadcrumb(
+  @tree,
+  @document,
+  label_builder: ->(item) { item.name },
+  path_builder: ->(item) { document_path(item) }
+) %>
+```
+
+現在itemはlinkではなくcurrent labelとして描画されます。route helper、authorization、現在itemの決定、layout上の配置はhost app側で扱います。通常のancestor linkには `path_builder:` を使い、breadcrumbをplain labelだけで出したい場合は省略します。
+
+独自wrapper、条件付きcopy、階層ごとのauthorization message、helper optionでは表現しきれないmarkupが必要な場合は、bundled helperを広げず、pathを直接使ってhost app側で描画します。
+
+```erb
+<% @tree.path_for(@document).each do |item| %>
+  <% if can?(:read, item) %>
+    <%= link_to item.name, document_path(item) %>
+  <% else %>
+    <span><%= item.name %></span>
+  <% end %>
+<% end %>
+```
+
+TreeView は records mode のpath lookupとbundled helper option surfaceを担当します。route、authorization、breadcrumbを置く場所、追加属性に紐づくTurbo / analytics behaviorはhost app側の責務です。
 
 ## 行customization quick guide
 

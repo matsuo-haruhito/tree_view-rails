@@ -15,8 +15,38 @@ For API details, see:
 - [Selection](selection.md)
 - [Lazy Loading](lazy-loading.md)
 - [Windowed Rendering](windowed-rendering.md)
+- [Breadcrumb](breadcrumb.md)
 - [Localized names](localized-names.md)
 - [Toggle icon customization](toggle-icons.md)
+
+## Add a breadcrumb for the current item
+
+Use [Breadcrumb](breadcrumb.md) when the page already has a records-mode tree and a current item, and the UI needs a compact path from the root to that item. TreeView looks up the ancestor path with `tree.path_for(item)` and renders the standard breadcrumb markup through `tree_view_breadcrumb`.
+
+```erb
+<%= tree_view_breadcrumb(
+  @tree,
+  @document,
+  label_builder: ->(item) { item.name },
+  path_builder: ->(item) { document_path(item) }
+) %>
+```
+
+The current item is rendered as a current label, not a link. Keep route helpers, authorization, the current item choice, and layout placement in the host app. Use `path_builder:` for normal linked ancestors and omit it when the breadcrumb should render plain labels.
+
+When the host app needs custom wrappers, conditional copy, per-level authorization messaging, or markup that the helper options do not cover, build from the path directly instead of stretching the helper.
+
+```erb
+<% @tree.path_for(@document).each do |item| %>
+  <% if can?(:read, item) %>
+    <%= link_to item.name, document_path(item) %>
+  <% else %>
+    <span><%= item.name %></span>
+  <% end %>
+<% end %>
+```
+
+TreeView owns path lookup in records mode and the bundled helper option surface. The host app owns routes, authorization, where the breadcrumb appears, and any Turbo or analytics behavior attached to custom attributes.
 
 ## Row customization quick guide
 
