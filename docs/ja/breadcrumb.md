@@ -101,6 +101,8 @@ TreeView は、これらの属性をbuilt-in classやaccessibility属性とmerge
 
 この表の option 名は、`config/public_api_manifest.yml` の `helper_option_keys.tree_view_breadcrumb` にも載っています。この manifest-backed list は既存 helper option surface の互換性 contract であり、markup、route、authorization behavior を追加するものではありません。
 
+class option を省略したときに描画される default class names は bundled styling reference であり、machine-readable manifest contract ではありません。upgrade をまたいで class name を強く固定したい host app は class option を明示してください。TreeView は documented customization keys を public に保ちますが、現在の default class list は `config/public_api_manifest.yml` には昇格しません。
+
 ## 対応mode
 
 breadcrumb helper は records mode のtreeを前提にします。
