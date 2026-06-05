@@ -2,6 +2,12 @@
 
 This page describes which APIs host Rails apps may depend on directly, which parts are internal, and how compatibility is handled.
 
+## Public API manifest
+
+`config/public_api_manifest.yml` is a packaged audit artifact and compatibility contract. It records machine-readable public helper methods, grouped option keys, JavaScript package-root exports, controller identifiers, event surfaces, and selected documented hooks so specs, package checks, and entrypoint smoke checks can compare docs-facing contracts with current code.
+
+Host apps should not treat the manifest as a runtime configuration API. Use the documented Ruby classes, helpers, options, JavaScript exports, and feature guides instead. The manifest is included in the gem package so maintainers can catch missing files or contract drift during release verification; its schema may evolve as long as the documented public surface remains compatible.
+
 ## Stable public entry points
 
 Host apps may use these entry points directly:
