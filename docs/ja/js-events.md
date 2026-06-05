@@ -185,6 +185,6 @@ element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStat
 
 ## 互換性方針
 
-machine-readable public API manifest は、このページで文書化している event name と代表的な必須 `event.detail` key を写して drift を検知するための guard です。一次の契約は引き続きこのページです。
+machine-readable public API manifest は、このページで文書化している event name と代表的な必須 `event.detail` key を写して drift を検知するための guard です。一次の契約は引き続きこのページです。host app の test が documented detail key 名の machine-readable な一覧を必要とする場合は、event payload shape を変えずに package root の `TreeViewEventDetailKeys` を import できます。
 
 上記のevent nameとdocumented `detail` fieldsは公開integration pointです。minor releaseではfield追加は許容します。event削除、field rename、documented fieldの意味変更は互換性に影響する変更として扱い、changelogで明示してください。

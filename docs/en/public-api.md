@@ -2,6 +2,12 @@
 
 This page describes which APIs host Rails apps may depend on directly, which parts are internal, and how compatibility is handled.
 
+## Public API manifest
+
+`config/public_api_manifest.yml` is a packaged audit artifact and compatibility contract. It records machine-readable public helper methods, grouped option keys, JavaScript package-root exports, controller identifiers, event surfaces, and selected documented hooks so specs, package checks, and entrypoint smoke checks can compare docs-facing contracts with current code.
+
+Host apps should not treat the manifest as a runtime configuration API. Use the documented Ruby classes, helpers, options, JavaScript exports, and feature guides instead. The manifest is included in the gem package so maintainers can catch missing files or contract drift during release verification; its schema may evolve as long as the documented public surface remains compatible.
+
 ## Stable public entry points
 
 Host apps may use these entry points directly:
@@ -26,6 +32,7 @@ Host apps may use these entry points directly:
 - `TreeView::ResourceTableRenderState.call`
 - `TreeView::VisibleRows`
 - `TreeView::RenderWindow`
+- `TreeView::FilteredTree`
 - `TreeView::UiConfig`
 - `TreeView::UiConfigBuilder`
 - `TreeView::GraphAdapter`
@@ -39,6 +46,11 @@ Host apps may use these entry points directly:
 - `tree_view_rows(render_state)`
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
+- `tree_node_dom_id(item_or_id, ui: @tree_ui)`
+- `tree_children_container_dom_id(item, ui: @tree_ui)`
+- `tree_remote_state_placeholder_dom_id(item, ui: @tree_ui)`
+- `tree_remote_state_placeholder_attributes(item, state: nil, ui: @tree_ui)`
+- `tree_selection_value(item, tree, builder = nil)`
 - `tree_view_breadcrumb(tree, item, ...)`
 - `tree_view_toolbar(render_state, ...)`
 - `tree_view_toolbar_supported_actions`
@@ -73,6 +85,8 @@ Documented non-toolbar helpers that are part of that public helper surface inclu
 - `tree_view_breadcrumb(tree, item, ...)` renders a breadcrumb path for a node.
 
 For host apps that own lazy-loading placeholder regions, these three lazy-loading helpers are part of the same stable helper surface described in [Lazy Loading](lazy-loading.md). Use them instead of reconstructing placeholder IDs or `data-tree-remote-state` attributes by hand.
+
+Pass the parent item that owns the lazy-loading placeholder to the lazy-loading helper methods. `tree_node_dom_id(item_or_id, ...)` remains the broader DOM ID helper for item-like or id-like values; the placeholder helpers are documented for item-based lazy-loading regions so they stay aligned with the row and Turbo Stream examples.
 
 For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` rather than internal constants.
 Documented toolbar helpers are part of that public helper surface:
@@ -114,6 +128,8 @@ Documented configuration options include:
 - `initial_state`
 - `render_log_level`
 
+`TreeView.configure`, `TreeView.configuration`, and `TreeView.reset_configuration!` are the stable configuration entry points. Depend on documented option names and behavior rather than the internal shape of the configuration object. See [Render log level](render-log-level.md) for the `render_log_level` values, default, disable path, and host-app logging boundary.
+
 Documented localized display-name helpers include:
 
 - `TreeView.model_name_for(item_or_class, count: 1, default: nil)`
@@ -139,6 +155,7 @@ See [API reference](api.md), [Localized names](localized-names.md), and [Turbo F
 | `initial_expansion` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | When flat keyword options and `initial_expansion:` are both supplied, the flat keyword options still win. |
 | `render_scope` | `max_depth`, `max_leaf_distance` | Mirrors the documented render-depth and leaf-distance controls for `TreeView::RenderState`. |
 | `toggle_scope` | `max_depth_from_root`, `max_leaf_distance` | Mirrors the documented tree-wide toggle depth and toggle leaf-distance controls. |
+| `toggle_icons` | `by_state`, `by_depth`, `by_type` | Mirrors the documented declarative toggle icon map. `toggle_icon_builder` remains a callable escape hatch and is not manifest-backed. |
 | `selection` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | Mirrors `TreeView::RenderState::SelectionConfig` and keeps grouped selection wiring aligned with the documented flat selection keywords. |
 | `lazy_loading` | `enabled`, `loaded_keys`, `scope` | Mirrors the documented lazy-loading row-state hooks and optional host-app scope passthrough. |
 | `row_status` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | Mirrors the documented row disabled / readonly state hooks and disabled-reason surface. |
@@ -168,6 +185,8 @@ Stable enough for host apps to use:
 
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
+- `TreeViewEventDetailKeys`
+- `TreeViewTransferDropPositions`
 - `TreeViewControllerIdentifiers`
 - exported controller classes
   - `TreeViewStateController`
@@ -181,6 +200,8 @@ Stable enough for host apps to use:
 `registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
 
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
+`TreeViewEventDetailKeys` exposes the documented `event.detail` key lists as a machine-readable package-root export. Use it when host-app tests or listeners need to compare against the documented key names without changing the payload shape; the field meanings still live in [JavaScript event contract](js-events.md).
+`TreeViewTransferDropPositions` exposes the documented coarse drop-position values for transfer events: `before`, `inside`, and `after`. `TreeViewEventNames.transfer.*` names transfer events, `TreeViewEventDetailKeys.transfer.*` lists the documented `event.detail` keys, and `TreeViewTransferDropPositions` carries the position values described in [Drag and Drop](drag-and-drop.md#drop-behavior).
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
 
 Within `TreeViewEventNames`, lazy-loading request lifecycle names live under `hostLifecycle`:

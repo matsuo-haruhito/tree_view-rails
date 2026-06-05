@@ -40,6 +40,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [FAQ](faq.md) | Short answers about responsibility boundaries, query expectations, and common misunderstandings |
 | [Troubleshooting](troubleshooting.md) | Symptom-based entry point for common integration problems before diving into API-specific pages |
 | [Visual reference mockups](../mockups/README.md) | Static HTML/CSS references for baseline output and interaction states without running a Rails app. Start with [review-gallery.html](../mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](../mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role. |
+| [Demo application boundary](demo-application-boundary.md) | Difference between static mockups and a real Rails demo app, plus the policy for not linking a demo repository until it is public |
 | [Accessibility Semantics](accessibility-semantics.md) | First-class accessibility guidance for table-first rows, ARIA placement, keyboard boundaries, and host-app responsibilities |
 | [Cookbook](cookbook.md) | Common patterns composed from existing APIs, including GraphAdapter ActiveRecord performance notes |
 | [NodePresenter row partial patterns](node-presenter-row-partials.md) | Use NodePresenter from host-app row partials instead of adding app-specific Column / Action DSLs |
@@ -97,6 +98,8 @@ When you know the use case but not the right API, start with the [Decision guide
 For common responsibility-boundary questions before choosing an API, read the [FAQ](faq.md).
 
 When you already know the symptom but need the fastest path to the relevant page, start with [Troubleshooting](troubleshooting.md).
+
+For large or partial trees, start with [Render Scale](render-scale.md) to choose the sizing strategy, then read [Lazy Loading](lazy-loading.md), [Windowed Rendering](windowed-rendering.md), or [Children Pagination](children-pagination.md) when the tree needs on-demand children, visible-window rendering, or server-side child paging.
 
 For tree-wide expand/collapse controls, see [Toolbar helper](toolbar.md). Use [toolbar-actions.html](../mockups/toolbar-actions.html) as the static visual companion for supported toolbar actions and the `:current_path` contract.
 

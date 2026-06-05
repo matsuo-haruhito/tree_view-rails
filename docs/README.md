@@ -23,16 +23,24 @@
 - [日本語ReverseTree](ja/reverse-tree.md): matched recordを表示上のrootにし、ancestorをその下に並べるchild-to-parent pathの入口。
 - [English Filtered Trees](en/filtered-trees.md): render search or filter results as trees while keeping path-generated folders and child-to-parent paths separate.
 - [日本語Filtered Trees](ja/filtered-trees.md): 検索・絞り込み結果をtreeとして表示する入口。path生成folderやchild-to-parent pathとは使い分けます。
+- [English PathTreeBuilder](en/path-tree-builder.md): build generated folder rows and record rows from path-like record values.
+- [日本語PathTreeBuilder](ja/path-tree-builder.md): pathらしいrecord値から生成folder行とrecord行を作る入口。
 - [English FAQ](en/faq.md): quick answers about responsibility boundaries and common misunderstandings.
 - [日本語FAQ](ja/faq.md): 責務境界とよくある誤解を短く確認する入口。
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
+- [English Accessibility Semantics](en/accessibility-semantics.md): table-first ARIA policy, keyboard helper boundary, and intentional automated-check allowances.
+- [日本語Accessibility Semantics](ja/accessibility-semantics.md): table-first ARIA 方針、keyboard helper の責務境界、自動 accessibility check の意図的な許容事項。
 - [English Selection](en/selection.md): checkbox selection hooks, disabled state, cascade behavior, and submitted value parsing.
 - [日本語Selection](ja/selection.md): checkbox selection hooks、disabled state、cascade、submitted value parsing の入口。
 - [English Lazy Loading](en/lazy-loading.md): load children on demand through host-app routes and TreeView remote-state hooks.
 - [日本語Lazy Loading](ja/lazy-loading.md): host app の route と TreeView remote-state hooks で子nodeを必要時に読み込む入口。
+- [English Children Pagination](en/children-pagination.md): combine lazy loading with server-side child paging when a parent has too many direct children to return at once.
+- [日本語Children Pagination](ja/children-pagination.md): direct children が多すぎる親nodeで、lazy loading と server-side child paging を組み合わせる入口。
 - [English Windowed Rendering](en/windowed-rendering.md): render visible rows by offset and limit while host apps keep query and paging ownership.
 - [日本語Windowed Rendering](ja/windowed-rendering.md): offset / limit で visible rows を描画し、query や paging は host app が所有する前提の入口。
+- [English Render log level](en/render-log-level.md): configure TreeView helper-rendered partial log verbosity without changing the host app's global Rails logger level.
+- [日本語Render log level](ja/render-log-level.md): host app 全体の Rails logger level を変えずに、TreeView helper-rendered partial log の出力を調整する入口。
 - [English direction-aware styling boundary](en/direction-aware-styling.md): host-app override guidance for RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing.
 - [日本語Direction-aware styling boundary](ja/direction-aware-styling.md): RTL、writing direction、current-row cue、hierarchy connector、toggle spacing の host-app override guidance。
 - [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure and interaction states. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
@@ -40,6 +48,10 @@
 - [日本語Demo application boundary](ja/demo-application-boundary.md): static mockup と real Rails demo app の役割分担、未公開 demo link を増やさない方針。
 - [English Turbo Frame option](en/turbo-frame.md): target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript.
 - [日本語Turbo Frame オプション](ja/turbo-frame.md): TreeView の Turbo toggle link を host app の Turbo Frame に向ける設定。
+- [English Toolbar helper](en/toolbar.md): render tree-wide expand, collapse, and collapse-to-current-path actions while host apps own final placement and copy.
+- [日本語Toolbar helper](ja/toolbar.md): tree全体のexpand / collapse / current pathへのcollapse actionを描画し、配置と文言はhost appが所有する入口。
+- [English Breadcrumb helper](en/breadcrumb.md): render ancestor path context for a current or target node without taking over host-app routing or navigation policy.
+- [日本語Breadcrumb helper](ja/breadcrumb.md): current nodeや対象nodeのancestor path contextを描画し、routeやnavigation policyはhost app側に残す入口。
 - [English Persisted State](en/persisted-state.md): save and restore TreeView expansion state through host-app-owned storage.
 - [日本語Persisted State](ja/persisted-state.md): TreeView の開閉状態を host app 側の保存先で保存・復元するための入口。
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.

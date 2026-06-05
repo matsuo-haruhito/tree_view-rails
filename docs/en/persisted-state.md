@@ -18,6 +18,19 @@ The host app remains responsible for storage ownership, authorization, save timi
 
 For a static visual reference of the save/restore handoff, see [Persisted State boundary mockup](../mockups/persisted-state-boundary.html). The mockup shows representative before, changed, restored, save-failed, and retry cues without turning storage, save endpoints, authorization, or retry policy into gem-owned behavior.
 
+## PersistedState.from normalization
+
+Use `TreeView::PersistedState.from(value)` when host-app integration code needs to normalize an optional persisted-state value before passing it into `RenderState`.
+
+`from` accepts only the current persisted-state boundary shapes:
+
+- `nil` returns `nil`, so callers can keep optional persisted state optional.
+- an existing `TreeView::PersistedState` instance is returned unchanged.
+- Hash-like input is read through `to_h`, symbolized, and converted from `tree_instance_key` / `expanded_keys` into a `TreeView::PersistedState` value object.
+- non Hash-like input raises `ArgumentError` with a `Hash-like` message fragment.
+
+This normalization boundary does not change `StateStore` persistence behavior, generator output, migration shape, storage lifecycle, or host-app authorization policy.
+
 ## Generator
 
 Use the generator to create model and migration templates.
@@ -131,6 +144,14 @@ persisted_state = store.clear!(
 `clear!` deletes the matching persisted-state record when one exists. When no record exists, it still returns a `TreeView::PersistedState` for the requested key with empty `expanded_keys`, matching the empty-state behavior of `find`.
 
 TreeView only provides the store API. The host app still owns the reset route, authorization, confirmation UI, retry behavior, and response shape.
+
+### Storage lifecycle and cleanup policy
+
+`StateStore#clear!` is a reset for one owner and one `tree_instance_key`. It is not a retention policy, bulk cleanup helper, or deleted-owner pruning task.
+
+Long-running host apps should treat persisted-state lifecycle as part of their own storage policy. For example, the host app decides whether old rows should expire, whether rows for deleted owners should be removed by an existing dependent-destroy or cleanup job, and whether audit or privacy rules require a shorter retention period.
+
+TreeView does not currently provide a cleanup rake task or default TTL. If the host app needs one, build it against the generated model and keep the scope tied to the app's owner, `tree_instance_key`, timestamp, and authorization rules. Future lifecycle helper proposals, if any, should keep those host-app policy decisions separate from the current `find` / `save!` / `clear!` contract.
 
 ## Minimal controller concern
 
@@ -300,6 +321,7 @@ TreeView stores expanded keys only. The host app still decides where save reques
 | save helper / controller concern | optional | includes and uses it |
 | choosing owner model | optional generator argument | yes |
 | deciding save timing | no | yes |
+| storage lifecycle / cleanup policy | no | yes |
 | controller/API endpoint | no | yes |
 | authorization | no | yes |
 | response format | no | yes |
