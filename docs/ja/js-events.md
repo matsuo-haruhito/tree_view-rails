@@ -105,7 +105,7 @@ remote row のretryが要求されたときに発火します。
 
 host app は、lazy-loading TreeView row 上でこれらの lifecycle event を発火し、remote-state controller にその row を loading、loaded、error、retrying として扱わせることができます。
 
-これらの event は、manifest 上で公開 `event.detail` field を定義していません。payload field に依存せず、lazy loading docs で案内している row attribute に remote-state data を置いてください。
+これらの event は、意図的に公開 `event.detail` field を定義していません。`config/public_api_manifest.yml` では `event_detail_keys` ではなく `event_names_without_detail` に載せ、entrypoint smoke がこの方針と detail-key entry の追加漏れを区別できるようにしています。payload field に依存せず、lazy loading docs で案内している row attribute に remote-state data を置いてください。
 
 ## Transfer events
 
@@ -186,5 +186,7 @@ element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStat
 ## 互換性方針
 
 machine-readable public API manifest は、このページで文書化している event name と代表的な必須 `event.detail` key を写して drift を検知するための guard です。一次の契約は引き続きこのページです。host app の test が documented detail key 名の machine-readable な一覧を必要とする場合は、event payload shape を変えずに package root の `TreeViewEventDetailKeys` を import できます。
+
+manifest 上のすべての public event name は、documented detail field を持つ場合は `event_detail_keys`、意図的に公開 detail field を持たない場合は `event_names_without_detail` のどちらかに分類します。entrypoint smoke はこの分類を確認するため、host lifecycle events が `event.detail` coverage の追加漏れに見えないようになります。
 
 上記のevent nameとdocumented `detail` fieldsは公開integration pointです。minor releaseではfield追加は許容します。event削除、field rename、documented fieldの意味変更は互換性に影響する変更として扱い、changelogで明示してください。

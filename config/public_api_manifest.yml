@@ -179,6 +179,12 @@ javascript_package_root:
       drop: tree-view-transfer:drop
       invalid_payload: tree-view-transfer:invalid-payload
       invalid_transfer: tree-view-transfer:invalid-transfer
+  event_names_without_detail:
+    host_lifecycle:
+      - loading
+      - loaded
+      - error
+      - retry
   event_detail_keys:
     state:
       state_changed:
