@@ -67,6 +67,13 @@ helper_option_keys:
     - link_html
     - current_html
     - separator_html
+  tree_view_toolbar:
+    - actions
+    - labels
+    - class_name
+    - button_class_name
+    - html
+    - action_html
 toolbar_actions:
   expand_all: expanded
   collapse_all: collapsed
