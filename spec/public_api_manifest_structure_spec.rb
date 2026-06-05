@@ -13,6 +13,7 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   helper_option_keys
   toolbar_actions
   grouped_option_keys
+  render_state_callback_builder_keys
   javascript_package_root
 ].freeze
 

@@ -160,6 +160,12 @@ localized display-name helper は、利用できる場合に host app の Rails 
 | `lazy_loading` | `enabled`, `loaded_keys`, `scope` | documented lazy-loading row-state hook と optional な host-app scope passthrough に対応します。 |
 | `row_status` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | documented row disabled / readonly state hook と disabled reason surface に対応します。 |
 
+### RenderState flat callback builder keys
+
+`TreeView::RenderState` は、host app の描画拡張用に flat callback builder keyword も公開しています。この key list は `config/public_api_manifest.yml` の `render_state_callback_builder_keys` に置かれ、focused compatibility spec が各 key を initializer keyword かつ public reader として確認します。
+
+対象 key は `row_class_builder`、`row_data_builder`、`row_event_payload_builder`、`loading_builder`、`error_builder`、`depth_label_builder`、`badge_builder`、`icon_builder`、`toggle_icon_builder` です。これは key surface の contract であり、grouped option hash、個別 scalar option、宣言的な `toggle_icons` map とは別の surface です。callback arity、return value validation、row rendering、`NodePresenter` fallback、toggle icon lookup priority は変更しません。
+
 ## Host app extension points
 
 host app が提供する主な拡張点は以下です。
