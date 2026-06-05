@@ -203,6 +203,7 @@ Key documents:
 | Installation | [Installation](docs/en/installation.md) | [導入手順](docs/ja/installation.md) |
 | Minimal usage | [Minimal usage](docs/en/minimal-usage.md) | [最小利用例](docs/ja/minimal-usage.md) |
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
+| Selection | [Selection](docs/en/selection.md) | [Selection](docs/ja/selection.md) |
 | Toolbar helper (`tree_view_toolbar`) | [Toolbar helper](docs/en/toolbar.md) | [Toolbar helper](docs/ja/toolbar.md) |
 | Turbo Frame option | [Turbo Frame option](docs/en/turbo-frame.md) | [Turbo Frame オプション](docs/ja/turbo-frame.md) |
 | Persisted State | [Persisted State](docs/en/persisted-state.md) | [Persisted State](docs/ja/persisted-state.md) |
