@@ -36,6 +36,30 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+path_tree_builder_node_shapes:
+  folder_node:
+    constant: PathTreeBuilder::FolderNode
+    fields:
+      - key
+      - parent_key
+      - label
+      - path
+      - node_type
+    predicates:
+      - folder_node?
+      - record_node?
+  record_node:
+    constant: PathTreeBuilder::RecordNode
+    fields:
+      - key
+      - parent_key
+      - label
+      - path
+      - record
+      - node_type
+    predicates:
+      - folder_node?
+      - record_node?
 helper_methods:
   - tree_view_rows
   - tree_view_window
