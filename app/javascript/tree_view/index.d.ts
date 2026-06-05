@@ -59,12 +59,6 @@ export declare const TreeViewEventDetailKeys: Readonly<{
   }>
 }>
 
-export declare const TreeViewRemoteStateValues: Readonly<{
-  loading: "loading"
-  loaded: "loaded"
-  error: "error"
-}>
-
 export declare const TreeViewTransferDropPositions: Readonly<{
   before: "before"
   inside: "inside"
@@ -77,13 +71,6 @@ export declare const TreeViewControllerIdentifiers: Readonly<{
   selection: "tree-view-selection"
   transfer: "tree-view-transfer"
   remoteState: "tree-view-remote-state"
-}>
-
-export declare const TreeViewSelectionDataHooks: Readonly<{
-  hiddenInputNameValue: "data-tree-view-selection-hidden-input-name-value"
-  maxCountValue: "data-tree-view-selection-max-count-value"
-  cascadeValue: "data-tree-view-selection-cascade-value"
-  indeterminateValue: "data-tree-view-selection-indeterminate-value"
 }>
 
 export declare function registerTreeViewControllers(application: Application): void
