@@ -19,8 +19,8 @@ module DocsDemoRepositoryLinkPolicySpec
   DIRECT_DEMO_REPOSITORY_PATTERN = %r{
     (?:https?://|git://|git@)github\.com[:/]
     matsuo-haruhito/tree_view-rails-demo(?:\.git)?(?:[/?#][^\s)\]]*)?
-  }ix.freeze
-  MARKDOWN_LINK_HREF_PATTERN = /\[[^\]]+\]\(([^)]+)\)/.freeze
+  }ix
+  MARKDOWN_LINK_HREF_PATTERN = /\[[^\]]+\]\(([^)]+)\)/
 
   module_function
 
