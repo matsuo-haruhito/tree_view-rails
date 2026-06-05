@@ -2,6 +2,12 @@
 
 このページでは、host Rails app が直接使ってよい公開API、内部API、互換性方針を整理します。
 
+## Public API manifest
+
+`config/public_api_manifest.yml` は、gem package に含める audit artifact であり、互換性 contract です。公開 helper method、grouped option key、JavaScript package-root export、controller identifier、event surface、一部の documented hook を machine-readable に記録し、spec、package check、entrypoint smoke check が docs-facing contract と current code のずれを検出できるようにします。
+
+host app はこの manifest を runtime configuration API として扱わないでください。通常は documented Ruby class、helper、option、JavaScript export、feature guide を使います。manifest は release verification で file 欠落や contract drift を見つけるために package へ含める保守用 artifact であり、documented public surface の互換性を保つ限り schema は変わる可能性があります。
+
 ## 安定した公開入口
 
 host app が直接使ってよい主な入口は以下です。
