@@ -33,6 +33,12 @@ function assertRootSignal(feature, rootPattern, message) {
   assert(rootPattern.test(rootReadme), `${feature}: ${message}`)
 }
 
+function assertFileSignal(sourcePath, pattern, feature, message) {
+  const source = read(sourcePath)
+
+  assert(pattern.test(source), `${feature}: ${message}`)
+}
+
 const rootReadme = read("README.md")
 
 const foundationalEntrypoints = [
@@ -188,6 +194,12 @@ const featureEntrypoints = [
       ["docs/README.md", "ja/selection.md"],
       ["docs/en/README.md", "selection.md"],
       ["docs/ja/README.md", "selection.md"]
+    ],
+    signals: [
+      ["docs/en/public-api.md", /TreeViewSelectionDataHooks[\s\S]*data-tree-view-selection-hidden-input-name-value/, "English public API docs no longer describe TreeViewSelectionDataHooks host-authored attributes"],
+      ["docs/ja/public-api.md", /TreeViewSelectionDataHooks[\s\S]*data-tree-view-selection-hidden-input-name-value/, "Japanese public API docs no longer describe TreeViewSelectionDataHooks host-authored attributes"],
+      ["docs/en/selection.md", /TreeViewSelectionDataHooks\.hiddenInputNameValue[\s\S]*data-tree-view-selection-hidden-input-name-value/, "English selection docs no longer connect TreeViewSelectionDataHooks with hidden input value attributes"],
+      ["docs/ja/selection.md", /TreeViewSelectionDataHooks\.hiddenInputNameValue[\s\S]*data-tree-view-selection-hidden-input-name-value/, "Japanese selection docs no longer connect TreeViewSelectionDataHooks with hidden input value attributes"]
     ]
   },
   {
@@ -308,10 +320,11 @@ foundationalEntrypoints.forEach(({ feature, rootPattern, links }) => {
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
 })
 
-featureEntrypoints.forEach(({ feature, rootPattern, links }) => {
+featureEntrypoints.forEach(({ feature, rootPattern, links, signals = [] }) => {
   assertRootSignal(feature, rootPattern, "README.md no longer exposes the representative feature signal")
 
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
+  signals.forEach(([sourcePath, pattern, message]) => assertFileSignal(sourcePath, pattern, feature, message))
 })
 
 maintainerEntrypoints.forEach(({ feature, links }) => {
