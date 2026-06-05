@@ -296,6 +296,47 @@ render_state = TreeView::RenderState.new(
 
 子nodeを必要な分だけ読み込みたい場合は lazy loading を使います。
 
+## lazy loading と children pagination を組み合わせる
+
+1つのbranchに大量の直接childrenがあり、最初の展開後も全件描画すると大きすぎる場合に使います。lazy loading は最初のchildren endpointとremote-state placeholderをつなぎ、host app は1page分のchildrenとhost-app-ownedの「もっと見る」行を返します。
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document",
+  key_resolver: ->(item) { TreeView.node_key("document", item.id) }
+).build(
+  load_children_path_builder: ->(item, depth, scope) {
+    children_document_path(item, depth:, scope:, limit: 50, format: :turbo_stream)
+  }
+)
+```
+
+```erb
+<%= turbo_stream.replace tree_children_container_dom_id(@parent) do %>
+  <tbody id="<%= tree_children_container_dom_id(@parent) %>">
+    <%= tree_view_rows(@render_state) %>
+    <% if @next_cursor %>
+      <tr id="<%= dom_id(@parent, :children_more) %>">
+        <td colspan="6">
+          <%= link_to "もっと見る",
+            children_document_path(@parent, cursor: @next_cursor, limit: @limit, format: :turbo_stream),
+            data: { turbo_stream: true } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+<% end %>
+
+<%= turbo_stream.replace tree_remote_state_placeholder_dom_id(@parent) do %>
+  <span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent, state: "loaded")) %>>loaded</span>
+<% end %>
+```
+
+TreeView は `load_children_path_builder`、children container ID、remote-state placeholder attributes、row rendering、lazy-loading hookを提供します。cursor / offset strategy、limit clamp、query ordering、authorization、`children_more` の配置、retry copy、Turbo Stream partial の形はhost app側で決めます。
+
+詳しい責務境界とcursor設計は [Lazy Loading](lazy-loading.md)、[Children Pagination](children-pagination.md)、[描画スケール](render-scale.md) を参照してください。この recipe を infinite scroll や virtual scroll の契約として扱わないでください。それらの方針は、別のfeatureで変えない限りhost app側の責務です。
+
 ## static collapsed tree が開けなくなる落とし穴を避ける
 
 `build_static` は開閉URLを設定しません。そのため static rendering と `initial_expansion: { default: :collapsed }` を組み合わせると、collapsed な子孫行は初期HTMLに描画されず、ユーザー操作では展開できません。
