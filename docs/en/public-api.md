@@ -41,9 +41,9 @@ Host apps may use these entry points directly:
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
 - `tree_node_dom_id(item_or_id, ui: @tree_ui)`
-- `tree_children_container_dom_id(item_or_id, ui: @tree_ui)`
-- `tree_remote_state_placeholder_dom_id(item_or_id, ui: @tree_ui)`
-- `tree_remote_state_placeholder_attributes(item_or_id, state: nil, ui: @tree_ui)`
+- `tree_children_container_dom_id(item, ui: @tree_ui)`
+- `tree_remote_state_placeholder_dom_id(item, ui: @tree_ui)`
+- `tree_remote_state_placeholder_attributes(item, state: nil, ui: @tree_ui)`
 - `tree_selection_value(item, tree, builder = nil)`
 - `tree_view_breadcrumb(tree, item, ...)`
 - `tree_view_toolbar(render_state, ...)`
@@ -79,6 +79,8 @@ Documented non-toolbar helpers that are part of that public helper surface inclu
 - `tree_view_breadcrumb(tree, item, ...)` renders a breadcrumb path for a node.
 
 For host apps that own lazy-loading placeholder regions, these three lazy-loading helpers are part of the same stable helper surface described in [Lazy Loading](lazy-loading.md). Use them instead of reconstructing placeholder IDs or `data-tree-remote-state` attributes by hand.
+
+Pass the parent item that owns the lazy-loading placeholder to the lazy-loading helper methods. `tree_node_dom_id(item_or_id, ...)` remains the broader DOM ID helper for item-like or id-like values; the placeholder helpers are documented for item-based lazy-loading regions so they stay aligned with the row and Turbo Stream examples.
 
 For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` rather than internal constants.
 Documented toolbar helpers are part of that public helper surface:
