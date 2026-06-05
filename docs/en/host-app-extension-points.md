@@ -35,6 +35,8 @@ Use this table when deciding which hook owns a host-app integration point.
 | Provide drag/drop transfer data | `row_event_payload_builder`; TreeView serializes the payload into `data-tree-transfer-payload`, adds `data-tree-transfer-node-key`, and the transfer controller skips rows with `data-tree-transfer-disabled="true"` | [Drag and Drop](drag-and-drop.md), [JavaScript event contract](js-events.md#transfer-events) |
 | Configure selection payloads or row-level selection state | Render-state `selection:` options such as `payload_builder`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, and `visibility` | [Selection](selection.md), [Row status](row-status.md#difference-from-selection-disabled-state) |
 | Configure selection controller behavior on already-rendered rows | Host-element `tree-view-selection` value attributes such as `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, and `data-tree-view-selection-indeterminate-value` | [Selection](selection.md#hidden-input-sync-for-regular-form-submit), [JavaScript event contract](js-events.md#selection-events) |
+| Build Turbo expand/collapse URLs | `show_descendants_path_builder`; the host app owns routes, controllers, authorization, and Turbo Stream responses | [Turbo Frame option](turbo-frame.md), [Usage](usage.md#turbo-mode) |
+| Build lazy-loading children URLs | `load_children_path_builder`; the host app owns children queries, route policy, authorization, and returned partial shape | [Lazy Loading](lazy-loading.md), [Children Pagination](children-pagination.md) |
 
 ## row_partial
 
