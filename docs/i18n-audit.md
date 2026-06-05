@@ -47,6 +47,8 @@ Exceptions are allowed when the mismatch is intentional and visible:
 - `docs/mockups/**` is a technical visual reference area and is tracked through its own README, review gallery, and browser smoke inventory instead of language-tree parity
 - a page may temporarily exist in one language first when the PR or changed page leaves a visible follow-up note and does not change the High-lane entry-point promise
 
+Only add a parity exception when the mismatch is temporary, maintainer-only, or a technical asset that is intentionally outside user-facing prose coverage. Record the reason, affected language, and the planned review timing or removal condition wherever the exception is introduced, such as the PR description, the changed page, or the parity check's exception entry. Do not use exceptions to make one-language user-facing docs permanent; if a user-facing page must stay unmatched for more than one maintenance sweep, track the follow-up explicitly and revisit whether the docs map still promises the right coverage.
+
 When a lightweight automated parity check exists, use it as a first pass only. It should flag missing peer filenames and documented exceptions; it should not judge translation quality, wording equivalence, or whether Japanese or English is the canonical prose source for a disputed behavior.
 
 ## When to update both Japanese and English docs
