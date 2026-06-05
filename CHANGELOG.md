@@ -29,6 +29,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added client-side-only expand/collapse mode that renders collapsed descendants into initial HTML and toggles rows in the browser with the bundled `tree-view-client` controller.
 - Added `TreeView::Diagnostics.run` as a consolidated diagnostics entrypoint for node keys, DOM IDs, orphans, and cycles.
 - Added `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` so host apps can reuse stable lazy-loading placeholder IDs and data attributes.
+- Added `toggle_icons` to the manifest-backed grouped option compatibility surface while keeping the existing RenderState option behavior unchanged.
 
 ### Changed
 
@@ -55,6 +56,7 @@ Breaking changes and required migration notes should be called out explicitly in
 - Clarified release checklist guidance for documented JavaScript wiring surfaces, including `data-tree-view-*` integration hooks and selection controller host-element value attributes, alongside machine-readable package-root exports.
 - Added migration guides in Japanese and English to summarize compatibility promises, deprecations, rename handling, and release-note expectations.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
+- Clarified development docs for the Ruby-backed `npm run test:entrypoints` manifest loader path and setup expectations.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
@@ -64,6 +66,12 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added toolbar disabled-action troubleshooting guidance in Japanese and English.
 - Added transfer disabled / invalid boundary states to the drop-position mockup and updated the mockup review guidance.
 - Added static mockup references for multi-tree selection forms, toggle icon states, and high-contrast state cues.
+- Added focused mockup references for RenderWindow boundary metadata and direction-aware visual cue boundaries.
+- Added direction-aware styling boundary docs for host-app-owned RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing overrides.
+- Added Decision guide guidance for choosing Static, Turbo, or Client-side toggle mode before tuning render depth or loading strategy.
+- Clarified docs index entry points for PathTreeBuilder, Children Pagination, and large-tree reading paths.
+- Added docs index entry points for Accessibility Semantics so ARIA placement, keyboard boundaries, and automated check allowances are easier to find before review.
+- Corrected Windowed Rendering docs examples and metadata tables to use the implemented `TreeView::RenderWindow#previous?` / `#next?` API names.
 - Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
 
 ### Tests
@@ -82,7 +90,9 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added specs for RenderState internal configuration objects and the consolidated diagnostics entrypoint.
 - Added JavaScript public event contract specs for selection, remote state, and transfer events.
 - Added package-root frozen object contract coverage for public JavaScript object exports.
+- Improved entrypoint smoke diagnostics for Ruby manifest loader and JSON parse failures without changing public export assertions.
 - Added browser smoke coverage for representative docs mockup pages and the review gallery.
+- Added docs entrypoint guard coverage for keeping README feature links and docs index targets aligned.
 
 ## 0.1.0 - 2026-05-07
 

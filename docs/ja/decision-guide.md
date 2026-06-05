@@ -9,6 +9,18 @@ TreeViewのAPIは大きく分けると次の2種類です。
 
 データがすでに取得済みなら、まず描画制御を使います。全ての子要素を先に取得すること自体が問題なら、Lazy LoadingやChildren Paginationを使います。scroll位置に応じたDOM仮想化が問題なら、host app側のJavaScriptで実装します。
 
+## 先にtoggle modeを選ぶ
+
+render depthやloading strategyを細かく決める前に、そのtree instanceで行をどう開閉するかを決めます。
+
+| Mode | まず使うAPI | 向いている場面 | host appが担当すること |
+|---|---|---|---|
+| Static | `UiConfigBuilder#build_static` | treeをread-only snapshotとして見せたい、またはcollapsed descendantsをbrowser上で開かせない画面。 | 描画前にどのrecordsを含めるか、別画面や別actionでviewを切り替えるか。 |
+| Turbo | `UiConfigBuilder#build_turbo` | 行を開くとhost app routeへrequestし、Turbo Stream responseで差し替えたい場合。あとから子要素を取得する必要がある場合。 | `show_descendants_path_builder`、`hide_descendants_path_builder`、routes、authorization、controller actions、queries、Turbo Stream responses。 |
+| Client-side | `UiConfigBuilder#build_client_side` | render scope内の全行を初期HTMLに含められ、browser内のshow/hideだけで足りる場合。 | 初期HTML量、JavaScript登録、row scope、ユーザーが行を開いた後の業務action。 |
+
+Lazy LoadingやChildren PaginationにはTurbo modeを使います。Client-side modeは初期DOMに存在する行だけを表示できます。server-side fetchingの代替にはなりません。toggle linkは表示されているが動かない場合は、症状別の逆引きとして [Troubleshooting](troubleshooting.md#toggle-links-do-not-expand-or-collapse) を参照してください。
+
 ## やりたいことから選ぶ
 
 | やりたいこと | まず使うAPI | 主なoption / API | 補足 |

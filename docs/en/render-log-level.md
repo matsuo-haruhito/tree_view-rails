@@ -11,6 +11,8 @@ TreeView.configure do |config|
 end
 ```
 
+`render_log_level` is one of the manifest-backed `TreeView.configure` option keys in `config/public_api_manifest.yml`. This page documents its accepted values and logging boundary; it does not add a new configuration option.
+
 ## Changing the level
 
 Set `render_log_level` to any standard Ruby logger level name when the host app needs a different threshold.

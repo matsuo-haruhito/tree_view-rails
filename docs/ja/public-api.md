@@ -26,6 +26,7 @@ host app が直接使ってよい主な入口は以下です。
 - `TreeView::ResourceTableRenderState.call`
 - `TreeView::VisibleRows`
 - `TreeView::RenderWindow`
+- `TreeView::FilteredTree`
 - `TreeView::UiConfig`
 - `TreeView::UiConfigBuilder`
 - `TreeView::GraphAdapter`
@@ -39,6 +40,11 @@ host app が直接使ってよい主な入口は以下です。
 - `tree_view_rows(render_state)`
 - `tree_view_rows(render_state, window: { offset:, limit: })`
 - `tree_view_window(render_state, offset:, limit:)`
+- `tree_node_dom_id(item_or_id, ui: @tree_ui)`
+- `tree_children_container_dom_id(item_or_id, ui: @tree_ui)`
+- `tree_remote_state_placeholder_dom_id(item_or_id, ui: @tree_ui)`
+- `tree_remote_state_placeholder_attributes(item_or_id, state: nil, ui: @tree_ui)`
+- `tree_selection_value(item, tree, builder = nil)`
 - `tree_view_breadcrumb(tree, item, ...)`
 - `tree_view_toolbar(render_state, ...)`
 - `tree_view_toolbar_supported_actions`
@@ -114,6 +120,8 @@ toolbar helper もこの公開 helper surface に含まれます。
 - `initial_state`
 - `render_log_level`
 
+`TreeView.configure`、`TreeView.configuration`、`TreeView.reset_configuration!` は安定した configuration entry point です。configuration object の内部形状ではなく、documented option name と documented behavior に依存してください。`render_log_level` の値、既定値、無効化方法、host app logging との責務境界は [render log level](render-log-level.md) を参照してください。
+
 公開 localized display-name helper には以下を含めます。
 
 - `TreeView.model_name_for(item_or_class, count: 1, default: nil)`
@@ -139,6 +147,7 @@ localized display-name helper は、利用できる場合に host app の Rails 
 | `initial_expansion` | `default`, `max_depth`, `expanded_keys`, `collapsed_keys`, `current_item`, `current_key`, `auto_expand_ancestors` | 個別 keyword option と `initial_expansion:` を併用した場合でも、優先されるのは個別 keyword option です。 |
 | `render_scope` | `max_depth`, `max_leaf_distance` | `TreeView::RenderState` の documented render-depth / leaf-distance control に対応します。 |
 | `toggle_scope` | `max_depth_from_root`, `max_leaf_distance` | tree-wide toggle の documented depth / leaf-distance control に対応します。 |
+| `toggle_icons` | `by_state`, `by_depth`, `by_type` | documented な宣言的 toggle icon map に対応します。`toggle_icon_builder` は callable escape hatch のままで、manifest-backed grouped option には含めません。 |
 | `selection` | `enabled`, `visibility`, `payload_builder`, `checkbox_name`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, `cascade`, `indeterminate`, `max_count` | `TreeView::RenderState::SelectionConfig` と同じ grouped key を machine-readable に追跡し、documented な flat selection keyword との対応も崩れないようにします。 |
 | `lazy_loading` | `enabled`, `loaded_keys`, `scope` | documented lazy-loading row-state hook と optional な host-app scope passthrough に対応します。 |
 | `row_status` | `row_disabled_builder`, `row_readonly_builder`, `row_disabled_reason_builder` | documented row disabled / readonly state hook と disabled reason surface に対応します。 |
@@ -174,6 +183,8 @@ host app が使ってよい入口:
 
 - `registerTreeViewControllers(application)`
 - `TreeViewEventNames`
+- `TreeViewEventDetailKeys`
+- `TreeViewTransferDropPositions`
 - `TreeViewControllerIdentifiers`
 - exported controller classes
   - `TreeViewStateController`
@@ -187,6 +198,8 @@ host app が使ってよい入口:
 `registerTreeViewControllers(application)` は、上記 5 つの controller export を bundled entrypoint の documented identifier 順に登録します。
 
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
+`TreeViewEventDetailKeys` は documented `event.detail` key list を machine-readable に参照するための package-root export です。host app の test や listener が documented key name と照合したい場合に使えますが、payload shape 自体は変えません。各 field の意味は [JavaScript event contract](js-events.md) を正本にしてください。
+`TreeViewTransferDropPositions` は transfer event の粗い drop-position value として、`before`、`inside`、`after` を公開します。`TreeViewEventNames.transfer.*` は transfer event 名、`TreeViewEventDetailKeys.transfer.*` は documented な `event.detail` key、`TreeViewTransferDropPositions` は [Drag and Drop](drag-and-drop.md#drop処理) で説明している position value を表します。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
 
 `TreeViewEventNames` のうち、lazy-loading の request lifecycle 名は `hostLifecycle` にまとめています。
