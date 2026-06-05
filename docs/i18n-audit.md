@@ -23,7 +23,7 @@ Use this table when you need a quick answer to "which user-facing pages must sta
 Japanese remains the more complete canonical prose source when English wording lags, but the pages below are the current cross-language planning baseline promised by `docs/en/README.md`, `docs/ja/README.md`, and `docs/README.md`.
 
 | Docs lane | Current coverage status | Priority | Maintenance expectation |
-|---|---|---|---|
+|---|---|---|
 | `docs/README.md`, `docs/en/README.md`, `docs/ja/README.md` | Published entry points for cross-language navigation and language-status guidance | High | Update in the same docs lane whenever reading order, docs map, or language-status promises change |
 | `docs/en/installation.md`, `docs/ja/installation.md` | Published in both trees | High | Keep setup, asset, importmap, and first-run instructions aligned before release-facing docs changes land |
 | `docs/en/minimal-usage.md`, `docs/ja/minimal-usage.md` | Published in both trees | High | Keep the first working host-app example aligned with installation and usage docs |
@@ -47,9 +47,9 @@ Exceptions are allowed when the mismatch is intentional and visible:
 - `docs/mockups/**` is a technical visual reference area and is tracked through its own README, review gallery, and browser smoke inventory instead of language-tree parity
 - a page may temporarily exist in one language first when the PR or changed page leaves a visible follow-up note and does not change the High-lane entry-point promise
 
-Only add a parity exception when the mismatch is temporary, maintainer-only, or a technical asset that is intentionally outside user-facing prose coverage. Record the reason, affected language, and the planned review timing or removal condition wherever the exception is introduced, such as the PR description, the changed page, or the parity check's exception entry. Do not use exceptions to make one-language user-facing docs permanent; if a user-facing page must stay unmatched for more than one maintenance sweep, track the follow-up explicitly and revisit whether the docs map still promises the right coverage.
+Only add a parity exception when the mismatch is temporary, maintainer-only, or a technical asset that is intentionally outside user-facing prose coverage. Record the exception in `script/test_docs_i18n_parity.mjs` with a key in the form `sourceLanguage:relative-page.md`, where `sourceLanguage` is the language tree that currently has the page. Each exception must include non-empty `affectedLanguage`, `reason`, and `review` metadata so the missing peer language, the reason for the mismatch, and the planned review timing or removal condition stay visible in the check itself. Do not use exceptions to make one-language user-facing docs permanent; if a user-facing page must stay unmatched for more than one maintenance sweep, track the follow-up explicitly and revisit whether the docs map still promises the right coverage.
 
-When a lightweight automated parity check exists, use it as a first pass only. It should flag missing peer filenames and documented exceptions; it should not judge translation quality, wording equivalence, or whether Japanese or English is the canonical prose source for a disputed behavior.
+When a lightweight automated parity check exists, use it as a first pass only. It should flag missing peer filenames and validate documented exception metadata; it should not judge translation quality, wording equivalence, or whether Japanese or English is the canonical prose source for a disputed behavior.
 
 ## When to update both Japanese and English docs
 
