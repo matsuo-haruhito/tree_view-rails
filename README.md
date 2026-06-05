@@ -205,6 +205,7 @@ Key documents:
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
 | Selection | [Selection](docs/en/selection.md) | [Selection](docs/ja/selection.md) |
 | Toolbar helper (`tree_view_toolbar`) | [Toolbar helper](docs/en/toolbar.md) | [Toolbar helper](docs/ja/toolbar.md) |
+| Breadcrumb helper (`tree_view_breadcrumb`) | [Breadcrumb helper](docs/en/breadcrumb.md) | [Breadcrumb helper](docs/ja/breadcrumb.md) |
 | Turbo Frame option | [Turbo Frame option](docs/en/turbo-frame.md) | [Turbo Frame オプション](docs/ja/turbo-frame.md) |
 | Persisted State | [Persisted State](docs/en/persisted-state.md) | [Persisted State](docs/ja/persisted-state.md) |
 | Localized names | [Localized names](docs/en/localized-names.md) | [ローカライズされた名前](docs/ja/localized-names.md) |
