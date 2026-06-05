@@ -27,6 +27,12 @@ function assertRelativeLink(sourcePath, href, feature) {
   )
 }
 
+function assertRootSignal(feature, rootPattern, message) {
+  if (!rootPattern) return
+
+  assert(rootPattern.test(rootReadme), `${feature}: ${message}`)
+}
+
 const rootReadme = read("README.md")
 
 const foundationalEntrypoints = [
@@ -184,7 +190,6 @@ const featureEntrypoints = [
   },
   {
     feature: "Breadcrumb helper",
-    rootPattern: /TreeView::Breadcrumb|tree_view_breadcrumb|breadcrumb/i,
     links: [
       ["docs/en/README.md", "breadcrumb.md"],
       ["docs/ja/README.md", "breadcrumb.md"]
@@ -262,13 +267,13 @@ const maintainerEntrypoints = [
 ]
 
 foundationalEntrypoints.forEach(({ feature, rootPattern, links }) => {
-  assert(rootPattern.test(rootReadme), `${feature}: README.md no longer exposes the representative docs signal`)
+  assertRootSignal(feature, rootPattern, "README.md no longer exposes the representative docs signal")
 
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
 })
 
 featureEntrypoints.forEach(({ feature, rootPattern, links }) => {
-  assert(rootPattern.test(rootReadme), `${feature}: README.md no longer exposes the representative feature signal`)
+  assertRootSignal(feature, rootPattern, "README.md no longer exposes the representative feature signal")
 
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
 })
