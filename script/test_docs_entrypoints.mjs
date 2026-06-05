@@ -167,6 +167,18 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "Turbo Frame option",
+    rootPattern: /Turbo Frame option/,
+    links: [
+      ["README.md", "docs/en/turbo-frame.md"],
+      ["README.md", "docs/ja/turbo-frame.md"],
+      ["docs/README.md", "en/turbo-frame.md"],
+      ["docs/README.md", "ja/turbo-frame.md"],
+      ["docs/en/README.md", "turbo-frame.md"],
+      ["docs/ja/README.md", "turbo-frame.md"]
+    ]
+  },
+  {
     feature: "Selection",
     rootPattern: /checkbox selection|selection hooks/i,
     links: [
@@ -223,6 +235,18 @@ const featureEntrypoints = [
       ["docs/README.md", "ja/public-api.md"],
       ["docs/en/README.md", "js-events.md"],
       ["docs/ja/README.md", "js-events.md"]
+    ]
+  },
+  {
+    feature: "Direction-aware styling boundary",
+    rootPattern: /Direction-aware styling boundary/i,
+    links: [
+      ["README.md", "docs/en/direction-aware-styling.md"],
+      ["README.md", "docs/ja/direction-aware-styling.md"],
+      ["docs/README.md", "en/direction-aware-styling.md"],
+      ["docs/README.md", "ja/direction-aware-styling.md"],
+      ["docs/en/README.md", "direction-aware-styling.md"],
+      ["docs/ja/README.md", "direction-aware-styling.md"]
     ]
   },
   {
