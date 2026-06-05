@@ -125,6 +125,7 @@ javascript_package_root:
     - TreeViewControllerIdentifiers
     - TreeViewSelectionDataHooks
     - TreeViewTransferDropPositions
+    - TreeViewRemoteStateValues
     - TreeViewStateController
     - TreeViewClientController
     - TreeViewSelectionController
@@ -136,6 +137,10 @@ javascript_package_root:
     before: before
     inside: inside
     after: after
+  remote_state_values:
+    loading: loading
+    loaded: loaded
+    error: error
   controller_registrations:
     - key: state
       identifier: tree-view-state
