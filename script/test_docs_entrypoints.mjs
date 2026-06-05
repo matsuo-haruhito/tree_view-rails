@@ -69,6 +69,41 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "Filtered Trees",
+    rootPattern: /Filtered Trees/,
+    links: [
+      ["README.md", "docs/en/filtered-trees.md"],
+      ["README.md", "docs/ja/filtered-trees.md"],
+      ["docs/README.md", "en/filtered-trees.md"],
+      ["docs/README.md", "ja/filtered-trees.md"],
+      ["docs/en/README.md", "filtered-trees.md"],
+      ["docs/ja/README.md", "filtered-trees.md"]
+    ]
+  },
+  {
+    feature: "Render Scale strategy",
+    rootPattern: /Render Scale[\s\S]*Lazy Loading[\s\S]*Children Pagination/,
+    links: [
+      ["README.md", "docs/en/render-scale.md"],
+      ["README.md", "docs/en/lazy-loading.md"],
+      ["README.md", "docs/en/children-pagination.md"],
+      ["docs/README.md", "en/lazy-loading.md"],
+      ["docs/README.md", "ja/lazy-loading.md"],
+      ["docs/README.md", "en/windowed-rendering.md"],
+      ["docs/README.md", "ja/windowed-rendering.md"],
+      ["docs/README.md", "en/children-pagination.md"],
+      ["docs/README.md", "ja/children-pagination.md"],
+      ["docs/en/README.md", "render-scale.md"],
+      ["docs/en/README.md", "lazy-loading.md"],
+      ["docs/en/README.md", "windowed-rendering.md"],
+      ["docs/en/README.md", "children-pagination.md"],
+      ["docs/ja/README.md", "render-scale.md"],
+      ["docs/ja/README.md", "lazy-loading.md"],
+      ["docs/ja/README.md", "windowed-rendering.md"],
+      ["docs/ja/README.md", "children-pagination.md"]
+    ]
+  },
+  {
     feature: "Selection",
     rootPattern: /checkbox selection|selection hooks/i,
     links: [
@@ -121,8 +156,40 @@ const featureEntrypoints = [
   }
 ]
 
+const maintainerEntrypoints = [
+  {
+    feature: "Maintainer release docs",
+    links: [
+      ["docs/README.md", "en/release.md"],
+      ["docs/README.md", "ja/release.md"],
+      ["docs/en/README.md", "release.md"],
+      ["docs/ja/README.md", "release.md"],
+      ["docs/README.md", "../CHANGELOG.md"],
+      ["docs/en/README.md", "../../CHANGELOG.md"],
+      ["docs/ja/README.md", "../../CHANGELOG.md"]
+    ]
+  },
+  {
+    feature: "Maintainer development docs",
+    links: [
+      ["docs/README.md", "en/development.md"],
+      ["docs/README.md", "ja/development.md"],
+      ["docs/en/README.md", "development.md"],
+      ["docs/ja/README.md", "development.md"],
+      ["docs/README.md", "en/code-quality.md"],
+      ["docs/README.md", "ja/code-quality.md"],
+      ["docs/en/README.md", "code-quality.md"],
+      ["docs/ja/README.md", "code-quality.md"]
+    ]
+  }
+]
+
 featureEntrypoints.forEach(({ feature, rootPattern, links }) => {
   assert(rootPattern.test(rootReadme), `${feature}: README.md no longer exposes the representative feature signal`)
 
+  links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
+})
+
+maintainerEntrypoints.forEach(({ feature, links }) => {
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
 })
