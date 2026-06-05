@@ -6,6 +6,23 @@ Use it when you already know what is going wrong in the host app, but are not su
 
 TreeView provides rendering primitives, JavaScript hooks, and validation helpers. The host app still owns routes, controller actions, authorization, queries, Turbo Stream responses, business actions, and layout decisions.
 
+## Localized labels show missing translations or unexpected fallback text
+
+Localized display names come from Rails / ActiveModel / I18n when those APIs are available. When TreeView cannot resolve a locale value, the localized-name helpers fall back to humanized class, attribute, or node type names unless the caller passes `default:`.
+
+Check these points.
+
+- Confirm the host app has the expected `activerecord.models`, `activerecord.attributes`, or `tree_view.node_types` locale keys for the current locale.
+- Pass `default:` when a row partial, presenter, or helper already knows the fallback copy that should appear for missing translations or plain Ruby objects.
+- Keep final translation text and product copy in the host app; TreeView only resolves names for the caller to render.
+- If toolbar action labels are the only missing text, check the `tree_view.toolbar.labels` keys or the explicit `labels:` override first.
+
+Read next:
+
+- [Localized names](localized-names.md)
+- [Public API](public-api.md)
+- [Host App Extension Points](host-app-extension-points.md)
+
 ## Toggle links do not expand or collapse
 
 Check the tree mode first.
