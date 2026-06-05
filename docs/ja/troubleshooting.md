@@ -6,6 +6,23 @@
 
 TreeView は描画プリミティブ、JavaScript hook、validation helper を提供します。routes、controller action、authorization、query、Turbo Stream response、business action、page layout は引き続き host app の責務です。
 
+## localized label が missing translation や想定外の fallback text になる
+
+localized display name は、利用できる場合は Rails / ActiveModel / I18n から解決されます。TreeView が locale の値を解決できない場合、localized-name helper は `default:` が渡されていなければ class 名、attribute 名、node type 名を humanize した fallback を返します。
+
+次を確認してください。
+
+- current locale に対して、host app 側に期待する `activerecord.models`、`activerecord.attributes`、または `tree_view.node_types` の locale key があるか
+- missing translation や plain Ruby object に出したい fallback copy を row partial、presenter、helper 側ですでに持っている場合は `default:` を渡す
+- 最終的な translation text や product copy は host app 側に置く。TreeView は caller が描画する表示名を解決するだけです
+- toolbar action label だけが missing になっている場合は、まず `tree_view.toolbar.labels` の key または明示的な `labels:` override を確認する
+
+次に読む文書:
+
+- [Localized names](localized-names.md)
+- [公開 API](public-api.md)
+- [Host App 拡張ポイント](host-app-extension-points.md)
+
 ## toggle link を押しても展開・折りたたみされない
 
 最初に tree mode を確認してください。
