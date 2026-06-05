@@ -7,8 +7,10 @@ require "yaml"
 PUBLIC_API_MANIFEST_STRUCTURE_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   module_methods
+  configuration_options
   public_constants
   helper_methods
+  helper_option_keys
   toolbar_actions
   grouped_option_keys
   javascript_package_root
