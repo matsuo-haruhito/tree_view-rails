@@ -238,6 +238,18 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "Accessibility Semantics",
+    rootPattern: /Accessibility Semantics[\s\S]*ARIA|accessibility-oriented row semantics/i,
+    links: [
+      ["README.md", "docs/en/accessibility-semantics.md"],
+      ["README.md", "docs/ja/accessibility-semantics.md"],
+      ["docs/README.md", "en/accessibility-semantics.md"],
+      ["docs/README.md", "ja/accessibility-semantics.md"],
+      ["docs/en/README.md", "accessibility-semantics.md"],
+      ["docs/ja/README.md", "accessibility-semantics.md"]
+    ]
+  },
+  {
     feature: "Direction-aware styling boundary",
     rootPattern: /Direction-aware styling boundary/i,
     links: [
