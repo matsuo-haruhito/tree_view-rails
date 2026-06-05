@@ -8,6 +8,7 @@ Use these helpers when a row partial or `NodePresenter` needs a human-readable l
 
 - For complete `NodePresenter` and `row_partial` composition examples, see [NodePresenter row partial patterns](node-presenter-row-partials.md).
 - For the broader boundary between TreeView hooks and host-app rendering code, see [Host app extension points](host-app-extension-points.md#row_partial).
+- For a static visual reference of long localized-style labels, type badges, attribute labels, secondary metadata, and tooltip cues, see [localized-row-labels.html](../mockups/localized-row-labels.html). Final translations and product copy remain host-app responsibilities.
 
 ## Model names
 
