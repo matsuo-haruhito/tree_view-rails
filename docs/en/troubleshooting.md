@@ -45,6 +45,24 @@ Read next:
 - [Turbo Frame option](turbo-frame.md)
 - [Usage](usage.md)
 
+## Breadcrumbs fail or cannot find a parent path
+
+Breadcrumb path lookup is records-mode only. TreeView can render breadcrumbs when it can walk `parent_id_method` relationships from the current record back to a root.
+
+Check these points.
+
+- Confirm the tree was built from `records:` with `parent_id_method:`. Resolver mode and adapter mode do not expose a unique parent path to the bundled breadcrumb helper.
+- If the error says parent path helpers are only supported in records mode, keep the failure as a mode boundary signal instead of trying to infer parents from graph-like data.
+- If the data is graph-like, has multiple possible parents, or comes from `GraphAdapter`, let the host app choose the breadcrumb trail and render its own links or labels.
+- Keep route, authorization, layout placement, and analytics behavior in the host app; TreeView only owns records-mode path lookup and helper HTML.
+
+Read next:
+
+- [Breadcrumb](breadcrumb.md#supported-mode)
+- [GraphAdapter](graph-adapter.md)
+- [Host App Extension Points](host-app-extension-points.md)
+- [Rendering Boundaries](rendering-boundaries.md)
+
 ## Row partial output looks broken or table cells do not line up
 
 TreeView owns the row wrapper and common tree UI cells. The host app owns the contents of `row_partial`, action cells, and the surrounding table layout.
@@ -211,6 +229,10 @@ Check these points.
 - If explicit `expanded_keys` are passed into `RenderState`, they override the persisted state.
 - If a browser listener saves immediately on page load, remember that `tree-view-state:state-changed` is also dispatched on initial connect. Treat the first event as the current expanded-state snapshot, then debounce, ignore the first event, or use a host-app dirty-state policy when only user-initiated saves should be sent.
 - If the same `expandedKeys` snapshot is saved repeatedly, inspect the host-app listener before changing TreeView. TreeView publishes state changes; the host app owns autosave timing, duplicate suppression, retry behavior, authorization, and endpoint responses.
+- If `StateStore#save!` raises from the backing model, inspect the generated model validations, owner lookup, uniqueness constraints, and any database constraints for the same owner / `tree_instance_key` pair. TreeView calls the backing model's `save!`; it does not rescue validation failures or decide retry behavior.
+- If `StateStore#clear!` raises, inspect the matching persisted-state record's `destroy!` path, including host-app callbacks, constraints, transactions, and authorization around the reset endpoint. TreeView calls `destroy!` for the matching record and leaves failure handling to the host app.
+- If `clear!` returns an empty state when no record existed, treat that as the no-op boundary: the tree is already cleared for that owner / key. If the UI still shows old expansion, check the rendered `expanded_keys`, browser event listener, and host-app response rather than changing `clear!` behavior.
+- For the detailed StateStore boundary, read the save and clear examples in [Persisted State](persisted-state.md#server-side-storage-with-statestore).
 - For the detailed browser wiring boundary, read the practical notes in [Persisted State](persisted-state.md#browser-event-wiring).
 
 Read next:

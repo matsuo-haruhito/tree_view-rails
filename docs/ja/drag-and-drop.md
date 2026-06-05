@@ -114,6 +114,8 @@ transfer controller が読者向けに公開する主なdetailは次のとおり
 
 `position` は、target row内でpointerがどこにあるかを示すTreeView側の粗いcueです。上 1/3 は `before`、中央 1/3 は `inside`、下 1/3 は `after` になります。これはhost appの業務ルールへの入力として扱い、最終的な許可・保存方針として扱わないでください。たとえば、leaf-only treeでは `inside` を無視したり、projectをまたぐdropを拒否したり、`before` / `after` を並び順更新へ変換したりできます。
 
+host app の JavaScript で raw な drop-position string を写経したくない場合は、package-root の `TreeViewTransferDropPositions` export を使えます。`TreeViewEventNames.transfer.*` は transfer event 名、`TreeViewEventDetailKeys.transfer.*` は documented detail key、`TreeViewTransferDropPositions` は粗い `before` / `inside` / `after` position value を表します。
+
 ### transfer operation と outcome の境界
 
 TreeView は drag start 時の `DataTransfer.effectAllowed` と、valid row 上で hover している間の `DataTransfer.dropEffect` を `move` に設定します。この cue は、現在の TreeView helper が row transfer 向けであることを示すだけで、host app の業務上の operation を決めるものではありません。

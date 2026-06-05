@@ -114,6 +114,8 @@ The transfer controller exposes these reader-facing details:
 
 `position` is a TreeView-owned coarse cue for where the pointer sits inside the target row: the top third is `before`, the middle third is `inside`, and the bottom third is `after`. Treat it as input to host-app business rules, not as final authorization or persistence policy. For example, a host app may ignore `inside` for leaf-only trees, reject drops across projects, or translate `before` / `after` into an ordering update.
 
+Use the package-root `TreeViewTransferDropPositions` export when host-app JavaScript wants to avoid raw drop-position strings. `TreeViewEventNames.transfer.*` names the transfer events, `TreeViewEventDetailKeys.transfer.*` lists the documented detail keys, and `TreeViewTransferDropPositions` carries the coarse `before` / `inside` / `after` position values.
+
 ### Transfer operation and outcome boundary
 
 TreeView sets the browser transfer cue to `move` by using `DataTransfer.effectAllowed` on drag start and `DataTransfer.dropEffect` while hovering over a valid row. That cue only says the current TreeView helper is row-transfer oriented; it does not decide the host app's business operation.

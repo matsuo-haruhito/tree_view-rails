@@ -80,6 +80,12 @@ When combining TreeView with a table preferences layer, keep the persisted state
 
 Treat node keys and row DOM ids as TreeView identity. Treat `data-rails-table-preferences-column-key` as table-column identity. They may appear in the same row markup, but they should not be reused for each other.
 
+### Empty row colspan policy
+
+TreeView's built-in empty row uses a broad `colspan="999"` fallback because TreeView does not own or infer the host app's actual table column count. This keeps the no-root and no-results message spanning the table body when selection columns, row actions, or table-preference columns are present.
+
+Do not treat that fallback as column ownership. The host app or table layer still owns the actual column count, captions, summaries, surrounding table layout, and any custom empty-state copy or CTA. If a screen needs exact colspan behavior, keep that in an app-owned empty row or custom partial instead of adding hidden coupling between TreeView and table column state.
+
 For a focused visual reference that compares shared hierarchy rows across fuller and narrower visible-column sets without adding host-app table logic, see [resource-table-bridge.html](../mockups/resource-table-bridge.html).
 
 ## When to use it
