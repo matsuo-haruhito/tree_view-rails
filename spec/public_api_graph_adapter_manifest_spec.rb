@@ -3,13 +3,13 @@
 require "spec_helper"
 require "yaml"
 
-RSpec.describe "GraphAdapter public manifest contract" do
-  MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-  EN_DOC_PATH = File.expand_path("../docs/en/graph-adapter.md", __dir__)
-  JA_DOC_PATH = File.expand_path("../docs/ja/graph-adapter.md", __dir__)
+GRAPH_ADAPTER_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+GRAPH_ADAPTER_EN_DOC_PATH = File.expand_path("../docs/en/graph-adapter.md", __dir__)
+GRAPH_ADAPTER_JA_DOC_PATH = File.expand_path("../docs/ja/graph-adapter.md", __dir__)
 
+RSpec.describe "GraphAdapter public manifest contract" do
   def manifest
-    @manifest ||= YAML.safe_load_file(MANIFEST_PATH)
+    @manifest ||= YAML.safe_load_file(GRAPH_ADAPTER_MANIFEST_PATH)
   end
 
   def initializer_keyword_names(kind)
@@ -30,9 +30,12 @@ RSpec.describe "GraphAdapter public manifest contract" do
   it "keeps representative GraphAdapter behavior inside the documented boundary" do
     node = Struct.new(:id, keyword_init: true).new(id: 42)
     child = Struct.new(:id, keyword_init: true).new(id: 7)
+    children_resolver = lambda do |current_node|
+      child if current_node == node
+    end
     adapter = TreeView::GraphAdapter.new(
-      roots: node,
-      children_resolver: ->(current_node) { current_node == node ? child : nil }
+      roots: [node],
+      children_resolver: children_resolver
     )
 
     expect(adapter.roots).to eq([node])
@@ -42,7 +45,7 @@ RSpec.describe "GraphAdapter public manifest contract" do
   end
 
   it "keeps GraphAdapter docs synced with the manifest boundary" do
-    [EN_DOC_PATH, JA_DOC_PATH].each do |path|
+    [GRAPH_ADAPTER_EN_DOC_PATH, GRAPH_ADAPTER_JA_DOC_PATH].each do |path|
       doc = File.read(path)
 
       expect(doc).to include("graph_adapter_initializer")
