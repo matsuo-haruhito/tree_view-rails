@@ -48,6 +48,10 @@
 - [日本語Demo application boundary](ja/demo-application-boundary.md): static mockup と real Rails demo app の役割分担、未公開 demo link を増やさない方針。
 - [English Turbo Frame option](en/turbo-frame.md): target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript.
 - [日本語Turbo Frame オプション](ja/turbo-frame.md): TreeView の Turbo toggle link を host app の Turbo Frame に向ける設定。
+- [English Toolbar helper](en/toolbar.md): render tree-wide expand, collapse, and collapse-to-current-path actions while host apps own final placement and copy.
+- [日本語Toolbar helper](ja/toolbar.md): tree全体のexpand / collapse / current pathへのcollapse actionを描画し、配置と文言はhost appが所有する入口。
+- [English Breadcrumb helper](en/breadcrumb.md): render ancestor path context for a current or target node without taking over host-app routing or navigation policy.
+- [日本語Breadcrumb helper](ja/breadcrumb.md): current nodeや対象nodeのancestor path contextを描画し、routeやnavigation policyはhost app側に残す入口。
 - [English Persisted State](en/persisted-state.md): save and restore TreeView expansion state through host-app-owned storage.
 - [日本語Persisted State](ja/persisted-state.md): TreeView の開閉状態を host app 側の保存先で保存・復元するための入口。
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.

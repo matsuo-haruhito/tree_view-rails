@@ -47,6 +47,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Forms and editing rows](form-editing.md) | Bulk edit forms, inline-editing layouts, Form Objects, row actions, and responsibility boundaries |
 | [Resource table bridge](resource-table-bridge.md) | Bridge TreeView row rendering with a separate table layer that owns columns and table state |
 | [API overview](api-overview.md) | Overview of the main public APIs, including records, resolver, and GraphAdapter adapter modes |
+| [GraphAdapter](graph-adapter.md) | Dedicated guide for adapter mode with heterogeneous or graph-like nodes |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
 | [PathTreeBuilder](path-tree-builder.md) | Build generated folder nodes and record nodes from path-like record values |
 | [ReverseTree](reverse-tree.md) | Render child-to-parent paths when matched records should be roots and ancestors should appear below them |

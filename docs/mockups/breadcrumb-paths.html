@@ -46,6 +46,10 @@
   background: #fff;
 }
 
+.mock-breadcrumb-frame--narrow {
+  max-width: 390px;
+}
+
 .mock-breadcrumb-toolbar {
   display: grid;
   gap: 12px;
@@ -109,6 +113,10 @@
   list-style: none;
 }
 
+.mock-breadcrumb-path--stress {
+  gap: 0.45rem;
+}
+
 .mock-breadcrumb-path li {
   display: inline-flex;
   align-items: center;
@@ -145,6 +153,13 @@
 .mock-breadcrumb-pill--muted {
   border-style: dashed;
   color: #64748b;
+}
+
+.mock-breadcrumb-pill--stress {
+  align-items: flex-start;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .mock-breadcrumb-table {
@@ -441,6 +456,83 @@
           </div>
         </div>
       </div>
+
+      <div class="mock-breadcrumb-state">
+        <div class="mock-breadcrumb-state__header">
+          <p class="mock-breadcrumb-eyebrow">Mode C</p>
+          <h2>Long labels in a narrow breadcrumb frame</h2>
+          <p class="mock-breadcrumb-note">
+            Use this state when the review goal is to stress wrapping, separators, and the current breadcrumb cue in a compact host-app pane.
+          </p>
+        </div>
+
+        <div class="mock-breadcrumb-frame mock-breadcrumb-frame--narrow">
+          <div class="mock-breadcrumb-toolbar">
+            <p class="mock-breadcrumb-toolbar__title">Narrow path stress</p>
+            <div class="mock-breadcrumb-toolbar__meta" aria-label="Representative narrow path metadata">
+              <span class="mock-breadcrumb-chip">390px frame</span>
+              <span class="mock-breadcrumb-chip mock-breadcrumb-chip--secondary">long labels</span>
+            </div>
+          </div>
+          <div class="mock-breadcrumb-body">
+            <p class="mock-breadcrumb-callout">
+              This stress state keeps the path product-neutral. Final truncation, menus, breakpoint choices, and permission-aware labels remain host-app responsibilities.
+            </p>
+            <ol class="mock-breadcrumb-path mock-breadcrumb-path--stress" aria-label="Representative long breadcrumb path in a narrow frame">
+              <li><span class="mock-breadcrumb-pill mock-breadcrumb-pill--stress">Workspace operations and compliance area</span></li>
+              <li><span class="mock-breadcrumb-pill mock-breadcrumb-pill--stress">Regional implementation planning workspace</span></li>
+              <li><span class="mock-breadcrumb-pill mock-breadcrumb-pill--stress">Quarterly accessibility evidence package</span></li>
+              <li><span class="mock-breadcrumb-pill mock-breadcrumb-pill--stress mock-breadcrumb-pill--current" aria-current="page">Current review item with a deliberately long label</span></li>
+            </ol>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-expanded" data-tree-node-key="narrow:1" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Narrow root row expanded">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <a class="tree-toggle__action" href="#">hide</a>
+                        <span class="tree-toggle__level">root</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-marker" title="Folder">folder</span>
+                    <span class="tree-depth-label">L0</span>
+                  </td>
+                  <td>Workspace operations</td>
+                  <td><span class="mock-status">ancestor</span></td>
+                </tr>
+                <tr class="tree-row is-window-current" data-tree-node-key="narrow:4" data-tree-parent-key="narrow:3" data-tree-depth="3" aria-level="4" aria-current="page">
+                  <td class="btn-cell tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Narrow current row">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-toggle__level">leaf</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-marker" title="File">file</span>
+                    <span class="tree-depth-label">L3</span>
+                    <span class="tree-node-badge tree-node-badge--current">current row</span>
+                  </td>
+                  <td>Current review item with a deliberately long label</td>
+                  <td><span class="mock-status mock-status--active">current item</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="mock-section" aria-labelledby="breadcrumb-comparison-heading">
@@ -456,7 +548,7 @@
         <tbody>
           <tr>
             <td>Breadcrumb path</td>
-            <td>The lineage to the current item, including shallow and deep representative paths.</td>
+            <td>The lineage to the current item, including shallow, deep, and narrow long-label representative paths.</td>
             <td>Real route helpers, final labels, authorization-aware visibility, and Turbo navigation.</td>
           </tr>
           <tr>

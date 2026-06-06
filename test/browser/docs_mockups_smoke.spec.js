@@ -50,6 +50,7 @@ async function expectNoDocumentHorizontalOverflow(page) {
 
 const focusedMockupSmokeTargets = [
   { file: "default-tree.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
+  { file: "minimal-usage-first-render.html", sample: "[data-tree-view-sample='minimal-usage-first-render'] .tree-view-table tbody tr", minimumCount: 3 },
   { file: "resource-table-bridge.html", sample: ".mock-bridge-table tbody tr", minimumCount: 4 },
   { file: "narrow-sidebar-tree.html", sample: ".mock-narrow-frame", minimumCount: 2 },
   { file: "current-branch-sidebar.html", sample: ".tree-row.is-selected[aria-current='page']", minimumCount: 1 },
@@ -118,6 +119,7 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("heading", { name: "TreeView mockup review gallery", level: 1 })).toBeVisible()
     await expect(page.getByRole("navigation", { name: "Documentation entry points" })).toBeVisible()
     await expect(page.getByRole("link", { name: "Baseline" })).toHaveAttribute("href", "#gallery-default-heading")
+    await expect(page.getByRole("link", { name: "Minimal usage" })).toHaveAttribute("href", "#gallery-minimal-usage-heading")
     await expect(page.getByRole("link", { name: "Interaction states" })).toHaveAttribute("href", "#gallery-interaction-heading")
     await expect(page.getByRole("link", { name: "Current branch" })).toHaveAttribute("href", "#gallery-current-branch-heading")
     await expect(page.getByRole("link", { name: "Keyboard current row" })).toHaveAttribute("href", "#gallery-keyboard-current-heading")
@@ -127,6 +129,7 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("link", { name: "Selection form" })).toHaveAttribute("href", "#gallery-selection-form-heading")
     await expect(page.getByRole("link", { name: "Pagination selection" })).toHaveAttribute("href", "#gallery-pagination-selection-heading")
     await expect(page.frameLocator("iframe[title='Default tree mock preview']").getByRole("heading", { name: "Default TreeView rendering mock", level: 1 })).toBeVisible()
+    await expect(page.frameLocator("iframe[title='Minimal usage first render mock preview']").getByRole("heading", { name: "Minimal usage first render mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Current branch sidebar mock preview']").getByRole("heading", { name: "Current branch sidebar mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Keyboard current row mock preview']").getByRole("heading", { name: "Keyboard focus and current-row cues", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Direction-aware cues mock preview']").getByRole("heading", { name: "Direction-aware current-row and hierarchy cues", level: 1 })).toBeVisible()
@@ -145,6 +148,7 @@ test.describe("docs mockup browser smoke", () => {
     const missingLinks = linkedFiles.filter((href) => !existsSync(path.resolve(mockupsRoot, href)))
 
     expect(linkedFiles).toContain("default-tree.html")
+    expect(linkedFiles).toContain("minimal-usage-first-render.html")
     expect(linkedFiles).toContain("interaction-states.html")
     expect(linkedFiles).toContain("reduced-motion-state-cues.html")
     expect(linkedFiles).toContain("current-branch-sidebar.html")
@@ -180,6 +184,7 @@ test.describe("docs mockup browser smoke", () => {
 
     expect(staleExceptions).toEqual([])
     expect(uncheckedFiles).toEqual([
+      "minimal-usage-first-render.html",
       "narrow-sidebar-tree.html",
       "current-branch-sidebar.html",
       "lazy-loading-handoff.html"

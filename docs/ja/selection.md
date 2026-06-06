@@ -132,12 +132,25 @@ tree が通常の HTML form の中にある場合、同じ controller で checke
 
 `data-tree-view-selection-hidden-input-name-value` を指定すると、TreeView は valid な checked payload ごとに hidden input を 1 つずつ生成し、connect / change / submit / manual refresh に追従して同期します。
 
+host app が package root をすでに import している場合、JavaScript から host-authored attribute name を参照するときは `TreeViewSelectionDataHooks.hiddenInputNameValue` を使うと raw string の写経を避けられます。
+
+```js
+import { TreeViewSelectionDataHooks } from "tree_view"
+
+const hiddenInputNameAttribute = TreeViewSelectionDataHooks.hiddenInputNameValue
+```
+
 - hidden input の `name` は host app 側で決められます。
 - value は JSON 文字列で書き込まれるため、`TreeView.parse_selection_params(params[:selected_nodes])` をそのまま使えます。
 - disabled checkbox と不正な JSON payload は既存 event と同じく skip されます。
 - tree が form の外にある場合は、selection event だけを dispatch し、hidden input は生成しません。
+- generated hidden input marker attribute と source-id attribute は TreeView が生成・管理する内部寄りの属性であり、host app が authoring する public hook ではありません。
 
-1つの form に複数の `tree-view-selection` controller がある場合、TreeView は生成した hidden input に `data-tree-view-selection-source-id` を付けます。これにより、各 controller は自分が生成した hidden input だけを削除・再生成します。controller element に `data-tree-view-selection-source-id` がすでにある場合はその値を使い、なければ connect 時に自動生成します。tree ごとに別々の params として受け取りたい場合は、`data-tree-view-selection-hidden-input-name-value` に別々の名前を指定してください。同じ名前を使うのは、server-side action が1つの配列としてまとめて受け取る設計のときに限ります。
+1つの form に複数の `tree-view-selection` controller がある場合、TreeView は生成した hidden input に `data-tree-view-selection-source-id` を付けます。これにより、各 controller は自分が生成した hidden input だけを削除・再生成します。hidden input には `data-tree-view-selection-generated-hidden-input` も付きますが、これらの generated-input attributes は TreeView 側の bookkeeping であり、host app が public hook として author / query / delete する属性ではありません。
+
+controller element には、その bookkeeping id の限定的な override として `data-tree-view-selection-source-id` を置けます。この override は、1つの form に複数 tree があり、browser assertion や server-rendered replacement などで stable source id が必要な場合だけ使ってください。通常の host app は省略し、TreeView に connect 時の source id 生成を任せます。この override は上記の host-authored value attributes を扱う `TreeViewSelectionDataHooks` には意図的に含めていません。
+
+tree ごとに別々の params として受け取りたい場合は、`data-tree-view-selection-hidden-input-name-value` に別々の名前を指定してください。同じ名前を使うのは、server-side action が1つの配列としてまとめて受け取る設計のときに限ります。
 
 [selection-multi-tree-form.html](../mockups/selection-multi-tree-form.html) などの static mockup は generated hidden input を review aid として見せることがありますが、送信 contract の正本はこの節です。TreeView は 1 hidden input に 1 JSON payload をミラーし、最終的な params grouping と summary copy は host app 側で決めます。
 
