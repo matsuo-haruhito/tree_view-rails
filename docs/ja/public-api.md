@@ -185,7 +185,7 @@ host app が提供する主な拡張点は以下です。
 
 ## JavaScript surface
 
-公開 JavaScript entrypoint は `tree_view/index.js` です。
+公開 JavaScript entrypoint は `tree_view/index.js` です。bundled された `app/javascript/tree_view/index.d.ts` declaration は TypeScript 対応 tooling 用に package-root export 名を写すものですが、runtime behavior を変えたり、別の public surface を追加したりするものではありません。正本は `tree_view/index.js`、`config/public_api_manifest.yml`、entrypoint smoke check です。declaration は npm-style tooling 向けの compile-time aid であり、importmap-only の host app はこれに追加の runtime setup をする必要はありません。
 
 host app が使ってよい入口:
 
