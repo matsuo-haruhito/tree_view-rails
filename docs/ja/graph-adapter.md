@@ -108,4 +108,4 @@ adapter = TreeView::GraphAdapter.new(
 - [API仕様: TreeView::Tree](api.md#treeviewtree)
 - [Node key 設計](node-keys.md)
 - [Tree diagnostics](tree-diagnostics.md)
-- [Cookbook: GraphAdapter と ActiveRecord の性能](cookbook.md#graphadapter-と-activeRecord-の性能)
+- [Cookbook: GraphAdapter と ActiveRecord の性能](cookbook.md#graphadapter-と-activerecord-の性能)
