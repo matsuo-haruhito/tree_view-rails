@@ -33,6 +33,12 @@ function assertRootSignal(feature, rootPattern, message) {
   assert(rootPattern.test(rootReadme), `${feature}: ${message}`)
 }
 
+function assertDocumentSignal(sourcePath, signalPattern, feature, message) {
+  const source = read(sourcePath)
+
+  assert(signalPattern.test(source), `${feature}: ${message}`)
+}
+
 const rootReadme = read("README.md")
 
 const foundationalEntrypoints = [
@@ -97,8 +103,12 @@ const featureEntrypoints = [
     feature: "GraphAdapter",
     rootPattern: /Use `GraphAdapter`/,
     links: [
+      ["README.md", "docs/en/graph-adapter.md"],
+      ["README.md", "docs/ja/graph-adapter.md"],
       ["docs/README.md", "en/graph-adapter.md"],
-      ["docs/README.md", "ja/graph-adapter.md"]
+      ["docs/README.md", "ja/graph-adapter.md"],
+      ["docs/en/README.md", "graph-adapter.md"],
+      ["docs/ja/README.md", "graph-adapter.md"]
     ]
   },
   {
@@ -148,8 +158,15 @@ const featureEntrypoints = [
     rootPattern: /Render Scale[\s\S]*Lazy Loading[\s\S]*Children Pagination/,
     links: [
       ["README.md", "docs/en/render-scale.md"],
+      ["README.md", "docs/ja/render-scale.md"],
       ["README.md", "docs/en/lazy-loading.md"],
+      ["README.md", "docs/ja/lazy-loading.md"],
+      ["README.md", "docs/en/windowed-rendering.md"],
+      ["README.md", "docs/ja/windowed-rendering.md"],
       ["README.md", "docs/en/children-pagination.md"],
+      ["README.md", "docs/ja/children-pagination.md"],
+      ["README.md", "docs/en/rendering-boundaries.md"],
+      ["README.md", "docs/ja/rendering-boundaries.md"],
       ["docs/README.md", "en/lazy-loading.md"],
       ["docs/README.md", "ja/lazy-loading.md"],
       ["docs/README.md", "en/windowed-rendering.md"],
@@ -164,6 +181,38 @@ const featureEntrypoints = [
       ["docs/ja/README.md", "lazy-loading.md"],
       ["docs/ja/README.md", "windowed-rendering.md"],
       ["docs/ja/README.md", "children-pagination.md"]
+    ]
+  },
+  {
+    feature: "Rendering Boundaries",
+    rootPattern: /Rendering Boundaries|描画責務の境界/,
+    links: [
+      ["README.md", "docs/en/rendering-boundaries.md"],
+      ["README.md", "docs/ja/rendering-boundaries.md"],
+      ["docs/en/README.md", "rendering-boundaries.md"],
+      ["docs/ja/README.md", "rendering-boundaries.md"]
+    ],
+    signals: [
+      [
+        "docs/en/rendering-boundaries.md",
+        /row_partial[\s\S]*host app partial renders application-specific columns/,
+        "English rendering-boundaries docs no longer state the row_partial ownership boundary"
+      ],
+      [
+        "docs/en/rendering-boundaries.md",
+        /controller action, query, and Turbo Stream response[\s\S]*host app/,
+        "English rendering-boundaries docs no longer state the Turbo response ownership boundary"
+      ],
+      [
+        "docs/ja/rendering-boundaries.md",
+        /row_partial[\s\S]*host app partialが業務固有のcolumns/,
+        "Japanese rendering-boundaries docs no longer state the row_partial ownership boundary"
+      ],
+      [
+        "docs/ja/rendering-boundaries.md",
+        /controller action、query、Turbo Stream responseはhost app側の責務/,
+        "Japanese rendering-boundaries docs no longer state the Turbo response ownership boundary"
+      ]
     ]
   },
   {
@@ -191,6 +240,28 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "Forms and editing rows",
+    rootPattern: /Forms and editing rows|Form と編集行/,
+    links: [
+      ["README.md", "docs/en/form-editing.md"],
+      ["README.md", "docs/ja/form-editing.md"],
+      ["docs/en/README.md", "form-editing.md"],
+      ["docs/ja/README.md", "form-editing.md"]
+    ]
+  },
+  {
+    feature: "Resource table bridge",
+    rootPattern: /Resource table bridge/,
+    links: [
+      ["README.md", "docs/en/resource-table-bridge.md"],
+      ["README.md", "docs/ja/resource-table-bridge.md"],
+      ["docs/README.md", "en/resource-table-bridge.md"],
+      ["docs/README.md", "ja/resource-table-bridge.md"],
+      ["docs/en/README.md", "resource-table-bridge.md"],
+      ["docs/ja/README.md", "resource-table-bridge.md"]
+    ]
+  },
+  {
     feature: "Toolbar helper",
     rootPattern: /tree_view_toolbar|Toolbar helper/,
     links: [
@@ -202,9 +273,28 @@ const featureEntrypoints = [
   },
   {
     feature: "Breadcrumb helper",
+    rootPattern: /tree_view_breadcrumb|Breadcrumb helper/,
     links: [
+      ["README.md", "docs/en/breadcrumb.md"],
+      ["README.md", "docs/ja/breadcrumb.md"],
+      ["docs/README.md", "en/breadcrumb.md"],
+      ["docs/README.md", "ja/breadcrumb.md"],
       ["docs/en/README.md", "breadcrumb.md"],
       ["docs/ja/README.md", "breadcrumb.md"]
+    ]
+  },
+  {
+    feature: "Depth Labels",
+    links: [
+      ["docs/en/README.md", "depth-labels.md"],
+      ["docs/ja/README.md", "depth-labels.md"]
+    ]
+  },
+  {
+    feature: "Row Status",
+    links: [
+      ["docs/en/README.md", "row-status.md"],
+      ["docs/ja/README.md", "row-status.md"]
     ]
   },
   {
@@ -322,10 +412,13 @@ foundationalEntrypoints.forEach(({ feature, rootPattern, links }) => {
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
 })
 
-featureEntrypoints.forEach(({ feature, rootPattern, links }) => {
+featureEntrypoints.forEach(({ feature, rootPattern, links, signals = [] }) => {
   assertRootSignal(feature, rootPattern, "README.md no longer exposes the representative feature signal")
 
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
+  signals.forEach(([sourcePath, signalPattern, message]) => {
+    assertDocumentSignal(sourcePath, signalPattern, feature, message)
+  })
 })
 
 maintainerEntrypoints.forEach(({ feature, links }) => {
