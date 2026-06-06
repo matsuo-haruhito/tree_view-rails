@@ -101,6 +101,8 @@ For markup changes that need custom wrappers, conditional authorization copy, or
 
 The option names in this table are also listed in `config/public_api_manifest.yml` under `helper_option_keys.tree_view_breadcrumb`. That manifest-backed list is a compatibility contract for the existing helper option surface; it does not add markup, route, or authorization behavior.
 
+The default class names rendered when those class options are omitted are bundled styling references. They are not listed in the manifest-backed compatibility surface, and host apps that need stable public styling hooks should pass explicit class options instead of depending on the bundled defaults.
+
 ## Supported mode
 
 The breadcrumb helper expects a records-mode tree.
