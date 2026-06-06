@@ -37,45 +37,9 @@ jobs:
             changed_files=$(git diff --name-only "origin/${{ github.base_ref }}" HEAD)
           fi
 
-          docs_only=true
-          mockups_changed=false
-          browser_smoke_changed=false
-          package_sensitive=false
-          while IFS= read -r file; do
-            [ -z "$file" ] && continue
-            # Root maintainer prose docs linked from the docs indexes are still docs-only changes.
-            case "$file" in
-              README.md|docs/*|Product\ Profile.md|CHANGELOG.md|AGENTS.md) ;;
-              *)
-                docs_only=false
-                ;;
-            esac
-
-            case "$file" in
-              docs/mockups/*|docs/mockups/**)
-                mockups_changed=true
-                ;;
-            esac
-
-            case "$file" in
-              test/browser/*|test/browser/**)
-                browser_smoke_changed=true
-                ;;
-            esac
-
-            case "$file" in
-              tree_view.gemspec|script/check_gem_package_contents.rb|.github/workflows/ci.yml|config/importmap.tree_view.rb|config/public_api_manifest.yml|lib/*|lib/**|app/helpers/*|app/helpers/**|app/views/*|app/views/**|app/assets/*|app/assets/**|app/javascript/*|app/javascript/**|config/locales/*|config/locales/**)
-                package_sensitive=true
-                ;;
-            esac
-          done <<EOF
+          node script/ci_changed_files_policy.mjs <<EOF >> "$GITHUB_OUTPUT"
           $changed_files
           EOF
-
-          echo "docs_only=$docs_only" >> "$GITHUB_OUTPUT"
-          echo "mockups_changed=$mockups_changed" >> "$GITHUB_OUTPUT"
-          echo "browser_smoke_changed=$browser_smoke_changed" >> "$GITHUB_OUTPUT"
-          echo "package_sensitive=$package_sensitive" >> "$GITHUB_OUTPUT"
 
   lint:
     runs-on: ubuntu-latest
@@ -192,11 +156,11 @@ jobs:
           cache: npm
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true'
         run: npm install
-      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true'
-        run: npx playwright install --with-deps chromium
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
-        run: npm run test:js
-      - if: github.event_name == 'pull_request' && (needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true')
+        run: npm run test:js:core
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true'
+        run: npx playwright install --with-deps chromium
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true'
         run: npm run test:browser
 
   gem_package:
