@@ -11,6 +11,7 @@ module TreeView
     GEMSPEC_PATH = "tree_view.gemspec"
     CHANGELOG_PATH = "CHANGELOG.md"
     RELEASE_DOC_PATHS = %w[docs/en/release.md docs/ja/release.md].freeze
+    CHANGELOG_CATEGORY_HEADINGS = %w[Added Changed Fixed Deprecated Removed Security Documentation].freeze
 
     class Failure < StandardError; end
 
@@ -66,10 +67,34 @@ module TreeView
       end
 
       def ensure_changelog_has_release_section!
+        source = read(CHANGELOG_PATH)
         header = /^##\s+#{Regexp.escape(version)}\s+-\s+\d{4}-\d{2}-\d{2}$/
-        return if read(CHANGELOG_PATH).match?(header)
+        match = source.match(header)
+        raise Failure, "#{CHANGELOG_PATH} must include a dated section for #{version}" unless match
 
-        raise Failure, "#{CHANGELOG_PATH} must include a dated section for #{version}"
+        section = release_section_after(source, match.end(0))
+        ensure_changelog_release_section_has_category!(section)
+        ensure_changelog_release_section_has_body!(section)
+      end
+
+      def release_section_after(source, offset)
+        source[offset..].to_s.split(/^##\s+/, 2).first.to_s
+      end
+
+      def ensure_changelog_release_section_has_category!(section)
+        allowed = CHANGELOG_CATEGORY_HEADINGS.map { |heading| Regexp.escape(heading) }.join("|")
+        return if section.match?(/^###\s+(?:#{allowed})\s*$/)
+
+        raise Failure, "#{CHANGELOG_PATH} release section for #{version} must include at least one category heading: #{CHANGELOG_CATEGORY_HEADINGS.join(", ")}"
+      end
+
+      def ensure_changelog_release_section_has_body!(section)
+        body = section.lines.reject do |line|
+          line.strip.empty? || line.start_with?("###", "<!--", "-->")
+        end.join
+        return unless body.strip.empty?
+
+        raise Failure, "#{CHANGELOG_PATH} release section for #{version} must include release notes under a category heading"
       end
 
       def ensure_release_docs_reference_checklist!
