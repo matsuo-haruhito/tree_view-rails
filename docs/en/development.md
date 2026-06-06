@@ -98,6 +98,20 @@ Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile
 
 A green check suite does not by itself mean a pull request is ready to merge after `main` has moved. When a branch is `diverged`, check mergeability, changed files, risk, and how far the branch is behind. Prefer refreshing the branch and observing fresh CI when GitHub reports `mergeable: false`, when the branch is far behind, or when the pull request touches workflow definitions, public API, specs, or shared docs inventory. For small docs-only changes that are only a little behind, it is enough to confirm the changed files still apply cleanly, mergeability is true, and the named checks remain green.
 
+### Known drift recovery
+
+A narrow pull request can fail when `main` or an unmerged base pull request already has a known public-contract drift, such as a manifest structure spec that has not learned a new top-level key or a TypeScript declaration that has not caught up with package-root exports. Treat that as CI triage, not as permission to widen the pull request automatically.
+
+When this happens:
+
+- Confirm the failing jobs, file paths, and error messages, then compare them with existing issues or pull requests that own the same drift.
+- Check whether the pull request's changed files actually touch the failing surface. If they do not, leave the pull request scoped to its issue.
+- Use the owning drift pull request when one exists. Wait for it to merge and refresh or rerun the narrow pull request, or create/use a dedicated follow-up pull request for the drift if that issue is ready.
+- Include the drift fix in the narrow pull request only when the issue scope already covers that public surface or a maintainer explicitly approves the bundle.
+- In the pull request comment, record the head SHA, failed run number, failing jobs, drift owner issue or pull request, and the chosen next action.
+
+For example, if a docs-only parity pull request fails because `spec/public_api_manifest_structure_spec.rb` is missing a manifest key and `app/javascript/tree_view/index.d.ts` is missing package-root exports, keep the parity pull request docs-only unless that public API drift is explicitly in scope.
+
 Pushes to `main` also run the broader compatibility and release checks:
 
 - Ruby version matrix
