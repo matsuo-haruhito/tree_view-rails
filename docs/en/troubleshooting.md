@@ -99,6 +99,25 @@ Read next:
 - [Accessibility Semantics](accessibility-semantics.md)
 - [Tree diagnostics](tree-diagnostics.md)
 
+## Empty or no-results rows are missing, cramped, or use the wrong copy
+
+Empty-state symptoms usually belong to the host app's page state, search or filter policy, and final product copy. TreeView provides a reusable empty-row wrapper and message slot, but it does not decide why the page is empty or what action the user should take next.
+
+Check these points.
+
+- Decide whether the screen has no root items, no matching results after filtering, or records hidden by permission policy. Those cases often need different copy or next actions.
+- If the default empty row is enough, style or target the documented wrapper hooks instead of replacing the partial: `data-tree-view-empty-state="true"`, `.tree-view-empty-row__content`, and `.tree-view-empty-row__message`.
+- Keep final empty copy, CTA text, filter reset behavior, permission messaging, and analytics in the host app.
+- If the empty row looks cramped or does not span the surrounding table, inspect the host app table wrapper, captions, columns, and resource-table bridge layout before changing TreeView internals.
+- Treat the static empty-state mockup as a visual reference for hooks and boundaries, not as a Rails controller, query, or demo-app implementation.
+
+Read next:
+
+- [Accessibility Semantics: Empty-state and hidden-count hooks](accessibility-semantics.md#empty-state-and-hidden-count-hooks)
+- [Usage](usage.md)
+- [empty-state mockup](../mockups/empty-state.html)
+- [Mockup Empty-state guidance](../mockups/README.md#empty-state-guidance)
+
 ## Tree rendering triggers repeated queries or high ActiveRecord time
 
 Treat this as a host-app data loading and row partial problem first. TreeView can traverse the tree and render rows, but it does not choose eager-loading, authorization, caching, or derived-value strategies for application records.
