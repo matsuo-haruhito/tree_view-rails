@@ -55,7 +55,15 @@ Public API compatibility specsは、documented Ruby entry points、helper method
 
 意図的なbreaking changeを受け入れる場合は、public API docsとcompatibility specsを同時に更新し、documented contractとtest coverageを同期させます。
 
-`config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、configuration options、helper names、helper option keys、toolbar action/state mapping、grouped option keys、JavaScript package-root named exports、controller registrations、public event names、documented `event.detail` keys を追跡しています。ここに entry を追加・rename・削除する場合は、manifest 自体を更新したうえで `docs/en/public-api.md` と `docs/ja/public-api.md` をそろえ、同じ surface を名前で案内している README / usage docs / feature docs / configuration option docs / JavaScript event docs を見直し、adopter に影響する変更なら利用者向けの変更点を `CHANGELOG.md` に残し、必要なら `docs/en/release.md` / `docs/ja/release.md` の release note や migration expectation も更新してください。
+`config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、configuration options、helper names、helper option keys、toolbar action/state mapping、grouped option keys、PathTreeBuilder node shapes、ResourceTableRenderState call keywords、RenderState callback builder keys、JavaScript package-root named exports、transfer drop positions、remote-state values、controller registrations、public event names、intentional no-detail event names、documented `event.detail` keys、selection data hooks を追跡しています。
+
+これらの entry を追加・rename・削除する場合は、docs sync の導線を小さく明示します。
+
+- manifest と、その surface を守る compatibility spec、entrypoint smoke、package guard のいずれかを同期する
+- documented public API に含まれる surface なら `docs/en/public-api.md` と `docs/ja/public-api.md` をそろえる
+- 同じ surface を名前で案内している README、usage page、feature doc、configuration option doc、JavaScript event doc、mockup inventory、release doc を確認する
+- adopter が気づく必要のある変更は `CHANGELOG.md` に user-facing effect として残す。runtime behavior を変えない docs-only guidance だけなら Documentation として扱う
+- release notes、migration expectation、package verification、tag-time evidence に影響する場合は `docs/en/release.md` と `docs/ja/release.md` を見直す
 
 ## JavaScript browser smoke tests
 
