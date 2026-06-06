@@ -9,7 +9,6 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   module_methods
   configuration_options
   public_constants
-  path_tree_builder_node_shapes
   helper_methods
   helper_option_keys
   toolbar_actions
