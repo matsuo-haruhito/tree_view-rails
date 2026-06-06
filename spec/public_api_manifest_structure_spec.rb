@@ -2,6 +2,7 @@
 
 require "spec_helper"
 require "psych"
+require "tree_view/resource_table_render_state"
 require "yaml"
 
 PUBLIC_API_MANIFEST_STRUCTURE_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
@@ -84,6 +85,30 @@ RSpec.describe "Public API manifest structure" do
       expect(keys).not_to be_empty, "expected grouped_option_keys.#{group_name} to list public keys"
       expect(keys).to all(be_a(String))
     end
+  end
+
+  it "keeps resource table render state keyword sections shaped as non-empty string lists" do
+    section = manifest.fetch("resource_table_render_state_call")
+
+    %w[required_keywords optional_keywords].each do |section_name|
+      keywords = section.fetch(section_name)
+
+      expect(keywords).to be_an(Array), "expected #{section_name} to be an array"
+      expect(keywords).not_to be_empty, "expected #{section_name} to list public keywords"
+      expect(keywords).to all(be_a(String))
+    end
+  end
+
+  it "keeps resource table render state keyword sections synchronized with the runtime call signature" do
+    section = manifest.fetch("resource_table_render_state_call")
+    parameters = TreeView::ResourceTableRenderState.method(:call).parameters
+    required_keywords = parameters.select { |kind, _name| kind == :keyreq }.map(&:last).map(&:to_s)
+    optional_keywords = parameters.select { |kind, _name| kind == :key }.map(&:last).map(&:to_s)
+
+    expect(section.fetch("required_keywords")).to eq(required_keywords)
+    expect(section.fetch("optional_keywords")).to eq(optional_keywords)
+    expect(parameters).to include([:keyrest, :render_options])
+    expect(section.fetch("render_options_contract")).to eq("render_state_pass_through")
   end
 
   it "keeps JavaScript event names and detail keys in nested hash sections" do
