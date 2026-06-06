@@ -185,7 +185,7 @@ Host apps are expected to provide these pieces:
 
 ## JavaScript surface
 
-The public JavaScript entrypoint is `tree_view/index.js`.
+The public JavaScript entrypoint is `tree_view/index.js`. The bundled `app/javascript/tree_view/index.d.ts` declaration mirrors the package-root export names for TypeScript-aware tooling, but it does not change runtime behavior or add a separate public surface. Treat `tree_view/index.js`, `config/public_api_manifest.yml`, and the entrypoint smoke checks as the source of truth; the declaration is a compile-time aid for npm-style tooling, while importmap-only host apps do not need extra runtime setup for it.
 
 Stable enough for host apps to use:
 
