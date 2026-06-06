@@ -85,6 +85,8 @@ end
 
 `visibility: :leaves` はleaf nodeだけにcheckboxを表示します。
 
+通常の form 送信で選択値を params に載せる場合は、次に [通常form送信用の hidden input 同期](selection.md#通常form送信用の-hidden-input-同期) を確認してください。JavaScript から controller の data attribute name を参照する場合は、raw string を写経せず package root の `TreeViewSelectionDataHooks.hiddenInputNameValue` を使えます。
+
 詳しくは [Selection](selection.md) を参照してください。
 
 ## 見た目の確認
