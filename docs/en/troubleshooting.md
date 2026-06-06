@@ -147,6 +147,23 @@ Read next:
 - [Usage](usage.md)
 - [JavaScript event contract](js-events.md)
 
+## Drag/drop events report invalid payloads or `sourcePayload` is `null`
+
+Treat this as an integration signal first. TreeView reports transfer payload parse boundaries, but the host app still owns final rejection copy, logging, authorization, and recovery behavior.
+
+Check these points.
+
+- If `tree-view-transfer:drop` reports `sourcePayload: null`, confirm the browser `DataTransfer` contained a TreeView row payload under `application/json` or `text/plain`. External drags, empty transfer values, and browser events without a TreeView row payload all leave the source payload unavailable.
+- If `tree-view-transfer:invalid-transfer` fires, the transferred non-empty value could not be parsed as JSON. Inspect the drag source and any host-app code that writes to `DataTransfer`.
+- If `tree-view-transfer:invalid-payload` fires, the target row's `data-tree-transfer-payload` could not be parsed. Inspect `row_event_payload_builder`, `row_data_builder`, and the rendered row attributes before changing drop handling.
+- A valid `sourcePayload` is not the same as an accepted move. The host app still decides permission, target compatibility, `before` / `inside` / `after` policy, persistence, and user-facing retry or rejection messages.
+
+Read next:
+
+- [Drag and Drop: Missing or invalid source payloads](drag-and-drop.md#missing-or-invalid-source-payloads)
+- [JavaScript event contract: transfer events](js-events.md#transfer-events)
+- [Host App Extension Points](host-app-extension-points.md)
+
 ## TreeView partial render logs are missing or too noisy
 
 TreeView lowers the log level around helper-rendered partials by default. That is intentional and only affects partial rendering that goes through TreeView helpers.
