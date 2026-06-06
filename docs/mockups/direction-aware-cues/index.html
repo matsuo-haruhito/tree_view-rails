@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction-aware TreeView cues mockup</title>
+<link rel="stylesheet" href="../default-tree.css">
+<style>
+.direction-page { max-width: 1180px; }
+.direction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+.direction-card { display: grid; gap: 14px; min-width: 0; }
+.direction-card h2, .direction-card p { margin: 0; }
+.direction-card__note { color: #52606d; font-size: 0.95rem; }
+.direction-frame { overflow: auto; border: 1px solid #dde4ec; border-radius: 12px; background: #fff; }
+.direction-frame .tree-view-table { min-width: 34rem; }
+.direction-frame[dir="rtl"] .tree-view-table th,
+.direction-frame[dir="rtl"] .tree-view-table td { text-align: right; }
+.direction-frame[dir="rtl"] .tree-toggle__branches { transform: scaleX(-1); }
+.direction-frame[dir="rtl"] .tree-node-marker,
+.direction-frame[dir="rtl"] .tree-node-badge,
+.direction-frame[dir="rtl"] .mock-status { margin-left: 0; margin-right: 0.25rem; }
+.direction-frame--vertical { max-height: 29rem; padding: 1rem; writing-mode: vertical-rl; }
+.direction-frame--vertical .tree-view-table { min-width: 0; min-height: 24rem; }
+.direction-frame--vertical .tree-view-table th,
+.direction-frame--vertical .tree-view-table td { border-bottom: 0; border-left: 1px solid #e4e7eb; }
+.direction-frame--vertical .tree-toggle__branches { min-height: 1.4rem; }
+.direction-boundary-list { margin: 0; padding-left: 1.2rem; color: #334e68; }
+@media (max-width: 720px) { .direction-frame .tree-view-table { min-width: 30rem; } }
+</style>
+</head>
+<body>
+  <main class="mock-page direction-page">
+    <nav class="mock-return-nav" aria-label="Mockup navigation"><a class="mock-return-nav__link" href="../review-gallery.html">Back to review gallery</a><a class="mock-return-nav__link mock-return-nav__link--secondary" href="../README.md">Back to mockup README</a></nav>
+
+    <header class="mock-header">
+      <p class="mock-kicker">Focused direction-aware reference</p>
+      <h1>Direction-aware current-row and hierarchy cues</h1>
+      <p>This static mockup compares TreeView-owned baseline hierarchy cues with host-app-owned RTL and writing-direction overrides. It is a review aid only: it does not promote directional selectors, connector pseudo-elements, or spacing classes into public styling hooks.</p>
+    </header>
+
+    <section class="mock-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">Responsibility boundary</h2>
+      <ul class="direction-boundary-list">
+        <li>TreeView owns readable baseline current-row, toggle spacing, depth, and hierarchy connector cues.</li>
+        <li>Host apps own final RTL, vertical writing, locale-specific spacing, design-system colors, and business row states.</li>
+        <li>Public styling hook promotion remains outside this page; use the direction-aware styling docs for the current decision.</li>
+      </ul>
+    </section>
+
+    <section class="direction-grid" aria-label="Direction-aware cue comparisons">
+      <article class="mock-section direction-card" aria-labelledby="ltr-heading">
+        <div>
+          <h2 id="ltr-heading">LTR baseline</h2>
+          <p class="direction-card__note">The bundled baseline shows the current row and ancestor connector path in a familiar left-to-right table.</p>
+        </div>
+        <div class="direction-frame" aria-label="LTR baseline tree sample">
+          <table class="tree-view-table">
+            <thead><tr><th scope="col">Node</th><th scope="col">State</th><th scope="col">Owner</th></tr></thead>
+            <tbody>
+              <tr class="tree-row"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">-</span><span class="mock-node-title">Workspace</span><span class="tree-node-badge tree-node-badge--info">Root</span></span></span></td><td><span class="mock-status mock-status--active">Expanded</span></td><td>TreeView baseline</td></tr>
+              <tr class="tree-row"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">-</span><span class="mock-node-title">Operations</span></span></span></td><td><span class="mock-status mock-status--active">Ancestor</span></td><td>TreeView baseline</td></tr>
+              <tr class="tree-row is-selected"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">-</span><span class="mock-node-title">Current queue</span><span class="tree-node-marker">Current</span></span></span></td><td><span class="mock-status mock-status--active">Current row</span></td><td>TreeView baseline</td></tr>
+              <tr class="tree-row is-collapsed"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">+</span><span class="mock-node-title">Archived queue</span></span></span></td><td><span class="mock-status mock-status--archived">Collapsed</span></td><td>Host app policy</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="mock-section direction-card" aria-labelledby="rtl-heading">
+        <div>
+          <h2 id="rtl-heading">RTL host-app override</h2>
+          <p class="direction-card__note">A host stylesheet can mirror connector direction and align text while preserving TreeView row semantics and data hooks.</p>
+        </div>
+        <div class="direction-frame" dir="rtl" aria-label="RTL override tree sample">
+          <table class="tree-view-table">
+            <thead><tr><th scope="col">Node</th><th scope="col">State</th><th scope="col">Owner</th></tr></thead>
+            <tbody>
+              <tr class="tree-row"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">-</span><span class="mock-node-title">Workspace</span><span class="tree-node-badge tree-node-badge--info">Root</span></span></span></td><td><span class="mock-status mock-status--active">Expanded</span></td><td>TreeView baseline</td></tr>
+              <tr class="tree-row"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">-</span><span class="mock-node-title">Operations</span></span></span></td><td><span class="mock-status mock-status--active">Ancestor</span></td><td>Host app override</td></tr>
+              <tr class="tree-row is-selected"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">-</span><span class="mock-node-title">Current queue</span><span class="tree-node-marker">Current</span></span></span></td><td><span class="mock-status mock-status--active">Current row</span></td><td>Host app override</td></tr>
+              <tr class="tree-row is-collapsed"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">+</span><span class="mock-node-title">Archived queue</span></span></span></td><td><span class="mock-status mock-status--archived">Collapsed</span></td><td>Host app policy</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="mock-section direction-card" aria-labelledby="vertical-heading">
+        <div>
+          <h2 id="vertical-heading">Vertical writing stress case</h2>
+          <p class="direction-card__note">This compact sample stresses logical spacing and connector readability without claiming complete vertical writing support.</p>
+        </div>
+        <div class="direction-frame direction-frame--vertical" aria-label="Vertical writing tree sample">
+          <table class="tree-view-table">
+            <thead><tr><th scope="col">Node</th><th scope="col">State</th></tr></thead>
+            <tbody>
+              <tr class="tree-row"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">-</span><span class="mock-node-title">Workspace</span></span></span></td><td><span class="mock-status mock-status--active">Expanded</span></td></tr>
+              <tr class="tree-row is-selected"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">-</span><span class="mock-node-title">Current queue</span><span class="tree-node-marker">Current</span></span></span></td><td><span class="mock-status mock-status--active">Current</span></td></tr>
+              <tr class="tree-row is-collapsed"><td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot"></span></span><span class="tree-toggle__control"><span class="tree-toggle__action">+</span><span class="mock-node-title">Sibling branch</span></span></span></td><td><span class="mock-status mock-status--pending">Collapsed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="mock-section" aria-labelledby="review-notes-heading">
+      <h2 id="review-notes-heading">Review notes</h2>
+      <ul class="direction-boundary-list">
+        <li>Use the LTR sample to compare TreeView's bundled current-row and connector baseline.</li>
+        <li>Use the RTL and vertical samples to discuss host-app override needs without changing public API or runtime behavior.</li>
+        <li>Keep final selector contracts in docs/en/direction-aware-styling.md, docs/ja/direction-aware-styling.md, and config/public_api_manifest.yml decisions.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

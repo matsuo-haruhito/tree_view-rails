@@ -62,6 +62,12 @@ export const TreeViewEventDetailKeys = Object.freeze({
   })
 })
 
+export const TreeViewRemoteStateValues = Object.freeze({
+  loading: "loading",
+  loaded: "loaded",
+  error: "error"
+})
+
 export const TreeViewTransferDropPositions = Object.freeze({
   before: "before",
   inside: "inside",
@@ -74,6 +80,13 @@ export const TreeViewControllerIdentifiers = Object.freeze({
   selection: "tree-view-selection",
   transfer: "tree-view-transfer",
   remoteState: "tree-view-remote-state"
+})
+
+export const TreeViewSelectionDataHooks = Object.freeze({
+  hiddenInputNameValue: "data-tree-view-selection-hidden-input-name-value",
+  maxCountValue: "data-tree-view-selection-max-count-value",
+  cascadeValue: "data-tree-view-selection-cascade-value",
+  indeterminateValue: "data-tree-view-selection-indeterminate-value"
 })
 
 export function registerTreeViewControllers(application) {
