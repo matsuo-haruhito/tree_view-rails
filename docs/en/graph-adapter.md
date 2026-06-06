@@ -10,6 +10,12 @@ GraphAdapter is intentionally small. It gives `TreeView::Tree` three things:
 | `children_resolver:` | yes | Callable that returns the children for a node. `nil` becomes an empty array, and a single child is wrapped in an array. |
 | `node_key_resolver:` | no | Callable that returns the stable node key. Without it, TreeView uses `[node.class.name, node.public_send(id_method)]`. |
 
+## Public manifest boundary
+
+The initializer keyword surface is part of the machine-readable public API manifest under `graph_adapter_initializer`. The manifest keeps `roots` and `children_resolver` as required keywords and `node_key_resolver` as the only optional keyword.
+
+That manifest entry describes the constructor surface, not the traversal semantics. Child normalization, node key fallback behavior, repeated-node policy, cycle handling, authorization, and query planning stay documented behavior and host-app responsibility rather than separate manifest schema for this slice.
+
 ## Minimal example
 
 ```ruby
