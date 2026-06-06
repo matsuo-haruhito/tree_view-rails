@@ -155,7 +155,7 @@ const featureEntrypoints = [
   },
   {
     feature: "Render Scale strategy",
-    rootPattern: /Render Scale[\s\S]*Lazy Loading[\s\S]*Windowed Rendering[\s\S]*Children Pagination/,
+    rootPattern: /Render Scale[\s\S]*Lazy Loading[\s\S]*Children Pagination/,
     links: [
       ["README.md", "docs/en/render-scale.md"],
       ["README.md", "docs/ja/render-scale.md"],
