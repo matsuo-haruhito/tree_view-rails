@@ -9,7 +9,7 @@
     "test": "vitest run",
     "test:browser": "playwright test",
     "test:docs-i18n": "node script/test_docs_i18n_parity.mjs",
-    "test:docs-entrypoints": "node script/test_docs_entrypoints.mjs && npm run test:docs-i18n",
+    "test:docs-entrypoints": "node script/test_docs_entrypoints.mjs && node script/test_docs_entrypoint_signals.mjs && npm run test:docs-i18n",
     "test:entrypoints": "node script/test_entrypoints.mjs && npm run test:docs-entrypoints",
     "test:js": "npm run test:entrypoints && npm test && npm run test:browser"
   },
