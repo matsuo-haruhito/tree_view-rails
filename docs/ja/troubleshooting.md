@@ -123,6 +123,45 @@ tree を描画しているときの Rails log で次を確認します。
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Tree diagnostics](tree-diagnostics.md)
 
+## 大きな tree で HTML が重い / virtual scroll が欲しい
+
+まず HTML 出力量の問題と host app 側 data fetching の問題を分けてください。TreeView は描画対象を制限できますが、database query を減らすこと、scroll 位置に応じた DOM virtualization、host app の pagination strategy の選択は行いません。
+
+次を確認してください。
+
+- 初期表示で開く node が多すぎる場合は、pagination や custom JavaScript を足す前に `max_initial_depth` で初期展開を制限する。
+- 画面に必要な範囲より深い descendant が描画されている場合は、`max_render_depth` または `max_leaf_distance` で描画範囲を減らす。
+- data はすでに読み込まれていて HTML 出力量だけが大きい場合は、`TreeView::RenderWindow` または `tree_view_rows(..., window:)` で現在 visible な row を slice する。
+- 全 descendant の取得や準備が重い場合は lazy loading に移し、host app がユーザー操作時に children を取得する。
+- 1つの親に大量の children がある場合は host app 側で children pagination を使い、cursor、limit、ordering、authorization、次 page 判定を host app に置く。
+- product 要件として scroll 位置に応じた virtual scrolling が必要な場合は、host app 側で実装する。TreeView の windowed rendering は HTML 出力の slice であり、full virtual scroll engine ではありません。
+
+次に読む文書:
+
+- [Render scale](render-scale.md)
+- [Windowed Rendering](windowed-rendering.md)
+- [Lazy Loading](lazy-loading.md)
+- [Children Pagination](children-pagination.md)
+
+## children pagination の placeholder や unloaded descendants が想定どおりにならない
+
+children pagination は lazy loading の上に host app が作る pattern です。TreeView は children URL hook と row data を提供しますが、page query、next-page placeholder、bulk action intent、server-side validation は host app の責務です。
+
+次を確認してください。
+
+- next-page placeholder が出ない場合は、host app が次 page の存在を判定し、次の request を始めたい場所に placeholder を描画し、期待する Turbo Stream response を返しているか確認する。
+- loaded page は追加されるが古い placeholder が残る場合は、TreeView row partial を変える前に host app 側の `children_more` replacement または removal target を確認する。
+- checkbox selection、cascade、drag/drop、bulk action が unloaded descendants を無視しているように見える場合は、その action が loaded DOM rows だけに作用するのか、filtered child set 全体に作用するのかを決める。
+- DOM から送られる checkbox 値は、action を loaded rows に限定する場合だけ使う。unloaded children も含めるなら query-backed action または server-side intent を使う。
+- ordering、cursor validation、authorization、move validation、最終的なユーザー向け copy は host app 側に置く。
+
+次に読む文書:
+
+- [Children Pagination](children-pagination.md#selection--drag-drop-との相互作用)
+- [Lazy Loading](lazy-loading.md)
+- [Selection](selection.md)
+- [children-pagination-selection-boundary mockup](../mockups/children-pagination-selection-boundary.html)
+
 ## GraphAdapter の行が重複する / 足りない / 想定と違う形になる
 
 GraphAdapter で起きる症状は、多くの場合 host app 側の resolver 出力または node key strategy から来ます。TreeView は行を描画できるよう resolver 結果を正規化しますが、graph-like data の traversal policy、authorization、cycle handling、query planning は決めません。

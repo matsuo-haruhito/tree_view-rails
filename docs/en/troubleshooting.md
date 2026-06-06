@@ -123,6 +123,45 @@ Read next:
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Tree diagnostics](tree-diagnostics.md)
 
+## Large trees render too much HTML or the app needs virtual scrolling
+
+Start by separating HTML output pressure from host-app data pressure. TreeView can limit what it renders, but it does not reduce database queries, implement scroll-position-driven virtualization, or choose the host app's pagination strategy.
+
+Check these points.
+
+- If the initial page opens too many nodes, limit initial expansion with `max_initial_depth` before adding pagination or custom JavaScript.
+- If the rendered descendants are deeper than the screen needs, use `max_render_depth` or `max_leaf_distance` to reduce the render scope.
+- If the data is already loaded but the HTML output is too large, use `TreeView::RenderWindow` or `tree_view_rows(..., window:)` to slice the currently visible rows.
+- If fetching or preparing every descendant is the expensive part, move to lazy loading so the host app fetches children only when the user asks.
+- If one parent can have many children, use children pagination in the host app and keep cursor, limit, ordering, authorization, and next-page detection there.
+- If the product requires scroll-position-driven virtual scrolling, implement that in the host app. TreeView's windowed rendering is an HTML-output slice, not a full virtual scroll engine.
+
+Read next:
+
+- [Render scale](render-scale.md)
+- [Windowed Rendering](windowed-rendering.md)
+- [Lazy Loading](lazy-loading.md)
+- [Children Pagination](children-pagination.md)
+
+## Children pagination placeholders or unloaded descendants behave unexpectedly
+
+Children pagination is a host-app pattern built on lazy loading. TreeView provides child URL hooks and row data, but the host app owns the page query, next-page placeholder, bulk-action intent, and server-side validation.
+
+Check these points.
+
+- If the next-page placeholder never appears, confirm the host app detected another page, rendered the placeholder where it wants the next request to start, and returned the expected Turbo Stream response.
+- If a loaded page appends but the old placeholder remains, inspect the host app's `children_more` replacement or removal target before changing TreeView row partials.
+- If checkbox selection, cascade, drag/drop, or bulk actions seem to ignore unloaded descendants, decide whether the action applies only to loaded DOM rows or to the full filtered child set.
+- Use DOM-submitted checkbox values only when the action is intentionally limited to loaded rows. Use a query-backed or server-side intent when the action should include unloaded children.
+- Keep ordering, cursor validation, authorization, move validation, and final user-facing copy in the host app.
+
+Read next:
+
+- [Children Pagination](children-pagination.md#selection-and-dragdrop-interactions)
+- [Lazy Loading](lazy-loading.md)
+- [Selection](selection.md)
+- [children-pagination-selection-boundary mockup](../mockups/children-pagination-selection-boundary.html)
+
 ## GraphAdapter rows look duplicated, incomplete, or shaped differently than expected
 
 GraphAdapter symptoms usually come from the host app's resolver output or node-key strategy. TreeView normalizes resolver results so it can render rows, but it does not decide traversal policy, authorization, cycle handling, or query planning for graph-like data.

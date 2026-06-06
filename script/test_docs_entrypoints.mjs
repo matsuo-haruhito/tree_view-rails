@@ -97,8 +97,12 @@ const featureEntrypoints = [
     feature: "GraphAdapter",
     rootPattern: /Use `GraphAdapter`/,
     links: [
+      ["README.md", "docs/en/graph-adapter.md"],
+      ["README.md", "docs/ja/graph-adapter.md"],
       ["docs/README.md", "en/graph-adapter.md"],
-      ["docs/README.md", "ja/graph-adapter.md"]
+      ["docs/README.md", "ja/graph-adapter.md"],
+      ["docs/en/README.md", "graph-adapter.md"],
+      ["docs/ja/README.md", "graph-adapter.md"]
     ]
   },
   {
