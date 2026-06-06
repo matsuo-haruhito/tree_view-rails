@@ -87,6 +87,12 @@ end
 
 詳しくは [Selection](selection.md) を参照してください。
 
+## 見た目の確認
+
+上の controller、view、row partial をつないだあと、[minimal-usage-first-render.html](../mockups/minimal-usage-first-render.html) でこの最小構成から最初に見える出力を確認できます。
+
+共有 CSS、selection、badge、row action、展開 / 折りたたみ状態を含む richer baseline を見たい場合は [default-tree.html](../mockups/default-tree.html) を使ってください。minimal first-render mockup は、このページの controller / view / row partial 例に近い確認用であり、host app の CRUD、route、seed data、visual redesign の要件は追加しません。
+
 ## 次に読むもの
 
 - [導入手順](installation.md)

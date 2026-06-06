@@ -1,0 +1,70 @@
+import { readFileSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
+
+function read(relativePath) {
+  return readFileSync(path.join(repoRoot, relativePath), "utf8")
+}
+
+function assert(condition, message) {
+  if (!condition) throw new Error(message)
+}
+
+function assertIncludes(source, needle, label) {
+  assert(source.includes(needle), `${label}: missing ${needle}`)
+}
+
+const manifest = read("config/public_api_manifest.yml")
+const publicApiDocs = [
+  ["docs/en/public-api.md", read("docs/en/public-api.md")],
+  ["docs/ja/public-api.md", read("docs/ja/public-api.md")]
+]
+
+const callbackBuilderSignals = [
+  "render_state_callback_builder_keys",
+  "row_event_payload_builder",
+  "depth_label_builder",
+  "toggle_icon_builder"
+]
+
+const hostLifecycleSignals = [
+  "TreeViewEventNames.hostLifecycle",
+  "loading",
+  "loaded",
+  "error",
+  "retry",
+  "TreeViewEventNames.remoteState",
+  "TreeViewEventDetailKeys"
+]
+
+callbackBuilderSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest callback builder key surface")
+})
+
+assertIncludes(manifest, "event_names_without_detail", "public API manifest no-detail event surface")
+assertIncludes(manifest, "host_lifecycle", "public API manifest no-detail event surface")
+hostLifecycleSignals.slice(1, 5).forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest host lifecycle no-detail event names")
+})
+
+publicApiDocs.forEach(([relativePath, document]) => {
+  callbackBuilderSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} RenderState callback builder docs`)
+  })
+
+  assert(
+    /callback arity|return[- ]value|return value|callback arity|戻り値/.test(document),
+    `${relativePath}: RenderState callback builder docs no longer mention callback arity or return-value boundary`
+  )
+
+  hostLifecycleSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} host lifecycle event docs`)
+  })
+
+  assert(
+    /host app|host-app|host app 側|host-app 側/.test(document),
+    `${relativePath}: host lifecycle event docs no longer name the host-app ownership boundary`
+  )
+})
