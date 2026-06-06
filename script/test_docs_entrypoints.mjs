@@ -238,6 +238,24 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "Drag and Drop / Host App Extension Points",
+    rootPattern: /Drag and drop[\s\S]*Host app extension boundary|Host app extension boundary[\s\S]*Drag and drop/i,
+    links: [
+      ["README.md", "docs/en/drag-and-drop.md"],
+      ["README.md", "docs/ja/drag-and-drop.md"],
+      ["README.md", "docs/en/host-app-extension-points.md"],
+      ["README.md", "docs/ja/host-app-extension-points.md"],
+      ["docs/README.md", "en/drag-and-drop.md"],
+      ["docs/README.md", "ja/drag-and-drop.md"],
+      ["docs/README.md", "en/host-app-extension-points.md"],
+      ["docs/README.md", "ja/host-app-extension-points.md"],
+      ["docs/en/README.md", "drag-and-drop.md"],
+      ["docs/en/README.md", "host-app-extension-points.md"],
+      ["docs/ja/README.md", "drag-and-drop.md"],
+      ["docs/ja/README.md", "host-app-extension-points.md"]
+    ]
+  },
+  {
     feature: "Accessibility Semantics",
     rootPattern: /Accessibility Semantics[\s\S]*ARIA|accessibility-oriented row semantics/i,
     links: [
