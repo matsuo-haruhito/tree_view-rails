@@ -4,6 +4,12 @@ TreeView provides small helpers for resolving model, attribute, and node type na
 
 Use these helpers when a row partial or `NodePresenter` needs a human-readable label that should follow the host app locale.
 
+## Public surface
+
+Host apps should call the top-level `TreeView.model_name_for`, `TreeView.attribute_name_for`, and `TreeView.type_name_for` helpers as the stable localized display-name surface.
+
+`TreeView::LocalizedNames` remains a documented public constant so maintainers and advanced integrations can identify the implementation family, but direct module-method calls are not the recommended host-app dependency boundary. Lower-level helpers such as `humanize_identifier` and `class_for` are implementation helpers, not manifest-backed host-app contracts.
+
 ## Use with row partials
 
 - For complete `NodePresenter` and `row_partial` composition examples, see [NodePresenter row partial patterns](node-presenter-row-partials.md).
