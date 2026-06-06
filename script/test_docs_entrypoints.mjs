@@ -196,8 +196,6 @@ const featureEntrypoints = [
     links: [
       ["README.md", "docs/en/form-editing.md"],
       ["README.md", "docs/ja/form-editing.md"],
-      ["docs/README.md", "en/form-editing.md"],
-      ["docs/README.md", "ja/form-editing.md"],
       ["docs/en/README.md", "form-editing.md"],
       ["docs/ja/README.md", "form-editing.md"]
     ]
