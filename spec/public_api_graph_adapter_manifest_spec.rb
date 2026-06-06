@@ -28,8 +28,9 @@ RSpec.describe "GraphAdapter public manifest contract" do
   end
 
   it "keeps representative GraphAdapter behavior inside the documented boundary" do
-    node = Struct.new(:id, keyword_init: true).new(id: 42)
-    child = Struct.new(:id, keyword_init: true).new(id: 7)
+    node = Object.new
+    child = Object.new
+    node.define_singleton_method(:id) { 42 }
     children_resolver = lambda do |current_node|
       child if current_node == node
     end
