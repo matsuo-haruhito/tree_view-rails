@@ -191,6 +191,28 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "Forms and editing rows",
+    rootPattern: /Forms and editing rows|Form と編集行/,
+    links: [
+      ["README.md", "docs/en/form-editing.md"],
+      ["README.md", "docs/ja/form-editing.md"],
+      ["docs/en/README.md", "form-editing.md"],
+      ["docs/ja/README.md", "form-editing.md"]
+    ]
+  },
+  {
+    feature: "Resource table bridge",
+    rootPattern: /Resource table bridge/,
+    links: [
+      ["README.md", "docs/en/resource-table-bridge.md"],
+      ["README.md", "docs/ja/resource-table-bridge.md"],
+      ["docs/README.md", "en/resource-table-bridge.md"],
+      ["docs/README.md", "ja/resource-table-bridge.md"],
+      ["docs/en/README.md", "resource-table-bridge.md"],
+      ["docs/ja/README.md", "resource-table-bridge.md"]
+    ]
+  },
+  {
     feature: "Toolbar helper",
     rootPattern: /tree_view_toolbar|Toolbar helper/,
     links: [

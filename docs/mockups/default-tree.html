@@ -5,6 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Default TreeView rendering mock</title>
 <link rel="stylesheet" href="default-tree.css">
+<style>
+  .mock-narrow-scan {
+    max-width: 25rem;
+    overflow-x: auto;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+  }
+
+  .mock-narrow-scan .tree-view-table {
+    min-width: 44rem;
+    margin: 0;
+  }
+
+  .mock-narrow-scan th,
+  .mock-narrow-scan td {
+    white-space: nowrap;
+  }
+
+  .mock-narrow-scan .tree-toggle__control {
+    gap: 0.35rem;
+  }
+
+  .mock-narrow-note {
+    max-width: 48rem;
+    color: #57606a;
+    font-size: 0.9rem;
+  }
+</style>
 </head>
 <body>
   <main class="mock-page">
@@ -138,6 +166,76 @@
       </table>
     </section>
 
+    <section class="mock-section" aria-labelledby="narrow-scan-heading">
+      <h2 id="narrow-scan-heading">Narrow first-scan row composition</h2>
+      <p class="mock-narrow-note">
+        A constrained frame keeps the checkbox, current-row cue, badge, and row action visible together for first-pass review.
+        Host applications still own final sidebar width, action-menu behavior, and responsive framing.
+      </p>
+      <div class="mock-narrow-scan" role="region" aria-label="Narrow TreeView first-scan example" tabindex="0">
+        <table class="tree-view-table" data-controller="tree-view-state" data-tree-view-state-keyboard-value="true">
+          <thead>
+            <tr>
+              <th scope="col">select</th>
+              <th scope="col">tree</th>
+              <th scope="col">name</th>
+              <th scope="col">status</th>
+              <th scope="col">actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="narrow_project_2" class="tree-row is-expanded is-selected" data-tree-node-key="project:2" data-tree-parent-key="project:1" data-tree-depth="1" data-tree-expanded="true" aria-level="2" aria-expanded="true" aria-selected="true" aria-current="page">
+              <td class="tree-selection-cell">
+                <input class="tree-selection-checkbox" id="narrow_project_2_selection" name="selected_nodes[]" type="checkbox" checked value='{"key":"project:2","id":2,"type":"Project"}' data-tree-selection-payload='{"key":"project:2","id":2,"type":"Project"}'>
+              </td>
+              <td class="btn-cell tree-toggle-cell" id="narrow_project_2_button">
+                <span class="tree-toggle" aria-label="Current child row expanded">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot has-line"></span>
+                    <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                    <span class="tree-toggle__level">child</span>
+                  </span>
+                </span>
+                <span class="tree-node-marker" title="Folder">folder</span>
+                <span class="tree-depth-label">L1</span>
+                <span class="tree-node-badge tree-node-badge--info" title="Selected node">selected</span>
+              </td>
+              <td>Admin UI</td>
+              <td><span class="mock-status mock-status--active">active</span></td>
+              <td class="tree-row-actions"><button type="button">Open</button></td>
+            </tr>
+            <tr id="narrow_project_4" class="tree-row is-collapsed" data-tree-node-key="project:4" data-tree-parent-key="project:1" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false" aria-selected="false">
+              <td class="tree-selection-cell">
+                <input class="tree-selection-checkbox" id="narrow_project_4_selection" name="selected_nodes[]" type="checkbox" disabled title="Archived nodes cannot be selected" value='{"key":"project:4","id":4,"type":"Project"}' data-tree-selection-disabled-reason="Archived nodes cannot be selected" data-tree-selection-payload='{"key":"project:4","id":4,"type":"Project"}'>
+              </td>
+              <td class="btn-cell tree-toggle-cell" id="narrow_project_4_button">
+                <span class="tree-toggle" aria-label="Collapsed archived row with hidden descendants">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot has-line"></span>
+                    <span class="tree-toggle__branch-slot is-current is-last"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a>
+                    <span class="tree-toggle__level">child</span>
+                    <span class="tree-toggle__hidden-count" title="Hidden descendants">12</span>
+                  </span>
+                </span>
+                <span class="tree-node-marker" title="Archive">archive</span>
+                <span class="tree-depth-label">L1</span>
+                <span class="tree-node-badge tree-node-badge--warning" title="Archived subtree">archived</span>
+              </td>
+              <td>Legacy reports</td>
+              <td><span class="mock-status mock-status--archived">archived</span></td>
+              <td class="tree-row-actions"><button type="button" disabled>Open</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="mock-section" aria-labelledby="notes-heading">
       <h2 id="notes-heading">What this mock covers</h2>
       <ul>
@@ -145,6 +243,7 @@
         <li>Expanded and collapsed rows with hidden-count cues</li>
         <li>Selected and disabled checkbox states</li>
         <li>Badge, marker, and depth-label placement</li>
+        <li>Narrow first-scan composition for checkbox, current cue, badge, and row action placement</li>
         <li>Row data attributes, tree state attributes, and row-actions column placement</li>
       </ul>
     </section>

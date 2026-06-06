@@ -26,6 +26,22 @@ render_state = TreeView::ResourceTableRenderState.call(
 
 default row partialは `tree_view/resource_table_row` です。`table_state["visible_columns"]` が渡されていればそれを使い、なければ `columns` を参照します。`ResourceTableRenderState` はどちらも render state 経由で row partial に渡します。
 
+## public call option contract
+
+`ResourceTableRenderState.call` は manifest-backed な public bridge です。required keyword は `records:` と `context:` です。
+
+公開 contract として扱う optional bridge keyword は以下です。
+
+- `row_partial:`
+- `parent_id_method:`
+- `id_method:`
+- `table_key:`
+- `columns:`
+- `table_state:`
+- `ui_config:`
+
+その他の keyword option は `**render_options` として受け取り、`TreeView::RenderState` に渡します。これらは resource-table 専用 contract ではなく、既存の RenderState option surface として扱ってください。たとえば `initial_expansion:`、`selection:`、`lazy_loading:` のような grouped option は RenderState 側の docs と manifest section が責務を持ちます。
+
 ## Rails Table Preferencesとの連携
 
 Rails Table Preferencesのようなtable layerがActive Recordからカラムを推論し、保存済み設定を `table_state` にmergeしてからTreeViewへ渡す想定です。
