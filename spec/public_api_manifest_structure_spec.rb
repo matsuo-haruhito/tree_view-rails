@@ -102,8 +102,9 @@ RSpec.describe "Public API manifest structure" do
   it "keeps resource table render state keyword sections synchronized with the runtime call signature" do
     section = manifest.fetch("resource_table_render_state_call")
     parameters = TreeView::ResourceTableRenderState.method(:call).parameters
-    required_keywords = parameters.select { |kind, _name| kind == :keyreq }.map(&:last).map(&:to_s)
-    optional_keywords = parameters.select { |kind, _name| kind == :key }.map(&:last).map(&:to_s)
+    parameters_by_kind = parameters.group_by(&:first)
+    required_keywords = parameters_by_kind.fetch(:keyreq, []).map(&:last).map(&:to_s)
+    optional_keywords = parameters_by_kind.fetch(:key, []).map(&:last).map(&:to_s)
 
     expect(section.fetch("required_keywords")).to eq(required_keywords)
     expect(section.fetch("optional_keywords")).to eq(optional_keywords)
