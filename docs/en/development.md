@@ -55,7 +55,15 @@ Public API compatibility specs protect documented Ruby entry points, helper meth
 
 When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
 
-`config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, configuration options, helper names, helper option keys, toolbar action/state mapping, grouped option keys, JavaScript package-root named exports, controller registrations, public event names, and documented `event.detail` keys. When you add, rename, or remove one of those entries, update the manifest, keep `docs/en/public-api.md` and `docs/ja/public-api.md` aligned, check any README, usage page, feature doc, configuration option doc, or JavaScript event doc that names the same surface, add the user-facing note to `CHANGELOG.md` when the change materially affects adopters, and review `docs/en/release.md` / `docs/ja/release.md` when release notes or migration expectations need to change.
+`config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, configuration options, helper names, helper option keys, toolbar action/state mapping, grouped option keys, PathTreeBuilder node shapes, ResourceTableRenderState call keywords, RenderState callback builder keys, JavaScript package-root named exports, transfer drop positions, remote-state values, controller registrations, public event names, intentional no-detail event names, documented `event.detail` keys, and selection data hooks.
+
+When you add, rename, or remove one of those entries, keep the sync trail small and explicit:
+
+- Update the manifest and the owning compatibility spec, entrypoint smoke, or package guard that protects that surface.
+- Align `docs/en/public-api.md` and `docs/ja/public-api.md` when the surface is part of the documented public API.
+- Check any README, usage page, feature doc, configuration option doc, JavaScript event doc, mockup inventory, or release doc that names the same surface.
+- Record the user-facing effect in `CHANGELOG.md` when adopters need to notice it; use Documentation only for docs-only guidance changes that do not imply runtime behavior changes.
+- Review `docs/en/release.md` and `docs/ja/release.md` when the change affects release notes, migration expectations, package verification, or tag-time evidence.
 
 ## JavaScript browser smoke tests
 
