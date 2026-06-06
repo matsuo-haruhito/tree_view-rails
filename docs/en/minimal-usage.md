@@ -87,6 +87,12 @@ Set `selection.enabled` to `true` to enable checkbox selection.
 
 See [Selection](selection.md) for details.
 
+## Visual check
+
+After wiring the controller, view, and row partial above, use [minimal-usage-first-render.html](../mockups/minimal-usage-first-render.html) to inspect the first visible output from this minimal setup.
+
+Use [default-tree.html](../mockups/default-tree.html) when you want the richer baseline with shared CSS, selection, badges, row actions, and expanded or collapsed states. The minimal first-render mockup stays close to this page's controller/view/row-partial example and does not add host-app CRUD, routes, seed data, or visual redesign requirements.
+
 ## Next steps
 
 - [Installation](installation.md)
