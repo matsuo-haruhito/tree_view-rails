@@ -99,6 +99,25 @@ TreeView は row wrapper と共通 tree UI cell を担当し、`row_partial` の
 - [Accessibility Semantics](accessibility-semantics.md)
 - [Tree diagnostics](tree-diagnostics.md)
 
+## empty / no-results row が出ない、狭い、または copy が合わない
+
+empty-state の症状は、多くの場合 host app 側の page state、search / filter policy、最終的な product copy の問題です。TreeView は再利用可能な empty-row wrapper と message slot を提供しますが、なぜ空なのか、次にユーザーへ何を促すかは決めません。
+
+次を確認してください。
+
+- その画面が no root items なのか、filter 後の no matching results なのか、permission policy によって record が隠れているのかを分ける。多くの場合、それぞれ copy や次 action が変わります。
+- default empty row で十分な場合は、partial を置き換える前に documented wrapper hook を装飾・target してください: `data-tree-view-empty-state="true"`、`.tree-view-empty-row__content`、`.tree-view-empty-row__message`。
+- 最終的な empty copy、CTA text、filter reset behavior、permission messaging、analytics は host app 側に置く。
+- empty row が狭い、または周囲の table を横断していないように見える場合は、TreeView 内部を変える前に host app 側の table wrapper、caption、column、resource-table bridge layout を確認する。
+- static empty-state mockup は hook と責務境界の visual reference として扱い、Rails controller、query、demo app 実装として扱わない。
+
+次に読む文書:
+
+- [Accessibility Semantics](accessibility-semantics.md)
+- [使い方](usage.md)
+- [empty-state mockup](../mockups/empty-state.html)
+- [Mockup Empty-state guidance](../mockups/README.md#empty-state-guidance)
+
 ## tree rendering 中に query が繰り返される / ActiveRecord time が大きい
 
 まず host app 側の data loading と row partial の問題として切り分けます。TreeView は tree traversal と row rendering を担いますが、application record の eager loading、authorization、caching、derived value の作り方は決めません。
