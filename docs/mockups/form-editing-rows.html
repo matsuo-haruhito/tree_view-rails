@@ -206,17 +206,21 @@
   block-size: 1rem;
 }
 
-.mock-editing-actions {
+.mock-editing-actions,
+.mock-action-cluster {
   display: inline-flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
 .mock-editing-actions a,
-.mock-editing-actions button {
+.mock-editing-actions button,
+.mock-action-cluster a,
+.mock-action-cluster button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 2.2rem;
   padding: 0.46rem 0.72rem;
   border-radius: 999px;
   border: 1px solid #cbd5e1;
@@ -227,14 +231,92 @@
   text-decoration: none;
 }
 
-.mock-editing-actions .is-primary {
+.mock-editing-actions .is-primary,
+.mock-action-cluster .is-primary {
   border-color: #93c5fd;
   color: #1d4ed8;
 }
 
-.mock-editing-actions .is-danger {
+.mock-editing-actions .is-danger,
+.mock-action-cluster .is-danger {
   border-color: #fecaca;
   color: #b91c1c;
+}
+
+.mock-action-cluster .is-overflow {
+  padding-inline: 0.78rem;
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.mock-overflow-frame {
+  inline-size: min(100%, 26rem);
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-overflow-frame .tree-view-table {
+  table-layout: fixed;
+}
+
+.mock-overflow-frame .tree-toggle-cell {
+  width: 13rem;
+  min-width: 0;
+  white-space: normal;
+}
+
+.mock-overflow-frame .tree-row-actions {
+  width: 5.5rem;
+  text-align: right;
+}
+
+.mock-overflow-frame .tree-toggle {
+  align-items: flex-start;
+}
+
+.mock-overflow-frame .tree-toggle__control {
+  flex-wrap: wrap;
+}
+
+.mock-overflow-frame .tree-toggle__action,
+.mock-overflow-frame .tree-toggle__level,
+.mock-overflow-frame .tree-depth-label {
+  min-width: 0;
+}
+
+.mock-overflow-menu-sample {
+  display: grid;
+  gap: 8px;
+  padding: 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.mock-overflow-menu-sample__title {
+  margin: 0;
+  color: #102a43;
+  font-weight: 700;
+}
+
+.mock-overflow-menu-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mock-overflow-menu-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #e4e7eb;
+  border-radius: 8px;
+  background: #fff;
 }
 
 .tree-row.is-editing-row {
@@ -247,6 +329,17 @@
 
 .tree-row.is-current-preview {
   background: #eff6ff;
+}
+
+@media (max-width: 720px) {
+  .mock-editing-body {
+    padding: 12px;
+  }
+
+  .mock-editing-table th,
+  .mock-editing-table td {
+    padding: 0.58rem;
+  }
 }
 </style>
 </head>
@@ -503,6 +596,90 @@
           </div>
         </div>
       </div>
+
+      <div class="mock-editing-state" data-tree-view-sample="row-action-overflow">
+        <div class="mock-editing-state__header">
+          <p class="mock-editing-eyebrow">Mode C</p>
+          <h2>Row action overflow placement</h2>
+          <p class="mock-editing-note">
+            Use this state when a narrow row has more host-app actions than can fit beside the hierarchy cue.
+          </p>
+        </div>
+
+        <div class="mock-editing-frame">
+          <div class="mock-editing-toolbar">
+            <div class="mock-editing-toolbar__copy">
+              <p class="mock-editing-toolbar__title">Keep the first scan line for hierarchy, label, and one compact action trigger</p>
+            </div>
+            <div class="mock-editing-toolbar__meta" aria-label="Representative overflow metadata">
+              <span class="mock-editing-chip">mode: action_overflow</span>
+              <span class="mock-editing-chip mock-editing-chip--secondary">menu behavior: host app</span>
+            </div>
+          </div>
+          <div class="mock-editing-body">
+            <p class="mock-editing-callout">
+              The compact trigger is a visual responsibility boundary only. TreeView does not own menu contents, authorization copy, confirmation flow, route behavior, focus trap, or persistence.
+            </p>
+            <div class="mock-overflow-frame" aria-label="Narrow row action overflow sample">
+              <table class="tree-view-table tree-view-table--narrow">
+                <thead>
+                  <tr>
+                    <th scope="col">tree</th>
+                    <th scope="col">actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="tree-row is-selected" aria-level="1" aria-current="page">
+                    <td class="tree-toggle-cell">
+                      <span class="tree-toggle" aria-label="Current row with overflow action">
+                        <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                        <span class="tree-toggle__control">
+                          <a class="tree-toggle__action" href="#">hide</a>
+                          <span class="tree-toggle__level">root</span>
+                          <span class="mock-node-title">Quarterly planning workspace</span>
+                          <span class="tree-node-badge tree-node-badge--info">active</span>
+                        </span>
+                      </span>
+                    </td>
+                    <td class="tree-row-actions">
+                      <div class="mock-action-cluster" aria-label="Host app row actions">
+                        <button type="button" class="is-overflow" data-tree-view-interactive="true" aria-haspopup="menu" aria-expanded="false" aria-label="More actions for Quarterly planning workspace">More</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="tree-row" aria-level="2">
+                    <td class="tree-toggle-cell">
+                      <span class="tree-toggle" aria-label="Child row with primary action">
+                        <span class="tree-toggle__branches" aria-hidden="true">
+                          <span class="tree-toggle__branch-slot has-line"></span>
+                          <span class="tree-toggle__branch-slot is-current is-last"></span>
+                        </span>
+                        <span class="tree-toggle__control">
+                          <span class="tree-depth-label">child</span>
+                          <span class="mock-node-title">Budget review notes</span>
+                        </span>
+                      </span>
+                    </td>
+                    <td class="tree-row-actions">
+                      <div class="mock-action-cluster">
+                        <a class="is-primary" href="#" data-tree-view-interactive="true">Open</a>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="mock-overflow-menu-sample" aria-label="Host app menu responsibility sample">
+              <p class="mock-overflow-menu-sample__title">Menu contents remain host-app owned</p>
+              <ul class="mock-overflow-menu-list">
+                <li><span>Open details</span><span>route</span></li>
+                <li><span>Duplicate</span><span>permission</span></li>
+                <li><span>Archive</span><span>confirm</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="mock-section" aria-labelledby="editing-boundary-heading">
@@ -526,11 +703,17 @@
             <td>Showing one editing row beside display rows without losing hierarchy cues.</td>
             <td>Turbo replacement timing, dirty-state guards, and optimistic update behavior.</td>
           </tr>
+          <tr>
+            <td>Row action overflow</td>
+            <td>Keeping hierarchy, primary label, current cue, and one compact action trigger readable in a narrow row.</td>
+            <td>Dropdown implementation, menu focus trap, final action labels, authorization copy, confirmation flow, routes, and persistence.</td>
+          </tr>
         </tbody>
       </table>
       <ul>
         <li><code>data-tree-view-interactive="true"</code> is shown as a representative marker only. Event handling still belongs to the host app.</li>
-        <li>Selection checkboxes belong to TreeView row-selection payloads. Business checkboxes belong to the host app form.</li>
+        <li>Selection checkboxes belong to TreeView row-selection payloads. Business checkboxes and overflow menu actions belong to the host app form or controller.</li>
+        <li>Use the overflow trigger sample to review placement only; do not treat it as a TreeView menu component contract.</li>
       </ul>
     </section>
   </main>
