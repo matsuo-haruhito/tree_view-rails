@@ -26,6 +26,22 @@ render_state = TreeView::ResourceTableRenderState.call(
 
 The default row partial is `tree_view/resource_table_row`. It reads `table_state["visible_columns"]` when provided, and falls back to `columns`. `ResourceTableRenderState` passes both values to the row partial through the render state.
 
+## Public call option contract
+
+`ResourceTableRenderState.call` is a manifest-backed public bridge. The required keywords are `records:` and `context:`.
+
+The documented optional bridge keywords are:
+
+- `row_partial:`
+- `parent_id_method:`
+- `id_method:`
+- `table_key:`
+- `columns:`
+- `table_state:`
+- `ui_config:`
+
+Other keyword options are accepted through `**render_options` and passed to `TreeView::RenderState`. Treat those options as the existing RenderState option surface, not as a separate resource-table-specific contract. For example, grouped options such as `initial_expansion:`, `selection:`, or `lazy_loading:` remain governed by the RenderState docs and manifest sections.
+
 ## Intended integration with Rails Table Preferences
 
 A table preferences layer can infer columns from Active Record, merge saved table settings into a table state, and then pass that table state to TreeView:
@@ -63,6 +79,12 @@ When combining TreeView with a table preferences layer, keep the persisted state
 | Host app | query execution, authorization, preload policy, business actions, partial overrides | hidden cross-gem state coupling |
 
 Treat node keys and row DOM ids as TreeView identity. Treat `data-rails-table-preferences-column-key` as table-column identity. They may appear in the same row markup, but they should not be reused for each other.
+
+### Empty row colspan policy
+
+TreeView's built-in empty row uses a broad `colspan="999"` fallback because TreeView does not own or infer the host app's actual table column count. This keeps the no-root and no-results message spanning the table body when selection columns, row actions, or table-preference columns are present.
+
+Do not treat that fallback as column ownership. The host app or table layer still owns the actual column count, captions, summaries, surrounding table layout, and any custom empty-state copy or CTA. If a screen needs exact colspan behavior, keep that in an app-owned empty row or custom partial instead of adding hidden coupling between TreeView and table column state.
 
 For a focused visual reference that compares shared hierarchy rows across fuller and narrower visible-column sets without adding host-app table logic, see [resource-table-bridge.html](../mockups/resource-table-bridge.html).
 

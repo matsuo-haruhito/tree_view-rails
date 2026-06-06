@@ -99,6 +99,8 @@ For common responsibility-boundary questions before choosing an API, read the [F
 
 When you already know the symptom but need the fastest path to the relevant page, start with [Troubleshooting](troubleshooting.md).
 
+For large or partial trees, start with [Render Scale](render-scale.md) to choose the sizing strategy, then read [Lazy Loading](lazy-loading.md), [Windowed Rendering](windowed-rendering.md), or [Children Pagination](children-pagination.md) when the tree needs on-demand children, visible-window rendering, or server-side child paging.
+
 For tree-wide expand/collapse controls, see [Toolbar helper](toolbar.md). Use [toolbar-actions.html](../mockups/toolbar-actions.html) as the static visual companion for supported toolbar actions and the `:current_path` contract.
 
 For static visual references of baseline DOM structure and interaction states, see [Visual reference mockups](../mockups/README.md). Start with [review-gallery.html](../mockups/review-gallery.html) for the fastest first look, open [default-tree.html](../mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.

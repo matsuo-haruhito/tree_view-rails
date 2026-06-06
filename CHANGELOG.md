@@ -29,6 +29,8 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added client-side-only expand/collapse mode that renders collapsed descendants into initial HTML and toggles rows in the browser with the bundled `tree-view-client` controller.
 - Added `TreeView::Diagnostics.run` as a consolidated diagnostics entrypoint for node keys, DOM IDs, orphans, and cycles.
 - Added `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` so host apps can reuse stable lazy-loading placeholder IDs and data attributes.
+- Added `TreeViewEventDetailKeys` as a package-root JavaScript export for host app tests that need machine-readable documented event detail key names.
+- Added `toggle_icons` to the manifest-backed grouped option compatibility surface while keeping the existing RenderState option behavior unchanged.
 
 ### Changed
 
@@ -36,6 +38,11 @@ Breaking changes and required migration notes should be called out explicitly in
 - Clarified public builder naming decisions: prefer `badge_builder`, keep `icon_builder` as a compatibility alias, treat `row_event_payload_builder` as transfer-specific, and document `loading_builder` / `error_builder` as boolean predicates.
 - Strengthened pull request CI to run Ruby specs alongside Standard Ruby lint while keeping broader compatibility and release checks on `main`.
 - Split RenderState selection and lazy-loading normalization into internal configuration objects while keeping the public RenderState API compatible.
+- Remote-state retry actions now mark the row `loading` and dispatch `tree-view-remote-state:change` before the existing retry event, so host app listeners can observe the loading transition consistently.
+
+### Fixed
+
+- Cleaned up generated selection hidden inputs when selection controllers disconnect, scoped to each controller source id.
 
 ### Documentation
 
@@ -52,10 +59,12 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added public name decision docs in Japanese and English.
 - Added render log level docs in Japanese and English.
 - Added JavaScript event contract docs in Japanese and English for public Stimulus events and payload details.
+- Clarified JavaScript event contract docs that `TreeViewEventDetailKeys` mirrors documented detail key names for machine-readable test assertions without changing event payload shape.
 - Clarified release checklist guidance for documented JavaScript wiring surfaces, including `data-tree-view-*` integration hooks and selection controller host-element value attributes, alongside machine-readable package-root exports.
 - Added migration guides in Japanese and English to summarize compatibility promises, deprecations, rename handling, and release-note expectations.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified development docs for the Ruby-backed `npm run test:entrypoints` manifest loader path and setup expectations.
+- Clarified development docs that `.nvmrc`, `package.json` `engines.node`, and workflow `node-version` stay aligned by a Node version source drift guard.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
@@ -63,8 +72,25 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added FAQ guidance for keyboard behavior and `treegrid` responsibility boundaries in Japanese and English.
 - Added a host-app extension hook reverse lookup table in Japanese and English.
 - Added toolbar disabled-action troubleshooting guidance in Japanese and English.
+- Added GraphAdapter troubleshooting guidance in Japanese and English for resolver shape, heterogeneous node keys, and diagnostics handoff.
+- Clarified the LocalizedNames public API boundary in Japanese and English so helper fallback behavior stays separate from host-app row rendering.
+- Added ResourceTableRenderState API reference entries in Japanese and English for the bridge call signature, row partial fallback, and table-layer responsibility boundary.
+- Added glossary entries in Japanese and English for integration-surface terms such as remote state, transfer payloads, drop position, resource-table bridge, windowed rendering, and children pagination.
+- Added Standard Ruby preflight guidance to the development docs for connector or GitHub API edits to Ruby files.
+- Documented the bilingual page-set parity policy for `docs/en` and `docs/ja`, including technical-asset and temporary single-language exceptions.
+- Added downstream host app smoke / release evidence guidance in Japanese and English, separating upstream TreeView release evidence from host-app adoption notes.
+- Clarified the remote-state retry event ordering in the JavaScript event contract docs in Japanese and English.
+- Added direction-aware styling boundary entry points to the root docs index.
+- Added a direction-aware hierarchy cue static mockup for LTR / RTL review of branch lines, toggle placement, current-row cues, selected rows, and row actions.
 - Added transfer disabled / invalid boundary states to the drop-position mockup and updated the mockup review guidance.
-- Added static mockup references for multi-tree selection forms, toggle icon states, and high-contrast state cues.
+- Added static mockup references for multi-tree selection forms, toggle icon states, high-contrast state cues, reduced-motion state cues, and localized row labels.
+- Added focused mockup references for RenderWindow boundary metadata and direction-aware visual cue boundaries.
+- Added direction-aware styling boundary docs for host-app-owned RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing overrides.
+- Added Decision guide guidance for choosing Static, Turbo, or Client-side toggle mode before tuning render depth or loading strategy.
+- Clarified docs index entry points for PathTreeBuilder, Children Pagination, and large-tree reading paths.
+- Added docs index entry points for Accessibility Semantics so ARIA placement, keyboard boundaries, and automated check allowances are easier to find before review.
+- Corrected Windowed Rendering docs examples and metadata tables to use the implemented `TreeView::RenderWindow#previous?` / `#next?` API names.
+- Clarified mockup copy and language policy exception recording for deliberate review stress cases.
 - Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
 
 ### Tests
@@ -83,8 +109,17 @@ Breaking changes and required migration notes should be called out explicitly in
 - Added specs for RenderState internal configuration objects and the consolidated diagnostics entrypoint.
 - Added JavaScript public event contract specs for selection, remote state, and transfer events.
 - Added package-root frozen object contract coverage for public JavaScript object exports.
+- Added `TreeViewEventDetailKeys` manifest/export guard coverage in entrypoint smoke and focused Ruby specs.
+- Added entrypoint smoke coverage that rejects package-root exports missing from `config/public_api_manifest.yml`.
+- Added Node version source drift guard coverage for `.nvmrc`, `package.json` `engines.node`, workflow `node-version`, and development docs.
 - Improved entrypoint smoke diagnostics for Ruby manifest loader and JSON parse failures without changing public export assertions.
+- Added transfer controller regression guards for drop position calculation and invalid payload event dispatch.
+- Added selection controller disconnect cleanup specs for generated hidden input lifecycle.
+- Added remote-state retry event contract coverage for the loading `change` event dispatched before retry.
+- Added browser smoke coverage for the direction-aware hierarchy cue mockup across desktop and narrow viewports.
 - Added browser smoke coverage for representative docs mockup pages and the review gallery.
+- Added docs entrypoint guard coverage for keeping README feature links and docs index targets aligned.
+- Expanded package verification coverage for TreeViewHelper subfiles, the breadcrumb helper, representative Japanese toolbar locale, and Japanese release docs files.
 
 ## 0.1.0 - 2026-05-07
 

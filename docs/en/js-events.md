@@ -105,7 +105,7 @@ Dispatched when retry is requested for a remote row.
 
 Host apps may dispatch these lifecycle events on a lazy-loading TreeView row so the remote-state controller can mark that row as loading, loaded, error, or retrying.
 
-These events do not define public `event.detail` fields in the manifest. Put row-specific remote-state data on the row attributes documented for lazy loading instead of relying on payload fields.
+These events intentionally do not define public `event.detail` fields. They are listed in `config/public_api_manifest.yml` under `event_names_without_detail` instead of `event_detail_keys`, so the entrypoint smoke can distinguish this policy from an accidental missing detail-key entry. Put row-specific remote-state data on the row attributes documented for lazy loading instead of relying on payload fields.
 
 ## Transfer events
 
@@ -185,6 +185,8 @@ element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStat
 
 ## Compatibility policy
 
-The machine-readable public API manifest mirrors the event names and representative required `event.detail` keys documented on this page so compatibility specs can detect drift; this page remains the primary contract.
+The machine-readable public API manifest mirrors the event names and representative required `event.detail` keys documented on this page so compatibility specs can detect drift; this page remains the primary contract. Host app tests may import `TreeViewEventDetailKeys` from the package root when they need a machine-readable list of documented detail key names without changing the event payload shape.
+
+Every public event name in the manifest must be classified either under `event_detail_keys` when it has documented detail fields or under `event_names_without_detail` when it intentionally exposes no public detail fields. The entrypoint smoke checks that classification so host lifecycle events do not look like missing `event.detail` coverage.
 
 The event names and documented `detail` fields above are public integration points. Additive fields may be added in minor releases. Removing events, renaming fields, or changing documented field meanings should be treated as a compatibility-impacting change and called out in the changelog.

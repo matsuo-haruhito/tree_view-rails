@@ -7,6 +7,10 @@ module_methods:
   - model_name_for
   - attribute_name_for
   - type_name_for
+configuration_options:
+  tree_view_configure:
+    - initial_state
+    - render_log_level
 public_constants:
   - Error
   - ConfigurationError
@@ -14,12 +18,14 @@ public_constants:
   - DuplicateNodeKeyError
   - CycleDetectedError
   - InvalidRenderWindowError
+  - Configuration
   - LocalizedNames
   - Tree
   - RenderState
   - ResourceTableRenderState
   - VisibleRows
   - RenderWindow
+  - FilteredTree
   - UiConfig
   - UiConfigBuilder
   - GraphAdapter
@@ -30,6 +36,30 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+path_tree_builder_node_shapes:
+  folder_node:
+    constant: PathTreeBuilder::FolderNode
+    fields:
+      - key
+      - parent_key
+      - label
+      - path
+      - node_type
+    predicates:
+      - folder_node?
+      - record_node?
+  record_node:
+    constant: PathTreeBuilder::RecordNode
+    fields:
+      - key
+      - parent_key
+      - label
+      - path
+      - record
+      - node_type
+    predicates:
+      - folder_node?
+      - record_node?
 helper_methods:
   - tree_view_rows
   - tree_view_window
@@ -43,6 +73,31 @@ helper_methods:
   - tree_view_toolbar_supported_actions
   - tree_view_toolbar_actions
   - tree_view_toolbar_action_metadata
+helper_option_keys:
+  tree_view_breadcrumb:
+    - label_builder
+    - path_builder
+    - separator
+    - nav_class
+    - list_class
+    - item_class
+    - link_class
+    - current_class
+    - separator_class
+    - aria_label
+    - html
+    - list_html
+    - item_html
+    - link_html
+    - current_html
+    - separator_html
+  tree_view_toolbar:
+    - actions
+    - labels
+    - class_name
+    - button_class_name
+    - html
+    - action_html
 toolbar_actions:
   expand_all: expanded
   collapse_all: collapsed
@@ -62,6 +117,10 @@ grouped_option_keys:
   toggle_scope:
     - max_depth_from_root
     - max_leaf_distance
+  toggle_icons:
+    - by_state
+    - by_depth
+    - by_type
   selection:
     - enabled
     - visibility
@@ -81,21 +140,51 @@ grouped_option_keys:
     - row_disabled_builder
     - row_readonly_builder
     - row_disabled_reason_builder
+resource_table_render_state_call:
+  required_keywords:
+    - records
+    - context
+  optional_keywords:
+    - row_partial
+    - parent_id_method
+    - id_method
+    - table_key
+    - columns
+    - table_state
+    - ui_config
+  render_options_contract: render_state_pass_through
+render_state_callback_builder_keys:
+  - row_class_builder
+  - row_data_builder
+  - row_event_payload_builder
+  - loading_builder
+  - error_builder
+  - depth_label_builder
+  - badge_builder
+  - icon_builder
+  - toggle_icon_builder
 javascript_package_root:
   named_exports:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
+    - TreeViewSelectionDataHooks
     - TreeViewTransferDropPositions
+    - TreeViewRemoteStateValues
     - TreeViewStateController
     - TreeViewClientController
     - TreeViewSelectionController
     - TreeViewTransferController
     - TreeViewRemoteStateController
     - TreeViewEventNames
+    - TreeViewEventDetailKeys
   transfer_drop_positions:
     before: before
     inside: inside
     after: after
+  remote_state_values:
+    loading: loading
+    loaded: loaded
+    error: error
   controller_registrations:
     - key: state
       identifier: tree-view-state
@@ -134,6 +223,12 @@ javascript_package_root:
       drop: tree-view-transfer:drop
       invalid_payload: tree-view-transfer:invalid-payload
       invalid_transfer: tree-view-transfer:invalid-transfer
+  event_names_without_detail:
+    host_lifecycle:
+      - loading
+      - loaded
+      - error
+      - retry
   event_detail_keys:
     state:
       state_changed:
@@ -182,3 +277,8 @@ javascript_package_root:
         - row
       invalid_transfer:
         - value
+  selection_data_hooks:
+    hidden_input_name_value: data-tree-view-selection-hidden-input-name-value
+    max_count_value: data-tree-view-selection-max-count-value
+    cascade_value: data-tree-view-selection-cascade-value
+    indeterminate_value: data-tree-view-selection-indeterminate-value

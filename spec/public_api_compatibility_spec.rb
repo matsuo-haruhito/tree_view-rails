@@ -16,6 +16,7 @@ RENDER_STATE_GROUPED_OPTION_KEY_RESOLVERS = {
   "initial_expansion" => -> { TreeView::RenderState::VALID_INITIAL_EXPANSION_KEYS.map(&:to_s) },
   "render_scope" => -> { TreeView::RenderState::VALID_RENDER_SCOPE_KEYS.map(&:to_s) },
   "toggle_scope" => -> { TreeView::RenderState::VALID_TOGGLE_SCOPE_KEYS.map(&:to_s) },
+  "toggle_icons" => -> { TreeView::RenderState::VALID_TOGGLE_ICONS_KEYS.map(&:to_s) },
   "selection" => -> { TreeView::RenderState::SelectionConfig::VALID_KEYS.map(&:to_s) },
   "lazy_loading" => -> { %w[enabled loaded_keys scope] },
   "row_status" => -> { %w[row_disabled_builder row_readonly_builder row_disabled_reason_builder] }
@@ -24,9 +25,14 @@ RENDER_STATE_GROUPED_OPTION_KEY_RESOLVERS = {
 RSpec.describe "Public API compatibility" do
   def public_api_manifest
     # The machine-readable manifest covers Ruby/module/helper entrypoints,
-    # grouped option keys, package-root exports, and required JavaScript event
-    # detail keys. Broader behavior and docs sync stay explicit here.
+    # helper option keys, grouped option keys, package-root exports, and
+    # required JavaScript event detail keys. Broader behavior and docs sync stay
+    # explicit here.
     @public_api_manifest ||= YAML.safe_load_file(PUBLIC_API_MANIFEST_PATH)
+  end
+
+  def public_helper_option_keys
+    public_api_manifest.fetch("helper_option_keys")
   end
 
   def public_javascript_manifest
@@ -48,6 +54,12 @@ RSpec.describe "Public API compatibility" do
   def javascript_controller_source(group_name)
     @javascript_controller_sources ||= {}
     @javascript_controller_sources[group_name] ||= File.read(JAVASCRIPT_CONTROLLER_PATHS.fetch(group_name))
+  end
+
+  def breadcrumb_helper_keyword_option_keys
+    TreeViewBreadcrumbHelper.instance_method(:tree_view_breadcrumb).parameters.filter_map do |parameter_type, parameter_name|
+      parameter_name.to_s if %i[key keyreq].include?(parameter_type)
+    end
   end
 
   def camelize_manifest_key(value)
@@ -185,6 +197,11 @@ RSpec.describe "Public API compatibility" do
         max_depth_from_root: 4,
         max_leaf_distance: 2
       },
+      toggle_icons: {
+        by_state: {
+          expanded: {text: "-", label: "Collapse"}
+        }
+      },
       selection: {
         enabled: true,
         visibility: :leaves,
@@ -214,6 +231,8 @@ RSpec.describe "Public API compatibility" do
     expect(state.max_leaf_distance).to eq(1)
     expect(state.max_toggle_depth_from_root).to eq(4)
     expect(state.max_toggle_leaf_distance).to eq(2)
+    expect(state.toggle_icons).to eq(by_state: {expanded: {text: "-", label: "Collapse"}})
+    expect(state.toggle_icon_builder.call(nil, :expanded, {depth: 0})).to eq(text: "-", label: "Collapse")
     expect(state.selection_enabled?).to eq(true)
     expect(state.selection_visibility).to eq(:leaves)
     expect(state.selection_checkbox_name).to eq("selected_documents[]")
@@ -233,6 +252,13 @@ RSpec.describe "Public API compatibility" do
     public_api_manifest.fetch("helper_methods").each do |method_name|
       expect(TreeViewHelper.public_instance_methods).to include(method_name.to_sym), "expected TreeViewHelper##{method_name} to remain public"
     end
+  end
+
+  it "keeps breadcrumb helper option keys aligned with the public helper signature" do
+    manifest_keys = public_helper_option_keys.fetch("tree_view_breadcrumb")
+
+    expect(manifest_keys).to eq(breadcrumb_helper_keyword_option_keys),
+      "expected tree_view_breadcrumb option keys to stay aligned with the public keyword signature"
   end
 
   it "keeps documented lazy-loading helper behavior available through TreeViewHelper" do
