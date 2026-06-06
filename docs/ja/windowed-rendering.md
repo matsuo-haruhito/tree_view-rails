@@ -45,8 +45,8 @@ window = tree_view_window(@render_state, offset: 0, limit: 50)
 | `total_count` | window適用前のvisible row数。 |
 | `before_count` | 現在のwindowより前にあるvisible row数。 |
 | `after_count` | 現在のwindowより後ろに残るvisible row数。 |
-| `has_previous?` | 前のwindowが存在するか。 |
-| `has_next?` | 次のwindowが存在するか。 |
+| `previous?` | 前のwindowが存在するか。 |
+| `next?` | 次のwindowが存在するか。 |
 | `previous_offset` | 前のwindowを描画するときに渡すoffset。前のwindowがない場合は `nil`。 |
 | `next_offset` | 次のwindowを描画するときに渡すoffset。次のwindowがない場合は `nil`。 |
 
@@ -67,8 +67,8 @@ window = tree_view_window(@render_state, offset: params.fetch(:tree_offset, 0).t
   （前に <%= window.before_count %> 件、後ろに <%= window.after_count %> 件）
 </p>
 
-<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.has_previous? %>
-<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.has_next? %>
+<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.previous? %>
+<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.next? %>
 ```
 
 表示文言、route helper、param 名、disabled button の扱い、リンク・ボタン・Turbo Frame toolbar のどれで出すかはすべて host app 側で決めます。
@@ -118,8 +118,8 @@ end
 ```
 
 ```erb
-<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.has_previous? %>
-<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.has_next? %>
+<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.previous? %>
+<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.next? %>
 ```
 
 `tree_offset` はあくまで例です。param 名、route 設計、どの interaction で offset を保つかは host app 側で決めます。
