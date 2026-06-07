@@ -71,6 +71,11 @@ export declare const TreeViewTransferDropPositions: Readonly<{
   after: "after"
 }>
 
+export declare const TreeViewTransferDataMimeTypes: Readonly<{
+  applicationJson: "application/json"
+  textPlain: "text/plain"
+}>
+
 export declare const TreeViewControllerIdentifiers: Readonly<{
   state: "tree-view-state"
   client: "tree-view-client"
