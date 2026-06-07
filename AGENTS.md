@@ -34,7 +34,8 @@ Use these files as the durable documentation source:
 - `docs/en/design-policy.md` / `docs/ja/design-policy.md` — design intent, responsibility boundaries, include/exclude policy
 - `docs/en/installation.md` / `docs/ja/installation.md` — installation and asset/importmap setup
 - `docs/en/usage.md` / `docs/ja/usage.md` — usage examples
-- `docs/en/api.md` / `docs/ja/api.md` — public API reference
+- `docs/en/api.md` / `docs/ja/api.md` — practical API reference, options, behavior, and constraints
+- `docs/en/public-api.md` / `docs/ja/public-api.md` — public compatibility contract and machine-readable manifest surface
 - `docs/en/development.md` / `docs/ja/development.md` — development, CI, and documentation update rules
 - `docs/en/release.md` / `docs/ja/release.md` — release checklist, changelog expectations, and compatibility-note policy
 - `CHANGELOG.md` — release-facing summary of public changes, compatibility notes, and notable documentation additions
@@ -97,7 +98,8 @@ When behavior, public API, setup steps, or design intent changes, update the rel
 - Design decisions: `docs/en/design-policy.md` and `docs/ja/design-policy.md`
 - Installation changes: `docs/en/installation.md` and `docs/ja/installation.md`
 - Usage changes: `docs/en/usage.md` and `docs/ja/usage.md`
-- API changes: `docs/en/api.md` and `docs/ja/api.md`
+- API reference changes: `docs/en/api.md` and `docs/ja/api.md`
+- Public API contract or manifest-backed surface changes: `docs/en/public-api.md` and `docs/ja/public-api.md`
 - Development and CI changes: `docs/en/development.md` and `docs/ja/development.md`
 - Cross-language maintenance rules: `docs/i18n-audit.md`
 - When `config/public_api_manifest.yml` changes, also review `docs/en/public-api.md`, `docs/ja/public-api.md`, the affected usage or feature docs, `CHANGELOG.md`, and `docs/en/release.md` / `docs/ja/release.md` when release notes or migration expectations need to change
