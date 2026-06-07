@@ -9,6 +9,7 @@ TreeView keeps business-specific display and behavior in the host app. The gem e
 Main extension points:
 
 - `row_partial`
+- `row_actions_partial`
 - `row_class_builder`
 - `row_data_builder`
 - `badge_builder`
@@ -18,8 +19,12 @@ Main extension points:
 - `row_disabled_reason_builder`
 - transfer payload builders
 - selection builders
+- selection controller value attributes
+- interactive-control markers (`data-tree-view-interactive` and `data-tree-view-ignore-*`)
 - lazy loading path builders
 - Turbo path builders
+
+Use render-state selection builders for row payloads, disabled state, selected keys, and checkbox visibility. Use host-element selection controller value attributes to mirror or constrain already-rendered checkboxes, and use interactive-control markers when custom row controls should opt out of TreeView keyboard, row-click, or drag behavior.
 
 For focused naming decisions, including the compatibility status of `icon_builder`, see [Public Name Decisions](public-name-decisions.md).
 

@@ -9,6 +9,7 @@ TreeView は、業務固有の表示や挙動を gem 内に持ち込まず、hos
 主な extension point:
 
 - `row_partial`
+- `row_actions_partial`
 - `row_class_builder`
 - `row_data_builder`
 - `badge_builder`
@@ -18,8 +19,12 @@ TreeView は、業務固有の表示や挙動を gem 内に持ち込まず、hos
 - `row_disabled_reason_builder`
 - transfer payload builders
 - selection builders
+- selection controller value attributes
+- interactive-control markers (`data-tree-view-interactive` と `data-tree-view-ignore-*`)
 - lazy loading path builders
 - Turbo path builders
+
+row ごとの payload、disabled state、selected keys、checkbox visibility は render-state 側の selection builders で設定します。描画済み checkbox の同期や制約は host-element の selection controller value attributes で設定し、custom row control を TreeView の keyboard / row-click / drag から外したい場合は interactive-control markers を使います。
 
 `icon_builder` の compatibility status を含む公開名の判断は [Public Name Decisions](public-name-decisions.md) を参照してください。
 
