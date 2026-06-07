@@ -21,10 +21,11 @@ Main extension points:
 - selection builders
 - selection controller value attributes
 - interactive-control markers (`data-tree-view-interactive` and `data-tree-view-ignore-*`)
+- direction-aware stylesheet overrides owned by the host app
 - lazy loading path builders
 - Turbo path builders
 
-Use render-state selection builders for row payloads, disabled state, selected keys, and checkbox visibility. Use host-element selection controller value attributes to mirror or constrain already-rendered checkboxes, and use interactive-control markers when custom row controls should opt out of TreeView keyboard, row-click, or drag behavior.
+Use render-state selection builders for row payloads, disabled state, selected keys, and checkbox visibility. Use host-element selection controller value attributes to mirror or constrain already-rendered checkboxes, and use interactive-control markers when custom row controls should opt out of TreeView keyboard, row-click, or drag behavior. When a host app needs RTL, vertical writing, or design-system-specific current-row and hierarchy cues, keep TreeView's documented hooks intact and use [Direction-aware styling boundary](direction-aware-styling.md) for the stylesheet override boundary.
 
 For focused naming decisions, including the compatibility status of `icon_builder`, see [Public Name Decisions](public-name-decisions.md).
 
@@ -41,6 +42,7 @@ Use this table when deciding which hook owns a host-app integration point.
 | Provide drag/drop transfer data | `row_event_payload_builder`; TreeView serializes the payload into `data-tree-transfer-payload`, adds `data-tree-transfer-node-key`, and the transfer controller skips rows with `data-tree-transfer-disabled="true"` | [Drag and Drop](drag-and-drop.md), [JavaScript event contract](js-events.md#transfer-events) |
 | Configure selection payloads or row-level selection state | Render-state `selection:` options such as `payload_builder`, `disabled_builder`, `disabled_reason_builder`, `selected_keys`, and `visibility` | [Selection](selection.md), [Row status](row-status.md#difference-from-selection-disabled-state) |
 | Configure selection controller behavior on already-rendered rows | Host-element `tree-view-selection` value attributes such as `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, and `data-tree-view-selection-indeterminate-value` | [Selection](selection.md#hidden-input-sync-for-regular-form-submit), [JavaScript event contract](js-events.md#selection-events) |
+| Tune direction-aware visual cues | Host-app stylesheet overrides for current-row cues, hierarchy connectors, toggle spacing, RTL, or vertical writing while keeping documented TreeView hooks intact | [Direction-aware styling boundary](direction-aware-styling.md), [TreeView mockups](../mockups/README.md) |
 | Render tree-wide toolbar controls | `tree_view_toolbar`, `tree_view_toolbar_actions`, and `tree_view_toolbar_supported_actions`; TreeView renders the helper/action surface while the host app owns routes, authorization, state persistence, and final action policy | [Toolbar helper](toolbar.md), [Usage](usage.md#minimal-turbo-expandcollapse-tree) |
 | Render a records-mode breadcrumb path | `tree_view_breadcrumb`; TreeView looks up and renders the records-mode path while the host app owns the current item, route labels, authorization, layout placement, and custom navigation behavior | [Breadcrumb](breadcrumb.md), [Troubleshooting](troubleshooting.md) |
 | Save or restore expanded state | `TreeView::PersistedState`, `TreeView::StateStore`, and the generated persisted-state wiring; TreeView provides storage helpers while the host app owns owner lookup, authorization, callbacks, retry policy, and save/reset endpoints | [Persisted State](persisted-state.md), [JavaScript event contract](js-events.md#state-events) |
@@ -196,4 +198,4 @@ load_children_path_builder: ->(item, depth, scope) {
 | interactive-control guards | yes | marks custom widgets when needed |
 | routes and controllers | no | yes |
 | authorization | no | yes |
-| CSS/design system | hooks only | yes |
+| CSS/design system | documented baseline hooks only | final visual policy, including direction-aware stylesheet overrides |
