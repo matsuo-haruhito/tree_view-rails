@@ -210,15 +210,26 @@ Start with installation wiring.
 - Register TreeView controllers in the host app when using client-side toggling, selection, transfer hooks, remote loading state, or other browser-side features.
 - When the host app registers only some controllers or chooses a custom boot order, import `TreeViewControllerIdentifiers` from `tree_view/index.js` instead of hand-copying identifier strings.
 
+Then split CSS loading symptoms from JavaScript registration symptoms.
+
+- If CSS is missing in a Propshaft app, confirm the host app stylesheet that imports `tree_view` is actually loaded by the layout. Propshaft does not make the gem stylesheet visible unless the host app chooses to load or import it.
+- If CSS is missing in a Sprockets app, confirm the host app stylesheet imports `tree_view`, and that the Sprockets asset paths / precompile targets still include the TreeView stylesheet when the app relies on engine-provided assets.
+- If JavaScript behavior is missing but CSS applies, inspect the importmap pin and Stimulus/controller registration separately. The stylesheet import does not register TreeView controllers.
+- If CSS is missing but JavaScript events fire, inspect the host app asset pipeline first instead of changing controller registration.
+
 Remember the boundary.
 
 - Static rendering can work without TreeView JavaScript.
 - Selection cascade, client-side expand/collapse, transfer events, and remote loading state need the JavaScript controllers.
 - Missing CSS usually means the host app stylesheet pipeline was not wired to load the gem asset.
+- Asset pipeline choice, precompile targets, stylesheet load order, importmap pins, and controller boot order remain host-app responsibilities.
 
 Read next:
 
-- [Installation](installation.md)
+- [Installation: CSS import](installation.md#css-import)
+- [Installation: Propshaft](installation.md#propshaft)
+- [Installation: Sprockets](installation.md#sprockets)
+- [Installation: JavaScript / importmap](installation.md#javascript--importmap)
 - [Usage](usage.md)
 - [JavaScript event contract](js-events.md)
 
