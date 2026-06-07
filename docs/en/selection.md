@@ -199,6 +199,10 @@ Use `TreeViewSelectionDataHooks.cascadeValue` and `TreeViewSelectionDataHooks.in
 
 This behavior is DOM-based. It affects rendered rows only and skips disabled checkboxes.
 
+The controller reads checkbox elements that are currently present in the page. It does not create selection semantics for descendants that lazy loading or children pagination has not rendered yet. When a bulk action should include unloaded descendants, submit a host-app-owned server-side intent or query filter in addition to the loaded-row checkbox payloads.
+
+See [Children Pagination](children-pagination.md#selection-and-dragdrop-interactions) for the pagination-specific boundary and [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) for a static visual reference.
+
 ## Responsibility boundary
 
 | Area | TreeView | Host app |
