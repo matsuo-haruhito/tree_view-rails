@@ -112,6 +112,12 @@ Record deliberate copy or language exceptions in this list. Add a row when a moc
 - Treat [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) as the source of truth for hidden input sync: TreeView mirrors one JSON payload per hidden input, and host apps own final params grouping, submit summaries, and business action copy.
 - Treat [Children pagination](../en/children-pagination.md#selection-and-dragdrop-interactions) as the source of truth when a bulk action should include unloaded descendants: host apps need a query-backed or server-side intent rather than relying on DOM-submitted loaded rows.
 
+## Children pagination guidance
+
+- Use `children-pagination.html` to review next-page placeholder placement and branch-scoped load-more affordances without turning the mockup into a cursor, Turbo Stream, or authorization contract.
+- Keep cursor encoding, page limits, retry behavior, and final button copy in the host app.
+- Use `children-pagination-selection-boundary.html` when the review question includes selection state across loaded rows and unloaded descendants.
+
 ## Narrow-width guidance
 
 - Keep the toggle control, the primary node label, and the current or selected cue visible in the first scan line.
