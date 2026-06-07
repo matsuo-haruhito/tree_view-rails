@@ -21,6 +21,10 @@ const publicApiDocs = [
   ["docs/en/public-api.md", read("docs/en/public-api.md")],
   ["docs/ja/public-api.md", read("docs/ja/public-api.md")]
 ]
+const lazyLoadingDocs = [
+  ["docs/en/lazy-loading.md", read("docs/en/lazy-loading.md")],
+  ["docs/ja/lazy-loading.md", read("docs/ja/lazy-loading.md")]
+]
 
 const callbackBuilderSignals = [
   "render_state_callback_builder_keys",
@@ -37,6 +41,13 @@ const hostLifecycleSignals = [
   "retry",
   "TreeViewEventNames.remoteState",
   "TreeViewEventDetailKeys"
+]
+
+const remoteStateValueSignals = [
+  "TreeViewRemoteStateValues",
+  "loading",
+  "loaded",
+  "error"
 ]
 
 callbackBuilderSignals.forEach((signal) => {
@@ -66,5 +77,16 @@ publicApiDocs.forEach(([relativePath, document]) => {
   assert(
     /host app|host-app|host app 側|host-app 側/.test(document),
     `${relativePath}: host lifecycle event docs no longer name the host-app ownership boundary`
+  )
+})
+
+lazyLoadingDocs.forEach(([relativePath, document]) => {
+  remoteStateValueSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} remote-state value docs`)
+  })
+
+  assert(
+    /not event names|event 名ではありません/.test(document),
+    `${relativePath}: remote-state value docs no longer separate state values from event names`
   )
 })
