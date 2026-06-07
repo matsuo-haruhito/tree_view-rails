@@ -57,6 +57,8 @@ Public API compatibility specsは、documented Ruby entry points、helper method
 
 `config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、configuration options、helper names、helper option keys、toolbar action/state mapping、grouped option keys、PathTreeBuilder node shapes、ResourceTableRenderState call keywords、RenderState callback builder keys、JavaScript package-root named exports、transfer drop positions、remote-state values、controller registrations、public event names、intentional no-detail event names、documented `event.detail` keys、selection data hooks を追跡しています。
 
+RenderState callback builder keys は manifest-backed な key surface であり、callback behavior 全体の contract ではありません。`render_state_callback_builder_keys` を変更する場合は、manifest、focused compatibility spec、`docs/en/public-api.md` / `docs/ja/public-api.md` の flat callback builder section、同じ key を名前で案内している feature docs を同期します。manifest tracking summary では callback arity、return-value validation、row rendering semantics、fallback behavior を定義しないでください。
+
 これらの entry を追加・rename・削除する場合は、docs sync の導線を小さく明示します。
 
 - manifest と、その surface を守る compatibility spec、entrypoint smoke、package guard のいずれかを同期する
