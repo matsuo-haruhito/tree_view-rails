@@ -18,7 +18,7 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
-Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version.
+Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version. The Node version source drift spec keeps `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value aligned without changing the current install policy.
 
 Keep using `npm install` for now. The repository has a committed `package-lock.json`, but it is not yet refreshed in sync with `package.json`, so local setup and pull-request CI stay on `npm install` until that lockfile refresh is completed in a registry-enabled environment. See [Installation](installation.md) for the current CI and install-path summary.
 
@@ -55,7 +55,17 @@ Public API compatibility specs protect documented Ruby entry points, helper meth
 
 When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
 
-`config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, helper names, helper option keys, toolbar action/state mapping, grouped option keys, JavaScript package-root named exports, controller registrations, public event names, and documented `event.detail` keys. When you add, rename, or remove one of those entries, update the manifest, keep `docs/en/public-api.md` and `docs/ja/public-api.md` aligned, check any README, usage page, feature doc, or JavaScript event doc that names the same surface, add the user-facing note to `CHANGELOG.md` when the change materially affects adopters, and review `docs/en/release.md` / `docs/ja/release.md` when release notes or migration expectations need to change.
+`config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, configuration options, helper names, helper option keys, toolbar action/state mapping, grouped option keys, PathTreeBuilder node shapes, ResourceTableRenderState call keywords, RenderState callback builder keys, JavaScript package-root named exports, transfer drop positions, remote-state values, controller registrations, public event names, intentional no-detail event names, documented `event.detail` keys, and selection data hooks.
+
+RenderState callback builder keys are a manifest-backed key surface, not a full callback behavior contract. When `render_state_callback_builder_keys` changes, sync the manifest, the focused compatibility spec, the flat callback builder section in `docs/en/public-api.md` / `docs/ja/public-api.md`, and any feature docs that name the same key. Do not use the manifest tracking summary to define callback arity, return-value validation, row rendering semantics, or fallback behavior.
+
+When you add, rename, or remove one of those entries, keep the sync trail small and explicit:
+
+- Update the manifest and the owning compatibility spec, entrypoint smoke, or package guard that protects that surface.
+- Align `docs/en/public-api.md` and `docs/ja/public-api.md` when the surface is part of the documented public API.
+- Check any README, usage page, feature doc, configuration option doc, JavaScript event doc, mockup inventory, or release doc that names the same surface.
+- Record the user-facing effect in `CHANGELOG.md` when adopters need to notice it; use Documentation only for docs-only guidance changes that do not imply runtime behavior changes.
+- Review `docs/en/release.md` and `docs/ja/release.md` when the change affects release notes, migration expectations, package verification, or tag-time evidence.
 
 ## JavaScript browser smoke tests
 
@@ -94,9 +104,23 @@ Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-
 
 The pull-request Rails lanes intentionally skip Rails 7.1 to keep PR feedback focused on representative lower, current, and next-major coverage; the `main` push full Rails matrix is the final compatibility gate that includes Rails 7.1.
 
-Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails lanes while preserving the same check names for branch protection. The JavaScript job also short-circuits for docs-only pull requests unless `docs/mockups/**` changed; mockup changes still check out the branch, install Playwright, and run `npm run test:browser`. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.
+Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails lanes while preserving the same check names for branch protection. The JavaScript job also short-circuits for docs-only pull requests unless `docs/mockups/**` changed; mockup documentation changes still check out the branch, install Playwright, and run `npm run test:browser` so the static visual references stay covered. Pull requests that change `test/browser/**` are not docs-only shortcut candidates, and they also run the JavaScript setup plus explicit browser smoke coverage because they change the smoke suite itself. Pull requests that also touch `.github/workflows/**` do not use this shortcut and still run the normal PR lanes.
 
 A green check suite does not by itself mean a pull request is ready to merge after `main` has moved. When a branch is `diverged`, check mergeability, changed files, risk, and how far the branch is behind. Prefer refreshing the branch and observing fresh CI when GitHub reports `mergeable: false`, when the branch is far behind, or when the pull request touches workflow definitions, public API, specs, or shared docs inventory. For small docs-only changes that are only a little behind, it is enough to confirm the changed files still apply cleanly, mergeability is true, and the named checks remain green.
+
+### Known drift recovery
+
+A narrow pull request can fail when `main` or an unmerged base pull request already has a known public-contract drift, such as a manifest structure spec that has not learned a new top-level key or a TypeScript declaration that has not caught up with package-root exports. Treat that as CI triage, not as permission to widen the pull request automatically.
+
+When this happens:
+
+- Confirm the failing jobs, file paths, and error messages, then compare them with existing issues or pull requests that own the same drift.
+- Check whether the pull request's changed files actually touch the failing surface. If they do not, leave the pull request scoped to its issue.
+- Use the owning drift pull request when one exists. Wait for it to merge and refresh or rerun the narrow pull request, or create/use a dedicated follow-up pull request for the drift if that issue is ready.
+- Include the drift fix in the narrow pull request only when the issue scope already covers that public surface or a maintainer explicitly approves the bundle.
+- In the pull request comment, record the head SHA, failed run number, failing jobs, drift owner issue or pull request, and the chosen next action.
+
+For example, if a docs-only parity pull request fails because `spec/public_api_manifest_structure_spec.rb` is missing a manifest key and `app/javascript/tree_view/index.d.ts` is missing package-root exports, keep the parity pull request docs-only unless that public API drift is explicitly in scope.
 
 Pushes to `main` also run the broader compatibility and release checks:
 
@@ -140,6 +164,7 @@ Before opening a docs pull request, do a short maintenance sweep using `docs/i18
 - Decide whether root compatibility docs should remain or point to language-specific docs.
 - When a pull request touches only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md`, confirm that the docs-only CI short-circuit is still the intended policy before relying on it.
 - If a pull request also changes `.github/workflows/**`, treat it as a full CI change rather than a docs-only shortcut candidate.
+- When a pull request changes `test/browser/**`, expect normal JavaScript setup and explicit `npm run test:browser` coverage even if the intent is only to maintain browser smoke specs.
 - When a pull request adds, renames, or removes a focused mockup under `docs/mockups/`, keep the mockup inventory trail synchronized: update `docs/mockups/README.md`, add or adjust the `docs/mockups/review-gallery.html` card, review README and language README entry points when the recommended review flow changes, and add feature-guide links when a mockup is meant to accompany a specific guide.
 - Docs-only CI skips JavaScript only when `docs/mockups/**` is unchanged. When focused mockup files change, CI runs `npm run test:browser` against the browser smoke target list, but that smoke does not prove the README Files table, review gallery, existing mockup inventory, and visual correctness are fully synchronized. If the existing mockup files and docs indexes already disagree, handle that as a separate docs follow-up instead of mixing gallery redesign or mockup HTML/CSS changes into a checklist-only PR.
 

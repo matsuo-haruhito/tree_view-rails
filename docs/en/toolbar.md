@@ -45,6 +45,12 @@ Supported actions:
 
 `collapse_all_except_current_path` is a host-app contract. TreeView only emits the toolbar action and state value.
 
+## Machine-readable contract
+
+The toolbar action/state mapping is also tracked in `config/public_api_manifest.yml` under `toolbar_actions`. The manifest maps each supported action name to the `toggle_all_path` state value used by the helper.
+
+Host apps should prefer `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, or `tree_view_toolbar_action_metadata` when building custom toolbar markup. The manifest exists for compatibility checks and integration audits; internal constants remain implementation details.
+
 ## Visual reference
 
 For a static comparison of expand-all, collapse-all, and current-path-preserving toolbar states, see [toolbar-actions.html](../mockups/toolbar-actions.html).
@@ -99,6 +105,8 @@ Use locale files for the host app's usual toolbar wording. Use `labels:` only fo
 Use `html:` for additional attributes on the toolbar container. Its `class` is appended after `class_name`, and its `data` values are merged while keeping TreeView's `data-tree-view-toolbar="true"` hook.
 
 Use `action_html:` for additional attributes on each rendered action link or disabled button. It may be a Proc that receives the action metadata hash, an action-keyed Hash such as `{ expand_all: { data: ... } }`, or a flat Hash applied to every action. Host app attributes are merged with the existing action metadata, but TreeView keeps ownership of `data-tree-view-toolbar-action` and `data-tree-view-toolbar-disabled`.
+
+`actions:`, `labels:`, `class_name:`, `button_class_name:`, `html:`, and `action_html:` are tracked as the `tree_view_toolbar` helper option key set in `config/public_api_manifest.yml`. That option-key contract is separate from the `toolbar_actions` action-to-state map, which tracks supported action names and their `toggle_all_path` state values.
 
 For heavier markup changes, custom authorization copy, extra controls, or a different button/link structure, keep using `tree_view_toolbar_actions` or `tree_view_toolbar_action_metadata` and render the toolbar in the host app.
 

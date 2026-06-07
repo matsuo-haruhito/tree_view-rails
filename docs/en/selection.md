@@ -132,12 +132,25 @@ When the tree sits inside a normal HTML form, the same controller can mirror che
 
 With `data-tree-view-selection-hidden-input-name-value`, TreeView writes one hidden input per valid checked payload and keeps those inputs in sync on connect, change, submit, and manual refresh.
 
+If your host app already imports the package root, use `TreeViewSelectionDataHooks.hiddenInputNameValue` when you need to reference the host-authored attribute name from JavaScript without hand-copying the raw string.
+
+```js
+import { TreeViewSelectionDataHooks } from "tree_view"
+
+const hiddenInputNameAttribute = TreeViewSelectionDataHooks.hiddenInputNameValue
+```
+
 - The hidden input `name` stays host-app controlled.
 - Values are written as JSON strings, so `TreeView.parse_selection_params(params[:selected_nodes])` keeps working.
 - Disabled checkboxes and invalid JSON payloads are skipped, matching the existing event payload behavior.
 - If the tree is not inside a form, TreeView keeps dispatching selection events and does not create hidden inputs.
+- Generated hidden input marker attributes and source-id attributes are managed by TreeView and are not host-authored public hooks.
 
-When one form contains multiple `tree-view-selection` controllers, TreeView tags each generated hidden input with `data-tree-view-selection-source-id` so one controller only removes and rewrites its own generated inputs. If the controller element already has `data-tree-view-selection-source-id`, TreeView reuses that value; otherwise it assigns a generated source id on connect. Use separate `data-tree-view-selection-hidden-input-name-value` names when the host app wants separate submitted params for each tree. Reuse a name only when the server-side action intentionally accepts one combined array.
+When one form contains multiple `tree-view-selection` controllers, TreeView tags each generated hidden input with `data-tree-view-selection-source-id` so one controller only removes and rewrites its own generated inputs. Hidden inputs also carry `data-tree-view-selection-generated-hidden-input`; both generated-input attributes are TreeView-owned bookkeeping, not attributes host apps should author, query, or delete as public hooks.
+
+The controller element can carry `data-tree-view-selection-source-id` as a narrow override for that bookkeeping id. Use the override only when a multi-tree form needs a stable source id for deterministic browser assertions, server-rendered replacement, or similar coordination. Most host apps should omit it and let TreeView assign the source id on connect. This override is intentionally not part of `TreeViewSelectionDataHooks`, which covers the host-authored value attributes listed above.
+
+Use separate `data-tree-view-selection-hidden-input-name-value` names when the host app wants separate submitted params for each tree. Reuse a name only when the server-side action intentionally accepts one combined array.
 
 Static mockups such as [selection-multi-tree-form.html](../mockups/selection-multi-tree-form.html) can show generated hidden inputs as a review aid, but this section is the submission contract: TreeView mirrors one JSON payload per hidden input, while the host app owns final params grouping and summary copy.
 
@@ -153,6 +166,8 @@ Host apps can limit the number of checked boxes on the JavaScript controller.
   <%= tree_view_rows(@render_state) %>
 </tbody>
 ```
+
+When your JavaScript authors or queries the host element, use `TreeViewSelectionDataHooks.maxCountValue` to reference that documented attribute name without hand-copying `data-tree-view-selection-max-count-value`.
 
 When a user exceeds the limit, TreeView unchecks the attempted checkbox and dispatches `tree-view-selection:limit-exceeded`.
 
@@ -180,7 +195,13 @@ The Stimulus controller can also update rendered child rows and parent mixed sta
 </tbody>
 ```
 
+Use `TreeViewSelectionDataHooks.cascadeValue` and `TreeViewSelectionDataHooks.indeterminateValue` when JavaScript needs the documented attribute names for host-authored cascade and indeterminate wiring. The raw attributes remain part of the public docs, and the package-root export is only a machine-readable reference to those names.
+
 This behavior is DOM-based. It affects rendered rows only and skips disabled checkboxes.
+
+The controller reads checkbox elements that are currently present in the page. It does not create selection semantics for descendants that lazy loading or children pagination has not rendered yet. When a bulk action should include unloaded descendants, submit a host-app-owned server-side intent or query filter in addition to the loaded-row checkbox payloads.
+
+See [Children Pagination](children-pagination.md#selection-and-dragdrop-interactions) for the pagination-specific boundary and [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) for a static visual reference.
 
 ## Responsibility boundary
 

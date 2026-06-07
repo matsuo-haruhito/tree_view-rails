@@ -39,6 +39,16 @@ RSpec.describe "mockup inventory" do
     File.read(audit_path)
   end
 
+  def mockup_copy_exception_rows
+    File.read(readme_path)
+      .lines
+      .grep(/\A\| `[^`]+\.html` \|/)
+      .to_h do |line|
+        _empty, mockup, exception, reason = line.split("|").map(&:strip)
+        [mockup.delete_prefix("`").delete_suffix("`"), {exception: exception, reason: reason}]
+      end
+  end
+
   it "keeps the mockup README inventory aligned with the actual asset set" do
     expect(readme_inventory).to eq(actual_mockup_assets - ["README.md"])
   end
@@ -55,5 +65,35 @@ RSpec.describe "mockup inventory" do
       "Focused subpage assets linked from the mockup README",
       "Update this technical-assets section only when the source-of-truth rule or asset-group responsibility changes"
     )
+  end
+
+  it "keeps the mockup copy and language exception policy visible" do
+    readme = File.read(readme_path)
+
+    expect(readme).to include(
+      "## Copy and language policy",
+      "Mockups use short, product-neutral English copy",
+      "Final labels, localization, permission messaging, and business wording remain host-app responsibilities",
+      "Record deliberate copy or language exceptions in this list",
+      "| Mockup | Deliberate exception | Review reason |"
+    )
+  end
+
+  it "keeps documented copy and language exceptions tied to review reasons" do
+    expect(mockup_copy_exception_rows).to include(
+      "toolbar-actions.html" => {
+        exception: "Long / localized-style toolbar labels",
+        reason: "Stress wrapping, metadata fallback, disabled state, and current-state cues without choosing final translations."
+      },
+      "localized-row-labels.html" => {
+        exception: "Long localized-style row labels and metadata",
+        reason: "Stress primary label wrapping, badge placement, attribute labels, secondary metadata, and tooltip cues without choosing final translations."
+      }
+    )
+
+    mockup_copy_exception_rows.each do |mockup, metadata|
+      expect(metadata[:exception]).not_to be_empty, "#{mockup} must describe the deliberate exception"
+      expect(metadata[:reason]).not_to be_empty, "#{mockup} must keep a review reason"
+    end
   end
 end

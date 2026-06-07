@@ -9,6 +9,18 @@ TreeView APIs fall into two broad groups:
 
 Use render controls first when the data is already available. Use lazy loading or children pagination when fetching all children up front is the problem. Use host-app JavaScript when the problem is full scroll-position-driven DOM virtualization.
 
+## Choose the toggle mode first
+
+Before tuning render depth or loading strategy, decide how each tree should open and close rows.
+
+| Mode | Start with | Choose it when | Host app owns |
+|---|---|---|---|
+| Static | `UiConfigBuilder#build_static` | The tree is a read-only snapshot, or the screen should not open collapsed descendants in the browser. | Which records are included before rendering and whether another page/action changes the view. |
+| Turbo | `UiConfigBuilder#build_turbo` | Opening a row should call host-app routes and return a Turbo Stream response, or unloaded children must be fetched later. | `show_descendants_path_builder`, `hide_descendants_path_builder`, routes, authorization, controller actions, queries, and Turbo Stream responses. |
+| Client-side | `UiConfigBuilder#build_client_side` | All rows in the render scope can be emitted in the initial HTML and browser-local show/hide behavior is enough. | Initial HTML size, JavaScript registration, row scope, and any business action after the user opens rows. |
+
+Use Turbo mode for lazy loading or children pagination. Client-side mode can only reveal rows already present in the initial DOM, so it is not a replacement for server-side fetching. If toggle links already render but do not work, use [Troubleshooting](troubleshooting.md#toggle-links-do-not-expand-or-collapse) as the reverse-lookup entry point.
+
 ## Start from the use case
 
 | I want to... | Start with | Key options or APIs | Notes |
@@ -134,3 +146,4 @@ flowchart TD
 - [Drag and Drop](drag-and-drop.md)
 - [Persisted State](persisted-state.md)
 - [Tree diagnostics](tree-diagnostics.md)
+- [Troubleshooting](troubleshooting.md)
