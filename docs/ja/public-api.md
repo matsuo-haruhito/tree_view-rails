@@ -277,6 +277,7 @@ host app が依存してよい browser-facing surface は、documented された
 | Lazy loading | `data-tree-remote-state`, remote placeholder ID, lazy-loading lifecycle events | [Lazy Loading](lazy-loading.md) で説明している stable placeholder / event hook です。request dispatch と response handling は引き続き host app 側の責務です。 |
 | Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | [mockup inventory](../mockups/README.md) で説明している reusable baseline hook です。shipped empty-state reference pattern を示すもので、すべての internal row class を公開するものではありません。 |
 | Interaction markers | focused mockup に出てくる marker row classes / `data-*` hooks | review / adoption 用の reference hook として [mockups](../mockups/README.md) で説明します。compatibility check が必要な hook だけを `config/public_api_manifest.yml` の machine-readable contract へ昇格してください。 |
+| Direction-aware styling | current-row cue、hierarchy connector、toggle spacing、RTL / vertical writing override reference | 責務境界と host-app stylesheet override guidance は [Direction-aware styling boundary](direction-aware-styling.md) を参照してください。これらの cue は、明示的に manifest-backed check へ昇格されるまでは machine-readable public styling hook ではありません。 |
 
 この inventory は代表例であり、網羅一覧ではありません。`config/public_api_manifest.yml` は helper method、JavaScript package-root export、controller identifier、selection data hook、RenderState grouped option key の machine-readable source of truth です。docs-only の hook inventory は feature guide と mockup への導線を示すもので、出力されるすべての class や `data-*` attribute を compatibility contract にするものではありません。
 
