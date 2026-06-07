@@ -155,6 +155,8 @@ Render the initial next-page placeholder where the host app wants it to appear:
 </tr>
 ```
 
+Use [children-pagination.html](../mockups/children-pagination.html) when you want a static visual reference for next-page placeholder placement and branch-scoped load-more affordances. The mockup is a review aid only; cursor encoding, Turbo Stream responses, final button copy, and retry behavior remain host-app responsibilities.
+
 ## Relationship to lazy loading
 
 Children pagination is built by the host app on top of lazy loading.
