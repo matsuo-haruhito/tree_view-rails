@@ -36,6 +36,16 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+node_presenter_builder_names:
+  - key
+  - label
+  - href
+  - tooltip
+  - row_class
+  - row_data
+  - icon
+  - badge
+  - actions
 path_tree_builder_node_shapes:
   folder_node:
     constant: PathTreeBuilder::FolderNode
