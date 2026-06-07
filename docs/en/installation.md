@@ -89,6 +89,17 @@ Static rendering works without dedicated TreeView JavaScript. Turbo Stream expan
 
 JavaScript controllers are used for browser-side integration hooks such as state tracking, keyboard navigation, selection cascade, transfer events, and remote loading state.
 
+For importmap apps that already boot a Stimulus application, register the bundled controllers from the host app's JavaScript entrypoint:
+
+```js
+import { application } from "controllers/application"
+import { registerTreeViewControllers } from "tree_view"
+
+registerTreeViewControllers(application)
+```
+
+Use `registerTreeViewControllers(application)` as the quick-start path for JavaScript-powered TreeView features. Host apps that need selective registration or a custom boot order can use `TreeViewControllerIdentifiers` from the public JavaScript surface; see [Public API](public-api.md#javascript-surface).
+
 ## Packaged files
 
 The gem package should include the files needed by Rails host apps:
