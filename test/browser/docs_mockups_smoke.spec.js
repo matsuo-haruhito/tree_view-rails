@@ -91,6 +91,7 @@ const narrowOverflowExpectedMockups = new Map([
   ["row-status-depth-labels.html", "status/depth table columns are intentionally preserved"],
   ["toggle-icon-states.html", "toggle-state comparison uses a wide table matrix"],
   ["interaction-states.html", "interaction-state table keeps multiple state columns visible"],
+  ["children-pagination.html", "children pagination examples keep branch page-state columns visible"],
   ["reduced-motion-state-cues.html", "state-cue comparison keeps the table matrix visible"],
   ["keyboard-focus-states.html", "focus samples include multiple side-by-side controls"],
   ["keyboard-current-row/index.html", "keyboard current-row comparison keeps focus/current/action columns visible"],
