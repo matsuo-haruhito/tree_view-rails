@@ -55,7 +55,15 @@ Public API compatibility specs protect documented Ruby entry points, helper meth
 
 When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
 
-`config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, configuration options, helper names, helper option keys, toolbar action/state mapping, grouped option keys, JavaScript package-root named exports, controller registrations, public event names, and documented `event.detail` keys. When you add, rename, or remove one of those entries, update the manifest, keep `docs/en/public-api.md` and `docs/ja/public-api.md` aligned, check any README, usage page, feature doc, configuration option doc, or JavaScript event doc that names the same surface, add the user-facing note to `CHANGELOG.md` when the change materially affects adopters, and review `docs/en/release.md` / `docs/ja/release.md` when release notes or migration expectations need to change.
+`config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, configuration options, helper names, helper option keys, toolbar action/state mapping, grouped option keys, PathTreeBuilder node shapes, ResourceTableRenderState call keywords, RenderState callback builder keys, JavaScript package-root named exports, transfer drop positions, remote-state values, controller registrations, public event names, intentional no-detail event names, documented `event.detail` keys, and selection data hooks.
+
+When you add, rename, or remove one of those entries, keep the sync trail small and explicit:
+
+- Update the manifest and the owning compatibility spec, entrypoint smoke, or package guard that protects that surface.
+- Align `docs/en/public-api.md` and `docs/ja/public-api.md` when the surface is part of the documented public API.
+- Check any README, usage page, feature doc, configuration option doc, JavaScript event doc, mockup inventory, or release doc that names the same surface.
+- Record the user-facing effect in `CHANGELOG.md` when adopters need to notice it; use Documentation only for docs-only guidance changes that do not imply runtime behavior changes.
+- Review `docs/en/release.md` and `docs/ja/release.md` when the change affects release notes, migration expectations, package verification, or tag-time evidence.
 
 ## JavaScript browser smoke tests
 
@@ -97,6 +105,20 @@ The pull-request Rails lanes intentionally skip Rails 7.1 to keep PR feedback fo
 Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails lanes while preserving the same check names for branch protection. The JavaScript job also short-circuits for docs-only pull requests unless `docs/mockups/**` changed; mockup documentation changes still check out the branch, install Playwright, and run `npm run test:browser` so the static visual references stay covered. Pull requests that change `test/browser/**` are not docs-only shortcut candidates, and they also run the JavaScript setup plus explicit browser smoke coverage because they change the smoke suite itself. Pull requests that also touch `.github/workflows/**` do not use the docs-only shortcut and still run the normal PR lanes.
 
 A green check suite does not by itself mean a pull request is ready to merge after `main` has moved. When a branch is `diverged`, check mergeability, changed files, risk, and how far the branch is behind. Prefer refreshing the branch and observing fresh CI when GitHub reports `mergeable: false`, when the branch is far behind, or when the pull request touches workflow definitions, public API, specs, or shared docs inventory. For small docs-only changes that are only a little behind, it is enough to confirm the changed files still apply cleanly, mergeability is true, and the named checks remain green.
+
+### Known drift recovery
+
+A narrow pull request can fail when `main` or an unmerged base pull request already has a known public-contract drift, such as a manifest structure spec that has not learned a new top-level key or a TypeScript declaration that has not caught up with package-root exports. Treat that as CI triage, not as permission to widen the pull request automatically.
+
+When this happens:
+
+- Confirm the failing jobs, file paths, and error messages, then compare them with existing issues or pull requests that own the same drift.
+- Check whether the pull request's changed files actually touch the failing surface. If they do not, leave the pull request scoped to its issue.
+- Use the owning drift pull request when one exists. Wait for it to merge and refresh or rerun the narrow pull request, or create/use a dedicated follow-up pull request for the drift if that issue is ready.
+- Include the drift fix in the narrow pull request only when the issue scope already covers that public surface or a maintainer explicitly approves the bundle.
+- In the pull request comment, record the head SHA, failed run number, failing jobs, drift owner issue or pull request, and the chosen next action.
+
+For example, if a docs-only parity pull request fails because `spec/public_api_manifest_structure_spec.rb` is missing a manifest key and `app/javascript/tree_view/index.d.ts` is missing package-root exports, keep the parity pull request docs-only unless that public API drift is explicitly in scope.
 
 Pushes to `main` also run the broader compatibility and release checks:
 

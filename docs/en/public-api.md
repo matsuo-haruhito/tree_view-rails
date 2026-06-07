@@ -185,7 +185,7 @@ Host apps are expected to provide these pieces:
 
 ## JavaScript surface
 
-The public JavaScript entrypoint is `tree_view/index.js`.
+The public JavaScript entrypoint is `tree_view/index.js`. The bundled `app/javascript/tree_view/index.d.ts` declaration mirrors the package-root export names for TypeScript-aware tooling, but it does not change runtime behavior or add a separate public surface. Treat `tree_view/index.js`, `config/public_api_manifest.yml`, and the entrypoint smoke checks as the source of truth; the declaration is a compile-time aid for npm-style tooling, while importmap-only host apps do not need extra runtime setup for it.
 
 Stable enough for host apps to use:
 
@@ -193,6 +193,7 @@ Stable enough for host apps to use:
 - `TreeViewEventNames`
 - `TreeViewEventDetailKeys`
 - `TreeViewTransferDropPositions`
+- `TreeViewRemoteStateValues`
 - `TreeViewControllerIdentifiers`
 - `TreeViewSelectionDataHooks`
 - exported controller classes
@@ -209,6 +210,7 @@ Stable enough for host apps to use:
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewEventDetailKeys` exposes the documented `event.detail` key lists as a machine-readable package-root export. Use it when host-app tests or listeners need to compare against the documented key names without changing the payload shape; the field meanings still live in [JavaScript event contract](js-events.md).
 `TreeViewTransferDropPositions` exposes the documented coarse drop-position values for transfer events: `before`, `inside`, and `after`. `TreeViewEventNames.transfer.*` names transfer events, `TreeViewEventDetailKeys.transfer.*` lists the documented `event.detail` keys, and `TreeViewTransferDropPositions` carries the position values described in [Drag and Drop](drag-and-drop.md#drop-behavior).
+`TreeViewRemoteStateValues` exposes the documented remote-state value set for lazy-loading rows: `loading`, `loaded`, and `error`. Use it when host-app JavaScript or tests need to compare `data-tree-remote-state` values without hand-copying strings; `TreeViewEventNames.remoteState.*` still names controller-emitted events, and `TreeViewEventDetailKeys.remoteState.*` still lists their `event.detail` keys.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
 `TreeViewSelectionDataHooks` exposes the documented `tree-view-selection` host-element value attribute names as a machine-readable object. Use it when JavaScript needs to author or query those host-owned attributes without hand-copying strings such as `TreeViewSelectionDataHooks.hiddenInputNameValue`.
 
@@ -220,6 +222,12 @@ Within `TreeViewEventNames`, lazy-loading request lifecycle names live under `ho
 - `retry`
 
 Use `TreeViewEventNames.hostLifecycle.*` only for the host-app dispatch surface described in [Lazy Loading](lazy-loading.md). TreeView's own controller-emitted remote-state events remain under `TreeViewEventNames.remoteState.*`.
+
+Documented keys on `TreeViewRemoteStateValues`:
+
+- `loading`
+- `loaded`
+- `error`
 
 Documented keys on `TreeViewControllerIdentifiers`:
 
@@ -245,7 +253,7 @@ The `tree-view-selection` controller's documented host-element value attributes 
 
 Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. Generated hidden input marker attributes and source-id attributes are managed by TreeView and are not host-authored public hooks. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
-The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, and selection data hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, remote-state values, and selection data hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 

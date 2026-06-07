@@ -33,6 +33,12 @@ function assertRootSignal(feature, rootPattern, message) {
   assert(rootPattern.test(rootReadme), `${feature}: ${message}`)
 }
 
+function assertDocumentSignal(sourcePath, signalPattern, feature, message) {
+  const source = read(sourcePath)
+
+  assert(signalPattern.test(source), `${feature}: ${message}`)
+}
+
 const rootReadme = read("README.md")
 
 const foundationalEntrypoints = [
@@ -58,6 +64,23 @@ const foundationalEntrypoints = [
       ["docs/ja/README.md", "installation.md"],
       ["docs/ja/README.md", "minimal-usage.md"],
       ["docs/ja/README.md", "usage.md"]
+    ],
+    signals: [
+      [
+        "docs/en/minimal-usage.md",
+        /TreeView::Tree[\s\S]*TreeView::UiConfigBuilder[\s\S]*build_static[\s\S]*TreeView::RenderState[\s\S]*tree_view_rows\(@render_state\)[\s\S]*row_partial[\s\S]*minimal-usage-first-render\.html/,
+        "English minimal-usage docs no longer expose the minimal controller/view/row-partial path and first-render mockup link"
+      ],
+      [
+        "docs/ja/minimal-usage.md",
+        /TreeView::Tree[\s\S]*TreeView::UiConfigBuilder[\s\S]*build_static[\s\S]*TreeView::RenderState[\s\S]*tree_view_rows\(@render_state\)[\s\S]*row_partial[\s\S]*minimal-usage-first-render\.html/,
+        "Japanese minimal-usage docs no longer expose the minimal controller/view/row-partial path and first-render mockup link"
+      ],
+      [
+        "docs/mockups/minimal-usage-first-render.html",
+        /data-tree-view-sample="minimal-usage-first-render"[\s\S]*Included[\s\S]*Initial table wrapper[\s\S]*Excluded[\s\S]*Checkbox selection[\s\S]*badges[\s\S]*row actions[\s\S]*CRUD links[\s\S]*routes[\s\S]*seeded demo records/,
+        "minimal-usage-first-render mockup no longer states the first-render included/excluded boundary"
+      ]
     ]
   },
   {
@@ -97,8 +120,12 @@ const featureEntrypoints = [
     feature: "GraphAdapter",
     rootPattern: /Use `GraphAdapter`/,
     links: [
+      ["README.md", "docs/en/graph-adapter.md"],
+      ["README.md", "docs/ja/graph-adapter.md"],
       ["docs/README.md", "en/graph-adapter.md"],
-      ["docs/README.md", "ja/graph-adapter.md"]
+      ["docs/README.md", "ja/graph-adapter.md"],
+      ["docs/en/README.md", "graph-adapter.md"],
+      ["docs/ja/README.md", "graph-adapter.md"]
     ]
   },
   {
@@ -148,8 +175,15 @@ const featureEntrypoints = [
     rootPattern: /Render Scale[\s\S]*Lazy Loading[\s\S]*Children Pagination/,
     links: [
       ["README.md", "docs/en/render-scale.md"],
+      ["README.md", "docs/ja/render-scale.md"],
       ["README.md", "docs/en/lazy-loading.md"],
+      ["README.md", "docs/ja/lazy-loading.md"],
+      ["README.md", "docs/en/windowed-rendering.md"],
+      ["README.md", "docs/ja/windowed-rendering.md"],
       ["README.md", "docs/en/children-pagination.md"],
+      ["README.md", "docs/ja/children-pagination.md"],
+      ["README.md", "docs/en/rendering-boundaries.md"],
+      ["README.md", "docs/ja/rendering-boundaries.md"],
       ["docs/README.md", "en/lazy-loading.md"],
       ["docs/README.md", "ja/lazy-loading.md"],
       ["docs/README.md", "en/windowed-rendering.md"],
@@ -164,6 +198,38 @@ const featureEntrypoints = [
       ["docs/ja/README.md", "lazy-loading.md"],
       ["docs/ja/README.md", "windowed-rendering.md"],
       ["docs/ja/README.md", "children-pagination.md"]
+    ]
+  },
+  {
+    feature: "Rendering Boundaries",
+    rootPattern: /Rendering Boundaries|描画責務の境界/,
+    links: [
+      ["README.md", "docs/en/rendering-boundaries.md"],
+      ["README.md", "docs/ja/rendering-boundaries.md"],
+      ["docs/en/README.md", "rendering-boundaries.md"],
+      ["docs/ja/README.md", "rendering-boundaries.md"]
+    ],
+    signals: [
+      [
+        "docs/en/rendering-boundaries.md",
+        /row_partial[\s\S]*host app partial renders application-specific columns/,
+        "English rendering-boundaries docs no longer state the row_partial ownership boundary"
+      ],
+      [
+        "docs/en/rendering-boundaries.md",
+        /controller action, query, and Turbo Stream response[\s\S]*host app/,
+        "English rendering-boundaries docs no longer state the Turbo response ownership boundary"
+      ],
+      [
+        "docs/ja/rendering-boundaries.md",
+        /row_partial[\s\S]*host app partialが業務固有のcolumns/,
+        "Japanese rendering-boundaries docs no longer state the row_partial ownership boundary"
+      ],
+      [
+        "docs/ja/rendering-boundaries.md",
+        /controller action、query、Turbo Stream responseはhost app側の責務/,
+        "Japanese rendering-boundaries docs no longer state the Turbo response ownership boundary"
+      ]
     ]
   },
   {
@@ -191,6 +257,28 @@ const featureEntrypoints = [
     ]
   },
   {
+    feature: "Forms and editing rows",
+    rootPattern: /Forms and editing rows|Form と編集行/,
+    links: [
+      ["README.md", "docs/en/form-editing.md"],
+      ["README.md", "docs/ja/form-editing.md"],
+      ["docs/en/README.md", "form-editing.md"],
+      ["docs/ja/README.md", "form-editing.md"]
+    ]
+  },
+  {
+    feature: "Resource table bridge",
+    rootPattern: /Resource table bridge/,
+    links: [
+      ["README.md", "docs/en/resource-table-bridge.md"],
+      ["README.md", "docs/ja/resource-table-bridge.md"],
+      ["docs/README.md", "en/resource-table-bridge.md"],
+      ["docs/README.md", "ja/resource-table-bridge.md"],
+      ["docs/en/README.md", "resource-table-bridge.md"],
+      ["docs/ja/README.md", "resource-table-bridge.md"]
+    ]
+  },
+  {
     feature: "Toolbar helper",
     rootPattern: /tree_view_toolbar|Toolbar helper/,
     links: [
@@ -202,9 +290,28 @@ const featureEntrypoints = [
   },
   {
     feature: "Breadcrumb helper",
+    rootPattern: /tree_view_breadcrumb|Breadcrumb helper/,
     links: [
+      ["README.md", "docs/en/breadcrumb.md"],
+      ["README.md", "docs/ja/breadcrumb.md"],
+      ["docs/README.md", "en/breadcrumb.md"],
+      ["docs/README.md", "ja/breadcrumb.md"],
       ["docs/en/README.md", "breadcrumb.md"],
       ["docs/ja/README.md", "breadcrumb.md"]
+    ]
+  },
+  {
+    feature: "Depth Labels",
+    links: [
+      ["docs/en/README.md", "depth-labels.md"],
+      ["docs/ja/README.md", "depth-labels.md"]
+    ]
+  },
+  {
+    feature: "Row Status",
+    links: [
+      ["docs/en/README.md", "row-status.md"],
+      ["docs/ja/README.md", "row-status.md"]
     ]
   },
   {
@@ -235,6 +342,62 @@ const featureEntrypoints = [
       ["docs/README.md", "ja/public-api.md"],
       ["docs/en/README.md", "js-events.md"],
       ["docs/ja/README.md", "js-events.md"]
+    ]
+  },
+  {
+    feature: "Drag and Drop / Host App Extension Points",
+    rootPattern: /Drag and drop[\s\S]*Host app extension boundary|Host app extension boundary[\s\S]*Drag and drop/i,
+    links: [
+      ["README.md", "docs/en/drag-and-drop.md"],
+      ["README.md", "docs/ja/drag-and-drop.md"],
+      ["README.md", "docs/en/host-app-extension-points.md"],
+      ["README.md", "docs/ja/host-app-extension-points.md"],
+      ["docs/en/README.md", "drag-and-drop.md"],
+      ["docs/en/README.md", "host-app-extension-points.md"],
+      ["docs/ja/README.md", "drag-and-drop.md"],
+      ["docs/ja/README.md", "host-app-extension-points.md"]
+    ],
+    signals: [
+      [
+        "docs/en/host-app-extension-points.md",
+        /row_partial[\s\S]*row_actions_partial[\s\S]*row_data_builder[\s\S]*row_event_payload_builder/,
+        "English host-app extension docs no longer expose the row extension surface reverse lookup"
+      ],
+      [
+        "docs/en/host-app-extension-points.md",
+        /data-tree-view-interactive[\s\S]*data-tree-view-ignore-keyboard[\s\S]*data-tree-view-ignore-row-click[\s\S]*data-tree-view-ignore-drag/,
+        "English host-app extension docs no longer expose the interactive marker boundary"
+      ],
+      [
+        "docs/en/host-app-extension-points.md",
+        /data-tree-view-selection-hidden-input-name-value[\s\S]*data-tree-view-selection-max-count-value[\s\S]*data-tree-view-selection-cascade-value[\s\S]*data-tree-view-selection-indeterminate-value/,
+        "English host-app extension docs no longer expose the selection controller value attributes"
+      ],
+      [
+        "docs/en/host-app-extension-points.md",
+        /TreeView::PersistedState[\s\S]*TreeView::StateStore[\s\S]*show_descendants_path_builder[\s\S]*load_children_path_builder/,
+        "English host-app extension docs no longer expose persisted-state and path-builder boundaries"
+      ],
+      [
+        "docs/ja/host-app-extension-points.md",
+        /row_partial[\s\S]*row_actions_partial[\s\S]*row_data_builder[\s\S]*row_event_payload_builder/,
+        "Japanese host-app extension docs no longer expose the row extension surface reverse lookup"
+      ],
+      [
+        "docs/ja/host-app-extension-points.md",
+        /data-tree-view-interactive[\s\S]*data-tree-view-ignore-keyboard[\s\S]*data-tree-view-ignore-row-click[\s\S]*data-tree-view-ignore-drag/,
+        "Japanese host-app extension docs no longer expose the interactive marker boundary"
+      ],
+      [
+        "docs/ja/host-app-extension-points.md",
+        /data-tree-view-selection-hidden-input-name-value[\s\S]*data-tree-view-selection-max-count-value[\s\S]*data-tree-view-selection-cascade-value[\s\S]*data-tree-view-selection-indeterminate-value/,
+        "Japanese host-app extension docs no longer expose the selection controller value attributes"
+      ],
+      [
+        "docs/ja/host-app-extension-points.md",
+        /TreeView::PersistedState[\s\S]*TreeView::StateStore[\s\S]*show_descendants_path_builder[\s\S]*load_children_path_builder/,
+        "Japanese host-app extension docs no longer expose persisted-state and path-builder boundaries"
+      ]
     ]
   },
   {
@@ -302,16 +465,22 @@ const maintainerEntrypoints = [
   }
 ]
 
-foundationalEntrypoints.forEach(({ feature, rootPattern, links }) => {
+foundationalEntrypoints.forEach(({ feature, rootPattern, links, signals = [] }) => {
   assertRootSignal(feature, rootPattern, "README.md no longer exposes the representative docs signal")
 
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
+  signals.forEach(([sourcePath, signalPattern, message]) => {
+    assertDocumentSignal(sourcePath, signalPattern, feature, message)
+  })
 })
 
-featureEntrypoints.forEach(({ feature, rootPattern, links }) => {
+featureEntrypoints.forEach(({ feature, rootPattern, links, signals = [] }) => {
   assertRootSignal(feature, rootPattern, "README.md no longer exposes the representative feature signal")
 
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
+  signals.forEach(([sourcePath, signalPattern, message]) => {
+    assertDocumentSignal(sourcePath, signalPattern, feature, message)
+  })
 })
 
 maintainerEntrypoints.forEach(({ feature, links }) => {

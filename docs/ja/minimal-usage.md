@@ -85,7 +85,15 @@ end
 
 `visibility: :leaves` はleaf nodeだけにcheckboxを表示します。
 
+通常の form 送信で選択値を params に載せる場合は、次に [通常form送信用の hidden input 同期](selection.md#通常form送信用の-hidden-input-同期) を確認してください。JavaScript から controller の data attribute name を参照する場合は、raw string を写経せず package root の `TreeViewSelectionDataHooks.hiddenInputNameValue` を使えます。
+
 詳しくは [Selection](selection.md) を参照してください。
+
+## 見た目の確認
+
+上の controller、view、row partial をつないだあと、[minimal-usage-first-render.html](../mockups/minimal-usage-first-render.html) でこの最小構成から最初に見える出力を確認できます。
+
+共有 CSS、selection、badge、row action、展開 / 折りたたみ状態を含む richer baseline を見たい場合は [default-tree.html](../mockups/default-tree.html) を使ってください。minimal first-render mockup は、このページの controller / view / row partial 例に近い確認用であり、host app の CRUD、route、seed data、visual redesign の要件は追加しません。
 
 ## 次に読むもの
 

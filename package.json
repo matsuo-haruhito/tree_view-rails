@@ -8,10 +8,12 @@
   "scripts": {
     "test": "vitest run",
     "test:browser": "playwright test",
+    "test:ci-policy": "node script/test_ci_changed_files_policy.mjs",
     "test:docs-i18n": "node script/test_docs_i18n_parity.mjs",
-    "test:docs-entrypoints": "node script/test_docs_entrypoints.mjs && npm run test:docs-i18n",
-    "test:entrypoints": "node script/test_entrypoints.mjs && npm run test:docs-entrypoints",
-    "test:js": "npm run test:entrypoints && npm test && npm run test:browser"
+    "test:docs-entrypoints": "node script/test_docs_entrypoints.mjs && node script/test_public_api_docs_signals.mjs && npm run test:docs-i18n",
+    "test:entrypoints": "node script/test_entrypoints.mjs && npm run test:docs-entrypoints && npm run test:ci-policy",
+    "test:js:core": "npm run test:entrypoints && npm test",
+    "test:js": "npm run test:js:core && npm run test:browser"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2"

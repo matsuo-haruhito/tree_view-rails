@@ -185,7 +185,7 @@ host app が提供する主な拡張点は以下です。
 
 ## JavaScript surface
 
-公開 JavaScript entrypoint は `tree_view/index.js` です。
+公開 JavaScript entrypoint は `tree_view/index.js` です。bundled された `app/javascript/tree_view/index.d.ts` declaration は TypeScript 対応 tooling 用に package-root export 名を写すものですが、runtime behavior を変えたり、別の public surface を追加したりするものではありません。正本は `tree_view/index.js`、`config/public_api_manifest.yml`、entrypoint smoke check です。declaration は npm-style tooling 向けの compile-time aid であり、importmap-only の host app はこれに追加の runtime setup をする必要はありません。
 
 host app が使ってよい入口:
 
@@ -193,6 +193,7 @@ host app が使ってよい入口:
 - `TreeViewEventNames`
 - `TreeViewEventDetailKeys`
 - `TreeViewTransferDropPositions`
+- `TreeViewRemoteStateValues`
 - `TreeViewControllerIdentifiers`
 - `TreeViewSelectionDataHooks`
 - exported controller classes
@@ -209,6 +210,7 @@ host app が使ってよい入口:
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 `TreeViewEventDetailKeys` は documented `event.detail` key list を machine-readable に参照するための package-root export です。host app の test や listener が documented key name と照合したい場合に使えますが、payload shape 自体は変えません。各 field の意味は [JavaScript event contract](js-events.md) を正本にしてください。
 `TreeViewTransferDropPositions` は transfer event の粗い drop-position value として、`before`、`inside`、`after` を公開します。`TreeViewEventNames.transfer.*` は transfer event 名、`TreeViewEventDetailKeys.transfer.*` は documented な `event.detail` key、`TreeViewTransferDropPositions` は [Drag and Drop](drag-and-drop.md#drop処理) で説明している position value を表します。
+`TreeViewRemoteStateValues` は lazy-loading row の documented remote-state value set として、`loading`、`loaded`、`error` を公開します。host app の JavaScript や test が `data-tree-remote-state` の値を string の写経なしに照合したい場合に使えます。controller が emit する remote-state event 名は引き続き `TreeViewEventNames.remoteState.*`、その `event.detail` key は `TreeViewEventDetailKeys.remoteState.*` で扱います。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
 `TreeViewSelectionDataHooks` は、documented された `tree-view-selection` host-element value attribute names を machine-readable object として公開します。JavaScript が host-owned attribute を author / query するとき、`TreeViewSelectionDataHooks.hiddenInputNameValue` のように使うことで string の写経を避けられます。
 
@@ -220,6 +222,12 @@ host app が使ってよい入口:
 - `retry`
 
 `TreeViewEventNames.hostLifecycle.*` は [Lazy Loading](lazy-loading.md) で説明している host app 側の request-state dispatch surface 専用です。TreeView controller 自身が emit する remote-state event は引き続き `TreeViewEventNames.remoteState.*` に置きます。
+
+`TreeViewRemoteStateValues` の documented key:
+
+- `loading`
+- `loaded`
+- `error`
 
 `TreeViewControllerIdentifiers` の documented key:
 
@@ -245,7 +253,7 @@ host app が使ってよい入口:
 
 これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。generated hidden input marker attribute と source-id attribute は TreeView が生成・管理する内部寄りの属性であり、host app が authoring する public hook ではありません。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
 
-package-root の JavaScript export、bundled controller identifier、selection data hook value の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
+package-root の JavaScript export、bundled controller identifier、remote-state value、selection data hook value の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
 内部扱い:
 
