@@ -93,6 +93,8 @@ function onDrop(event) {
 }
 ```
 
+`application/json` is the primary TreeView transfer MIME type for host apps to read. TreeView also writes the same JSON payload to `text/plain` as a browser compatibility fallback. Host apps that want machine-readable strings can import `TreeViewTransferDataMimeTypes` from the package root and read `TreeViewTransferDataMimeTypes.applicationJson` first, then `TreeViewTransferDataMimeTypes.textPlain` only as fallback.
+
 Host apps can also listen for the public transfer events dispatched by the `tree-view-transfer` controller instead of reading controller internals directly.
 
 ```js
