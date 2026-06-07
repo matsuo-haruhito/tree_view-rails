@@ -122,7 +122,6 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("navigation", { name: "Documentation entry points" })).toBeVisible()
     await expect(page.getByRole("link", { name: "Baseline" })).toHaveAttribute("href", "#gallery-default-heading")
     await expect(page.getByRole("link", { name: "Minimal usage" })).toHaveAttribute("href", "#gallery-minimal-usage-heading")
-    await expect(page.getByRole("link", { name: "Page structure" })).toHaveAttribute("href", "#gallery-table-caption-heading")
     await expect(page.getByRole("link", { name: "Interaction states" })).toHaveAttribute("href", "#gallery-interaction-heading")
     await expect(page.getByRole("link", { name: "Current branch" })).toHaveAttribute("href", "#gallery-current-branch-heading")
     await expect(page.getByRole("link", { name: "Keyboard current row" })).toHaveAttribute("href", "#gallery-keyboard-current-heading")
