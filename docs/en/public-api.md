@@ -88,6 +88,8 @@ For host apps that own lazy-loading placeholder regions, these three lazy-loadin
 
 Pass the parent item that owns the lazy-loading placeholder to the lazy-loading helper methods. `tree_node_dom_id(item_or_id, ...)` remains the broader DOM ID helper for item-like or id-like values; the placeholder helpers are documented for item-based lazy-loading regions so they stay aligned with the row and Turbo Stream examples.
 
+DOM and path helpers that are absent from `config/public_api_manifest.yml` remain internal composition helpers, even when bundled partials call them. For example, `tree_button_dom_id`, `tree_show_button_dom_id`, `tree_selection_checkbox_dom_id`, and toggle or lazy-loading path helpers are reserved for TreeView's own partial and helper composition. Host apps should depend on the manifest-backed node, children-container, and remote-state placeholder helpers above rather than those internal helper names.
+
 For app-owned toolbar builders, use `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` rather than internal constants.
 Documented toolbar helpers are part of that public helper surface:
 
@@ -203,7 +205,7 @@ Stable enough for host apps to use:
   - `TreeViewTransferController`
   - `TreeViewRemoteStateController`
 - documented JavaScript events and payload keys
-- documented `data-tree-view-*` integration hooks
+- documented `data-tree_view-*` integration hooks
 
 `registerTreeViewControllers(application)` registers the five controller exports above with the documented identifiers in the bundled entrypoint order.
 
@@ -274,12 +276,14 @@ Representative documented hooks are tracked where their feature behavior is expl
 |---|---|---|
 | Toolbar | `data-tree-view-toolbar`, `data-tree-view-toolbar-action`, `data-tree-view-toolbar-disabled` | TreeView-owned hooks documented in [Toolbar](toolbar.md). Use helper methods for supported actions and metadata instead of internal constants. |
 | Selection | `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | Stable host-element controller values documented in [Selection](selection.md) and mirrored by `TreeViewSelectionDataHooks`. Row payloads and disabled decisions stay with `selection:` render-state builders. Generated hidden input marker attributes and source-id attributes are TreeView-managed internals. |
-| Lazy loading | `data-tree-remote-state`, remote placeholder IDs, lazy-loading lifecycle events | Stable placeholder and event hooks documented in [Lazy Loading](lazy-loading.md). Host apps still own request dispatch and response handling. |
+| Lazy loading | `data-tree-remote-state`, remote placeholder IDs, lazy-loading lifecycle events | Stable placeholder and event hooks documented in [Lazy Loading](lazy-loading.md). Host apps still own request dispatch and response handling. Use `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` for placeholder IDs and state attributes rather than internal path or toggle helpers. |
 | Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | Reusable baseline hooks documented in the [mockup inventory](../mockups/README.md). They describe the shipped empty-state reference pattern, not every internal row class. |
 | Interaction markers | marker row classes and `data-*` hooks shown in focused mockups | Reference hooks documented through [mockups](../mockups/README.md) for review and adoption. Promote any hook to a machine-readable contract in `config/public_api_manifest.yml` only when it needs compatibility checks. |
 | Direction-aware styling | current-row cues, hierarchy connectors, toggle spacing, RTL / vertical writing override references | Responsibility boundary and host-app stylesheet override guidance live in [Direction-aware styling boundary](direction-aware-styling.md). These cues are not machine-readable public styling hooks unless they are explicitly promoted into manifest-backed checks. |
 
 This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, JavaScript package-root exports, controller identifiers, selection data hooks, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
+
+DOM helper names that are not listed in the manifest remain internal even when the generated DOM IDs or attributes appear in bundled markup. In particular, button, selection-checkbox, toggle-path, and lazy-loading path helper names are not public host-app dependencies unless they are promoted into the manifest and documented here.
 
 Undocumented CSS helper classes, data attributes, DOM structure details, and gem partial locals are implementation details.
 
