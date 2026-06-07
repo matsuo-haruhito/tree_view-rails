@@ -174,6 +174,8 @@ Pagination means some descendants are not present in the DOM yet. Define product
 | Bulk actions | Use query-backed actions when the action should affect unloaded children. Use DOM-submitted checkbox values only for loaded-row actions. |
 | Retry/error UI | Keep retry controls scoped to the parent/page that failed so another page can remain loaded. |
 
+The [Selection](selection.md#linked-checkbox-behavior) guide is the contract for loaded-row checkbox payloads, hidden input sync, and rendered-only cascade / indeterminate behavior. The [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) mockup is a visual review aid for this boundary; it does not add a TreeView API for unloaded descendants.
+
 ## Notes
 
 - Always use stable ordering, for example `order(:name, :id)`.
