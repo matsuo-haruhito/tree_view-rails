@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">Default TreeView rendering mock</title>
+  <desc id="desc">Static TreeView mockup showing expanded and collapsed hierarchy rows with selection checkboxes, badges, and row actions.</desc>
+  <rect width="1200" height="560" fill="#f7f9fb"/>
+  <rect x="24" y="24" width="1152" height="512" rx="16" fill="#ffffff" stroke="#dde4ec"/>
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <text x="48" y="64" font-size="14" font-weight="700" letter-spacing="1.1" fill="#52606d">TREE_VIEW-RAILS</text>
+    <text x="48" y="104" font-size="30" font-weight="760" fill="#102a43">Default TreeView rendering mock</text>
+    <text x="48" y="132" font-size="16" fill="#52606d">Table-first hierarchy rows with selection, expansion state, badges, and host-app-owned row actions.</text>
+
+    <rect x="40" y="142" width="1120" height="36" fill="#f1f5f9"/>
+    <text x="72" y="165" font-size="13" font-weight="700" letter-spacing="0.5" fill="#334e68">SELECT</text>
+    <text x="180" y="165" font-size="13" font-weight="700" letter-spacing="0.5" fill="#334e68">TREE</text>
+    <text x="650" y="165" font-size="13" font-weight="700" letter-spacing="0.5" fill="#334e68">NAME</text>
+    <text x="820" y="165" font-size="13" font-weight="700" letter-spacing="0.5" fill="#334e68">OWNER</text>
+    <text x="950" y="165" font-size="13" font-weight="700" letter-spacing="0.5" fill="#334e68">STATUS</text>
+    <text x="1080" y="165" font-size="13" font-weight="700" letter-spacing="0.5" fill="#334e68">ACTIONS</text>
+
+    <rect x="40" y="178" width="1120" height="68" fill="#ffffff"/>
+    <line x1="40" x2="1160" y1="246" y2="246" stroke="#e4e7eb"/>
+    <rect x="78" y="203" width="18" height="18" rx="4" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+    <line x1="190" y1="190" x2="190" y2="223" stroke="rgba(108,117,125,.48)"/>
+    <line x1="190" y1="209" x2="202" y2="209" stroke="rgba(108,117,125,.55)"/>
+    <rect x="212" y="200" width="49" height="24" rx="12" fill="#ffffff" stroke="#bcccdc"/>
+    <text x="236.5" y="216" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">hide</text>
+    <rect x="266" y="200" width="44" height="24" rx="12" fill="#f1f3f5"/>
+    <text x="288" y="216" font-size="13" font-weight="700" fill="#6c757d" text-anchor="middle">root</text>
+    <rect x="322" y="200" width="62" height="24" rx="12" fill="#edf2f7"/>
+    <text x="353" y="216" text-anchor="middle" font-size="13" font-weight="700" fill="#334e68">folder</text>
+    <rect x="390" y="200" width="34" height="24" rx="12" fill="#f1f3f5"/>
+    <text x="407" y="216" text-anchor="middle" font-size="13" font-weight="700" fill="#6c757d">L0</text>
+    <rect x="436" y="200" width="34" height="24" rx="12" fill="#edf2f7"/>
+    <text x="453" y="216" text-anchor="middle" font-size="13" font-weight="700" fill="#334e68">3</text>
+    <text x="650" y="220" font-size="16" fill="#102a43">Product Platform</text>
+    <text x="820" y="220" font-size="16" fill="#334155">Team A</text>
+    <rect x="950" y="200" width="62" height="24" rx="12" fill="#e0f2fe"/>
+    <text x="981" y="216" text-anchor="middle" font-size="13" font-weight="700" fill="#075985">active</text>
+    <rect x="1080" y="198" width="74" height="30" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="1117" y="218" text-anchor="middle" font-size="14" fill="#1f2933">Edit</text>
+  </g>
+</svg>
