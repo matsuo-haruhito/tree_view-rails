@@ -172,6 +172,7 @@ javascript_package_root:
     - TreeViewControllerIdentifiers
     - TreeViewSelectionDataHooks
     - TreeViewTransferDropPositions
+    - TreeViewTransferDataMimeTypes
     - TreeViewRemoteStateValues
     - TreeViewStateController
     - TreeViewClientController
@@ -184,6 +185,9 @@ javascript_package_root:
     before: before
     inside: inside
     after: after
+  transfer_data_mime_types:
+    application_json: application/json
+    text_plain: text/plain
   remote_state_values:
     loading: loading
     loaded: loaded
