@@ -275,6 +275,8 @@ Use narrower markers when only one tree behavior should ignore the control:
 
 These markers only opt a control out of TreeView behavior. Validation, persistence, authorization, CRUD routes, and inline editing flows still belong to the host app.
 
+For static visual references, use [interactive-marker-behaviors.html](../mockups/interactive-marker-behaviors.html) to compare the broad interactive marker against the narrower keyboard, row-click, and drag markers, and use [drag-interactive-controls.html](../mockups/drag-interactive-controls.html) when draggable rows mix native controls with drag-safe custom widgets.
+
 ## Grouped options
 
 Initial expansion, render scope, and toggle scope can be configured with grouped options.
