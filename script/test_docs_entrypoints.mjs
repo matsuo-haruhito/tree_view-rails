@@ -67,6 +67,16 @@ const foundationalEntrypoints = [
     ],
     signals: [
       [
+        "docs/en/installation.md",
+        /@import "tree_view";[\s\S]*pin "tree_view", to: "tree_view\/index\.js"[\s\S]*app\/assets\/stylesheets\/tree_view\.scss[\s\S]*app\/javascript\/tree_view\/\*\*\/\*[\s\S]*config\/importmap\.tree_view\.rb[\s\S]*config\/public_api_manifest\.yml[\s\S]*Propshaft[\s\S]*explicitly import CSS and add the importmap pin[\s\S]*Sprockets[\s\S]*explicit CSS\/importmap setup/,
+        "English installation docs no longer expose the CSS/importmap, packaged files, and explicit Propshaft/Sprockets setup signals"
+      ],
+      [
+        "docs/ja/installation.md",
+        /@import "tree_view";[\s\S]*pin "tree_view", to: "tree_view\/index\.js"[\s\S]*app\/assets\/stylesheets\/tree_view\.scss[\s\S]*app\/javascript\/tree_view\/\*\*\/\*[\s\S]*config\/importmap\.tree_view\.rb[\s\S]*config\/public_api_manifest\.yml[\s\S]*Propshaft[\s\S]*CSS \/ importmap を明示的に読み込む構成[\s\S]*Sprockets[\s\S]*CSS \/ importmapを明示的に読み込む運用/,
+        "Japanese installation docs no longer expose the CSS/importmap, packaged files, and explicit Propshaft/Sprockets setup signals"
+      ],
+      [
         "docs/en/minimal-usage.md",
         /TreeView::Tree[\s\S]*TreeView::UiConfigBuilder[\s\S]*build_static[\s\S]*TreeView::RenderState[\s\S]*tree_view_rows\(@render_state\)[\s\S]*row_partial[\s\S]*minimal-usage-first-render\.html/,
         "English minimal-usage docs no longer expose the minimal controller/view/row-partial path and first-render mockup link"
