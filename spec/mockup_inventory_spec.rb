@@ -83,7 +83,7 @@ RSpec.describe "mockup inventory" do
     expect(mockup_copy_exception_rows).to include(
       "toolbar-actions.html" => {
         exception: "Long / localized-style toolbar labels",
-        reason: "Stress wrapping, disabled state, and current-state cues without choosing final translations."
+        reason: "Stress wrapping, metadata fallback, disabled state, and current-state cues without choosing final translations."
       },
       "localized-row-labels.html" => {
         exception: "Long localized-style row labels and metadata",
