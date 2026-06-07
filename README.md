@@ -203,7 +203,10 @@ Key documents:
 | Installation | [Installation](docs/en/installation.md) | [導入手順](docs/ja/installation.md) |
 | Minimal usage | [Minimal usage](docs/en/minimal-usage.md) | [最小利用例](docs/ja/minimal-usage.md) |
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
+| Selection | [Selection](docs/en/selection.md) | [Selection](docs/ja/selection.md) |
 | Toolbar helper (`tree_view_toolbar`) | [Toolbar helper](docs/en/toolbar.md) | [Toolbar helper](docs/ja/toolbar.md) |
+| Breadcrumb helper (`tree_view_breadcrumb`) | [Breadcrumb helper](docs/en/breadcrumb.md) | [Breadcrumb helper](docs/ja/breadcrumb.md) |
+| Depth labels and row status | [Depth Labels](docs/en/depth-labels.md) and [Row Status](docs/en/row-status.md) | [Depth Labels](docs/ja/depth-labels.md) and [Row Status](docs/ja/row-status.md) |
 | Turbo Frame option | [Turbo Frame option](docs/en/turbo-frame.md) | [Turbo Frame オプション](docs/ja/turbo-frame.md) |
 | Persisted State | [Persisted State](docs/en/persisted-state.md) | [Persisted State](docs/ja/persisted-state.md) |
 | Localized names | [Localized names](docs/en/localized-names.md) | [ローカライズされた名前](docs/ja/localized-names.md) |
@@ -220,6 +223,7 @@ Key documents:
 | Children pagination | [Children Pagination](docs/en/children-pagination.md) | [Children Pagination](docs/ja/children-pagination.md) |
 | Tree identity and diagnostics | [Node keys](docs/en/node-keys.md) and [Tree diagnostics](docs/en/tree-diagnostics.md) | [Node key 設計](docs/ja/node-keys.md) and [Tree diagnostics](docs/ja/tree-diagnostics.md) |
 | Rendering scale and boundaries | [Render Scale](docs/en/render-scale.md), [Lazy Loading](docs/en/lazy-loading.md), [Windowed Rendering](docs/en/windowed-rendering.md), [Rendering Boundaries](docs/en/rendering-boundaries.md), and [Render log level](docs/en/render-log-level.md) | [描画スケール](docs/ja/render-scale.md), [Lazy Loading](docs/ja/lazy-loading.md), [Windowed Rendering](docs/ja/windowed-rendering.md), [描画責務の境界](docs/ja/rendering-boundaries.md), and [render log レベル](docs/ja/render-log-level.md) |
+| Direction-aware styling boundary | [Direction-aware styling boundary](docs/en/direction-aware-styling.md) | [Direction-aware styling boundary](docs/ja/direction-aware-styling.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | GraphAdapter | [GraphAdapter](docs/en/graph-adapter.md) | [GraphAdapter](docs/ja/graph-adapter.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |

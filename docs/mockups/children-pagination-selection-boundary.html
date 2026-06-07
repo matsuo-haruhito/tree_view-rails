@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Children pagination selection boundary mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-boundary-layout { display: grid; gap: 24px; }
+.mock-boundary-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.mock-boundary-card { border: 1px solid #d8e0ea; border-radius: 8px; background: #fff; padding: 16px; }
+.mock-boundary-card h3, .mock-boundary-card p { margin: 0; }
+.mock-boundary-card h3 { font-size: 0.95rem; color: #334e68; }
+.mock-boundary-card p { margin-top: 0.45rem; color: #52606d; }
+.mock-pagination-selection-state { display: grid; gap: 12px; }
+.mock-boundary-note { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0; color: #52606d; }
+.mock-boundary-note strong { color: #243b53; }
+.mock-boundary-pill { display: inline-flex; align-items: center; min-height: 1.8rem; padding: 0.25rem 0.6rem; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334e68; font-size: 0.85rem; font-weight: 700; }
+.mock-selection-checkbox--mixed { display: inline-grid; place-items: center; width: 1rem; height: 1rem; border: 1.5px solid #64748b; border-radius: 4px; background: #fff; }
+.mock-selection-checkbox--mixed::before { content: ""; width: 0.55rem; height: 2px; border-radius: 999px; background: #1d4ed8; }
+.mock-pagination-placeholder { color: #52606d; }
+.mock-pagination-placeholder .tree-node-label { color: #334e68; }
+.mock-boundary-payload { margin: 0; padding: 0.7rem 0.8rem; border: 1px dashed #cbd5e1; border-radius: 8px; background: #f8fafc; color: #334e68; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 0.82rem; white-space: normal; word-break: break-word; }
+@media (max-width: 720px) {
+  .mock-boundary-card { padding: 14px; }
+  .mock-boundary-note { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Children pagination selection boundary mock</h1>
+      <p>Focused static reference for reviewing checkbox selection when a branch shows only a loaded slice of children. The examples keep TreeView's rendered-row boundary visible and leave server-side selection intent, authorization, and final bulk actions with the host app.</p>
+      <nav class="mock-return-nav" aria-label="Mockup navigation"><a href="review-gallery.html">Back to review gallery</a><a href="README.md">Back to mockup README</a></nav>
+    </header>
+
+    <section class="mock-section mock-boundary-layout" aria-labelledby="loaded-selection-heading">
+      <div>
+        <h2 id="loaded-selection-heading">Loaded rows only selection</h2>
+        <p>Checked rows mirror the rendered child rows that are present in the DOM. The next-page placeholder remains a pagination cue, not a submitted descendant selection.</p>
+      </div>
+      <div class="mock-boundary-summary" aria-label="Loaded selection summary">
+        <article class="mock-boundary-card"><h3>Rendered slice</h3><p>3 loaded descendants are visible under Roadmap.</p></article>
+        <article class="mock-boundary-card"><h3>Selected payloads</h3><p>2 checked loaded rows would mirror hidden inputs.</p></article>
+        <article class="mock-boundary-card"><h3>Unloaded descendants</h3><p>Rows behind the next-page placeholder are outside DOM-submitted selection.</p></article>
+      </div>
+      <div class="mock-pagination-selection-state" data-tree-view-sample="children-pagination-selection-boundary">
+        <table class="tree-view-table" aria-label="Loaded rows only selection sample">
+          <thead><tr><th scope="col">Select</th><th scope="col">Node</th><th scope="col">State</th><th scope="col">Boundary</th></tr></thead>
+          <tbody>
+            <tr class="tree-row is-expanded" aria-expanded="true"><td class="tree-selection-cell"><span class="mock-selection-checkbox--mixed" role="checkbox" aria-checked="mixed" aria-label="Some loaded Roadmap children selected"></span></td><td><span class="tree-node"><span class="tree-toggle" aria-hidden="true">-</span><span class="tree-node-label">Roadmap</span></span></td><td><span class="mock-status">Partial</span></td><td>Mixed state reflects rendered descendants only.</td></tr>
+            <tr class="tree-row is-selected"><td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Select Roadmap planning"></td><td><span class="tree-node tree-depth-1"><span class="tree-toggle" aria-hidden="true"></span><span class="tree-node-label">Planning</span></span></td><td><span class="mock-status">Selected</span></td><td>Included in hidden input sync.</td></tr>
+            <tr class="tree-row"><td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Select Roadmap research"></td><td><span class="tree-node tree-depth-1"><span class="tree-toggle" aria-hidden="true"></span><span class="tree-node-label">Research</span></span></td><td><span class="mock-status">Loaded</span></td><td>Available for rendered-row selection.</td></tr>
+            <tr class="tree-row is-selected"><td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Select Roadmap delivery"></td><td><span class="tree-node tree-depth-1"><span class="tree-toggle" aria-hidden="true"></span><span class="tree-node-label">Delivery</span></span></td><td><span class="mock-status">Selected</span></td><td>Included in hidden input sync.</td></tr>
+            <tr class="tree-row mock-pagination-placeholder"><td class="tree-selection-cell" aria-hidden="true"></td><td><span class="tree-node tree-depth-1"><span class="tree-toggle" aria-hidden="true"></span><span class="tree-node-label">More children are available</span></span></td><td><span class="mock-status">Next page</span></td><td>Unloaded descendants are not checked or submitted by this DOM slice.</td></tr>
+          </tbody>
+        </table>
+        <p class="mock-boundary-note"><strong>Review cue:</strong><span class="mock-boundary-pill">2 loaded selected</span><span class="mock-boundary-pill">1 loaded unselected</span><span class="mock-boundary-pill">unloaded unknown</span></p>
+      </div>
+    </section>
+
+    <section class="mock-section mock-boundary-layout" aria-labelledby="cascade-heading">
+      <div>
+        <h2 id="cascade-heading">Rendered-row cascade and indeterminate cues</h2>
+        <p>The parent can show an indeterminate review cue when only some rendered descendants are selected. The static mockup avoids promising cascade behavior for rows that have not been loaded.</p>
+      </div>
+      <div class="mock-pagination-selection-state">
+        <table class="tree-view-table" aria-label="Rendered-row cascade sample">
+          <thead><tr><th scope="col">Control</th><th scope="col">Node</th><th scope="col">Visible descendants</th><th scope="col">Unloaded boundary</th></tr></thead>
+          <tbody>
+            <tr class="tree-row is-expanded"><td class="tree-selection-cell"><span class="mock-selection-checkbox--mixed" role="checkbox" aria-checked="mixed" aria-label="Milestones partly selected"></span></td><td><span class="tree-node"><span class="tree-toggle" aria-hidden="true">-</span><span class="tree-node-label">Milestones</span></span></td><td>2 of 3 rendered rows selected</td><td>Additional descendants require host-app query intent.</td></tr>
+            <tr class="tree-row is-selected"><td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Select Alpha milestone"></td><td><span class="tree-node tree-depth-1"><span class="tree-toggle" aria-hidden="true"></span><span class="tree-node-label">Alpha</span></span></td><td>Rendered and selected</td><td>DOM payload available.</td></tr>
+            <tr class="tree-row is-selected"><td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" checked aria-label="Select Beta milestone"></td><td><span class="tree-node tree-depth-1"><span class="tree-toggle" aria-hidden="true"></span><span class="tree-node-label">Beta</span></span></td><td>Rendered and selected</td><td>DOM payload available.</td></tr>
+            <tr class="tree-row"><td class="tree-selection-cell"><input class="tree-selection-checkbox" type="checkbox" aria-label="Select Release candidate milestone"></td><td><span class="tree-node tree-depth-1"><span class="tree-toggle" aria-hidden="true"></span><span class="tree-node-label">Release candidate</span></span></td><td>Rendered and unselected</td><td>Can still be selected locally.</td></tr>
+            <tr class="tree-row mock-pagination-placeholder"><td class="tree-selection-cell" aria-hidden="true"></td><td><span class="tree-node tree-depth-1"><span class="tree-toggle" aria-hidden="true"></span><span class="tree-node-label">Load 12 more milestones</span></span></td><td>Not rendered</td><td>No checkbox state is implied.</td></tr>
+          </tbody>
+        </table>
+        <p class="mock-boundary-note"><strong>Rendered-only rule:</strong> the visual mixed state explains the loaded slice; it does not choose a product policy for unloaded descendants.</p>
+      </div>
+    </section>
+
+    <section class="mock-section mock-boundary-layout" aria-labelledby="bulk-action-heading">
+      <div>
+        <h2 id="bulk-action-heading">Host-app bulk action boundary</h2>
+        <p>When a bulk action should include descendants that are not rendered, the host app needs a query-backed or server-side intent. TreeView can keep the visible-row payload honest without owning that workflow.</p>
+      </div>
+      <div class="mock-boundary-summary">
+        <article class="mock-boundary-card mock-pagination-selection-state"><h3>DOM-submitted selection</h3><p>Best for actions on loaded checked rows.</p><p class="mock-boundary-payload">tree_selection[] = { id: "planning", depth: 1 }<br>tree_selection[] = { id: "delivery", depth: 1 }</p></article>
+        <article class="mock-boundary-card mock-pagination-selection-state"><h3>Query-backed intent</h3><p>Best when the host app offers "all descendants" across unloaded pages.</p><p class="mock-boundary-payload">selection_intent = { branch: "roadmap", scope: "all_descendants" }</p></article>
+        <article class="mock-boundary-card mock-pagination-selection-state"><h3>Review boundary</h3><p>Keep final copy, confirmation, permission checks, and server validation outside this static TreeView mockup.</p></article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

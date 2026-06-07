@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process"
+import { readFileSync } from "node:fs"
 
 function loadJavascriptPackageManifest() {
   const manifestJson = loadManifestJson()
@@ -50,6 +51,15 @@ function loadManifestJson() {
   }
 }
 
+function loadDeclarationExportNames() {
+  const declarationPath = new URL("../app/javascript/tree_view/index.d.ts", import.meta.url)
+  const declarationSource = readFileSync(declarationPath, "utf8")
+  const exportPattern = /^export\s+declare\s+(?:class|const|function)\s+([A-Za-z0-9_]+)/gm
+  const exportNames = [...declarationSource.matchAll(exportPattern)].map((match) => match[1])
+
+  return [...new Set(exportNames)]
+}
+
 function camelizeKey(value) {
   return value.replace(/_([a-z])/g, (_match, character) => character.toUpperCase())
 }
@@ -67,6 +77,78 @@ function deepCamelizeKeys(value) {
 
 function assert(condition, message) {
   if (!condition) throw new Error(message)
+}
+
+function formatValue(value) {
+  return JSON.stringify(value)
+}
+
+function valueType(value) {
+  if (Array.isArray(value)) return "array"
+  if (value === null) return "null"
+
+  return typeof value
+}
+
+function isPlainObject(value) {
+  return value && typeof value === "object" && !Array.isArray(value)
+}
+
+function diffValues(expected, actual, path) {
+  if (Array.isArray(expected) || Array.isArray(actual)) {
+    if (!Array.isArray(expected) || !Array.isArray(actual)) {
+      return [`${path}: expected ${valueType(expected)}, actual ${valueType(actual)}`]
+    }
+
+    if (JSON.stringify(expected) !== JSON.stringify(actual)) {
+      return [`${path}: expected ${formatValue(expected)}, actual ${formatValue(actual)}`]
+    }
+
+    return []
+  }
+
+  if (isPlainObject(expected) || isPlainObject(actual)) {
+    if (!isPlainObject(expected) || !isPlainObject(actual)) {
+      return [`${path}: expected ${valueType(expected)}, actual ${valueType(actual)}`]
+    }
+
+    const diffs = []
+    const expectedKeys = Object.keys(expected)
+    const actualKeys = Object.keys(actual)
+
+    expectedKeys
+      .filter((key) => !(key in actual))
+      .forEach((key) => diffs.push(`${path}.${key}: missing, expected ${formatValue(expected[key])}`))
+
+    actualKeys
+      .filter((key) => !(key in expected))
+      .forEach((key) => diffs.push(`${path}.${key}: extra, actual ${formatValue(actual[key])}`))
+
+    expectedKeys
+      .filter((key) => key in actual)
+      .forEach((key) => diffs.push(...diffValues(expected[key], actual[key], `${path}.${key}`)))
+
+    return diffs
+  }
+
+  if (expected !== actual) {
+    return [`${path}: expected ${formatValue(expected)}, actual ${formatValue(actual)}`]
+  }
+
+  return []
+}
+
+function assertDeepEqualExport(actual, expected, name) {
+  const diffs = diffValues(expected, actual, name)
+
+  assert(
+    diffs.length === 0,
+    [
+      `${name} export is out of sync`,
+      ...diffs.slice(0, 10),
+      ...(diffs.length > 10 ? [`...and ${diffs.length - 10} more differences`] : [])
+    ].join("\n")
+  )
 }
 
 function assertFrozenObject(value, name, { deep = false } = {}) {
@@ -98,8 +180,8 @@ function assertUniqueStringList(values, name) {
   const seenValues = new Set()
 
   values.forEach((value) => {
-    assert(typeof value === "string" && value.length > 0, `${name} contains a non-string detail key`)
-    assert(!seenValues.has(value), `${name} contains duplicate detail key: ${value}`)
+    assert(typeof value === "string" && value.length > 0, `${name} contains a non-string value`)
+    assert(!seenValues.has(value), `${name} contains duplicate value: ${value}`)
     seenValues.add(value)
   })
 }
@@ -115,6 +197,44 @@ function assertEventDetailKeysMatchEventNames(eventNames, eventDetailKeys) {
         `event_detail_keys.${group}.${eventKey} does not match an exported event name`
       )
       assertUniqueStringList(detailKeys, `event_detail_keys.${group}.${eventKey}`)
+    })
+  })
+}
+
+function assertEventDetailCoverage(eventNames, eventDetailKeys, eventNamesWithoutDetail) {
+  assert(
+    eventNamesWithoutDetail && typeof eventNamesWithoutDetail === "object" && !Array.isArray(eventNamesWithoutDetail),
+    "event_names_without_detail must be an object"
+  )
+
+  Object.entries(eventNamesWithoutDetail).forEach(([group, eventKeys]) => {
+    assert(group in eventNames, `event_names_without_detail.${group} does not match an exported event group`)
+    assertUniqueStringList(eventKeys, `event_names_without_detail.${group}`)
+
+    eventKeys.forEach((eventKey) => {
+      assert(
+        eventKey in eventNames[group],
+        `event_names_without_detail.${group}.${eventKey} does not match an exported event name`
+      )
+      assert(
+        !(eventKey in (eventDetailKeys[group] || {})),
+        `event_names_without_detail.${group}.${eventKey} is also listed in event_detail_keys`
+      )
+    })
+  })
+
+  Object.entries(eventNames).forEach(([group, events]) => {
+    Object.keys(events).forEach((eventKey) => {
+      const hasDetailKeys = eventKey in (eventDetailKeys[group] || {})
+      const isMarkedWithoutDetail = (eventNamesWithoutDetail[group] || []).includes(eventKey)
+
+      assert(
+        hasDetailKeys || isMarkedWithoutDetail,
+        [
+          `event_names.${group}.${eventKey} is not classified for detail coverage`,
+          "List it under event_detail_keys when it has documented public detail fields, or under event_names_without_detail when it intentionally has no public detail fields."
+        ].join("\n")
+      )
     })
   })
 }
@@ -143,6 +263,22 @@ assert(
   ].join("\n")
 )
 
+const declarationExportNames = loadDeclarationExportNames()
+const missingDeclarationExports = javascriptPackageManifest.named_exports.filter(
+  (exportName) => !declarationExportNames.includes(exportName)
+)
+const undocumentedDeclarationExports = declarationExportNames.filter(
+  (exportName) => !javascriptPackageManifest.named_exports.includes(exportName)
+)
+assert(
+  missingDeclarationExports.length === 0,
+  `TypeScript declaration exports are missing manifest exports: ${missingDeclarationExports.join(", ")}`
+)
+assert(
+  undocumentedDeclarationExports.length === 0,
+  `TypeScript declaration exports are not listed in the manifest: ${undocumentedDeclarationExports.join(", ")}`
+)
+
 const expectedIdentifiers = Object.fromEntries(
   javascriptPackageManifest.controller_registrations.map(({ key, identifier }) => [key, identifier])
 )
@@ -151,6 +287,13 @@ assert(
   "TreeViewControllerIdentifiers export is out of sync"
 )
 assertFrozenObject(entrypointModule.TreeViewControllerIdentifiers, "TreeViewControllerIdentifiers")
+
+const expectedSelectionDataHooks = deepCamelizeKeys(javascriptPackageManifest.selection_data_hooks)
+assert(
+  JSON.stringify(entrypointModule.TreeViewSelectionDataHooks) === JSON.stringify(expectedSelectionDataHooks),
+  "TreeViewSelectionDataHooks export is out of sync"
+)
+assertFrozenObject(entrypointModule.TreeViewSelectionDataHooks, "TreeViewSelectionDataHooks")
 
 const expectedRegistrations = javascriptPackageManifest.controller_registrations.map(({ identifier, export: exportName }) => {
   assert(exportName in entrypointModule, `${exportName} export is missing`)
@@ -175,23 +318,32 @@ assert(
 )
 
 const expectedEventNames = deepCamelizeKeys(javascriptPackageManifest.event_names)
-assert(
-  JSON.stringify(entrypointModule.TreeViewEventNames) === JSON.stringify(expectedEventNames),
-  "TreeViewEventNames export is out of sync"
-)
+assertDeepEqualExport(entrypointModule.TreeViewEventNames, expectedEventNames, "TreeViewEventNames")
 assertFrozenObject(entrypointModule.TreeViewEventNames, "TreeViewEventNames", { deep: true })
 
 const expectedEventDetailKeys = deepCamelizeKeys(javascriptPackageManifest.event_detail_keys)
-assert(
-  JSON.stringify(entrypointModule.TreeViewEventDetailKeys) === JSON.stringify(expectedEventDetailKeys),
-  "TreeViewEventDetailKeys export is out of sync"
-)
+assertDeepEqualExport(entrypointModule.TreeViewEventDetailKeys, expectedEventDetailKeys, "TreeViewEventDetailKeys")
 assertFrozenEventDetailKeys(entrypointModule.TreeViewEventDetailKeys, "TreeViewEventDetailKeys")
 assertEventDetailKeysMatchEventNames(entrypointModule.TreeViewEventNames, entrypointModule.TreeViewEventDetailKeys)
 
+const expectedEventNamesWithoutDetail = deepCamelizeKeys(javascriptPackageManifest.event_names_without_detail)
+assertEventDetailCoverage(
+  entrypointModule.TreeViewEventNames,
+  entrypointModule.TreeViewEventDetailKeys,
+  expectedEventNamesWithoutDetail
+)
+
 const expectedTransferDropPositions = javascriptPackageManifest.transfer_drop_positions
-assert(
-  JSON.stringify(entrypointModule.TreeViewTransferDropPositions) === JSON.stringify(expectedTransferDropPositions),
-  "TreeViewTransferDropPositions export is out of sync"
+assertDeepEqualExport(
+  entrypointModule.TreeViewTransferDropPositions,
+  expectedTransferDropPositions,
+  "TreeViewTransferDropPositions"
 )
 assertFrozenObject(entrypointModule.TreeViewTransferDropPositions, "TreeViewTransferDropPositions")
+
+const expectedRemoteStateValues = javascriptPackageManifest.remote_state_values
+assert(
+  JSON.stringify(entrypointModule.TreeViewRemoteStateValues) === JSON.stringify(expectedRemoteStateValues),
+  "TreeViewRemoteStateValues export is out of sync"
+)
+assertFrozenObject(entrypointModule.TreeViewRemoteStateValues, "TreeViewRemoteStateValues")

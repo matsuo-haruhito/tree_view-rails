@@ -174,6 +174,8 @@ pagination中は、まだDOM上に存在しないdescendantsがあります。pr
 | Bulk actions | unloaded childrenにも作用するactionはquery-backed actionにする。DOMから送られるcheckbox値はloaded-row actionsに限定する。 |
 | Retry/error UI | 失敗したparent/pageにretry controlをscopeし、他のpageがloadedのまま残れるようにする。 |
 
+loaded-row checkbox payload、hidden input sync、rendered-only cascade / indeterminate behavior の contract は [Selection](selection.md#連動checkbox挙動) が正本です。[children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) はこの境界を確認するための visual review aid であり、unloaded descendants 向けの TreeView API を追加するものではありません。
+
 ## 注意点
 
 - 並び順は必ず安定させてください。例: `order(:name, :id)`

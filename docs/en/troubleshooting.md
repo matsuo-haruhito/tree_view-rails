@@ -6,6 +6,23 @@ Use it when you already know what is going wrong in the host app, but are not su
 
 TreeView provides rendering primitives, JavaScript hooks, and validation helpers. The host app still owns routes, controller actions, authorization, queries, Turbo Stream responses, business actions, and layout decisions.
 
+## Localized labels show missing translations or unexpected fallback text
+
+Localized display names come from Rails / ActiveModel / I18n when those APIs are available. When TreeView cannot resolve a locale value, the localized-name helpers fall back to humanized class, attribute, or node type names unless the caller passes `default:`.
+
+Check these points.
+
+- Confirm the host app has the expected `activerecord.models`, `activerecord.attributes`, or `tree_view.node_types` locale keys for the current locale.
+- Pass `default:` when a row partial, presenter, or helper already knows the fallback copy that should appear for missing translations or plain Ruby objects.
+- Keep final translation text and product copy in the host app; TreeView only resolves names for the caller to render.
+- If toolbar action labels are the only missing text, check the `tree_view.toolbar.labels` keys or the explicit `labels:` override first.
+
+Read next:
+
+- [Localized names](localized-names.md)
+- [Public API](public-api.md)
+- [Host App Extension Points](host-app-extension-points.md)
+
 ## Toggle links do not expand or collapse
 
 Check the tree mode first.
@@ -45,6 +62,24 @@ Read next:
 - [Turbo Frame option](turbo-frame.md)
 - [Usage](usage.md)
 
+## Breadcrumbs fail or cannot find a parent path
+
+Breadcrumb path lookup is records-mode only. TreeView can render breadcrumbs when it can walk `parent_id_method` relationships from the current record back to a root.
+
+Check these points.
+
+- Confirm the tree was built from `records:` with `parent_id_method:`. Resolver mode and adapter mode do not expose a unique parent path to the bundled breadcrumb helper.
+- If the error says parent path helpers are only supported in records mode, keep the failure as a mode boundary signal instead of trying to infer parents from graph-like data.
+- If the data is graph-like, has multiple possible parents, or comes from `GraphAdapter`, let the host app choose the breadcrumb trail and render its own links or labels.
+- Keep route, authorization, layout placement, and analytics behavior in the host app; TreeView only owns records-mode path lookup and helper HTML.
+
+Read next:
+
+- [Breadcrumb](breadcrumb.md#supported-mode)
+- [GraphAdapter](graph-adapter.md)
+- [Host App Extension Points](host-app-extension-points.md)
+- [Rendering Boundaries](rendering-boundaries.md)
+
 ## Row partial output looks broken or table cells do not line up
 
 TreeView owns the row wrapper and common tree UI cells. The host app owns the contents of `row_partial`, action cells, and the surrounding table layout.
@@ -63,6 +98,25 @@ Read next:
 - [Selection](selection.md)
 - [Accessibility Semantics](accessibility-semantics.md)
 - [Tree diagnostics](tree-diagnostics.md)
+
+## Empty or no-results rows are missing, cramped, or use the wrong copy
+
+Empty-state symptoms usually belong to the host app's page state, search or filter policy, and final product copy. TreeView provides a reusable empty-row wrapper and message slot, but it does not decide why the page is empty or what action the user should take next.
+
+Check these points.
+
+- Decide whether the screen has no root items, no matching results after filtering, or records hidden by permission policy. Those cases often need different copy or next actions.
+- If the default empty row is enough, style or target the documented wrapper hooks instead of replacing the partial: `data-tree-view-empty-state="true"`, `.tree-view-empty-row__content`, and `.tree-view-empty-row__message`.
+- Keep final empty copy, CTA text, filter reset behavior, permission messaging, and analytics in the host app.
+- If the empty row looks cramped or does not span the surrounding table, inspect the host app table wrapper, captions, columns, and resource-table bridge layout before changing TreeView internals.
+- Treat the static empty-state mockup as a visual reference for hooks and boundaries, not as a Rails controller, query, or demo-app implementation.
+
+Read next:
+
+- [Accessibility Semantics: Empty-state and hidden-count hooks](accessibility-semantics.md#empty-state-and-hidden-count-hooks)
+- [Usage](usage.md)
+- [empty-state mockup](../mockups/empty-state.html)
+- [Mockup Empty-state guidance](../mockups/README.md#empty-state-guidance)
 
 ## Tree rendering triggers repeated queries or high ActiveRecord time
 
@@ -87,6 +141,45 @@ Read next:
 - [Cookbook: GraphAdapter and ActiveRecord performance](cookbook.md#graphadapter-and-activerecord-performance)
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Tree diagnostics](tree-diagnostics.md)
+
+## Large trees render too much HTML or the app needs virtual scrolling
+
+Start by separating HTML output pressure from host-app data pressure. TreeView can limit what it renders, but it does not reduce database queries, implement scroll-position-driven virtualization, or choose the host app's pagination strategy.
+
+Check these points.
+
+- If the initial page opens too many nodes, limit initial expansion with `max_initial_depth` before adding pagination or custom JavaScript.
+- If the rendered descendants are deeper than the screen needs, use `max_render_depth` or `max_leaf_distance` to reduce the render scope.
+- If the data is already loaded but the HTML output is too large, use `TreeView::RenderWindow` or `tree_view_rows(..., window:)` to slice the currently visible rows.
+- If fetching or preparing every descendant is the expensive part, move to lazy loading so the host app fetches children only when the user asks.
+- If one parent can have many children, use children pagination in the host app and keep cursor, limit, ordering, authorization, and next-page detection there.
+- If the product requires scroll-position-driven virtual scrolling, implement that in the host app. TreeView's windowed rendering is an HTML-output slice, not a full virtual scroll engine.
+
+Read next:
+
+- [Render scale](render-scale.md)
+- [Windowed Rendering](windowed-rendering.md)
+- [Lazy Loading](lazy-loading.md)
+- [Children Pagination](children-pagination.md)
+
+## Children pagination placeholders or unloaded descendants behave unexpectedly
+
+Children pagination is a host-app pattern built on lazy loading. TreeView provides child URL hooks and row data, but the host app owns the page query, next-page placeholder, bulk-action intent, and server-side validation.
+
+Check these points.
+
+- If the next-page placeholder never appears, confirm the host app detected another page, rendered the placeholder where it wants the next request to start, and returned the expected Turbo Stream response.
+- If a loaded page appends but the old placeholder remains, inspect the host app's `children_more` replacement or removal target before changing TreeView row partials.
+- If checkbox selection, cascade, drag/drop, or bulk actions seem to ignore unloaded descendants, decide whether the action applies only to loaded DOM rows or to the full filtered child set.
+- Use DOM-submitted checkbox values only when the action is intentionally limited to loaded rows. Use a query-backed or server-side intent when the action should include unloaded children.
+- Keep ordering, cursor validation, authorization, move validation, and final user-facing copy in the host app.
+
+Read next:
+
+- [Children Pagination](children-pagination.md#selection-and-dragdrop-interactions)
+- [Lazy Loading](lazy-loading.md)
+- [Selection](selection.md)
+- [children-pagination-selection-boundary mockup](../mockups/children-pagination-selection-boundary.html)
 
 ## GraphAdapter rows look duplicated, incomplete, or shaped differently than expected
 
@@ -117,17 +210,45 @@ Start with installation wiring.
 - Register TreeView controllers in the host app when using client-side toggling, selection, transfer hooks, remote loading state, or other browser-side features.
 - When the host app registers only some controllers or chooses a custom boot order, import `TreeViewControllerIdentifiers` from `tree_view/index.js` instead of hand-copying identifier strings.
 
+Then split CSS loading symptoms from JavaScript registration symptoms.
+
+- If CSS is missing in a Propshaft app, confirm the host app stylesheet that imports `tree_view` is actually loaded by the layout. Propshaft does not make the gem stylesheet visible unless the host app chooses to load or import it.
+- If CSS is missing in a Sprockets app, confirm the host app stylesheet imports `tree_view`, and that the Sprockets asset paths / precompile targets still include the TreeView stylesheet when the app relies on engine-provided assets.
+- If JavaScript behavior is missing but CSS applies, inspect the importmap pin and Stimulus/controller registration separately. The stylesheet import does not register TreeView controllers.
+- If CSS is missing but JavaScript events fire, inspect the host app asset pipeline first instead of changing controller registration.
+
 Remember the boundary.
 
 - Static rendering can work without TreeView JavaScript.
 - Selection cascade, client-side expand/collapse, transfer events, and remote loading state need the JavaScript controllers.
 - Missing CSS usually means the host app stylesheet pipeline was not wired to load the gem asset.
+- Asset pipeline choice, precompile targets, stylesheet load order, importmap pins, and controller boot order remain host-app responsibilities.
 
 Read next:
 
-- [Installation](installation.md)
+- [Installation: CSS import](installation.md#css-import)
+- [Installation: Propshaft](installation.md#propshaft)
+- [Installation: Sprockets](installation.md#sprockets)
+- [Installation: JavaScript / importmap](installation.md#javascript--importmap)
 - [Usage](usage.md)
 - [JavaScript event contract](js-events.md)
+
+## Drag/drop events report invalid payloads or `sourcePayload` is `null`
+
+Treat this as an integration signal first. TreeView reports transfer payload parse boundaries, but the host app still owns final rejection copy, logging, authorization, and recovery behavior.
+
+Check these points.
+
+- If `tree-view-transfer:drop` reports `sourcePayload: null`, confirm the browser `DataTransfer` contained a TreeView row payload under `application/json` or `text/plain`. External drags, empty transfer values, and browser events without a TreeView row payload all leave the source payload unavailable.
+- If `tree-view-transfer:invalid-transfer` fires, the transferred non-empty value could not be parsed as JSON. Inspect the drag source and any host-app code that writes to `DataTransfer`.
+- If `tree-view-transfer:invalid-payload` fires, the target row's `data-tree-transfer-payload` could not be parsed. Inspect `row_event_payload_builder`, `row_data_builder`, and the rendered row attributes before changing drop handling.
+- A valid `sourcePayload` is not the same as an accepted move. The host app still decides permission, target compatibility, `before` / `inside` / `after` policy, persistence, and user-facing retry or rejection messages.
+
+Read next:
+
+- [Drag and Drop: Missing or invalid source payloads](drag-and-drop.md#missing-or-invalid-source-payloads)
+- [JavaScript event contract: transfer events](js-events.md#transfer-events)
+- [Host App Extension Points](host-app-extension-points.md)
 
 ## TreeView partial render logs are missing or too noisy
 
