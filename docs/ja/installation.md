@@ -89,6 +89,17 @@ pin "tree_view", to: "tree_view/index.js"
 
 JavaScript controllers は、state tracking、keyboard navigation、selection cascade、transfer events、remote loading stateなどのbrowser-side integration hookで使います。
 
+Stimulus application をすでに起動している importmap app では、host app の JavaScript entrypoint から bundled controllers を登録します。
+
+```js
+import { application } from "controllers/application"
+import { registerTreeViewControllers } from "tree_view"
+
+registerTreeViewControllers(application)
+```
+
+JavaScript-powered な TreeView 機能を使う場合は、quick-start として `registerTreeViewControllers(application)` を使ってください。controller を部分登録したい場合や custom boot order が必要な場合は、public JavaScript surface の `TreeViewControllerIdentifiers` を使えます。詳しくは [Public API](public-api.md#javascript-surface) を参照してください。
+
 ## Packaged files
 
 TreeView gem package には、Rails host app で必要になる以下を含めます。
