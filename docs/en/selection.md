@@ -167,6 +167,8 @@ Host apps can limit the number of checked boxes on the JavaScript controller.
 </tbody>
 ```
 
+When your JavaScript authors or queries the host element, use `TreeViewSelectionDataHooks.maxCountValue` to reference that documented attribute name without hand-copying `data-tree-view-selection-max-count-value`.
+
 When a user exceeds the limit, TreeView unchecks the attempted checkbox and dispatches `tree-view-selection:limit-exceeded`.
 
 ```js
@@ -192,6 +194,8 @@ The Stimulus controller can also update rendered child rows and parent mixed sta
   <%= tree_view_rows(@render_state) %>
 </tbody>
 ```
+
+Use `TreeViewSelectionDataHooks.cascadeValue` and `TreeViewSelectionDataHooks.indeterminateValue` when JavaScript needs the documented attribute names for host-authored cascade and indeterminate wiring. The raw attributes remain part of the public docs, and the package-root export is only a machine-readable reference to those names.
 
 This behavior is DOM-based. It affects rendered rows only and skips disabled checkboxes.
 
