@@ -41,7 +41,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [selection-max-count.html](selection-max-count.html) | Focused selection max-count reference showing below-limit, limit-reached, and limit-exceeded feedback while keeping final action copy host-app owned. |
 | [selection-multi-tree-form.html](selection-multi-tree-form.html) | Focused multi-tree selection form reference showing source-specific selected counts, submit summary, empty state, and generated hidden input boundary as a review aid. |
 | [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) | Focused children-pagination selection boundary reference showing loaded-row selection, unloaded descendants, rendered-only cascade/indeterminate cues, and host-app-owned bulk action semantics. |
-| [toolbar-actions.html](toolbar-actions.html) | Expand-all, collapse-all, and collapse-to-current-path toolbar reference showing enabled, disabled, current-state, and long/localized label variants without host-app routes or authorization copy. |
+| [toolbar-actions.html](toolbar-actions.html) | Expand-all, collapse-all, and collapse-to-current-path toolbar reference showing enabled, disabled fallback, missing-path fallback, current-state, metadata-boundary, and long/localized label variants without host-app routes or authorization copy. |
 | [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
 
@@ -78,7 +78,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 29. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
 30. Use [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) when review needs to compare checkbox selection with partially loaded descendants, rendered-only cascade/indeterminate cues, and the boundary between DOM-submitted loaded rows and host-app query-backed bulk actions.
 31. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
-32. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
+32. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, disabled fallback, missing-path fallback, current-state cues, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
 33. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Automated smoke coverage
@@ -89,7 +89,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 ## Copy and language policy
 
 - Mockups use short, product-neutral English copy so reviewers can compare layout and state cues without language changes becoming visual noise.
-- `toolbar-actions.html` intentionally includes a narrow long/localized label stress case so reviewers can inspect wrapping and disabled/current cues without choosing final translations.
+- `toolbar-actions.html` intentionally includes a narrow long/localized label stress case so reviewers can inspect wrapping, metadata fallback, disabled state, and current-state cues without choosing final translations.
 - `localized-row-labels.html` intentionally uses long localized-style English labels to stress row wrapping, badge placement, attribute labels, secondary metadata, and tooltip cues without choosing final translations.
 - Final labels, localization, permission messaging, and business wording remain host-app responsibilities.
 - If a future mockup intentionally uses another language, document that exception here so reviewers know it is deliberate.
@@ -98,7 +98,7 @@ Record deliberate copy or language exceptions in this list. Add a row when a moc
 
 | Mockup | Deliberate exception | Review reason |
 |---|---|---|
-| `toolbar-actions.html` | Long / localized-style toolbar labels | Stress wrapping, disabled state, and current-state cues without choosing final translations. |
+| `toolbar-actions.html` | Long / localized-style toolbar labels | Stress wrapping, metadata fallback, disabled state, and current-state cues without choosing final translations. |
 | `localized-row-labels.html` | Long localized-style row labels and metadata | Stress primary label wrapping, badge placement, attribute labels, secondary metadata, and tooltip cues without choosing final translations. |
 
 ## Selection form guidance
@@ -134,6 +134,12 @@ Record deliberate copy or language exceptions in this list. Add a row when a moc
 
 - Keep generated folder rows visually distinct from record-backed rows, but avoid business-specific folder permission wording.
 - Treat record columns, file actions, download affordances, and final file-manager behavior as host-app responsibilities.
+
+## Toolbar guidance
+
+- Use `toolbar-actions.html` to review visual action availability, current-path emphasis, disabled fallback, and missing-path fallback without treating the page as a public API manifest for `tree_view_toolbar_action_metadata`.
+- Keep route builders, authorization policy, final localized labels, and permission messages in the host app.
+- Use #1449 for helper return-shape / manifest-backed public contract decisions instead of expanding this mockup into API documentation.
 
 ## Drag/drop guidance
 
