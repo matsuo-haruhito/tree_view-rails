@@ -210,6 +210,7 @@ Key documents:
 | Turbo Frame option | [Turbo Frame option](docs/en/turbo-frame.md) | [Turbo Frame オプション](docs/ja/turbo-frame.md) |
 | Persisted State | [Persisted State](docs/en/persisted-state.md) | [Persisted State](docs/ja/persisted-state.md) |
 | Localized names | [Localized names](docs/en/localized-names.md) | [ローカライズされた名前](docs/ja/localized-names.md) |
+| NodePresenter row partial patterns | [NodePresenter row partial patterns](docs/en/node-presenter-row-partials.md) | [NodePresenter row partial パターン](docs/ja/node-presenter-row-partials.md) |
 | Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
 | FAQ | [FAQ](docs/en/faq.md) | [FAQ](docs/ja/faq.md) |
 | Troubleshooting | [Troubleshooting](docs/en/troubleshooting.md) | [Troubleshooting](docs/ja/troubleshooting.md) |
