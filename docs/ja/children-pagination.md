@@ -155,6 +155,8 @@ host app側で、children rowsと「もっと見る」UIを返します。
 </tr>
 ```
 
+次page placeholder の配置や branch-scoped load-more affordance を静的に確認したい場合は、[children-pagination.html](../mockups/children-pagination.html) を使ってください。この mockup は review aid であり、cursor encoding、Turbo Stream response、最終 button copy、retry behavior は host app 側の責務です。
+
 ## lazy loadingとの関係
 
 children pagination は lazy loading の上にhost app側で作る仕組みです。
