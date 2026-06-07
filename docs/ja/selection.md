@@ -199,6 +199,10 @@ JavaScript が host-authored cascade / indeterminate wiring の documented attri
 
 この挙動はDOMベースです。影響するのは描画済み行だけで、disabled checkboxはskipします。
 
+controller は、現在のpageに存在するcheckbox elementだけを読み取ります。lazy loading や children pagination でまだ描画されていない descendants について、TreeView は選択 semantics を作りません。unloaded descendants も含む bulk action が必要な場合は、loaded-row checkbox payload に加えて、host app 側の server-side intent や query filter を送ってください。
+
+pagination 固有の境界は [Children Pagination](children-pagination.md#selection--drag-drop-との相互作用) を参照してください。静的な確認用 visual reference は [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) です。
+
 ## 責務範囲
 
 | Area | TreeView | Host app |
