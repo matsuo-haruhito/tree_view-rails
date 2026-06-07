@@ -85,6 +85,8 @@ Set `selection.enabled` to `true` to enable checkbox selection.
 
 `visibility: :leaves` renders checkboxes only for leaf nodes.
 
+For regular form submits, continue with [Hidden input sync for regular form submit](selection.md#hidden-input-sync-for-regular-form-submit). When JavaScript needs to reference the controller data attribute, use `TreeViewSelectionDataHooks.hiddenInputNameValue` from the package root instead of copying the raw attribute string.
+
 See [Selection](selection.md) for details.
 
 ## Visual check
