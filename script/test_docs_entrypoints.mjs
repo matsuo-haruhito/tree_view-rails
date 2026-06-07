@@ -64,6 +64,23 @@ const foundationalEntrypoints = [
       ["docs/ja/README.md", "installation.md"],
       ["docs/ja/README.md", "minimal-usage.md"],
       ["docs/ja/README.md", "usage.md"]
+    ],
+    signals: [
+      [
+        "docs/en/minimal-usage.md",
+        /TreeView::Tree[\s\S]*TreeView::UiConfigBuilder[\s\S]*build_static[\s\S]*TreeView::RenderState[\s\S]*tree_view_rows\(@render_state\)[\s\S]*row_partial[\s\S]*minimal-usage-first-render\.html/,
+        "English minimal-usage docs no longer expose the minimal controller/view/row-partial path and first-render mockup link"
+      ],
+      [
+        "docs/ja/minimal-usage.md",
+        /TreeView::Tree[\s\S]*TreeView::UiConfigBuilder[\s\S]*build_static[\s\S]*TreeView::RenderState[\s\S]*tree_view_rows\(@render_state\)[\s\S]*row_partial[\s\S]*minimal-usage-first-render\.html/,
+        "Japanese minimal-usage docs no longer expose the minimal controller/view/row-partial path and first-render mockup link"
+      ],
+      [
+        "docs/mockups/minimal-usage-first-render.html",
+        /data-tree-view-sample="minimal-usage-first-render"[\s\S]*Included[\s\S]*Initial table wrapper[\s\S]*Excluded[\s\S]*Checkbox selection[\s\S]*badges[\s\S]*row actions[\s\S]*CRUD links[\s\S]*routes[\s\S]*seeded demo records/,
+        "minimal-usage-first-render mockup no longer states the first-render included/excluded boundary"
+      ]
     ]
   },
   {
@@ -339,6 +356,48 @@ const featureEntrypoints = [
       ["docs/en/README.md", "host-app-extension-points.md"],
       ["docs/ja/README.md", "drag-and-drop.md"],
       ["docs/ja/README.md", "host-app-extension-points.md"]
+    ],
+    signals: [
+      [
+        "docs/en/host-app-extension-points.md",
+        /row_partial[\s\S]*row_actions_partial[\s\S]*row_data_builder[\s\S]*row_event_payload_builder/,
+        "English host-app extension docs no longer expose the row extension surface reverse lookup"
+      ],
+      [
+        "docs/en/host-app-extension-points.md",
+        /data-tree-view-interactive[\s\S]*data-tree-view-ignore-keyboard[\s\S]*data-tree-view-ignore-row-click[\s\S]*data-tree-view-ignore-drag/,
+        "English host-app extension docs no longer expose the interactive marker boundary"
+      ],
+      [
+        "docs/en/host-app-extension-points.md",
+        /data-tree-view-selection-hidden-input-name-value[\s\S]*data-tree-view-selection-max-count-value[\s\S]*data-tree-view-selection-cascade-value[\s\S]*data-tree-view-selection-indeterminate-value/,
+        "English host-app extension docs no longer expose the selection controller value attributes"
+      ],
+      [
+        "docs/en/host-app-extension-points.md",
+        /TreeView::PersistedState[\s\S]*TreeView::StateStore[\s\S]*show_descendants_path_builder[\s\S]*load_children_path_builder/,
+        "English host-app extension docs no longer expose persisted-state and path-builder boundaries"
+      ],
+      [
+        "docs/ja/host-app-extension-points.md",
+        /row_partial[\s\S]*row_actions_partial[\s\S]*row_data_builder[\s\S]*row_event_payload_builder/,
+        "Japanese host-app extension docs no longer expose the row extension surface reverse lookup"
+      ],
+      [
+        "docs/ja/host-app-extension-points.md",
+        /data-tree-view-interactive[\s\S]*data-tree-view-ignore-keyboard[\s\S]*data-tree-view-ignore-row-click[\s\S]*data-tree-view-ignore-drag/,
+        "Japanese host-app extension docs no longer expose the interactive marker boundary"
+      ],
+      [
+        "docs/ja/host-app-extension-points.md",
+        /data-tree-view-selection-hidden-input-name-value[\s\S]*data-tree-view-selection-max-count-value[\s\S]*data-tree-view-selection-cascade-value[\s\S]*data-tree-view-selection-indeterminate-value/,
+        "Japanese host-app extension docs no longer expose the selection controller value attributes"
+      ],
+      [
+        "docs/ja/host-app-extension-points.md",
+        /TreeView::PersistedState[\s\S]*TreeView::StateStore[\s\S]*show_descendants_path_builder[\s\S]*load_children_path_builder/,
+        "Japanese host-app extension docs no longer expose persisted-state and path-builder boundaries"
+      ]
     ]
   },
   {
@@ -406,10 +465,13 @@ const maintainerEntrypoints = [
   }
 ]
 
-foundationalEntrypoints.forEach(({ feature, rootPattern, links }) => {
+foundationalEntrypoints.forEach(({ feature, rootPattern, links, signals = [] }) => {
   assertRootSignal(feature, rootPattern, "README.md no longer exposes the representative docs signal")
 
   links.forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
+  signals.forEach(([sourcePath, signalPattern, message]) => {
+    assertDocumentSignal(sourcePath, signalPattern, feature, message)
+  })
 })
 
 featureEntrypoints.forEach(({ feature, rootPattern, links, signals = [] }) => {
