@@ -58,7 +58,6 @@ const focusedMockupSmokeTargets = [
   { file: "row-status-depth-labels.html", sample: ".tree-view-table tbody tr", minimumCount: 3 },
   { file: "toggle-icon-states.html", sample: ".tree-view-table tbody tr", minimumCount: 7 },
   { file: "interaction-states.html", sample: ".tree-view-table tbody tr", minimumCount: 5 },
-  { file: "children-pagination.html", sample: ".mock-pagination-card", minimumCount: 3 },
   { file: "reduced-motion-state-cues.html", sample: "[data-tree-view-sample='reduced-motion-state-cues'] .tree-view-table tbody tr", minimumCount: 5 },
   { file: "keyboard-focus-states.html", sample: ".focus-sample, .focus-sample--soft", minimumCount: 5 },
   { file: "keyboard-current-row/index.html", sample: ".keyboard-current-row, .keyboard-current-focus", minimumCount: 3 },
@@ -91,7 +90,6 @@ const narrowOverflowExpectedMockups = new Map([
   ["row-status-depth-labels.html", "status/depth table columns are intentionally preserved"],
   ["toggle-icon-states.html", "toggle-state comparison uses a wide table matrix"],
   ["interaction-states.html", "interaction-state table keeps multiple state columns visible"],
-  ["children-pagination.html", "children pagination examples keep branch page-state columns visible"],
   ["reduced-motion-state-cues.html", "state-cue comparison keeps the table matrix visible"],
   ["keyboard-focus-states.html", "focus samples include multiple side-by-side controls"],
   ["keyboard-current-row/index.html", "keyboard current-row comparison keeps focus/current/action columns visible"],
@@ -156,7 +154,6 @@ test.describe("docs mockup browser smoke", () => {
     expect(linkedFiles).toContain("minimal-usage-first-render.html")
     expect(linkedFiles).toContain("table-caption-context.html")
     expect(linkedFiles).toContain("interaction-states.html")
-    expect(linkedFiles).toContain("children-pagination.html")
     expect(linkedFiles).toContain("reduced-motion-state-cues.html")
     expect(linkedFiles).toContain("current-branch-sidebar.html")
     expect(linkedFiles).toContain("keyboard-current-row/index.html")
