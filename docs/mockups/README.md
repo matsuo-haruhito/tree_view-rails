@@ -15,6 +15,7 @@ They are **not** a complete Rails application and should not grow into host-app 
 | [minimal-usage-first-render.html](minimal-usage-first-render.html) | Minimal usage first-render reference showing the small table/tree output from the controller, view, and row-partial docs without checkbox selection, badges, row actions, routes, CRUD, or seed data. |
 | [readme-representative-visual-candidates.md](readme-representative-visual-candidates.md) | Candidate note for choosing a future README screenshot or GIF source before adding generated assets in #360. |
 | [resource-table-bridge.html](resource-table-bridge.html) | Resource table bridge reference showing shared hierarchy rows across fuller and narrower visible column sets without host-app table logic. |
+| [table-caption-context.html](table-caption-context.html) | Focused table caption and surrounding page structure reference showing host-app-owned heading, caption, summary, and actions around TreeView-owned row cues. |
 | [narrow-sidebar-tree.html](narrow-sidebar-tree.html) | Narrow sidebar and small-width reference that keeps toggle controls, primary labels, and current or selection cues visible while secondary metadata wraps below. |
 | [current-branch-sidebar.html](current-branch-sidebar.html) | Current branch sidebar reference showing current row, expanded ancestors, collapsed sibling branches, and depth/toggle cues without host-app navigation policy. |
 | [row-status-depth-labels.html](row-status-depth-labels.html) | Focused comparison for row-wide status cues, selection checkbox disabled state, and depth labels without host-app authorization or business wording. |
@@ -76,10 +77,11 @@ They are **not** a complete Rails application and should not grow into host-app 
 27. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
 28. Use [selection-max-count.html](selection-max-count.html) when review needs to compare below-limit, limit-reached, and limit-exceeded selection feedback without adding runtime behavior or final bulk-action copy.
 29. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
-30. Use [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) when review needs to compare checkbox selection with partially loaded descendants, rendered-only cascade/indeterminate cues, and the boundary between DOM-submitted loaded rows and host-app query-backed bulk actions.
-31. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
-32. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, disabled fallback, missing-path fallback, current-state cues, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
-33. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+30. Use [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) when selection review intersects with children pagination, rendered-only cascade/indeterminate cues, or unloaded descendant boundaries.
+31. Use [table-caption-context.html](table-caption-context.html) when review needs to compare host-app-owned heading, caption, summary, and adjacent actions around TreeView-owned row hierarchy cues.
+32. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
+33. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, disabled fallback, missing-path fallback, current-state cues, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
+34. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Automated smoke coverage
 
