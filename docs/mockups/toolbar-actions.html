@@ -6,41 +6,278 @@
 <title>TreeView toolbar actions mock</title>
 <link rel="stylesheet" href="default-tree.css">
 <style>
-.mock-toolbar-page { max-width: 1160px; }
-.mock-toolbar-grid { display: grid; gap: 18px; }
-.mock-toolbar-surface { display: grid; gap: 16px; }
-.mock-toolbar-frame { border: 1px solid #dde4ec; border-radius: 14px; overflow: hidden; background: #fff; }
-.mock-toolbar-frame--narrow { max-width: 380px; }
-.mock-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #e4e7eb; background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); }
-.mock-toolbar__copy { display: grid; gap: 2px; min-width: 0; }
-.mock-toolbar__eyebrow { margin: 0; color: #52606d; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.mock-toolbar__title { margin: 0; color: #102a43; font-size: 1rem; font-weight: 700; }
-.mock-toolbar__actions { display: inline-flex; flex-wrap: wrap; gap: 10px; }
-.mock-toolbar-button { display: inline-flex; align-items: center; gap: 8px; min-height: 2.4rem; min-width: 0; padding: 0.45rem 0.9rem; border: 1px solid #cbd5e1; border-radius: 999px; background: #fff; color: #102a43; font-weight: 700; text-decoration: none; }
-.mock-toolbar-button__label { min-width: 0; white-space: normal; }
-.mock-toolbar-button__icon { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; inline-size: 1.2rem; block-size: 1.2rem; border-radius: 999px; background: #e2e8f0; color: #334155; font-size: 0.8rem; font-weight: 800; }
-.mock-toolbar-button--current { border-color: #93c5fd; background: #eff6ff; color: #1d4ed8; }
-.mock-toolbar-button--current .mock-toolbar-button__icon { background: #bfdbfe; color: #1d4ed8; }
-.mock-toolbar-button[aria-disabled="true"], .mock-toolbar-button:disabled { border-style: dashed; color: #94a3b8; background: #f8fafc; }
-.mock-toolbar-button[aria-disabled="true"] .mock-toolbar-button__icon, .mock-toolbar-button:disabled .mock-toolbar-button__icon { background: #e2e8f0; color: #94a3b8; }
-.mock-toolbar-button[aria-disabled="true"] { pointer-events: none; }
-.mock-toolbar-note { margin: 0; color: #52606d; }
-.mock-toolbar-boundary-list { display: grid; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
-.mock-toolbar-boundary-list li { display: grid; grid-template-columns: minmax(7rem, max-content) 1fr; gap: 10px; align-items: start; padding: 0.55rem 0.65rem; border: 1px solid #e4e7eb; border-radius: 8px; background: #f8fafc; color: #334e68; }
-.mock-toolbar-boundary { color: #0f172a; font-weight: 800; }
-.mock-toolbar-preview { padding: 16px; background: #fff; }
-.mock-toolbar-node { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 0.7rem 0.85rem; border: 1px solid #e4e7eb; border-radius: 10px; margin-bottom: 10px; background: #fff; }
-.mock-toolbar-node:last-child { margin-bottom: 0; }
-.mock-toolbar-node.is-collapsed { background: #fffaf0; }
-.mock-toolbar-node.is-expanded { background: #eff6ff; }
-.mock-toolbar-node__tree { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
-.mock-toolbar-node__caret { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; inline-size: 1.8rem; block-size: 1.8rem; border-radius: 999px; background: #f1f5f9; color: #334155; font-weight: 800; }
-.mock-toolbar-node__meta { display: inline-flex; flex-wrap: wrap; gap: 8px; color: #52606d; font-size: 0.92rem; }
-.mock-toolbar-pill { display: inline-flex; align-items: center; justify-content: center; padding: 0.14rem 0.5rem; border-radius: 999px; background: #f1f5f9; color: #334155; font-size: 0.78rem; font-weight: 700; }
-.mock-toolbar-table { width: 100%; border-collapse: collapse; }
-.mock-toolbar-table th, .mock-toolbar-table td { border-bottom: 1px solid #e4e7eb; padding: 0.7rem 0.75rem; text-align: left; vertical-align: top; }
-.mock-toolbar-table th { background: #f8fafc; color: #334e68; font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase; }
-@media (max-width: 720px) { .mock-toolbar { align-items: flex-start; } .mock-toolbar__actions { inline-size: 100%; } .mock-toolbar-button { flex: 1 1 11rem; justify-content: center; } .mock-toolbar-boundary-list li { grid-template-columns: 1fr; } .mock-toolbar-frame--narrow { max-width: none; } .mock-toolbar-node { grid-template-columns: 1fr; } }
+.mock-toolbar-page {
+  max-width: 1160px;
+}
+
+.mock-toolbar-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.mock-toolbar-surface {
+  display: grid;
+  gap: 16px;
+}
+
+.mock-toolbar-frame {
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-toolbar-frame--narrow {
+  max-width: 380px;
+}
+
+.mock-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.mock-toolbar__copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mock-toolbar__eyebrow {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-toolbar__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-toolbar__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mock-toolbar-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 2.4rem;
+  min-width: 0;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #102a43;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mock-toolbar-button__label {
+  min-width: 0;
+  white-space: normal;
+}
+
+.mock-toolbar-button__icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.mock-toolbar-button--current {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.mock-toolbar-button--current .mock-toolbar-button__icon {
+  background: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.mock-toolbar-button[aria-disabled="true"],
+.mock-toolbar-button:disabled {
+  border-style: dashed;
+  color: #94a3b8;
+  background: #f8fafc;
+}
+
+.mock-toolbar-button[aria-disabled="true"] .mock-toolbar-button__icon,
+.mock-toolbar-button:disabled .mock-toolbar-button__icon {
+  background: #e2e8f0;
+  color: #94a3b8;
+}
+
+.mock-toolbar-button[aria-disabled="true"] {
+  pointer-events: none;
+}
+
+.mock-toolbar-note {
+  margin: 0;
+  color: #52606d;
+}
+
+.mock-toolbar-boundary-list {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mock-toolbar-boundary-list li {
+  display: grid;
+  grid-template-columns: minmax(7rem, max-content) 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #e4e7eb;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334e68;
+}
+
+.mock-toolbar-boundary {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.mock-toolbar-preview {
+  padding: 16px;
+  background: #fff;
+}
+
+.mock-toolbar-node {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #e4e7eb;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+.mock-toolbar-node:last-child {
+  margin-bottom: 0;
+}
+
+.mock-toolbar-node.is-collapsed {
+  background: #fffaf0;
+}
+
+.mock-toolbar-node.is-expanded {
+  background: #eff6ff;
+}
+
+.mock-toolbar-node__tree {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.mock-toolbar-node__caret {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.8rem;
+  block-size: 1.8rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #334155;
+  font-weight: 800;
+}
+
+.mock-toolbar-node__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #52606d;
+  font-size: 0.92rem;
+}
+
+.mock-toolbar-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.14rem 0.5rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.mock-toolbar-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-toolbar-table th,
+.mock-toolbar-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-toolbar-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .mock-toolbar {
+    align-items: flex-start;
+  }
+
+  .mock-toolbar__actions {
+    inline-size: 100%;
+  }
+
+  .mock-toolbar-button {
+    flex: 1 1 11rem;
+    justify-content: center;
+  }
+
+  .mock-toolbar-boundary-list li {
+    grid-template-columns: 1fr;
+  }
+
+  .mock-toolbar-frame--narrow {
+    max-width: none;
+  }
+
+  .mock-toolbar-node {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 </head>
 <body>
@@ -74,7 +311,10 @@
 
         <div class="mock-toolbar-frame">
           <div class="mock-toolbar">
-            <div class="mock-toolbar__copy"><p class="mock-toolbar__eyebrow">State A</p><p class="mock-toolbar__title">Mixed tree, every action available</p></div>
+            <div class="mock-toolbar__copy">
+              <p class="mock-toolbar__eyebrow">State A</p>
+              <p class="mock-toolbar__title">Mixed tree, every action available</p>
+            </div>
             <div class="mock-toolbar__actions" aria-label="Tree-wide actions">
               <a class="mock-toolbar-button" href="#" data-mock-state="expand-enabled"><span class="mock-toolbar-button__icon" aria-hidden="true">+</span><span class="mock-toolbar-button__label">Expand all</span></a>
               <a class="mock-toolbar-button" href="#" data-mock-state="collapse-enabled"><span class="mock-toolbar-button__icon" aria-hidden="true">-</span><span class="mock-toolbar-button__label">Collapse all</span></a>
@@ -90,7 +330,10 @@
 
         <div class="mock-toolbar-frame">
           <div class="mock-toolbar">
-            <div class="mock-toolbar__copy"><p class="mock-toolbar__eyebrow">State B</p><p class="mock-toolbar__title">Everything already expanded</p></div>
+            <div class="mock-toolbar__copy">
+              <p class="mock-toolbar__eyebrow">State B</p>
+              <p class="mock-toolbar__title">Everything already expanded</p>
+            </div>
             <div class="mock-toolbar__actions" aria-label="Tree-wide actions">
               <button class="mock-toolbar-button" type="button" aria-disabled="true" data-mock-boundary="metadata-disabled-fallback"><span class="mock-toolbar-button__icon" aria-hidden="true">+</span><span class="mock-toolbar-button__label">Expand all</span></button>
               <a class="mock-toolbar-button mock-toolbar-button--current" href="#" data-mock-state="collapse-current"><span class="mock-toolbar-button__icon" aria-hidden="true">-</span><span class="mock-toolbar-button__label">Collapse all</span></a>
@@ -105,7 +348,10 @@
 
         <div class="mock-toolbar-frame">
           <div class="mock-toolbar">
-            <div class="mock-toolbar__copy"><p class="mock-toolbar__eyebrow">State C</p><p class="mock-toolbar__title">Everything already collapsed</p></div>
+            <div class="mock-toolbar__copy">
+              <p class="mock-toolbar__eyebrow">State C</p>
+              <p class="mock-toolbar__title">Everything already collapsed</p>
+            </div>
             <div class="mock-toolbar__actions" aria-label="Tree-wide actions">
               <a class="mock-toolbar-button mock-toolbar-button--current" href="#" data-mock-state="expand-current"><span class="mock-toolbar-button__icon" aria-hidden="true">+</span><span class="mock-toolbar-button__label">Expand all</span></a>
               <button class="mock-toolbar-button" type="button" aria-disabled="true" data-mock-boundary="metadata-disabled-fallback"><span class="mock-toolbar-button__icon" aria-hidden="true">-</span><span class="mock-toolbar-button__label">Collapse all</span></button>
@@ -120,7 +366,10 @@
 
         <div class="mock-toolbar-frame">
           <div class="mock-toolbar">
-            <div class="mock-toolbar__copy"><p class="mock-toolbar__eyebrow">State D</p><p class="mock-toolbar__title">Only the current path stays open</p></div>
+            <div class="mock-toolbar__copy">
+              <p class="mock-toolbar__eyebrow">State D</p>
+              <p class="mock-toolbar__title">Only the current path stays open</p>
+            </div>
             <div class="mock-toolbar__actions" aria-label="Tree-wide actions">
               <a class="mock-toolbar-button" href="#" data-mock-state="expand-from-current-path"><span class="mock-toolbar-button__icon" aria-hidden="true">+</span><span class="mock-toolbar-button__label">Expand all</span></a>
               <a class="mock-toolbar-button" href="#" data-mock-state="collapse-from-current-path"><span class="mock-toolbar-button__icon" aria-hidden="true">-</span><span class="mock-toolbar-button__label">Collapse all</span></a>
