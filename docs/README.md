@@ -63,8 +63,8 @@
 
 - [English documentation](en/README.md): full English docs map, reading order, and maintainer-facing entry points within the English tree.
 - [日本語ドキュメント](ja/README.md): 日本語 docs tree の full map、reading order、maintainer-facing entry points。
-- [Product Profile](../Product%20Profile.md): repository positioning, source-of-truth order, host app responsibilities, and non-goals.
-- [AGENTS.md](../AGENTS.md): repository-specific maintainer workflow, first-read order, and documentation update rules.
+- Repository-only Product Profile (`Product Profile.md` at the repository root): repository positioning, source-of-truth order, host app responsibilities, and non-goals. This file is not packaged in the gem; read it from a repository checkout.
+- Repository-only maintainer workflow (`AGENTS.md` at the repository root): repository-specific maintainer workflow, first-read order, and documentation update rules. This file is not packaged in the gem; read it from a repository checkout.
 - [Documentation maintenance checklist](i18n-audit.md): language-sync rules, technical-asset inventory, and cross-language update coverage.
 - [Public API](en/public-api.md) / [公開 API](ja/public-api.md): compatibility contract and the surfaces host apps may use directly.
 - [Migration guide](en/migration.md) / [移行ガイド](ja/migration.md): upgrade expectations, deprecations, and release-note reading order.

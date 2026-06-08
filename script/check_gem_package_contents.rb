@@ -66,6 +66,13 @@ INSTALLATION_REQUIRED_SIGNALS = [
   "pin \"tree_view\", to: \"tree_view/index.js\""
 ].freeze
 
+PACKAGED_DOCS_FORBIDDEN_RELATIVE_ROOT_LINKS = {
+  "docs/README.md" => [
+    "../Product%20Profile.md",
+    "../AGENTS.md"
+  ]
+}.freeze
+
 root = File.expand_path("..", __dir__)
 gem_path = ARGV.first || Dir[File.join(root, "tree_view-*.gem")].max_by { |path| File.mtime(path) }
 
@@ -77,12 +84,16 @@ missing_installation_signals = INSTALLATION_DOC_PATHS.to_h do |path|
   content = File.read(File.join(root, path))
   [path, INSTALLATION_REQUIRED_SIGNALS.reject { |signal| content.include?(signal) }]
 end.reject { |_path, missing_signals| missing_signals.empty? }
+forbidden_packaged_doc_links = PACKAGED_DOCS_FORBIDDEN_RELATIVE_ROOT_LINKS.to_h do |path, forbidden_links|
+  content = File.read(File.join(root, path))
+  [path, forbidden_links.select { |link| content.include?(link) }]
+end.reject { |_path, links| links.empty? }
 
 importmap_path = File.join(root, "config/importmap.tree_view.rb")
 importmap_content = File.read(importmap_path)
 importmap_pin_missing = !importmap_content.include?("pin \"tree_view\", to: \"tree_view/index.js\"")
 
-if missing.empty? && missing_installation_signals.empty? && !importmap_pin_missing
+if missing.empty? && missing_installation_signals.empty? && forbidden_packaged_doc_links.empty? && !importmap_pin_missing
   puts "Gem package contents verified: #{File.basename(gem_path)}"
 else
   warn "Gem package contents verification failed: #{File.basename(gem_path)}"
@@ -95,6 +106,11 @@ else
   missing_installation_signals.each do |path, signals|
     warn "Missing installation docs signals in #{path}:"
     signals.each { |signal| warn "  - #{signal}" }
+  end
+
+  forbidden_packaged_doc_links.each do |path, links|
+    warn "Forbidden repository-only root doc links in packaged #{path}:"
+    links.each { |link| warn "  - #{link}" }
   end
 
   if importmap_pin_missing
