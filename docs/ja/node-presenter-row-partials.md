@@ -8,6 +8,7 @@
 
 - presenter の label、tooltip、badge、node type 名を host app の locale に合わせたい場合は [Localized names](localized-names.md) を参照してください。
 - その関心ごとを `row_partial`、builder、host app 側 UI code のどこに置くべきか迷う場合は [Host app extension points](host-app-extension-points.md#row_partial) を参照してください。
+- resolver が返す label、link、badge、icon、任意 action を host app 側の column や permission と並べて確認したい場合は、静的な visual reference として [node-presenter-row-partials.html](../mockups/node-presenter-row-partials.html) を使ってください。この mockup は review aid であり、Column / Action DSL や最終的な business UI contract ではありません。
 
 ## なぜ今 Column / Action DSL を入れないのか
 
