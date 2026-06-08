@@ -29,14 +29,12 @@ RSpec.describe "Public API integration hooks" do
     integration_hooks.each do |group_name, hooks|
       exported_group_name = camelize_key(group_name)
 
-      expect(entrypoint_source).to include("#{exported_group_name}: Object.freeze({"),
-        "expected TreeViewIntegrationHooks.#{exported_group_name} to remain documented")
+      expect(entrypoint_source).to include("#{exported_group_name}: Object.freeze({")
 
       hooks.each do |hook_key, hook_name|
         exported_hook_key = camelize_key(hook_key)
 
-        expect(entrypoint_source).to include("#{exported_hook_key}: \"#{hook_name}\""),
-          "expected TreeViewIntegrationHooks.#{exported_group_name}.#{exported_hook_key} to remain mapped to #{hook_name}"
+        expect(entrypoint_source).to include("#{exported_hook_key}: \"#{hook_name}\"")
       end
     end
   end
