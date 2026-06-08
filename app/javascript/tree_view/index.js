@@ -89,6 +89,19 @@ export const TreeViewSelectionDataHooks = Object.freeze({
   indeterminateValue: "data-tree-view-selection-indeterminate-value"
 })
 
+export const TreeViewIntegrationHooks = Object.freeze({
+  state: Object.freeze({
+    viewKeyValue: "data-tree-view-state-view-key-value",
+    nodeKey: "data-tree-view-state-node-key"
+  }),
+  remoteState: Object.freeze({
+    childrenUrl: "data-tree-children-url"
+  }),
+  transfer: Object.freeze({
+    payload: "data-tree-transfer-payload"
+  })
+})
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-client", TreeViewClientController)

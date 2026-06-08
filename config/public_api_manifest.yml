@@ -171,6 +171,7 @@ javascript_package_root:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
     - TreeViewSelectionDataHooks
+    - TreeViewIntegrationHooks
     - TreeViewTransferDropPositions
     - TreeViewRemoteStateValues
     - TreeViewStateController
@@ -285,3 +286,11 @@ javascript_package_root:
     max_count_value: data-tree-view-selection-max-count-value
     cascade_value: data-tree-view-selection-cascade-value
     indeterminate_value: data-tree-view-selection-indeterminate-value
+  integration_hooks:
+    state:
+      view_key_value: data-tree-view-state-view-key-value
+      node_key: data-tree-view-state-node-key
+    remote_state:
+      children_url: data-tree-children-url
+    transfer:
+      payload: data-tree-transfer-payload
