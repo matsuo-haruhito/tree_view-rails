@@ -3,9 +3,14 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
+const validLanguages = new Set(["en", "ja"])
 
 const parityExceptions = new Map([
-  // Keep intentional one-language Markdown pages visible here with a short reason.
+  // ["en:temporary-page.md", {
+  //   affectedLanguage: "ja",
+  //   reason: "Short reason why the peer page is intentionally absent.",
+  //   review: "Planned review timing or removal condition."
+  // }]
 ])
 
 function markdownPages(relativeDirectory) {
@@ -32,6 +37,50 @@ function assert(condition, message) {
   if (!condition) throw new Error(message)
 }
 
+function validateExceptionMetadata(sourceLanguage, page, metadata, pagesByLanguage) {
+  const exceptionKey = `${sourceLanguage}:${page}`
+
+  assert(
+    validLanguages.has(sourceLanguage),
+    `docs i18n parity exception ${exceptionKey} must start with en: or ja:`
+  )
+  assert(
+    page && page.endsWith(".md"),
+    `docs i18n parity exception ${exceptionKey} must include a Markdown page path`
+  )
+  assert(
+    pagesByLanguage[sourceLanguage].has(page),
+    `docs i18n parity exception ${exceptionKey} references a missing ${sourceLanguage} source page`
+  )
+  assert(
+    metadata && typeof metadata === "object" && !Array.isArray(metadata),
+    `docs i18n parity exception ${exceptionKey} must include metadata`
+  )
+  assert(
+    validLanguages.has(metadata.affectedLanguage) && metadata.affectedLanguage !== sourceLanguage,
+    `docs i18n parity exception ${exceptionKey} must name the missing peer language as affectedLanguage`
+  )
+
+  ;["reason", "review"].forEach((field) => {
+    assert(
+      typeof metadata[field] === "string" && metadata[field].trim().length > 0,
+      `docs i18n parity exception ${exceptionKey} must include a non-empty ${field}`
+    )
+  })
+}
+
+function validateParityExceptions(englishPages, japanesePages) {
+  const pagesByLanguage = {
+    en: new Set(englishPages),
+    ja: new Set(japanesePages)
+  }
+
+  parityExceptions.forEach((metadata, exceptionKey) => {
+    const [sourceLanguage, ...pageParts] = exceptionKey.split(":")
+    validateExceptionMetadata(sourceLanguage, pageParts.join(":"), metadata, pagesByLanguage)
+  })
+}
+
 function missingPeers(sourceLanguage, targetLanguage, sourcePages, targetPages) {
   const targetSet = new Set(targetPages)
 
@@ -43,6 +92,8 @@ function missingPeers(sourceLanguage, targetLanguage, sourcePages, targetPages) 
 
 const englishPages = markdownPages("docs/en")
 const japanesePages = markdownPages("docs/ja")
+
+validateParityExceptions(englishPages, japanesePages)
 
 const failures = [
   ...missingPeers("en", "ja", englishPages, japanesePages),
