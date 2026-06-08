@@ -79,6 +79,34 @@ export declare const TreeViewControllerIdentifiers: Readonly<{
   remoteState: "tree-view-remote-state"
 }>
 
+export declare const TreeViewControllerEntries: readonly [
+  Readonly<{
+    key: "state"
+    identifier: "tree-view-state"
+    controller: typeof TreeViewStateController
+  }>,
+  Readonly<{
+    key: "client"
+    identifier: "tree-view-client"
+    controller: typeof TreeViewClientController
+  }>,
+  Readonly<{
+    key: "selection"
+    identifier: "tree-view-selection"
+    controller: typeof TreeViewSelectionController
+  }>,
+  Readonly<{
+    key: "transfer"
+    identifier: "tree-view-transfer"
+    controller: typeof TreeViewTransferController
+  }>,
+  Readonly<{
+    key: "remoteState"
+    identifier: "tree-view-remote-state"
+    controller: typeof TreeViewRemoteStateController
+  }>
+]
+
 export declare const TreeViewSelectionDataHooks: Readonly<{
   hiddenInputNameValue: "data-tree-view-selection-hidden-input-name-value"
   maxCountValue: "data-tree-view-selection-max-count-value"
