@@ -30,7 +30,7 @@ builder は以下の2種類の公開node形状を作ります。
 | `TreeView::PathTreeBuilder::FolderNode` | `key`, `parent_key`, `label`, `path`, `node_type`, `folder_node?`, `record_node?` | 生成された中間フォルダ。 |
 | `TreeView::PathTreeBuilder::RecordNode` | `key`, `parent_key`, `label`, `path`, `record`, `node_type`, `folder_node?`, `record_node?` | host app recordを包むleaf node。 |
 
-`config/public_api_manifest.yml` は、これらの nested node constant、field 名、predicate method を machine-readable な public contract として追跡します。生成される tree の挙動、key generation、sort、host app record の描画は、個別 manifest surface ではなく `PathTreeBuilder` の挙動として扱います。
+これらの field / predicate set は、node shape contract として public API manifest でも追跡されます。manifest が固定するのは生成 node の読み取り可能な形状であり、folder key generation strategy、sort algorithm、file-manager behavior、host app の row action design までは固定しません。
 
 `RecordNode#record` には元のobjectが残るため、row partial 側で application-specific な列、link、status、action を描画できます。
 

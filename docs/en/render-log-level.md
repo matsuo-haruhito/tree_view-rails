@@ -13,6 +13,8 @@ end
 
 `render_log_level` is one of the manifest-backed `TreeView.configure` option keys in `config/public_api_manifest.yml`. This page documents its accepted values and logging boundary; it does not add a new configuration option.
 
+`initial_state` is also a manifest-backed `TreeView.configure` option key. Its accepted public values are `:expanded` and `:collapsed`; string values such as `"collapsed"` are normalized to symbols, and invalid values raise `TreeView::ConfigurationError`. The accepted value set is guarded by compatibility specs and docs rather than a separate manifest value schema.
+
 ## Changing the level
 
 Set `render_log_level` to any standard Ruby logger level name when the host app needs a different threshold.

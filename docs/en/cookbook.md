@@ -15,8 +15,38 @@ For API details, see:
 - [Selection](selection.md)
 - [Lazy Loading](lazy-loading.md)
 - [Windowed Rendering](windowed-rendering.md)
+- [Breadcrumb](breadcrumb.md)
 - [Localized names](localized-names.md)
 - [Toggle icon customization](toggle-icons.md)
+
+## Add a breadcrumb for the current item
+
+Use [Breadcrumb](breadcrumb.md) when the page already has a records-mode tree and a current item, and the UI needs a compact path from the root to that item. TreeView looks up the ancestor path with `tree.path_for(item)` and renders the standard breadcrumb markup through `tree_view_breadcrumb`.
+
+```erb
+<%= tree_view_breadcrumb(
+  @tree,
+  @document,
+  label_builder: ->(item) { item.name },
+  path_builder: ->(item) { document_path(item) }
+) %>
+```
+
+The current item is rendered as a current label, not a link. Keep route helpers, authorization, the current item choice, and layout placement in the host app. Use `path_builder:` for normal linked ancestors and omit it when the breadcrumb should render plain labels.
+
+When the host app needs custom wrappers, conditional copy, per-level authorization messaging, or markup that the helper options do not cover, build from the path directly instead of stretching the helper.
+
+```erb
+<% @tree.path_for(@document).each do |item| %>
+  <% if can?(:read, item) %>
+    <%= link_to item.name, document_path(item) %>
+  <% else %>
+    <span><%= item.name %></span>
+  <% end %>
+<% end %>
+```
+
+TreeView owns path lookup in records mode and the bundled helper option surface. The host app owns routes, authorization, where the breadcrumb appears, and any Turbo or analytics behavior attached to custom attributes.
 
 ## Row customization quick guide
 
@@ -295,6 +325,47 @@ Use windowed rendering when many visible rows remain.
 ```
 
 Use lazy loading when children should be loaded only as needed.
+
+## Combine lazy loading with children pagination
+
+Use this pattern when a branch has many direct children and rendering all of them after the first expand would still be too large. Keep lazy loading responsible for the initial child endpoint and remote-state placeholders, then let the host app return one page of children plus a host-app-owned "Load more" row.
+
+```ruby
+tree_ui = TreeView::UiConfigBuilder.new(
+  context: view_context,
+  node_prefix: "document",
+  key_resolver: ->(item) { TreeView.node_key("document", item.id) }
+).build(
+  load_children_path_builder: ->(item, depth, scope) {
+    children_document_path(item, depth:, scope:, limit: 50, format: :turbo_stream)
+  }
+)
+```
+
+```erb
+<%= turbo_stream.replace tree_children_container_dom_id(@parent) do %>
+  <tbody id="<%= tree_children_container_dom_id(@parent) %>">
+    <%= tree_view_rows(@render_state) %>
+    <% if @next_cursor %>
+      <tr id="<%= dom_id(@parent, :children_more) %>">
+        <td colspan="6">
+          <%= link_to "Load more",
+            children_document_path(@parent, cursor: @next_cursor, limit: @limit, format: :turbo_stream),
+            data: { turbo_stream: true } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+<% end %>
+
+<%= turbo_stream.replace tree_remote_state_placeholder_dom_id(@parent) do %>
+  <span <%= tag.attributes(tree_remote_state_placeholder_attributes(@parent, state: "loaded")) %>>loaded</span>
+<% end %>
+```
+
+TreeView provides `load_children_path_builder`, children container IDs, remote-state placeholder attributes, row rendering, and lazy-loading hooks. The host app owns the cursor or offset strategy, limit clamping, query ordering, authorization, `children_more` placement, retry copy, and Turbo Stream partial shape.
+
+For the full boundary and cursor details, read [Lazy Loading](lazy-loading.md), [Children Pagination](children-pagination.md), and [Render Scale](render-scale.md). Do not use this recipe as an infinite-scroll or virtual-scroll contract; those policies stay in the host app unless a separate feature changes them.
 
 ## Avoid an unopenable static collapsed tree
 

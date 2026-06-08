@@ -26,6 +26,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | Render large or partial trees | [Render Scale](render-scale.md), [Lazy Loading](lazy-loading.md), [Windowed Rendering](windowed-rendering.md), and [Children Pagination](children-pagination.md) |
 | Wire selection, forms, or table-owned columns | [Selection](selection.md), [Forms and editing rows](form-editing.md), and [Resource table bridge](resource-table-bridge.md) |
 | Check public contracts and integration hooks | [Public API](public-api.md), [JavaScript event contract](js-events.md), and [Host App Extension Points](host-app-extension-points.md) |
+| Review empty roots, no-results rows, or empty copy boundaries | [Usage: Empty root and no-results rows](usage.md#empty-root-and-no-results-rows) and [empty-state.html](../mockups/empty-state.html) |
 | Diagnose symptoms or responsibility boundaries | [Troubleshooting](troubleshooting.md), [FAQ](faq.md), and [Tree diagnostics](tree-diagnostics.md) |
 
 | Document | Description |
@@ -47,6 +48,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Forms and editing rows](form-editing.md) | Bulk edit forms, inline-editing layouts, Form Objects, row actions, and responsibility boundaries |
 | [Resource table bridge](resource-table-bridge.md) | Bridge TreeView row rendering with a separate table layer that owns columns and table state |
 | [API overview](api-overview.md) | Overview of the main public APIs, including records, resolver, and GraphAdapter adapter modes |
+| [GraphAdapter](graph-adapter.md) | Dedicated guide for adapter mode with heterogeneous or graph-like nodes |
 | [API reference](api.md) | Main public APIs, options, behavior, and constraints |
 | [PathTreeBuilder](path-tree-builder.md) | Build generated folder nodes and record nodes from path-like record values |
 | [ReverseTree](reverse-tree.md) | Render child-to-parent paths when matched records should be roots and ancestors should appear below them |
@@ -104,6 +106,8 @@ For large or partial trees, start with [Render Scale](render-scale.md) to choose
 For tree-wide expand/collapse controls, see [Toolbar helper](toolbar.md). Use [toolbar-actions.html](../mockups/toolbar-actions.html) as the static visual companion for supported toolbar actions and the `:current_path` contract.
 
 For static visual references of baseline DOM structure and interaction states, see [Visual reference mockups](../mockups/README.md). Start with [review-gallery.html](../mockups/review-gallery.html) for the fastest first look, open [default-tree.html](../mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
+
+For empty roots or no-results rows, start with [Usage: Empty root and no-results rows](usage.md#empty-root-and-no-results-rows) for the baseline hooks (`data-tree-view-empty-state="true"`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message`) and use [empty-state.html](../mockups/empty-state.html) to review the host-app-owned copy, CTA, permission messaging, and filter-reset boundary.
 
 For a high-level API entry point, read [API overview](api-overview.md) first, then use [API reference](api.md) for details.
 

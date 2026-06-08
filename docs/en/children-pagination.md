@@ -155,6 +155,8 @@ Render the initial next-page placeholder where the host app wants it to appear:
 </tr>
 ```
 
+Use [children-pagination.html](../mockups/children-pagination.html) when you want a static visual reference for next-page placeholder placement and branch-scoped load-more affordances. The mockup is a review aid only; cursor encoding, Turbo Stream responses, final button copy, and retry behavior remain host-app responsibilities.
+
 ## Relationship to lazy loading
 
 Children pagination is built by the host app on top of lazy loading.
@@ -173,6 +175,8 @@ Pagination means some descendants are not present in the DOM yet. Define product
 | Drag/drop | Validate moves on the server. Invisible or unloaded siblings can affect allowed positions, ordering, and conflict checks. |
 | Bulk actions | Use query-backed actions when the action should affect unloaded children. Use DOM-submitted checkbox values only for loaded-row actions. |
 | Retry/error UI | Keep retry controls scoped to the parent/page that failed so another page can remain loaded. |
+
+The [Selection](selection.md#linked-checkbox-behavior) guide is the contract for loaded-row checkbox payloads, hidden input sync, and rendered-only cascade / indeterminate behavior. The [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) mockup is a visual review aid for this boundary; it does not add a TreeView API for unloaded descendants.
 
 ## Notes
 

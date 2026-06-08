@@ -30,7 +30,7 @@ The builder creates two public node shapes:
 | `TreeView::PathTreeBuilder::FolderNode` | `key`, `parent_key`, `label`, `path`, `node_type`, `folder_node?`, `record_node?` | Generated intermediate folders. |
 | `TreeView::PathTreeBuilder::RecordNode` | `key`, `parent_key`, `label`, `path`, `record`, `node_type`, `folder_node?`, `record_node?` | Leaf nodes wrapping host-app records. |
 
-`config/public_api_manifest.yml` tracks these nested node constants, field names, and predicate methods as the machine-readable public contract. Generated tree behavior, key generation, sorting, and host-app record rendering remain `PathTreeBuilder` behavior rather than separate manifest surfaces.
+These field and predicate sets are tracked in the public API manifest as the node shape contract. The manifest fixes the readable shape of generated nodes, not the folder key generation strategy, sort algorithm, file-manager behavior, or host-app row action design.
 
 `RecordNode#record` keeps the original object so the row partial can render application-specific columns, links, status, or actions.
 

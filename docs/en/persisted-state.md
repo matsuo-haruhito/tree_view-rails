@@ -18,6 +18,19 @@ The host app remains responsible for storage ownership, authorization, save timi
 
 For a static visual reference of the save/restore handoff, see [Persisted State boundary mockup](../mockups/persisted-state-boundary.html). The mockup shows representative before, changed, restored, save-failed, and retry cues without turning storage, save endpoints, authorization, or retry policy into gem-owned behavior.
 
+## PersistedState.from normalization
+
+Use `TreeView::PersistedState.from(value)` when host-app integration code needs to normalize an optional persisted-state value before passing it into `RenderState`.
+
+`from` accepts only the current persisted-state boundary shapes:
+
+- `nil` returns `nil`, so callers can keep optional persisted state optional.
+- an existing `TreeView::PersistedState` instance is returned unchanged.
+- Hash-like input is read through `to_h`, symbolized, and converted from `tree_instance_key` / `expanded_keys` into a `TreeView::PersistedState` value object.
+- non Hash-like input raises `ArgumentError` with a `Hash-like` message fragment.
+
+This normalization boundary does not change `StateStore` persistence behavior, generator output, migration shape, storage lifecycle, or host-app authorization policy.
+
 ## Generator
 
 Use the generator to create model and migration templates.

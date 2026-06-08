@@ -13,6 +13,8 @@ end
 
 `render_log_level` は `config/public_api_manifest.yml` に載る manifest-backed な `TreeView.configure` option key の 1 つです。このページは指定可能な値と logging の責務境界を説明するもので、新しい configuration option は追加しません。
 
+`initial_state` も manifest-backed な `TreeView.configure` option key です。公開 contract として指定できる値は `:expanded` と `:collapsed` で、`"collapsed"` のような文字列は symbol に正規化されます。無効な値は `TreeView::ConfigurationError` になります。この accepted value set は、manifest に value schema を増やすのではなく compatibility spec と docs で守ります。
+
 ## level を変更する
 
 host app 側で別の閾値にしたい場合は、標準の Ruby logger level 名を指定します。

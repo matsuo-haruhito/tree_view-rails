@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process"
+import { readFileSync } from "node:fs"
 
 function loadJavascriptPackageManifest() {
   const manifestJson = loadManifestJson()
@@ -48,6 +49,15 @@ function loadManifestJson() {
       { cause: error }
     )
   }
+}
+
+function loadDeclarationExportNames() {
+  const declarationPath = new URL("../app/javascript/tree_view/index.d.ts", import.meta.url)
+  const declarationSource = readFileSync(declarationPath, "utf8")
+  const exportPattern = /^export\s+declare\s+(?:class|const|function)\s+([A-Za-z0-9_]+)/gm
+  const exportNames = [...declarationSource.matchAll(exportPattern)].map((match) => match[1])
+
+  return [...new Set(exportNames)]
 }
 
 function camelizeKey(value) {
@@ -170,8 +180,8 @@ function assertUniqueStringList(values, name) {
   const seenValues = new Set()
 
   values.forEach((value) => {
-    assert(typeof value === "string" && value.length > 0, `${name} contains a non-string detail key`)
-    assert(!seenValues.has(value), `${name} contains duplicate detail key: ${value}`)
+    assert(typeof value === "string" && value.length > 0, `${name} contains a non-string value`)
+    assert(!seenValues.has(value), `${name} contains duplicate value: ${value}`)
     seenValues.add(value)
   })
 }
@@ -187,6 +197,44 @@ function assertEventDetailKeysMatchEventNames(eventNames, eventDetailKeys) {
         `event_detail_keys.${group}.${eventKey} does not match an exported event name`
       )
       assertUniqueStringList(detailKeys, `event_detail_keys.${group}.${eventKey}`)
+    })
+  })
+}
+
+function assertEventDetailCoverage(eventNames, eventDetailKeys, eventNamesWithoutDetail) {
+  assert(
+    eventNamesWithoutDetail && typeof eventNamesWithoutDetail === "object" && !Array.isArray(eventNamesWithoutDetail),
+    "event_names_without_detail must be an object"
+  )
+
+  Object.entries(eventNamesWithoutDetail).forEach(([group, eventKeys]) => {
+    assert(group in eventNames, `event_names_without_detail.${group} does not match an exported event group`)
+    assertUniqueStringList(eventKeys, `event_names_without_detail.${group}`)
+
+    eventKeys.forEach((eventKey) => {
+      assert(
+        eventKey in eventNames[group],
+        `event_names_without_detail.${group}.${eventKey} does not match an exported event name`
+      )
+      assert(
+        !(eventKey in (eventDetailKeys[group] || {})),
+        `event_names_without_detail.${group}.${eventKey} is also listed in event_detail_keys`
+      )
+    })
+  })
+
+  Object.entries(eventNames).forEach(([group, events]) => {
+    Object.keys(events).forEach((eventKey) => {
+      const hasDetailKeys = eventKey in (eventDetailKeys[group] || {})
+      const isMarkedWithoutDetail = (eventNamesWithoutDetail[group] || []).includes(eventKey)
+
+      assert(
+        hasDetailKeys || isMarkedWithoutDetail,
+        [
+          `event_names.${group}.${eventKey} is not classified for detail coverage`,
+          "List it under event_detail_keys when it has documented public detail fields, or under event_names_without_detail when it intentionally has no public detail fields."
+        ].join("\n")
+      )
     })
   })
 }
@@ -215,6 +263,22 @@ assert(
   ].join("\n")
 )
 
+const declarationExportNames = loadDeclarationExportNames()
+const missingDeclarationExports = javascriptPackageManifest.named_exports.filter(
+  (exportName) => !declarationExportNames.includes(exportName)
+)
+const undocumentedDeclarationExports = declarationExportNames.filter(
+  (exportName) => !javascriptPackageManifest.named_exports.includes(exportName)
+)
+assert(
+  missingDeclarationExports.length === 0,
+  `TypeScript declaration exports are missing manifest exports: ${missingDeclarationExports.join(", ")}`
+)
+assert(
+  undocumentedDeclarationExports.length === 0,
+  `TypeScript declaration exports are not listed in the manifest: ${undocumentedDeclarationExports.join(", ")}`
+)
+
 const expectedIdentifiers = Object.fromEntries(
   javascriptPackageManifest.controller_registrations.map(({ key, identifier }) => [key, identifier])
 )
@@ -223,6 +287,13 @@ assert(
   "TreeViewControllerIdentifiers export is out of sync"
 )
 assertFrozenObject(entrypointModule.TreeViewControllerIdentifiers, "TreeViewControllerIdentifiers")
+
+const expectedSelectionDataHooks = deepCamelizeKeys(javascriptPackageManifest.selection_data_hooks)
+assert(
+  JSON.stringify(entrypointModule.TreeViewSelectionDataHooks) === JSON.stringify(expectedSelectionDataHooks),
+  "TreeViewSelectionDataHooks export is out of sync"
+)
+assertFrozenObject(entrypointModule.TreeViewSelectionDataHooks, "TreeViewSelectionDataHooks")
 
 const expectedRegistrations = javascriptPackageManifest.controller_registrations.map(({ identifier, export: exportName }) => {
   assert(exportName in entrypointModule, `${exportName} export is missing`)
@@ -255,6 +326,13 @@ assertDeepEqualExport(entrypointModule.TreeViewEventDetailKeys, expectedEventDet
 assertFrozenEventDetailKeys(entrypointModule.TreeViewEventDetailKeys, "TreeViewEventDetailKeys")
 assertEventDetailKeysMatchEventNames(entrypointModule.TreeViewEventNames, entrypointModule.TreeViewEventDetailKeys)
 
+const expectedEventNamesWithoutDetail = deepCamelizeKeys(javascriptPackageManifest.event_names_without_detail)
+assertEventDetailCoverage(
+  entrypointModule.TreeViewEventNames,
+  entrypointModule.TreeViewEventDetailKeys,
+  expectedEventNamesWithoutDetail
+)
+
 const expectedTransferDropPositions = javascriptPackageManifest.transfer_drop_positions
 assertDeepEqualExport(
   entrypointModule.TreeViewTransferDropPositions,
@@ -262,3 +340,10 @@ assertDeepEqualExport(
   "TreeViewTransferDropPositions"
 )
 assertFrozenObject(entrypointModule.TreeViewTransferDropPositions, "TreeViewTransferDropPositions")
+
+const expectedRemoteStateValues = javascriptPackageManifest.remote_state_values
+assert(
+  JSON.stringify(entrypointModule.TreeViewRemoteStateValues) === JSON.stringify(expectedRemoteStateValues),
+  "TreeViewRemoteStateValues export is out of sync"
+)
+assertFrozenObject(entrypointModule.TreeViewRemoteStateValues, "TreeViewRemoteStateValues")

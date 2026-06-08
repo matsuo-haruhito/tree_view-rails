@@ -21,6 +21,18 @@ RSpec.describe TreeView::PersistedState do
     expect(state.expanded_keys).to eq([1, 2])
   end
 
+  it "returns existing persisted state instances unchanged" do
+    state = described_class.new(tree_instance_key: "documents", expanded_keys: [1, 2])
+
+    expect(described_class.from(state)).to equal(state)
+  end
+
+  it "rejects non hash-like values" do
+    expect do
+      described_class.from("documents")
+    end.to raise_error(ArgumentError, /Hash-like/)
+  end
+
   it "returns nil from nil" do
     expect(described_class.from(nil)).to be_nil
   end

@@ -29,7 +29,7 @@ This builds visible rows from the current expansion state and render scope, then
 
 ## tree_view_window helper
 
-Use `tree_view_window` when pagination metadata is needed.
+Use `tree_view_window` when pagination metadata is needed. Its supported helper keyword surface is `offset:` and `limit:`; those keys are tracked in `config/public_api_manifest.yml` so compatibility checks catch drift without making pagination policy a TreeView responsibility.
 
 ```ruby
 window = tree_view_window(@render_state, offset: 0, limit: 50)
@@ -45,8 +45,8 @@ Main metadata:
 | `total_count` | Visible row count before windowing. |
 | `before_count` | Number of visible rows before the current window. |
 | `after_count` | Number of visible rows after the current window. |
-| `has_previous?` | Whether a previous window exists. |
-| `has_next?` | Whether a next window exists. |
+| `previous?` | Whether a previous window exists. |
+| `next?` | Whether a next window exists. |
 | `previous_offset` | Offset to pass back when rendering the previous window, or `nil` when there is no previous window. |
 | `next_offset` | Offset to pass forward when rendering the next window, or `nil` when there is no next window. |
 
@@ -67,8 +67,8 @@ window = tree_view_window(@render_state, offset: params.fetch(:tree_offset, 0).t
   (<%= window.before_count %> before, <%= window.after_count %> after)
 </p>
 
-<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.has_previous? %>
-<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.has_next? %>
+<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.previous? %>
+<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.next? %>
 ```
 
 The label text, route helper, parameter name, disabled-button treatment, and whether this appears as links, buttons, or a Turbo Frame toolbar are all host-app decisions.
@@ -118,8 +118,8 @@ end
 ```
 
 ```erb
-<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.has_previous? %>
-<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.has_next? %>
+<%= link_to "Previous", documents_path(tree_offset: window.previous_offset) if window.previous? %>
+<%= link_to "Next", documents_path(tree_offset: window.next_offset) if window.next? %>
 ```
 
 `tree_offset` is only an example key. The host app owns route design, param names, and which interactions must preserve the offset.

@@ -203,10 +203,14 @@ Key documents:
 | Installation | [Installation](docs/en/installation.md) | [導入手順](docs/ja/installation.md) |
 | Minimal usage | [Minimal usage](docs/en/minimal-usage.md) | [最小利用例](docs/ja/minimal-usage.md) |
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
+| Selection | [Selection](docs/en/selection.md) | [Selection](docs/ja/selection.md) |
 | Toolbar helper (`tree_view_toolbar`) | [Toolbar helper](docs/en/toolbar.md) | [Toolbar helper](docs/ja/toolbar.md) |
+| Breadcrumb helper (`tree_view_breadcrumb`) | [Breadcrumb helper](docs/en/breadcrumb.md) | [Breadcrumb helper](docs/ja/breadcrumb.md) |
+| Depth labels and row status | [Depth Labels](docs/en/depth-labels.md) and [Row Status](docs/en/row-status.md) | [Depth Labels](docs/ja/depth-labels.md) and [Row Status](docs/ja/row-status.md) |
 | Turbo Frame option | [Turbo Frame option](docs/en/turbo-frame.md) | [Turbo Frame オプション](docs/ja/turbo-frame.md) |
 | Persisted State | [Persisted State](docs/en/persisted-state.md) | [Persisted State](docs/ja/persisted-state.md) |
 | Localized names | [Localized names](docs/en/localized-names.md) | [ローカライズされた名前](docs/ja/localized-names.md) |
+| NodePresenter row partial patterns | [NodePresenter row partial patterns](docs/en/node-presenter-row-partials.md) | [NodePresenter row partial パターン](docs/ja/node-presenter-row-partials.md) |
 | Decision guide | [Decision guide](docs/en/decision-guide.md) | [API判断ガイド](docs/ja/decision-guide.md) |
 | FAQ | [FAQ](docs/en/faq.md) | [FAQ](docs/ja/faq.md) |
 | Troubleshooting | [Troubleshooting](docs/en/troubleshooting.md) | [Troubleshooting](docs/ja/troubleshooting.md) |

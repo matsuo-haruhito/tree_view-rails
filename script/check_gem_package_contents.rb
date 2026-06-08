@@ -5,7 +5,7 @@ require "rubygems/package"
 
 # Keep representative English and Japanese files in this list so package
 # verification covers the bilingual locale, public API, docs entrypoints,
-# and release docs shipped by the gem.
+# release docs, and user-facing mockup entrypoints shipped by the gem.
 REQUIRED_PACKAGED_PATHS = %w[
   app/helpers/tree_view_helper.rb
   app/helpers/tree_view_helper/support.rb
@@ -34,6 +34,12 @@ REQUIRED_PACKAGED_PATHS = %w[
   CHANGELOG.md
   README.md
   docs/README.md
+  docs/mockups/README.md
+  docs/mockups/review-gallery.html
+  docs/mockups/default-tree.html
+  docs/mockups/default-tree.css
+  docs/en/installation.md
+  docs/ja/installation.md
   docs/en/public-api.md
   docs/ja/public-api.md
   docs/en/release.md

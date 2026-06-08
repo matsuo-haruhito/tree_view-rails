@@ -155,6 +155,8 @@ host app側で、children rowsと「もっと見る」UIを返します。
 </tr>
 ```
 
+次page placeholder の配置や branch-scoped load-more affordance を静的に確認したい場合は、[children-pagination.html](../mockups/children-pagination.html) を使ってください。この mockup は review aid であり、cursor encoding、Turbo Stream response、最終 button copy、retry behavior は host app 側の責務です。
+
 ## lazy loadingとの関係
 
 children pagination は lazy loading の上にhost app側で作る仕組みです。
@@ -173,6 +175,8 @@ pagination中は、まだDOM上に存在しないdescendantsがあります。pr
 | Drag/drop | move validationはserver側で行う。見えていないsiblingsがallowed positions、ordering、conflict checkに影響する可能性があります。 |
 | Bulk actions | unloaded childrenにも作用するactionはquery-backed actionにする。DOMから送られるcheckbox値はloaded-row actionsに限定する。 |
 | Retry/error UI | 失敗したparent/pageにretry controlをscopeし、他のpageがloadedのまま残れるようにする。 |
+
+loaded-row checkbox payload、hidden input sync、rendered-only cascade / indeterminate behavior の contract は [Selection](selection.md#連動checkbox挙動) が正本です。[children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) はこの境界を確認するための visual review aid であり、unloaded descendants 向けの TreeView API を追加するものではありません。
 
 ## 注意点
 
