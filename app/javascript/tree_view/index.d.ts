@@ -91,4 +91,10 @@ export declare const TreeViewSelectionCheckboxHooks: Readonly<{
   disabledReasonAttribute: "data-tree-selection-disabled-reason"
 }>
 
+export declare const TreeViewEmptyStateHooks: Readonly<{
+  wrapperAttribute: "data-tree-view-empty-state"
+  contentClass: "tree-view-empty-row__content"
+  messageClass: "tree-view-empty-row__message"
+}>
+
 export declare function registerTreeViewControllers(application: Application): void
