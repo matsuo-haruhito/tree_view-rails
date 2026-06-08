@@ -183,7 +183,7 @@ Row partial:
 
 You can also render the `tree_view/tree_row` partial directly when needed.
 
-TreeView silences its own helper-rendered partial logs at `:warn` by default to avoid noisy `Rendered tree_view/...` entries in the host app log. Change or disable this with `TreeView.configure { |config| config.render_log_level = :info }` or `nil`.
+TreeView silences its own helper-rendered partial logs at `:warn` by default to avoid noisy `Rendered tree_view/...` entries in the host app log. Change or disable this with `TreeView.configure { |config| config.render_log_level = :info }` or `nil`. See [Render log level](docs/en/render-log-level.md) / [日本語](docs/ja/render-log-level.md) for accepted values and the boundary with the host app's global Rails logger level.
 
 See [Usage](docs/en/usage.md) for details.
 
