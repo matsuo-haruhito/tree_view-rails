@@ -230,6 +230,7 @@ Key documents:
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | GraphAdapter | [GraphAdapter](docs/en/graph-adapter.md) | [GraphAdapter](docs/ja/graph-adapter.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
+| Error hierarchy | [Error hierarchy](docs/en/errors.md) | [エラー階層](docs/ja/errors.md) |
 | PathTreeBuilder | [PathTreeBuilder](docs/en/path-tree-builder.md) | [PathTreeBuilder](docs/ja/path-tree-builder.md) |
 | ReverseTree | [ReverseTree](docs/en/reverse-tree.md) | [ReverseTree](docs/ja/reverse-tree.md) |
 | Filtered Trees | [Filtered Trees](docs/en/filtered-trees.md) | [Filtered Trees](docs/ja/filtered-trees.md) |
