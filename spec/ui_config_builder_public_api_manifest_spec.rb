@@ -3,11 +3,11 @@
 require "spec_helper"
 require "yaml"
 
-RSpec.describe "UiConfigBuilder public API manifest" do
-  MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+UI_CONFIG_BUILDER_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
 
+RSpec.describe "UiConfigBuilder public API manifest" do
   def manifest_option_keys
-    YAML.safe_load_file(MANIFEST_PATH).fetch("ui_config_builder_option_keys")
+    YAML.safe_load_file(UI_CONFIG_BUILDER_MANIFEST_PATH).fetch("ui_config_builder_option_keys")
   end
 
   def keyword_option_keys(method_name)
