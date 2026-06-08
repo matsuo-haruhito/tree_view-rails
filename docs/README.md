@@ -29,8 +29,8 @@
 - [日本語FAQ](ja/faq.md): 責務境界とよくある誤解を短く確認する入口。
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
-- [English Accessibility Semantics](en/accessibility-semantics.md): table-first ARIA policy, keyboard helper boundary, and intentional automated-check allowances.
-- [日本語Accessibility Semantics](ja/accessibility-semantics.md): table-first ARIA 方針、keyboard helper の責務境界、自動 accessibility check の意図的な許容事項。
+- [English Accessibility Semantics](en/accessibility-semantics.md): table-first ARIA policy, empty-state wrapper hooks, keyboard helper boundary, and intentional automated-check allowances.
+- [日本語Accessibility Semantics](ja/accessibility-semantics.md): table-first ARIA 方針、empty-state wrapper hook、keyboard helper の責務境界、自動 accessibility check の意図的な許容事項。
 - [English Selection](en/selection.md): checkbox selection hooks, disabled state, cascade behavior, and submitted value parsing.
 - [日本語Selection](ja/selection.md): checkbox selection hooks、disabled state、cascade、submitted value parsing の入口。
 - [English Lazy Loading](en/lazy-loading.md): load children on demand through host-app routes and TreeView remote-state hooks.
@@ -45,7 +45,7 @@
 - [日本語Render log level](ja/render-log-level.md): host app 全体の Rails logger level を変えずに、TreeView helper-rendered partial log の出力を調整する入口。
 - [English direction-aware styling boundary](en/direction-aware-styling.md): host-app override guidance for RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing.
 - [日本語Direction-aware styling boundary](ja/direction-aware-styling.md): RTL、writing direction、current-row cue、hierarchy connector、toggle spacing の host-app override guidance。
-- [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure and interaction states. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
+- [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure, interaction states, and focused empty-state rows. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, and use [empty-state.html](mockups/empty-state.html) when checking no-root-items / no-results wrapper hooks and host-app-owned copy boundaries.
 - [English demo application boundary](en/demo-application-boundary.md): decide when to use static mockups versus a real Rails demo app, without adding private or unavailable demo links.
 - [日本語Demo application boundary](ja/demo-application-boundary.md): static mockup と real Rails demo app の役割分担、未公開 demo link を増やさない方針。
 - [English Turbo Frame option](en/turbo-frame.md): target TreeView Turbo toggle links at a host-app Turbo Frame without custom JavaScript.
