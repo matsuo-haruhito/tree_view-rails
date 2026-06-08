@@ -60,6 +60,18 @@ const selectionDataHookSignals = [
   "data-tree-view-selection-hidden-input-name-value"
 ]
 
+const manifestBackedDocsSignalSurfaces = [
+  ["RenderState callback builder keys", "render_state_callback_builder_keys:"],
+  ["host lifecycle no-detail events", "event_names_without_detail:"],
+  ["host lifecycle event names", "host_lifecycle:"],
+  ["remote-state values", "remote_state_values:"],
+  ["selection data hooks", "selection_data_hooks:"]
+]
+
+manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
+  assertIncludes(manifest, manifestNeedle, `public API docs signal manifest surface (${label})`)
+})
+
 callbackBuilderSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest callback builder key surface")
 })
