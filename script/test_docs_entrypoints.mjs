@@ -264,6 +264,28 @@ const featureEntrypoints = [
       ["docs/README.md", "ja/selection.md"],
       ["docs/en/README.md", "selection.md"],
       ["docs/ja/README.md", "selection.md"]
+    ],
+    signals: [
+      [
+        "docs/en/public-api.md",
+        /TreeViewSelectionDataHooks[\s\S]*hiddenInputNameValue[\s\S]*maxCountValue[\s\S]*cascadeValue[\s\S]*indeterminateValue[\s\S]*data-tree-view-selection-hidden-input-name-value[\s\S]*data-tree-view-selection-max-count-value[\s\S]*data-tree-view-selection-cascade-value[\s\S]*data-tree-view-selection-indeterminate-value/,
+        "English public API docs no longer expose the TreeViewSelectionDataHooks host-authored value attributes"
+      ],
+      [
+        "docs/ja/public-api.md",
+        /TreeViewSelectionDataHooks[\s\S]*hiddenInputNameValue[\s\S]*maxCountValue[\s\S]*cascadeValue[\s\S]*indeterminateValue[\s\S]*data-tree-view-selection-hidden-input-name-value[\s\S]*data-tree-view-selection-max-count-value[\s\S]*data-tree-view-selection-cascade-value[\s\S]*data-tree-view-selection-indeterminate-value/,
+        "Japanese public API docs no longer expose the TreeViewSelectionDataHooks host-authored value attributes"
+      ],
+      [
+        "docs/en/selection.md",
+        /TreeViewSelectionDataHooks\.hiddenInputNameValue[\s\S]*TreeViewSelectionDataHooks\.maxCountValue[\s\S]*TreeViewSelectionDataHooks\.cascadeValue[\s\S]*TreeViewSelectionDataHooks\.indeterminateValue/,
+        "English selection docs no longer expose the machine-readable selection data hooks"
+      ],
+      [
+        "docs/ja/selection.md",
+        /TreeViewSelectionDataHooks\.hiddenInputNameValue[\s\S]*TreeViewSelectionDataHooks\.maxCountValue[\s\S]*TreeViewSelectionDataHooks\.cascadeValue[\s\S]*TreeViewSelectionDataHooks\.indeterminateValue/,
+        "Japanese selection docs no longer expose the machine-readable selection data hooks"
+      ]
     ]
   },
   {
@@ -308,6 +330,30 @@ const featureEntrypoints = [
       ["docs/README.md", "ja/breadcrumb.md"],
       ["docs/en/README.md", "breadcrumb.md"],
       ["docs/ja/README.md", "breadcrumb.md"]
+    ]
+  },
+  {
+    feature: "Cookbook",
+    rootPattern: /Cookbook/,
+    links: [
+      ["README.md", "docs/en/cookbook.md"],
+      ["README.md", "docs/ja/cookbook.md"],
+      ["docs/README.md", "en/cookbook.md"],
+      ["docs/README.md", "ja/cookbook.md"],
+      ["docs/en/README.md", "cookbook.md"],
+      ["docs/ja/README.md", "cookbook.md"]
+    ],
+    signals: [
+      [
+        "docs/en/cookbook.md",
+        /tree_view_breadcrumb[\s\S]*row_partial[\s\S]*row_actions_partial[\s\S]*data-tree-view-interactive[\s\S]*TreeView::NodePresenter[\s\S]*TreeView\.model_name_for[\s\S]*TreeView\.attribute_name_for[\s\S]*TreeView\.type_name_for/,
+        "English Cookbook no longer exposes the representative host-app pattern signals"
+      ],
+      [
+        "docs/ja/cookbook.md",
+        /tree_view_breadcrumb[\s\S]*row_partial[\s\S]*row_actions_partial[\s\S]*data-tree-view-interactive[\s\S]*TreeView::NodePresenter[\s\S]*TreeView\.model_name_for[\s\S]*TreeView\.attribute_name_for[\s\S]*TreeView\.type_name_for/,
+        "Japanese Cookbook no longer exposes the representative host-app pattern signals"
+      ]
     ]
   },
   {
