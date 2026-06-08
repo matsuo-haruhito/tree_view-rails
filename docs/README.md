@@ -37,6 +37,8 @@
 - [日本語Lazy Loading](ja/lazy-loading.md): host app の route と TreeView remote-state hooks で子nodeを必要時に読み込む入口。
 - [English Children Pagination](en/children-pagination.md): combine lazy loading with server-side child paging when a parent has too many direct children to return at once.
 - [日本語Children Pagination](ja/children-pagination.md): direct children が多すぎる親nodeで、lazy loading と server-side child paging を組み合わせる入口。
+- [English Cookbook](en/cookbook.md): common host-app patterns that combine existing TreeView APIs while keeping CRUD, authorization, routes, and final copy in the host app.
+- [日本語Cookbook](ja/cookbook.md): 既存TreeView APIを組み合わせるhost app向けpattern集。CRUD、authorization、route、最終copyはhost app側に残します。
 - [English Windowed Rendering](en/windowed-rendering.md): render visible rows by offset and limit while host apps keep query and paging ownership.
 - [日本語Windowed Rendering](ja/windowed-rendering.md): offset / limit で visible rows を描画し、query や paging は host app が所有する前提の入口。
 - [English Render log level](en/render-log-level.md): configure TreeView helper-rendered partial log verbosity without changing the host app's global Rails logger level.
