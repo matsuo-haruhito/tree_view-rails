@@ -201,6 +201,7 @@ javascript_package_root:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
     - TreeViewSelectionDataHooks
+    - TreeViewSelectionCheckboxHooks
     - TreeViewEmptyStateHooks
     - TreeViewTransferDropPositions
     - TreeViewRemoteStateValues
@@ -316,6 +317,9 @@ javascript_package_root:
     max_count_value: data-tree-view-selection-max-count-value
     cascade_value: data-tree-view-selection-cascade-value
     indeterminate_value: data-tree-view-selection-indeterminate-value
+  selection_checkbox_hooks:
+    checkbox_class: tree-selection-checkbox
+    disabled_reason_attribute: data-tree-selection-disabled-reason
   empty_state_hooks:
     wrapper_attribute: data-tree-view-empty-state
     content_class: tree-view-empty-row__content
