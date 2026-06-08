@@ -8,6 +8,7 @@ The goal is to keep shared tree concepts in the gem and leave app-specific table
 
 - Use [Localized names](localized-names.md) when presenter labels, tooltips, badges, or node type names should follow the host app locale.
 - Use [Host app extension points](host-app-extension-points.md#row_partial) to decide whether a concern belongs in `row_partial`, a builder, or host-app UI code.
+- Use [node-presenter-row-partials.html](../mockups/node-presenter-row-partials.html) as the static visual reference when reviewing resolver-provided labels, links, badges, icons, and optional actions beside host-app-owned columns and permissions. The mockup is a review aid, not a Column / Action DSL or final business UI contract.
 
 ## Why not a Column / Action DSL yet?
 
