@@ -15,6 +15,7 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   helper_methods
   helper_option_keys
   toolbar_actions
+  toolbar_action_metadata
   grouped_option_keys
   diagnostics
   resource_table_render_state_call

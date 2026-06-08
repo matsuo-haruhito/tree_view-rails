@@ -47,7 +47,11 @@ Supported actions:
 
 ## Machine-readable contract
 
-The toolbar action/state mapping is also tracked in `config/public_api_manifest.yml` under `toolbar_actions`. The manifest maps each supported action name to the `toggle_all_path` state value used by the helper.
+The toolbar action/state mapping is tracked in `config/public_api_manifest.yml` under `toolbar_actions`. The manifest maps each supported action name to the `toggle_all_path` state value used by the helper.
+
+The metadata returned by `tree_view_toolbar_action_metadata` is also tracked under `toolbar_action_metadata`. Its public key set is `action`, `state`, `label`, `path`, `disabled`, and `data`. The TreeView-owned `data` keys are `tree_view_toolbar_action` and, for disabled fallback controls, `tree_view_toolbar_disabled`.
+
+When `toggle_all_path` is unavailable, metadata returns `path: nil`, `disabled: true`, and the disabled data hook so host-app-owned toolbar markup can render a disabled fallback without inventing a route. Authorization, route availability, and final fallback copy still belong to the host app.
 
 Host apps should prefer `tree_view_toolbar_supported_actions`, `tree_view_toolbar_actions`, or `tree_view_toolbar_action_metadata` when building custom toolbar markup. The manifest exists for compatibility checks and integration audits; internal constants remain implementation details.
 
@@ -106,7 +110,7 @@ Use `html:` for additional attributes on the toolbar container. Its `class` is a
 
 Use `action_html:` for additional attributes on each rendered action link or disabled button. It may be a Proc that receives the action metadata hash, an action-keyed Hash such as `{ expand_all: { data: ... } }`, or a flat Hash applied to every action. Host app attributes are merged with the existing action metadata, but TreeView keeps ownership of `data-tree-view-toolbar-action` and `data-tree-view-toolbar-disabled`.
 
-`actions:`, `labels:`, `class_name:`, `button_class_name:`, `html:`, and `action_html:` are tracked as the `tree_view_toolbar` helper option key set in `config/public_api_manifest.yml`. That option-key contract is separate from the `toolbar_actions` action-to-state map, which tracks supported action names and their `toggle_all_path` state values.
+`actions:`, `labels:`, `class_name:`, `button_class_name:`, `html:`, and `action_html:` are tracked as the `tree_view_toolbar` helper option key set in `config/public_api_manifest.yml`. That option-key contract is separate from the `toolbar_actions` action-to-state map, which tracks supported action names and their `toggle_all_path` state values, and from `toolbar_action_metadata`, which tracks the returned metadata hash shape.
 
 For heavier markup changes, custom authorization copy, extra controls, or a different button/link structure, keep using `tree_view_toolbar_actions` or `tree_view_toolbar_action_metadata` and render the toolbar in the host app.
 
