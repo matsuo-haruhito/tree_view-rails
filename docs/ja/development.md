@@ -53,6 +53,8 @@ BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rake
 
 Public API compatibility specsは、documented Ruby entry points、helper methods、helper option keys、grouped options、JavaScript package-root exportsが意図せず削除・renameされることを防ぐためのtestsです。JavaScript entrypoint smoke では、manifest-backed な controller registrations、public event names、documented `event.detail` key groups も確認します。これらのspecは、実装詳細を網羅するのではなく、APIの存在と代表的な互換挙動に絞ります。
 
+docs entrypoint smoke と public API docs signal smoke は、`npm run test:docs-entrypoints` の中で別の責務を持ちます。`script/test_docs_entrypoints.mjs` は docs の入口、link、広い feature-guide signal を守り、`script/test_public_api_docs_signals.mjs` は Public API docs と feature docs の代表 signal を守ります。public API manifest entry、package-root export、public helper surface、または docs signal を追加・rename する場合は、影響する英日 docs と一緒に public API docs signal smoke も見直して更新してください。
+
 意図的なbreaking changeを受け入れる場合は、public API docsとcompatibility specsを同時に更新し、documented contractとtest coverageを同期させます。
 
 `config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、configuration options、helper names、helper option keys、toolbar action/state mapping、grouped option keys、PathTreeBuilder node shapes、ResourceTableRenderState call keywords、RenderState callback builder keys、JavaScript package-root named exports、transfer drop positions、remote-state values、controller registrations、public event names、intentional no-detail event names、documented `event.detail` keys、selection data hooks を追跡しています。
