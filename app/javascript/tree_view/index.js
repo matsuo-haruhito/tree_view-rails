@@ -89,6 +89,11 @@ export const TreeViewSelectionDataHooks = Object.freeze({
   indeterminateValue: "data-tree-view-selection-indeterminate-value"
 })
 
+export const TreeViewSelectionCheckboxHooks = Object.freeze({
+  checkboxClass: "tree-selection-checkbox",
+  disabledReasonAttribute: "data-tree-selection-disabled-reason"
+})
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-client", TreeViewClientController)
