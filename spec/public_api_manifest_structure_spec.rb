@@ -11,11 +11,14 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   configuration_options
   public_constants
   node_presenter_builder_names
+  graph_adapter_initializer
   path_tree_builder_node_shapes
   helper_methods
   helper_option_keys
   toolbar_actions
+  toolbar_action_metadata
   grouped_option_keys
+  diagnostics
   resource_table_render_state_call
   render_state_callback_builder_keys
   javascript_package_root
