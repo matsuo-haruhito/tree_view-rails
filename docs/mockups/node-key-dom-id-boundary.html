@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node key and DOM ID boundary mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-id-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr); gap: 18px; }
+.mock-id-stack { display: grid; gap: 14px; }
+.mock-id-note { margin: 0; color: #52606d; }
+.mock-id-table { table-layout: fixed; }
+.mock-id-node { display: grid; gap: 0.35rem; min-width: 0; }
+.mock-id-primary { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.5rem; min-width: 0; }
+.mock-id-primary a { color: #1d4ed8; font-weight: 800; overflow-wrap: anywhere; text-decoration: none; }
+.mock-id-primary a:hover, .mock-id-primary a:focus { text-decoration: underline; }
+.mock-id-type { display: inline-flex; align-items: center; max-width: 100%; padding: 0.12rem 0.45rem; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334e68; font-size: 0.78rem; font-weight: 800; overflow-wrap: anywhere; }
+.mock-id-type--accent { border-color: #bae6fd; background: #e0f2fe; color: #075985; }
+.mock-id-secondary { color: #52606d; font-size: 0.86rem; line-height: 1.45; overflow-wrap: anywhere; }
+.mock-id-code { display: inline-flex; max-width: 100%; padding: 0.08rem 0.35rem; border-radius: 6px; background: #f1f5f9; color: #334155; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.8rem; overflow-wrap: anywhere; }
+.mock-id-card { border: 1px solid #dde4ec; border-radius: 8px; background: #fff; padding: 14px; }
+.mock-id-card h3, .mock-id-card p, .mock-id-card ul { margin-top: 0; }
+.mock-id-card ul { padding-left: 1.15rem; margin-bottom: 0; }
+.mock-id-comparison { width: 100%; border-collapse: collapse; }
+.mock-id-comparison th, .mock-id-comparison td { border-bottom: 1px solid #e4e7eb; padding: 0.7rem 0.75rem; text-align: left; vertical-align: top; }
+.mock-id-comparison th { background: #f1f5f9; color: #334e68; font-size: 0.8rem; text-transform: uppercase; }
+@media (max-width: 860px) { .mock-id-grid { grid-template-columns: 1fr; } .mock-id-table { display: block; overflow-x: auto; } .mock-id-table th, .mock-id-table td { min-width: 10rem; } .mock-id-table th:first-child, .mock-id-table td:first-child { min-width: 18rem; } }
+</style>
+</head>
+<body>
+  <main class="mock-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Node key and DOM ID boundary mock</h1>
+      <p>Focused static reference for reviewing the difference between tree-side node keys and browser-facing DOM IDs across heterogeneous nodes and multiple tree instances.</p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-id-grid" aria-labelledby="boundary-summary-heading">
+      <div class="mock-id-stack">
+        <h2 id="boundary-summary-heading">Same node key, different browser targets</h2>
+        <p class="mock-id-note">Node keys identify tree data for expansion, selection, persisted state, and diagnostics. DOM IDs identify rendered HTML targets and can change with the tree instance prefix.</p>
+      </div>
+      <div class="mock-id-card">
+        <h3>Review boundary</h3>
+        <ul>
+          <li>Tree node key: stable data identity.</li>
+          <li>DOM ID: browser target scoped by UI config and tree instance.</li>
+          <li>Final business labels, permissions, and route names stay host-app owned.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="mock-section mock-id-stack" aria-labelledby="heterogeneous-heading">
+      <h2 id="heterogeneous-heading">Heterogeneous node sample</h2>
+      <p class="mock-id-note">Product-neutral project, folder, document, and external-reference rows show node type cues without changing GraphAdapter traversal, key generation, or NodePresenter behavior.</p>
+      <table class="tree-view-table mock-id-table" data-controller="tree-view-state" data-tree-view-state-keyboard-value="true" data-tree-view-instance="workspace-tree">
+        <thead><tr><th scope="col">tree node</th><th scope="col">tree-side key</th><th scope="col">browser DOM ID</th><th scope="col">review note</th></tr></thead>
+        <tbody>
+          <tr id="workspace_tree_project_alpha" class="tree-row is-expanded" data-tree-node-key="project:alpha" data-tree-parent-key="" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Project Alpha expanded"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#">hide</a><span class="tree-toggle__level">root</span></span></span><span class="mock-id-node"><span class="mock-id-primary"><a href="#workspace_tree_project_alpha" title="Project Alpha">Project Alpha</a><span class="mock-id-type mock-id-type--accent">project</span></span><span class="mock-id-secondary">Root node rendered in the workspace tree instance.</span></span></td>
+            <td><span class="mock-id-code">project:alpha</span></td><td><span class="mock-id-code">workspace_tree_project_alpha</span></td><td>Expansion and diagnostics use the node key; anchors and Turbo targets use the DOM ID.</td>
+          </tr>
+          <tr id="workspace_tree_folder_specs" class="tree-row" data-tree-node-key="folder:specs" data-tree-parent-key="project:alpha" data-tree-depth="1" aria-level="2">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Specs folder leaf"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">child</span></span></span><span class="mock-id-node"><span class="mock-id-primary"><a href="#workspace_tree_folder_specs" title="Specs folder">Specs folder</a><span class="mock-id-type">folder</span></span><span class="mock-id-secondary">Folder row keeps the same parent key even when host columns change.</span></span></td>
+            <td><span class="mock-id-code">folder:specs</span></td><td><span class="mock-id-code">workspace_tree_folder_specs</span></td><td>Type badge and label are presentation; key semantics stay data-owned.</td>
+          </tr>
+          <tr id="workspace_tree_document_release_plan" class="tree-row is-selected" data-tree-node-key="document:release-plan" data-tree-parent-key="folder:specs" data-tree-depth="2" aria-level="3" aria-current="page">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Release plan current document"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">leaf</span></span></span><span class="mock-id-node"><span class="mock-id-primary"><a href="#workspace_tree_document_release_plan" title="Release plan document">Release plan document</a><span class="tree-node-badge" title="Current node">current</span><span class="mock-id-type">document</span></span><span class="mock-id-secondary">Current cue follows rendered row state, not a different data key.</span></span></td>
+            <td><span class="mock-id-code">document:release-plan</span></td><td><span class="mock-id-code">workspace_tree_document_release_plan</span></td><td>Selection and persisted state should store the key, not this instance-scoped ID.</td>
+          </tr>
+          <tr id="workspace_tree_external_vendor_portal" class="tree-row is-collapsed" data-tree-node-key="external:vendor-portal" data-tree-parent-key="project:alpha" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Vendor portal collapsed"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#">show</a><span class="tree-toggle__level">child</span><span class="tree-toggle__hidden-count" title="Hidden external descendants">3</span></span></span><span class="mock-id-node"><span class="mock-id-primary"><a href="#workspace_tree_external_vendor_portal" title="Vendor portal reference">Vendor portal reference</a><span class="mock-id-type">external reference</span></span><span class="mock-id-secondary">External reference type is host-app presentation, not a new TreeView behavior.</span></span></td>
+            <td><span class="mock-id-code">external:vendor-portal</span></td><td><span class="mock-id-code">workspace_tree_external_vendor_portal</span></td><td>Collision avoidance is reviewed separately from final external-link behavior.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section mock-id-stack" aria-labelledby="multi-tree-heading">
+      <h2 id="multi-tree-heading">Multiple tree instance comparison</h2>
+      <p class="mock-id-note">The same tree-side key can appear in two rendered tree instances. The DOM IDs differ so browser targets do not collide.</p>
+      <table class="mock-id-comparison"><thead><tr><th scope="col">Rendered tree</th><th scope="col">Same node key</th><th scope="col">Instance-scoped DOM ID</th><th scope="col">Why it matters</th></tr></thead><tbody>
+        <tr><td>Workspace navigation</td><td><span class="mock-id-code">document:release-plan</span></td><td><span class="mock-id-code">workspace_tree_document_release_plan</span></td><td>Sidebar links and current-row anchors can target this rendered instance.</td></tr>
+        <tr><td>Picker dialog</td><td><span class="mock-id-code">document:release-plan</span></td><td><span class="mock-id-code">picker_tree_document_release_plan</span></td><td>Dialog controls avoid duplicate IDs while preserving the same selected key.</td></tr>
+        <tr><td>Diagnostics log</td><td><span class="mock-id-code">document:release-plan</span></td><td><span class="mock-id-code">not stored</span></td><td>Diagnostics and persisted state should report the data key, not one rendered DOM target.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="mock-section mock-id-grid" aria-labelledby="what-to-review-heading">
+      <div class="mock-id-card"><h2 id="what-to-review-heading">What to review</h2><ul><li>Node keys remain stable across tree instances.</li><li>DOM IDs remain unique for browser targets.</li><li>Type badges and localized labels do not redefine identity.</li></ul></div>
+      <div class="mock-id-card"><h3>Out of scope</h3><ul><li>Key generation API redesign.</li><li>GraphAdapter traversal or persistence behavior.</li><li>Host-app route, authorization, or final copy decisions.</li></ul></div>
+    </section>
+  </main>
+</body>
+</html>
