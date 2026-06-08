@@ -94,6 +94,12 @@ export const TreeViewSelectionCheckboxHooks = Object.freeze({
   disabledReasonAttribute: "data-tree-selection-disabled-reason"
 })
 
+export const TreeViewEmptyStateHooks = Object.freeze({
+  wrapperAttribute: "data-tree-view-empty-state",
+  contentClass: "tree-view-empty-row__content",
+  messageClass: "tree-view-empty-row__message"
+})
+
 export function registerTreeViewControllers(application) {
   application.register("tree-view-state", TreeViewStateController)
   application.register("tree-view-client", TreeViewClientController)
