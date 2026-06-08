@@ -295,6 +295,13 @@ assert(
 )
 assertFrozenObject(entrypointModule.TreeViewSelectionDataHooks, "TreeViewSelectionDataHooks")
 
+const expectedEmptyStateHooks = deepCamelizeKeys(javascriptPackageManifest.empty_state_hooks)
+assert(
+  JSON.stringify(entrypointModule.TreeViewEmptyStateHooks) === JSON.stringify(expectedEmptyStateHooks),
+  "TreeViewEmptyStateHooks export is out of sync"
+)
+assertFrozenObject(entrypointModule.TreeViewEmptyStateHooks, "TreeViewEmptyStateHooks")
+
 const expectedRegistrations = javascriptPackageManifest.controller_registrations.map(({ identifier, export: exportName }) => {
   assert(exportName in entrypointModule, `${exportName} export is missing`)
   return [identifier, entrypointModule[exportName]]

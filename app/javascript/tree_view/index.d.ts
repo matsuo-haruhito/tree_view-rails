@@ -86,4 +86,10 @@ export declare const TreeViewSelectionDataHooks: Readonly<{
   indeterminateValue: "data-tree-view-selection-indeterminate-value"
 }>
 
+export declare const TreeViewEmptyStateHooks: Readonly<{
+  wrapperAttribute: "data-tree-view-empty-state"
+  contentClass: "tree-view-empty-row__content"
+  messageClass: "tree-view-empty-row__message"
+}>
+
 export declare function registerTreeViewControllers(application: Application): void
