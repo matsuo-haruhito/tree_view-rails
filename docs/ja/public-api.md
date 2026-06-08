@@ -88,6 +88,8 @@ lazy-loading の placeholder region を host app 側で持つ場合、上の 3 h
 
 lazy-loading helper には、その placeholder を所有する parent item を渡してください。`tree_node_dom_id(item_or_id, ...)` は item-like / id-like value を扱うより広い DOM ID helper のままです。一方、placeholder helper は row と Turbo Stream の例に合わせて、item-based lazy-loading region 用の公開 surface として document します。
 
+`config/public_api_manifest.yml` に存在しない DOM / path helper は、bundled partial から呼ばれていても内部 composition helper のままです。たとえば `tree_button_dom_id`、`tree_show_button_dom_id`、`tree_selection_checkbox_dom_id`、toggle / lazy-loading path helper 群は TreeView 自身の partial / helper composition 用に予約されています。host app はそれらの内部 helper 名ではなく、上記の manifest-backed な node、children container、remote-state placeholder helper に依存してください。
+
 app-owned toolbar builder では、internal constant を直接参照せず、`tree_view_toolbar_supported_actions`、`tree_view_toolbar_actions`、`tree_view_toolbar_action_metadata` を使ってください。
 toolbar helper もこの公開 helper surface に含まれます。
 
@@ -196,7 +198,6 @@ host app が使ってよい入口:
 - `TreeViewRemoteStateValues`
 - `TreeViewControllerIdentifiers`
 - `TreeViewSelectionDataHooks`
-- `TreeViewEmptyStateHooks`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -214,7 +215,6 @@ host app が使ってよい入口:
 `TreeViewRemoteStateValues` は lazy-loading row の documented remote-state value set として、`loading`、`loaded`、`error` を公開します。host app の JavaScript や test が `data-tree-remote-state` の値を string の写経なしに照合したい場合に使えます。controller が emit する remote-state event 名は引き続き `TreeViewEventNames.remoteState.*`、その `event.detail` key は `TreeViewEventDetailKeys.remoteState.*` で扱います。
 `TreeViewControllerIdentifiers` は、同じ documented identifier を machine-readable な object として公開します。controller を部分登録したい host app や custom boot order を組みたい host app は、identifier string を写経せずこの export を使ってください。
 `TreeViewSelectionDataHooks` は、documented された `tree-view-selection` host-element value attribute names を machine-readable object として公開します。JavaScript が host-owned attribute を author / query するとき、`TreeViewSelectionDataHooks.hiddenInputNameValue` のように使うことで string の写経を避けられます。
-`TreeViewEmptyStateHooks` は、documented された empty-state wrapper attribute と class 名を machine-readable object として公開します。host app の JavaScript や test が `data-tree-view-empty-state`、`.tree-view-empty-row__content`、`.tree-view-empty-row__message` を target するとき、selector string の写経を避けられます。
 
 `TreeViewEventNames` のうち、lazy-loading の request lifecycle 名は `hostLifecycle` にまとめています。
 
@@ -246,12 +246,6 @@ host app が使ってよい入口:
 - `cascadeValue`
 - `indeterminateValue`
 
-`TreeViewEmptyStateHooks` の documented key:
-
-- `wrapperAttribute`
-- `contentClass`
-- `messageClass`
-
 `tree-view-selection` controller の documented host-element value attribute も、stable な host-app wiring surface の一部です。
 
 - `data-tree-view-selection-hidden-input-name-value`
@@ -259,15 +253,9 @@ host app が使ってよい入口:
 - `data-tree-view-selection-cascade-value`
 - `data-tree-view-selection-indeterminate-value`
 
-empty-state wrapper hook と class 名も、stable な host-app targeting surface の一部です。
-
-- `data-tree-view-empty-state`
-- `.tree-view-empty-row__content`
-- `.tree-view-empty-row__message`
-
 これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。generated hidden input marker attribute と source-id attribute は TreeView が生成・管理する内部寄りの属性であり、host app が authoring する public hook ではありません。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
 
-package-root の JavaScript export、bundled controller identifier、remote-state value、selection data hook value、empty-state hook value の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
+package-root の JavaScript export、bundled controller identifier、remote-state value、selection data hook value の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
 内部扱い:
 
@@ -288,11 +276,14 @@ host app が依存してよい browser-facing surface は、documented された
 |---|---|---|
 | Toolbar | `data-tree-view-toolbar`, `data-tree-view-toolbar-action`, `data-tree-view-toolbar-disabled` | [Toolbar](toolbar.md) で説明している TreeView-owned hook です。supported action や metadata は internal constant ではなく helper method から取得してください。 |
 | Selection | `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | [Selection](selection.md) で説明している stable host-element controller value であり、`TreeViewSelectionDataHooks` からも参照できます。row payload や disabled 判定は `selection:` render-state builder 側に残ります。generated hidden input marker attribute と source-id attribute は TreeView-managed internal です。 |
-| Lazy loading | `data-tree-remote-state`, remote placeholder ID, lazy-loading lifecycle events | [Lazy Loading](lazy-loading.md) で説明している stable placeholder / event hook です。request dispatch と response handling は引き続き host app 側の責務です。 |
-| Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | [mockup inventory](../mockups/README.md) で説明している reusable baseline hook であり、`TreeViewEmptyStateHooks` からも参照できます。shipped empty-state reference pattern を示すもので、すべての internal row class を公開するものではありません。 |
+| Lazy loading | `data-tree-remote-state`, remote placeholder ID, lazy-loading lifecycle events | [Lazy Loading](lazy-loading.md) で説明している stable placeholder / event hook です。request dispatch と response handling は引き続き host app 側の責務です。placeholder ID と state attribute には `tree_children_container_dom_id`、`tree_remote_state_placeholder_dom_id`、`tree_remote_state_placeholder_attributes` を使い、internal path / toggle helper には依存しないでください。 |
+| Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | [mockup inventory](../mockups/README.md) で説明している reusable baseline hook です。shipped empty-state reference pattern を示すもので、すべての internal row class を公開するものではありません。 |
 | Interaction markers | focused mockup に出てくる marker row classes / `data-*` hooks | review / adoption 用の reference hook として [mockups](../mockups/README.md) で説明します。compatibility check が必要な hook だけを `config/public_api_manifest.yml` の machine-readable contract へ昇格してください。 |
+| Direction-aware styling | current-row cue、hierarchy connector、toggle spacing、RTL / vertical writing override reference | 責務境界と host-app stylesheet override guidance は [Direction-aware styling boundary](direction-aware-styling.md) を参照してください。これらの cue は、明示的に manifest-backed check へ昇格されるまでは machine-readable public styling hook ではありません。 |
 
-この inventory は代表例であり、網羅一覧ではありません。`config/public_api_manifest.yml` は helper method、JavaScript package-root export、controller identifier、selection data hook、empty-state hook、RenderState grouped option key の machine-readable source of truth です。docs-only の hook inventory は feature guide と mockup への導線を示すもので、出力されるすべての class や `data-*` attribute を compatibility contract にするものではありません。
+この inventory は代表例であり、網羅一覧ではありません。`config/public_api_manifest.yml` は helper method、JavaScript package-root export、controller identifier、selection data hook、RenderState grouped option key の machine-readable source of truth です。docs-only の hook inventory は feature guide と mockup への導線を示すもので、出力されるすべての class や `data-*` attribute を compatibility contract にするものではありません。
+
+manifest に載っていない DOM helper 名は、生成される DOM ID や attribute が bundled markup に現れていても内部扱いです。特に button、selection checkbox、toggle path、lazy-loading path helper 名は、manifest に昇格されこのページで document されるまでは host app の公開依存先ではありません。
 
 undocumented な CSS helper class、data attribute、DOM 構造詳細、gem partial 内部 locals は内部実装です。
 
