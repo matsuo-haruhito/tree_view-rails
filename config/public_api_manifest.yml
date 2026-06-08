@@ -36,6 +36,12 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+graph_adapter_initializer:
+  required_keywords:
+    - roots
+    - children_resolver
+  optional_keywords:
+    - node_key_resolver
 path_tree_builder_node_shapes:
   folder_node:
     constant: PathTreeBuilder::FolderNode
