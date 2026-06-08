@@ -179,13 +179,15 @@ element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStat
 
 `TreeViewEventNames.hostLifecycle.*` は、`tree-view:loading` など lazy-loading request lifecycle event を host app 側で dispatch するための surface です。このページで説明している TreeView controller 自身が emit する remote-state event は `TreeViewEventNames.remoteState.*` を使います。
 
+listener や browser assertion で関連する documented DOM hook 名も必要な場合は、raw attribute string を写経せずに `tree_view/index.js` から `TreeViewIntegrationHooks` を import できます。代表的な key は `TreeViewIntegrationHooks.state.viewKeyValue`, `TreeViewIntegrationHooks.remoteState.childrenUrl`, `TreeViewIntegrationHooks.transfer.payload` です。
+
 `tree-view-transfer:invalid-payload` の detail は `value` と `row` を含みます。
 
 `tree-view-transfer:invalid-transfer` の detail は `value` を含みます。
 
 ## 互換性方針
 
-machine-readable public API manifest は、このページで文書化している event name と代表的な必須 `event.detail` key を写して drift を検知するための guard です。一次の契約は引き続きこのページです。host app の test が documented detail key 名の machine-readable な一覧を必要とする場合は、event payload shape を変えずに package root の `TreeViewEventDetailKeys` を import できます。
+machine-readable public API manifest は、このページで文書化している event name、documented integration hook 名、代表的な必須 `event.detail` key を写して drift を検知するための guard です。一次の契約は引き続きこのページです。host app の test が documented detail key 名の machine-readable な一覧を必要とする場合は、event payload shape を変えずに package root の `TreeViewEventDetailKeys` を import できます。
 
 manifest 上のすべての public event name は、documented detail field を持つ場合は `event_detail_keys`、意図的に公開 detail field を持たない場合は `event_names_without_detail` のどちらかに分類します。entrypoint smoke はこの分類を確認するため、host lifecycle events が `event.detail` coverage の追加漏れに見えないようになります。
 
