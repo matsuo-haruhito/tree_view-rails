@@ -67,6 +67,8 @@ Use the smallest TreeView extension point that matches the UI you are adding.
 
 TreeView owns reusable tree structure, row rendering slots, toggle/selection hooks, and browser integration markers. CRUD, persistence, validation, authorization, product-specific actions, and host-app business workflows stay in the host app.
 
+For static visual review of these extension points, use the mockup map instead of treating the cookbook as a demo app. Start with [TreeView mockups](../mockups/README.md), then compare [node-presenter-row-partials.html](../mockups/node-presenter-row-partials.html) for presenter and row partial composition, [form-editing-rows.html](../mockups/form-editing-rows.html) for editing rows, [drag-interactive-controls.html](../mockups/drag-interactive-controls.html) and [interactive-marker-behaviors.html](../mockups/interactive-marker-behaviors.html) for native and custom controls inside rows. The mockups are static visual references; routes, CRUD, authorization, persistence, and final copy remain host-app responsibilities.
+
 ## Add data display columns with row_partial
 
 Put the main row content in the configured `row_partial`. This is the right place for business columns such as name, owner, updated time, size, or type.
