@@ -100,6 +100,115 @@ const signalGroups = [
         ]
       ]
     ]
+  },
+  {
+    feature: "Drag/drop visual reference routing",
+    files: [
+      [
+        "docs/en/drag-and-drop.md",
+        [
+          "drag-interactive-controls.html",
+          "interactive-marker-behaviors.html",
+          "drop-positions.html",
+          "before",
+          "inside",
+          "after"
+        ]
+      ],
+      [
+        "docs/ja/drag-and-drop.md",
+        [
+          "drag-interactive-controls.html",
+          "interactive-marker-behaviors.html",
+          "drop-positions.html",
+          "before",
+          "inside",
+          "after"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Design policy responsibility and promotion boundaries",
+    files: [
+      [
+        "docs/en/design-policy.md",
+        [
+          "CRUD",
+          "authorization",
+          "queries, filtering, and pagination",
+          "business behavior remains in the host app",
+          "Prefer adding cookbook guidance before adding new rendering DSLs",
+          "thin resolver, helper, or configuration object",
+          "not coupled to authorization"
+        ]
+      ],
+      [
+        "docs/ja/design-policy.md",
+        [
+          "CRUD",
+          "authorization",
+          "query / filtering / pagination",
+          "業務処理はhost appに残します",
+          "まず cookbook として整理することを優先します",
+          "薄い resolver、helper、configuration object",
+          "authorization、forms、modals、downloads、domain workflows と密結合しない"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Node keys and UI identifiers responsibility boundary",
+    files: [
+      [
+        "docs/en/node-keys.md",
+        [
+          "Tree node key",
+          "UI identifier / DOM ID",
+          "expanded_keys",
+          "collapsed_keys",
+          "persisted state",
+          "diagnostics",
+          "UiConfig"
+        ]
+      ],
+      [
+        "docs/ja/node-keys.md",
+        [
+          "Tree node key",
+          "UI識別子 / DOM ID",
+          "expanded_keys",
+          "collapsed_keys",
+          "persisted state",
+          "diagnostics",
+          "UiConfig"
+        ]
+      ],
+      [
+        "docs/en/api-overview.md",
+        [
+          "Node keys and UI identifiers",
+          "Tree node key",
+          "UI identifier / DOM ID",
+          "expanded_keys",
+          "collapsed_keys",
+          "Changing a UI DOM ID builder",
+          "does not change the keys"
+        ]
+      ],
+      [
+        "docs/ja/api-overview.md",
+        [
+          "node keyとUI識別子",
+          "Tree node key",
+          "UI識別子 / DOM ID",
+          "expanded_keys",
+          "collapsed_keys",
+          "UI側のDOM ID builderを変更しても",
+          "keyは変わりません"
+        ]
+      ]
+    ]
   }
 ]
 
