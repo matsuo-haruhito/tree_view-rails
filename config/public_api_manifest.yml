@@ -36,6 +36,12 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+graph_adapter_initializer:
+  required_keywords:
+    - roots
+    - children_resolver
+  optional_keywords:
+    - node_key_resolver
 path_tree_builder_node_shapes:
   folder_node:
     constant: PathTreeBuilder::FolderNode
@@ -105,6 +111,17 @@ toolbar_actions:
   expand_all: expanded
   collapse_all: collapsed
   collapse_all_except_current_path: current_path
+toolbar_action_metadata:
+  keys:
+    - action
+    - state
+    - label
+    - path
+    - disabled
+    - data
+  data_keys:
+    - tree_view_toolbar_action
+    - tree_view_toolbar_disabled
 grouped_option_keys:
   initial_expansion:
     - default
@@ -143,6 +160,19 @@ grouped_option_keys:
     - row_disabled_builder
     - row_readonly_builder
     - row_disabled_reason_builder
+diagnostics:
+  accepted_checks:
+    - node_keys
+    - dom_ids
+    - orphans
+    - cycles
+  result_surface:
+    attributes:
+      - checks
+      - errors
+      - warnings
+    methods:
+      - success?
 resource_table_render_state_call:
   required_keywords:
     - records
@@ -172,6 +202,7 @@ javascript_package_root:
     - TreeViewControllerIdentifiers
     - TreeViewSelectionDataHooks
     - TreeViewSelectionCheckboxHooks
+    - TreeViewEmptyStateHooks
     - TreeViewTransferDropPositions
     - TreeViewRemoteStateValues
     - TreeViewStateController
@@ -289,3 +320,7 @@ javascript_package_root:
   selection_checkbox_hooks:
     checkbox_class: tree-selection-checkbox
     disabled_reason_attribute: data-tree-selection-disabled-reason
+  empty_state_hooks:
+    wrapper_attribute: data-tree-view-empty-state
+    content_class: tree-view-empty-row__content
+    message_class: tree-view-empty-row__message
