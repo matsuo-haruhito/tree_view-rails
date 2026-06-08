@@ -142,6 +142,25 @@
   color: #64748b;
 }
 
+.mock-windowed-boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.mock-windowed-boundary {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.mock-windowed-boundary__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
 .mock-windowed-table {
   width: 100%;
   border-collapse: collapse;
@@ -176,6 +195,12 @@
   background: #fffbeb;
   color: #92400e;
   font-style: italic;
+}
+
+@media (max-width: 760px) {
+  .mock-windowed-boundary-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 </head>
@@ -525,6 +550,103 @@
                 <tr>
                   <td>Current-row anchoring is possible because TreeView exposes the visible-row list</td>
                   <td>What counts as the current row and where it should sit inside the window</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-windowed-state">
+        <div class="mock-windowed-state__header">
+          <p class="mock-windowed-eyebrow">Mode D</p>
+          <h2>Boundary windows</h2>
+          <p class="mock-windowed-note">
+            Use this state when the review goal is to compare first-window and last-window metadata without designing host-app paging controls.
+          </p>
+        </div>
+
+        <div class="mock-windowed-frame">
+          <div class="mock-windowed-toolbar">
+            <div class="mock-windowed-toolbar__copy">
+              <p class="mock-windowed-toolbar__title">Unavailable directions stay metadata-only</p>
+            </div>
+            <div class="mock-windowed-toolbar__meta" aria-label="Representative first and last boundary metadata">
+              <span class="mock-windowed-chip">limit: 5</span>
+              <span class="mock-windowed-chip mock-windowed-chip--secondary">total_count: 143</span>
+            </div>
+          </div>
+          <div class="mock-windowed-body">
+            <p class="mock-windowed-callout">
+              First and last windows show when one direction is unavailable. TreeView exposes boundary metadata; the host app decides whether that becomes disabled copy, hidden controls, or another paging pattern.
+            </p>
+            <div class="mock-windowed-boundary-grid">
+              <div class="mock-windowed-boundary">
+                <h3 class="mock-windowed-boundary__title">First window</h3>
+                <div class="mock-windowed-pagination" aria-label="First window boundary availability">
+                  <span class="is-muted">has_previous?: false</span>
+                  <span class="is-muted">previous_offset: nil</span>
+                  <span>rows: 1-5</span>
+                  <span class="is-available">next_offset: 5</span>
+                </div>
+                <table class="mock-windowed-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Boundary cue</th>
+                      <th scope="col">Review meaning</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Previous unavailable</td>
+                      <td>The window starts at offset <code>0</code>, so TreeView has no earlier visible rows to expose.</td>
+                    </tr>
+                    <tr>
+                      <td>Next available</td>
+                      <td>The host app can decide whether <code>next_offset: 5</code> becomes a button, link, or observer.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mock-windowed-boundary">
+                <h3 class="mock-windowed-boundary__title">Last window</h3>
+                <div class="mock-windowed-pagination" aria-label="Last window boundary availability">
+                  <span class="is-available">previous_offset: 138</span>
+                  <span>rows: 139-143</span>
+                  <span class="is-muted">has_next?: false</span>
+                  <span class="is-muted">next_offset: nil</span>
+                </div>
+                <table class="mock-windowed-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Boundary cue</th>
+                      <th scope="col">Review meaning</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Previous available</td>
+                      <td>The host app may offer a way back to an earlier window without changing TreeView's row slice.</td>
+                    </tr>
+                    <tr>
+                      <td>Next unavailable</td>
+                      <td>The rendered slice reaches the end of the visible-row list, so no next offset is exposed.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <table class="mock-windowed-table">
+              <thead>
+                <tr>
+                  <th scope="col">Kept inside this mock</th>
+                  <th scope="col">Kept in the host app</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Availability flags, nil offsets, and visible-row range copy that explains the boundary.</td>
+                  <td>Disabled button styling, numbered page labels, route params, cursor persistence, and infinite-scroll behavior.</td>
                 </tr>
               </tbody>
             </table>
