@@ -25,6 +25,10 @@ const lazyLoadingDocs = [
   ["docs/en/lazy-loading.md", read("docs/en/lazy-loading.md")],
   ["docs/ja/lazy-loading.md", read("docs/ja/lazy-loading.md")]
 ]
+const selectionDocs = [
+  ["docs/en/selection.md", read("docs/en/selection.md")],
+  ["docs/ja/selection.md", read("docs/ja/selection.md")]
+]
 
 const callbackBuilderSignals = [
   "render_state_callback_builder_keys",
@@ -48,6 +52,12 @@ const remoteStateValueSignals = [
   "loading",
   "loaded",
   "error"
+]
+
+const selectionDataHookSignals = [
+  "TreeViewSelectionDataHooks",
+  "TreeViewSelectionDataHooks.hiddenInputNameValue",
+  "data-tree-view-selection-hidden-input-name-value"
 ]
 
 callbackBuilderSignals.forEach((signal) => {
@@ -78,6 +88,10 @@ publicApiDocs.forEach(([relativePath, document]) => {
     /host app|host-app|host app 側|host-app 側/.test(document),
     `${relativePath}: host lifecycle event docs no longer name the host-app ownership boundary`
   )
+
+  selectionDataHookSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} selection data hook docs`)
+  })
 })
 
 lazyLoadingDocs.forEach(([relativePath, document]) => {
@@ -89,4 +103,10 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
     /not event names|event 名ではありません/.test(document),
     `${relativePath}: remote-state value docs no longer separate state values from event names`
   )
+})
+
+selectionDocs.forEach(([relativePath, document]) => {
+  selectionDataHookSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} selection data hook docs`)
+  })
 })
