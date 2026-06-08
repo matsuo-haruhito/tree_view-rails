@@ -86,4 +86,9 @@ export declare const TreeViewSelectionDataHooks: Readonly<{
   indeterminateValue: "data-tree-view-selection-indeterminate-value"
 }>
 
+export declare const TreeViewSelectionCheckboxHooks: Readonly<{
+  checkboxClass: "tree-selection-checkbox"
+  disabledReasonAttribute: "data-tree-selection-disabled-reason"
+}>
+
 export declare function registerTreeViewControllers(application: Application): void
