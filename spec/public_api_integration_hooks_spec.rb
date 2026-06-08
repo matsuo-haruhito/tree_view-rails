@@ -4,11 +4,16 @@ require "spec_helper"
 require "yaml"
 
 RSpec.describe "Public API integration hooks" do
-  MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-  ENTRYPOINT_PATH = File.expand_path("../app/javascript/tree_view/index.js", __dir__)
+  def manifest_path
+    File.expand_path("../config/public_api_manifest.yml", __dir__)
+  end
+
+  def entrypoint_path
+    File.expand_path("../app/javascript/tree_view/index.js", __dir__)
+  end
 
   def javascript_manifest
-    YAML.safe_load_file(MANIFEST_PATH).fetch("javascript_package_root")
+    YAML.safe_load_file(manifest_path).fetch("javascript_package_root")
   end
 
   def integration_hooks
@@ -16,7 +21,7 @@ RSpec.describe "Public API integration hooks" do
   end
 
   def entrypoint_source
-    @entrypoint_source ||= File.read(ENTRYPOINT_PATH)
+    @entrypoint_source ||= File.read(entrypoint_path)
   end
 
   def camelize_key(value)
