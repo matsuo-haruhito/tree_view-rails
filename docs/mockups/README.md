@@ -6,6 +6,8 @@ These files are intentionally small, reviewable assets in the gem repository. Th
 
 They are **not** a complete Rails application and should not grow into host-app CRUD, query, authorization, seed data, or controller examples. Full playground/application examples belong in `matsuo-haruhito/tree_view-rails-demo` once that demo repository is public.
 
+When a review starts from the gallery or a focused mockup page, confirm this static mockup / real demo app boundary before requesting new routes, persistence, CRUD flows, seeded records, or authorization examples in this directory.
+
 ## Files
 
 | File | Covers |
@@ -50,40 +52,47 @@ They are **not** a complete Rails application and should not grow into host-app 
 ## Recommended review flow
 
 1. Start with [review-gallery.html](review-gallery.html) when you want a quick side-by-side pass across the current mockup set, or use its review-path links to jump directly to a state family.
-2. Open the linked full mockup page when one surface needs deeper inspection or longer notes.
-3. Use [minimal-usage-first-render.html](minimal-usage-first-render.html) when review needs to inspect the first visible output from the minimal usage docs before richer baseline states.
-4. Use [narrow-sidebar-tree.html](narrow-sidebar-tree.html) when review needs a focused pass on 22rem or 18rem frames where hierarchy cues stay visible while secondary metadata wraps below the primary label.
-5. Use [current-branch-sidebar.html](current-branch-sidebar.html) when review needs to isolate `current_item:` / `current_key:` plus `auto_expand_ancestors: true` as a visual reference for the current row, ancestor path, and collapsed siblings.
-6. Use [row-status-depth-labels.html](row-status-depth-labels.html) when review needs to compare row-wide readonly/disabled cues, selection checkbox disabled state, and depth-label meaning boundaries.
-7. Use [toggle-icon-states.html](toggle-icon-states.html) when review needs to compare `toggle_icons:` expanded, collapsed, leaf, loading, and depth/type variation without selecting a final icon library.
-8. Use [resource-table-bridge.html](resource-table-bridge.html) when review needs a focused pass on table-owned columns plus TreeView-owned hierarchy cues.
-9. Use [interaction-states.html](interaction-states.html) when review needs a focused pass on lazy loading, retry, pagination placeholders, or drag/drop states.
-10. Use [children-pagination.html](children-pagination.html) when review needs a narrower pass on where next-page placeholder rows and load-more affordances sit inside one expanded branch.
-11. Use [reduced-motion-state-cues.html](reduced-motion-state-cues.html) when review needs to compare loading, retry, current/selected, and drop-target cues that remain readable without animation.
-12. Use [keyboard-focus-states.html](keyboard-focus-states.html) when review needs to compare visible focus cues across toggle links, native controls, toolbar actions, and row actions without treating the mockup as a keyboard navigation contract.
-13. Use [keyboard-current-row/index.html](keyboard-current-row/index.html) when review needs to compare focus-visible cues beside `aria-current="page"`, expanded/collapsed rows, and host-app-owned row actions in the same tree.
-14. Use [high contrast state cues](high-contrast-state-cues/index.html) when review needs to compare current, selected, focus-visible, error/retry, and drop-target cues without relying on color alone.
-15. Use [direction-aware cues](direction-aware-cues/index.html) when review needs to compare LTR baseline, RTL host-app override, and vertical writing stress cases without treating directional styling as a public hook contract.
-16. Use [lazy-loading-handoff.html](lazy-loading-handoff.html) when review needs to isolate children container ownership and remote-state slot handoff from the broader interaction-state page.
-17. Use [drop-positions.html](drop-positions.html) when review needs to compare before, inside, after, transfer disabled, and invalid transfer boundary cues without modeling host-app reorder rules or persistence.
-18. Use [persisted-state-boundary.html](persisted-state-boundary.html) when review needs to compare persisted expansion state before, changed, restored, save-failed, and retry cues without adding host-app persistence behavior.
-19. Use [turbo-frame-target.html](turbo-frame-target.html) when review needs a focused pass on the configured `data-turbo-frame` link attribute and the host-app-owned frame target boundary.
-20. Use [drag-interactive-controls.html](drag-interactive-controls.html) when review needs a focused pass on draggable rows that contain native controls, custom interactive markers, or drag-only ignore markers.
-21. Use [interactive-marker-behaviors.html](interactive-marker-behaviors.html) when review needs to compare the broad interactive marker against the narrower keyboard, row-click, and drag behavior markers.
-22. Use [windowed-rendering.html](windowed-rendering.html) when review needs to compare visible-row slicing and current-row anchoring without adding host-app paging controls.
-23. Use [breadcrumb-paths.html](breadcrumb-paths.html) when review needs to compare breadcrumb-path context against the tree's own current-row cue without modeling host-app route design.
-24. Use [filtered-tree-modes.html](filtered-tree-modes.html) when review needs to compare matched nodes against ancestor or descendant context without adding host-app search UI.
-25. Use [path-tree-builder-rows.html](path-tree-builder-rows.html) when review needs to compare generated folder rows with record-backed rows without designing a file-manager application.
-26. Use [node-presenter-row-partials.html](node-presenter-row-partials.html) when review needs to compare NodePresenter-provided row partial values against host-app-owned columns, permissions, and final actions.
-27. Use [localized-row-labels.html](localized-row-labels.html) when review needs to compare long localized row labels, type badges, attribute labels, secondary metadata, and tooltip cues without deciding final host-app translations.
-28. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
-29. Use [selection-max-count.html](selection-max-count.html) when review needs to compare below-limit, limit-reached, and limit-exceeded selection feedback without adding runtime behavior or final bulk-action copy.
-30. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
-31. Use [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) when selection review intersects with children pagination, rendered-only cascade/indeterminate cues, or unloaded descendant boundaries.
-32. Use [table-caption-context.html](table-caption-context.html) when review needs to compare host-app-owned heading, caption, summary, and adjacent actions around TreeView-owned row hierarchy cues.
-33. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
-34. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, disabled fallback, missing-path fallback, current-state cues, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
-35. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+2. Before asking for a missing workflow in a mockup, confirm whether it belongs in the future real Rails demo app instead. Static mockups should not add CRUD, authorization, routes, seed data, controller behavior, or full host-app flows.
+3. Open the linked full mockup page when one surface needs deeper inspection or longer notes.
+4. Use [minimal-usage-first-render.html](minimal-usage-first-render.html) when review needs to inspect the first visible output from the minimal usage docs before richer baseline states.
+5. Use [narrow-sidebar-tree.html](narrow-sidebar-tree.html) when review needs a focused pass on 22rem or 18rem frames where hierarchy cues stay visible while secondary metadata wraps below the primary label.
+6. Use [current-branch-sidebar.html](current-branch-sidebar.html) when review needs to isolate `current_item:` / `current_key:` plus `auto_expand_ancestors: true` as a visual reference for the current row, ancestor path, and collapsed siblings.
+7. Use [row-status-depth-labels.html](row-status-depth-labels.html) when review needs to compare row-wide readonly/disabled cues, selection checkbox disabled state, and depth-label meaning boundaries.
+8. Use [toggle-icon-states.html](toggle-icon-states.html) when review needs to compare `toggle_icons:` expanded, collapsed, leaf, loading, and depth/type variation without selecting a final icon library.
+9. Use [resource-table-bridge.html](resource-table-bridge.html) when review needs a focused pass on table-owned columns plus TreeView-owned hierarchy cues.
+10. Use [interaction-states.html](interaction-states.html) when review needs a focused pass on lazy loading, retry, pagination placeholders, or drag/drop states.
+11. Use [children-pagination.html](children-pagination.html) when review needs a narrower pass on where next-page placeholder rows and load-more affordances sit inside one expanded branch.
+12. Use [reduced-motion-state-cues.html](reduced-motion-state-cues.html) when review needs to compare loading, retry, current/selected, and drop-target cues that remain readable without animation.
+13. Use [keyboard-focus-states.html](keyboard-focus-states.html) when review needs to compare visible focus cues across toggle links, native controls, toolbar actions, and row actions without treating the mockup as a keyboard navigation contract.
+14. Use [keyboard-current-row/index.html](keyboard-current-row/index.html) when review needs to compare focus-visible cues beside `aria-current="page"`, expanded/collapsed rows, and host-app-owned row actions in the same tree.
+15. Use [high contrast state cues](high-contrast-state-cues/index.html) when review needs to compare current, selected, focus-visible, error/retry, and drop-target cues without relying on color alone.
+16. Use [direction-aware cues](direction-aware-cues/index.html) when review needs to compare LTR baseline, RTL host-app override, and vertical writing stress cases without treating directional styling as a public hook contract.
+17. Use [lazy-loading-handoff.html](lazy-loading-handoff.html) when review needs to isolate children container ownership and remote-state slot handoff from the broader interaction-state page.
+18. Use [drop-positions.html](drop-positions.html) when review needs to compare before, inside, after, transfer disabled, and invalid transfer boundary cues without modeling host-app reorder rules or persistence.
+19. Use [persisted-state-boundary.html](persisted-state-boundary.html) when review needs to compare persisted expansion state before, changed, restored, save-failed, and retry cues without adding host-app persistence behavior.
+20. Use [turbo-frame-target.html](turbo-frame-target.html) when review needs a focused pass on the configured `data-turbo-frame` link attribute and the host-app-owned frame target boundary.
+21. Use [drag-interactive-controls.html](drag-interactive-controls.html) when review needs a focused pass on draggable rows that contain native controls, custom interactive markers, or drag-only ignore markers.
+22. Use [interactive-marker-behaviors.html](interactive-marker-behaviors.html) when review needs to compare the broad interactive marker against the narrower keyboard, row-click, and drag behavior markers.
+23. Use [windowed-rendering.html](windowed-rendering.html) when review needs to compare visible-row slicing and current-row anchoring without adding host-app paging controls.
+24. Use [breadcrumb-paths.html](breadcrumb-paths.html) when review needs to compare breadcrumb-path context against the tree's own current-row cue without modeling host-app route design.
+25. Use [filtered-tree-modes.html](filtered-tree-modes.html) when review needs to compare matched nodes against ancestor or descendant context without adding host-app search UI.
+26. Use [path-tree-builder-rows.html](path-tree-builder-rows.html) when review needs to compare generated folder rows with record-backed rows without designing a file-manager application.
+27. Use [node-presenter-row-partials.html](node-presenter-row-partials.html) when review needs to compare NodePresenter-provided row partial values against host-app-owned columns, permissions, and final actions.
+28. Use [localized-row-labels.html](localized-row-labels.html) when review needs to compare long localized row labels, type badges, attribute labels, secondary metadata, and tooltip cues without deciding final host-app translations.
+29. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit placement, or selection-versus-business checkbox roles without adding a real save workflow.
+30. Use [selection-max-count.html](selection-max-count.html) when review needs to compare below-limit, limit-reached, and limit-exceeded selection feedback without adding runtime behavior or final bulk-action copy.
+31. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
+32. Use [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) when selection review intersects with children pagination, rendered-only cascade/indeterminate cues, or unloaded descendant boundaries.
+33. Use [table-caption-context.html](table-caption-context.html) when review needs to compare host-app-owned heading, caption, summary, and adjacent actions around TreeView-owned row hierarchy cues.
+34. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
+35. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, disabled fallback, missing-path fallback, current-state cues, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
+36. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+
+## Demo boundary guidance
+
+- Use these mockups to review static DOM structure, CSS hooks, ARIA attributes, row states, and product-neutral responsibility boundaries.
+- Use the future real Rails demo app for end-to-end flows that need routes, controller behavior, persistence, authorization, seeded records, CRUD screens, or business workflow copy.
+- Do not add direct public demo links from the mockups until the demo repository is public and its publication checklist is ready.
 
 ## Automated smoke coverage
 
