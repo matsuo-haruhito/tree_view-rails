@@ -46,6 +46,10 @@ If you already know the symptom and want a faster reverse-lookup entry point, se
 
 If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md). Start with [review-gallery.html](docs/mockups/review-gallery.html) for the fastest first look, open [default-tree.html](docs/mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
 
+![Static TreeView mockup showing expanded and collapsed hierarchy rows with selection checkboxes, badges, and row actions.](docs/mockups/assets/readme-default-tree.svg)
+
+The image above is a single orientation asset derived from the `default-tree.html` baseline rows. Use the linked mockups for full static review paths and focused state comparisons.
+
 For the boundary between static mockups and a future real Rails demo app, see [Demo application boundary](docs/en/demo-application-boundary.md) / [日本語](docs/ja/demo-application-boundary.md). The public docs intentionally avoid direct demo repository links until a demo repository is public.
 
 ## Features
