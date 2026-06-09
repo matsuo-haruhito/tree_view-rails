@@ -4,8 +4,6 @@
 require "json"
 require "net/http"
 require "optparse"
-require "set"
-require "time"
 require "uri"
 
 module ReleaseNoteCandidates
