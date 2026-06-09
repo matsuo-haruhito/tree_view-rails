@@ -27,6 +27,8 @@ releaseの流れ:
 7. 必要に応じてGitHub Releaseを作成する。
 8. 必要に応じてgem publishする。
 
+GitHub Release notes を書く前に、[Release note candidate collector](release-note-candidates.md) で merged PR / closed Issue の候補リンクを集め、maintainer review の checklist として確認します。この collector は `CHANGELOG.md` を書き換えず、最終的な release notes、tag 作成、gem publish、GitHub Release 作成を自動判断しません。
+
 `release/x.y` branch は、複数minor lineの並行保守、長期RC検証、security/compatibility patchなどが必要になった時だけ導入します。
 
 ## 初回リリースの目標
