@@ -72,9 +72,11 @@ end
 
 `checks:` には実行したいdiagnosticsを指定できます。省略すると、defaultの `node_keys`、`dom_ids`、`orphans`、`cycles` が実行されます。host appのtestで一部だけ確認したい場合は、より小さいlistを渡してください。`raise_errors: false` のままなら `errors` と `warnings` を持つ `Result` が返り、`raise_errors: true` にすると失敗したcheckが即座に例外をraiseします。
 
+`checks:` と `raise_errors:` は、`TreeView::Diagnostics.run` の manifest-backed な run option key です。manifest はこれらの名前を記録し、host app が公開 keyword surface に依存できるようにします。一方、`checks:` に指定できる値は、別の accepted check-name list として扱います。
+
 `Result#success?` は収集されたerrorsだけを見ます。orphan reportはwarningsとして返るため、filter、import、permission scopeによって描画対象外のrecordsが生じる可能性がある場合は `warnings` も確認してください。
 
-manifest-backed な diagnostics contract は、accepted check names と `Result` の reader surface を対象にします。stable な check names は `node_keys`、`dom_ids`、`orphans`、`cycles` です。diagnostics `Result` は `checks`、`errors`、`warnings`、`success?` を公開します。一方で、個々の error entry 内部、warning detail shape、orphan warning semantics、cycle validation policy までは manifest で固定しません。これらは documented behavior と host app data policy の境界として扱い、manifest schema を広げすぎないようにします。
+manifest-backed な diagnostics contract は、accepted check names、`Diagnostics.run` の option key surface、`Result` の reader surface を対象にします。stable な check names は `node_keys`、`dom_ids`、`orphans`、`cycles` です。stable な run option keys は `checks` と `raise_errors` です。diagnostics `Result` は `checks`、`errors`、`warnings`、`success?` を公開します。一方で、run option の accepted value schema、個々の error entry 内部、warning detail shape、orphan warning semantics、cycle validation policy までは manifest で固定しません。これらは documented behavior と host app data policy の境界として扱い、manifest schema を広げすぎないようにします。
 
 ## node key uniqueness
 
