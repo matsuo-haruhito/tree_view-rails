@@ -72,9 +72,11 @@ end
 
 `checks:` accepts the diagnostics you want to run. Omit it to run the default `node_keys`, `dom_ids`, `orphans`, and `cycles` checks, or pass a smaller list when a host-app test only needs part of the pre-render validation. Keep `raise_errors: false` when you want a `Result` object with `errors` and `warnings`; set `raise_errors: true` when a failing check should raise immediately.
 
+`checks:` and `raise_errors:` are manifest-backed run option keys for `TreeView::Diagnostics.run`. The manifest records their names so host apps can rely on the public keyword surface, while the accepted values for `checks:` stay tied to the separate accepted check-name list.
+
 `Result#success?` only reflects collected errors. Orphan reports are warnings, so review `warnings` when filtered, imported, or permission-scoped data can leave records outside the rendered tree.
 
-The manifest-backed diagnostics contract covers the accepted check names and the `Result` reader surface. The stable check names are `node_keys`, `dom_ids`, `orphans`, and `cycles`. A diagnostics `Result` exposes `checks`, `errors`, `warnings`, and `success?`. The manifest intentionally does not freeze individual error entry internals, warning detail shape, orphan warning semantics, or cycle validation policy; those remain documented behavior and host-app data policy boundaries rather than a broader manifest schema.
+The manifest-backed diagnostics contract covers accepted check names, the `Diagnostics.run` option key surface, and the `Result` reader surface. The stable check names are `node_keys`, `dom_ids`, `orphans`, and `cycles`. The stable run option keys are `checks` and `raise_errors`. A diagnostics `Result` exposes `checks`, `errors`, `warnings`, and `success?`. The manifest intentionally does not freeze accepted value schemas for run options, individual error entry internals, warning detail shape, orphan warning semantics, or cycle validation policy; those remain documented behavior and host-app data policy boundaries rather than a broader manifest schema.
 
 ## Node key uniqueness
 
