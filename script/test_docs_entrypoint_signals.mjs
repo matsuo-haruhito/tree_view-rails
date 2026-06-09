@@ -102,6 +102,20 @@ const signalGroups = [
     ]
   },
   {
+    feature: "README host extension summary boundary",
+    files: [
+      [
+        "README.md",
+        [
+          "row_actions_partial",
+          "action availability, routes, authorization, and final copy stay in the host app",
+          "row_event_payload_builder",
+          "drag/drop business behavior stays in the host app"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Drag/drop visual reference routing",
     files: [
       [
