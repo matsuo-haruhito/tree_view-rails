@@ -48,7 +48,7 @@ function declarationBlock(declarationSource, exportName) {
 }
 
 function escapeRegExp(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  return String(value).replace(/[\\^$.*+?()[\]{}|]/g, "\\$&")
 }
 
 function assertBlockContains(block, pattern, message) {
