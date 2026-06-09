@@ -62,9 +62,9 @@ const selectionDataHookSignals = [
 
 const emptyStateHookSignals = [
   "TreeViewEmptyStateHooks",
-  "TreeViewEmptyStateHooks.wrapperAttribute",
-  "TreeViewEmptyStateHooks.contentClass",
-  "TreeViewEmptyStateHooks.messageClass",
+  "wrapperAttribute",
+  "contentClass",
+  "messageClass",
   "data-tree-view-empty-state"
 ]
 
