@@ -39,6 +39,7 @@ REQUIRED_PACKAGED_PATHS = %w[
   docs/mockups/review-gallery.html
   docs/mockups/default-tree.html
   docs/mockups/default-tree.css
+  docs/mockups/assets/readme-default-tree.svg
   docs/en/installation.md
   docs/ja/installation.md
   docs/en/public-api.md
