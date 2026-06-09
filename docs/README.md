@@ -31,8 +31,8 @@
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
 - [English Accessibility Semantics](en/accessibility-semantics.md): table-first ARIA policy, empty-state wrapper hooks, keyboard helper boundary, and intentional automated-check allowances.
 - [日本語Accessibility Semantics](ja/accessibility-semantics.md): table-first ARIA 方針、empty-state wrapper hook、keyboard helper の責務境界、自動 accessibility check の意図的な許容事項。
-- [English Selection](en/selection.md): checkbox selection hooks, disabled state, cascade behavior, and submitted value parsing.
-- [日本語Selection](ja/selection.md): checkbox selection hooks、disabled state、cascade、submitted value parsing の入口。
+- [English Selection](en/selection.md): checkbox selection hooks, hidden input form sync, max-count limits, multi-tree form boundaries, unloaded-descendant boundaries, and submitted value parsing.
+- [日本語Selection](ja/selection.md): checkbox selection hooks、hidden input form sync、最大選択数、複数 tree form の境界、unloaded descendants の境界、submitted value parsing の入口。
 - [English Lazy Loading](en/lazy-loading.md): load children on demand through host-app routes and TreeView remote-state hooks.
 - [日本語Lazy Loading](ja/lazy-loading.md): host app の route と TreeView remote-state hooks で子nodeを必要時に読み込む入口。
 - [English Children Pagination](en/children-pagination.md): combine lazy loading with server-side child paging when a parent has too many direct children to return at once.
