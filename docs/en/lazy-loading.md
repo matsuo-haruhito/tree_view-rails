@@ -172,7 +172,7 @@ If a request fails, return a host-app retry affordance instead of hiding the err
 <% end %>
 ```
 
-The helper `state:` value remains a string-compatible Ruby argument. Host apps may keep using raw strings in ERB, while shared JavaScript can import `TreeViewRemoteStateValues.loaded` and `.error` from the package root to avoid duplicating the same state names.
+The helper `state:` value remains a string-compatible Ruby argument. TreeView writes it through to `data-tree-remote-state` with string coercion and does not validate it against a closed enum. Host apps may keep using raw strings in ERB, including app-specific placeholder states. Shared JavaScript can import `TreeViewRemoteStateValues.loaded` and `.error` from the package root for the common documented values, but that export is a convenience surface rather than the complete set of helper-accepted states.
 
 ## Loaded, error, and retry states
 
@@ -215,7 +215,7 @@ The host app can dispatch these events according to fetch or Turbo request state
 
 To avoid hand-copying those lifecycle names, import them from the package root as `TreeViewEventNames.hostLifecycle.loading`, `.loaded`, `.error`, and `.retry`. That group is reserved for host-app request-state dispatch. `TreeViewEventNames.remoteState.*` remains the separate surface for events emitted by TreeView controllers.
 
-`TreeViewRemoteStateValues.loading`, `.loaded`, and `.error` are a separate package-root export for state values, not event names. Use them when shared JavaScript needs to compare or pass remote-state values; do not add `retry` there because retry is an action/event, not a row state value.
+`TreeViewRemoteStateValues.loading`, `.loaded`, and `.error` are a separate package-root export for the common documented state values, not event names and not a validation list for `tree_remote_state_placeholder_attributes`. Use them when shared JavaScript needs to compare or pass those common remote-state values. If a host app needs an application-specific placeholder state, keep passing a string value to the helper and document that state in the host app. Do not add `retry` to this value set because retry is an action/event, not a row state value.
 
 ## Children pagination
 
