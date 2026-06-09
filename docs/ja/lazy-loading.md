@@ -215,7 +215,7 @@ host app側は、fetchやTurbo requestの状態に応じてこれらのeventをd
 
 これらの lifecycle event 名は package root から `TreeViewEventNames.hostLifecycle.loading` / `.loaded` / `.error` / `.retry` として参照できます。この group は host app 側の request-state dispatch 専用です。`TreeViewEventNames.remoteState.*` は引き続き TreeView controller が emit する event 用の別 surface として扱います。
 
-`TreeViewRemoteStateValues.loading` / `.loaded` / `.error` は、よく使う documented state value 用の別 package-root export であり、event 名でも `tree_remote_state_placeholder_attributes` の validation list でもありません。共有 JavaScript でそれらの代表 remote-state value を比較または受け渡すときに使えます。host app 固有の placeholder state が必要な場合は、helper に string value を渡し、その state を host app 側で document してください。`retry` は action / event であって row state value ではないため、この value set には含めません。
+`TreeViewRemoteStateValues.loading` / `.loaded` / `.error` は、よく使う documented state value 用の別 package-root export であり、event 名ではありません。また、`tree_remote_state_placeholder_attributes` の validation list でもありません。共有 JavaScript でそれらの代表 remote-state value を比較または受け渡すときに使えます。host app 固有の placeholder state が必要な場合は、helper に string value を渡し、その state を host app 側で document してください。`retry` は action / event であって row state value ではないため、この value set には含めません。
 
 ## children pagination
 
