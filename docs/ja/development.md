@@ -18,7 +18,7 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
-ローカルの JavaScript 作業では Node 22 を使ってください。repository root の `.nvmrc` が CI の JavaScript lane とそろった、推奨 Node major version の source of truth です。Node version source drift spec は `.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` を同期確認し、現在の install policy は変更しません。
+ローカルの JavaScript 作業では Node 22 を使ってください。repository root の `.nvmrc` が CI の JavaScript lane とそろった、推奨 Node major version の source of truth です。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` は、どれかを変更するときに同じ Node major を指すように同期してください。current `main` には専用の自動 Node version drift guard はまだありません。現在の install policy を変えずに lightweight guard を追加するかどうかは #1659 で追跡しています。
 
 現状は `npm install` を使い続けてください。repo には `package-lock.json` を commit していますが、まだ `package.json` と同期していないため、ローカルセットアップと Pull Request CI は、registry-enabled な環境で lockfile refresh が完了するまで `npm install` を前提にしています。現在の CI と install path の整理は [導入手順](installation.md) を参照してください。
 
