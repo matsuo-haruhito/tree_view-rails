@@ -36,6 +36,23 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+localized_name_i18n_keys:
+  model_names:
+    helper: model_name_for
+    delegated_lookup_prefixes:
+      - activerecord.models
+      - activemodel.models
+    fallback: humanized_class_name_or_default
+  attribute_names:
+    helper: attribute_name_for
+    delegated_lookup_prefixes:
+      - activerecord.attributes
+      - activemodel.attributes
+    fallback: humanized_attribute_name_or_default
+  node_type_names:
+    helper: type_name_for
+    lookup_prefix: tree_view.node_types
+    fallback: humanized_node_type_or_default
 graph_adapter_initializer:
   required_keywords:
     - roots
