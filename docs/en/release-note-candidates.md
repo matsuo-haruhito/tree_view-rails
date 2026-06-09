@@ -34,6 +34,30 @@ ruby script/release_note_candidates.rb --repo matsuo-haruhito/tree_view-rails --
 
 This mode compares the tag to `HEAD`, extracts `#123` style references from commit messages, and resolves those numbers as pull requests or issues. It is useful as a fallback when a date window is not obvious, but it only finds references that appear in commit messages.
 
+## Output example
+
+The script prints Markdown that is meant to be copied into release preparation notes, not committed as the final release text:
+
+```markdown
+# Release note candidates for matsuo-haruhito/tree_view-rails
+
+Source: closed or merged since 2026-06-01
+
+This is a maintainer review aid. It does not rewrite CHANGELOG.md and does not decide the final release notes.
+
+## Merged pull requests
+
+- #1691 Persisted State cleanup guide entrypoints (2026-06-09T09:16:47Z)
+  https://github.com/matsuo-haruhito/tree_view-rails/pull/1691
+
+## Closed issues
+
+- #1549 Persisted State cleanup docs entrypoint (2026-06-09T09:16:48Z)
+  https://github.com/matsuo-haruhito/tree_view-rails/issues/1549
+```
+
+During the release preparation PR, paste or link this output as review evidence, then compare it with `CHANGELOG.md`, the merged PR history, and any release-facing compatibility notes. Keep only the human-approved highlights in GitHub Release notes.
+
 ## Review boundary
 
 Treat the output as a checklist for maintainer review. During the release preparation PR, compare it with `CHANGELOG.md` and the merged PR history, then manually decide which items are notable enough for GitHub Release notes.
