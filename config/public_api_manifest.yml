@@ -111,6 +111,20 @@ helper_option_keys:
     - button_class_name
     - html
     - action_html
+render_window_metadata:
+  - rows
+  - offset
+  - limit
+  - total_count
+  - before_count
+  - after_count
+  - start_index
+  - end_index
+  - previous?
+  - next?
+  - previous_offset
+  - next_offset
+  - empty?
 toolbar_actions:
   expand_all: expanded
   collapse_all: collapsed
