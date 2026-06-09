@@ -36,6 +36,12 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+graph_adapter_initializer:
+  required_keywords:
+    - roots
+    - children_resolver
+  optional_keywords:
+    - node_key_resolver
 path_tree_builder_node_shapes:
   folder_node:
     constant: PathTreeBuilder::FolderNode
@@ -74,6 +80,10 @@ helper_methods:
   - tree_view_toolbar_actions
   - tree_view_toolbar_action_metadata
 helper_option_keys:
+  tree_view_rows:
+    - mode
+    - collapsed
+    - window
   tree_view_window:
     - offset
     - limit
@@ -105,6 +115,17 @@ toolbar_actions:
   expand_all: expanded
   collapse_all: collapsed
   collapse_all_except_current_path: current_path
+toolbar_action_metadata:
+  keys:
+    - action
+    - state
+    - label
+    - path
+    - disabled
+    - data
+  data_keys:
+    - tree_view_toolbar_action
+    - tree_view_toolbar_disabled
 setup_generators:
   persisted_state_install:
     name: tree_view:state:install
@@ -154,6 +175,19 @@ grouped_option_keys:
     - row_disabled_builder
     - row_readonly_builder
     - row_disabled_reason_builder
+diagnostics:
+  accepted_checks:
+    - node_keys
+    - dom_ids
+    - orphans
+    - cycles
+  result_surface:
+    attributes:
+      - checks
+      - errors
+      - warnings
+    methods:
+      - success?
 resource_table_render_state_call:
   required_keywords:
     - records
@@ -182,7 +216,9 @@ javascript_package_root:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
     - TreeViewSelectionDataHooks
+    - TreeViewEmptyStateHooks
     - TreeViewTransferDropPositions
+    - TreeViewTransferDataMimeTypes
     - TreeViewRemoteStateValues
     - TreeViewStateController
     - TreeViewClientController
@@ -195,6 +231,9 @@ javascript_package_root:
     before: before
     inside: inside
     after: after
+  transfer_data_mime_types:
+    application_json: application/json
+    text_plain: text/plain
   remote_state_values:
     loading: loading
     loaded: loaded
@@ -296,3 +335,7 @@ javascript_package_root:
     max_count_value: data-tree-view-selection-max-count-value
     cascade_value: data-tree-view-selection-cascade-value
     indeterminate_value: data-tree-view-selection-indeterminate-value
+  empty_state_hooks:
+    wrapper_attribute: data-tree-view-empty-state
+    content_class: tree-view-empty-row__content
+    message_class: tree-view-empty-row__message
