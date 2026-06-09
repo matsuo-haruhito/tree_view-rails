@@ -10,6 +10,18 @@ Host apps should call the top-level `TreeView.model_name_for`, `TreeView.attribu
 
 `TreeView::LocalizedNames` remains a documented public constant so maintainers and advanced integrations can identify the implementation family, but direct module-method calls are not the recommended host-app dependency boundary. Lower-level helpers such as `humanize_identifier` and `class_for` are implementation helpers, not manifest-backed host-app contracts.
 
+## Manifest-backed lookup key patterns
+
+`config/public_api_manifest.yml` records the lookup key families these helpers depend on:
+
+| Helper | Manifest key family | Responsibility |
+|---|---|---|
+| `TreeView.model_name_for` | `activerecord.models`, `activemodel.models` | Delegated Rails / ActiveModel model-name lookup, with TreeView fallback labels. |
+| `TreeView.attribute_name_for` | `activerecord.attributes`, `activemodel.attributes` | Delegated Rails / ActiveModel attribute-name lookup, with TreeView fallback labels. |
+| `TreeView.type_name_for` | `tree_view.node_types` | TreeView-owned node type lookup prefix, with humanized node-type fallback. |
+
+The manifest fixes the key pattern families and helper boundaries, not a complete locale inventory. Host apps still own their translation files, fallback copy, and translation completeness checks.
+
 ## Use with row partials
 
 - For complete `NodePresenter` and `row_partial` composition examples, see [NodePresenter row partial patterns](node-presenter-row-partials.md).
@@ -41,6 +53,8 @@ en:
         other: "Documents"
 ```
 
+ActiveModel-backed classes can use the equivalent `activemodel.models` lookup family. The manifest tracks both delegated model-name prefixes, while the helper itself continues to delegate to Rails / ActiveModel.
+
 If ActiveModel naming is unavailable, TreeView falls back to a humanized class name. Pass `default:` when a host app wants a specific label for missing translations or plain Ruby objects:
 
 ```ruby
@@ -70,6 +84,8 @@ en:
       document:
         published_at: "Published at"
 ```
+
+ActiveModel-backed classes can use the equivalent `activemodel.attributes` lookup family. The manifest tracks both delegated attribute-name prefixes, without requiring host apps to provide every possible translation key.
 
 If ActiveModel attribute naming is unavailable, TreeView falls back to a humanized attribute name. Pass `default:` to provide a stable label when the translation may be missing:
 
