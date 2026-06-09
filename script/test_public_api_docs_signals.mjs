@@ -60,12 +60,21 @@ const selectionDataHookSignals = [
   "data-tree-view-selection-hidden-input-name-value"
 ]
 
+const emptyStateHookSignals = [
+  "TreeViewEmptyStateHooks",
+  "wrapperAttribute",
+  "contentClass",
+  "messageClass",
+  "data-tree-view-empty-state"
+]
+
 const manifestBackedDocsSignalSurfaces = [
   ["RenderState callback builder keys", "render_state_callback_builder_keys:"],
   ["host lifecycle no-detail events", "event_names_without_detail:"],
   ["host lifecycle event names", "host_lifecycle:"],
   ["remote-state values", "remote_state_values:"],
-  ["selection data hooks", "selection_data_hooks:"]
+  ["selection data hooks", "selection_data_hooks:"],
+  ["empty-state hooks", "empty_state_hooks:"]
 ]
 
 manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
@@ -104,6 +113,15 @@ publicApiDocs.forEach(([relativePath, document]) => {
   selectionDataHookSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} selection data hook docs`)
   })
+
+  emptyStateHookSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} empty-state hook docs`)
+  })
+
+  assert(
+    /final empty-state copy|permission message|filter-reset behavior|最終的な empty-state copy|permission message/.test(document),
+    `${relativePath}: empty-state hook docs no longer preserve the host-app-owned final-copy boundary`
+  )
 })
 
 lazyLoadingDocs.forEach(([relativePath, document]) => {
