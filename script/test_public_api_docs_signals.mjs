@@ -2,134 +2,92 @@ import { readFileSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const root = path.resolve(__dirname, "..")
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 
 function read(relativePath) {
-  return readFileSync(path.join(root, relativePath), "utf8")
+  return readFileSync(path.join(repoRoot, relativePath), "utf8")
 }
 
 function assert(condition, message) {
-  if (!condition) {
-    throw new Error(message)
-  }
+  if (!condition) throw new Error(message)
 }
 
-function assertIncludes(document, needle, context) {
-  assert(
-    document.includes(needle),
-    `${context} should mention ${JSON.stringify(needle)} so public API docs keep covering manifest-backed surfaces.`
-  )
+function assertIncludes(source, needle, label) {
+  assert(source.includes(needle), `${label}: missing ${needle}`)
 }
 
 const manifest = read("config/public_api_manifest.yml")
-const publicApiDocs = read("docs/en/public_api.md")
-const lazyLoadingDocs = read("docs/en/lazy_loading.md")
-const selectionDocs = read("docs/en/selection.md")
-const diagnosticsDocs = read("docs/en/diagnostics.md")
+const publicApiDocs = [
+  ["docs/en/public-api.md", read("docs/en/public-api.md")],
+  ["docs/ja/public-api.md", read("docs/ja/public-api.md")]
+]
+const lazyLoadingDocs = [
+  ["docs/en/lazy-loading.md", read("docs/en/lazy-loading.md")],
+  ["docs/ja/lazy-loading.md", read("docs/ja/lazy-loading.md")]
+]
+const selectionDocs = [
+  ["docs/en/selection.md", read("docs/en/selection.md")],
+  ["docs/ja/selection.md", read("docs/ja/selection.md")]
+]
+const diagnosticsDocs = [
+  ["docs/en/tree-diagnostics.md", read("docs/en/tree-diagnostics.md")],
+  ["docs/ja/tree-diagnostics.md", read("docs/ja/tree-diagnostics.md")]
+]
 const developmentDocs = [
   ["docs/en/development.md", read("docs/en/development.md")],
   ["docs/ja/development.md", read("docs/ja/development.md")]
 ]
 
-const manifestBackedDocsSignalSurfaces = [
-  ["RenderState callback builder keys", "render_state_callback_builder_keys:"],
-  ["event names without payload", "event_names_without_detail:"],
-  ["remote state value constants", "remote_state_value_keys:"],
-  ["selection data hook exports", "selection_data_hooks:"],
-  ["empty-state hook exports", "empty_state_hooks:"]
-]
-
-for (const [label, manifestSignal] of manifestBackedDocsSignalSurfaces) {
-  assertIncludes(manifest, manifestSignal, `public API manifest for ${label}`)
-}
-
 const callbackBuilderSignals = [
-  "TreeViewRenderStateCallbackBuilder",
-  "ancestors",
-  "children",
-  "selected",
-  "metadata",
-  "loading",
-  "expanded",
-  "TreeViewRenderState"
+  "render_state_callback_builder_keys",
+  "row_event_payload_builder",
+  "depth_label_builder",
+  "toggle_icon_builder"
 ]
 
 const hostLifecycleSignals = [
-  "TreeViewClickEvent",
-  "TreeViewExpandEvent",
-  "TreeViewCollapseEvent",
-  "TreeViewToggleEvent",
-  "treeView:click",
-  "treeView:expand",
-  "treeView:collapse",
-  "treeView:toggle",
-  "Event detail payloads",
-  "node",
-  "event",
-  "metadata"
+  "TreeViewEventNames.hostLifecycle",
+  "loading",
+  "loaded",
+  "error",
+  "retry",
+  "TreeViewEventNames.remoteState",
+  "TreeViewEventDetailKeys"
 ]
 
 const remoteStateValueSignals = [
-  "remoteStateValue",
-  "setRemoteStateValue",
+  "TreeViewRemoteStateValues",
   "loading",
-  "success",
+  "loaded",
   "error"
 ]
 
 const selectionDataHookSignals = [
   "TreeViewSelectionDataHooks",
-  "selectionDataAction",
-  "selectionDataParam",
-  "selectionDataValuesParam",
-  "selectionDataValue"
+  "TreeViewSelectionDataHooks.hiddenInputNameValue",
+  "data-tree-view-selection-hidden-input-name-value"
 ]
 
 const emptyStateHookSignals = [
   "TreeViewEmptyStateHooks",
-  "emptyStateTitle",
-  "emptyStateDescription"
+  "wrapperAttribute",
+  "contentClass",
+  "messageClass",
+  "data-tree-view-empty-state"
 ]
 
-const diagnosticsReaderSignals = [
-  "TreeViewDiagnostics",
-  "findTreeViewRoot",
-  "getTreeViewDiagnostics",
-  "readTreeViewDatasetDiagnostics"
+const diagnosticsAcceptedCheckSignals = [
+  "node_keys",
+  "dom_ids",
+  "orphans",
+  "cycles"
 ]
 
-const diagnosticsPayloadSignals = [
-  "treeView:diagnostics",
-  "version",
-  "action",
-  "timestamp",
-  "metadata"
-]
-
-const diagnosticsControllerSignals = [
-  "TreeViewDiagnosticsController",
-  "connect",
-  "disconnect",
-  "emit",
-  "emitDiagnostics"
-]
-
-const lazyLoadingRemoteStateSignals = [
-  "remoteStateValue",
-  "setRemoteStateValue",
-  "loading",
-  "success",
-  "error",
-  "remote state"
-]
-
-const selectionDataHookDocsSignals = [
-  "TreeViewSelectionDataHooks",
-  "selectionDataAction",
-  "selectionDataParam",
-  "selectionDataValuesParam",
-  "selectionDataValue"
+const diagnosticsResultSurfaceSignals = [
+  "checks",
+  "errors",
+  "warnings",
+  "success?"
 ]
 
 const developmentManifestTrackingSignals = [
@@ -149,64 +107,120 @@ const developmentEntrypointGuardSignals = [
   "transfer values"
 ]
 
-for (const signal of callbackBuilderSignals) {
-  assertIncludes(publicApiDocs, signal, "docs/en/public_api.md RenderState callback builder section")
-}
+const manifestBackedDocsSignalSurfaces = [
+  ["RenderState callback builder keys", "render_state_callback_builder_keys:"],
+  ["host lifecycle no-detail events", "event_names_without_detail:"],
+  ["host lifecycle event names", "host_lifecycle:"],
+  ["remote-state values", "remote_state_values:"],
+  ["selection data hooks", "selection_data_hooks:"],
+  ["empty-state hooks", "empty_state_hooks:"],
+  ["diagnostics accepted checks", "diagnostics:"],
+  ["diagnostics accepted checks", "accepted_checks:"],
+  ["diagnostics Result surface", "result_surface:"]
+]
 
-for (const signal of hostLifecycleSignals) {
-  assertIncludes(publicApiDocs, signal, "docs/en/public_api.md host lifecycle event section")
-}
+manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
+  assertIncludes(manifest, manifestNeedle, `public API docs signal manifest surface (${label})`)
+})
 
-for (const signal of remoteStateValueSignals) {
-  assertIncludes(publicApiDocs, signal, "docs/en/public_api.md remote state value section")
-}
+callbackBuilderSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest callback builder key surface")
+})
 
-for (const signal of selectionDataHookSignals) {
-  assertIncludes(publicApiDocs, signal, "docs/en/public_api.md selection data hooks section")
-}
+diagnosticsAcceptedCheckSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest diagnostics accepted checks")
+})
 
-for (const signal of emptyStateHookSignals) {
-  assertIncludes(publicApiDocs, signal, "docs/en/public_api.md empty-state hooks section")
-}
+diagnosticsResultSurfaceSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest diagnostics Result surface")
+})
 
-for (const signal of diagnosticsReaderSignals) {
-  assertIncludes(publicApiDocs, signal, "docs/en/public_api.md diagnostics readers section")
-}
+assertIncludes(manifest, "event_names_without_detail", "public API manifest no-detail event surface")
+assertIncludes(manifest, "host_lifecycle", "public API manifest no-detail event surface")
+hostLifecycleSignals.slice(1, 5).forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest host lifecycle no-detail event names")
+})
 
-for (const signal of diagnosticsPayloadSignals) {
-  assertIncludes(publicApiDocs, signal, "docs/en/public_api.md diagnostics payload section")
-}
+publicApiDocs.forEach(([relativePath, document]) => {
+  callbackBuilderSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} RenderState callback builder docs`)
+  })
 
-for (const signal of diagnosticsControllerSignals) {
-  assertIncludes(publicApiDocs, signal, "docs/en/public_api.md diagnostics controller section")
-}
+  assert(
+    /callback arity|return[- ]value|return value|callback arity|戻り値/.test(document),
+    `${relativePath}: RenderState callback builder docs no longer mention callback arity or return-value boundary`
+  )
 
-for (const signal of lazyLoadingRemoteStateSignals) {
-  assertIncludes(lazyLoadingDocs, signal, "docs/en/lazy_loading.md remote state documentation")
-}
+  hostLifecycleSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} host lifecycle event docs`)
+  })
 
-for (const signal of selectionDataHookDocsSignals) {
-  assertIncludes(selectionDocs, signal, "docs/en/selection.md selection data hook documentation")
-}
+  assert(
+    /host app|host-app|host app 側|host-app 側/.test(document),
+    `${relativePath}: host lifecycle event docs no longer name the host-app ownership boundary`
+  )
 
-for (const signal of diagnosticsReaderSignals) {
-  assertIncludes(diagnosticsDocs, signal, "docs/en/diagnostics.md diagnostics reader documentation")
-}
+  selectionDataHookSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} selection data hook docs`)
+  })
 
-for (const signal of diagnosticsPayloadSignals) {
-  assertIncludes(diagnosticsDocs, signal, "docs/en/diagnostics.md diagnostics event payload documentation")
-}
+  emptyStateHookSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} empty-state hook docs`)
+  })
 
-for (const signal of diagnosticsControllerSignals) {
-  assertIncludes(diagnosticsDocs, signal, "docs/en/diagnostics.md diagnostics controller documentation")
-}
+  assert(
+    /final empty-state copy|permission message|filter-reset behavior|最終的な empty-state copy|permission message/.test(document),
+    `${relativePath}: empty-state hook docs no longer preserve the host-app-owned final-copy boundary`
+  )
+})
 
-for (const [relativePath, document] of developmentDocs) {
-  for (const signal of developmentManifestTrackingSignals) {
+lazyLoadingDocs.forEach(([relativePath, document]) => {
+  remoteStateValueSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} remote-state value docs`)
+  })
+
+  assert(
+    /not event names|event 名ではありません/.test(document),
+    `${relativePath}: remote-state value docs no longer separate state values from event names`
+  )
+})
+
+selectionDocs.forEach(([relativePath, document]) => {
+  selectionDataHookSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} selection data hook docs`)
+  })
+})
+
+diagnosticsDocs.forEach(([relativePath, document]) => {
+  assertIncludes(document, "TreeView::Diagnostics.run", `${relativePath} diagnostics aggregate entrypoint docs`)
+  assertIncludes(document, "checks:", `${relativePath} diagnostics accepted checks docs`)
+  assertIncludes(document, "Result", `${relativePath} diagnostics Result surface docs`)
+
+  diagnosticsAcceptedCheckSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} diagnostics accepted check docs`)
+  })
+
+  diagnosticsResultSurfaceSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} diagnostics Result reader docs`)
+  })
+
+  assert(
+    /manifest-backed.*diagnostics contract|manifest-backed な diagnostics contract/.test(document),
+    `${relativePath}: diagnostics docs no longer identify the manifest-backed contract boundary`
+  )
+
+  assert(
+    /individual error entry internals|warning detail shape|orphan warning semantics|cycle validation policy|個々の error entry 内部|warning detail shape|orphan warning semantics|cycle validation policy/.test(document),
+    `${relativePath}: diagnostics docs no longer keep detailed error and warning shapes outside the manifest schema`
+  )
+})
+
+developmentDocs.forEach(([relativePath, document]) => {
+  developmentManifestTrackingSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} public API manifest tracking summary`)
-  }
+  })
 
-  for (const signal of developmentEntrypointGuardSignals) {
+  developmentEntrypointGuardSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} public API smoke guard summary`)
-  }
-}
+  })
+})
