@@ -51,6 +51,16 @@ const cases = [
       browser_smoke_changed: false,
       package_sensitive: true
     }
+  },
+  {
+    name: "package and Node metadata are package-sensitive full CI changes",
+    files: ["package.json", "package-lock.json", ".nvmrc"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true
+    }
   }
 ];
 
