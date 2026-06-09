@@ -45,10 +45,15 @@ Main metadata:
 | `total_count` | Visible row count before windowing. |
 | `before_count` | Number of visible rows before the current window. |
 | `after_count` | Number of visible rows after the current window. |
+| `start_index` | Zero-based index where the window starts, capped at `total_count`. |
+| `end_index` | Zero-based exclusive index after the last rendered row, or `0` when no rows render. |
 | `previous?` | Whether a previous window exists. |
 | `next?` | Whether a next window exists. |
 | `previous_offset` | Offset to pass back when rendering the previous window, or `nil` when there is no previous window. |
 | `next_offset` | Offset to pass forward when rendering the next window, or `nil` when there is no next window. |
+| `empty?` | Whether this window renders no rows. |
+
+The returned metadata method set is tracked as `render_window_metadata` in `config/public_api_manifest.yml`. The manifest covers the public reader-facing metadata contract only; it does not make route helpers, URL parameters, disabled button behavior, infinite scroll, or virtual scrolling TreeView responsibilities.
 
 `before_count` and `after_count` are summary metadata. Use them when the host app wants to show labels such as "20 rows before this window" or "35 rows remaining after this window" without recalculating those counts from `offset`, `limit`, and `total_count`.
 
