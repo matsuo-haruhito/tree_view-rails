@@ -37,6 +37,8 @@ npm run test:browser
 
 CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。docs-only failure を、docs entrypoints、README Quick Start signal、Public API docs signal、i18n parity の範囲で先に切り分けたい場合は `npm run test:docs-entrypoints` を使います。その後、より広い `npm run test:entrypoints` や browser smoke checks に進んでください。失敗箇所を切り分ける場合は個別の npm command を使ってください。
 
+`npm run test:entrypoints` の中では、`script/test_entrypoints.mjs` が runtime の package-root exports、controller registration helper、manifest loader、`.d.ts` の export-name inventory を確認します。その後 `script/test_declaration_literal_shapes.mjs` が、event names、detail keys、remote-state values、transfer values、controller identifiers、selection data hooks、empty-state hooks などの manifest-backed JavaScript constants について、`app/javascript/tree_view/index.d.ts` の literal shape を確認します。package-root export が足りない、または余分な場合は export-name guard を見ます。export は存在するが key、tuple、代表 literal value が `config/public_api_manifest.yml` とずれた場合は literal-shape guard を見ます。これは smoke guard であり、TypeScript compiler や declaration generator ではありません。
+
 Rails version matrixを確認する場合:
 
 ```bash
@@ -85,6 +87,8 @@ npm run test:entrypoints
 ```
 
 このcheckで、documented controller exports と `registerTreeViewControllers` helper が importmap entrypoint とずれないようにします。Node 側の assertions を実行する前に Ruby で `config/public_api_manifest.yml` を読み、`javascript_package_root` section を JSON として出力します。manifest loader failure を調べる場合は、repository root から Ruby が使える状態で実行してください。
+
+entrypoint command は `script/test_declaration_literal_shapes.mjs` も実行します。この2つ目の guard は `script/test_entrypoints.mjs` と一緒に保守してください。entrypoint smoke は runtime exports と `.d.ts` export names の存在を確認し、declaration literal guard は `index.d.ts` の exported literal object shapes が `config/public_api_manifest.yml` と一致することを確認します。
 
 docs-only の entrypoint / signal checks は次で個別に確認できます。
 
