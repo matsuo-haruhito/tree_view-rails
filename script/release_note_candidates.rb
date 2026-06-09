@@ -25,7 +25,7 @@ module ReleaseNoteCandidates
 
     def compare(repo, base_ref)
       owner, name = repo.split("/", 2)
-      encoded_ref = URI.encode_uri_component(base_ref)
+      encoded_ref = URI.encode_www_form_component(base_ref)
       get_json(URI("#{@api_base}/repos/#{owner}/#{name}/compare/#{encoded_ref}...HEAD"))
     end
 
