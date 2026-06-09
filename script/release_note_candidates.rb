@@ -4,7 +4,6 @@
 require "json"
 require "net/http"
 require "optparse"
-require "uri"
 
 module ReleaseNoteCandidates
   Entry = Struct.new(:type, :number, :title, :url, :closed_at, :merged_at, keyword_init: true)
