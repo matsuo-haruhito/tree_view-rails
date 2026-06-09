@@ -74,6 +74,11 @@ export const TreeViewTransferDropPositions = Object.freeze({
   after: "after"
 })
 
+export const TreeViewTransferDataMimeTypes = Object.freeze({
+  applicationJson: "application/json",
+  textPlain: "text/plain"
+})
+
 export const TreeViewControllerIdentifiers = Object.freeze({
   state: "tree-view-state",
   client: "tree-view-client",
