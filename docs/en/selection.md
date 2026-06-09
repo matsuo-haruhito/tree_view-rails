@@ -59,6 +59,8 @@ selected_nodes = TreeView.parse_selection_params(params[:selected_nodes])
 
 `TreeView.parse_selection_params` accepts arrays of JSON strings and returns parsed hash-like values. Invalid JSON raises a clear error so the host app can handle malformed submissions.
 
+Nil and empty string entries are skipped, which keeps optional checkbox params easy to pass through when nothing was selected. Hash-like entries and JSON objects are accepted as the current server-side parser surface. Malformed JSON and JSON values that are not objects raise `ArgumentError`; host apps own whether to rescue that error, reject the request, show validation copy, or log the malformed submission.
+
 ## Disabled checkboxes
 
 Use `disabled_builder` when some nodes cannot be selected.
