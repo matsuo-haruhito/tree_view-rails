@@ -61,6 +61,8 @@ expand-all、collapse-all、current path を残す toolbar state を静的に見
 
 この mockup は、この helper の責務境界を視覚的に補うためのものです。action の見え方と `:current_path` contract を確認できますが、route、authorization copy、Turbo response behavior 自体を定義するものではありません。
 
+`html:` や `action_html:` の attribute をreviewする場合は、あわせて [Toolbar action HTML boundary note](../toolbar_action_html_boundary.md) を読んでください。mockup は visual state を確認するための入口で、boundary note は attribute ownership を確認するための補助資料です。TreeView-owned hook は維持し、analytics、Turbo target、screen-specific grouping、final copy は host app 側の責務として扱います。
+
 ## label resolution
 
 `tree_view_toolbar`、`tree_view_toolbar_actions`、`tree_view_toolbar_action_metadata` は、action label を次の順で解決します。
