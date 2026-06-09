@@ -45,10 +45,15 @@ window = tree_view_window(@render_state, offset: 0, limit: 50)
 | `total_count` | window適用前のvisible row数。 |
 | `before_count` | 現在のwindowより前にあるvisible row数。 |
 | `after_count` | 現在のwindowより後ろに残るvisible row数。 |
+| `start_index` | window の開始位置。`total_count` を超える場合は `total_count` で止まります。 |
+| `end_index` | 最後に描画される row の次の位置。何も描画しない場合は `0`。 |
 | `previous?` | 前のwindowが存在するか。 |
 | `next?` | 次のwindowが存在するか。 |
 | `previous_offset` | 前のwindowを描画するときに渡すoffset。前のwindowがない場合は `nil`。 |
 | `next_offset` | 次のwindowを描画するときに渡すoffset。次のwindowがない場合は `nil`。 |
+| `empty?` | このwindowが row を描画しないか。 |
+
+返却される metadata method set は `config/public_api_manifest.yml` の `render_window_metadata` として追跡します。この manifest が固定するのは利用者向けのmetadata contractだけです。route helper、URL parameter、disabled button の扱い、infinite scroll、virtual scrolling を TreeView の責務にするものではありません。
 
 `before_count` / `after_count` は summary 用metadataです。host app が「このwindowの前に20件ある」「このwindowの後ろに35件残っている」のような表示を作るとき、`offset` / `limit` / `total_count` から毎回再計算せずに利用できます。
 
