@@ -6,12 +6,13 @@ function nextFrame() {
   return new Promise((resolve) => setTimeout(resolve, 0))
 }
 
-function renderTree() {
+function renderTree({ keyboard = false } = {}) {
   document.body.innerHTML = `
     <section
       id="tree"
       data-controller="tree-view-state"
-      data-tree-view-state-view-key-value="project-tree">
+      data-tree-view-state-view-key-value="project-tree"
+      ${keyboard ? 'data-tree-view-state-keyboard-value="true"' : ""}>
       <div
         id="project-1"
         data-tree-view-state-target="node"
@@ -36,6 +37,22 @@ function renderTree() {
   `
 
   return document.getElementById("tree")
+}
+
+function makeVisible(...ids) {
+  ids.forEach((id) => {
+    Object.defineProperty(document.getElementById(id), "offsetParent", {
+      configurable: true,
+      get: () => document.body
+    })
+  })
+}
+
+function keydown(controller, target, key) {
+  const event = new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true })
+  Object.defineProperty(event, "target", { configurable: true, value: target })
+  controller.keydown(event)
+  return event
 }
 
 describe("TreeViewStateController state-changed details", () => {
@@ -89,5 +106,70 @@ describe("TreeViewStateController state-changed details", () => {
       viewKey: "project-tree",
       expandedKeys: ["project:2"]
     })
+  })
+
+  it("moves Home and End focus to the first and last visible rows", async () => {
+    const element = renderTree({ keyboard: true })
+    application = Application.start()
+    application.register("tree-view-state", TreeViewStateController)
+    await nextFrame()
+
+    makeVisible("project-1", "project-2")
+
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    const first = document.getElementById("project-1")
+    const second = document.getElementById("project-2")
+    const hidden = document.getElementById("missing-key")
+
+    second.focus()
+    const homeEvent = keydown(controller, second, "Home")
+    expect(homeEvent.defaultPrevented).toBe(true)
+    expect(document.activeElement).toBe(first)
+
+    const endEvent = keydown(controller, first, "End")
+    expect(endEvent.defaultPrevented).toBe(true)
+    expect(document.activeElement).toBe(second)
+    expect(document.activeElement).not.toBe(hidden)
+  })
+
+  it("leaves Home and End events from interactive targets alone", async () => {
+    const element = renderTree({ keyboard: true })
+    application = Application.start()
+    application.register("tree-view-state", TreeViewStateController)
+    await nextFrame()
+
+    makeVisible("project-1", "project-2")
+
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    const first = document.getElementById("project-1")
+    const button = document.getElementById("project-2-toggle")
+
+    button.focus()
+    const event = keydown(controller, button, "Home")
+
+    expect(event.defaultPrevented).toBe(false)
+    expect(document.activeElement).toBe(button)
+    expect(document.activeElement).not.toBe(first)
+  })
+
+  it("does not handle Home and End when keyboard navigation is disabled", async () => {
+    const element = renderTree()
+    application = Application.start()
+    application.register("tree-view-state", TreeViewStateController)
+    await nextFrame()
+
+    makeVisible("project-1", "project-2")
+
+    const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    const first = document.getElementById("project-1")
+    const second = document.getElementById("project-2")
+
+    first.tabIndex = -1
+    second.tabIndex = -1
+    first.focus()
+    const event = keydown(controller, first, "End")
+
+    expect(event.defaultPrevented).toBe(false)
+    expect(document.activeElement).toBe(first)
   })
 })
