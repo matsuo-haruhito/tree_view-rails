@@ -43,6 +43,16 @@ const cases = [
     }
   },
   {
+    name: "package metadata changes are package-sensitive full CI changes",
+    files: ["package.json", "package-lock.json", ".nvmrc"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true
+    }
+  },
+  {
     name: "package-sensitive runtime files are not docs-only",
     files: ["app/javascript/tree_view/index.js", "config/public_api_manifest.yml"],
     expected: {
