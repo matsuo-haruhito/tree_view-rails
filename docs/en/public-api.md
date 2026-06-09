@@ -198,6 +198,7 @@ Stable enough for host apps to use:
 - `TreeViewRemoteStateValues`
 - `TreeViewControllerIdentifiers`
 - `TreeViewSelectionDataHooks`
+- `TreeViewEmptyStateHooks`
 - exported controller classes
   - `TreeViewStateController`
   - `TreeViewClientController`
@@ -215,6 +216,7 @@ Stable enough for host apps to use:
 `TreeViewRemoteStateValues` exposes the documented remote-state value set for lazy-loading rows: `loading`, `loaded`, and `error`. Use it when host-app JavaScript or tests need to compare `data-tree-remote-state` values without hand-copying strings; `TreeViewEventNames.remoteState.*` still names controller-emitted events, and `TreeViewEventDetailKeys.remoteState.*` still lists their `event.detail` keys.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
 `TreeViewSelectionDataHooks` exposes the documented `tree-view-selection` host-element value attribute names as a machine-readable object. Use it when JavaScript needs to author or query those host-owned attributes without hand-copying strings such as `TreeViewSelectionDataHooks.hiddenInputNameValue`.
+`TreeViewEmptyStateHooks` exposes the documented empty-state wrapper attribute and baseline row classes as a machine-readable object. Use it when host-app JavaScript, tests, or copied styling need to target the shipped empty-state reference pattern without hand-copying `data-tree-view-empty-state`, `.tree-view-empty-row__content`, or `.tree-view-empty-row__message`. The final empty-state copy, CTA, permission message, and filter-reset behavior stay host-app responsibilities.
 
 Within `TreeViewEventNames`, lazy-loading request lifecycle names live under `hostLifecycle`:
 
@@ -246,6 +248,12 @@ Documented keys on `TreeViewSelectionDataHooks`:
 - `cascadeValue`
 - `indeterminateValue`
 
+Documented keys on `TreeViewEmptyStateHooks`:
+
+- `wrapperAttribute`
+- `contentClass`
+- `messageClass`
+
 The `tree-view-selection` controller's documented host-element value attributes are also part of the stable host-app wiring surface:
 
 - `data-tree-view-selection-hidden-input-name-value`
@@ -255,7 +263,7 @@ The `tree-view-selection` controller's documented host-element value attributes 
 
 Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. Generated hidden input marker attributes and source-id attributes are managed by TreeView and are not host-authored public hooks. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
-The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, remote-state values, and selection data hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, remote-state values, selection data hook values, and empty-state hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
@@ -277,11 +285,11 @@ Representative documented hooks are tracked where their feature behavior is expl
 | Toolbar | `data-tree-view-toolbar`, `data-tree-view-toolbar-action`, `data-tree-view-toolbar-disabled` | TreeView-owned hooks documented in [Toolbar](toolbar.md). Use helper methods for supported actions and metadata instead of internal constants. |
 | Selection | `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | Stable host-element controller values documented in [Selection](selection.md) and mirrored by `TreeViewSelectionDataHooks`. Row payloads and disabled decisions stay with `selection:` render-state builders. Generated hidden input marker attributes and source-id attributes are TreeView-managed internals. |
 | Lazy loading | `data-tree-remote-state`, remote placeholder IDs, lazy-loading lifecycle events | Stable placeholder and event hooks documented in [Lazy Loading](lazy-loading.md). Host apps still own request dispatch and response handling. Use `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` for placeholder IDs and state attributes rather than internal path or toggle helpers. |
-| Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | Reusable baseline hooks documented in the [mockup inventory](../mockups/README.md). They describe the shipped empty-state reference pattern, not every internal row class. |
+| Empty state | `data-tree-view-empty-state`, `.tree-view-empty-row__content`, `.tree-view-empty-row__message` | Reusable baseline hooks documented in the [mockup inventory](../mockups/README.md) and mirrored by `TreeViewEmptyStateHooks`. They describe the shipped empty-state reference pattern, not every internal row class or the host app's final copy / CTA workflow. |
 | Interaction markers | marker row classes and `data-*` hooks shown in focused mockups | Reference hooks documented through [mockups](../mockups/README.md) for review and adoption. Promote any hook to a machine-readable contract in `config/public_api_manifest.yml` only when it needs compatibility checks. |
 | Direction-aware styling | current-row cues, hierarchy connectors, toggle spacing, RTL / vertical writing override references | Responsibility boundary and host-app stylesheet override guidance live in [Direction-aware styling boundary](direction-aware-styling.md). These cues are not machine-readable public styling hooks unless they are explicitly promoted into manifest-backed checks. |
 
-This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, JavaScript package-root exports, controller identifiers, selection data hooks, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
+This inventory is intentionally representative, not exhaustive. `config/public_api_manifest.yml` remains the machine-readable source of truth for helper methods, JavaScript package-root exports, controller identifiers, selection data hooks, empty-state hooks, and RenderState grouped option keys. Docs-only hook inventories should point to feature guides and mockups; they should not turn every emitted class or `data-*` attribute into a compatibility contract.
 
 DOM helper names that are not listed in the manifest remain internal even when the generated DOM IDs or attributes appear in bundled markup. In particular, button, selection-checkbox, toggle-path, and lazy-loading path helper names are not public host-app dependencies unless they are promoted into the manifest and documented here.
 

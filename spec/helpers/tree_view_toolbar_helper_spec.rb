@@ -3,6 +3,7 @@
 require "spec_helper"
 require "action_view"
 require "action_view/helpers"
+require "yaml"
 
 RSpec.describe "tree_view_toolbar helper" do
   let(:helper_class) do
@@ -69,6 +70,30 @@ RSpec.describe "tree_view_toolbar helper" do
         }
       ]
     )
+  end
+
+  it "keeps toolbar action metadata aligned with the public API manifest" do
+    manifest = YAML.load_file(File.expand_path("../../config/public_api_manifest.yml", __dir__))
+    metadata_contract = manifest.fetch("toolbar_action_metadata")
+    action_state_mapping = manifest.fetch("toolbar_actions")
+
+    action = helper.tree_view_toolbar_action_metadata(render_state, :collapse_all_except_current_path)
+
+    expect(action.keys.map(&:to_s)).to eq(metadata_contract.fetch("keys"))
+    expect(action.fetch(:state).to_s).to eq(action_state_mapping.fetch(action.fetch(:action).to_s))
+    expect(action.fetch(:data).keys.map(&:to_s)).to include("tree_view_toolbar_action")
+
+    static_ui_config = TreeView::UiConfig.new(
+      node_dom_id_builder: ->(item_or_id) { "node_#{item_or_id}" },
+      button_dom_id_builder: ->(item_or_id) { "button_#{item_or_id}" },
+      show_button_dom_id_builder: ->(item_or_id) { "show_button_#{item_or_id}" }
+    )
+    static_render_state = instance_double(TreeView::RenderState, ui_config: static_ui_config)
+    disabled_action = helper.tree_view_toolbar_action_metadata(static_render_state, :expand_all)
+
+    expect(disabled_action.fetch(:path)).to be_nil
+    expect(disabled_action.fetch(:disabled)).to be(true)
+    expect(disabled_action.fetch(:data).keys.map(&:to_s)).to eq(metadata_contract.fetch("data_keys"))
   end
 
   it "uses I18n toolbar labels when a translation is available" do

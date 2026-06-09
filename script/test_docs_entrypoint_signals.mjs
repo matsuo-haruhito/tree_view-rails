@@ -209,6 +209,98 @@ const signalGroups = [
         ]
       ]
     ]
+  },
+  {
+    feature: "TreeView.configure option docs boundary",
+    files: [
+      [
+        "config/public_api_manifest.yml",
+        ["configuration_options:", "tree_view_configure:", "initial_state", "render_log_level"]
+      ],
+      [
+        "docs/en/render-log-level.md",
+        [
+          "render_log_level",
+          "config/public_api_manifest.yml",
+          ":debug",
+          ":unknown",
+          "render_log_level = nil",
+          "helper-rendered partials",
+          "It does not change `Rails.logger.level`",
+          "initial_state",
+          ":expanded",
+          ":collapsed",
+          "TreeView::ConfigurationError"
+        ]
+      ],
+      [
+        "docs/ja/render-log-level.md",
+        [
+          "render_log_level",
+          "config/public_api_manifest.yml",
+          ":debug",
+          ":unknown",
+          "render_log_level = nil",
+          "TreeView helper 経由で描画される partial",
+          "host application 全体の `Rails.logger.level` は変更しません",
+          "initial_state",
+          ":expanded",
+          ":collapsed",
+          "TreeView::ConfigurationError"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Row status and depth label docs boundary",
+    files: [
+      [
+        "docs/en/row-status.md",
+        [
+          "row_disabled_builder",
+          "row_readonly_builder",
+          "row_disabled_reason_builder",
+          "data-tree-view-row-disabled",
+          "data-tree-view-row-readonly",
+          "data-tree-view-row-disabled-reason",
+          "selection[:disabled_builder]",
+          "row-status-depth-labels.html",
+          "Business rules, action blocking, authorization, and persistence remain host app responsibilities"
+        ]
+      ],
+      [
+        "docs/ja/row-status.md",
+        [
+          "row_disabled_builder",
+          "row_readonly_builder",
+          "row_disabled_reason_builder",
+          "data-tree-view-row-disabled",
+          "data-tree-view-row-readonly",
+          "data-tree-view-row-disabled-reason",
+          "selection[:disabled_builder]",
+          "row-status-depth-labels.html",
+          "実際の業務ルール、操作制御、認可、保存処理は host app 側で実装します"
+        ]
+      ],
+      [
+        "docs/en/depth-labels.md",
+        [
+          "depth_label_builder",
+          "context.depth",
+          "row-status-depth-labels.html",
+          "The host app decides the label text, business meaning of each depth, and CSS styling"
+        ]
+      ],
+      [
+        "docs/ja/depth-labels.md",
+        [
+          "depth_label_builder",
+          "context.depth",
+          "row-status-depth-labels.html",
+          "どのdepthにどの文言を出すか、業務上の意味付け、CSS表現はhost app側で決めます"
+        ]
+      ]
+    ]
   }
 ]
 

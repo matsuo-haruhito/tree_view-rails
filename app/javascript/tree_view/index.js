@@ -74,6 +74,11 @@ export const TreeViewTransferDropPositions = Object.freeze({
   after: "after"
 })
 
+export const TreeViewTransferDataMimeTypes = Object.freeze({
+  applicationJson: "application/json",
+  textPlain: "text/plain"
+})
+
 export const TreeViewControllerIdentifiers = Object.freeze({
   state: "tree-view-state",
   client: "tree-view-client",
@@ -87,6 +92,12 @@ export const TreeViewSelectionDataHooks = Object.freeze({
   maxCountValue: "data-tree-view-selection-max-count-value",
   cascadeValue: "data-tree-view-selection-cascade-value",
   indeterminateValue: "data-tree-view-selection-indeterminate-value"
+})
+
+export const TreeViewEmptyStateHooks = Object.freeze({
+  wrapperAttribute: "data-tree-view-empty-state",
+  contentClass: "tree-view-empty-row__content",
+  messageClass: "tree-view-empty-row__message"
 })
 
 export function registerTreeViewControllers(application) {

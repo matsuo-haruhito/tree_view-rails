@@ -74,6 +74,8 @@ end
 
 `Result#success?` only reflects collected errors. Orphan reports are warnings, so review `warnings` when filtered, imported, or permission-scoped data can leave records outside the rendered tree.
 
+The manifest-backed diagnostics contract covers the accepted check names and the `Result` reader surface. The stable check names are `node_keys`, `dom_ids`, `orphans`, and `cycles`. A diagnostics `Result` exposes `checks`, `errors`, `warnings`, and `success?`. The manifest intentionally does not freeze individual error entry internals, warning detail shape, orphan warning semantics, or cycle validation policy; those remain documented behavior and host-app data policy boundaries rather than a broader manifest schema.
+
 ## Node key uniqueness
 
 Enable validation when building the tree to catch duplicate node keys early.

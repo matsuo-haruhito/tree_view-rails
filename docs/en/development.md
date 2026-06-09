@@ -18,7 +18,7 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
-Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version. The Node version source drift spec keeps `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value aligned without changing the current install policy.
+Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version. Keep `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value aligned when any of them changes. A dedicated automated Node version drift guard is not present on current `main`; #1659 tracks whether to add a lightweight guard without changing the current install policy.
 
 Keep using `npm install` for now. The repository has a committed `package-lock.json`, but it is not yet refreshed in sync with `package.json`, so local setup and pull-request CI stay on `npm install` until that lockfile refresh is completed in a registry-enabled environment. See [Installation](installation.md) for the current CI and install-path summary.
 
@@ -31,10 +31,11 @@ bundle exec rake build
 npm run test:js
 npm test
 npm run test:entrypoints
+npm run test:docs-entrypoints
 npm run test:browser
 ```
 
-Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use the individual npm commands when you are narrowing a failure.
+Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use the individual npm commands when you are narrowing a failure.
 
 For the Rails version matrix:
 
@@ -84,6 +85,14 @@ npm run test:entrypoints
 ```
 
 That check keeps the documented controller exports and `registerTreeViewControllers` helper aligned with the importmap entrypoint. It uses Ruby to load `config/public_api_manifest.yml` and print the `javascript_package_root` section as JSON before Node assertions run, so run it from the repository root with Ruby available when you are diagnosing manifest loader failures.
+
+Docs-only entrypoint and signal checks can be run separately with:
+
+```bash
+npm run test:docs-entrypoints
+```
+
+That command runs the docs entrypoint smoke, docs entrypoint signal smoke, README Quick Start signal, Public API docs signal, and i18n parity checks without the broader entrypoint and CI policy checks. Use it when a docs-only change fails before moving on to `npm run test:entrypoints` or `npm run test:browser`.
 
 Browser-level smoke tests run through Playwright with:
 
