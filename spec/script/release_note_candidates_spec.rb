@@ -3,68 +3,70 @@
 require "spec_helper"
 require_relative "../../script/release_note_candidates"
 
-class FakeReleaseNoteClient
-  attr_reader :queries
+def build_fake_release_note_client
+  Class.new do
+    attr_reader :queries
 
-  def initialize
-    @queries = []
-  end
+    def initialize
+      @queries = []
+    end
 
-  def search(query)
-    @queries << query
-    if query.include?("is:pr")
-      [
+    def search(query)
+      @queries << query
+      if query.include?("is:pr")
+        [
+          {
+            "number" => 12,
+            "title" => "Add toolbar helper",
+            "html_url" => "https://github.com/example/repo/pull/12",
+            "pull_request" => {"merged_at" => "2026-06-01T00:00:00Z"}
+          }
+        ]
+      else
+        [
+          {
+            "number" => 34,
+            "title" => "Clarify release docs",
+            "html_url" => "https://github.com/example/repo/issues/34",
+            "closed_at" => "2026-06-02T00:00:00Z"
+          }
+        ]
+      end
+    end
+
+    def compare(_repo, _base_ref)
+      {
+        "commits" => [
+          {"commit" => {"message" => "Merge pull request #12 from feature\n\nCloses #34"}},
+          {"commit" => {"message" => "Docs update without issue reference"}}
+        ]
+      }
+    end
+
+    def issue(_repo, number)
+      case number.to_i
+      when 12
         {
           "number" => 12,
           "title" => "Add toolbar helper",
           "html_url" => "https://github.com/example/repo/pull/12",
           "pull_request" => {"merged_at" => "2026-06-01T00:00:00Z"}
         }
-      ]
-    else
-      [
+      when 34
         {
           "number" => 34,
           "title" => "Clarify release docs",
           "html_url" => "https://github.com/example/repo/issues/34",
           "closed_at" => "2026-06-02T00:00:00Z"
         }
-      ]
+      end
     end
-  end
-
-  def compare(_repo, _base_ref)
-    {
-      "commits" => [
-        {"commit" => {"message" => "Merge pull request #12 from feature\n\nCloses #34"}},
-        {"commit" => {"message" => "Docs update without issue reference"}}
-      ]
-    }
-  end
-
-  def issue(_repo, number)
-    case number.to_i
-    when 12
-      {
-        "number" => 12,
-        "title" => "Add toolbar helper",
-        "html_url" => "https://github.com/example/repo/pull/12",
-        "pull_request" => {"merged_at" => "2026-06-01T00:00:00Z"}
-      }
-    when 34
-      {
-        "number" => 34,
-        "title" => "Clarify release docs",
-        "html_url" => "https://github.com/example/repo/issues/34",
-        "closed_at" => "2026-06-02T00:00:00Z"
-      }
-    end
-  end
+  end.new
 end
 
 RSpec.describe ReleaseNoteCandidates::Collector do
   it "collects merged pull requests and closed issues for a date window" do
-    client = FakeReleaseNoteClient.new
+    client = build_fake_release_note_client
     merged_prs, closed_issues = described_class.new(client: client).by_since_date(
       repo: "example/repo",
       since_date: "2026-06-01"
@@ -79,7 +81,7 @@ RSpec.describe ReleaseNoteCandidates::Collector do
   end
 
   it "collects referenced candidates from commits since a tag" do
-    client = FakeReleaseNoteClient.new
+    client = build_fake_release_note_client
     merged_prs, closed_issues = described_class.new(client: client).by_since_tag(
       repo: "example/repo",
       since_tag: "v0.1.0"
