@@ -39,6 +39,8 @@ If a future browser-level accessibility smoke test treats one of these patterns 
 - Empty rows now wrap the message in `.tree-view-empty-row__content` and `.tree-view-empty-row__message`, with `data-tree-view-empty-state="true"` on the wrapper so host apps can style or target empty states without overriding the partial.
 - Static hidden-count text appends a screen-reader-only suffix from `tree_view.accessibility.hidden_descendants`, which defaults to ` descendants` and can be localized by the host app.
 
+Host apps that target these hooks from JavaScript, tests, or copied CSS can import `TreeViewEmptyStateHooks` from `tree_view/index.js` instead of hand-copying the wrapper attribute or baseline class names. The export covers only `wrapperAttribute`, `contentClass`, and `messageClass`; it does not turn final copy, CTAs, permission messages, or filter-reset behavior into TreeView-owned UI.
+
 For a static comparison of no-root-items and no-results rows, the reusable empty-row wrapper hook, and the host-app-owned copy boundary, see [empty-state.html](../mockups/empty-state.html).
 
 Use that mockup as a visual companion to this policy; it does not redefine ARIA behavior, CTA copy, or filter-reset workflow.
