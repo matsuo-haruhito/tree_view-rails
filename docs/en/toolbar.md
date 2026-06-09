@@ -61,6 +61,8 @@ For a static comparison of expand-all, collapse-all, and current-path-preserving
 
 Use that mockup as a visual companion to this helper boundary: it highlights action affordances and the `:current_path` contract without defining routes, authorization copy, or Turbo response behavior.
 
+When reviewing `html:` or `action_html:` attributes, also read the [Toolbar action HTML boundary note](../toolbar_action_html_boundary.md). The mockup shows visual states, while the boundary note focuses on attribute ownership: TreeView-owned hooks stay present, and analytics, Turbo targets, screen-specific grouping, and final copy remain host-app responsibilities.
+
 ## Label resolution
 
 `tree_view_toolbar`, `tree_view_toolbar_actions`, and `tree_view_toolbar_action_metadata` resolve action labels in this order:
