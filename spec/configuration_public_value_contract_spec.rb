@@ -5,7 +5,7 @@ require "yaml"
 
 RSpec.describe "configuration public value contract" do
   let(:manifest) do
-    YAML.safe_load(File.read(File.expand_path("../config/public_api_manifest.yml", __dir__)))
+    YAML.safe_load_file(File.expand_path("../config/public_api_manifest.yml", __dir__))
   end
 
   let(:english_public_api_docs) do
