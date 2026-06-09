@@ -36,6 +36,11 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+filtered_tree_modes:
+  - matched_only
+  - with_ancestors
+  - with_descendants
+  - with_ancestors_and_descendants
 graph_adapter_initializer:
   required_keywords:
     - roots
