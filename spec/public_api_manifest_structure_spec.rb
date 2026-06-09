@@ -10,6 +10,7 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   module_methods
   configuration_options
   public_constants
+  localized_name_i18n_keys
   graph_adapter_initializer
   path_tree_builder_node_shapes
   helper_methods
@@ -79,6 +80,28 @@ RSpec.describe "Public API manifest structure" do
     YAML
 
     expect(duplicate_mapping_keys(yaml)).to eq(["javascript_package_root.event_names.state"])
+  end
+
+  it "keeps localized name i18n key sections shaped as explicit hash contracts" do
+    section = manifest.fetch("localized_name_i18n_keys")
+
+    expect(section.keys).to eq(%w[model_names attribute_names node_type_names])
+
+    %w[model_names attribute_names].each do |section_name|
+      contract = section.fetch(section_name)
+
+      expect(contract.fetch("helper")).to be_a(String)
+      expect(contract.fetch("delegated_lookup_prefixes")).to be_an(Array)
+      expect(contract.fetch("delegated_lookup_prefixes")).not_to be_empty
+      expect(contract.fetch("delegated_lookup_prefixes")).to all(be_a(String))
+      expect(contract.fetch("fallback")).to be_a(String)
+    end
+
+    node_type_contract = section.fetch("node_type_names")
+
+    expect(node_type_contract.fetch("helper")).to be_a(String)
+    expect(node_type_contract.fetch("lookup_prefix")).to be_a(String)
+    expect(node_type_contract.fetch("fallback")).to be_a(String)
   end
 
   it "keeps grouped option key sections shaped as non-empty string lists" do
