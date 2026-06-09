@@ -18,7 +18,7 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
-ローカルの JavaScript 作業では Node 22 を使ってください。repository root の `.nvmrc` が CI の JavaScript lane とそろった、推奨 Node major version の source of truth です。Node version source drift spec は `.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` を同期確認し、現在の install policy は変更しません。
+ローカルの JavaScript 作業では Node 22 を使ってください。repository root の `.nvmrc` が CI の JavaScript lane とそろった、推奨 Node major version の source of truth です。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` は、どれかを変更するときに同じ Node major を指すように同期してください。current `main` には専用の自動 Node version drift guard はまだありません。現在の install policy を変えずに lightweight guard を追加するかどうかは #1659 で追跡しています。
 
 現状は `npm install` を使い続けてください。repo には `package-lock.json` を commit していますが、まだ `package.json` と同期していないため、ローカルセットアップと Pull Request CI は、registry-enabled な環境で lockfile refresh が完了するまで `npm install` を前提にしています。現在の CI と install path の整理は [導入手順](installation.md) を参照してください。
 
@@ -31,10 +31,11 @@ bundle exec rake build
 npm run test:js
 npm test
 npm run test:entrypoints
+npm run test:docs-entrypoints
 npm run test:browser
 ```
 
-CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。失敗箇所を切り分ける場合は個別の npm command を使ってください。
+CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。docs-only failure を、docs entrypoints、README Quick Start signal、Public API docs signal、i18n parity の範囲で先に切り分けたい場合は `npm run test:docs-entrypoints` を使います。その後、より広い `npm run test:entrypoints` や browser smoke checks に進んでください。失敗箇所を切り分ける場合は個別の npm command を使ってください。
 
 Rails version matrixを確認する場合:
 
@@ -84,6 +85,14 @@ npm run test:entrypoints
 ```
 
 このcheckで、documented controller exports と `registerTreeViewControllers` helper が importmap entrypoint とずれないようにします。Node 側の assertions を実行する前に Ruby で `config/public_api_manifest.yml` を読み、`javascript_package_root` section を JSON として出力します。manifest loader failure を調べる場合は、repository root から Ruby が使える状態で実行してください。
+
+docs-only の entrypoint / signal checks は次で個別に確認できます。
+
+```bash
+npm run test:docs-entrypoints
+```
+
+この command は、docs entrypoint smoke、docs entrypoint signal smoke、README Quick Start signal、Public API docs signal、i18n parity checks を実行し、より広い entrypoint / CI policy checks は含めません。docs-only change が失敗したときは、`npm run test:entrypoints` や `npm run test:browser` に進む前の切り分けに使ってください。
 
 Browser-level smoke testsはPlaywrightで実行します。
 

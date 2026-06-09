@@ -93,6 +93,8 @@ function onDrop(event) {
 }
 ```
 
+`application/json` は、host app が通常読む primary な TreeView transfer MIME type です。TreeView は browser compatibility fallback として、同じ JSON payload を `text/plain` にも書き込みます。machine-readable な文字列を使いたい host app は package root から `TreeViewTransferDataMimeTypes` を import し、まず `TreeViewTransferDataMimeTypes.applicationJson` を読み、必要な場合だけ `TreeViewTransferDataMimeTypes.textPlain` を fallback として使ってください。
+
 host appは controller 内部に直接依存せず、`tree-view-transfer` controller がdispatchする公開transfer eventをlistenできます。
 
 ```js

@@ -71,6 +71,11 @@ export declare const TreeViewTransferDropPositions: Readonly<{
   after: "after"
 }>
 
+export declare const TreeViewTransferDataMimeTypes: Readonly<{
+  applicationJson: "application/json"
+  textPlain: "text/plain"
+}>
+
 export declare const TreeViewControllerIdentifiers: Readonly<{
   state: "tree-view-state"
   client: "tree-view-client"
@@ -84,6 +89,12 @@ export declare const TreeViewSelectionDataHooks: Readonly<{
   maxCountValue: "data-tree-view-selection-max-count-value"
   cascadeValue: "data-tree-view-selection-cascade-value"
   indeterminateValue: "data-tree-view-selection-indeterminate-value"
+}>
+
+export declare const TreeViewEmptyStateHooks: Readonly<{
+  wrapperAttribute: "data-tree-view-empty-state"
+  contentClass: "tree-view-empty-row__content"
+  messageClass: "tree-view-empty-row__message"
 }>
 
 export declare function registerTreeViewControllers(application: Application): void

@@ -1,36 +1,77 @@
 require "spec_helper"
 
-DummyRecord = Struct.new(:owner, :tree_instance_key, :expanded_keys) do
+DummyRecord = Struct.new(:owner, :tree_instance_key, :expanded_keys, :updated_at) do
   def save!
     true
   end
 
   def destroy!
-    DummyModel.record = nil
+    DummyModel.records.delete(self)
     true
   end
 end
 
+class DummyRelation
+  def initialize(records)
+    @records = records
+  end
+
+  def where(conditions)
+    filtered = records.select do |record|
+      conditions.all? { |attribute, expected| record.public_send(attribute) == expected }
+    end
+
+    self.class.new(filtered)
+  end
+
+  def delete_all
+    count = records.count
+    records.each { |record| DummyModel.records.delete(record) }
+    count
+  end
+
+  private
+
+  attr_reader :records
+end
+
 class DummyModel
   class << self
-    attr_accessor :record
+    attr_accessor :records
+
+    def record
+      records.first
+    end
+
+    def record=(value)
+      self.records = value ? [value] : []
+    end
 
     def find_by(owner:, tree_instance_key:)
-      return nil unless record
-      return record if record.owner == owner && record.tree_instance_key == tree_instance_key
-
-      nil
+      records.find do |record|
+        record.owner == owner && record.tree_instance_key == tree_instance_key
+      end
     end
 
     def find_or_initialize_by(owner:, tree_instance_key:)
-      self.record ||= DummyRecord.new(owner, tree_instance_key, [])
+      find_by(owner: owner, tree_instance_key: tree_instance_key).tap do |record|
+        return record if record
+      end
+
+      DummyRecord.new(owner, tree_instance_key, []).tap { |record| records << record }
+    end
+
+    def where(query, value)
+      raise ArgumentError, "unexpected query" unless query == "updated_at < ?"
+
+      DummyRelation.new(records.select { |record| record.updated_at && record.updated_at < value })
     end
   end
 end
 
 RSpec.describe TreeView::StateStore do
   before do
-    DummyModel.record = nil
+    DummyModel.records = []
   end
 
   it "returns an empty persisted state when no record exists" do
@@ -82,5 +123,50 @@ RSpec.describe TreeView::StateStore do
 
     expect(state.tree_instance_key).to eq("documents")
     expect(state.expanded_keys).to eq([])
+  end
+
+  it "prunes records older than the given timestamp" do
+    cutoff = Time.utc(2026, 1, 1)
+    old_record = DummyRecord.new(:user, "documents", ["node-1"], cutoff - 60)
+    fresh_record = DummyRecord.new(:user, "documents", ["node-2"], cutoff + 60)
+    DummyModel.records = [old_record, fresh_record]
+    store = described_class.new(model: DummyModel)
+
+    count = store.prune!(older_than: cutoff)
+
+    expect(count).to eq(1)
+    expect(DummyModel.records).to contain_exactly(fresh_record)
+  end
+
+  it "prunes only matching owner records when an owner is provided" do
+    cutoff = Time.utc(2026, 1, 1)
+    matching_record = DummyRecord.new(:user, "documents", ["node-1"], cutoff - 60)
+    other_owner_record = DummyRecord.new(:admin, "documents", ["node-2"], cutoff - 60)
+    DummyModel.records = [matching_record, other_owner_record]
+    store = described_class.new(model: DummyModel)
+
+    count = store.prune!(older_than: cutoff, owner: :user)
+
+    expect(count).to eq(1)
+    expect(DummyModel.records).to contain_exactly(other_owner_record)
+  end
+
+  it "prunes only matching tree instance records when a tree instance key is provided" do
+    cutoff = Time.utc(2026, 1, 1)
+    matching_record = DummyRecord.new(:user, "documents", ["node-1"], cutoff - 60)
+    other_tree_record = DummyRecord.new(:user, "projects", ["node-2"], cutoff - 60)
+    DummyModel.records = [matching_record, other_tree_record]
+    store = described_class.new(model: DummyModel)
+
+    count = store.prune!(older_than: cutoff, tree_instance_key: "documents")
+
+    expect(count).to eq(1)
+    expect(DummyModel.records).to contain_exactly(other_tree_record)
+  end
+
+  it "requires an older_than timestamp before pruning" do
+    store = described_class.new(model: DummyModel)
+
+    expect { store.prune!(older_than: nil) }.to raise_error(ArgumentError, "older_than is required")
   end
 end

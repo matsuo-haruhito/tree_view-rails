@@ -56,6 +56,12 @@ RSpec.describe "Public API compatibility" do
     @javascript_controller_sources[group_name] ||= File.read(JAVASCRIPT_CONTROLLER_PATHS.fetch(group_name))
   end
 
+  def tree_view_rows_helper_keyword_option_keys
+    TreeViewHelper::Rendering.instance_method(:tree_view_rows).parameters.filter_map do |parameter_type, parameter_name|
+      parameter_name.to_s if %i[key keyreq].include?(parameter_type)
+    end
+  end
+
   def breadcrumb_helper_keyword_option_keys
     TreeViewBreadcrumbHelper.instance_method(:tree_view_breadcrumb).parameters.filter_map do |parameter_type, parameter_name|
       parameter_name.to_s if %i[key keyreq].include?(parameter_type)
@@ -252,6 +258,13 @@ RSpec.describe "Public API compatibility" do
     public_api_manifest.fetch("helper_methods").each do |method_name|
       expect(TreeViewHelper.public_instance_methods).to include(method_name.to_sym), "expected TreeViewHelper##{method_name} to remain public"
     end
+  end
+
+  it "keeps tree_view_rows helper option keys aligned with the public helper signature" do
+    manifest_keys = public_helper_option_keys.fetch("tree_view_rows")
+
+    expect(manifest_keys).to eq(tree_view_rows_helper_keyword_option_keys),
+      "expected tree_view_rows option keys to stay aligned with the public keyword signature"
   end
 
   it "keeps breadcrumb helper option keys aligned with the public helper signature" do
