@@ -34,6 +34,30 @@ ruby script/release_note_candidates.rb --repo matsuo-haruhito/tree_view-rails --
 
 この mode は tag と `HEAD` を compare し、commit message 内の `#123` 形式の参照を pull request / issue として解決します。期間を決めにくいときの fallback として使えますが、commit message に出てこない issue / PR は候補に入りません。
 
+## Output example
+
+script は Markdown を出力します。この出力は release preparation の確認メモへ貼るためのもので、最終 release 文として commit する前提ではありません。
+
+```markdown
+# Release note candidates for matsuo-haruhito/tree_view-rails
+
+Source: closed or merged since 2026-06-01
+
+This is a maintainer review aid. It does not rewrite CHANGELOG.md and does not decide the final release notes.
+
+## Merged pull requests
+
+- #1691 Persisted State cleanup guide entrypoints (2026-06-09T09:16:47Z)
+  https://github.com/matsuo-haruhito/tree_view-rails/pull/1691
+
+## Closed issues
+
+- #1549 Persisted State cleanup docs entrypoint (2026-06-09T09:16:48Z)
+  https://github.com/matsuo-haruhito/tree_view-rails/issues/1549
+```
+
+release preparation PR では、この出力を review evidence として貼るか link し、`CHANGELOG.md`、merged PR history、release-facing compatibility note と見比べてください。GitHub Release notes へ残す項目は、人間が確認した highlight に絞ります。
+
 ## Review boundary
 
 出力は maintainer review 用 checklist として扱います。release preparation PR では、この候補一覧、`CHANGELOG.md`、merged PR history を見比べ、GitHub Release notes に載せるべき項目を人間が判断してください。
