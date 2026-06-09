@@ -54,8 +54,8 @@
 - [日本語Toolbar helper](ja/toolbar.md): tree全体のexpand / collapse / current pathへのcollapse actionを描画し、配置と文言はhost appが所有する入口。
 - [English Breadcrumb helper](en/breadcrumb.md): render ancestor path context for a current or target node without taking over host-app routing or navigation policy.
 - [日本語Breadcrumb helper](ja/breadcrumb.md): current nodeや対象nodeのancestor path contextを描画し、routeやnavigation policyはhost app側に残す入口。
-- [English Persisted State](en/persisted-state.md): save and restore TreeView expansion state through host-app-owned storage.
-- [日本語Persisted State](ja/persisted-state.md): TreeView の開閉状態を host app 側の保存先で保存・復元するための入口。
+- [English Persisted State](en/persisted-state.md): save, restore, clear, and prune TreeView expansion state through host-app-owned storage and retention policy boundaries.
+- [日本語Persisted State](ja/persisted-state.md): TreeView の開閉状態を host app 側の保存先で保存・復元・clear・pruneし、retention policy / cleanup schedule の責務境界を確認する入口。
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.
 - [日本語Resource table bridge](ja/resource-table-bridge.md): 別table layerが列推論やtable stateを持つ場合のTreeView連携。
 
