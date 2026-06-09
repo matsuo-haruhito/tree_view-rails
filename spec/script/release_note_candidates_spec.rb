@@ -5,10 +5,12 @@ require_relative "../../script/release_note_candidates"
 
 def build_fake_release_note_client
   Class.new do
-    attr_reader :queries
+    attr_reader :queries, :compares, :issue_numbers
 
     def initialize
       @queries = []
+      @compares = []
+      @issue_numbers = []
     end
 
     def search(query)
@@ -34,7 +36,8 @@ def build_fake_release_note_client
       end
     end
 
-    def compare(_repo, _base_ref)
+    def compare(repo, base_ref)
+      @compares << [repo, base_ref]
       {
         "commits" => [
           {"commit" => {"message" => "Merge pull request #12 from feature\n\nCloses #34"}},
@@ -43,7 +46,8 @@ def build_fake_release_note_client
       }
     end
 
-    def issue(_repo, number)
+    def issue(repo, number)
+      @issue_numbers << [repo, number]
       case number.to_i
       when 12
         {
@@ -77,7 +81,9 @@ RSpec.describe ReleaseNoteCandidates::Collector do
       "repo:example/repo is:issue is:closed closed:>=2026-06-01"
     ])
     expect(merged_prs.map(&:number)).to eq([12])
+    expect(merged_prs.first.merged_at).to eq("2026-06-01T00:00:00Z")
     expect(closed_issues.map(&:number)).to eq([34])
+    expect(closed_issues.first.closed_at).to eq("2026-06-02T00:00:00Z")
   end
 
   it "collects referenced candidates from commits since a tag" do
@@ -87,6 +93,8 @@ RSpec.describe ReleaseNoteCandidates::Collector do
       since_tag: "v0.1.0"
     )
 
+    expect(client.compares).to eq([["example/repo", "v0.1.0"]])
+    expect(client.issue_numbers).to eq([["example/repo", "12"], ["example/repo", "34"]])
     expect(merged_prs.map(&:number)).to eq([12])
     expect(closed_issues.map(&:number)).to eq([34])
   end
@@ -101,9 +109,47 @@ RSpec.describe ReleaseNoteCandidates::MarkdownFormatter do
       closed_issues: []
     )
 
-    expect(markdown).to include("Release note candidates for example/repo")
+    expect(markdown).to include("# Release note candidates for example/repo")
+    expect(markdown).to include("Source: closed or merged since 2026-06-01")
     expect(markdown).to include("This is a maintainer review aid. It does not rewrite CHANGELOG.md")
+    expect(markdown).to include("## Merged pull requests")
     expect(markdown).to include("#12 Add toolbar helper")
+    expect(markdown).to include("## Closed issues")
     expect(markdown).to include("No candidates found")
+  end
+end
+
+RSpec.describe ReleaseNoteCandidates::CLI do
+  it "parses the date-window source option" do
+    options = described_class.parse_options([
+      "--repo", "example/repo",
+      "--since", "2026-06-01"
+    ])
+
+    expect(options).to eq(repo: "example/repo", since: "2026-06-01")
+  end
+
+  it "parses the since-tag source option" do
+    options = described_class.parse_options([
+      "--repo", "example/repo",
+      "--since-tag", "v0.1.0"
+    ])
+
+    expect(options).to eq(repo: "example/repo", since_tag: "v0.1.0")
+  end
+
+  it "requires the repository option" do
+    expect { described_class.parse_options(["--since", "2026-06-01"]) }.to raise_error(SystemExit)
+  end
+
+  it "requires exactly one source option" do
+    expect { described_class.parse_options(["--repo", "example/repo"]) }.to raise_error(SystemExit)
+    expect do
+      described_class.parse_options([
+        "--repo", "example/repo",
+        "--since", "2026-06-01",
+        "--since-tag", "v0.1.0"
+      ])
+    end.to raise_error(SystemExit)
   end
 end
