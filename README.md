@@ -73,6 +73,8 @@ For the boundary between static mockups and a future real Rails demo app, see [D
 - Flatten currently visible rows with `TreeView::VisibleRows`.
 - Render currently visible rows by offset and limit with `TreeView::RenderWindow` and windowed rendering. This limits HTML output only; it does not reduce host-app queries or fetched records.
 - Customize host-app row content through `row_partial`.
+- Render host-app row action slots through `row_actions_partial` while action availability, routes, authorization, and final copy stay in the host app.
+- Customize transfer payload data through `row_event_payload_builder` while drag/drop business behavior stays in the host app.
 - Control initial expansion with `initial_state`, `expanded_keys`, `collapsed_keys`, and `max_initial_depth`.
 - Limit render scope with `max_render_depth` and `max_leaf_distance`.
 - Limit toggle scope with `max_toggle_depth_from_root` and `max_toggle_leaf_distance`.
