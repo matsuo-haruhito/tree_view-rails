@@ -33,6 +33,10 @@ const diagnosticsDocs = [
   ["docs/en/tree-diagnostics.md", read("docs/en/tree-diagnostics.md")],
   ["docs/ja/tree-diagnostics.md", read("docs/ja/tree-diagnostics.md")]
 ]
+const developmentDocs = [
+  ["docs/en/development.md", read("docs/en/development.md")],
+  ["docs/ja/development.md", read("docs/ja/development.md")]
+]
 
 const callbackBuilderSignals = [
   "render_state_callback_builder_keys",
@@ -84,6 +88,23 @@ const diagnosticsResultSurfaceSignals = [
   "errors",
   "warnings",
   "success?"
+]
+
+const developmentManifestTrackingSignals = [
+  "config/public_api_manifest.yml",
+  "RenderState callback builder keys",
+  "event_names_without_detail",
+  "remote-state values",
+  "selection data hooks",
+  "empty-state hooks"
+]
+
+const developmentEntrypointGuardSignals = [
+  "script/test_public_api_docs_signals.mjs",
+  "script/test_entrypoints.mjs",
+  "script/test_declaration_literal_shapes.mjs",
+  "payload shape",
+  "transfer values"
 ]
 
 const manifestBackedDocsSignalSurfaces = [
@@ -192,4 +213,14 @@ diagnosticsDocs.forEach(([relativePath, document]) => {
     /individual error entry internals|warning detail shape|orphan warning semantics|cycle validation policy|個々の error entry 内部|warning detail shape|orphan warning semantics|cycle validation policy/.test(document),
     `${relativePath}: diagnostics docs no longer keep detailed error and warning shapes outside the manifest schema`
   )
+})
+
+developmentDocs.forEach(([relativePath, document]) => {
+  developmentManifestTrackingSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} public API manifest tracking summary`)
+  })
+
+  developmentEntrypointGuardSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} public API smoke guard summary`)
+  })
 })
