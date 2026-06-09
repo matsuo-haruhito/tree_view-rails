@@ -62,7 +62,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Selection](selection.md) | Checkbox selection, visibility, and submitted value parsing |
 | [Lazy Loading](lazy-loading.md) | Hooks and data attributes for loading children on demand |
 | [Windowed Rendering](windowed-rendering.md) | Opt-in API for rendering visible rows by offset / limit |
-| [Persisted State](persisted-state.md) | Persisting and restoring expansion state with the generator |
+| [Persisted State](persisted-state.md) | Persisting, restoring, clearing, and pruning expansion state with the generator and `StateStore`; host apps own retention policy and cleanup scheduling |
 | [Breadcrumb](breadcrumb.md) | Helper for rendering ancestor paths as breadcrumbs |
 | [Depth Labels](depth-labels.md) | Hook for displaying node depth labels |
 | [Row Status](row-status.md) | Hook for disabled / readonly row state |

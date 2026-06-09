@@ -79,7 +79,7 @@ For the boundary between static mockups and a future real Rails demo app, see [D
 - Customize row attributes with `row_class_builder` and `row_data_builder`.
 - Add lazy loading hooks with `load_children_path_builder` and `RenderState#lazy_loading`.
 - Add checkbox selection with JSON payloads, disabled states, selected keys, cascade, indeterminate state, and max-count limits.
-- Persist expansion state through `TreeView::PersistedState`, `TreeView::StateStore`, and `rails g tree_view:state:install`.
+- Persist, restore, clear, and prune expansion state through `TreeView::PersistedState`, `TreeView::StateStore`, and `rails g tree_view:state:install` while leaving retention policy to the host app.
 - Register JavaScript controllers for state tracking, client-side toggling, selection, transfer payloads, and remote loading state.
 
 ## Out of scope
