@@ -29,6 +29,10 @@ const selectionDocs = [
   ["docs/en/selection.md", read("docs/en/selection.md")],
   ["docs/ja/selection.md", read("docs/ja/selection.md")]
 ]
+const diagnosticsDocs = [
+  ["docs/en/tree-diagnostics.md", read("docs/en/tree-diagnostics.md")],
+  ["docs/ja/tree-diagnostics.md", read("docs/ja/tree-diagnostics.md")]
+]
 
 const callbackBuilderSignals = [
   "render_state_callback_builder_keys",
@@ -68,13 +72,30 @@ const emptyStateHookSignals = [
   "data-tree-view-empty-state"
 ]
 
+const diagnosticsAcceptedCheckSignals = [
+  "node_keys",
+  "dom_ids",
+  "orphans",
+  "cycles"
+]
+
+const diagnosticsResultSurfaceSignals = [
+  "checks",
+  "errors",
+  "warnings",
+  "success?"
+]
+
 const manifestBackedDocsSignalSurfaces = [
   ["RenderState callback builder keys", "render_state_callback_builder_keys:"],
   ["host lifecycle no-detail events", "event_names_without_detail:"],
   ["host lifecycle event names", "host_lifecycle:"],
   ["remote-state values", "remote_state_values:"],
   ["selection data hooks", "selection_data_hooks:"],
-  ["empty-state hooks", "empty_state_hooks:"]
+  ["empty-state hooks", "empty_state_hooks:"],
+  ["diagnostics accepted checks", "diagnostics:"],
+  ["diagnostics accepted checks", "accepted_checks:"],
+  ["diagnostics Result surface", "result_surface:"]
 ]
 
 manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
@@ -83,6 +104,14 @@ manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
 
 callbackBuilderSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest callback builder key surface")
+})
+
+diagnosticsAcceptedCheckSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest diagnostics accepted checks")
+})
+
+diagnosticsResultSurfaceSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest diagnostics Result surface")
 })
 
 assertIncludes(manifest, "event_names_without_detail", "public API manifest no-detail event surface")
@@ -139,4 +168,28 @@ selectionDocs.forEach(([relativePath, document]) => {
   selectionDataHookSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} selection data hook docs`)
   })
+})
+
+diagnosticsDocs.forEach(([relativePath, document]) => {
+  assertIncludes(document, "TreeView::Diagnostics.run", `${relativePath} diagnostics aggregate entrypoint docs`)
+  assertIncludes(document, "checks:", `${relativePath} diagnostics accepted checks docs`)
+  assertIncludes(document, "Result", `${relativePath} diagnostics Result surface docs`)
+
+  diagnosticsAcceptedCheckSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} diagnostics accepted check docs`)
+  })
+
+  diagnosticsResultSurfaceSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} diagnostics Result reader docs`)
+  })
+
+  assert(
+    /manifest-backed.*diagnostics contract|manifest-backed な diagnostics contract/.test(document),
+    `${relativePath}: diagnostics docs no longer identify the manifest-backed contract boundary`
+  )
+
+  assert(
+    /individual error entry internals|warning detail shape|orphan warning semantics|cycle validation policy|個々の error entry 内部|warning detail shape|orphan warning semantics|cycle validation policy/.test(document),
+    `${relativePath}: diagnostics docs no longer keep detailed error and warning shapes outside the manifest schema`
+  )
 })
