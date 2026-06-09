@@ -61,10 +61,14 @@
 
 ## Maintainer entry points
 
+Maintainer entry points include both gem-packaged docs under `docs/**` and repository-only files at the repository root. The packaged docs are the public documentation shipped with the gem; the repository-only files are for maintainers, reviewers, and agents working from a checkout.
+
+Maintainer entry points には、gem に同梱される `docs/**` と repository root の repository-only files が混在しています。packaged docs は gem と一緒に配布される公開ドキュメント、repository-only files は checkout で作業する maintainer、reviewer、agent 向けの入口です。
+
 - [English documentation](en/README.md): full English docs map, reading order, and maintainer-facing entry points within the English tree.
 - [日本語ドキュメント](ja/README.md): 日本語 docs tree の full map、reading order、maintainer-facing entry points。
-- Repository-only Product Profile (`Product Profile.md` at the repository root): repository positioning, source-of-truth order, host app responsibilities, and non-goals. This file is not packaged in the gem; read it from a repository checkout.
-- Repository-only maintainer workflow (`AGENTS.md` at the repository root): repository-specific maintainer workflow, first-read order, and documentation update rules. This file is not packaged in the gem; read it from a repository checkout.
+- Repository-only Product Profile (`Product Profile.md` at the repository root): product positioning, source-of-truth order, host-app responsibility boundary, and non-goals for maintainers and reviewers. This file is not packaged in the gem and is not a host-app API guide; read it from a repository checkout before judging scope or docs sync.
+- Repository-only agent workflow (`AGENTS.md` at the repository root): repository-specific workflow, first-read order, documentation update rules, and CI shortcut policy for maintainers and agents. This file is not packaged in the gem and is not user-facing integration guidance; read it from a repository checkout before changing maintainer workflow or docs policy.
 - [Documentation maintenance checklist](i18n-audit.md): language-sync rules, technical-asset inventory, and cross-language update coverage.
 - [Public API](en/public-api.md) / [公開 API](ja/public-api.md): compatibility contract and the surfaces host apps may use directly.
 - [Migration guide](en/migration.md) / [移行ガイド](ja/migration.md): upgrade expectations, deprecations, and release-note reading order.
