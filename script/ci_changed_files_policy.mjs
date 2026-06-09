@@ -40,6 +40,9 @@ function isDocsOnlyPath(file) {
 function isPackageSensitivePath(file) {
   return (
     file === "tree_view.gemspec" ||
+    file === "package.json" ||
+    file === "package-lock.json" ||
+    file === ".nvmrc" ||
     file === "script/check_gem_package_contents.rb" ||
     file === ".github/workflows/ci.yml" ||
     file === "config/importmap.tree_view.rb" ||
