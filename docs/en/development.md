@@ -37,6 +37,8 @@ npm run test:browser
 
 Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use the individual npm commands when you are narrowing a failure.
 
+Within `npm run test:entrypoints`, `script/test_entrypoints.mjs` checks the runtime package-root exports, controller registration helper, manifest loader, and `.d.ts` export-name inventory. `script/test_declaration_literal_shapes.mjs` then checks the literal shapes in `app/javascript/tree_view/index.d.ts` for the manifest-backed JavaScript constants such as event names, detail keys, remote-state values, transfer values, controller identifiers, selection data hooks, and empty-state hooks. Use the export-name guard when a package-root export is missing or extra; use the literal-shape guard when the export exists but a key, tuple, or representative literal value no longer matches `config/public_api_manifest.yml`. This is a smoke guard, not a TypeScript compiler or declaration generator.
+
 For the Rails version matrix:
 
 ```bash
@@ -85,6 +87,8 @@ npm run test:entrypoints
 ```
 
 That check keeps the documented controller exports and `registerTreeViewControllers` helper aligned with the importmap entrypoint. It uses Ruby to load `config/public_api_manifest.yml` and print the `javascript_package_root` section as JSON before Node assertions run, so run it from the repository root with Ruby available when you are diagnosing manifest loader failures.
+
+The entrypoint command also runs `script/test_declaration_literal_shapes.mjs`. Keep this second guard aligned with `script/test_entrypoints.mjs`: the entrypoint smoke proves runtime exports and `.d.ts` export names exist, while the declaration literal guard proves the exported literal object shapes in `index.d.ts` still mirror `config/public_api_manifest.yml`.
 
 Docs-only entrypoint and signal checks can be run separately with:
 
