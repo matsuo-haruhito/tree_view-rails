@@ -73,6 +73,7 @@
 - [Development](en/development.md) / [開発・保守方針](ja/development.md): CI, local checks, documentation update workflow, and maintenance habits.
 - [Code quality](en/code-quality.md) / [コード品質](ja/code-quality.md): lint, tests, error message quality, and documentation quality policy.
 - [Release checklist](en/release.md) / [リリースチェックリスト](ja/release.md): release workflow, CI and package verification, and changelog expectations.
+- [Release note candidate collector](en/release-note-candidates.md) / [Release note candidate collector](ja/release-note-candidates.md): maintainer review aid for collecting merged PR and closed Issue candidates without replacing `CHANGELOG.md` or release notes decisions.
 - [CHANGELOG.md](../CHANGELOG.md): release-facing summary of shipped public changes, compatibility notes, and notable documentation additions.
 
 ## Maintenance
