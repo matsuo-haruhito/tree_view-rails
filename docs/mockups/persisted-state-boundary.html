@@ -103,6 +103,11 @@
   color: #5b21b6;
 }
 
+.persisted-status--policy {
+  background: #e2e8f0;
+  color: #334155;
+}
+
 .persisted-boundary-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(260px, 0.75fr);
@@ -149,7 +154,7 @@
       <p class="mock-kicker">Focused persisted state boundary</p>
       <h1>Persisted State boundary mockup</h1>
       <p>
-        Static reference for reviewing the TreeView-owned expansion state event beside host-app-owned storage, save endpoint, error copy, and retry policy.
+        Static reference for reviewing the TreeView-owned expansion state event beside host-app-owned storage, save endpoint, cleanup retention, error copy, and retry policy.
       </p>
     </header>
 
@@ -157,7 +162,7 @@
       <div>
         <h2 id="persisted-flow-heading">Expansion state flow</h2>
         <p>
-          The representative states show how <code>tree_instance_key</code> and expanded keys move from first render to changed state, saved state, restored state, and save failure without modeling a real network request.
+          The representative states show how <code>tree_instance_key</code> and expanded keys move from first render to changed state, saved state, restored state, save failure, and cleanup review without modeling a real network request or retention job.
         </p>
       </div>
 
@@ -297,6 +302,53 @@
             <span>render_state: restored</span>
           </div>
         </article>
+
+        <article class="persisted-state-card">
+          <p class="persisted-step-label">Cleanup review</p>
+          <h3>Old snapshot pruned</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--policy">Host retention policy</span>
+            <span class="mock-status mock-status--pending">TreeView helper only</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Snapshot</th>
+                <th scope="col">Review cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-loading">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-depth-label">Stored</span>
+                      <span class="tree-node-title">documents_tree / owner: archive</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Older than host cutoff</td>
+              </tr>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-depth-label">Keep</span>
+                      <span class="tree-node-title">documents_tree / owner: current</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Fresh row remains available</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="persisted-snapshot">
+            <span>helper: StateStore#prune!(older_than:, owner:, tree_instance_key:)</span>
+            <span>policy: cutoff, schedule, deleted-owner handling, audit retention</span>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -326,15 +378,15 @@
       <aside class="persisted-boundary-card" aria-label="Responsibility boundary summary">
         <h3>Responsibility boundary</h3>
         <ul>
-          <li><strong>TreeView owns:</strong> expansion state rendering and <code>tree-view-state:state-changed</code> event details.</li>
-          <li><strong>Host app owns:</strong> persistence storage, save endpoint, authorization, retry policy, and visible error copy.</li>
-          <li><strong>Review focus:</strong> compare state cues without implying that the gem ships a browser save helper.</li>
+          <li><strong>TreeView owns:</strong> expansion state rendering, <code>tree-view-state:state-changed</code> event details, and the opt-in <code>StateStore#prune!</code> cleanup helper.</li>
+          <li><strong>Host app owns:</strong> persistence storage, save endpoint, authorization, retry policy, cleanup schedule, default TTL, deleted-owner policy, audit retention, privacy retention, and visible error copy.</li>
+          <li><strong>Review focus:</strong> compare state cues and cleanup boundaries without implying that the gem ships a browser save helper, cleanup job, or retention policy.</li>
         </ul>
       </aside>
     </section>
 
     <p class="persisted-note">
-      This mockup is static. It does not add a database table, controller action, debounce helper, retry loop, authorization policy, or persisted state runtime behavior.
+      This mockup is static. It does not add a database table, controller action, debounce helper, retry loop, cleanup schedule, default retention period, authorization policy, or persisted state runtime behavior.
     </p>
   </main>
 </body>
