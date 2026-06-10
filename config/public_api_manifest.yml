@@ -36,6 +36,17 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+visible_rows_row_metadata:
+  fields:
+    - item
+    - depth
+    - node_key
+    - parent_key
+    - has_children
+    - expanded
+  predicates:
+    - has_children?
+    - expanded?
 graph_adapter_initializer:
   required_keywords:
     - roots
