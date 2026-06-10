@@ -18,6 +18,8 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
+The development Docker image installs Node 22 and npm so the Docker setup can run the same JavaScript install path as local development. Keep the Dockerfile Node major aligned with `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value when any of them changes.
+
 Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version. Keep `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value aligned when any of them changes. The automated drift guard is `script/test_node_version_sources.mjs`, exposed as `npm run test:node-version-sources` and included in `npm run test:entrypoints`; it verifies those Node version sources stay on Node 22 without changing the current install policy.
 
 Keep using `npm install` for now. The repository has a committed `package-lock.json`, but it is not yet refreshed in sync with `package.json`, so local setup and pull-request CI stay on `npm install` until that lockfile refresh is completed in a registry-enabled environment. See [Installation](installation.md) for the current CI and install-path summary.
