@@ -37,6 +37,7 @@ Lazy LoadingやChildren PaginationにはTurbo modeを使います。Client-side 
 | full virtual scrollingを追加したい | host app JavaScript | scroll observer、virtualization library、URL/window state | TreeViewは組み込みのDOM仮想化やinfinite-scroll制御を提供しません。必要に応じてrender metadataと組み合わせます。 |
 | 検索結果をancestor付きで表示したい | `path_tree_for` | `tree.path_tree_for(matches)` | matchしたrecordをrootからの文脈付きで表示したい場合に使います。 |
 | childからparentへ辿る表示をしたい | `reverse_tree_for` | `tree.reverse_tree_for(items)` | 子側を起点にして親方向へ展開する表示に使います。 |
+| records mode のbreadcrumbを描画したい | [Breadcrumb helper](breadcrumb.md) | `tree_view_breadcrumb`, `tree.path_for(item)`, `label_builder`, `path_builder` | records mode の詳細画面で root から現在nodeまでの path を出したい場合に使います。graph-like data や複数parent候補がある場合、trail の選択は host app 側で行います。path lookup が失敗する場合は [Troubleshooting](troubleshooting.md#breadcrumb-が失敗する--親方向の-path-が見つからない) を参照してください。 |
 | 異種node混在やgraph-like nodeを描画したい | [API概要: adapter mode](api-overview.md#adapter-mode) | `TreeView::GraphAdapter`, `TreeView::Tree.new(adapter:)`, `children_resolver`, `node_key_resolver` | 1つのparent id columnだけでは表しにくい、複数record class混在やgraph-like edge由来のtreeに使います。TreeViewはhost appが渡すrootとchildrenを辿ります。data model、authorization、cycle policy、保存はhost app側の責務です。 |
 | checkbox selectionを追加したい | `selection:` option と host element 上の `tree-view-selection` wiring | `enabled`, `checkbox_name`, `selected_keys`, `disabled_builder`, `disabled_reason_builder`, `visibility`, `data-tree-view-selection-hidden-input-name-value`, `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, `data-tree-view-selection-indeterminate-value` | row payload 生成、disabled reason、checkbox visibility は grouped `selection:` option 側で決めます。hidden input sync、client-side の最大選択数制限、描画済み row の cascade / indeterminate は controller value attribute 側で設定します。TreeViewはselection stateとvalueを描画しますが、送信後の業務 action は引き続き host app が担当します。 |
 | 行内に編集fieldを置きたい | [Form と編集行](form-editing.md) と [Cookbook](cookbook.md#行customization-quick-guide) | `row_partial`, `row_actions_partial`, Rails `form_with`, `fields_for`, host-app Form Object | TreeViewはinline-editing layoutを支援します。edit mode、validation、persistence、authorization、dirty-state handling、Turbo workflowはhost appが担当します。 |
@@ -105,7 +106,7 @@ flowchart TD
 5. 1つのparent id columnだけでは扱いにくい異種recordやgraph-like edgeがある場合は [GraphAdapter adapter mode](api-overview.md#adapter-mode) を使います。
 6. dataは取得済みで、初期HTML量を許容でき、Turbo endpointが過剰な場合は `build_client_side` を使います。
 7. scroll位置に応じたDOM仮想化がproduct要件になった場合だけ、host app側でvirtual scrollingを追加します。
-8. interaction要件やrow customization要件が固まったら [Selection](selection.md)、[Form と編集行](form-editing.md)、[Cookbook row customization](cookbook.md#行customization-quick-guide)、[Localized names](localized-names.md)、[Toolbar helper](toolbar.md)、[Drag and Drop](drag-and-drop.md)、[Persisted State](persisted-state.md) を追加します。
+8. interaction要件やrow customization要件が固まったら [Selection](selection.md)、[Form と編集行](form-editing.md)、[Cookbook row customization](cookbook.md#行customization-quick-guide)、[Localized names](localized-names.md)、[Toolbar helper](toolbar.md)、[Breadcrumb helper](breadcrumb.md)、[Drag and Drop](drag-and-drop.md)、[Persisted State](persisted-state.md) を追加します。
 9. node key、DOM ID、tree構造を検証したい場合は [Tree diagnostics](tree-diagnostics.md) を使います。
 
 ## よくある組み合わせ
@@ -119,6 +120,7 @@ flowchart TD
 | 大きなscrolling browser | host app virtual scrolling + 必要に応じてrender/window metadata |
 | 検索ページ | `path_tree_for` + match周辺のrender scope |
 | breadcrumb風のreverse view | `reverse_tree_for` + custom row partial |
+| records mode の詳細画面breadcrumb | Breadcrumb helper + host-app label/path builders |
 | bulk action page | StaticまたはTurbo rendering + `selection:` + host-app form action |
 | bulk edit page | StaticまたはTurbo rendering + row partial form controls + host-app Form Object |
 | per-row inline edit page | 表示用row partial + `row_actions_partial` + host-app edit action / Turbo response + 編集用row partial |
@@ -136,6 +138,7 @@ flowchart TD
 - [Cookbook: 行customization quick guide](cookbook.md#行customization-quick-guide)
 - [Localized names](localized-names.md)
 - [Toolbar helper](toolbar.md)
+- [Breadcrumb helper](breadcrumb.md)
 - [Toolbar actions mockup](../mockups/toolbar-actions.html)
 - [Render Scale](render-scale.md)
 - [Lazy Loading](lazy-loading.md)
@@ -146,3 +149,4 @@ flowchart TD
 - [Drag and Drop](drag-and-drop.md)
 - [Persisted State](persisted-state.md)
 - [Tree diagnostics](tree-diagnostics.md)
+- [Troubleshooting](troubleshooting.md)
