@@ -68,6 +68,19 @@ export const TreeViewRemoteStateValues = Object.freeze({
   error: "error"
 })
 
+export const TreeViewRemoteStateDataHooks = Object.freeze({
+  lazyAttribute: "data-tree-lazy",
+  childrenUrlAttribute: "data-tree-children-url",
+  loadedAttribute: "data-tree-loaded",
+  remoteStateAttribute: "data-tree-remote-state"
+})
+
+export const TreeViewToolbarDataHooks = Object.freeze({
+  toolbarAttribute: "data-tree-view-toolbar",
+  actionAttribute: "data-tree-view-toolbar-action",
+  disabledAttribute: "data-tree-view-toolbar-disabled"
+})
+
 export const TreeViewTransferDropPositions = Object.freeze({
   before: "before",
   inside: "inside",
