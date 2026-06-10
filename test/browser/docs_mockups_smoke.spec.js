@@ -208,6 +208,18 @@ test.describe("docs mockup browser smoke", () => {
     })
   }
 
+  test("direction-aware-cues/index.html preserves LTR, RTL, and vertical representative regions", async ({ page }) => {
+    await openMockup(page, "direction-aware-cues/index.html")
+
+    await expect(page.getByRole("heading", { name: "LTR baseline" })).toBeVisible()
+    await expect(page.locator("[aria-label='LTR baseline tree sample'] .tree-row.is-selected")).toBeVisible()
+    await expect(page.getByRole("heading", { name: "RTL host-app override" })).toBeVisible()
+    await expect(page.locator("[aria-label='RTL override tree sample'][dir='rtl'] .tree-row.is-selected")).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Vertical writing stress case" })).toBeVisible()
+    await expect(page.locator("[aria-label='Vertical writing tree sample'].direction-frame--vertical .tree-row.is-selected")).toBeVisible()
+    await expect(page.locator("[aria-label='Vertical writing tree sample'].direction-frame--vertical")).toHaveCSS("writing-mode", "vertical-rl")
+  })
+
   test("toolbar-actions.html preserves action and responsibility boundary signals", async ({ page }) => {
     await openMockup(page, "toolbar-actions.html")
 
