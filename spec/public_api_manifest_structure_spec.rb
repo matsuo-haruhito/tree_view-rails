@@ -10,6 +10,7 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   module_methods
   configuration_options
   public_constants
+  visible_rows_row_metadata
   graph_adapter_initializer
   path_tree_builder_node_shapes
   helper_methods
@@ -79,6 +80,18 @@ RSpec.describe "Public API manifest structure" do
     YAML
 
     expect(duplicate_mapping_keys(yaml)).to eq(["javascript_package_root.event_names.state"])
+  end
+
+  it "keeps VisibleRows row metadata shaped as non-empty string lists" do
+    section = manifest.fetch("visible_rows_row_metadata")
+
+    %w[fields predicates].each do |section_name|
+      methods = section.fetch(section_name)
+
+      expect(methods).to be_an(Array), "expected #{section_name} to be an array"
+      expect(methods).not_to be_empty, "expected #{section_name} to list public row methods"
+      expect(methods).to all(be_a(String))
+    end
   end
 
   it "keeps grouped option key sections shaped as non-empty string lists" do
