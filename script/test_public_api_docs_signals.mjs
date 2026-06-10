@@ -87,6 +87,12 @@ const diagnosticsAcceptedCheckSignals = [
   "cycles"
 ]
 
+const diagnosticsRunOptionSignals = [
+  "run_options",
+  "checks",
+  "raise_errors"
+]
+
 const diagnosticsResultSurfaceSignals = [
   "checks",
   "errors",
@@ -133,6 +139,7 @@ const manifestBackedDocsSignalSurfaces = [
   ["empty-state hooks", "empty_state_hooks:"],
   ["diagnostics accepted checks", "diagnostics:"],
   ["diagnostics accepted checks", "accepted_checks:"],
+  ["diagnostics run options", "run_options:"],
   ["diagnostics Result surface", "result_surface:"],
   ["PathTreeBuilder node shapes", "path_tree_builder_node_shapes:"]
 ]
@@ -147,6 +154,10 @@ callbackBuilderSignals.forEach((signal) => {
 
 diagnosticsAcceptedCheckSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest diagnostics accepted checks")
+})
+
+diagnosticsRunOptionSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest diagnostics run options")
 })
 
 diagnosticsResultSurfaceSignals.forEach((signal) => {
@@ -216,10 +227,15 @@ selectionDocs.forEach(([relativePath, document]) => {
 diagnosticsDocs.forEach(([relativePath, document]) => {
   assertIncludes(document, "TreeView::Diagnostics.run", `${relativePath} diagnostics aggregate entrypoint docs`)
   assertIncludes(document, "checks:", `${relativePath} diagnostics accepted checks docs`)
+  assertIncludes(document, "raise_errors:", `${relativePath} diagnostics run option docs`)
   assertIncludes(document, "Result", `${relativePath} diagnostics Result surface docs`)
 
   diagnosticsAcceptedCheckSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} diagnostics accepted check docs`)
+  })
+
+  diagnosticsRunOptionSignals.slice(1).forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} diagnostics run option docs`)
   })
 
   diagnosticsResultSurfaceSignals.forEach((signal) => {
@@ -229,6 +245,11 @@ diagnosticsDocs.forEach(([relativePath, document]) => {
   assert(
     /manifest-backed.*diagnostics contract|manifest-backed な diagnostics contract/.test(document),
     `${relativePath}: diagnostics docs no longer identify the manifest-backed contract boundary`
+  )
+
+  assert(
+    /run option key surface|option key surface/.test(document),
+    `${relativePath}: diagnostics docs no longer identify the run option key surface boundary`
   )
 
   assert(
