@@ -44,6 +44,9 @@ function isDocsOnlyPath(file) {
 
 function isPackageSensitivePath(file) {
   return (
+    file === "README.md" ||
+    file === "CHANGELOG.md" ||
+    file.startsWith("docs/") ||
     file === "tree_view.gemspec" ||
     file === "package.json" ||
     file === "package-lock.json" ||
