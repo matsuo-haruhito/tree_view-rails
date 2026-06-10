@@ -3,7 +3,8 @@ export function classifyChangedFiles(files) {
     docs_only: true,
     mockups_changed: false,
     browser_smoke_changed: false,
-    package_sensitive: false
+    package_sensitive: false,
+    docker_setup_sensitive: false
   };
 
   for (const file of files.map((entry) => entry.trim()).filter(Boolean)) {
@@ -21,6 +22,10 @@ export function classifyChangedFiles(files) {
 
     if (isPackageSensitivePath(file)) {
       result.package_sensitive = true;
+    }
+
+    if (isDockerSetupSensitivePath(file)) {
+      result.docker_setup_sensitive = true;
     }
   }
 
@@ -53,6 +58,16 @@ function isPackageSensitivePath(file) {
     file.startsWith("app/assets/") ||
     file.startsWith("app/javascript/") ||
     file.startsWith("config/locales/")
+  );
+}
+
+function isDockerSetupSensitivePath(file) {
+  return (
+    file === "Dockerfile" ||
+    file === "docker-compose.yml" ||
+    file === "package.json" ||
+    file === "package-lock.json" ||
+    file === ".nvmrc"
   );
 }
 
