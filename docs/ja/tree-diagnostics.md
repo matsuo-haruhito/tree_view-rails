@@ -76,6 +76,19 @@ end
 
 manifest-backed な diagnostics contract は、accepted check names、`TreeView::Diagnostics.run` の option key surface、`Result` の reader surface を対象にします。stable な check names は `node_keys`、`dom_ids`、`orphans`、`cycles` です。run option keys は `checks` と `raise_errors` で、`checks:` は accepted check names から実行対象を選び、`raise_errors:` は失敗を `Result` に収集するか即座に例外としてraiseするかを選びます。diagnostics `Result` は `checks`、`errors`、`warnings`、`success?` を公開します。一方で、accepted value schema、boolean coercion、個々の error entry 内部、warning detail shape、orphan warning semantics、cycle validation policy までは manifest で固定しません。これらは documented behavior と host app data policy の境界として扱い、manifest schema を広げすぎないようにします。
 
+## 描画前validation review note
+
+full static mockup page を増やさずに diagnostics flow をレビューしたい場合は、この比較表を使ってください。TreeView が出せるsignalと、host appが決めるcorrection policyを分けて見るためのfocused noteです。
+
+| Review state | TreeView側で確認するsignal | Host app側で決めること |
+|---|---|---|
+| duplicate node key | 描画前の `validate_node_keys: true` または `node_keys` diagnostics error | `id_method:` や `node_key_resolver:` など、安定したkey strategyを選ぶ |
+| DOM ID collision | 実画面と同じ `UiConfig` での `render_state.validate_unique_dom_ids!` または `dom_ids` diagnostics error | `node_prefix`、custom DOM ID builder、ブラウザ向けIDへ正規化したときに衝突するnode keyを直す |
+| orphaned record | filter、import、permission scope後の `tree.orphan_items` または `orphans` diagnostics warning | `:raise`、`:as_root`、orphan-only表示、または意図したfiltered subsetとして文書化するかを決める |
+| cycle risk | parent relationship に対する `TreeView::CycleDiagnostics.new(tree).report` または `cycles` diagnostics error | 描画前にimport data / user編集可能な親子data、またはcycleを作るresolver logicを修正する |
+
+このnoteはreview aidであり、production validation UIの代替ではありません。修復文言、dashboard、alert、data repair workflow、release gateはhost app側、または専用quality workで扱ってください。
+
 ## node key uniqueness
 
 node keyの重複を検出したい場合は、tree作成時にvalidationを有効にします。
