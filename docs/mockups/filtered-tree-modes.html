@@ -169,7 +169,7 @@
       <h1>Filtered tree modes mock</h1>
       <p>
         Static reference for comparing how filtered trees keep only matches, matches with ancestors,
-        or matches with descendants. The page stays focused on reusable TreeView output and keeps
+        matches with descendants, or matches with both ancestor and descendant context. The page stays focused on reusable TreeView output and keeps
         search forms, ranking, highlighting, and authorization copy outside the mock.
       </p>
     </header>
@@ -391,6 +391,135 @@
           </div>
         </div>
       </div>
+
+      <div class="mock-filtered-state">
+        <div class="mock-filtered-state__header">
+          <p class="mock-filtered-state__eyebrow">Mode D</p>
+          <h2>Matched with ancestors and descendants</h2>
+          <p class="mock-filtered-note">
+            Use this when reviewers need both the path to the match and the rows below that matched branch in one filtered output.
+          </p>
+        </div>
+
+        <div class="mock-filtered-frame">
+          <div class="mock-filtered-toolbar">
+            <div class="mock-filtered-toolbar__copy">
+              <p class="mock-filtered-toolbar__title">Matched branch with both surrounding contexts</p>
+            </div>
+            <div class="mock-filtered-toolbar__meta" aria-label="Representative filter context">
+              <span class="mock-filtered-chip">query: billing</span>
+              <span class="mock-filtered-chip mock-filtered-chip--mode">mode: with_ancestors_and_descendants</span>
+            </div>
+          </div>
+          <div class="mock-filtered-summary">
+            <p class="mock-filtered-callout">
+              Ancestor rows show where the match lives, the matched row stays explicit, and descendant rows remain inspectable. Search copy, ranking, highlighting, and permission-aware filtering still belong to the host app.
+            </p>
+            <table class="tree-view-table">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">name</th>
+                  <th scope="col">owner</th>
+                  <th scope="col">state</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-context" aria-level="1">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Ancestor root node">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-toggle__action tree-toggle__action--pending">open</span>
+                        <span class="tree-toggle__level">root</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--context">ancestor</span>
+                  </td>
+                  <td>Operations</td>
+                  <td>Platform</td>
+                  <td><span class="mock-status mock-status--pending">context</span></td>
+                </tr>
+                <tr class="tree-row is-context" aria-level="2">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Ancestor branch node">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-toggle__action tree-toggle__action--pending">open</span>
+                        <span class="tree-toggle__level">child</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--context">ancestor</span>
+                  </td>
+                  <td>Finance workspace</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status mock-status--pending">context</span></td>
+                </tr>
+                <tr class="tree-row is-match" aria-level="3">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Matched branch with descendants">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-toggle__action tree-toggle__action--pending">open</span>
+                        <span class="tree-toggle__level">branch</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--match">match</span>
+                  </td>
+                  <td>Billing reports</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status mock-status--active">matched</span></td>
+                </tr>
+                <tr class="tree-row is-descendant" aria-level="4">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Descendant report node">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">leaf</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--descendant">descendant</span>
+                  </td>
+                  <td>Invoice aging</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+                <tr class="tree-row is-descendant" aria-level="4">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Descendant report node">
+                      <span class="tree-toggle__branches" aria-hidden="true">
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot has-line"></span>
+                        <span class="tree-toggle__branch-slot is-current is-last"></span>
+                      </span>
+                      <span class="tree-toggle__control">
+                        <span class="tree-depth-label">leaf</span>
+                      </span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--descendant">descendant</span>
+                  </td>
+                  <td>Payment reconciliation</td>
+                  <td>Finance</td>
+                  <td><span class="mock-status">visible</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="mock-section" aria-labelledby="filtered-boundary-heading">
@@ -419,11 +548,16 @@
             <td>Keeping a matched parent together with visible rows beneath it.</td>
             <td>Downstream sorting rules, pagination, or fetch behavior.</td>
           </tr>
+          <tr>
+            <td><code>:with_ancestors_and_descendants</code></td>
+            <td>Keeping both the path to the match and the rows below the matched branch visible.</td>
+            <td>Search UI, ranked explanations, text highlighting, permission copy, or authorization-aware filtering.</td>
+          </tr>
         </tbody>
       </table>
       <ul>
-        <li><code>:with_ancestors_and_descendants</code> remains part of the documented API and can combine these cues in a host app.</li>
-        <li>This focused page keeps the minimum comparison set narrow so reviewers can inspect mode differences without extra product behavior.</li>
+        <li><code>:with_ancestors_and_descendants</code> combines the ancestor and descendant retention cues in one filtered output.</li>
+        <li>This focused page keeps product behavior outside the mock so reviewers can inspect mode differences without extra search workflow decisions.</li>
       </ul>
     </section>
   </main>
