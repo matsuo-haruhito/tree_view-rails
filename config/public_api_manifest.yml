@@ -215,6 +215,7 @@ javascript_package_root:
   named_exports:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
+    - TreeViewControllerEntries
     - TreeViewSelectionDataHooks
     - TreeViewEmptyStateHooks
     - TreeViewTransferDropPositions
