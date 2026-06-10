@@ -59,6 +59,16 @@ const hostLifecycleSignals = [
   "TreeViewEventDetailKeys"
 ]
 
+const lazyLoadingHostLifecycleSignals = [
+  "TreeViewEventNames.hostLifecycle",
+  "tree-view:loading",
+  "tree-view:loaded",
+  "tree-view:error",
+  "tree-view:retry",
+  "TreeViewEventNames.remoteState",
+  "TreeViewRemoteStateValues"
+]
+
 const remoteStateValueSignals = [
   "TreeViewRemoteStateValues",
   "loading",
@@ -204,6 +214,20 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
   assert(
     /not event names|event 名ではありません/.test(document),
     `${relativePath}: remote-state value docs no longer separate state values from event names`
+  )
+
+  lazyLoadingHostLifecycleSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} host lifecycle event reader-journey docs`)
+  })
+
+  assert(
+    /The host app can dispatch these events|host app側は、fetchやTurbo requestの状態に応じてこれらのeventをdispatchできます/.test(document),
+    `${relativePath}: Lazy Loading docs no longer say host apps dispatch the lifecycle events`
+  )
+
+  assert(
+    /separate surface|別 surface/.test(document),
+    `${relativePath}: Lazy Loading docs no longer separate host lifecycle events from remote-state controller events`
   )
 })
 
