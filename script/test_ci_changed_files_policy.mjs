@@ -9,7 +9,8 @@ const cases = [
       docs_only: true,
       mockups_changed: false,
       browser_smoke_changed: false,
-      package_sensitive: false
+      package_sensitive: false,
+      docker_setup_sensitive: false
     }
   },
   {
@@ -19,7 +20,8 @@ const cases = [
       docs_only: true,
       mockups_changed: true,
       browser_smoke_changed: false,
-      package_sensitive: false
+      package_sensitive: false,
+      docker_setup_sensitive: false
     }
   },
   {
@@ -29,7 +31,8 @@ const cases = [
       docs_only: false,
       mockups_changed: false,
       browser_smoke_changed: true,
-      package_sensitive: false
+      package_sensitive: false,
+      docker_setup_sensitive: false
     }
   },
   {
@@ -39,7 +42,8 @@ const cases = [
       docs_only: false,
       mockups_changed: false,
       browser_smoke_changed: false,
-      package_sensitive: true
+      package_sensitive: true,
+      docker_setup_sensitive: false
     }
   },
   {
@@ -49,7 +53,8 @@ const cases = [
       docs_only: false,
       mockups_changed: false,
       browser_smoke_changed: false,
-      package_sensitive: true
+      package_sensitive: true,
+      docker_setup_sensitive: false
     }
   },
   {
@@ -59,7 +64,19 @@ const cases = [
       docs_only: false,
       mockups_changed: false,
       browser_smoke_changed: false,
-      package_sensitive: true
+      package_sensitive: true,
+      docker_setup_sensitive: true
+    }
+  },
+  {
+    name: "Docker setup files request Docker setup verification",
+    files: ["Dockerfile", "docker-compose.yml"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: false,
+      docker_setup_sensitive: true
     }
   }
 ];
