@@ -3,8 +3,19 @@ import { classifyChangedFiles } from "./ci_changed_files_policy.mjs";
 
 const cases = [
   {
-    name: "root and language docs stay docs-only",
-    files: ["README.md", "docs/en/development.md", "docs/ja/development.md", "Product Profile.md", "CHANGELOG.md", "AGENTS.md"],
+    name: "gem-packaged docs stay docs-only and request package guard",
+    files: ["README.md", "docs/en/development.md", "docs/ja/development.md", "CHANGELOG.md"],
+    expected: {
+      docs_only: true,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false
+    }
+  },
+  {
+    name: "repository-only docs stay docs-only without package guard",
+    files: ["Product Profile.md", "AGENTS.md"],
     expected: {
       docs_only: true,
       mockups_changed: false,
@@ -14,13 +25,13 @@ const cases = [
     }
   },
   {
-    name: "mockup docs remain docs-only but request browser smoke",
+    name: "mockup docs remain docs-only but request browser smoke and package guard",
     files: ["docs/mockups/default-tree.html"],
     expected: {
       docs_only: true,
       mockups_changed: true,
       browser_smoke_changed: false,
-      package_sensitive: false,
+      package_sensitive: true,
       docker_setup_sensitive: false
     }
   },
