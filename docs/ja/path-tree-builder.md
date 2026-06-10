@@ -56,6 +56,8 @@ builder は以下の2種類の公開node形状を作ります。
 
 `FolderNode` は TreeView が path segment から生成するため、folder row は汎用的な表示に留めます。record row では `item.record` を使って、product 固有の field、link、permission、status badge、action を host app 側で描画できます。
 
+静的な visual reference として、[PathTreeBuilder row mockup](../mockups/path-tree-builder-rows.html) も参照できます。この mockup は生成 folder row と record-backed row を比較し、file-manager behavior、download action、authorization copy、最終的な row action design は gem contract の外に残す境界を示します。
+
 predicate method は生成された node shape を判定するためのものなので、`folder_node_type:` や `record_node_type:` に custom 値を渡しても意味は変わりません。設定した type label を表示またはserializeしたい場合だけ、`node_type` を直接使ってください。
 
 ## path入力
