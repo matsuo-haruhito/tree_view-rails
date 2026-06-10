@@ -7,7 +7,7 @@ PUBLIC_API_VISIBLE_ROWS_METADATA_MANIFEST_PATH = File.expand_path("../config/pub
 
 RSpec.describe "VisibleRows row metadata public manifest" do
   def manifest
-    @manifest ||= YAML.safe_load(File.read(PUBLIC_API_VISIBLE_ROWS_METADATA_MANIFEST_PATH))
+    @manifest ||= YAML.safe_load_file(PUBLIC_API_VISIBLE_ROWS_METADATA_MANIFEST_PATH)
   end
 
   def visible_rows_metadata
