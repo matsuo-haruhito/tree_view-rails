@@ -36,6 +36,16 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+node_presenter_builder_names:
+  - key
+  - label
+  - href
+  - tooltip
+  - row_class
+  - row_data
+  - icon
+  - badge
+  - actions
 graph_adapter_initializer:
   required_keywords:
     - roots
