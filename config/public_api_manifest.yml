@@ -170,6 +170,9 @@ diagnostics:
     - dom_ids
     - orphans
     - cycles
+  run_options:
+    - checks
+    - raise_errors
   result_surface:
     attributes:
       - checks
