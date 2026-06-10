@@ -352,6 +352,80 @@ const signalGroups = [
         ]
       ]
     ]
+  },
+  {
+    feature: "GraphAdapter ActiveRecord performance guidance",
+    files: [
+      [
+        "docs/en/graph-adapter.md",
+        [
+          "Materialize children before returning them from the resolver",
+          "children_by_project_id",
+          "includes(:latest_version).to_a",
+          "Cookbook: GraphAdapter and ActiveRecord performance"
+        ]
+      ],
+      [
+        "docs/ja/graph-adapter.md",
+        [
+          "resolver から返す children を事前に materialize",
+          "children_by_project_id",
+          "includes(:latest_version).to_a",
+          "Cookbook: GraphAdapter と ActiveRecord の性能"
+        ]
+      ],
+      [
+        "docs/en/cookbook.md",
+        [
+          "GraphAdapter and ActiveRecord performance",
+          "avoid returning lazy relations from `children_resolver`",
+          "Materialize parent records with `to_a`",
+          "Return arrays, not ActiveRecord relations, from `children_resolver`",
+          "Cache child collections by parent id in the host app",
+          "Do not run DB queries or expensive permission/version checks inside row partials"
+        ]
+      ],
+      [
+        "docs/ja/cookbook.md",
+        [
+          "GraphAdapter と ActiveRecord の性能",
+          "`children_resolver` から lazy な relation を返さない",
+          "親recordを `to_a` で確定する",
+          "ActiveRecord relation ではなく配列を返す",
+          "children cache を host app 側で作る",
+          "row partial 内で DB query や高コストな権限・version判定をしない"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Resource table bridge ownership signal",
+    files: [
+      [
+        "docs/en/resource-table-bridge.md",
+        [
+          "ResourceTableRenderState.call",
+          "The required keywords are `records:` and `context:`",
+          "Other keyword options are accepted through `**render_options`",
+          "TreeView owns tree structure and hierarchical row rendering",
+          "Rails Table Preferences owns column inference, labels, saved table state, and preference UI",
+          "The host app can override partials for presentation, queries, authorization, and business behavior",
+          "resource-table-bridge.html"
+        ]
+      ],
+      [
+        "docs/ja/resource-table-bridge.md",
+        [
+          "ResourceTableRenderState.call",
+          "required keyword は `records:` と `context:`",
+          "その他の keyword option は `**render_options` として受け取り",
+          "TreeView: tree構造と階層行の描画",
+          "Rails Table Preferences: カラム推論、ラベル解決、保存済みtable state、preference UI",
+          "host app: 必要に応じたpartial差し替え、query、認可、業務処理",
+          "resource-table-bridge.html"
+        ]
+      ]
+    ]
   }
 ]
 
