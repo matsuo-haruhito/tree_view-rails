@@ -105,7 +105,8 @@ RSpec.describe "Public API manifest structure" do
   it "keeps diagnostics run option keys synchronized with the public runtime entrypoint" do
     diagnostics = manifest.fetch("diagnostics")
     parameters = TreeView::Diagnostics.method(:run).parameters
-    keyword_names = parameters.filter_map { |kind, name| name.to_s if kind == :key }
+    parameters_by_kind = parameters.group_by(&:first)
+    keyword_names = parameters_by_kind.fetch(:key, []).map(&:last).map(&:to_s)
 
     expect(keyword_names).to include("tree", "render_state")
     expect(diagnostics.fetch("run_options")).to eq(%w[checks raise_errors])
