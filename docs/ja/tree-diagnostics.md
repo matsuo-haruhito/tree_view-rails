@@ -74,7 +74,7 @@ end
 
 `Result#success?` は収集されたerrorsだけを見ます。orphan reportはwarningsとして返るため、filter、import、permission scopeによって描画対象外のrecordsが生じる可能性がある場合は `warnings` も確認してください。
 
-manifest-backed な diagnostics contract は、accepted check names と `Result` の reader surface を対象にします。stable な check names は `node_keys`、`dom_ids`、`orphans`、`cycles` です。diagnostics `Result` は `checks`、`errors`、`warnings`、`success?` を公開します。一方で、個々の error entry 内部、warning detail shape、orphan warning semantics、cycle validation policy までは manifest で固定しません。これらは documented behavior と host app data policy の境界として扱い、manifest schema を広げすぎないようにします。
+manifest-backed な diagnostics contract は、accepted check names、`TreeView::Diagnostics.run` の option key surface、`Result` の reader surface を対象にします。stable な check names は `node_keys`、`dom_ids`、`orphans`、`cycles` です。run option keys は `checks` と `raise_errors` で、`checks:` は accepted check names から実行対象を選び、`raise_errors:` は失敗を `Result` に収集するか即座に例外としてraiseするかを選びます。diagnostics `Result` は `checks`、`errors`、`warnings`、`success?` を公開します。一方で、accepted value schema、boolean coercion、個々の error entry 内部、warning detail shape、orphan warning semantics、cycle validation policy までは manifest で固定しません。これらは documented behavior と host app data policy の境界として扱い、manifest schema を広げすぎないようにします。
 
 ## node key uniqueness
 
