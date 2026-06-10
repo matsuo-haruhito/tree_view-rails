@@ -73,6 +73,18 @@ TreeView は host app の path builder を呼んだり、host app の row partia
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Host App Extension Points](host-app-extension-points.md)
 
+## resolver mode や adapter mode でも TreeView が breadcrumb を推測しますか？
+
+いいえ。bundled breadcrumb helper は records mode の tree と `tree.path_for(item)` を使い、現在 record から root までの path を辿ります。resolver mode、adapter mode、graph-like data では親方向の候補が複数あり得るため、TreeView はどの breadcrumb trail が正しいかを推測しません。
+
+`GraphAdapter` や graph-like source の data では、host app 側で breadcrumb trail を選び、独自の link または label を描画してください。route、authorization、layout placement、analytics behavior も host app 側の責務です。
+
+関連:
+
+- [Breadcrumb: 対応mode](breadcrumb.md#対応mode)
+- [Troubleshooting: breadcrumb が失敗する / 親方向の path が見つからない](troubleshooting.md#breadcrumb-が失敗する--親方向の-path-が見つからない)
+- [GraphAdapter](graph-adapter.md)
+
 ## row が重複する / 消える / 描画前に失敗する場合はどこを見ますか？
 
 row partial や JavaScript wiring を変える前に tree diagnostics から確認してください。node key の重複は展開状態や persisted state を不安定に見せることがあり、filter や permission scope で親が隠れると orphan が出ます。DOM ID collision は browser 向け target を壊し、cycle は parent path traversal を不正にします。
