@@ -39,7 +39,11 @@ const signalGroups = [
     files: [
       [
         "docs/en/troubleshooting.md",
-        ["host app still owns routes", "authorization", "business actions"]
+        [
+          "host app still owns routes",
+          "authorization",
+          "business actions"
+        ]
       ],
       [
         "docs/ja/troubleshooting.md",
@@ -312,6 +316,39 @@ const signalGroups = [
           "context.depth",
           "row-status-depth-labels.html",
           "どのdepthにどの文言を出すか、業務上の意味付け、CSS表現はhost app側で決めます"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Migration guide compatibility boundary",
+    files: [
+      [
+        "docs/en/migration.md",
+        [
+          "semantic versioning",
+          "documented integration points",
+          "deprecation path",
+          "Renamed APIs and moved entry points",
+          "JavaScript event compatibility",
+          "CSS and data-attribute compatibility",
+          "CHANGELOG.md",
+          "release notes",
+          "migration notes"
+        ]
+      ],
+      [
+        "docs/ja/migration.md",
+        [
+          "semantic versioning",
+          "documented integration point",
+          "deprecation path",
+          "entry point 移動",
+          "JavaScript event の互換性",
+          "CSS / data attribute の互換性",
+          "CHANGELOG.md",
+          "release note",
+          "migration note"
         ]
       ]
     ]
