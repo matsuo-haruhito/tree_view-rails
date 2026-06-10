@@ -2,6 +2,7 @@
 
 require "spec_helper"
 require "psych"
+require "tree_view/diagnostics"
 require "tree_view/resource_table_render_state"
 require "yaml"
 
@@ -88,6 +89,27 @@ RSpec.describe "Public API manifest structure" do
       expect(keys).not_to be_empty, "expected grouped_option_keys.#{group_name} to list public keys"
       expect(keys).to all(be_a(String))
     end
+  end
+
+  it "keeps diagnostics sections shaped as explicit public contract lists" do
+    diagnostics = manifest.fetch("diagnostics")
+
+    expect(diagnostics.fetch("accepted_checks")).to all(be_a(String))
+    expect(diagnostics.fetch("accepted_checks")).not_to be_empty
+    expect(diagnostics.fetch("run_options")).to all(be_a(String))
+    expect(diagnostics.fetch("run_options")).not_to be_empty
+    expect(diagnostics.fetch("result_surface").fetch("attributes")).to all(be_a(String))
+    expect(diagnostics.fetch("result_surface").fetch("methods")).to all(be_a(String))
+  end
+
+  it "keeps diagnostics run option keys synchronized with the public runtime entrypoint" do
+    diagnostics = manifest.fetch("diagnostics")
+    parameters = TreeView::Diagnostics.method(:run).parameters
+    keyword_names = parameters.select { |kind, _name| kind == :key }.map(&:last).map(&:to_s)
+
+    expect(keyword_names).to include("tree", "render_state")
+    expect(diagnostics.fetch("run_options")).to eq(%w[checks raise_errors])
+    expect(keyword_names & diagnostics.fetch("run_options")).to eq(diagnostics.fetch("run_options"))
   end
 
   it "keeps resource table render state keyword sections shaped as non-empty string lists" do
