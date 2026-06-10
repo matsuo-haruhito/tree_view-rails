@@ -302,6 +302,22 @@ assert(
 )
 assertFrozenObject(entrypointModule.TreeViewEmptyStateHooks, "TreeViewEmptyStateHooks")
 
+const expectedRemoteStateDataHooks = deepCamelizeKeys(javascriptPackageManifest.remote_state_data_hooks)
+assertDeepEqualExport(
+  entrypointModule.TreeViewRemoteStateDataHooks,
+  expectedRemoteStateDataHooks,
+  "TreeViewRemoteStateDataHooks"
+)
+assertFrozenObject(entrypointModule.TreeViewRemoteStateDataHooks, "TreeViewRemoteStateDataHooks")
+
+const expectedToolbarDataHooks = deepCamelizeKeys(javascriptPackageManifest.toolbar_data_hooks)
+assertDeepEqualExport(
+  entrypointModule.TreeViewToolbarDataHooks,
+  expectedToolbarDataHooks,
+  "TreeViewToolbarDataHooks"
+)
+assertFrozenObject(entrypointModule.TreeViewToolbarDataHooks, "TreeViewToolbarDataHooks")
+
 const expectedRegistrations = javascriptPackageManifest.controller_registrations.map(({ identifier, export: exportName }) => {
   assert(exportName in entrypointModule, `${exportName} export is missing`)
   return [identifier, entrypointModule[exportName]]
