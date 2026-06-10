@@ -33,6 +33,10 @@ const diagnosticsDocs = [
   ["docs/en/tree-diagnostics.md", read("docs/en/tree-diagnostics.md")],
   ["docs/ja/tree-diagnostics.md", read("docs/ja/tree-diagnostics.md")]
 ]
+const pathTreeBuilderDocs = [
+  ["docs/en/path-tree-builder.md", read("docs/en/path-tree-builder.md")],
+  ["docs/ja/path-tree-builder.md", read("docs/ja/path-tree-builder.md")]
+]
 const developmentDocs = [
   ["docs/en/development.md", read("docs/en/development.md")],
   ["docs/ja/development.md", read("docs/ja/development.md")]
@@ -96,6 +100,19 @@ const diagnosticsResultSurfaceSignals = [
   "success?"
 ]
 
+const pathTreeBuilderNodeShapeSignals = [
+  "FolderNode",
+  "RecordNode",
+  "key",
+  "parent_key",
+  "label",
+  "path",
+  "node_type",
+  "record",
+  "folder_node?",
+  "record_node?"
+]
+
 const developmentManifestTrackingSignals = [
   "config/public_api_manifest.yml",
   "RenderState callback builder keys",
@@ -123,7 +140,8 @@ const manifestBackedDocsSignalSurfaces = [
   ["diagnostics accepted checks", "diagnostics:"],
   ["diagnostics accepted checks", "accepted_checks:"],
   ["diagnostics run options", "run_options:"],
-  ["diagnostics Result surface", "result_surface:"]
+  ["diagnostics Result surface", "result_surface:"],
+  ["PathTreeBuilder node shapes", "path_tree_builder_node_shapes:"]
 ]
 
 manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
@@ -144,6 +162,10 @@ diagnosticsRunOptionSignals.forEach((signal) => {
 
 diagnosticsResultSurfaceSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest diagnostics Result surface")
+})
+
+pathTreeBuilderNodeShapeSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest PathTreeBuilder node shape surface")
 })
 
 assertIncludes(manifest, "event_names_without_detail", "public API manifest no-detail event surface")
@@ -233,6 +255,24 @@ diagnosticsDocs.forEach(([relativePath, document]) => {
   assert(
     /individual error entry internals|warning detail shape|orphan warning semantics|cycle validation policy|個々の error entry 内部|warning detail shape|orphan warning semantics|cycle validation policy/.test(document),
     `${relativePath}: diagnostics docs no longer keep detailed error and warning shapes outside the manifest schema`
+  )
+})
+
+pathTreeBuilderDocs.forEach(([relativePath, document]) => {
+  assertIncludes(document, "TreeView::PathTreeBuilder", `${relativePath} PathTreeBuilder docs`)
+
+  pathTreeBuilderNodeShapeSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} PathTreeBuilder node shape docs`)
+  })
+
+  assert(
+    /public API manifest|public API manifest/.test(document),
+    `${relativePath}: PathTreeBuilder docs no longer identify the manifest-backed node shape contract`
+  )
+
+  assert(
+    /folder key generation strategy|sort algorithm|file-manager behavior|row action design|folder key generation strategy|sort algorithm|file-manager behavior|row action design/.test(document),
+    `${relativePath}: PathTreeBuilder docs no longer keep generated-key, sorting, file-manager, and row-action behavior outside the node shape contract`
   )
 })
 
