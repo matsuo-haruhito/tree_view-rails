@@ -130,7 +130,7 @@ Documented configuration options include:
 - `initial_state`
 - `render_log_level`
 
-`TreeView.configure`, `TreeView.configuration`, and `TreeView.reset_configuration!` are the stable configuration entry points. Depend on documented option names and behavior rather than the internal shape of the configuration object. See [Render log level](render-log-level.md) for the `render_log_level` values, default, disable path, and host-app logging boundary.
+`TreeView.configure`, `TreeView.configuration`, and `TreeView.reset_configuration!` are the stable configuration entry points. Depend on documented option names and behavior rather than the internal shape of the configuration object. The manifest tracks these option names, not their accepted value sets: `initial_state` accepts `:expanded` and `:collapsed`, while `render_log_level` accepts the documented Ruby logger levels or `nil` to disable TreeView render log silencing. Those accepted values are guarded by compatibility specs and feature docs rather than a separate manifest value schema. See [Render log level](render-log-level.md) for the `render_log_level` values, default, disable path, and host-app logging boundary.
 
 Documented localized display-name helpers include:
 

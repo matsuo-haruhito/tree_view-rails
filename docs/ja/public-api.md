@@ -130,7 +130,7 @@ toolbar helper もこの公開 helper surface に含まれます。
 - `initial_state`
 - `render_log_level`
 
-`TreeView.configure`、`TreeView.configuration`、`TreeView.reset_configuration!` は安定した configuration entry point です。configuration object の内部形状ではなく、documented option name と documented behavior に依存してください。`render_log_level` の値、既定値、無効化方法、host app logging との責務境界は [render log level](render-log-level.md) を参照してください。
+`TreeView.configure`、`TreeView.configuration`、`TreeView.reset_configuration!` は安定した configuration entry point です。configuration object の内部形状ではなく、documented option name と documented behavior に依存してください。manifest が追跡するのはこれらの option 名であり、accepted value set ではありません。`initial_state` は `:expanded` / `:collapsed` を受け取り、`render_log_level` は documented な Ruby logger level または TreeView render log 抑制を無効化する `nil` を受け取ります。これらの accepted value は、manifest に別の value schema を増やすのではなく compatibility spec と feature docs で守ります。`render_log_level` の値、既定値、無効化方法、host app logging との責務境界は [render log level](render-log-level.md) を参照してください。
 
 公開 localized display-name helper には以下を含めます。
 
