@@ -33,7 +33,7 @@ TreeView provides lazy-loading hooks, children container IDs, remote-state place
 
 Start with `selection:` options when the screen submits selected rows to a host-app action. Use `checkbox_name`, `visibility`, `disabled_builder`, and `disabled_reason_builder` to render the row-level selection shape, then wire the surrounding form and submit endpoint in the host app. For unloaded descendants, pair the recipe with [Children Pagination](children-pagination.md#selection-and-bulk-actions) so the UI does not imply TreeView can submit rows that the host app never rendered or authorized.
 
-TreeView owns rendered checkbox state, selected values, selected payloads, disabled reasons, hidden-input sync, and the client-side max-count guard. The host app owns the bulk operation, permission checks, query filters, server-side intent, confirmation copy, and success or failure handling. Use [Selection](selection.md) for the event and payload contract, and compare [selection-payloads.html](../mockups/selection-payloads.html) or [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) when reviewing static UI copy.
+TreeView owns rendered checkbox state, selected values, selected payloads, disabled reasons, hidden-input sync, and the client-side max-count guard. The host app owns the bulk operation, permission checks, query filters, server-side intent, confirmation copy, and success or failure handling. Use [Selection](selection.md) for the event and payload contract, and compare [selection-multi-tree-form.html](../mockups/selection-multi-tree-form.html) or [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) when reviewing static UI copy.
 
 ### Status-heavy tree table
 
