@@ -44,13 +44,7 @@ export const TreeViewEventDetailKeys = Object.freeze({
     stateChanged: Object.freeze(["viewKey", "expandedKeys"])
   }),
   selection: Object.freeze({
-    change: Object.freeze([
-      "selectedCount",
-      "selectedValues",
-      "selectedPayloads",
-      "sourceCheckbox",
-      "attemptedChecked"
-    ]),
+    change: Object.freeze(["selectedCount", "selectedValues", "selectedPayloads", "sourceCheckbox", "attemptedChecked"]),
     selected: Object.freeze(["payloads"]),
     limitExceeded: Object.freeze(["maxCount", "attemptedCount", "attemptedChecked", "checkbox"]),
     invalidPayload: Object.freeze(["value", "checkbox"])
