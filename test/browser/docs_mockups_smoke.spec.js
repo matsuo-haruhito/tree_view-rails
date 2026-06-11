@@ -52,6 +52,7 @@ const focusedMockupSmokeTargets = [
   { file: "default-tree.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "minimal-usage-first-render.html", sample: "[data-tree-view-sample='minimal-usage-first-render'] .tree-view-table tbody tr", minimumCount: 3 },
   { file: "resource-table-bridge.html", sample: ".mock-bridge-table tbody tr", minimumCount: 4 },
+  { file: "resource-table-empty-colspan-boundary.html", sample: ".mock-colspan-table tbody tr", minimumCount: 3 },
   { file: "table-caption-context.html", sample: ".tree-view-table caption", minimumCount: 1 },
   { file: "narrow-sidebar-tree.html", sample: ".mock-narrow-frame", minimumCount: 2 },
   { file: "current-branch-sidebar.html", sample: ".tree-row.is-selected[aria-current='page']", minimumCount: 1 },
@@ -88,6 +89,7 @@ const focusedMockupSmokeTargets = [
 const narrowOverflowExpectedMockups = new Map([
   ["default-tree.html", "wide baseline table columns are intentionally visible in the reference mockup"],
   ["resource-table-bridge.html", "resource-table comparison keeps fuller columns visible for review"],
+  ["resource-table-empty-colspan-boundary.html", "resource-table empty colspan comparison keeps selection, metadata, and action columns visible"],
   ["table-caption-context.html", "table caption reference keeps host-owned action and status columns visible"],
   ["row-status-depth-labels.html", "status/depth table columns are intentionally preserved"],
   ["toggle-icon-states.html", "toggle-state comparison uses a wide table matrix"],
