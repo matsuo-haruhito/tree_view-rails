@@ -65,6 +65,19 @@ export declare const TreeViewRemoteStateValues: Readonly<{
   error: "error"
 }>
 
+export declare const TreeViewRemoteStateDataHooks: Readonly<{
+  lazyAttribute: "data-tree-lazy"
+  childrenUrlAttribute: "data-tree-children-url"
+  loadedAttribute: "data-tree-loaded"
+  remoteStateAttribute: "data-tree-remote-state"
+}>
+
+export declare const TreeViewToolbarDataHooks: Readonly<{
+  toolbarAttribute: "data-tree-view-toolbar"
+  actionAttribute: "data-tree-view-toolbar-action"
+  disabledAttribute: "data-tree-view-toolbar-disabled"
+}>
+
 export declare const TreeViewTransferDropPositions: Readonly<{
   before: "before"
   inside: "inside"
