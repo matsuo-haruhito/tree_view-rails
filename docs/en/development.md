@@ -38,7 +38,7 @@ npm run test:node-version-sources
 npm run test:browser
 ```
 
-Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use `npm run test:node-version-sources` when you only need to confirm that `.nvmrc`, `package.json` `engines.node`, and CI workflow `node-version` still agree on Node 22. Use the individual npm commands when you are narrowing a failure.
+Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, repository-only maintainer entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use `npm run test:node-version-sources` when you only need to confirm that `.nvmrc`, `package.json` `engines.node`, and CI workflow `node-version` still agree on Node 22. Use the individual npm commands when you are narrowing a failure.
 
 Within `npm run test:entrypoints`, `script/test_entrypoints.mjs` checks the runtime package-root exports, controller registration helper, manifest loader, and `.d.ts` export-name inventory. `script/test_declaration_literal_shapes.mjs` then checks the literal shapes in `app/javascript/tree_view/index.d.ts` for the manifest-backed JavaScript constants such as event names, detail keys, remote-state values, transfer values, controller identifiers, selection data hooks, and empty-state hooks. Use the export-name guard when a package-root export is missing or extra; use the literal-shape guard when the export exists but a key, tuple, or representative literal value no longer matches `config/public_api_manifest.yml`. This is a smoke guard, not a TypeScript compiler or declaration generator.
 
@@ -59,7 +59,7 @@ BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rake
 
 Public API compatibility specs protect documented Ruby entry points, helper methods, helper option keys, grouped options, and JavaScript package-root exports from accidental removals or renames. The JavaScript entrypoint smoke also checks manifest-backed controller registrations, public event names, and documented `event.detail` key groups. Keep these specs focused on API existence and representative behavior rather than full implementation details.
 
-Docs entrypoint smoke and public API docs signal smoke have separate responsibilities within `npm run test:docs-entrypoints`: `script/test_docs_entrypoints.mjs` protects broad documentation entry points, links, and feature-guide signals, while `script/test_public_api_docs_signals.mjs` protects representative Public API and feature-doc signals. When a public API manifest entry, package-root export, public helper surface, or docs signal is added or renamed, review and update the public API docs signal smoke alongside the affected English and Japanese docs.
+Docs entrypoint smoke and public API docs signal smoke have separate responsibilities within `npm run test:docs-entrypoints`: `script/test_docs_entrypoints.mjs` protects broad documentation entry points, links, and feature-guide signals, while `script/test_repository_only_maintainer_entrypoints.mjs` protects repository-only maintainer entry points such as `Product Profile.md`, `AGENTS.md`, `CHANGELOG.md`, and `docs/i18n-audit.md` from disappearing out of the root docs map or language README files. `script/test_public_api_docs_signals.mjs` protects representative Public API and feature-doc signals. When a public API manifest entry, package-root export, public helper surface, or docs signal is added or renamed, review and update the public API docs signal smoke alongside the affected English and Japanese docs.
 
 When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
 
@@ -101,7 +101,7 @@ Docs-only entrypoint and signal checks can be run separately with:
 npm run test:docs-entrypoints
 ```
 
-That command runs the docs entrypoint smoke, docs entrypoint signal smoke, README Quick Start signal, Public API docs signal, and i18n parity checks without the broader entrypoint and CI policy checks. Use it when a docs-only change fails before moving on to `npm run test:entrypoints` or `npm run test:browser`.
+That command runs the docs entrypoint smoke, repository-only maintainer entrypoint smoke, docs entrypoint signal smoke, README Quick Start signal, Public API docs signal, and i18n parity checks without the broader entrypoint and CI policy checks. The repository-only maintainer entrypoint smoke keeps checkout-only files such as `Product Profile.md`, `AGENTS.md`, `CHANGELOG.md`, and `docs/i18n-audit.md` discoverable from `docs/README.md` and the language README files without treating them as gem-packaged host-app API guides. Use it when a docs-only change fails before moving on to `npm run test:entrypoints` or `npm run test:browser`.
 
 Browser-level smoke tests run through Playwright with:
 
