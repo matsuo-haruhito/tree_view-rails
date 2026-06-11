@@ -13,11 +13,9 @@ RSpec.describe "Breadcrumb public contract" do
   end
 
   def helper
-    Class.new do
-      include ActionView::Helpers::TagHelper
-      include ActionView::Helpers::OutputSafetyHelper
-      include TreeViewBreadcrumbHelper
-    end.new
+    view = ActionView::Base.empty
+    view.extend(TreeViewBreadcrumbHelper)
+    view
   end
 
   def breadcrumb_helper_keyword_option_keys
