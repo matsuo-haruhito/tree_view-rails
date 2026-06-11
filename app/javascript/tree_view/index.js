@@ -41,7 +41,7 @@ export const TreeViewEventNames = Object.freeze({
 
 export const TreeViewEventDetailKeys = Object.freeze({
   state: Object.freeze({
-    stateChanged: Object.freeze(["viewKey", "expandedKeys"])
+    stateChanged: Object.freeze(["viewKey", "expandedKeys", "reason"])
   }),
   selection: Object.freeze({
     change: Object.freeze(["selectedCount", "selectedValues", "selectedPayloads"]),
