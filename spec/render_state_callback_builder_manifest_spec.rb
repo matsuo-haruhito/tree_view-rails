@@ -17,8 +17,12 @@ RENDER_STATE_CALLBACK_BUILDER_KEYS = %w[
 ].freeze
 
 RSpec.describe "RenderState callback builder public manifest" do
+  def public_api_manifest
+    YAML.safe_load_file(RENDER_STATE_CALLBACK_BUILDER_MANIFEST_PATH)
+  end
+
   def manifest_callback_builder_keys
-    YAML.safe_load_file(RENDER_STATE_CALLBACK_BUILDER_MANIFEST_PATH).fetch("render_state_callback_builder_keys")
+    public_api_manifest.fetch("render_state_callback_builder_keys")
   end
 
   it "keeps the flat callback builder key list aligned with RenderState" do
@@ -36,5 +40,11 @@ RSpec.describe "RenderState callback builder public manifest" do
     manifest_callback_builder_keys.each do |key|
       expect(state.public_send(key)).to eq(builders.fetch(key.to_sym)), "expected RenderState##{key} to keep the provided builder"
     end
+  end
+
+  it "keeps row_data_builder as a key-surface contract rather than a return-shape schema" do
+    expect(manifest_callback_builder_keys).to include("row_data_builder")
+    expect(public_api_manifest.keys.grep(/row_data_builder/)).to be_empty
+    expect(public_api_manifest.keys.grep(/row_data/)).to be_empty
   end
 end
