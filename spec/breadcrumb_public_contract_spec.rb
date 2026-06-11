@@ -26,11 +26,11 @@ RSpec.describe "Breadcrumb public contract" do
     end
   end
 
-  def records_tree
+  def records_tree_with_child
     root = BreadcrumbPublicContractNode.new(id: 1, parent_id: nil, name: "Root")
     child = BreadcrumbPublicContractNode.new(id: 2, parent_id: 1, name: "Child")
 
-    TreeView::Tree.new(records: [root, child], parent_id_method: :parent_id)
+    [TreeView::Tree.new(records: [root, child], parent_id_method: :parent_id), child]
   end
 
   it "keeps the manifest-backed breadcrumb option keys aligned with the helper signature" do
@@ -40,8 +40,7 @@ RSpec.describe "Breadcrumb public contract" do
   end
 
   it "keeps current item semantics and HTML merge hooks available" do
-    tree = records_tree
-    current_item = tree.root_items.first.children.first
+    tree, current_item = records_tree_with_child
     html = helper.tree_view_breadcrumb(
       tree,
       current_item,
