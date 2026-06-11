@@ -122,6 +122,11 @@ export const TreeViewSelectionDataHooks = Object.freeze({
   indeterminateValue: "data-tree-view-selection-indeterminate-value"
 })
 
+export const TreeViewSelectionCheckboxHooks = Object.freeze({
+  checkboxClass: "tree-selection-checkbox",
+  disabledReasonAttribute: "data-tree-selection-disabled-reason"
+})
+
 export const TreeViewEmptyStateHooks = Object.freeze({
   wrapperAttribute: "data-tree-view-empty-state",
   contentClass: "tree-view-empty-row__content",
