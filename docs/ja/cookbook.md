@@ -328,6 +328,17 @@ render_state = TreeView::RenderState.new(
 
 子nodeを必要な分だけ読み込みたい場合は lazy loading を使います。
 
+product要件として scroll位置に応じたDOM仮想化が必要な場合は、そのcontrollerをhost app側に置き、TreeViewには描画すべきHTML row sliceだけを任せます。`TreeView::RenderWindow` は、すでにvisibleとして計算されたrowを小さく出力するには使えますが、scroll位置の監視、host app queryの削減、page取得、scroll anchoringの維持は行いません。
+
+host-app virtual scrolling の最小構成は次の形です。
+
+1. viewport observer、scroll anchoring、overscan、analytics は host app JavaScript が担当する。
+2. host app が query page、cursor、offset を選び、その viewport で表示してよいrecordをauthorizationする。
+3. 選ばれたrecordから `RenderState` を作り、`TreeView::RenderWindow` または `tree_view_rows(..., window:)` でvisible HTML sliceだけを描画する。
+4. 問題が scroll位置に応じたDOM作業ではなくchild fetching量なら、[Lazy Loading](lazy-loading.md) や [Children Pagination](children-pagination.md) に戻す。
+
+TreeView側の出力境界は [描画スケール](render-scale.md) と [Windowed Rendering](windowed-rendering.md) を参照してください。host appのdata loading量も減らす必要がある場合は [Lazy Loading](lazy-loading.md) と [Children Pagination](children-pagination.md) を使います。このrecipeを組み込みvirtual scrolling engineやserver-side pagination契約として扱わないでください。
+
 ## lazy loading と children pagination を組み合わせる
 
 1つのbranchに大量の直接childrenがあり、最初の展開後も全件描画すると大きすぎる場合に使います。lazy loading は最初のchildren endpointとremote-state placeholderをつなぎ、host app は1page分のchildrenとhost-app-ownedの「もっと見る」行を返します。
