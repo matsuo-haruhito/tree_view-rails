@@ -313,10 +313,14 @@ Check these points.
 - When one form contains multiple trees, use separate hidden input names when the server should receive separate params. Reuse a name only when the host app intentionally accepts one combined array; TreeView uses source ids only to keep each controller from removing another controller's generated inputs.
 - If you expect client-side max-count limits or linked checkbox behavior, configure `data-tree-view-selection-max-count-value`, `data-tree-view-selection-cascade-value`, and `data-tree-view-selection-indeterminate-value` on the same host element.
 - Cascade and indeterminate behavior only affects rendered rows in the current DOM.
+- If max-count, multi-tree, or unloaded-descendant behavior still does not match the product action, keep final params grouping, bulk-action semantics, server-side validation, and user-facing business copy in the host app.
 
 Read next:
 
 - [Selection](selection.md)
+- [selection max-count mockup](../mockups/selection-max-count.html)
+- [selection multi-tree form mockup](../mockups/selection-multi-tree-form.html)
+- [children-pagination-selection-boundary mockup](../mockups/children-pagination-selection-boundary.html)
 - [Host App Extension Points](host-app-extension-points.md)
 - [Public API](public-api.md)
 - [JavaScript event contract](js-events.md)

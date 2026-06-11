@@ -73,6 +73,18 @@ See also:
 - [Rendering Boundaries](rendering-boundaries.md)
 - [Host App Extension Points](host-app-extension-points.md)
 
+## Does TreeView infer breadcrumbs for resolver or adapter mode?
+
+No. The bundled breadcrumb helper uses a records-mode tree and `tree.path_for(item)` to walk from the current record back to a root. Resolver mode, adapter mode, and graph-like data may have more than one possible parent path, so TreeView does not guess which breadcrumb trail is correct.
+
+When the data comes from `GraphAdapter` or another graph-like source, let the host app choose the breadcrumb trail and render its own links or labels. Routes, authorization, layout placement, and analytics behavior stay in the host app.
+
+See also:
+
+- [Breadcrumb: Supported mode](breadcrumb.md#supported-mode)
+- [Troubleshooting: Breadcrumbs fail or cannot find a parent path](troubleshooting.md#breadcrumbs-fail-or-cannot-find-a-parent-path)
+- [GraphAdapter](graph-adapter.md)
+
 ## Why do rows look duplicated, disappear, or fail before rendering?
 
 Start with tree diagnostics before changing the row partial or JavaScript wiring. Duplicate node keys can make expansion and persisted state look unstable, orphan records can appear when filtering or permission scopes hide parents, DOM ID collisions can break browser-facing targets, and cycles can make parent-path traversal invalid.

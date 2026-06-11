@@ -59,6 +59,8 @@ selected_nodes = TreeView.parse_selection_params(params[:selected_nodes])
 
 `TreeView.parse_selection_params` はJSON文字列配列を受け取り、parse済みのhash-like valuesを返します。不正なJSONは明確なerrorになります。
 
+nil と空文字列の entry は skip されるため、何も選択されていない optional checkbox params もそのまま渡しやすくなっています。Hash-like entry と JSON object は、現在の server-side parser surface として受け付けます。壊れた JSON や object ではない JSON value は `ArgumentError` になります。その error を rescue するか、request を reject するか、validation copy を表示するか、malformed submission を記録するかは host app 側の責務です。
+
 ## disabled checkbox
 
 選択できないnodeがある場合は `disabled_builder` を使います。

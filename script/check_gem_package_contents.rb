@@ -22,6 +22,7 @@ REQUIRED_PACKAGED_PATHS = %w[
   app/views/tree_view/_tree_row.html.erb
   app/assets/stylesheets/tree_view.scss
   app/javascript/tree_view/index.js
+  app/javascript/tree_view/index.d.ts
   app/javascript/tree_view/client_controller.js
   app/javascript/tree_view/remote_state_controller.js
   app/javascript/tree_view/selection_controller.js
@@ -38,6 +39,7 @@ REQUIRED_PACKAGED_PATHS = %w[
   docs/mockups/review-gallery.html
   docs/mockups/default-tree.html
   docs/mockups/default-tree.css
+  docs/mockups/assets/readme-default-tree.svg
   docs/en/installation.md
   docs/ja/installation.md
   docs/en/public-api.md

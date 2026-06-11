@@ -24,6 +24,8 @@ When a screen has no root items or a filtered search returns no rows, keep the e
 - `.tree-view-empty-row__content`
 - `.tree-view-empty-row__message`
 
+If the host app already imports the package root, use `TreeViewEmptyStateHooks.wrapperAttribute`, `TreeViewEmptyStateHooks.contentClass`, and `TreeViewEmptyStateHooks.messageClass` when JavaScript, browser tests, or copied styling need to target the same documented hooks without hand-copying raw strings.
+
 For the focused visual reference and hook boundary, see [empty-state.html](../mockups/empty-state.html) and the [mockup empty-state guidance](../mockups/README.md#empty-state-guidance).
 
 ## Toggle modes

@@ -29,6 +29,18 @@ const selectionDocs = [
   ["docs/en/selection.md", read("docs/en/selection.md")],
   ["docs/ja/selection.md", read("docs/ja/selection.md")]
 ]
+const diagnosticsDocs = [
+  ["docs/en/tree-diagnostics.md", read("docs/en/tree-diagnostics.md")],
+  ["docs/ja/tree-diagnostics.md", read("docs/ja/tree-diagnostics.md")]
+]
+const pathTreeBuilderDocs = [
+  ["docs/en/path-tree-builder.md", read("docs/en/path-tree-builder.md")],
+  ["docs/ja/path-tree-builder.md", read("docs/ja/path-tree-builder.md")]
+]
+const developmentDocs = [
+  ["docs/en/development.md", read("docs/en/development.md")],
+  ["docs/ja/development.md", read("docs/ja/development.md")]
+]
 
 const callbackBuilderSignals = [
   "render_state_callback_builder_keys",
@@ -47,6 +59,16 @@ const hostLifecycleSignals = [
   "TreeViewEventDetailKeys"
 ]
 
+const lazyLoadingHostLifecycleSignals = [
+  "TreeViewEventNames.hostLifecycle",
+  "tree-view:loading",
+  "tree-view:loaded",
+  "tree-view:error",
+  "tree-view:retry",
+  "TreeViewEventNames.remoteState",
+  "TreeViewRemoteStateValues"
+]
+
 const remoteStateValueSignals = [
   "TreeViewRemoteStateValues",
   "loading",
@@ -60,12 +82,69 @@ const selectionDataHookSignals = [
   "data-tree-view-selection-hidden-input-name-value"
 ]
 
+const emptyStateHookSignals = [
+  "TreeViewEmptyStateHooks",
+  "wrapperAttribute",
+  "contentClass",
+  "messageClass",
+  "data-tree-view-empty-state"
+]
+
+const diagnosticsAcceptedCheckSignals = [
+  "node_keys",
+  "dom_ids",
+  "orphans",
+  "cycles"
+]
+
+const diagnosticsResultSurfaceSignals = [
+  "checks",
+  "errors",
+  "warnings",
+  "success?"
+]
+
+const pathTreeBuilderNodeShapeSignals = [
+  "FolderNode",
+  "RecordNode",
+  "key",
+  "parent_key",
+  "label",
+  "path",
+  "node_type",
+  "record",
+  "folder_node?",
+  "record_node?"
+]
+
+const developmentManifestTrackingSignals = [
+  "config/public_api_manifest.yml",
+  "RenderState callback builder keys",
+  "event_names_without_detail",
+  "remote-state values",
+  "selection data hooks",
+  "empty-state hooks"
+]
+
+const developmentEntrypointGuardSignals = [
+  "script/test_public_api_docs_signals.mjs",
+  "script/test_entrypoints.mjs",
+  "script/test_declaration_literal_shapes.mjs",
+  "payload shape",
+  "transfer values"
+]
+
 const manifestBackedDocsSignalSurfaces = [
   ["RenderState callback builder keys", "render_state_callback_builder_keys:"],
   ["host lifecycle no-detail events", "event_names_without_detail:"],
   ["host lifecycle event names", "host_lifecycle:"],
   ["remote-state values", "remote_state_values:"],
-  ["selection data hooks", "selection_data_hooks:"]
+  ["selection data hooks", "selection_data_hooks:"],
+  ["empty-state hooks", "empty_state_hooks:"],
+  ["diagnostics accepted checks", "diagnostics:"],
+  ["diagnostics accepted checks", "accepted_checks:"],
+  ["diagnostics Result surface", "result_surface:"],
+  ["PathTreeBuilder node shapes", "path_tree_builder_node_shapes:"]
 ]
 
 manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
@@ -74,6 +153,18 @@ manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
 
 callbackBuilderSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest callback builder key surface")
+})
+
+diagnosticsAcceptedCheckSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest diagnostics accepted checks")
+})
+
+diagnosticsResultSurfaceSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest diagnostics Result surface")
+})
+
+pathTreeBuilderNodeShapeSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest PathTreeBuilder node shape surface")
 })
 
 assertIncludes(manifest, "event_names_without_detail", "public API manifest no-detail event surface")
@@ -104,6 +195,15 @@ publicApiDocs.forEach(([relativePath, document]) => {
   selectionDataHookSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} selection data hook docs`)
   })
+
+  emptyStateHookSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} empty-state hook docs`)
+  })
+
+  assert(
+    /final empty-state copy|permission message|filter-reset behavior|最終的な empty-state copy|permission message/.test(document),
+    `${relativePath}: empty-state hook docs no longer preserve the host-app-owned final-copy boundary`
+  )
 })
 
 lazyLoadingDocs.forEach(([relativePath, document]) => {
@@ -115,10 +215,76 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
     /not event names|event 名ではありません/.test(document),
     `${relativePath}: remote-state value docs no longer separate state values from event names`
   )
+
+  lazyLoadingHostLifecycleSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} host lifecycle event reader-journey docs`)
+  })
+
+  assert(
+    /The host app can dispatch these events|host app側は、fetchやTurbo requestの状態に応じてこれらのeventをdispatchできます/.test(document),
+    `${relativePath}: Lazy Loading docs no longer say host apps dispatch the lifecycle events`
+  )
+
+  assert(
+    /separate surface|別 surface/.test(document),
+    `${relativePath}: Lazy Loading docs no longer separate host lifecycle events from remote-state controller events`
+  )
 })
 
 selectionDocs.forEach(([relativePath, document]) => {
   selectionDataHookSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} selection data hook docs`)
+  })
+})
+
+diagnosticsDocs.forEach(([relativePath, document]) => {
+  assertIncludes(document, "TreeView::Diagnostics.run", `${relativePath} diagnostics aggregate entrypoint docs`)
+  assertIncludes(document, "checks:", `${relativePath} diagnostics accepted checks docs`)
+  assertIncludes(document, "Result", `${relativePath} diagnostics Result surface docs`)
+
+  diagnosticsAcceptedCheckSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} diagnostics accepted check docs`)
+  })
+
+  diagnosticsResultSurfaceSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} diagnostics Result reader docs`)
+  })
+
+  assert(
+    /manifest-backed.*diagnostics contract|manifest-backed な diagnostics contract/.test(document),
+    `${relativePath}: diagnostics docs no longer identify the manifest-backed contract boundary`
+  )
+
+  assert(
+    /individual error entry internals|warning detail shape|orphan warning semantics|cycle validation policy|個々の error entry 内部|warning detail shape|orphan warning semantics|cycle validation policy/.test(document),
+    `${relativePath}: diagnostics docs no longer keep detailed error and warning shapes outside the manifest schema`
+  )
+})
+
+pathTreeBuilderDocs.forEach(([relativePath, document]) => {
+  assertIncludes(document, "TreeView::PathTreeBuilder", `${relativePath} PathTreeBuilder docs`)
+
+  pathTreeBuilderNodeShapeSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} PathTreeBuilder node shape docs`)
+  })
+
+  assert(
+    /public API manifest|public API manifest/.test(document),
+    `${relativePath}: PathTreeBuilder docs no longer identify the manifest-backed node shape contract`
+  )
+
+  assert(
+    /folder key generation strategy|sort algorithm|file-manager behavior|row action design|folder key generation strategy|sort algorithm|file-manager behavior|row action design/.test(document),
+    `${relativePath}: PathTreeBuilder docs no longer keep generated-key, sorting, file-manager, and row-action behavior outside the node shape contract`
+  )
+})
+
+developmentDocs.forEach(([relativePath, document]) => {
+  developmentManifestTrackingSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} public API manifest tracking summary`)
+  })
+
+  developmentEntrypointGuardSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} public API smoke guard summary`)
   })
 })

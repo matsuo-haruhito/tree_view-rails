@@ -14,6 +14,7 @@ jobs:
       mockups_changed: ${{ steps.detect.outputs.mockups_changed }}
       browser_smoke_changed: ${{ steps.detect.outputs.browser_smoke_changed }}
       package_sensitive: ${{ steps.detect.outputs.package_sensitive }}
+      docker_setup_sensitive: ${{ steps.detect.outputs.docker_setup_sensitive }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -26,6 +27,7 @@ jobs:
             echo "mockups_changed=false" >> "$GITHUB_OUTPUT"
             echo "browser_smoke_changed=false" >> "$GITHUB_OUTPUT"
             echo "package_sensitive=true" >> "$GITHUB_OUTPUT"
+            echo "docker_setup_sensitive=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -162,6 +164,15 @@ jobs:
         run: npx playwright install --with-deps chromium
       - if: github.event_name != 'pull_request' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true'
         run: npm run test:browser
+
+  docker_development_setup:
+    if: github.event_name == 'pull_request' && needs.changes.outputs.docker_setup_sensitive == 'true'
+    needs: changes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: docker compose build app
+      - run: docker compose run --rm app sh -lc 'node --version | grep -E "^v22\." && npm --version && npm install'
 
   gem_package:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'pull_request' && needs.changes.outputs.package_sensitive == 'true'

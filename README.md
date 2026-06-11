@@ -46,6 +46,10 @@ If you already know the symptom and want a faster reverse-lookup entry point, se
 
 If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md). Start with [review-gallery.html](docs/mockups/review-gallery.html) for the fastest first look, open [default-tree.html](docs/mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
 
+![Static TreeView mockup showing expanded and collapsed hierarchy rows with selection checkboxes, badges, and row actions.](docs/mockups/assets/readme-default-tree.svg)
+
+The image above is a single orientation asset derived from the `default-tree.html` baseline rows. Use the linked mockups for full static review paths and focused state comparisons.
+
 For no-root-items or no-results empty-state styling hooks, see [Accessibility Semantics](docs/en/accessibility-semantics.md#empty-state-and-hidden-count-hooks) / [日本語](docs/ja/accessibility-semantics.md) and the focused [empty-state.html](docs/mockups/empty-state.html) mockup. TreeView exposes reusable wrapper hooks for styling; final empty copy, CTAs, and filter-reset behavior stay in the host app.
 
 For the boundary between static mockups and a future real Rails demo app, see [Demo application boundary](docs/en/demo-application-boundary.md) / [日本語](docs/ja/demo-application-boundary.md). The public docs intentionally avoid direct demo repository links until a demo repository is public.
@@ -69,13 +73,15 @@ For the boundary between static mockups and a future real Rails demo app, see [D
 - Flatten currently visible rows with `TreeView::VisibleRows`.
 - Render currently visible rows by offset and limit with `TreeView::RenderWindow` and windowed rendering. This limits HTML output only; it does not reduce host-app queries or fetched records.
 - Customize host-app row content through `row_partial`.
+- Render host-app row action slots through `row_actions_partial` while action availability, routes, authorization, and final copy stay in the host app.
+- Customize transfer payload data through `row_event_payload_builder` while drag/drop business behavior stays in the host app.
 - Control initial expansion with `initial_state`, `expanded_keys`, `collapsed_keys`, and `max_initial_depth`.
 - Limit render scope with `max_render_depth` and `max_leaf_distance`.
 - Limit toggle scope with `max_toggle_depth_from_root` and `max_toggle_leaf_distance`.
 - Customize row attributes with `row_class_builder` and `row_data_builder`.
 - Add lazy loading hooks with `load_children_path_builder` and `RenderState#lazy_loading`.
 - Add checkbox selection with JSON payloads, disabled states, selected keys, cascade, indeterminate state, and max-count limits.
-- Persist expansion state through `TreeView::PersistedState`, `TreeView::StateStore`, and `rails g tree_view:state:install`.
+- Persist, restore, clear, and prune expansion state through `TreeView::PersistedState`, `TreeView::StateStore`, and `rails g tree_view:state:install` while leaving retention policy to the host app.
 - Register JavaScript controllers for state tracking, client-side toggling, selection, transfer payloads, and remote loading state.
 
 ## Out of scope

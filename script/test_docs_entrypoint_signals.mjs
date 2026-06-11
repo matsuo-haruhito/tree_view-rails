@@ -39,7 +39,11 @@ const signalGroups = [
     files: [
       [
         "docs/en/troubleshooting.md",
-        ["host app still owns routes", "authorization", "business actions"]
+        [
+          "host app still owns routes",
+          "authorization",
+          "business actions"
+        ]
       ],
       [
         "docs/ja/troubleshooting.md",
@@ -97,6 +101,20 @@ const signalGroups = [
           "static mockup",
           "real Rails demo application",
           "Publication checklist"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "README host extension summary boundary",
+    files: [
+      [
+        "README.md",
+        [
+          "row_actions_partial",
+          "action availability, routes, authorization, and final copy stay in the host app",
+          "row_event_payload_builder",
+          "drag/drop business behavior stays in the host app"
         ]
       ]
     ]
@@ -206,6 +224,205 @@ const signalGroups = [
           "collapsed_keys",
           "UI側のDOM ID builderを変更しても",
           "keyは変わりません"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "TreeView.configure option docs boundary",
+    files: [
+      [
+        "config/public_api_manifest.yml",
+        ["configuration_options:", "tree_view_configure:", "initial_state", "render_log_level"]
+      ],
+      [
+        "docs/en/render-log-level.md",
+        [
+          "render_log_level",
+          "config/public_api_manifest.yml",
+          ":debug",
+          ":unknown",
+          "render_log_level = nil",
+          "helper-rendered partials",
+          "It does not change `Rails.logger.level`",
+          "initial_state",
+          ":expanded",
+          ":collapsed",
+          "TreeView::ConfigurationError"
+        ]
+      ],
+      [
+        "docs/ja/render-log-level.md",
+        [
+          "render_log_level",
+          "config/public_api_manifest.yml",
+          ":debug",
+          ":unknown",
+          "render_log_level = nil",
+          "TreeView helper 経由で描画される partial",
+          "host application 全体の `Rails.logger.level` は変更しません",
+          "initial_state",
+          ":expanded",
+          ":collapsed",
+          "TreeView::ConfigurationError"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Row status and depth label docs boundary",
+    files: [
+      [
+        "docs/en/row-status.md",
+        [
+          "row_disabled_builder",
+          "row_readonly_builder",
+          "row_disabled_reason_builder",
+          "data-tree-view-row-disabled",
+          "data-tree-view-row-readonly",
+          "data-tree-view-row-disabled-reason",
+          "selection[:disabled_builder]",
+          "row-status-depth-labels.html",
+          "Business rules, action blocking, authorization, and persistence remain host app responsibilities"
+        ]
+      ],
+      [
+        "docs/ja/row-status.md",
+        [
+          "row_disabled_builder",
+          "row_readonly_builder",
+          "row_disabled_reason_builder",
+          "data-tree-view-row-disabled",
+          "data-tree-view-row-readonly",
+          "data-tree-view-row-disabled-reason",
+          "selection[:disabled_builder]",
+          "row-status-depth-labels.html",
+          "実際の業務ルール、操作制御、認可、保存処理は host app 側で実装します"
+        ]
+      ],
+      [
+        "docs/en/depth-labels.md",
+        [
+          "depth_label_builder",
+          "context.depth",
+          "row-status-depth-labels.html",
+          "The host app decides the label text, business meaning of each depth, and CSS styling"
+        ]
+      ],
+      [
+        "docs/ja/depth-labels.md",
+        [
+          "depth_label_builder",
+          "context.depth",
+          "row-status-depth-labels.html",
+          "どのdepthにどの文言を出すか、業務上の意味付け、CSS表現はhost app側で決めます"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Migration guide compatibility boundary",
+    files: [
+      [
+        "docs/en/migration.md",
+        [
+          "semantic versioning",
+          "documented integration points",
+          "deprecation path",
+          "Renamed APIs and moved entry points",
+          "JavaScript event compatibility",
+          "CSS and data-attribute compatibility",
+          "CHANGELOG.md",
+          "release notes",
+          "migration notes"
+        ]
+      ],
+      [
+        "docs/ja/migration.md",
+        [
+          "semantic versioning",
+          "documented integration point",
+          "deprecation path",
+          "entry point 移動",
+          "JavaScript event の互換性",
+          "CSS / data attribute の互換性",
+          "CHANGELOG.md",
+          "release note",
+          "migration note"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "GraphAdapter ActiveRecord performance guidance",
+    files: [
+      [
+        "docs/en/graph-adapter.md",
+        [
+          "Materialize children before returning them from the resolver",
+          "children_by_project_id",
+          "includes(:latest_version).to_a",
+          "Cookbook: GraphAdapter and ActiveRecord performance"
+        ]
+      ],
+      [
+        "docs/ja/graph-adapter.md",
+        [
+          "resolver から返す children を事前に materialize",
+          "children_by_project_id",
+          "includes(:latest_version).to_a",
+          "Cookbook: GraphAdapter と ActiveRecord の性能"
+        ]
+      ],
+      [
+        "docs/en/cookbook.md",
+        [
+          "GraphAdapter and ActiveRecord performance",
+          "avoid returning lazy relations from `children_resolver`",
+          "Materialize parent records with `to_a`",
+          "Return arrays, not ActiveRecord relations, from `children_resolver`",
+          "Cache child collections by parent id in the host app",
+          "Do not run DB queries or expensive permission/version checks inside row partials"
+        ]
+      ],
+      [
+        "docs/ja/cookbook.md",
+        [
+          "GraphAdapter と ActiveRecord の性能",
+          "`children_resolver` から lazy な relation を返さない",
+          "親recordを `to_a` で確定する",
+          "ActiveRecord relation ではなく配列を返す",
+          "children cache を host app 側で作る",
+          "row partial 内で DB query や高コストな権限・version判定をしない"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Resource table bridge ownership signal",
+    files: [
+      [
+        "docs/en/resource-table-bridge.md",
+        [
+          "ResourceTableRenderState.call",
+          "The required keywords are `records:` and `context:`",
+          "Other keyword options are accepted through `**render_options`",
+          "TreeView owns tree structure and hierarchical row rendering",
+          "Rails Table Preferences owns column inference, labels, saved table state, and preference UI",
+          "The host app can override partials for presentation, queries, authorization, and business behavior",
+          "resource-table-bridge.html"
+        ]
+      ],
+      [
+        "docs/ja/resource-table-bridge.md",
+        [
+          "ResourceTableRenderState.call",
+          "required keyword は `records:` と `context:`",
+          "その他の keyword option は `**render_options` として受け取り",
+          "TreeView: tree構造と階層行の描画",
+          "Rails Table Preferences: カラム推論、ラベル解決、保存済みtable state、preference UI",
+          "host app: 必要に応じたpartial差し替え、query、認可、業務処理",
+          "resource-table-bridge.html"
         ]
       ]
     ]

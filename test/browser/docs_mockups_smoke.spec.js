@@ -208,6 +208,50 @@ test.describe("docs mockup browser smoke", () => {
     })
   }
 
+  test("direction-aware-cues/index.html preserves LTR, RTL, and vertical representative regions", async ({ page }) => {
+    await openMockup(page, "direction-aware-cues/index.html")
+
+    await expect(page.getByRole("heading", { name: "LTR baseline" })).toBeVisible()
+    await expect(page.locator("[aria-label='LTR baseline tree sample'] .tree-row.is-selected")).toBeVisible()
+    await expect(page.getByRole("heading", { name: "RTL host-app override" })).toBeVisible()
+    await expect(page.locator("[aria-label='RTL override tree sample'][dir='rtl'] .tree-row.is-selected")).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Vertical writing stress case" })).toBeVisible()
+    await expect(page.locator("[aria-label='Vertical writing tree sample'].direction-frame--vertical .tree-row.is-selected")).toBeVisible()
+    await expect(page.locator("[aria-label='Vertical writing tree sample'].direction-frame--vertical")).toHaveCSS("writing-mode", "vertical-rl")
+  })
+
+  test("toolbar-actions.html preserves action and responsibility boundary signals", async ({ page }) => {
+    await openMockup(page, "toolbar-actions.html")
+
+    await expect(page.locator("[data-mock-state='expand-enabled']")).toBeVisible()
+    await expect(page.locator("[data-mock-state='collapse-enabled']")).toBeVisible()
+    await expect(page.locator("[data-mock-state='current-path-enabled']")).toBeVisible()
+    await expect(page.locator("[data-mock-boundary='current-path-active']")).toBeVisible()
+    await expect(page.locator("[data-mock-boundary='localized-current-path-active']")).toBeVisible()
+    expect(await page.locator("[data-mock-boundary='metadata-disabled-fallback']").count()).toBeGreaterThanOrEqual(2)
+    await expect(page.getByText("Host app owns", { exact: true })).toBeVisible()
+    await expect(page.getByText("Route generation, authorization policy, final permission copy, localization, and business-specific action names.", { exact: true })).toBeVisible()
+    await expect(page.getByText("すべての部署とチームを展開", { exact: true })).toBeVisible()
+    await expect(page.getByText("現在の申請ルートだけを表示", { exact: true })).toBeVisible()
+  })
+
+  test("path-tree-builder-rows.html preserves generated-folder and record-row boundary signals", async ({ page }) => {
+    await openMockup(page, "path-tree-builder-rows.html")
+
+    await expect(page.getByText("Generated folder row", { exact: true })).toBeVisible()
+    await expect(page.getByText("Record row", { exact: true })).toBeVisible()
+    await expect(page.getByText("Outside this mock", { exact: true })).toBeVisible()
+    await expect(page.getByText("Routes, downloads, authorization copy, and final file-manager behavior stay outside the gem mockup.", { exact: true })).toBeVisible()
+    expect(await page.locator(".path-builder-row-kind--folder").count()).toBeGreaterThanOrEqual(2)
+    expect(await page.locator(".path-builder-row-kind--record").count()).toBeGreaterThanOrEqual(2)
+    expect(await page.locator("[title='Generated folder node']").count()).toBeGreaterThanOrEqual(2)
+    expect(await page.locator("[title='Record node']").count()).toBeGreaterThanOrEqual(2)
+    await expect(page.locator(".path-builder-code")).toContainText("FolderNode")
+    await expect(page.locator(".path-builder-code")).toContainText("RecordNode")
+    await expect(page.getByRole("button", { name: "Open" }).first()).toBeVisible()
+    await expect(page.getByRole("button", { name: "Download" })).toHaveAttribute("aria-disabled", "true")
+  })
+
   test("non-exempt focused mockups avoid document-level horizontal overflow at narrow width", async ({ page }) => {
     const overflowingMockups = []
     const checkedMockups = focusedMockupSmokeTargets.filter((mockup) => !narrowOverflowExpectedMockups.has(mockup.file))

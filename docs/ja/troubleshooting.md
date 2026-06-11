@@ -313,10 +313,14 @@ selection checkbox の送信値は plain ID ではなく JSON string です。
 - 1つの form に複数 tree がある場合、server 側で別々の params として受け取りたいなら hidden input name を分ける。同じ name を使うのは、host app が1つの配列としてまとめて受け取る設計のときだけです。TreeView の source id は、各 controller が他 controller の generated input を消さないために使われます
 - client-side の最大選択数制限や連動 checkbox 挙動を使う場合は、同じ host element に `data-tree-view-selection-max-count-value`、`data-tree-view-selection-cascade-value`、`data-tree-view-selection-indeterminate-value` を設定する
 - cascade と indeterminate は、現在 DOM に描画されている row にだけ効く
+- max-count、multi-tree、unloaded descendant の挙動が product action の期待とまだ合わない場合、最終的な params grouping、bulk action semantics、server-side validation、ユーザー向け business copy は host app 側に置く
 
 次に読む文書:
 
 - [Selection](selection.md)
+- [selection max-count mockup](../mockups/selection-max-count.html)
+- [selection multi-tree form mockup](../mockups/selection-multi-tree-form.html)
+- [children-pagination-selection-boundary mockup](../mockups/children-pagination-selection-boundary.html)
 - [Host App 拡張ポイント](host-app-extension-points.md)
 - [公開 API](public-api.md)
 - [JavaScript event contract](js-events.md)

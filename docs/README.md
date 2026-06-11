@@ -31,8 +31,8 @@
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
 - [English Accessibility Semantics](en/accessibility-semantics.md): table-first ARIA policy, empty-state wrapper hooks, keyboard helper boundary, and intentional automated-check allowances.
 - [日本語Accessibility Semantics](ja/accessibility-semantics.md): table-first ARIA 方針、empty-state wrapper hook、keyboard helper の責務境界、自動 accessibility check の意図的な許容事項。
-- [English Selection](en/selection.md): checkbox selection hooks, disabled state, cascade behavior, and submitted value parsing.
-- [日本語Selection](ja/selection.md): checkbox selection hooks、disabled state、cascade、submitted value parsing の入口。
+- [English Selection](en/selection.md): checkbox selection hooks, hidden input form sync, max-count limits, multi-tree form boundaries, unloaded-descendant boundaries, and submitted value parsing.
+- [日本語Selection](ja/selection.md): checkbox selection hooks、hidden input form sync、最大選択数、複数 tree form の境界、unloaded descendants の境界、submitted value parsing の入口。
 - [English Lazy Loading](en/lazy-loading.md): load children on demand through host-app routes and TreeView remote-state hooks.
 - [日本語Lazy Loading](ja/lazy-loading.md): host app の route と TreeView remote-state hooks で子nodeを必要時に読み込む入口。
 - [English Children Pagination](en/children-pagination.md): combine lazy loading with server-side child paging when a parent has too many direct children to return at once.
@@ -54,17 +54,21 @@
 - [日本語Toolbar helper](ja/toolbar.md): tree全体のexpand / collapse / current pathへのcollapse actionを描画し、配置と文言はhost appが所有する入口。
 - [English Breadcrumb helper](en/breadcrumb.md): render ancestor path context for a current or target node without taking over host-app routing or navigation policy.
 - [日本語Breadcrumb helper](ja/breadcrumb.md): current nodeや対象nodeのancestor path contextを描画し、routeやnavigation policyはhost app側に残す入口。
-- [English Persisted State](en/persisted-state.md): save and restore TreeView expansion state through host-app-owned storage.
-- [日本語Persisted State](ja/persisted-state.md): TreeView の開閉状態を host app 側の保存先で保存・復元するための入口。
+- [English Persisted State](en/persisted-state.md): save, restore, clear, and prune TreeView expansion state through host-app-owned storage and retention policy boundaries.
+- [日本語Persisted State](ja/persisted-state.md): TreeView の開閉状態を host app 側の保存先で保存・復元・clear・pruneし、retention policy / cleanup schedule の責務境界を確認する入口。
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.
 - [日本語Resource table bridge](ja/resource-table-bridge.md): 別table layerが列推論やtable stateを持つ場合のTreeView連携。
 
 ## Maintainer entry points
 
+Maintainer entry points include both gem-packaged docs under `docs/**` and repository-only files at the repository root. The packaged docs are the public documentation shipped with the gem; the repository-only files are for maintainers, reviewers, and agents working from a checkout.
+
+Maintainer entry points には、gem に同梱される `docs/**` と repository root の repository-only files が混在しています。packaged docs は gem と一緒に配布される公開ドキュメント、repository-only files は checkout で作業する maintainer、reviewer、agent 向けの入口です。
+
 - [English documentation](en/README.md): full English docs map, reading order, and maintainer-facing entry points within the English tree.
 - [日本語ドキュメント](ja/README.md): 日本語 docs tree の full map、reading order、maintainer-facing entry points。
-- Repository-only Product Profile (`Product Profile.md` at the repository root): repository positioning, source-of-truth order, host app responsibilities, and non-goals. This file is not packaged in the gem; read it from a repository checkout.
-- Repository-only maintainer workflow (`AGENTS.md` at the repository root): repository-specific maintainer workflow, first-read order, and documentation update rules. This file is not packaged in the gem; read it from a repository checkout.
+- Repository-only Product Profile (`Product Profile.md` at the repository root): product positioning, source-of-truth order, host-app responsibility boundary, and non-goals for maintainers and reviewers. This file is not packaged in the gem and is not a host-app API guide; read it from a repository checkout before judging scope or docs sync.
+- Repository-only agent workflow (`AGENTS.md` at the repository root): repository-specific workflow, first-read order, documentation update rules, and CI shortcut policy for maintainers and agents. This file is not packaged in the gem and is not user-facing integration guidance; read it from a repository checkout before changing maintainer workflow or docs policy.
 - [Documentation maintenance checklist](i18n-audit.md): language-sync rules, technical-asset inventory, and cross-language update coverage.
 - [Public API](en/public-api.md) / [公開 API](ja/public-api.md): compatibility contract and the surfaces host apps may use directly.
 - [Migration guide](en/migration.md) / [移行ガイド](ja/migration.md): upgrade expectations, deprecations, and release-note reading order.
@@ -73,6 +77,7 @@
 - [Development](en/development.md) / [開発・保守方針](ja/development.md): CI, local checks, documentation update workflow, and maintenance habits.
 - [Code quality](en/code-quality.md) / [コード品質](ja/code-quality.md): lint, tests, error message quality, and documentation quality policy.
 - [Release checklist](en/release.md) / [リリースチェックリスト](ja/release.md): release workflow, CI and package verification, and changelog expectations.
+- [Release note candidate collector](en/release-note-candidates.md) / [Release note candidate collector](ja/release-note-candidates.md): maintainer review aid for collecting merged PR and closed Issue candidates without replacing `CHANGELOG.md` or release notes decisions.
 - [CHANGELOG.md](../CHANGELOG.md): release-facing summary of shipped public changes, compatibility notes, and notable documentation additions.
 
 ## Maintenance
