@@ -38,7 +38,7 @@ export declare const TreeViewEventNames: Readonly<{
 
 export declare const TreeViewEventDetailKeys: Readonly<{
   state: Readonly<{
-    stateChanged: readonly ["viewKey", "expandedKeys"]
+    stateChanged: readonly ["viewKey", "expandedKeys", "reason"]
   }>
   selection: Readonly<{
     change: readonly ["selectedCount", "selectedValues", "selectedPayloads"]
