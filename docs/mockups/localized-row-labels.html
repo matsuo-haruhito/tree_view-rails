@@ -82,10 +82,32 @@
       </table>
     </section>
 
+    <section class="mock-section mock-localized-frame" aria-labelledby="localized-identity-heading">
+      <h2 id="localized-identity-heading">Node key and DOM ID boundary note</h2>
+      <p class="mock-localized-note">Localized labels and type badges are presentation cues. Tree-side node keys remain the stable identity for selection, expansion, persisted state, and diagnostics; browser DOM IDs remain rendered targets that can be scoped by the tree instance.</p>
+      <table class="tree-view-table mock-localized-table">
+        <thead><tr><th scope="col">rendered tree</th><th scope="col">same node key</th><th scope="col">browser DOM ID</th><th scope="col">review boundary</th></tr></thead>
+        <tbody>
+          <tr class="tree-row" data-tree-node-key="localized-cjk:invoice" data-tree-depth="1" aria-level="2">
+            <td>Workspace navigation</td>
+            <td><code>localized-cjk:invoice</code></td>
+            <td><code>workspace_tree_localized_cjk_invoice</code></td>
+            <td>Use the node key for data identity; use the DOM ID only for this rendered browser target.</td>
+          </tr>
+          <tr class="tree-row" data-tree-node-key="localized-cjk:invoice" data-tree-depth="1" aria-level="2">
+            <td>Picker dialog</td>
+            <td><code>localized-cjk:invoice</code></td>
+            <td><code>picker_tree_localized_cjk_invoice</code></td>
+            <td>The same data node can render in another tree instance without reusing the same DOM ID.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <section class="mock-section mock-localized-cards" aria-labelledby="localized-boundary-heading">
       <div class="mock-localized-card"><h2 id="localized-boundary-heading">TreeView-owned cues</h2><p>Hierarchy controls, current or selected state, depth labels, and toggle affordances must stay visible when labels wrap.</p></div>
       <div class="mock-localized-card"><h3>Host-app-owned copy</h3><p>Final translations, truncation rules, tooltip text, permission copy, and business-specific labels remain outside this mockup.</p></div>
-      <div class="mock-localized-card"><h3>Review focus</h3><p>Inspect primary label wrapping, type badge placement, attribute label length, secondary metadata, and tooltip cue proximity.</p></div>
+      <div class="mock-localized-card"><h3>Review focus</h3><p>Inspect primary label wrapping, type badge placement, attribute label length, secondary metadata, tooltip cue proximity, and node key versus DOM ID boundaries.</p></div>
     </section>
   </main>
 </body>
