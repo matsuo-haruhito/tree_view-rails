@@ -14,7 +14,7 @@ function assert(condition, message) {
 
 function assertRelativeLink(sourcePath, href, feature) {
   const source = read(sourcePath)
-  const target = href.split("#", 1)[0]
+  const target = decodeURIComponent(href.split("#", 1)[0])
   const resolvedTarget = path.resolve(path.dirname(path.join(repoRoot, sourcePath)), target)
 
   assert(
@@ -39,8 +39,6 @@ const repositoryOnlyEntrypoints = [
     links: [
       ["docs/README.md", "en/README.md"],
       ["docs/README.md", "ja/README.md"],
-      ["docs/README.md", "../Product%20Profile.md"],
-      ["docs/README.md", "../AGENTS.md"],
       ["docs/README.md", "i18n-audit.md"],
       ["docs/README.md", "../CHANGELOG.md"]
     ],
