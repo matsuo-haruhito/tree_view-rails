@@ -16,6 +16,8 @@ TreeView is responsible for:
 
 The host app remains responsible for storage ownership, authorization, save timing, cleanup policy, controller actions, and UI wiring.
 
+Use [Public Setup Surface](public-setup-surface.md) when you need the path-level contract for the persisted-state install generator. It tracks the generator name, optional owner argument, and generated destination paths without freezing the migration schema or generated template contents.
+
 For a static visual reference of the save/restore handoff, see [Persisted State boundary mockup](../mockups/persisted-state-boundary.html). The mockup shows representative before, changed, restored, save-failed, and retry cues without turning storage, save endpoints, authorization, or retry policy into gem-owned behavior.
 
 ## PersistedState.from normalization
@@ -206,8 +208,9 @@ const element = document.querySelector("[data-controller~='tree-view-state']")
 
 if (element) {
   element.addEventListener("tree-view-state:state-changed", async (event) => {
-    const { viewKey, expandedKeys } = event.detail
+    const { viewKey, expandedKeys, reason } = event.detail
     if (!viewKey) return
+    if (reason === "connect") return
 
     await fetch("/tree_states", {
       method: "PATCH",
@@ -228,7 +231,7 @@ A few practical notes:
 
 - `viewKey` comes from `data-tree-view-state-view-key-value`. A common pattern is to keep it aligned with the server-side `tree_instance_key` so the browser listener can save the correct screen state without extra lookup.
 - `expandedKeys` is the current expanded node-key snapshot published by the state controller after connect, `refresh`, and expand/collapse updates.
-- Because the controller dispatches once on initial connect, host apps that only want user-initiated saves can debounce the listener, ignore the first event, or gate saves behind their own dirty-state policy.
+- `reason` identifies why the snapshot was published: `connect`, `refresh`, `expanded`, or `collapsed`. Host apps that only want user-initiated saves can skip `connect` or save only `expanded` / `collapsed` events, while keeping save timing as an app-owned policy.
 - TreeView only dispatches the event. The host app still owns the route, authorization, retry behavior, and the decision to save on every change or only at explicit checkpoints.
 
 ## RenderState integration
