@@ -328,6 +328,17 @@ Use windowed rendering when many visible rows remain.
 
 Use lazy loading when children should be loaded only as needed.
 
+When the product needs scroll-position-driven DOM virtualization, keep that controller in the host app and use TreeView only for the HTML row slice it should render. `TreeView::RenderWindow` is useful for outputting a bounded list of already-visible rows, but it does not observe scroll position, reduce host-app queries, fetch pages, or preserve scroll anchoring.
+
+A minimal host-app virtual scrolling shape is:
+
+1. Keep the viewport observer, scroll anchoring, overscan, and analytics in host-app JavaScript.
+2. Let the host app choose the query page, cursor, or offset and authorize the records for that viewport.
+3. Build a `RenderState` from the selected records and render only the visible HTML slice with `TreeView::RenderWindow` or `tree_view_rows(..., window:)`.
+4. Fall back to [Lazy Loading](lazy-loading.md) or [Children Pagination](children-pagination.md) when the problem is child fetching rather than scroll-position-driven DOM work.
+
+Use [Render Scale](render-scale.md) and [Windowed Rendering](windowed-rendering.md) for the TreeView-owned output boundary. Use [Lazy Loading](lazy-loading.md) and [Children Pagination](children-pagination.md) when host-app data loading also needs to shrink. Do not treat this recipe as a built-in virtual scrolling engine or a server-side pagination contract.
+
 ## Combine lazy loading with children pagination
 
 Use this pattern when a branch has many direct children and rendering all of them after the first expand would still be too large. Keep lazy loading responsible for the initial child endpoint and remote-state placeholders, then let the host app return one page of children plus a host-app-owned "Load more" row.
