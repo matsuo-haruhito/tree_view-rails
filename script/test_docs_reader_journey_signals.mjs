@@ -64,6 +64,102 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Language README user journey",
+    files: [
+      [
+        "docs/en/README.md",
+        [
+          "For users",
+          "Goal-based shortcuts",
+          "Set up TreeView for the first time",
+          "Choose the right API or rendering mode",
+          "Render large or partial trees",
+          "Diagnose symptoms or responsibility boundaries",
+          "Installation",
+          "Minimal usage",
+          "Usage",
+          "Decision guide",
+          "Troubleshooting",
+          "FAQ",
+          "Visual reference mockups",
+          "Demo application boundary",
+          "Reading order"
+        ]
+      ],
+      [
+        "docs/ja/README.md",
+        [
+          "利用者向け",
+          "目的別ショートカット",
+          "初めて TreeView を導入する",
+          "使う API や描画方式を選ぶ",
+          "大きな tree や一部描画を扱う",
+          "症状や責務境界から調べる",
+          "導入手順",
+          "最小利用例",
+          "使い方",
+          "API判断ガイド",
+          "トラブルシューティング",
+          "FAQ",
+          "視覚リファレンス mockup",
+          "Demo application boundary",
+          "読む順番"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Selection and children pagination unloaded descendants boundary",
+    files: [
+      [
+        "docs/en/selection.md",
+        [
+          "DOM-based",
+          "rendered rows only",
+          "unloaded descendants",
+          "server-side intent or query filter",
+          "Children Pagination",
+          "children-pagination-selection-boundary.html"
+        ]
+      ],
+      [
+        "docs/ja/selection.md",
+        [
+          "DOMベース",
+          "描画済み行だけ",
+          "unloaded descendants",
+          "server-side intent",
+          "Children Pagination",
+          "children-pagination-selection-boundary.html"
+        ]
+      ],
+      [
+        "docs/en/children-pagination.md",
+        [
+          "Selection and drag/drop interactions",
+          "unloaded descendants",
+          "server-side selection intent",
+          "query-backed actions",
+          "DOM-submitted checkbox values",
+          "Selection](selection.md#linked-checkbox-behavior)",
+          "children-pagination-selection-boundary.html"
+        ]
+      ],
+      [
+        "docs/ja/children-pagination.md",
+        [
+          "selection / drag-drop との相互作用",
+          "unloaded descendants",
+          "server-side selection intent",
+          "query-backed action",
+          "DOMから送られるcheckbox値",
+          "Selection](selection.md#連動checkbox挙動)",
+          "children-pagination-selection-boundary.html"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Mockup README smoke and review policy",
     files: [
       [
