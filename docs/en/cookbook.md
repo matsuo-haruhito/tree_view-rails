@@ -257,7 +257,7 @@ render_state = TreeView::RenderState.new(
 )
 ```
 
-Use `row_data_builder` when host-app JavaScript needs stable metadata. If a row should be readonly or disabled for TreeView-level interaction, also see [Row status](row-status.md). Authorization decisions and business rules still belong in the host app.
+Use `row_data_builder` when host-app JavaScript needs stable metadata under host-owned keys. If a row should be readonly or disabled for TreeView-level interaction, also see [Row status](row-status.md); do not treat TreeView-owned status keys such as `tree_view_row_disabled` as app metadata to overwrite. Authorization decisions and business rules still belong in the host app.
 
 ## Stable name sorting
 
