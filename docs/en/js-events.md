@@ -168,10 +168,10 @@ Dispatched when transferred JSON cannot be parsed.
 
 ## Using TreeViewEventNames in host-app code
 
-The raw event strings above remain the public contract. When wiring listeners in host-app JavaScript, you can import `TreeViewEventNames` from `tree_view/index.js` and use the matching package-root export instead of hand-copying strings:
+The raw event strings above remain the public contract. When wiring listeners in host-app JavaScript, you can import `TreeViewEventNames` from `tree_view` and use the matching package-root export instead of hand-copying strings:
 
 ```js
-import { TreeViewEventNames } from "tree_view/index.js"
+import { TreeViewEventNames } from "tree_view"
 
 element.addEventListener(TreeViewEventNames.selection.change, handleSelectionChange)
 element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStateChange)
@@ -179,11 +179,33 @@ element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStat
 
 `TreeViewEventNames.hostLifecycle.*` is for host apps dispatching lazy-loading request lifecycle events such as `tree-view:loading`; TreeView controller-emitted remote-state events on this page use `TreeViewEventNames.remoteState.*`.
 
-When listener code or browser assertions also need the related documented DOM hook names, import `TreeViewIntegrationHooks` from `tree_view/index.js` instead of hand-copying raw attribute strings. Representative keys are `TreeViewIntegrationHooks.state.viewKeyValue`, `TreeViewIntegrationHooks.remoteState.childrenUrl`, and `TreeViewIntegrationHooks.transfer.payload`.
+When listener code or browser assertions also need the related documented DOM hook names, import `TreeViewIntegrationHooks` from `tree_view` instead of hand-copying raw attribute strings. Representative keys are `TreeViewIntegrationHooks.state.viewKeyValue`, `TreeViewIntegrationHooks.remoteState.childrenUrl`, and `TreeViewIntegrationHooks.transfer.payload`.
 
 `tree-view-transfer:invalid-payload` detail contains `value` and `row`.
 
 `tree-view-transfer:invalid-transfer` detail contains `value`.
+
+## Using documented event values in host-app code
+
+Some `event.detail` fields intentionally expose a small documented value set. Host apps can import the package-root value exports when listener branches or tests need those values without hand-copying strings:
+
+```js
+import {
+  TreeViewEventNames,
+  TreeViewRemoteStateValues,
+  TreeViewTransferDropPositions
+} from "tree_view"
+
+element.addEventListener(TreeViewEventNames.remoteState.change, (event) => {
+  if (event.detail.state === TreeViewRemoteStateValues.error) showRetryNotice(event.detail.row)
+})
+
+element.addEventListener(TreeViewEventNames.transfer.drop, (event) => {
+  if (event.detail.position === TreeViewTransferDropPositions.inside) attachAsChild(event.detail)
+})
+```
+
+`TreeViewEventNames` names events, `TreeViewEventDetailKeys` lists documented payload field names, and these value exports carry documented enum-like values for those fields. `TreeViewRemoteStateValues` is limited to remote-state row values (`loading`, `loaded`, `error`), and `TreeViewTransferDropPositions` is limited to transfer drop positions (`before`, `inside`, `after`). They do not add listener helpers or change controller dispatch behavior.
 
 ## Compatibility policy
 
