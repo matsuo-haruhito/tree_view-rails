@@ -12,6 +12,12 @@ const hiddenInputs = (form) =>
 
 const hiddenInputValues = (form) => hiddenInputs(form).map((input) => input.value)
 
+const selectionChangeDetails = (element) => {
+  const details = []
+  element.addEventListener("tree-view-selection:change", (event) => details.push(event.detail))
+  return details
+}
+
 describe("TreeViewSelectionController", () => {
   let application
 
@@ -197,5 +203,142 @@ describe("TreeViewSelectionController", () => {
     await flush()
 
     expect(hiddenInputValues(document.getElementById("bulk-form"))).toEqual([])
+  })
+
+  it("marks initial and explicit refresh selection changes as source-less", async () => {
+    document.body.innerHTML = `
+      <table>
+        <tbody id="selection" data-controller="tree-view-selection">
+          <tr data-tree-depth="0">
+            <td>
+              <input
+                class="tree-selection-checkbox"
+                type="checkbox"
+                checked
+                value='{"id":1}'>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `
+
+    const selection = document.getElementById("selection")
+    const changes = selectionChangeDetails(selection)
+
+    await flush()
+
+    expect(changes[0]).toMatchObject({
+      selectedCount: 1,
+      selectedValues: ['{"id":1}'],
+      selectedPayloads: [{ id: 1 }],
+      sourceCheckbox: null,
+      attemptedChecked: null
+    })
+
+    const controller = application.getControllerForElementAndIdentifier(selection, "tree-view-selection")
+    controller.refresh()
+
+    expect(changes.at(-1)).toMatchObject({
+      selectedCount: 1,
+      sourceCheckbox: null,
+      attemptedChecked: null
+    })
+  })
+
+  it("includes the source checkbox and attempted checked state on toggle changes", async () => {
+    document.body.innerHTML = `
+      <table>
+        <tbody
+          id="selection"
+          data-controller="tree-view-selection"
+          data-action="change->tree-view-selection#toggle">
+          <tr data-tree-depth="0">
+            <td>
+              <input
+                id="node-1"
+                class="tree-selection-checkbox"
+                type="checkbox"
+                value='{"id":1}'>
+            </td>
+          </tr>
+          <tr data-tree-depth="0">
+            <td>
+              <input
+                id="node-2"
+                class="tree-selection-checkbox"
+                type="checkbox"
+                checked
+                value='{"id":2}'>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `
+
+    const selection = document.getElementById("selection")
+    const changes = selectionChangeDetails(selection)
+
+    await flush()
+    changes.length = 0
+
+    const first = document.getElementById("node-1")
+    first.checked = true
+    first.dispatchEvent(new Event("change", { bubbles: true }))
+
+    expect(changes.at(-1)).toMatchObject({
+      selectedCount: 2,
+      selectedValues: ['{"id":1}', '{"id":2}'],
+      selectedPayloads: [{ id: 1 }, { id: 2 }],
+      sourceCheckbox: first,
+      attemptedChecked: true
+    })
+  })
+
+  it("keeps cascade selection changes tied to the checkbox the user toggled", async () => {
+    document.body.innerHTML = `
+      <table>
+        <tbody
+          id="selection"
+          data-controller="tree-view-selection"
+          data-action="change->tree-view-selection#toggle"
+          data-tree-view-selection-cascade-value="true">
+          <tr data-tree-depth="0">
+            <td>
+              <input
+                id="parent"
+                class="tree-selection-checkbox"
+                type="checkbox"
+                value='{"id":"parent"}'>
+            </td>
+          </tr>
+          <tr data-tree-depth="1">
+            <td>
+              <input
+                id="child"
+                class="tree-selection-checkbox"
+                type="checkbox"
+                value='{"id":"child"}'>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `
+
+    const selection = document.getElementById("selection")
+    const changes = selectionChangeDetails(selection)
+
+    await flush()
+    changes.length = 0
+
+    const parent = document.getElementById("parent")
+    parent.checked = true
+    parent.dispatchEvent(new Event("change", { bubbles: true }))
+
+    expect(document.getElementById("child").checked).toBe(true)
+    expect(changes.at(-1)).toMatchObject({
+      selectedCount: 2,
+      sourceCheckbox: parent,
+      attemptedChecked: true
+    })
   })
 })
