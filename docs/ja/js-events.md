@@ -183,6 +183,28 @@ element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStat
 
 `tree-view-transfer:invalid-transfer` の detail は `value` を含みます。
 
+## host app code で documented event values を使う
+
+一部の `event.detail` field は、小さな documented value set を公開します。listener の分岐や test でそれらの値が必要な場合、host app は package-root の value export を import し、string を写経せずに参照できます。
+
+```js
+import {
+  TreeViewEventNames,
+  TreeViewRemoteStateValues,
+  TreeViewTransferDropPositions
+} from "tree_view/index.js"
+
+element.addEventListener(TreeViewEventNames.remoteState.change, (event) => {
+  if (event.detail.state === TreeViewRemoteStateValues.error) showRetryNotice(event.detail.row)
+})
+
+element.addEventListener(TreeViewEventNames.transfer.drop, (event) => {
+  if (event.detail.position === TreeViewTransferDropPositions.inside) attachAsChild(event.detail)
+})
+```
+
+`TreeViewEventNames` は event 名、`TreeViewEventDetailKeys` は documented payload field 名、これらの value export は field に入る documented enum-like value を表します。`TreeViewRemoteStateValues` は remote-state row value (`loading`, `loaded`, `error`) に限定し、`TreeViewTransferDropPositions` は transfer drop position (`before`, `inside`, `after`) に限定します。listener helper を追加したり、controller dispatch behavior を変更したりするものではありません。
+
 ## 互換性方針
 
 machine-readable public API manifest は、このページで文書化している event name と代表的な必須 `event.detail` key を写して drift を検知するための guard です。一次の契約は引き続きこのページです。host app の test が documented detail key 名の machine-readable な一覧を必要とする場合は、event payload shape を変えずに package root の `TreeViewEventDetailKeys` を import できます。
