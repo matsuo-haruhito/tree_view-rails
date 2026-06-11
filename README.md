@@ -73,13 +73,15 @@ For the boundary between static mockups and a future real Rails demo app, see [D
 - Flatten currently visible rows with `TreeView::VisibleRows`.
 - Render currently visible rows by offset and limit with `TreeView::RenderWindow` and windowed rendering. This limits HTML output only; it does not reduce host-app queries or fetched records.
 - Customize host-app row content through `row_partial`.
+- Render host-app row action slots through `row_actions_partial` while action availability, routes, authorization, and final copy stay in the host app.
+- Customize transfer payload data through `row_event_payload_builder` while drag/drop business behavior stays in the host app.
 - Control initial expansion with `initial_state`, `expanded_keys`, `collapsed_keys`, and `max_initial_depth`.
 - Limit render scope with `max_render_depth` and `max_leaf_distance`.
 - Limit toggle scope with `max_toggle_depth_from_root` and `max_toggle_leaf_distance`.
 - Customize row attributes with `row_class_builder` and `row_data_builder`.
 - Add lazy loading hooks with `load_children_path_builder` and `RenderState#lazy_loading`.
 - Add checkbox selection with JSON payloads, disabled states, selected keys, cascade, indeterminate state, and max-count limits.
-- Persist expansion state through `TreeView::PersistedState`, `TreeView::StateStore`, and `rails g tree_view:state:install`.
+- Persist, restore, clear, and prune expansion state through `TreeView::PersistedState`, `TreeView::StateStore`, and `rails g tree_view:state:install` while leaving retention policy to the host app.
 - Register JavaScript controllers for state tracking, client-side toggling, selection, transfer payloads, and remote loading state.
 
 ## Out of scope

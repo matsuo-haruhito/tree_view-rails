@@ -6,6 +6,7 @@ RSpec.describe TreeView::SelectionParams do
   describe ".parse" do
     it "returns an empty array for nil and empty input" do
       expect(described_class.parse(nil)).to eq([])
+      expect(described_class.parse("")).to eq([])
       expect(described_class.parse([])).to eq([])
       expect(described_class.parse([nil, ""])).to eq([])
     end

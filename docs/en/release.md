@@ -27,6 +27,8 @@ Release flow:
 7. Create a GitHub Release when appropriate.
 8. Publish the gem when appropriate.
 
+Before writing GitHub Release notes, use the [Release note candidate collector](release-note-candidates.md) to gather merged PR and closed Issue links for maintainer review. The collector is only a checklist aid: it does not rewrite `CHANGELOG.md`, decide the final notes, tag, publish, or create a GitHub Release.
+
 Introduce `release/x.y` branches only when parallel maintenance, long RC verification, or security/compatibility patch lines are needed.
 
 ## Initial release target

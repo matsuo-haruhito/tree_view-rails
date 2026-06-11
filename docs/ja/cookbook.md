@@ -48,6 +48,21 @@ records mode のtreeと現在itemがあり、rootからそのitemまでの短い
 
 TreeView は records mode のpath lookupとbundled helper option surfaceを担当します。route、authorization、breadcrumbを置く場所、追加属性に紐づくTurbo / analytics behaviorはhost app側の責務です。
 
+## path-shaped tree view を選ぶ
+
+画面の主目的が全recordの階層表示ではなく、contextを短く見せることなら path-shaped API を使います。
+
+| やりたいこと | まず使うAPI | host appの責務 |
+|---|---|---|
+| 検索結果に、matchがどこにあるか分かるだけのancestorを付けたい | `tree.path_tree_for(matches)` | 検索query、結果のauthorization、どのmatched recordを含めるか |
+| record-backed row と並ぶ generated folder / virtual grouping row を作りたい | [PathTreeBuilder](path-tree-builder.md) | folder label、grouping rule、generated row key、最終的な業務copy |
+| child起点の画面でparent方向へ展開したい | [ReverseTree](reverse-tree.md) / `tree.reverse_tree_for(items)` | viewの起点になるchild recordと、parent contextの見せ方 |
+| 詳細画面にrootから現在nodeまでの短いtrailが必要 | [Breadcrumb helper](breadcrumb.md) / `tree_view_breadcrumb` | route helper、label、authorization copy、配置 |
+
+`path_tree_for` と breadcrumb helper は records mode の path lookup を前提にします。host app が同じrecordではない generated grouping row を作る場合は `PathTreeBuilder` が向いています。`reverse_tree_for` は child-to-parent 表示用であり、GraphAdapter の resolver support を意味するものではありません。
+
+より広い比較は [API判断ガイド](decision-guide.md#やりたいことから選ぶ) から始め、制約と例は [PathTreeBuilder](path-tree-builder.md)、[ReverseTree](reverse-tree.md)、[Breadcrumb](breadcrumb.md) を参照してください。
+
 ## 行customization quick guide
 
 追加したいUIに合わせて、最小のTreeView extension pointを使います。
@@ -327,6 +342,17 @@ render_state = TreeView::RenderState.new(
 ```
 
 子nodeを必要な分だけ読み込みたい場合は lazy loading を使います。
+
+product要件として scroll位置に応じたDOM仮想化が必要な場合は、そのcontrollerをhost app側に置き、TreeViewには描画すべきHTML row sliceだけを任せます。`TreeView::RenderWindow` は、すでにvisibleとして計算されたrowを小さく出力するには使えますが、scroll位置の監視、host app queryの削減、page取得、scroll anchoringの維持は行いません。
+
+host-app virtual scrolling の最小構成は次の形です。
+
+1. viewport observer、scroll anchoring、overscan、analytics は host app JavaScript が担当する。
+2. host app が query page、cursor、offset を選び、その viewport で表示してよいrecordをauthorizationする。
+3. 選ばれたrecordから `RenderState` を作り、`TreeView::RenderWindow` または `tree_view_rows(..., window:)` でvisible HTML sliceだけを描画する。
+4. 問題が scroll位置に応じたDOM作業ではなくchild fetching量なら、[Lazy Loading](lazy-loading.md) や [Children Pagination](children-pagination.md) に戻す。
+
+TreeView側の出力境界は [描画スケール](render-scale.md) と [Windowed Rendering](windowed-rendering.md) を参照してください。host appのdata loading量も減らす必要がある場合は [Lazy Loading](lazy-loading.md) と [Children Pagination](children-pagination.md) を使います。このrecipeを組み込みvirtual scrolling engineやserver-side pagination契約として扱わないでください。
 
 ## lazy loading と children pagination を組み合わせる
 

@@ -18,7 +18,9 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
-Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version. The Node version source drift spec keeps `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value aligned without changing the current install policy.
+The development Docker image installs Node 22 and npm so the Docker setup can run the same JavaScript install path as local development. Keep the Dockerfile Node major aligned with `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value when any of them changes.
+
+Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version. Keep `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value aligned when any of them changes. The automated drift guard is `script/test_node_version_sources.mjs`, exposed as `npm run test:node-version-sources` and included in `npm run test:entrypoints`; it verifies those Node version sources stay on Node 22 without changing the current install policy.
 
 Keep using `npm install` for now. The repository has a committed `package-lock.json`, but it is not yet refreshed in sync with `package.json`, so local setup and pull-request CI stay on `npm install` until that lockfile refresh is completed in a registry-enabled environment. See [Installation](installation.md) for the current CI and install-path summary.
 
@@ -32,10 +34,13 @@ npm run test:js
 npm test
 npm run test:entrypoints
 npm run test:docs-entrypoints
+npm run test:node-version-sources
 npm run test:browser
 ```
 
-Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use the individual npm commands when you are narrowing a failure.
+Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use `npm run test:node-version-sources` when you only need to confirm that `.nvmrc`, `package.json` `engines.node`, and CI workflow `node-version` still agree on Node 22. Use the individual npm commands when you are narrowing a failure.
+
+Within `npm run test:entrypoints`, `script/test_entrypoints.mjs` checks the runtime package-root exports, controller registration helper, manifest loader, and `.d.ts` export-name inventory. `script/test_declaration_literal_shapes.mjs` then checks the literal shapes in `app/javascript/tree_view/index.d.ts` for the manifest-backed JavaScript constants such as event names, detail keys, remote-state values, transfer values, controller identifiers, selection data hooks, and empty-state hooks. Use the export-name guard when a package-root export is missing or extra; use the literal-shape guard when the export exists but a key, tuple, or representative literal value no longer matches `config/public_api_manifest.yml`. This is a smoke guard, not a TypeScript compiler or declaration generator.
 
 For the Rails version matrix:
 
@@ -58,7 +63,9 @@ Docs entrypoint smoke and public API docs signal smoke have separate responsibil
 
 When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
 
-`config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, configuration options, helper names, helper option keys, toolbar action/state mapping, grouped option keys, PathTreeBuilder node shapes, ResourceTableRenderState call keywords, RenderState callback builder keys, JavaScript package-root named exports, transfer drop positions, remote-state values, controller registrations, public event names, intentional no-detail event names, documented `event.detail` keys, and selection data hooks.
+`config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, configuration options, helper names, helper option keys, toolbar action/state mapping, grouped option keys, PathTreeBuilder node shapes, ResourceTableRenderState call keywords, RenderState callback builder keys, JavaScript package-root named exports, transfer drop positions, remote-state values, controller registrations, public event names, intentional no-detail event names, documented `event.detail` keys, selection data hooks, and empty-state hooks.
+
+`event_names_without_detail` is the intentional classification for host lifecycle events that do not publish public `event.detail` fields. Do not use that list to add or freeze host lifecycle payload shapes; keep payload-bearing events under the documented `event.detail` key groups instead.
 
 RenderState callback builder keys are a manifest-backed key surface, not a full callback behavior contract. When `render_state_callback_builder_keys` changes, sync the manifest, the focused compatibility spec, the flat callback builder section in `docs/en/public-api.md` / `docs/ja/public-api.md`, and any feature docs that name the same key. Do not use the manifest tracking summary to define callback arity, return-value validation, row rendering semantics, or fallback behavior.
 
@@ -85,6 +92,8 @@ npm run test:entrypoints
 ```
 
 That check keeps the documented controller exports and `registerTreeViewControllers` helper aligned with the importmap entrypoint. It uses Ruby to load `config/public_api_manifest.yml` and print the `javascript_package_root` section as JSON before Node assertions run, so run it from the repository root with Ruby available when you are diagnosing manifest loader failures.
+
+The entrypoint command also runs `script/test_declaration_literal_shapes.mjs`. Keep this second guard aligned with `script/test_entrypoints.mjs`: the entrypoint smoke proves runtime exports and `.d.ts` export names exist, while the declaration literal guard proves the exported literal object shapes in `index.d.ts` still mirror `config/public_api_manifest.yml`.
 
 Docs-only entrypoint and signal checks can be run separately with:
 

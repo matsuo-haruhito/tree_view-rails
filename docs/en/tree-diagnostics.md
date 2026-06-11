@@ -76,6 +76,19 @@ end
 
 The manifest-backed diagnostics contract covers the accepted check names and the `Result` reader surface. The stable check names are `node_keys`, `dom_ids`, `orphans`, and `cycles`. A diagnostics `Result` exposes `checks`, `errors`, `warnings`, and `success?`. The manifest intentionally does not freeze individual error entry internals, warning detail shape, orphan warning semantics, or cycle validation policy; those remain documented behavior and host-app data policy boundaries rather than a broader manifest schema.
 
+## Pre-render validation review note
+
+Use this focused comparison when reviewing diagnostics without adding a full static mockup page. The goal is to separate the signal TreeView can provide from the correction policy the host app owns.
+
+| Review state | TreeView signal to inspect | Host-app-owned decision |
+|---|---|---|
+| Duplicate node key | `validate_node_keys: true` or `node_keys` diagnostics error before render | Choose a stable key strategy, such as `id_method:` or `node_key_resolver:` |
+| DOM ID collision | `render_state.validate_unique_dom_ids!` or `dom_ids` diagnostics error with the same `UiConfig` used by the page | Fix `node_prefix`, custom DOM ID builders, or node keys that normalize to the same browser-facing ID |
+| Orphaned record | `tree.orphan_items` or `orphans` diagnostics warning after filtering, imports, or permission scoping | Decide whether the subset should raise, render orphans as roots, render only orphans, or document that the filtered subset is intentional |
+| Cycle risk | `TreeView::CycleDiagnostics.new(tree).report` or `cycles` diagnostics error for parent relationships | Correct imported or user-editable parent data before rendering, or repair the resolver logic that creates the cycle |
+
+This note is intentionally a review aid, not a replacement for a production validation UI. Keep remediation copy, dashboards, alerts, data repair workflows, and release gates in the host app or in dedicated quality work.
+
 ## Node key uniqueness
 
 Enable validation when building the tree to catch duplicate node keys early.

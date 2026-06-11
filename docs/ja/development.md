@@ -18,7 +18,9 @@ docker compose run --rm app bundle install
 docker compose run --rm app npm install
 ```
 
-ローカルの JavaScript 作業では Node 22 を使ってください。repository root の `.nvmrc` が CI の JavaScript lane とそろった、推奨 Node major version の source of truth です。Node version source drift spec は `.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` を同期確認し、現在の install policy は変更しません。
+開発用 Docker image は Node 22 と npm を含めるため、Docker setup でもローカル開発と同じ JavaScript install path を実行できます。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` を変更する場合は、Dockerfile の Node major も同じ方針にそろえてください。
+
+ローカルの JavaScript 作業では Node 22 を使ってください。repository root の `.nvmrc` が CI の JavaScript lane とそろった、推奨 Node major version の source of truth です。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` は、どれかを変更するときに同じ Node major を指すように同期してください。自動 drift guard は `script/test_node_version_sources.mjs` です。`npm run test:node-version-sources` として実行でき、`npm run test:entrypoints` にも含まれており、これらの Node version source が Node 22 を指し続けることを現在の install policy を変えずに確認します。
 
 現状は `npm install` を使い続けてください。repo には `package-lock.json` を commit していますが、まだ `package.json` と同期していないため、ローカルセットアップと Pull Request CI は、registry-enabled な環境で lockfile refresh が完了するまで `npm install` を前提にしています。現在の CI と install path の整理は [導入手順](installation.md) を参照してください。
 
@@ -32,10 +34,13 @@ npm run test:js
 npm test
 npm run test:entrypoints
 npm run test:docs-entrypoints
+npm run test:node-version-sources
 npm run test:browser
 ```
 
-CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。docs-only failure を、docs entrypoints、README Quick Start signal、Public API docs signal、i18n parity の範囲で先に切り分けたい場合は `npm run test:docs-entrypoints` を使います。その後、より広い `npm run test:entrypoints` や browser smoke checks に進んでください。失敗箇所を切り分ける場合は個別の npm command を使ってください。
+CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。docs-only failure を、docs entrypoints、README Quick Start signal、Public API docs signal、i18n parity の範囲で先に切り分けたい場合は `npm run test:docs-entrypoints` を使います。その後、より広い `npm run test:entrypoints` や browser smoke checks に進んでください。`.nvmrc`、`package.json` の `engines.node`、CI workflow の `node-version` が Node 22 でそろっていることだけを確認したい場合は `npm run test:node-version-sources` を使います。失敗箇所を切り分ける場合は個別の npm command を使ってください。
+
+`npm run test:entrypoints` の中では、`script/test_entrypoints.mjs` が runtime の package-root exports、controller registration helper、manifest loader、`.d.ts` の export-name inventory を確認します。その後 `script/test_declaration_literal_shapes.mjs` が、event names、detail keys、remote-state values、transfer values、controller identifiers、selection data hooks、empty-state hooks などの manifest-backed JavaScript constants について、`app/javascript/tree_view/index.d.ts` の literal shape を確認します。package-root export が足りない、または余分な場合は export-name guard を見ます。export は存在するが key、tuple、代表 literal value が `config/public_api_manifest.yml` とずれた場合は literal-shape guard を見ます。これは smoke guard であり、TypeScript compiler や declaration generator ではありません。
 
 Rails version matrixを確認する場合:
 
@@ -58,7 +63,9 @@ docs entrypoint smoke と public API docs signal smoke は、`npm run test:docs-
 
 意図的なbreaking changeを受け入れる場合は、public API docsとcompatibility specsを同時に更新し、documented contractとtest coverageを同期させます。
 
-`config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、configuration options、helper names、helper option keys、toolbar action/state mapping、grouped option keys、PathTreeBuilder node shapes、ResourceTableRenderState call keywords、RenderState callback builder keys、JavaScript package-root named exports、transfer drop positions、remote-state values、controller registrations、public event names、intentional no-detail event names、documented `event.detail` keys、selection data hooks を追跡しています。
+`config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、configuration options、helper names、helper option keys、toolbar action/state mapping、grouped option keys、PathTreeBuilder node shapes、ResourceTableRenderState call keywords、RenderState callback builder keys、JavaScript package-root named exports、transfer drop positions、remote-state values、controller registrations、public event names、intentional no-detail event names、documented `event.detail` keys、selection data hooks、empty-state hooks を追跡しています。
+
+`event_names_without_detail` は、public な `event.detail` fields を持たない host lifecycle events の意図的な分類です。この一覧を根拠に host lifecycle payload shape を追加・固定しないでください。payload を持つ events は documented `event.detail` key groups 側で扱います。
 
 RenderState callback builder keys は manifest-backed な key surface であり、callback behavior 全体の contract ではありません。`render_state_callback_builder_keys` を変更する場合は、manifest、focused compatibility spec、`docs/en/public-api.md` / `docs/ja/public-api.md` の flat callback builder section、同じ key を名前で案内している feature docs を同期します。manifest tracking summary では callback arity、return-value validation、row rendering semantics、fallback behavior を定義しないでください。
 
@@ -85,6 +92,8 @@ npm run test:entrypoints
 ```
 
 このcheckで、documented controller exports と `registerTreeViewControllers` helper が importmap entrypoint とずれないようにします。Node 側の assertions を実行する前に Ruby で `config/public_api_manifest.yml` を読み、`javascript_package_root` section を JSON として出力します。manifest loader failure を調べる場合は、repository root から Ruby が使える状態で実行してください。
+
+entrypoint command は `script/test_declaration_literal_shapes.mjs` も実行します。この2つ目の guard は `script/test_entrypoints.mjs` と一緒に保守してください。entrypoint smoke は runtime exports と `.d.ts` export names の存在を確認し、declaration literal guard は `index.d.ts` の exported literal object shapes が `config/public_api_manifest.yml` と一致することを確認します。
 
 docs-only の entrypoint / signal checks は次で個別に確認できます。
 
