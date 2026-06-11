@@ -125,7 +125,7 @@ const foundationalEntrypoints = [
     signals: [
       [
         "docs/en/faq.md",
-        /DB queries[\s\S]*RenderWindow[\s\S]*virtual scroll[\s\S]*keyboard navigation[\s\S]*CRUD[\s\S]*authorization[\s\S]*TreeView::Diagnostics\.run[\s\S]*persisted state[\s\S]*children pagination/,
+        /database queries[\s\S]*TreeView::RenderWindow[\s\S]*virtual scrolling[\s\S]*keyboard navigation[\s\S]*CRUD[\s\S]*authorization[\s\S]*TreeView::Diagnostics\.run[\s\S]*persisted state[\s\S]*children pagination/i,
         "English FAQ no longer covers the main host-app responsibility boundary questions"
       ],
       [
