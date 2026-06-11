@@ -48,6 +48,21 @@ records mode のtreeと現在itemがあり、rootからそのitemまでの短い
 
 TreeView は records mode のpath lookupとbundled helper option surfaceを担当します。route、authorization、breadcrumbを置く場所、追加属性に紐づくTurbo / analytics behaviorはhost app側の責務です。
 
+## path-shaped tree view を選ぶ
+
+画面の主目的が全recordの階層表示ではなく、contextを短く見せることなら path-shaped API を使います。
+
+| やりたいこと | まず使うAPI | host appの責務 |
+|---|---|---|
+| 検索結果に、matchがどこにあるか分かるだけのancestorを付けたい | `tree.path_tree_for(matches)` | 検索query、結果のauthorization、どのmatched recordを含めるか |
+| record-backed row と並ぶ generated folder / virtual grouping row を作りたい | [PathTreeBuilder](path-tree-builder.md) | folder label、grouping rule、generated row key、最終的な業務copy |
+| child起点の画面でparent方向へ展開したい | [ReverseTree](reverse-tree.md) / `tree.reverse_tree_for(items)` | viewの起点になるchild recordと、parent contextの見せ方 |
+| 詳細画面にrootから現在nodeまでの短いtrailが必要 | [Breadcrumb helper](breadcrumb.md) / `tree_view_breadcrumb` | route helper、label、authorization copy、配置 |
+
+`path_tree_for` と breadcrumb helper は records mode の path lookup を前提にします。host app が同じrecordではない generated grouping row を作る場合は `PathTreeBuilder` が向いています。`reverse_tree_for` は child-to-parent 表示用であり、GraphAdapter の resolver support を意味するものではありません。
+
+より広い比較は [API判断ガイド](decision-guide.md#やりたいことから選ぶ) から始め、制約と例は [PathTreeBuilder](path-tree-builder.md)、[ReverseTree](reverse-tree.md)、[Breadcrumb](breadcrumb.md) を参照してください。
+
 ## 行customization quick guide
 
 追加したいUIに合わせて、最小のTreeView extension pointを使います。
