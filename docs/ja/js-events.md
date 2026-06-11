@@ -168,10 +168,10 @@ transferred JSON をparseできないときに発火します。
 
 ## host app code で TreeViewEventNames を使う
 
-上記の raw event string は引き続き公開契約です。host app の JavaScript で listener を配線するときは、`tree_view/index.js` から `TreeViewEventNames` を import し、event name string を写経せずに対応する package-root export を使えます。
+上記の raw event string は引き続き公開契約です。host app の JavaScript で listener を配線するときは、`tree_view` から `TreeViewEventNames` を import し、event name string を写経せずに対応する package-root export を使えます。
 
 ```js
-import { TreeViewEventNames } from "tree_view/index.js"
+import { TreeViewEventNames } from "tree_view"
 
 element.addEventListener(TreeViewEventNames.selection.change, handleSelectionChange)
 element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStateChange)
@@ -179,11 +179,33 @@ element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStat
 
 `TreeViewEventNames.hostLifecycle.*` は、`tree-view:loading` など lazy-loading request lifecycle event を host app 側で dispatch するための surface です。このページで説明している TreeView controller 自身が emit する remote-state event は `TreeViewEventNames.remoteState.*` を使います。
 
-listener や browser assertion で関連する documented DOM hook 名も必要な場合は、raw attribute string を写経せずに `tree_view/index.js` から `TreeViewIntegrationHooks` を import できます。代表的な key は `TreeViewIntegrationHooks.state.viewKeyValue`, `TreeViewIntegrationHooks.remoteState.childrenUrl`, `TreeViewIntegrationHooks.transfer.payload` です。
+listener や browser assertion で関連する documented DOM hook 名も必要な場合は、raw attribute string を写経せずに `tree_view` から `TreeViewIntegrationHooks` を import できます。代表的な key は `TreeViewIntegrationHooks.state.viewKeyValue`, `TreeViewIntegrationHooks.remoteState.childrenUrl`, `TreeViewIntegrationHooks.transfer.payload` です。
 
 `tree-view-transfer:invalid-payload` の detail は `value` と `row` を含みます。
 
 `tree-view-transfer:invalid-transfer` の detail は `value` を含みます。
+
+## host app code で documented event values を使う
+
+一部の `event.detail` field は、小さな documented value set を公開します。listener の分岐や test でそれらの値が必要な場合、host app は package-root の value export を import し、string を写経せずに参照できます。
+
+```js
+import {
+  TreeViewEventNames,
+  TreeViewRemoteStateValues,
+  TreeViewTransferDropPositions
+} from "tree_view"
+
+element.addEventListener(TreeViewEventNames.remoteState.change, (event) => {
+  if (event.detail.state === TreeViewRemoteStateValues.error) showRetryNotice(event.detail.row)
+})
+
+element.addEventListener(TreeViewEventNames.transfer.drop, (event) => {
+  if (event.detail.position === TreeViewTransferDropPositions.inside) attachAsChild(event.detail)
+})
+```
+
+`TreeViewEventNames` は event 名、`TreeViewEventDetailKeys` は documented payload field 名、これらの value export は field に入る documented enum-like value を表します。`TreeViewRemoteStateValues` は remote-state row value (`loading`, `loaded`, `error`) に限定し、`TreeViewTransferDropPositions` は transfer drop position (`before`, `inside`, `after`) に限定します。listener helper を追加したり、controller dispatch behavior を変更したりするものではありません。
 
 ## 互換性方針
 
