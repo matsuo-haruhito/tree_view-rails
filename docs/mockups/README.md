@@ -40,8 +40,10 @@ When a review starts from the gallery or a focused mockup page, confirm this sta
 | [filtered-tree-modes.html](filtered-tree-modes.html) | Focused comparison for `filtered_tree_for` modes, showing matched-only, ancestor-retaining, and descendant-retaining output without host-app search behavior. |
 | [path-tree-builder-rows.html](path-tree-builder-rows.html) | Focused PathTreeBuilder comparison for generated folder rows versus record-backed rows, keeping host-app columns/actions outside the gem contract. |
 | [node-presenter-row-partials.html](node-presenter-row-partials.html) | Focused NodePresenter row partial reference showing resolver-provided label, href, tooltip, badge, icon, and optional action beside host-app-owned columns and permissions. |
+| [row-action-menu-boundary/index.html](row-action-menu-boundary/index.html) | Focused row action menu / context-menu-like surface showing native button/link controls, interactive markers, drag-ignore markers, and host-owned menu behavior boundaries. |
 | [localized-row-labels.html](localized-row-labels.html) | Focused localized and long translated row label reference showing primary label, type badge, attribute label, secondary metadata, and tooltip cues without choosing final host-app translations. |
 | [form-editing-rows.html](form-editing-rows.html) | Focused comparison for bulk-edit rows, per-row edit placement, and the boundary between TreeView selection checkboxes and host-app business controls. |
+| [form-editing-replacement-risk/index.html](form-editing-replacement-risk/index.html) | Focused form editing risk reference showing unsaved row cues and host-owned handling for collapse, lazy-loading, Turbo replacement, filtering, and windowed removal. |
 | [selection-max-count.html](selection-max-count.html) | Focused selection max-count reference showing below-limit, limit-reached, and limit-exceeded feedback while keeping final action copy host-app owned. |
 | [selection-multi-tree-form.html](selection-multi-tree-form.html) | Focused multi-tree selection form reference showing source-specific selected counts, submit summary, empty state, and generated hidden input boundary as a review aid. |
 | [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) | Focused children-pagination selection boundary reference showing loaded-row selection, unloaded descendants, rendered-only cascade/indeterminate cues, and host-app-owned bulk action semantics. |
@@ -78,15 +80,17 @@ When a review starts from the gallery or a focused mockup page, confirm this sta
 25. Use [filtered-tree-modes.html](filtered-tree-modes.html) when review needs to compare matched nodes against ancestor or descendant context without adding host-app search UI.
 26. Use [path-tree-builder-rows.html](path-tree-builder-rows.html) when review needs to compare generated folder rows with record-backed rows without designing a file-manager application.
 27. Use [node-presenter-row-partials.html](node-presenter-row-partials.html) when review needs to compare NodePresenter-provided row partial values against host-app-owned columns, permissions, and final actions.
-28. Use [localized-row-labels.html](localized-row-labels.html) when review needs to compare long localized row labels, type badges, attribute labels, secondary metadata, and tooltip cues without deciding final host-app translations.
-29. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
-30. Use [selection-max-count.html](selection-max-count.html) when review needs to compare below-limit, limit-reached, and limit-exceeded selection feedback without adding runtime behavior or final bulk-action copy.
-31. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
-32. Use [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) when selection review intersects with children pagination, rendered-only cascade/indeterminate cues, or unloaded descendant boundaries.
-33. Use [table-caption-context.html](table-caption-context.html) when review needs to compare host-app-owned heading, caption, summary, and adjacent actions around TreeView-owned row hierarchy cues.
-34. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
-35. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, disabled fallback, missing-path fallback, current-state cues, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
-36. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
+28. Use [row-action-menu-boundary/index.html](row-action-menu-boundary/index.html) when review needs to compare row action menu triggers, native menu items, interactive markers, and drag-ignore markers without adding TreeView-owned menu behavior.
+29. Use [localized-row-labels.html](localized-row-labels.html) when review needs to compare long localized row labels, type badges, attribute labels, secondary metadata, and tooltip cues without deciding final host-app translations.
+30. Use [form-editing-rows.html](form-editing-rows.html) when review needs to compare bulk edit rows, per-row edit action placement, or selection-versus-business checkbox roles without adding a real save workflow.
+31. Use [form-editing-replacement-risk/index.html](form-editing-replacement-risk/index.html) when review needs to compare dirty row cues against collapse, lazy-loading, Turbo replacement, filtering, or windowed removal risks without adding TreeView-owned dirty tracking.
+32. Use [selection-max-count.html](selection-max-count.html) when review needs to compare below-limit, limit-reached, and limit-exceeded selection feedback without adding runtime behavior or final bulk-action copy.
+33. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
+34. Use [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) when selection review intersects with children pagination, rendered-only cascade/indeterminate cues, or unloaded descendant boundaries.
+35. Use [table-caption-context.html](table-caption-context.html) when review needs to compare host-app-owned heading, caption, summary, and adjacent actions around TreeView-owned row hierarchy cues.
+36. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
+37. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, disabled fallback, missing-path fallback, current-state cues, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
+38. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
 ## Demo boundary guidance
 
@@ -126,6 +130,12 @@ Record deliberate copy or language exceptions in this list. Add a row when a moc
 - Use `children-pagination.html` to review next-page placeholder placement and branch-scoped load-more affordances without turning the mockup into a cursor, Turbo Stream, or authorization contract.
 - Keep cursor encoding, page limits, retry behavior, and final button copy in the host app.
 - Use `children-pagination-selection-boundary.html` when the review question includes selection state across loaded rows and unloaded descendants.
+
+## Row action and form editing risk guidance
+
+- Use `row-action-menu-boundary/index.html` to review row action menu placement, native button/link semantics, `data-tree-view-interactive`, and `data-tree-view-ignore-drag` without turning TreeView into a menu controller or authorization surface.
+- Use `form-editing-replacement-risk/index.html` to review dirty row cues and replacement hazards before deciding whether the host app needs confirmation, persistence, recovery, or filtering policy.
+- Keep menu open/close behavior, dirty tracking, confirmation dialogs, save/discard workflows, permissions, and final action copy in the host app.
 
 ## Narrow-width guidance
 
