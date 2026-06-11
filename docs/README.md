@@ -67,8 +67,8 @@ Maintainer entry points には、gem に同梱される `docs/**` と repository
 
 - [English documentation](en/README.md): full English docs map, reading order, and maintainer-facing entry points within the English tree.
 - [日本語ドキュメント](ja/README.md): 日本語 docs tree の full map、reading order、maintainer-facing entry points。
-- Repository-only Product Profile (`Product Profile.md` at the repository root): product positioning, source-of-truth order, host-app responsibility boundary, and non-goals for maintainers and reviewers. This file is not packaged in the gem and is not a host-app API guide; read it from a repository checkout before judging scope or docs sync.
-- Repository-only agent workflow (`AGENTS.md` at the repository root): repository-specific workflow, first-read order, documentation update rules, and CI shortcut policy for maintainers and agents. This file is not packaged in the gem and is not user-facing integration guidance; read it from a repository checkout before changing maintainer workflow or docs policy.
+- [Repository-only Product Profile](../Product%20Profile.md): product positioning, source-of-truth order, host-app responsibility boundary, and non-goals for maintainers and reviewers. This file is not packaged in the gem and is not a host-app API guide; read it from a repository checkout before judging scope or docs sync.
+- [Repository-only agent workflow](../AGENTS.md): repository-specific workflow, first-read order, documentation update rules, and CI shortcut policy for maintainers and agents. This file is not packaged in the gem and is not user-facing integration guidance; read it from a repository checkout before changing maintainer workflow or docs policy.
 - [Documentation maintenance checklist](i18n-audit.md): language-sync rules, technical-asset inventory, and cross-language update coverage.
 - [Public API](en/public-api.md) / [公開 API](ja/public-api.md): compatibility contract and the surfaces host apps may use directly.
 - [Migration guide](en/migration.md) / [移行ガイド](ja/migration.md): upgrade expectations, deprecations, and release-note reading order.
