@@ -208,6 +208,20 @@ test.describe("docs mockup browser smoke", () => {
     })
   }
 
+  test("table-caption-context.html preserves host and TreeView responsibility boundary signals", async ({ page }) => {
+    await openMockup(page, "table-caption-context.html")
+
+    await expect(page.getByRole("heading", { name: "Workspace hierarchy" })).toBeVisible()
+    await expect(page.locator("[aria-label='Host app actions']")).toBeVisible()
+    await expect(page.locator(".tree-view-table caption")).toContainText("Host-owned table caption")
+    await expect(page.getByRole("heading", { name: "Responsibility boundary" })).toBeVisible()
+    await expect(page.getByText("Host app owns page heading", { exact: false })).toBeVisible()
+    await expect(page.getByText("TreeView owns row hierarchy cues", { exact: false })).toBeVisible()
+    expect(await page.locator(".tree-toggle__branches").count()).toBeGreaterThanOrEqual(4)
+    expect(await page.locator(".tree-depth-label").count()).toBeGreaterThanOrEqual(4)
+    expect(await page.locator("[data-tree-selection-payload]").count()).toBeGreaterThanOrEqual(4)
+  })
+
   test("direction-aware-cues/index.html preserves LTR, RTL, and vertical representative regions", async ({ page }) => {
     await openMockup(page, "direction-aware-cues/index.html")
 
