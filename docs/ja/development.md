@@ -63,7 +63,7 @@ docs entrypoint smoke と public API docs signal smoke は、`npm run test:docs-
 
 意図的なbreaking changeを受け入れる場合は、public API docsとcompatibility specsを同時に更新し、documented contractとtest coverageを同期させます。
 
-`config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、configuration options、helper names、helper option keys、toolbar action/state mapping、grouped option keys、PathTreeBuilder node shapes、ResourceTableRenderState call keywords、RenderState callback builder keys、JavaScript package-root named exports、transfer drop positions、remote-state values、controller registrations、public event names、intentional no-detail event names、documented `event.detail` keys、selection data hooks、empty-state hooks を追跡しています。
+`config/public_api_manifest.yml` は、compatibility checks が守る public surface の machine-readable source of truth です。現在は Ruby module methods、public constants、configuration options、helper names、helper option keys、toolbar action/state mapping、grouped option keys、PathTreeBuilder node shapes、ResourceTableRenderState call keywords、RenderState callback builder keys、JavaScript package-root named exports、transfer drop positions、transfer data MIME types、remote-state values、controller registrations、public event names、intentional no-detail event names、documented `event.detail` keys、selection data hooks、empty-state hooks を追跡しています。
 
 `event_names_without_detail` は、public な `event.detail` fields を持たない host lifecycle events の意図的な分類です。この一覧を根拠に host lifecycle payload shape を追加・固定しないでください。payload を持つ events は documented `event.detail` key groups 側で扱います。
 
