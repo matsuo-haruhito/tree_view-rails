@@ -115,6 +115,19 @@ export const TreeViewControllerEntries = Object.freeze([
   })
 ])
 
+export const TreeViewIntegrationHooks = Object.freeze({
+  state: Object.freeze({
+    viewKeyValue: "data-tree-view-state-view-key-value",
+    nodeKey: "data-tree-view-state-node-key"
+  }),
+  remoteState: Object.freeze({
+    childrenUrl: "data-tree-children-url"
+  }),
+  transfer: Object.freeze({
+    payload: "data-tree-transfer-payload"
+  })
+})
+
 export const TreeViewSelectionDataHooks = Object.freeze({
   hiddenInputNameValue: "data-tree-view-selection-hidden-input-name-value",
   maxCountValue: "data-tree-view-selection-max-count-value",

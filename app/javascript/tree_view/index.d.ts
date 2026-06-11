@@ -112,6 +112,19 @@ export declare const TreeViewControllerEntries: readonly [
   }>
 ]
 
+export declare const TreeViewIntegrationHooks: Readonly<{
+  state: Readonly<{
+    viewKeyValue: "data-tree-view-state-view-key-value"
+    nodeKey: "data-tree-view-state-node-key"
+  }>
+  remoteState: Readonly<{
+    childrenUrl: "data-tree-children-url"
+  }>
+  transfer: Readonly<{
+    payload: "data-tree-transfer-payload"
+  }>
+}>
+
 export declare const TreeViewSelectionDataHooks: Readonly<{
   hiddenInputNameValue: "data-tree-view-selection-hidden-input-name-value"
   maxCountValue: "data-tree-view-selection-max-count-value"
