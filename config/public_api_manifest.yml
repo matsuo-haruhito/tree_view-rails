@@ -346,6 +346,7 @@ javascript_package_root:
       state_changed:
         - viewKey
         - expandedKeys
+        - reason
     selection:
       change:
         - selectedCount
