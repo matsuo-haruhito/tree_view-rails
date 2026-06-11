@@ -74,6 +74,11 @@ export const TreeViewTransferDropPositions = Object.freeze({
   after: "after"
 })
 
+export const TreeViewTransferDataMimeTypes = Object.freeze({
+  applicationJson: "application/json",
+  textPlain: "text/plain"
+})
+
 export const TreeViewControllerIdentifiers = Object.freeze({
   state: "tree-view-state",
   client: "tree-view-client",
@@ -81,6 +86,34 @@ export const TreeViewControllerIdentifiers = Object.freeze({
   transfer: "tree-view-transfer",
   remoteState: "tree-view-remote-state"
 })
+
+export const TreeViewControllerEntries = Object.freeze([
+  Object.freeze({
+    key: "state",
+    identifier: TreeViewControllerIdentifiers.state,
+    controller: TreeViewStateController
+  }),
+  Object.freeze({
+    key: "client",
+    identifier: TreeViewControllerIdentifiers.client,
+    controller: TreeViewClientController
+  }),
+  Object.freeze({
+    key: "selection",
+    identifier: TreeViewControllerIdentifiers.selection,
+    controller: TreeViewSelectionController
+  }),
+  Object.freeze({
+    key: "transfer",
+    identifier: TreeViewControllerIdentifiers.transfer,
+    controller: TreeViewTransferController
+  }),
+  Object.freeze({
+    key: "remoteState",
+    identifier: TreeViewControllerIdentifiers.remoteState,
+    controller: TreeViewRemoteStateController
+  })
+])
 
 export const TreeViewIntegrationHooks = Object.freeze({
   state: Object.freeze({

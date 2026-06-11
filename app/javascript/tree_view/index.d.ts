@@ -71,6 +71,11 @@ export declare const TreeViewTransferDropPositions: Readonly<{
   after: "after"
 }>
 
+export declare const TreeViewTransferDataMimeTypes: Readonly<{
+  applicationJson: "application/json"
+  textPlain: "text/plain"
+}>
+
 export declare const TreeViewControllerIdentifiers: Readonly<{
   state: "tree-view-state"
   client: "tree-view-client"
@@ -78,6 +83,34 @@ export declare const TreeViewControllerIdentifiers: Readonly<{
   transfer: "tree-view-transfer"
   remoteState: "tree-view-remote-state"
 }>
+
+export declare const TreeViewControllerEntries: readonly [
+  Readonly<{
+    key: "state"
+    identifier: "tree-view-state"
+    controller: typeof TreeViewStateController
+  }>,
+  Readonly<{
+    key: "client"
+    identifier: "tree-view-client"
+    controller: typeof TreeViewClientController
+  }>,
+  Readonly<{
+    key: "selection"
+    identifier: "tree-view-selection"
+    controller: typeof TreeViewSelectionController
+  }>,
+  Readonly<{
+    key: "transfer"
+    identifier: "tree-view-transfer"
+    controller: typeof TreeViewTransferController
+  }>,
+  Readonly<{
+    key: "remoteState"
+    identifier: "tree-view-remote-state"
+    controller: typeof TreeViewRemoteStateController
+  }>
+]
 
 export declare const TreeViewIntegrationHooks: Readonly<{
   state: Readonly<{

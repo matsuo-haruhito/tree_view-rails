@@ -36,12 +36,43 @@ public_constants:
   - PersistedState
   - StateStore
   - Diagnostics
+node_presenter_builder_names:
+  - key
+  - label
+  - href
+  - tooltip
+  - row_class
+  - row_data
+  - icon
+  - badge
+  - actions
 graph_adapter_initializer:
   required_keywords:
     - roots
     - children_resolver
   optional_keywords:
     - node_key_resolver
+ui_config_builder_option_keys:
+  build:
+    - show_descendants_path_builder
+    - hide_descendants_path_builder
+    - toggle_all_path_builder
+    - load_children_path_builder
+    - turbo_frame
+    - indent_unit
+    - scope_format
+  build_turbo:
+    - show_descendants_path_builder
+    - hide_descendants_path_builder
+    - toggle_all_path_builder
+    - load_children_path_builder
+    - turbo_frame
+    - indent_unit
+    - scope_format
+  build_static:
+    - indent_unit
+  build_client_side:
+    - indent_unit
 path_tree_builder_node_shapes:
   folder_node:
     constant: PathTreeBuilder::FolderNode
@@ -80,6 +111,10 @@ helper_methods:
   - tree_view_toolbar_actions
   - tree_view_toolbar_action_metadata
 helper_option_keys:
+  tree_view_rows:
+    - mode
+    - collapsed
+    - window
   tree_view_window:
     - offset
     - limit
@@ -122,6 +157,17 @@ toolbar_action_metadata:
   data_keys:
     - tree_view_toolbar_action
     - tree_view_toolbar_disabled
+setup_generators:
+  persisted_state_install:
+    name: tree_view:state:install
+    class_name: TreeView::Generators::State::InstallGenerator
+    optional_arguments:
+      - name: owner_model_name
+        banner: OWNER_MODEL
+    generated_paths:
+      - db/migrate/*_create_tree_view_states.rb
+      - app/models/tree_view_state.rb
+      - app/models/concerns/tree_view_state_owner.rb
 grouped_option_keys:
   initial_expansion:
     - default
@@ -200,10 +246,12 @@ javascript_package_root:
   named_exports:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
+    - TreeViewControllerEntries
     - TreeViewIntegrationHooks
     - TreeViewSelectionDataHooks
     - TreeViewEmptyStateHooks
     - TreeViewTransferDropPositions
+    - TreeViewTransferDataMimeTypes
     - TreeViewRemoteStateValues
     - TreeViewStateController
     - TreeViewClientController
@@ -216,6 +264,9 @@ javascript_package_root:
     before: before
     inside: inside
     after: after
+  transfer_data_mime_types:
+    application_json: application/json
+    text_plain: text/plain
   remote_state_values:
     loading: loading
     loaded: loaded
