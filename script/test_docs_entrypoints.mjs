@@ -135,7 +135,7 @@ const foundationalEntrypoints = [
       ],
       [
         "docs/en/troubleshooting.md",
-        /localized label[\s\S]*toggle link[\s\S]*toolbar action[\s\S]*breadcrumb[\s\S]*row partial[\s\S]*empty[\s\S]*ActiveRecord time[\s\S]*virtual scroll[\s\S]*children pagination[\s\S]*GraphAdapter[\s\S]*CSS or JavaScript integration[\s\S]*lazy loading[\s\S]*persisted state/,
+        /Localized labels[\s\S]*Toggle links[\s\S]*Toolbar actions[\s\S]*Breadcrumbs[\s\S]*Row partial[\s\S]*Empty or no-results[\s\S]*ActiveRecord time[\s\S]*virtual scrolling[\s\S]*Children pagination[\s\S]*GraphAdapter[\s\S]*CSS or JavaScript integration[\s\S]*Lazy loading[\s\S]*persisted state/i,
         "English troubleshooting docs no longer expose the representative symptom-driven entrypoints"
       ],
       [
