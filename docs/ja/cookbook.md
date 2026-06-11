@@ -33,7 +33,7 @@ TreeView は lazy-loading hook、children container ID、remote-state placeholde
 
 選択した row を host app action に送信する画面では `selection:` option から始めます。`checkbox_name`、`visibility`、`disabled_builder`、`disabled_reason_builder` で row 単位の selection shape を描画し、周辺の form と submit endpoint は host app 側で接続します。未読み込み descendants がある場合は [Children Pagination](children-pagination.md#selectionとbulk-action) と合わせ、TreeView が描画も authorization もしていない row を送信できるように見せないでください。
 
-TreeView は checkbox state、selected values、selected payloads、disabled reason、hidden-input sync、client-side max-count guard を担当します。bulk operation、permission check、query filter、server-side intent、confirmation copy、成功 / 失敗 handling は host app 側で扱います。event と payload contract は [Selection](selection.md) を参照し、静的な UI copy を確認するときは [selection-payloads.html](../mockups/selection-payloads.html) や [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) を比較してください。
+TreeView は checkbox state、selected values、selected payloads、disabled reason、hidden-input sync、client-side max-count guard を担当します。bulk operation、permission check、query filter、server-side intent、confirmation copy、成功 / 失敗 handling は host app 側で扱います。event と payload contract は [Selection](selection.md) を参照し、静的な UI copy を確認するときは [selection-multi-tree-form.html](../mockups/selection-multi-tree-form.html) や [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) を比較してください。
 
 ### status が多い tree table
 
