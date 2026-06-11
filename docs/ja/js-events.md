@@ -168,10 +168,10 @@ transferred JSON をparseできないときに発火します。
 
 ## host app code で TreeViewEventNames を使う
 
-上記の raw event string は引き続き公開契約です。host app の JavaScript で listener を配線するときは、`tree_view/index.js` から `TreeViewEventNames` を import し、event name string を写経せずに対応する package-root export を使えます。
+上記の raw event string は引き続き公開契約です。host app の JavaScript で listener を配線するときは、`tree_view` から `TreeViewEventNames` を import し、event name string を写経せずに対応する package-root export を使えます。
 
 ```js
-import { TreeViewEventNames } from "tree_view/index.js"
+import { TreeViewEventNames } from "tree_view"
 
 element.addEventListener(TreeViewEventNames.selection.change, handleSelectionChange)
 element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStateChange)
@@ -192,7 +192,7 @@ import {
   TreeViewEventNames,
   TreeViewRemoteStateValues,
   TreeViewTransferDropPositions
-} from "tree_view/index.js"
+} from "tree_view"
 
 element.addEventListener(TreeViewEventNames.remoteState.change, (event) => {
   if (event.detail.state === TreeViewRemoteStateValues.error) showRetryNotice(event.detail.row)
