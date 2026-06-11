@@ -56,6 +56,8 @@
 - [日本語Breadcrumb helper](ja/breadcrumb.md): current nodeや対象nodeのancestor path contextを描画し、routeやnavigation policyはhost app側に残す入口。
 - [English Persisted State](en/persisted-state.md): save, restore, clear, and prune TreeView expansion state through host-app-owned storage and retention policy boundaries.
 - [日本語Persisted State](ja/persisted-state.md): TreeView の開閉状態を host app 側の保存先で保存・復元・clear・pruneし、retention policy / cleanup schedule の責務境界を確認する入口。
+- [English Public Setup Surface](en/public-setup-surface.md): path-level contract for the persisted-state install generator and the boundary between setup destinations and host-app review.
+- [日本語Public Setup Surface](ja/public-setup-surface.md): persisted-state install generator の生成先 path-level contract と、setup surface / host-app review の責務境界。
 - [English resource table bridge](en/resource-table-bridge.md): bridge TreeView row rendering with a separate table layer that owns columns and table state.
 - [日本語Resource table bridge](ja/resource-table-bridge.md): 別table layerが列推論やtable stateを持つ場合のTreeView連携。
 
@@ -71,6 +73,7 @@ Maintainer entry points には、gem に同梱される `docs/**` と repository
 - Repository-only agent workflow (`AGENTS.md` at the repository root): repository-specific workflow, first-read order, documentation update rules, and CI shortcut policy for maintainers and agents. This file is not packaged in the gem and is not user-facing integration guidance; read it from a repository checkout before changing maintainer workflow or docs policy.
 - [Documentation maintenance checklist](i18n-audit.md): language-sync rules, technical-asset inventory, and cross-language update coverage.
 - [Public API](en/public-api.md) / [公開 API](ja/public-api.md): compatibility contract and the surfaces host apps may use directly.
+- [Public Setup Surface](en/public-setup-surface.md) / [Public Setup Surface](ja/public-setup-surface.md): generator name, optional owner argument, and generated destination path contract for persisted-state setup.
 - [Migration guide](en/migration.md) / [移行ガイド](ja/migration.md): upgrade expectations, deprecations, and release-note reading order.
 - [Design policy](en/design-policy.md) / [設計思想と責務範囲](ja/design-policy.md): repository scope, responsibility boundaries, and non-goals.
 - [Demo application boundary](en/demo-application-boundary.md) / [Demo application boundary](ja/demo-application-boundary.md): handoff policy between static gem mockups and a future public Rails demo application.
