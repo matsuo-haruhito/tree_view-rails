@@ -19,6 +19,28 @@ cookbook は、個別APIの詳細仕様ではなく、host appでよく使う構
 - [Localized names](localized-names.md)
 - [toggle icon のカスタマイズ](toggle-icons.md)
 
+## よくある組み合わせから組み立てる
+
+[API判断ガイド](decision-guide.md#よくある組み合わせ) で scenario を選んだ後、この節を使ってください。各 recipe は組み合わせる TreeView primitive を示し、product route、authorization、保存、最終copyは host app 側に残します。
+
+### 大きな folder browser
+
+branch を開いたときに必要な子要素だけ取得したい場合は [Lazy Loading](lazy-loading.md) から始めます。読み込んだ branch だけでも直接 children が多い場合は [Children Pagination](children-pagination.md) を足し、ユーザーが再訪時に同じ開閉状態へ戻る必要がある場合だけ [Persisted State](persisted-state.md) を足します。
+
+TreeView は lazy-loading hook、children container ID、remote-state placeholder、row rendering、persisted-state helper を提供します。folder query、cursor / offset strategy、stable ordering、authorization、retry copy、scroll位置に応じた virtualization は host app 側の責務です。問題が server-side child fetching ではなく HTML 出力量なら、[描画スケール](render-scale.md) と [Windowed Rendering](windowed-rendering.md) を使います。
+
+### bulk action page
+
+選択した row を host app action に送信する画面では `selection:` option から始めます。`checkbox_name`、`visibility`、`disabled_builder`、`disabled_reason_builder` で row 単位の selection shape を描画し、周辺の form と submit endpoint は host app 側で接続します。未読み込み descendants がある場合は [Children Pagination](children-pagination.md#selectionとbulk-action) と合わせ、TreeView が描画も authorization もしていない row を送信できるように見せないでください。
+
+TreeView は checkbox state、selected values、selected payloads、disabled reason、hidden-input sync、client-side max-count guard を担当します。bulk operation、permission check、query filter、server-side intent、confirmation copy、成功 / 失敗 handling は host app 側で扱います。event と payload contract は [Selection](selection.md) を参照し、静的な UI copy を確認するときは [selection-multi-tree-form.html](../mockups/selection-multi-tree-form.html) や [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) を比較してください。
+
+### status が多い tree table
+
+業務列は `row_partial` から始め、TreeView が一貫して描画できる row 状態には `row_class_builder`、`row_data_builder`、`badge_builder` を使います。status table に行単位 action も必要な場合だけ `row_actions_partial` を足します。cookbook を完成した product table にせず、[Row status](row-status.md)、[Form と編集行](form-editing.md)、static mockup map へ導線を置いて status rule を読みやすくします。
+
+TreeView は rendering slot と再利用可能な row-state hook を担当します。status vocabulary、permission model、action availability、保存、route target、最終的な badge / action copy は host app 側の責務です。status + depth label の組み合わせは [row-status-depth-labels.html](../mockups/row-status-depth-labels.html)、業務列と TreeView hierarchy control を並べる場合は [resource-table-bridge.html](../mockups/resource-table-bridge.html) を参照してください。
+
 ## 現在itemのbreadcrumbを追加する
 
 records mode のtreeと現在itemがあり、rootからそのitemまでの短いpathをUIに出したい場合は [Breadcrumb](breadcrumb.md) を使います。TreeView は `tree.path_for(item)` で祖先pathを解決し、`tree_view_breadcrumb` で標準的なbreadcrumb markupを描画します。
