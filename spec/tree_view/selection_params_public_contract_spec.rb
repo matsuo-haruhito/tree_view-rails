@@ -18,12 +18,12 @@ RSpec.describe "TreeView.parse_selection_params public contract" do
   it "accepts non-String hash-like entries without coercing their keys" do
     hash_like_entry = Class.new do
       def to_h
-        {id: "document:2", "label" => "Hash-like entry"}
+        {"id" => "document:2", "label" => "Hash-like entry"}
       end
     end.new
 
     expect(TreeView.parse_selection_params([hash_like_entry])).to eq([
-      {id: "document:2", "label" => "Hash-like entry"}
+      {"id" => "document:2", "label" => "Hash-like entry"}
     ])
   end
 
