@@ -168,10 +168,10 @@ Dispatched when transferred JSON cannot be parsed.
 
 ## Using TreeViewEventNames in host-app code
 
-The raw event strings above remain the public contract. When wiring listeners in host-app JavaScript, you can import `TreeViewEventNames` from `tree_view/index.js` and use the matching package-root export instead of hand-copying strings:
+The raw event strings above remain the public contract. When wiring listeners in host-app JavaScript, you can import `TreeViewEventNames` from `tree_view` and use the matching package-root export instead of hand-copying strings:
 
 ```js
-import { TreeViewEventNames } from "tree_view/index.js"
+import { TreeViewEventNames } from "tree_view"
 
 element.addEventListener(TreeViewEventNames.selection.change, handleSelectionChange)
 element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStateChange)
@@ -192,7 +192,7 @@ import {
   TreeViewEventNames,
   TreeViewRemoteStateValues,
   TreeViewTransferDropPositions
-} from "tree_view/index.js"
+} from "tree_view"
 
 element.addEventListener(TreeViewEventNames.remoteState.change, (event) => {
   if (event.detail.state === TreeViewRemoteStateValues.error) showRetryNotice(event.detail.row)
