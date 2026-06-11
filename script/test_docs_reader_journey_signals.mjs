@@ -160,6 +160,40 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Accessibility semantics mockup reader journey",
+    files: [
+      [
+        "docs/en/accessibility-semantics.md",
+        [
+          "accessibility-semantics.html",
+          "table-first ARIA policy",
+          "toggle `aria-expanded`",
+          "omitted `aria-controls`",
+          "host-app-owned page-structure boundaries"
+        ]
+      ],
+      [
+        "docs/ja/accessibility-semantics.md",
+        [
+          "accessibility-semantics.html",
+          "table-first ARIA policy",
+          "toggle の `aria-expanded`",
+          "`aria-controls` 非採用",
+          "host-app-owned page structure boundary"
+        ]
+      ],
+      [
+        "docs/mockups/accessibility-semantics.html",
+        [
+          "data-tree-view-sample=\"accessibility-semantics\"",
+          "Table-first, not treegrid",
+          "aria-controls",
+          "host-app decisions"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Mockup README smoke and review policy",
     files: [
       [
