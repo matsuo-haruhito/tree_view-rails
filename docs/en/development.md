@@ -176,7 +176,7 @@ Before opening a docs pull request, do a short maintenance sweep using `docs/i18
 - Confirm whether the change affects shared user-facing guidance and therefore needs matching Japanese and English updates.
 - Decide whether the change needs `CHANGELOG.md`, release docs, README/docs index links, or root-level docs policy updates.
 - For public API, compatibility, installation, release, or migration docs, check the update matrix in `docs/i18n-audit.md` before narrowing the PR scope.
-- For focused mockup additions, renames, or removals, confirm the `docs/mockups/README.md` Files table, `docs/mockups/review-gallery.html`, and browser smoke target list describe the same inventory.
+- For focused mockup additions, renames, or removals, confirm that the `docs/mockups/README.md` Files table, `docs/mockups/review-gallery.html`, and focused smoke target definitions describe the same inventory. The browser smoke derives expected files from the README Files table, compares them with the focused target definitions, and separately checks review-gallery links; do not treat that as a manually maintained target list.
 - If one language or one related doc intentionally lags, leave the mismatch visible in the PR body or a follow-up issue instead of silently relying on the docs-only CI shortcut.
 
 - Keep Japanese and English docs in sync when practical.
@@ -185,8 +185,8 @@ Before opening a docs pull request, do a short maintenance sweep using `docs/i18
 - When a pull request touches only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md`, confirm that the docs-only CI short-circuit is still the intended policy before relying on it.
 - If a pull request also changes `.github/workflows/**`, treat it as a full CI change rather than a docs-only shortcut candidate.
 - When a pull request changes `test/browser/**`, expect normal JavaScript setup and explicit `npm run test:browser` coverage even if the intent is only to maintain browser smoke specs.
-- When a pull request adds, renames, or removes a focused mockup under `docs/mockups/`, keep the mockup inventory trail synchronized: update `docs/mockups/README.md`, add or adjust the `docs/mockups/review-gallery.html` card, review README and language README entry points when the recommended review flow changes, and add feature-guide links when a mockup is meant to accompany a specific guide.
-- Docs-only CI skips JavaScript only when `docs/mockups/**` is unchanged. When focused mockup files change, CI runs `npm run test:browser` against the browser smoke target list, but that smoke does not prove the README Files table, review gallery, existing mockup inventory, and visual correctness are fully synchronized. If the existing mockup files and docs indexes already disagree, handle that as a separate docs follow-up instead of mixing gallery redesign or mockup HTML/CSS changes into a checklist-only PR.
+- When a pull request adds, renames, or removes a focused mockup under `docs/mockups/`, keep the mockup inventory trail synchronized: update `docs/mockups/README.md` Files table, add or adjust the `docs/mockups/review-gallery.html` card, review README and language README entry points when the recommended review flow changes, and add or update the focused smoke target definition with a representative selector and minimum count when the mockup should be browser-smoked.
+- Docs-only CI skips JavaScript only when `docs/mockups/**` is unchanged. When focused mockup files change, CI runs `npm run test:browser` against the README-derived focused smoke targets, but that smoke does not prove the README Files table, review gallery, existing mockup inventory, and visual correctness are fully synchronized. If the existing mockup files and docs indexes already disagree, handle that as a separate docs follow-up instead of mixing gallery redesign or mockup HTML/CSS changes into a checklist-only PR.
 
 ## Before release
 
