@@ -38,7 +38,7 @@ npm run test:node-version-sources
 npm run test:browser
 ```
 
-CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。docs-only failure を、docs entrypoints、README Quick Start signal、Public API docs signal、i18n parity の範囲で先に切り分けたい場合は `npm run test:docs-entrypoints` を使います。その後、より広い `npm run test:entrypoints` や browser smoke checks に進んでください。`.nvmrc`、`package.json` の `engines.node`、CI workflow の `node-version` が Node 22 でそろっていることだけを確認したい場合は `npm run test:node-version-sources` を使います。失敗箇所を切り分ける場合は個別の npm command を使ってください。
+CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。docs-only failure を、docs entrypoints、repository-only maintainer entrypoints、README Quick Start signal、Public API docs signal、i18n parity の範囲で先に切り分けたい場合は `npm run test:docs-entrypoints` を使います。その後、より広い `npm run test:entrypoints` や browser smoke checks に進んでください。`.nvmrc`、`package.json` の `engines.node`、CI workflow の `node-version` が Node 22 でそろっていることだけを確認したい場合は `npm run test:node-version-sources` を使います。失敗箇所を切り分ける場合は個別の npm command を使ってください。
 
 `npm run test:entrypoints` の中では、`script/test_entrypoints.mjs` が runtime の package-root exports、controller registration helper、manifest loader、`.d.ts` の export-name inventory を確認します。その後 `script/test_declaration_literal_shapes.mjs` が、event names、detail keys、remote-state values、transfer values、controller identifiers、selection data hooks、empty-state hooks などの manifest-backed JavaScript constants について、`app/javascript/tree_view/index.d.ts` の literal shape を確認します。package-root export が足りない、または余分な場合は export-name guard を見ます。export は存在するが key、tuple、代表 literal value が `config/public_api_manifest.yml` とずれた場合は literal-shape guard を見ます。これは smoke guard であり、TypeScript compiler や declaration generator ではありません。
 
@@ -59,7 +59,7 @@ BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rake
 
 Public API compatibility specsは、documented Ruby entry points、helper methods、helper option keys、grouped options、JavaScript package-root exportsが意図せず削除・renameされることを防ぐためのtestsです。JavaScript entrypoint smoke では、manifest-backed な controller registrations、public event names、documented `event.detail` key groups も確認します。これらのspecは、実装詳細を網羅するのではなく、APIの存在と代表的な互換挙動に絞ります。
 
-docs entrypoint smoke と public API docs signal smoke は、`npm run test:docs-entrypoints` の中で別の責務を持ちます。`script/test_docs_entrypoints.mjs` は docs の入口、link、広い feature-guide signal を守り、`script/test_public_api_docs_signals.mjs` は Public API docs と feature docs の代表 signal を守ります。public API manifest entry、package-root export、public helper surface、または docs signal を追加・rename する場合は、影響する英日 docs と一緒に public API docs signal smoke も見直して更新してください。
+docs entrypoint smoke と public API docs signal smoke は、`npm run test:docs-entrypoints` の中で別の責務を持ちます。`script/test_docs_entrypoints.mjs` は docs の入口、link、広い feature-guide signal を守り、`script/test_repository_only_maintainer_entrypoints.mjs` は `Product Profile.md`、`AGENTS.md`、`CHANGELOG.md`、`docs/i18n-audit.md` などの repository-only maintainer entry points が root docs map や言語別 README から消えないことを守ります。`script/test_public_api_docs_signals.mjs` は Public API docs と feature docs の代表 signal を守ります。public API manifest entry、package-root export、public helper surface、または docs signal を追加・rename する場合は、影響する英日 docs と一緒に public API docs signal smoke も見直して更新してください。
 
 意図的なbreaking changeを受け入れる場合は、public API docsとcompatibility specsを同時に更新し、documented contractとtest coverageを同期させます。
 
@@ -101,7 +101,7 @@ docs-only の entrypoint / signal checks は次で個別に確認できます。
 npm run test:docs-entrypoints
 ```
 
-この command は、docs entrypoint smoke、docs entrypoint signal smoke、README Quick Start signal、Public API docs signal、i18n parity checks を実行し、より広い entrypoint / CI policy checks は含めません。docs-only change が失敗したときは、`npm run test:entrypoints` や `npm run test:browser` に進む前の切り分けに使ってください。
+この command は、docs entrypoint smoke、repository-only maintainer entrypoint smoke、docs entrypoint signal smoke、README Quick Start signal、Public API docs signal、i18n parity checks を実行し、より広い entrypoint / CI policy checks は含めません。repository-only maintainer entrypoint smoke は、`Product Profile.md`、`AGENTS.md`、`CHANGELOG.md`、`docs/i18n-audit.md` など checkout 専用のファイルが `docs/README.md` と言語別 README から辿れることを守りますが、それらを gem 同梱の host-app API guide として扱うものではありません。docs-only change が失敗したときは、`npm run test:entrypoints` や `npm run test:browser` に進む前の切り分けに使ってください。
 
 Browser-level smoke testsはPlaywrightで実行します。
 
