@@ -122,3 +122,15 @@ See also:
 - [Decision guide](decision-guide.md)
 - [Children Pagination](children-pagination.md)
 - [Lazy Loading](lazy-loading.md)
+
+## Does selecting a parent include descendants that have not loaded yet?
+
+No. TreeView's checkbox cascade, indeterminate state, and hidden input sync read the rendered DOM. They only cover rows that are already present on the page.
+
+When a bulk action should affect unloaded descendants, children from later pages, or the entire filtered child set, send a host-app-owned server-side intent or query filter in addition to any loaded-row checkbox payloads. TreeView does not decide authorization, query scope, or bulk-action semantics for records it has not rendered.
+
+See also:
+
+- [Selection: linked checkbox behavior](selection.md#linked-checkbox-behavior)
+- [Children Pagination: selection and drag/drop interactions](children-pagination.md#selection-and-dragdrop-interactions)
+- [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html)
