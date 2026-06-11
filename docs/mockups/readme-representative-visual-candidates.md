@@ -14,6 +14,7 @@ The source HTML/CSS mockups remain canonical. The current first README image ass
 - Alt text direction: "Static TreeView mockup showing expanded and collapsed hierarchy rows with selection checkboxes, badges, and row actions."
 - Weight concern: low. One focused screenshot is easier to scan than a gallery capture and does not imply every focused mockup is part of the README hero.
 - Refresh note: when `default-tree.html` changes the first-viewport representative rows, update the README asset in the same review so it still reflects the baseline table-first shape.
+- Boundary note: if only focused mockups, review-gallery cards, or state-specific references change, keep this README asset in place unless the baseline `default-tree.html` first viewport no longer represents the image.
 - Caveat: it should not look like a complete file-manager product. Crop around the tree surface and keep host-app business copy out of the image.
 
 ## Candidate B: review gallery overview
@@ -24,7 +25,18 @@ The source HTML/CSS mockups remain canonical. The current first README image ass
 - README placement: below the baseline TreeView explanation or in a short "Visual references" note, not as the primary hero image.
 - Alt text direction: "TreeView review gallery showing multiple static mockup previews for baseline rows and focused interaction states."
 - Weight concern: medium. The overview is useful for reviewers, but it may be visually busy for first-time README readers.
+- Refresh note: refresh a gallery-derived README image only when the README wants to sell the review system itself, not every time a new focused page is added.
 - Caveat: the gallery image should not replace links to individual mockup pages. It is an orientation aid, not the source of truth for every state.
+
+## Update boundary checklist
+
+Use this checklist before changing `docs/mockups/assets/readme-default-tree.svg`:
+
+- Keep the current asset when `default-tree.html` still shows the same baseline table-first hierarchy shape.
+- Update the asset when the baseline first viewport changes enough that the README image would misrepresent row structure, hierarchy cues, selection, badges, or row actions.
+- Do not treat `review-gallery.html` as the source of truth for the README image; it is the overview for reviewers after they choose to inspect the mockup set.
+- Do not swap in a focused mockup screenshot as the first README visual unless the README copy is also intentionally changing from baseline product shape to that focused state family.
+- Keep host-app final product screenshots, demo app screenshots, GIFs, and screenshot baseline platform decisions out of this note.
 
 ## Recommendation
 

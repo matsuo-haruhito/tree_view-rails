@@ -89,7 +89,7 @@ Check these points in order.
 - Confirm the page-level table wrapper belongs to the host app and is consistent with the row partial.
 - Confirm the row partial renders the business columns the page expects.
 - If selection, resource-table bridging, or other optional cells are enabled, make sure the host app layout still expects those extra cells.
-- If the problem appears only for specific records, inspect node keys and DOM IDs before changing the partial blindly.
+- If the problem appears only for specific records, inspect tree node keys and UI DOM IDs before changing the partial blindly. Expansion state, persisted state, and diagnostics use the tree node key layer, so changing a UI-only DOM ID builder will not change `expanded_keys`, `collapsed_keys`, or saved state. Confirm `tree.node_key_for(item)` when the symptom follows a specific record.
 
 Read next:
 
@@ -98,6 +98,7 @@ Read next:
 - [Selection](selection.md)
 - [Accessibility Semantics](accessibility-semantics.md)
 - [Tree diagnostics](tree-diagnostics.md)
+- [Node keys](node-keys.md)
 
 ## Empty or no-results rows are missing, cramped, or use the wrong copy
 
@@ -336,6 +337,7 @@ Check these points.
 - Use a stable `tree_instance_key` per screen or per tree placement.
 - Confirm the host app save endpoint chooses the owner, authorizes the request, and calls `StateStore` or `TreeView::PersistedStateController` correctly.
 - If explicit `expanded_keys` are passed into `RenderState`, they override the persisted state.
+- If restored expansion state targets the wrong rows or does not affect the expected rows, compare the saved keys with `tree.node_key_for(item)`. Persisted expansion belongs to the tree node key layer, not UI-only DOM IDs or Turbo target builders.
 - If a browser listener saves immediately on page load, remember that `tree-view-state:state-changed` is also dispatched on initial connect. Treat the first event as the current expanded-state snapshot, then debounce, ignore the first event, or use a host-app dirty-state policy when only user-initiated saves should be sent.
 - If the same `expandedKeys` snapshot is saved repeatedly, inspect the host-app listener before changing TreeView. TreeView publishes state changes; the host app owns autosave timing, duplicate suppression, retry behavior, authorization, and endpoint responses.
 - If `StateStore#save!` raises from the backing model, inspect the generated model validations, owner lookup, uniqueness constraints, and any database constraints for the same owner / `tree_instance_key` pair. TreeView calls the backing model's `save!`; it does not rescue validation failures or decide retry behavior.
@@ -349,6 +351,7 @@ Read next:
 - [Persisted State](persisted-state.md)
 - [JavaScript event contract](js-events.md)
 - [Tree diagnostics](tree-diagnostics.md)
+- [Node keys](node-keys.md)
 
 ## Duplicate node keys, orphan records, DOM ID collisions, or cycles appear
 

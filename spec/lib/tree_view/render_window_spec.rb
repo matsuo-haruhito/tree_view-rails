@@ -18,17 +18,37 @@ RSpec.describe TreeView::RenderWindow do
     expect(window.next_offset).to eq(5)
   end
 
-  it "reports previous and next availability" do
+  it "reports previous and next availability with navigation offsets" do
+    empty = described_class.new([], offset: 0, limit: 4)
     first = described_class.new(rows, offset: 0, limit: 4)
     middle = described_class.new(rows, offset: 4, limit: 4)
     last = described_class.new(rows, offset: 8, limit: 4)
+    beyond = described_class.new(rows, offset: 20, limit: 5)
+
+    expect(empty).not_to be_previous
+    expect(empty).not_to be_next
+    expect(empty.previous_offset).to be_nil
+    expect(empty.next_offset).to be_nil
 
     expect(first).not_to be_previous
     expect(first).to be_next
+    expect(first.previous_offset).to be_nil
+    expect(first.next_offset).to eq(4)
+
     expect(middle).to be_previous
     expect(middle).to be_next
+    expect(middle.previous_offset).to eq(0)
+    expect(middle.next_offset).to eq(8)
+
     expect(last).to be_previous
     expect(last).not_to be_next
+    expect(last.previous_offset).to eq(4)
+    expect(last.next_offset).to be_nil
+
+    expect(beyond).to be_previous
+    expect(beyond).not_to be_next
+    expect(beyond.previous_offset).to eq(15)
+    expect(beyond.next_offset).to be_nil
   end
 
   it "reports non-negative before and after counts" do

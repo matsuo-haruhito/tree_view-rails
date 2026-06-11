@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView large-tree strategy mock</title>
+<link rel="stylesheet" href="../default-tree.css">
+<style>
+.mock-large-tree-page {
+  max-width: 1260px;
+}
+
+.mock-large-tree-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.mock-large-tree-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.mock-large-tree-card__kicker {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-large-tree-card h2 {
+  margin: 0;
+  color: #102a43;
+  font-size: 1.05rem;
+}
+
+.mock-large-tree-note {
+  margin: 0;
+  color: #52606d;
+}
+
+.mock-large-tree-stack {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-large-tree-stack__row {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid #e4e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.mock-large-tree-stack__label {
+  overflow-wrap: anywhere;
+  color: #102a43;
+  font-weight: 700;
+}
+
+.mock-large-tree-stack__value {
+  overflow-wrap: anywhere;
+  color: #52606d;
+  font-size: 0.88rem;
+}
+
+.mock-large-tree-meter {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-large-tree-meter__track {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e4e7eb;
+}
+
+.mock-large-tree-meter__bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #2f80ed;
+}
+
+.mock-large-tree-meter__bar--small {
+  width: 22%;
+}
+
+.mock-large-tree-meter__bar--medium {
+  width: 48%;
+}
+
+.mock-large-tree-meter__bar--large {
+  width: 74%;
+}
+
+.mock-large-tree-meter__bar--full {
+  width: 100%;
+}
+
+.mock-large-tree-boundary {
+  display: grid;
+  gap: 12px;
+}
+
+.mock-large-tree-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-large-tree-table th,
+.mock-large-tree-table td {
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid #e4e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-large-tree-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mock-large-tree-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.mock-large-tree-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-large-tree-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0f4c81;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.mock-large-tree-chip--host {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mock-large-tree-chip--tree {
+  background: #dcfce7;
+  color: #166534;
+}
+
+@media (max-width: 1120px) {
+  .mock-large-tree-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .mock-large-tree-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mock-large-tree-stack__row {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-large-tree-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Large-tree strategy decision mock</h1>
+      <p>
+        Static visual reference for comparing how large-tree strategies reduce rendered HTML, child fetching, or host-app work.
+        It intentionally stops at the responsibility boundary: TreeView-owned row output is shown separately from host-app-owned query, route, virtual-scroll, and persistence policy.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="../review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="../README.md">Open mockup index</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="../windowed-rendering.html">Windowed rendering reference</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="../lazy-loading-handoff.html">Lazy-loading handoff reference</a>
+    </nav>
+
+    <section class="mock-section" aria-labelledby="strategy-cards-heading">
+      <h2 id="strategy-cards-heading">Strategy comparison</h2>
+      <div class="mock-large-tree-grid">
+        <article class="mock-large-tree-card" aria-labelledby="strategy-full-render">
+          <p class="mock-large-tree-card__kicker">baseline</p>
+          <h2 id="strategy-full-render">Full render</h2>
+          <p class="mock-large-tree-note">Useful when the tree is small enough that first paint can include every visible branch.</p>
+          <div class="mock-large-tree-stack" aria-label="Full render impact">
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">HTML output</span><span class="mock-large-tree-stack__value">all selected rows</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Fetch volume</span><span class="mock-large-tree-stack__value">host app decides</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Best fit</span><span class="mock-large-tree-stack__value">small trees</span></div>
+          </div>
+          <div class="mock-large-tree-meter" aria-label="Full render output level">
+            <span class="mock-large-tree-meter__track"><span class="mock-large-tree-meter__bar mock-large-tree-meter__bar--full"></span></span>
+          </div>
+        </article>
+
+        <article class="mock-large-tree-card" aria-labelledby="strategy-render-scope">
+          <p class="mock-large-tree-card__kicker">render scope</p>
+          <h2 id="strategy-render-scope">Depth or scope limit</h2>
+          <p class="mock-large-tree-note">Use depth limits or a scoped item set when first render should show a smaller, intentional slice.</p>
+          <div class="mock-large-tree-stack" aria-label="Render scope impact">
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">HTML output</span><span class="mock-large-tree-stack__value">reduced rows</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Fetch volume</span><span class="mock-large-tree-stack__value">unchanged unless scoped</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Best fit</span><span class="mock-large-tree-stack__value">deep trees</span></div>
+          </div>
+          <div class="mock-large-tree-meter" aria-label="Render scope output level">
+            <span class="mock-large-tree-meter__track"><span class="mock-large-tree-meter__bar mock-large-tree-meter__bar--large"></span></span>
+          </div>
+        </article>
+
+        <article class="mock-large-tree-card" aria-labelledby="strategy-windowed">
+          <p class="mock-large-tree-card__kicker">window</p>
+          <h2 id="strategy-windowed">Windowed rows</h2>
+          <p class="mock-large-tree-note">Use windowed rendering when review needs a visible-row slice plus previous or next metadata.</p>
+          <div class="mock-large-tree-stack" aria-label="Windowed rendering impact">
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">HTML output</span><span class="mock-large-tree-stack__value">offset / limit slice</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Fetch volume</span><span class="mock-large-tree-stack__value">host app decides</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Best fit</span><span class="mock-large-tree-stack__value">long visible lists</span></div>
+          </div>
+          <div class="mock-large-tree-meter" aria-label="Windowed output level">
+            <span class="mock-large-tree-meter__track"><span class="mock-large-tree-meter__bar mock-large-tree-meter__bar--small"></span></span>
+          </div>
+        </article>
+
+        <article class="mock-large-tree-card" aria-labelledby="strategy-lazy">
+          <p class="mock-large-tree-card__kicker">remote children</p>
+          <h2 id="strategy-lazy">Lazy loading</h2>
+          <p class="mock-large-tree-note">Use lazy loading when expanded branches should fetch children only after a user opens them.</p>
+          <div class="mock-large-tree-stack" aria-label="Lazy loading impact">
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">HTML output</span><span class="mock-large-tree-stack__value">branch placeholder</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Fetch volume</span><span class="mock-large-tree-stack__value">deferred children</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Best fit</span><span class="mock-large-tree-stack__value">wide branches</span></div>
+          </div>
+          <div class="mock-large-tree-meter" aria-label="Lazy loading output level">
+            <span class="mock-large-tree-meter__track"><span class="mock-large-tree-meter__bar mock-large-tree-meter__bar--medium"></span></span>
+          </div>
+        </article>
+
+        <article class="mock-large-tree-card" aria-labelledby="strategy-host-virtual">
+          <p class="mock-large-tree-card__kicker">host-owned</p>
+          <h2 id="strategy-host-virtual">Virtual scrolling</h2>
+          <p class="mock-large-tree-note">Use host-app virtual scrolling only when browser viewport management must own rows outside TreeView.</p>
+          <div class="mock-large-tree-stack" aria-label="Host virtual scroll impact">
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">HTML output</span><span class="mock-large-tree-stack__value">host viewport slice</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Fetch volume</span><span class="mock-large-tree-stack__value">host controller</span></div>
+            <div class="mock-large-tree-stack__row"><span class="mock-large-tree-stack__label">Best fit</span><span class="mock-large-tree-stack__value">custom app shell</span></div>
+          </div>
+          <div class="mock-large-tree-meter" aria-label="Host virtual scroll output level">
+            <span class="mock-large-tree-meter__track"><span class="mock-large-tree-meter__bar mock-large-tree-meter__bar--small"></span></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section mock-large-tree-boundary" aria-labelledby="ownership-heading">
+      <h2 id="ownership-heading">Ownership boundary</h2>
+      <div class="mock-large-tree-chip-row" aria-label="Large tree strategy ownership cues">
+        <span class="mock-large-tree-chip mock-large-tree-chip--tree">TreeView-owned: hierarchy rows</span>
+        <span class="mock-large-tree-chip mock-large-tree-chip--tree">TreeView-owned: visible-row metadata</span>
+        <span class="mock-large-tree-chip mock-large-tree-chip--host">Host-owned: query shape</span>
+        <span class="mock-large-tree-chip mock-large-tree-chip--host">Host-owned: routes and cursors</span>
+        <span class="mock-large-tree-chip mock-large-tree-chip--host">Host-owned: virtual scroll policy</span>
+      </div>
+      <table class="mock-large-tree-table">
+        <thead>
+          <tr>
+            <th scope="col">Review question</th>
+            <th scope="col">Use this mock to decide</th>
+            <th scope="col">Still outside this mock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>First render feels too heavy</td>
+            <td>Compare full render, scope limits, and windowed rows as ways to reduce initial HTML.</td>
+            <td>Database query optimization, authorization filtering, and final route params.</td>
+          </tr>
+          <tr>
+            <td>Branches are wide or remote</td>
+            <td>Compare lazy loading and children pagination as ways to defer child output.</td>
+            <td>Cursor encoding, retry copy, endpoint policy, and server response shape.</td>
+          </tr>
+          <tr>
+            <td>The app shell already virtualizes content</td>
+            <td>Keep TreeView hierarchy cues separate from host-owned virtual-scroll viewport behavior.</td>
+            <td>Scroll anchoring, browser observers, and app-specific performance telemetry.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

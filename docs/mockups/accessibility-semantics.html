@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView table-first accessibility semantics mockup</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.accessibility-semantics-page { max-width: 1180px; }
+.accessibility-semantics-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 18px; }
+.accessibility-semantics-summary__item { border: 1px solid #d8e0ea; border-radius: 8px; background: #fff; padding: 14px; }
+.accessibility-semantics-summary__item strong { display: block; margin-bottom: 0.35rem; color: #102a43; }
+.accessibility-semantics-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr); gap: 20px; align-items: start; }
+.accessibility-semantics-demo { overflow-x: auto; border: 1px solid #d8e0ea; border-radius: 8px; background: #fff; }
+.accessibility-semantics-demo .tree-view-table { min-width: 900px; margin: 0; }
+.accessibility-semantics-row--current { background: #eff6ff; }
+.accessibility-semantics-row--selected { background: #f8fafc; }
+.accessibility-semantics-row--host { background: #fffaf0; }
+.accessibility-semantics-token { display: inline-flex; max-width: 100%; padding: 0.18rem 0.45rem; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.78rem; font-weight: 700; overflow-wrap: anywhere; }
+.accessibility-semantics-token--owned { border-color: #93c5fd; background: #eff6ff; color: #1d4ed8; }
+.accessibility-semantics-token--host { border-color: #facc15; background: #fefce8; color: #854d0e; }
+.accessibility-semantics-notes { display: grid; gap: 12px; }
+.accessibility-semantics-note { border: 1px solid #d8e0ea; border-radius: 8px; background: #f8fafc; padding: 14px; }
+.accessibility-semantics-note h3, .accessibility-semantics-note p { margin: 0; }
+.accessibility-semantics-note h3 { margin-bottom: 0.4rem; color: #102a43; }
+.accessibility-semantics-checklist { margin: 0; padding-left: 1.2rem; }
+.accessibility-semantics-code { white-space: nowrap; }
+@media (max-width: 760px) { .accessibility-semantics-layout { grid-template-columns: 1fr; } .accessibility-semantics-demo .tree-view-table { min-width: 760px; } }
+</style>
+</head>
+<body>
+  <main class="mock-page accessibility-semantics-page">
+    <header class="mock-header">
+      <p class="mock-kicker">focused mockup</p>
+      <h1>Table-first accessibility semantics</h1>
+      <p>Static reference for reviewing TreeView's table-first accessibility policy. The rows show representative ARIA placement and responsibility boundaries without moving the component toward a full <code>treegrid</code> model.</p>
+      <nav class="mock-page-nav" aria-label="Mockup navigation">
+        <a href="review-gallery.html">Back to gallery</a>
+        <a href="README.md">Mockup README</a>
+        <a href="../en/accessibility-semantics.md">Accessibility semantics docs</a>
+        <a href="keyboard-current-row/index.html">Keyboard current row</a>
+      </nav>
+      <div class="accessibility-semantics-summary" aria-label="Review summary">
+        <div class="accessibility-semantics-summary__item"><strong>TreeView-owned row cues</strong>Rows carry depth, expansion, current, and selected state samples while staying inside normal table markup.</div>
+        <div class="accessibility-semantics-summary__item"><strong>Toggle link boundary</strong>Toggle links expose expansion state, but the mockup intentionally avoids promising <code>aria-controls</code> or full tree keyboard behavior.</div>
+        <div class="accessibility-semantics-summary__item"><strong>Host-app structure</strong>Caption, page heading, shortcut policy, final copy, and surrounding navigation remain outside TreeView's contract.</div>
+      </div>
+    </header>
+
+    <section class="mock-section accessibility-semantics-layout" aria-labelledby="semantics-heading">
+      <div>
+        <h2 id="semantics-heading">Representative table-first ARIA placement</h2>
+        <div class="accessibility-semantics-demo" data-tree-view-sample="accessibility-semantics">
+          <table class="tree-view-table" aria-label="Table-first accessibility semantics comparison">
+            <caption>Host-owned caption: project hierarchy review</caption>
+            <thead><tr><th scope="col">Node</th><th scope="col">Row ARIA sample</th><th scope="col">Toggle sample</th><th scope="col">Boundary</th></tr></thead>
+            <tbody>
+              <tr class="tree-row tree-row--expanded" aria-level="1" aria-expanded="true"><td><a href="#" class="tree-toggle__action" aria-expanded="true">Operations handbook</a></td><td><code class="accessibility-semantics-code">aria-level="1" aria-expanded="true"</code></td><td><span class="accessibility-semantics-token accessibility-semantics-token--owned">toggle aria-expanded=true</span></td><td>TreeView row and toggle expose expansion state.</td></tr>
+              <tr class="tree-row tree-row--child accessibility-semantics-row--current" aria-level="2" aria-current="page"><td><span class="tree-leaf-label">Release checklist</span></td><td><code class="accessibility-semantics-code">aria-level="2" aria-current="page"</code></td><td><span class="accessibility-semantics-token">leaf row, no toggle state</span></td><td>Current item is a row-level cue, route selection stays host-owned.</td></tr>
+              <tr class="tree-row tree-row--child accessibility-semantics-row--selected" aria-level="2" aria-selected="true"><td><span class="tree-leaf-label">Deployment notes</span></td><td><code class="accessibility-semantics-code">aria-level="2" aria-selected="true"</code></td><td><span class="accessibility-semantics-token">selection sample</span></td><td>Selection semantics are represented without defining submit behavior.</td></tr>
+              <tr class="tree-row tree-row--child tree-row--collapsed" aria-level="2" aria-expanded="false"><td><a href="#" class="tree-toggle__action" aria-expanded="false">Archived playbooks</a></td><td><code class="accessibility-semantics-code">aria-level="2" aria-expanded="false"</code></td><td><span class="accessibility-semantics-token accessibility-semantics-token--owned">toggle aria-expanded=false</span></td><td>No <code>aria-controls</code> promise; child container ownership is contextual.</td></tr>
+              <tr class="tree-row accessibility-semantics-row--host"><td><span class="tree-leaf-label">Host app shortcut hint</span></td><td><span class="accessibility-semantics-token accessibility-semantics-token--host">host-owned</span></td><td><span class="accessibility-semantics-token accessibility-semantics-token--host">caption / shortcuts / page flow</span></td><td>Host app owns final caption, focus order, keyboard shortcuts, and action copy.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <aside class="accessibility-semantics-notes" aria-label="Responsibility notes">
+        <div class="accessibility-semantics-note"><h3>Table-first, not treegrid</h3><p>The sample stays in a normal table and does not claim <code>role="treegrid"</code>, roving tabindex, or a complete WAI-ARIA tree keyboard model.</p></div>
+        <div class="accessibility-semantics-note"><h3>ARIA placement</h3><p>Representative row-level state is visible beside the toggle-link state so reviewers can check what belongs to rows versus controls.</p></div>
+        <div class="accessibility-semantics-note"><h3>Related pages</h3><p>Use keyboard and high-contrast mockups for visual cue inspection. Use the accessibility semantics docs for the maintained policy text.</p></div>
+      </aside>
+    </section>
+
+    <section class="mock-section" aria-labelledby="review-checklist-heading">
+      <h2 id="review-checklist-heading">Review checklist</h2>
+      <ul class="accessibility-semantics-checklist">
+        <li>Row-level <code>aria-level</code>, <code>aria-expanded</code>, <code>aria-selected</code>, and <code>aria-current</code> samples are visible without implying a full treegrid model.</li>
+        <li>Toggle links expose <code>aria-expanded</code> while <code>aria-controls</code>, caption policy, keyboard shortcuts, and focus order remain host-app decisions.</li>
+        <li>Runtime Ruby, JavaScript, helper output, role mapping, and automated accessibility tooling are intentionally unchanged.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

@@ -45,6 +45,8 @@ For a static comparison of no-root-items and no-results rows, the reusable empty
 
 Use that mockup as a visual companion to this policy; it does not redefine ARIA behavior, CTA copy, or filter-reset workflow.
 
+For a focused visual companion to the table-first ARIA policy, see [accessibility-semantics.html](../mockups/accessibility-semantics.html). It shows representative row-level ARIA placement, toggle `aria-expanded`, omitted `aria-controls`, and host-app-owned page-structure boundaries without redefining runtime behavior or promising a full treegrid model.
+
 ## Supported rendering examples
 
 ### Static table rows
@@ -73,9 +75,9 @@ When selection is enabled, `aria-selected` on each rendered row mirrors TreeView
 
 TreeView registers Stimulus controllers for state tracking, selection, transfer payloads, and remote loading state, but it does not currently implement a full WAI-ARIA tree or treegrid keyboard interaction model.
 
-When the state controller's `keyboard` value is enabled, TreeView provides a lightweight row navigation helper: ArrowDown and ArrowUp move focus between visible rendered rows, ArrowRight and ArrowLeft activate expand/collapse in the requested direction when possible, and Enter or Space activates the row toggle. Events that start from host-app interactive targets are ignored so buttons, links, and form controls can keep their own keyboard behavior.
+When the state controller's `keyboard` value is enabled, TreeView provides a lightweight row navigation helper: ArrowDown and ArrowUp move focus between visible rendered rows, Home and End move focus to the first and last visible rendered row, ArrowRight and ArrowLeft activate expand/collapse in the requested direction when possible, and Enter or Space activates the row toggle. Events that start from host-app interactive targets are ignored so buttons, links, and form controls can keep their own keyboard behavior.
 
-This helper is intentionally narrower than a full treegrid model. It does not add Home/End traversal, typeahead, roving tabindex ownership, page-level shortcut policy, or a promise that every host-app column behaves like a WAI-ARIA treegrid cell.
+This helper is intentionally narrower than a full treegrid model. It does not add typeahead, PageUp/PageDown traversal, roving tabindex ownership, page-level shortcut policy, or a promise that every host-app column behaves like a WAI-ARIA treegrid cell.
 
 Host apps remain responsible for page-level keyboard flow, focus order, table captions, action buttons, and any shortcut keys they add around TreeView. If a host app needs full treegrid keyboard navigation, treat that as an explicit application feature rather than assuming TreeView provides it automatically.
 

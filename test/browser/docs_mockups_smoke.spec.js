@@ -61,6 +61,7 @@ const focusedMockupSmokeTargets = [
   { file: "children-pagination.html", sample: ".mock-pagination-card", minimumCount: 3 },
   { file: "reduced-motion-state-cues.html", sample: "[data-tree-view-sample='reduced-motion-state-cues'] .tree-view-table tbody tr", minimumCount: 5 },
   { file: "keyboard-focus-states.html", sample: ".focus-sample, .focus-sample--soft", minimumCount: 5 },
+  { file: "accessibility-semantics.html", sample: "[data-tree-view-sample='accessibility-semantics'] .tree-view-table tbody tr", minimumCount: 5 },
   { file: "keyboard-current-row/index.html", sample: ".keyboard-current-row, .keyboard-current-focus", minimumCount: 3 },
   { file: "high-contrast-state-cues/index.html", sample: "[data-tree-view-sample='high-contrast-state-cues']", minimumCount: 1 },
   { file: "direction-aware-cues/index.html", sample: ".direction-frame .tree-view-table tbody tr", minimumCount: 10 },
@@ -94,6 +95,7 @@ const narrowOverflowExpectedMockups = new Map([
   ["children-pagination.html", "children pagination examples keep branch page-state columns visible"],
   ["reduced-motion-state-cues.html", "state-cue comparison keeps the table matrix visible"],
   ["keyboard-focus-states.html", "focus samples include multiple side-by-side controls"],
+  ["accessibility-semantics.html", "table-first ARIA comparison keeps state and boundary columns visible"],
   ["keyboard-current-row/index.html", "keyboard current-row comparison keeps focus/current/action columns visible"],
   ["high-contrast-state-cues/index.html", "high-contrast state-cue panels stay side by side for comparison"],
   ["direction-aware-cues/index.html", "direction-aware examples keep multiple writing directions visible for comparison"],
@@ -159,6 +161,7 @@ test.describe("docs mockup browser smoke", () => {
     expect(linkedFiles).toContain("children-pagination.html")
     expect(linkedFiles).toContain("reduced-motion-state-cues.html")
     expect(linkedFiles).toContain("current-branch-sidebar.html")
+    expect(linkedFiles).toContain("accessibility-semantics.html")
     expect(linkedFiles).toContain("keyboard-current-row/index.html")
     expect(linkedFiles).toContain("direction-aware-cues/index.html")
     expect(linkedFiles).toContain("node-presenter-row-partials.html")
@@ -207,6 +210,20 @@ test.describe("docs mockup browser smoke", () => {
       expect(await page.locator(mockup.sample).count()).toBeGreaterThanOrEqual(mockup.minimumCount)
     })
   }
+
+  test("table-caption-context.html preserves host and TreeView responsibility boundary signals", async ({ page }) => {
+    await openMockup(page, "table-caption-context.html")
+
+    await expect(page.getByRole("heading", { name: "Workspace hierarchy" })).toBeVisible()
+    await expect(page.locator("[aria-label='Host app actions']")).toBeVisible()
+    await expect(page.locator(".tree-view-table caption")).toContainText("Host-owned table caption")
+    await expect(page.getByRole("heading", { name: "Responsibility boundary" })).toBeVisible()
+    await expect(page.getByText("Host app owns page heading", { exact: false })).toBeVisible()
+    await expect(page.getByText("TreeView owns row hierarchy cues", { exact: false })).toBeVisible()
+    expect(await page.locator(".tree-toggle__branches").count()).toBeGreaterThanOrEqual(4)
+    expect(await page.locator(".tree-depth-label").count()).toBeGreaterThanOrEqual(4)
+    expect(await page.locator("[data-tree-selection-payload]").count()).toBeGreaterThanOrEqual(4)
+  })
 
   test("direction-aware-cues/index.html preserves LTR, RTL, and vertical representative regions", async ({ page }) => {
     await openMockup(page, "direction-aware-cues/index.html")

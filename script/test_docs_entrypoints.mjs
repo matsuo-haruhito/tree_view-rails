@@ -121,6 +121,28 @@ const foundationalEntrypoints = [
       ["docs/en/README.md", "troubleshooting.md"],
       ["docs/ja/README.md", "faq.md"],
       ["docs/ja/README.md", "troubleshooting.md"]
+    ],
+    signals: [
+      [
+        "docs/en/faq.md",
+        /database queries[\s\S]*TreeView::RenderWindow[\s\S]*virtual scrolling[\s\S]*keyboard navigation[\s\S]*CRUD[\s\S]*authorization[\s\S]*TreeView::Diagnostics\.run[\s\S]*persisted state[\s\S]*children pagination/i,
+        "English FAQ no longer covers the main host-app responsibility boundary questions"
+      ],
+      [
+        "docs/ja/faq.md",
+        /DB query[\s\S]*TreeView::RenderWindow[\s\S]*virtual scroll[\s\S]*keyboard navigation[\s\S]*CRUD[\s\S]*authorization[\s\S]*TreeView::Diagnostics\.run[\s\S]*persisted state[\s\S]*children pagination/,
+        "Japanese FAQ no longer covers the main host-app responsibility boundary questions"
+      ],
+      [
+        "docs/en/troubleshooting.md",
+        /Localized labels[\s\S]*Toggle links[\s\S]*Toolbar actions[\s\S]*Breadcrumbs[\s\S]*Row partial[\s\S]*Empty or no-results[\s\S]*ActiveRecord time[\s\S]*virtual scrolling[\s\S]*Children pagination[\s\S]*GraphAdapter[\s\S]*CSS or JavaScript integration[\s\S]*Lazy loading[\s\S]*persisted state/i,
+        "English troubleshooting docs no longer expose the representative symptom-driven entrypoints"
+      ],
+      [
+        "docs/ja/troubleshooting.md",
+        /localized label[\s\S]*toggle link[\s\S]*toolbar action[\s\S]*breadcrumb[\s\S]*row partial[\s\S]*empty[\s\S]*ActiveRecord time[\s\S]*virtual scroll[\s\S]*children pagination[\s\S]*GraphAdapter[\s\S]*CSS や JavaScript の統合[\s\S]*lazy loading[\s\S]*persisted state/,
+        "Japanese troubleshooting docs no longer expose the representative symptom-driven entrypoints"
+      ]
     ]
   }
 ]

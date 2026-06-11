@@ -168,16 +168,18 @@ Dispatched when transferred JSON cannot be parsed.
 
 ## Using TreeViewEventNames in host-app code
 
-The raw event strings above remain the public contract. When wiring listeners in host-app JavaScript, you can import `TreeViewEventNames` from `tree_view/index.js` and use the matching package-root export instead of hand-copying strings:
+The raw event strings above remain the public contract. When wiring listeners in host-app JavaScript, you can import `TreeViewEventNames` from `tree_view` and use the matching package-root export instead of hand-copying strings:
 
 ```js
-import { TreeViewEventNames } from "tree_view/index.js"
+import { TreeViewEventNames } from "tree_view"
 
 element.addEventListener(TreeViewEventNames.selection.change, handleSelectionChange)
 element.addEventListener(TreeViewEventNames.remoteState.change, handleRemoteStateChange)
 ```
 
 `TreeViewEventNames.hostLifecycle.*` is for host apps dispatching lazy-loading request lifecycle events such as `tree-view:loading`; TreeView controller-emitted remote-state events on this page use `TreeViewEventNames.remoteState.*`.
+
+When listener code or browser assertions also need the related documented DOM hook names, import `TreeViewIntegrationHooks` from `tree_view` instead of hand-copying raw attribute strings. Representative keys are `TreeViewIntegrationHooks.state.viewKeyValue`, `TreeViewIntegrationHooks.remoteState.childrenUrl`, and `TreeViewIntegrationHooks.transfer.payload`.
 
 `tree-view-transfer:invalid-payload` detail contains `value` and `row`.
 
@@ -192,7 +194,7 @@ import {
   TreeViewEventNames,
   TreeViewRemoteStateValues,
   TreeViewTransferDropPositions
-} from "tree_view/index.js"
+} from "tree_view"
 
 element.addEventListener(TreeViewEventNames.remoteState.change, (event) => {
   if (event.detail.state === TreeViewRemoteStateValues.error) showRetryNotice(event.detail.row)
@@ -207,7 +209,7 @@ element.addEventListener(TreeViewEventNames.transfer.drop, (event) => {
 
 ## Compatibility policy
 
-The machine-readable public API manifest mirrors the event names and representative required `event.detail` keys documented on this page so compatibility specs can detect drift; this page remains the primary contract. Host app tests may import `TreeViewEventDetailKeys` from the package root when they need a machine-readable list of documented detail key names without changing the event payload shape.
+The machine-readable public API manifest mirrors the event names, documented integration hook names, and representative required `event.detail` keys documented on this page so compatibility specs can detect drift; this page remains the primary contract. Host app tests may import `TreeViewEventDetailKeys` from the package root when they need a machine-readable list of documented detail key names without changing the event payload shape.
 
 Every public event name in the manifest must be classified either under `event_detail_keys` when it has documented detail fields or under `event_names_without_detail` when it intentionally exposes no public detail fields. The entrypoint smoke checks that classification so host lifecycle events do not look like missing `event.detail` coverage.
 

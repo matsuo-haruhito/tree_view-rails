@@ -19,6 +19,28 @@ For API details, see:
 - [Localized names](localized-names.md)
 - [Toggle icon customization](toggle-icons.md)
 
+## Build from common combinations
+
+Use this section after choosing a scenario in the [API decision guide](decision-guide.md#common-combinations). Each recipe names the TreeView primitives to combine, then leaves product routing, authorization, persistence, and final copy in the host app.
+
+### Large folder browser
+
+Start with [Lazy Loading](lazy-loading.md) when opening a branch should fetch children on demand. Add [Children Pagination](children-pagination.md) when a single loaded branch can still contain many direct children, and add [Persisted State](persisted-state.md) only when users should return to the same expanded state on later visits.
+
+TreeView provides lazy-loading hooks, children container IDs, remote-state placeholders, row rendering, and persisted-state helpers. The host app still owns folder queries, cursor or offset strategy, stable ordering, authorization, retry copy, and any scroll-position-driven virtualization. Use [Render Scale](render-scale.md) and [Windowed Rendering](windowed-rendering.md) when the issue is HTML output size rather than server-side child fetching.
+
+### Bulk action page
+
+Start with `selection:` options when the screen submits selected rows to a host-app action. Use `checkbox_name`, `visibility`, `disabled_builder`, and `disabled_reason_builder` to render the row-level selection shape, then wire the surrounding form and submit endpoint in the host app. For unloaded descendants, pair the recipe with [Children Pagination](children-pagination.md#selection-and-bulk-actions) so the UI does not imply TreeView can submit rows that the host app never rendered or authorized.
+
+TreeView owns rendered checkbox state, selected values, selected payloads, disabled reasons, hidden-input sync, and the client-side max-count guard. The host app owns the bulk operation, permission checks, query filters, server-side intent, confirmation copy, and success or failure handling. Use [Selection](selection.md) for the event and payload contract, and compare [selection-multi-tree-form.html](../mockups/selection-multi-tree-form.html) or [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) when reviewing static UI copy.
+
+### Status-heavy tree table
+
+Start with `row_partial` for business columns, then use `row_class_builder`, `row_data_builder`, and `badge_builder` for row-level status cues that TreeView can render consistently. Add `row_actions_partial` only when the status table also needs per-row actions. Keep status rules readable by linking to [Row status](row-status.md), [Forms and editing rows](form-editing.md), and the static mockup map instead of turning the cookbook into a finished product table.
+
+TreeView owns the rendering slots and reusable row-state hooks. The host app owns the status vocabulary, permission model, action availability, persistence, route targets, and final badge or action copy. Use [row-status-depth-labels.html](../mockups/row-status-depth-labels.html) for status + depth-label composition and [resource-table-bridge.html](../mockups/resource-table-bridge.html) when business columns need to sit beside TreeView hierarchy controls.
+
 ## Add a breadcrumb for the current item
 
 Use [Breadcrumb](breadcrumb.md) when the page already has a records-mode tree and a current item, and the UI needs a compact path from the root to that item. TreeView looks up the ancestor path with `tree.path_for(item)` and renders the standard breadcrumb markup through `tree_view_breadcrumb`.
@@ -47,6 +69,21 @@ When the host app needs custom wrappers, conditional copy, per-level authorizati
 ```
 
 TreeView owns path lookup in records mode and the bundled helper option surface. The host app owns routes, authorization, where the breadcrumb appears, and any Turbo or analytics behavior attached to custom attributes.
+
+## Choose a path-shaped tree view
+
+Use the path-shaped APIs when a screen is about context, not about showing every record in one hierarchy.
+
+| Use case | Start with | Host app owns |
+|---|---|---|
+| Search results need enough ancestors to show where each match lives | `tree.path_tree_for(matches)` | Search query, result authorization, and which matched records are included |
+| Generated folders or virtual grouping rows should sit beside record-backed rows | [PathTreeBuilder](path-tree-builder.md) | Folder labels, grouping rules, generated row keys, and final business copy |
+| A child-first screen should expand back toward parents | [ReverseTree](reverse-tree.md) / `tree.reverse_tree_for(items)` | Which child records seed the view and how parent context is presented |
+| A detail page needs one compact root-to-current trail | [Breadcrumb helper](breadcrumb.md) / `tree_view_breadcrumb` | Route helpers, labels, authorization copy, and placement |
+
+`path_tree_for` and the breadcrumb helper require records-mode path lookup. `PathTreeBuilder` is the better fit when the host app creates generated grouping rows that are not backed by the same records. `reverse_tree_for` is for child-to-parent presentation; it is not GraphAdapter resolver support and should not be used to imply support for graph-like reverse traversal.
+
+For a broader comparison, start with [API decision guide](decision-guide.md#start-from-the-use-case), then read [PathTreeBuilder](path-tree-builder.md), [ReverseTree](reverse-tree.md), and [Breadcrumb](breadcrumb.md) for the full constraints and examples.
 
 ## Row customization quick guide
 
@@ -327,6 +364,17 @@ Use windowed rendering when many visible rows remain.
 ```
 
 Use lazy loading when children should be loaded only as needed.
+
+When the product needs scroll-position-driven DOM virtualization, keep that controller in the host app and use TreeView only for the HTML row slice it should render. `TreeView::RenderWindow` is useful for outputting a bounded list of already-visible rows, but it does not observe scroll position, reduce host-app queries, fetch pages, or preserve scroll anchoring.
+
+A minimal host-app virtual scrolling shape is:
+
+1. Keep the viewport observer, scroll anchoring, overscan, and analytics in host-app JavaScript.
+2. Let the host app choose the query page, cursor, or offset and authorize the records for that viewport.
+3. Build a `RenderState` from the selected records and render only the visible HTML slice with `TreeView::RenderWindow` or `tree_view_rows(..., window:)`.
+4. Fall back to [Lazy Loading](lazy-loading.md) or [Children Pagination](children-pagination.md) when the problem is child fetching rather than scroll-position-driven DOM work.
+
+Use [Render Scale](render-scale.md) and [Windowed Rendering](windowed-rendering.md) for the TreeView-owned output boundary. Use [Lazy Loading](lazy-loading.md) and [Children Pagination](children-pagination.md) when host-app data loading also needs to shrink. Do not treat this recipe as a built-in virtual scrolling engine or a server-side pagination contract.
 
 ## Combine lazy loading with children pagination
 

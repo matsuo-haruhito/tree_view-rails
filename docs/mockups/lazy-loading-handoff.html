@@ -54,6 +54,59 @@
   margin: 0;
 }
 
+.handoff-map {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.handoff-map th,
+.handoff-map td {
+  padding: 0.72rem 0.8rem;
+  border-bottom: 1px solid #e4e7eb;
+  text-align: left;
+  vertical-align: top;
+}
+
+.handoff-map th {
+  background: #f1f5f9;
+  color: #334e68;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.handoff-map code,
+.handoff-flow code {
+  overflow-wrap: anywhere;
+}
+
+.handoff-flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.handoff-flow__card {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid #d8e0ea;
+  background: #fff;
+}
+
+.handoff-flow__card h3,
+.handoff-flow__card p {
+  margin: 0;
+}
+
+.handoff-flow__label {
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .handoff-boundary-list {
   margin: 0;
   padding-left: 1.2rem;
@@ -94,6 +147,61 @@
         <article class="handoff-note">
           <h3>Out of scope here</h3>
           <p>Requests, authorization, retries, cursor math, and final business copy are intentionally not represented as working behavior.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="helper-map-heading">
+      <h2 id="helper-map-heading">Helper-to-region map</h2>
+      <table class="handoff-map">
+        <thead>
+          <tr>
+            <th scope="col">Guide helper</th>
+            <th scope="col">Rendered region</th>
+            <th scope="col">Host-app ownership</th>
+            <th scope="col">Review cue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>tree_children_container_dom_id(node)</code></td>
+            <td>Stable children container such as <code>project_alpha_children</code>.</td>
+            <td>Turbo Stream, fetch, or server-rendered replacement decides which child rows appear.</td>
+            <td>The placeholder and final child rows should read as the same branch, not as a second tree.</td>
+          </tr>
+          <tr>
+            <td><code>tree_remote_state_placeholder_dom_id(node)</code></td>
+            <td>Status slot such as <code>project_alpha_remote_state</code>.</td>
+            <td>Loading, empty-after-load, error, retry, and final copy stay with the host app.</td>
+            <td>Remote-state copy should sit near the branch it explains without replacing the tree hierarchy cue.</td>
+          </tr>
+          <tr>
+            <td><code>tree_remote_state_placeholder_attributes(state:)</code></td>
+            <td>Data hook for values such as <code>loading</code>, <code>loaded</code>, or <code>error</code>.</td>
+            <td>The helper provides attributes; it does not validate app-specific states or implement retry policy.</td>
+            <td>The visible label can use host-app words while the data value remains a reviewable state cue.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="replacement-flow-heading">
+      <h2 id="replacement-flow-heading">Replacement flow reference</h2>
+      <div class="handoff-flow">
+        <article class="handoff-flow__card">
+          <p class="handoff-flow__label">Before request</p>
+          <h3>Reserved branch regions</h3>
+          <p>The parent row names both targets with <code>aria-controls</code>; the children container and remote-state slot can be present before data arrives.</p>
+        </article>
+        <article class="handoff-flow__card">
+          <p class="handoff-flow__label">During request</p>
+          <h3>Status changes before rows</h3>
+          <p>The remote-state slot may show loading copy while the children container remains stable for the eventual replacement.</p>
+        </article>
+        <article class="handoff-flow__card">
+          <p class="handoff-flow__label">After response</p>
+          <h3>Rows and status separate cleanly</h3>
+          <p>Loaded child rows replace the children container; error or retry copy stays in the remote-state slot when no rows can be committed.</p>
         </article>
       </div>
     </section>

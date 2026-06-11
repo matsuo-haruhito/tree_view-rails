@@ -11,7 +11,7 @@
     "test:ci-policy": "node script/test_ci_changed_files_policy.mjs",
     "test:node-version-sources": "node script/test_node_version_sources.mjs",
     "test:docs-i18n": "node script/test_docs_i18n_parity.mjs",
-    "test:docs-entrypoints": "node script/test_docs_entrypoints.mjs && node script/test_docs_entrypoint_signals.mjs && node script/test_breadcrumb_docs_signals.mjs && node script/test_release_docs_signals.mjs && node script/test_readme_quick_start_signal.mjs && node script/test_public_api_docs_signals.mjs && npm run test:docs-i18n",
+    "test:docs-entrypoints": "node script/test_docs_entrypoints.mjs && node script/test_repository_only_maintainer_entrypoints.mjs && node script/test_docs_entrypoint_signals.mjs && node script/test_breadcrumb_docs_signals.mjs && node script/test_docs_reader_journey_signals.mjs && node script/test_release_docs_signals.mjs && node script/test_readme_quick_start_signal.mjs && node script/test_public_api_docs_signals.mjs && npm run test:docs-i18n",
     "test:entrypoints": "node script/test_entrypoints.mjs && node script/test_declaration_literal_shapes.mjs && npm run test:docs-entrypoints && npm run test:ci-policy && npm run test:node-version-sources",
     "test:js:core": "npm run test:entrypoints && npm test",
     "test:js": "npm run test:js:core && npm run test:browser"

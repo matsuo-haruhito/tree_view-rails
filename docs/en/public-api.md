@@ -130,7 +130,7 @@ Documented configuration options include:
 - `initial_state`
 - `render_log_level`
 
-`TreeView.configure`, `TreeView.configuration`, and `TreeView.reset_configuration!` are the stable configuration entry points. Depend on documented option names and behavior rather than the internal shape of the configuration object. See [Render log level](render-log-level.md) for the `render_log_level` values, default, disable path, and host-app logging boundary.
+`TreeView.configure`, `TreeView.configuration`, and `TreeView.reset_configuration!` are the stable configuration entry points. Depend on documented option names and behavior rather than the internal shape of the configuration object. The manifest tracks these option names, not their accepted value sets: `initial_state` accepts `:expanded` and `:collapsed`, while `render_log_level` accepts the documented Ruby logger levels or `nil` to disable TreeView render log silencing. Those accepted values are guarded by compatibility specs and feature docs rather than a separate manifest value schema. See [Render log level](render-log-level.md) for the `render_log_level` values, default, disable path, and host-app logging boundary.
 
 Documented localized display-name helpers include:
 
@@ -195,6 +195,7 @@ Stable enough for host apps to use:
 - `TreeViewEventNames`
 - `TreeViewEventDetailKeys`
 - `TreeViewTransferDropPositions`
+- `TreeViewTransferDataMimeTypes`
 - `TreeViewRemoteStateValues`
 - `TreeViewControllerIdentifiers`
 - `TreeViewSelectionDataHooks`
@@ -213,6 +214,7 @@ Stable enough for host apps to use:
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewEventDetailKeys` exposes the documented `event.detail` key lists as a machine-readable package-root export. Use it when host-app tests or listeners need to compare against the documented key names without changing the payload shape; the field meanings still live in [JavaScript event contract](js-events.md).
 `TreeViewTransferDropPositions` exposes the documented coarse drop-position values for transfer events: `before`, `inside`, and `after`. `TreeViewEventNames.transfer.*` names transfer events, `TreeViewEventDetailKeys.transfer.*` lists the documented `event.detail` keys, and `TreeViewTransferDropPositions` carries the position values described in [Drag and Drop](drag-and-drop.md#drop-behavior).
+`TreeViewTransferDataMimeTypes` exposes the documented TreeView transfer MIME type values: `application/json` for the primary JSON payload and `text/plain` as the browser compatibility fallback. Use it when host-app JavaScript or tests need to read or assert TreeView transfer data without hand-copying MIME strings; drag/drop behavior, payload shape, and final business handling still live in [Drag and Drop](drag-and-drop.md#drop-behavior).
 `TreeViewRemoteStateValues` exposes the documented remote-state value set for lazy-loading rows: `loading`, `loaded`, and `error`. Use it when host-app JavaScript or tests need to compare `data-tree-remote-state` values without hand-copying strings; `TreeViewEventNames.remoteState.*` still names controller-emitted events, and `TreeViewEventDetailKeys.remoteState.*` still lists their `event.detail` keys.
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
 `TreeViewSelectionDataHooks` exposes the documented `tree-view-selection` host-element value attribute names as a machine-readable object. Use it when JavaScript needs to author or query those host-owned attributes without hand-copying strings such as `TreeViewSelectionDataHooks.hiddenInputNameValue`.
@@ -226,6 +228,11 @@ Within `TreeViewEventNames`, lazy-loading request lifecycle names live under `ho
 - `retry`
 
 Use `TreeViewEventNames.hostLifecycle.*` only for the host-app dispatch surface described in [Lazy Loading](lazy-loading.md). TreeView's own controller-emitted remote-state events remain under `TreeViewEventNames.remoteState.*`.
+
+Documented keys on `TreeViewTransferDataMimeTypes`:
+
+- `applicationJson`
+- `textPlain`
 
 Documented keys on `TreeViewRemoteStateValues`:
 
@@ -263,7 +270,7 @@ The `tree-view-selection` controller's documented host-element value attributes 
 
 Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. Generated hidden input marker attributes and source-id attributes are managed by TreeView and are not host-authored public hooks. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
-The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, remote-state values, selection data hook values, and empty-state hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, transfer drop-position values, transfer data MIME type values, remote-state values, selection data hook values, and empty-state hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
