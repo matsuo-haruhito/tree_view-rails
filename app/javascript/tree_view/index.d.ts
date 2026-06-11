@@ -41,13 +41,7 @@ export declare const TreeViewEventDetailKeys: Readonly<{
     stateChanged: readonly ["viewKey", "expandedKeys"]
   }>
   selection: Readonly<{
-    change: readonly [
-      "selectedCount",
-      "selectedValues",
-      "selectedPayloads",
-      "sourceCheckbox",
-      "attemptedChecked"
-    ]
+    change: readonly ["selectedCount", "selectedValues", "selectedPayloads", "sourceCheckbox", "attemptedChecked"]
     selected: readonly ["payloads"]
     limitExceeded: readonly ["maxCount", "attemptedCount", "attemptedChecked", "checkbox"]
     invalidPayload: readonly ["value", "checkbox"]
