@@ -48,6 +48,21 @@ When the host app needs custom wrappers, conditional copy, per-level authorizati
 
 TreeView owns path lookup in records mode and the bundled helper option surface. The host app owns routes, authorization, where the breadcrumb appears, and any Turbo or analytics behavior attached to custom attributes.
 
+## Choose a path-shaped tree view
+
+Use the path-shaped APIs when a screen is about context, not about showing every record in one hierarchy.
+
+| Use case | Start with | Host app owns |
+|---|---|---|
+| Search results need enough ancestors to show where each match lives | `tree.path_tree_for(matches)` | Search query, result authorization, and which matched records are included |
+| Generated folders or virtual grouping rows should sit beside record-backed rows | [PathTreeBuilder](path-tree-builder.md) | Folder labels, grouping rules, generated row keys, and final business copy |
+| A child-first screen should expand back toward parents | [ReverseTree](reverse-tree.md) / `tree.reverse_tree_for(items)` | Which child records seed the view and how parent context is presented |
+| A detail page needs one compact root-to-current trail | [Breadcrumb helper](breadcrumb.md) / `tree_view_breadcrumb` | Route helpers, labels, authorization copy, and placement |
+
+`path_tree_for` and the breadcrumb helper require records-mode path lookup. `PathTreeBuilder` is the better fit when the host app creates generated grouping rows that are not backed by the same records. `reverse_tree_for` is for child-to-parent presentation; it is not GraphAdapter resolver support and should not be used to imply support for graph-like reverse traversal.
+
+For a broader comparison, start with [API decision guide](decision-guide.md#start-from-the-use-case), then read [PathTreeBuilder](path-tree-builder.md), [ReverseTree](reverse-tree.md), and [Breadcrumb](breadcrumb.md) for the full constraints and examples.
+
 ## Row customization quick guide
 
 Use the smallest TreeView extension point that matches the UI you are adding.
