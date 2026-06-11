@@ -10,13 +10,16 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   module_methods
   configuration_options
   public_constants
+  node_presenter_builder_names
   graph_adapter_initializer
+  ui_config_builder_option_keys
   path_tree_builder_node_shapes
   helper_methods
   helper_option_keys
   render_window_metadata
   toolbar_actions
   toolbar_action_metadata
+  setup_generators
   grouped_option_keys
   diagnostics
   resource_table_render_state_call
@@ -80,6 +83,14 @@ RSpec.describe "Public API manifest structure" do
     YAML
 
     expect(duplicate_mapping_keys(yaml)).to eq(["javascript_package_root.event_names.state"])
+  end
+
+  it "keeps NodePresenter builder names shaped as a non-empty string list" do
+    builder_names = manifest.fetch("node_presenter_builder_names")
+
+    expect(builder_names).to be_an(Array)
+    expect(builder_names).not_to be_empty
+    expect(builder_names).to all(be_a(String))
   end
 
   it "keeps grouped option key sections shaped as non-empty string lists" do
