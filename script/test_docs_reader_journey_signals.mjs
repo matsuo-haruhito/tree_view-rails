@@ -109,6 +109,46 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Render log level reader journey",
+    files: [
+      [
+        "README.md",
+        [
+          "docs/en/render-log-level.md",
+          "docs/ja/render-log-level.md",
+          "accepted values",
+          "host app's global Rails logger level"
+        ]
+      ],
+      [
+        "docs/README.md",
+        [
+          "en/render-log-level.md",
+          "ja/render-log-level.md",
+          "host app's global Rails logger level"
+        ]
+      ],
+      [
+        "docs/en/README.md",
+        [
+          "Render log level",
+          "render-log-level.md",
+          "Configure TreeView partial render log silencing",
+          "TreeView render log verbosity in host app logs"
+        ]
+      ],
+      [
+        "docs/ja/README.md",
+        [
+          "render log レベル",
+          "render-log-level.md",
+          "TreeView partial render log の抑制設定",
+          "host app log 上の TreeView render log"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Selection and children pagination unloaded descendants boundary",
     files: [
       [
