@@ -60,17 +60,18 @@ export class TreeViewSelectionController extends Controller {
     })
   }
 
-  refresh(detail = this.selectionDetail()) {
+  refresh(detail = null) {
     this.updateIndeterminateStates()
 
-    this.syncHiddenInputs(detail.selectedPayloads)
+    const selectionDetail = detail || this.selectionDetail()
+    this.syncHiddenInputs(selectionDetail.selectedPayloads)
 
     this.dispatch("selected", {
       detail: {
-        payloads: detail.selectedPayloads
+        payloads: selectionDetail.selectedPayloads
       }
     })
-    this.dispatchSelectionChanged(detail)
+    this.dispatchSelectionChanged(selectionDetail)
   }
 
   dispatchSelectionChanged(detail = this.selectionDetail()) {
