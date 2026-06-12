@@ -41,6 +41,60 @@ Start with `row_partial` for business columns, then use `row_class_builder`, `ro
 
 TreeView owns the rendering slots and reusable row-state hooks. The host app owns the status vocabulary, permission model, action availability, persistence, route targets, and final badge or action copy. Use [row-status-depth-labels.html](../mockups/row-status-depth-labels.html) for status + depth-label composition and [resource-table-bridge.html](../mockups/resource-table-bridge.html) when business columns need to sit beside TreeView hierarchy controls.
 
+### Documents and attachments from path-like records
+
+Use [PathTreeBuilder](path-tree-builder.md) when documents, attachments, generated artifacts, or export files are stored as flat records with a path-like value but the host app does not have separate folder records. The builder supplies generated folder nodes and record-backed leaf nodes; the host app keeps the query, permission scope, download route, preview behavior, and final business copy.
+
+```ruby
+builder = TreeView::PathTreeBuilder.new(
+  records: current_project.documents.visible_to(current_user),
+  path_resolver: ->(document) { document.source_relative_path },
+  id_resolver: ->(document) { TreeView.node_key(:document, document.id) },
+  label_resolver: ->(document) { document.title },
+  sort: { folders_first: true }
+)
+
+render_state = TreeView::RenderState.new(
+  tree: builder.tree,
+  root_items: builder.root_items,
+  row_partial: "documents/tree_columns",
+  row_actions_partial: "documents/tree_actions",
+  ui_config: tree_ui
+)
+```
+
+Keep the row partial split small: folder rows describe generated grouping context, while record rows unwrap `item.record` for host-app metadata and actions.
+
+```erb
+<!-- app/views/documents/_tree_columns.html.erb -->
+<% if item.folder_node? %>
+  <td><%= item.label %></td>
+  <td><%= item.path %></td>
+  <td>Generated folder</td>
+<% elsif item.record_node? %>
+  <% document = item.record %>
+  <td><%= item.label %></td>
+  <td><%= item.path %></td>
+  <td><%= document.owner_name %></td>
+  <td><%= document.review_state %></td>
+<% end %>
+```
+
+```erb
+<!-- app/views/documents/_tree_actions.html.erb -->
+<% if item.record_node? %>
+  <% document = item.record %>
+  <td>
+    <%= link_to "Preview", document_path(document) %>
+    <%= link_to "Download", download_document_path(document) %>
+  </td>
+<% else %>
+  <td></td>
+<% end %>
+```
+
+TreeView owns generated folder shape, record node wrapping, row rendering slots, and the reusable hierarchy cue. The host app owns which records are included, permission checks before rendering or downloading, path normalization policy, preview availability, file-size or status metadata, and final action labels. Use the [PathTreeBuilder row mockup](../mockups/path-tree-builder-rows.html) when reviewing long path segments or folder-versus-record row composition.
+
 ## Add a breadcrumb for the current item
 
 Use [Breadcrumb](breadcrumb.md) when the page already has a records-mode tree and a current item, and the UI needs a compact path from the root to that item. TreeView looks up the ancestor path with `tree.path_for(item)` and renders the standard breadcrumb markup through `tree_view_breadcrumb`.

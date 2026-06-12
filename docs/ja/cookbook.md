@@ -41,6 +41,60 @@ TreeView は checkbox state、selected values、selected payloads、disabled rea
 
 TreeView は rendering slot と再利用可能な row-state hook を担当します。status vocabulary、permission model、action availability、保存、route target、最終的な badge / action copy は host app 側の責務です。status + depth label の組み合わせは [row-status-depth-labels.html](../mockups/row-status-depth-labels.html)、業務列と TreeView hierarchy control を並べる場合は [resource-table-bridge.html](../mockups/resource-table-bridge.html) を参照してください。
 
+### path らしい record から documents / attachments を表示する
+
+Database 上に folder record はないが、documents、attachments、generated artifacts、export file などが path らしい値を持つ場合は [PathTreeBuilder](path-tree-builder.md) を使います。builder は生成 folder node と record-backed leaf node を提供し、query、permission scope、download route、preview behavior、最終的な業務copy は host app 側に残します。
+
+```ruby
+builder = TreeView::PathTreeBuilder.new(
+  records: current_project.documents.visible_to(current_user),
+  path_resolver: ->(document) { document.source_relative_path },
+  id_resolver: ->(document) { TreeView.node_key(:document, document.id) },
+  label_resolver: ->(document) { document.title },
+  sort: { folders_first: true }
+)
+
+render_state = TreeView::RenderState.new(
+  tree: builder.tree,
+  root_items: builder.root_items,
+  row_partial: "documents/tree_columns",
+  row_actions_partial: "documents/tree_actions",
+  ui_config: tree_ui
+)
+```
+
+row partial の分岐は小さく保ちます。folder row は生成された grouping context を説明し、record row は `item.record` を取り出して host app 固有の metadata や action を描画します。
+
+```erb
+<!-- app/views/documents/_tree_columns.html.erb -->
+<% if item.folder_node? %>
+  <td><%= item.label %></td>
+  <td><%= item.path %></td>
+  <td>Generated folder</td>
+<% elsif item.record_node? %>
+  <% document = item.record %>
+  <td><%= item.label %></td>
+  <td><%= item.path %></td>
+  <td><%= document.owner_name %></td>
+  <td><%= document.review_state %></td>
+<% end %>
+```
+
+```erb
+<!-- app/views/documents/_tree_actions.html.erb -->
+<% if item.record_node? %>
+  <% document = item.record %>
+  <td>
+    <%= link_to "Preview", document_path(document) %>
+    <%= link_to "Download", download_document_path(document) %>
+  </td>
+<% else %>
+  <td></td>
+<% end %>
+```
+
+TreeView は generated folder shape、record node wrapping、row rendering slot、再利用可能な hierarchy cue を担当します。どの record を含めるか、描画や download 前の permission check、path normalization policy、preview availability、file size / status metadata、最終的な action label は host app 側の責務です。長い path segment や folder / record row の組み合わせを確認する場合は [PathTreeBuilder row mockup](../mockups/path-tree-builder-rows.html) を参照してください。
+
 ## 現在itemのbreadcrumbを追加する
 
 records mode のtreeと現在itemがあり、rootからそのitemまでの短いpathをUIに出したい場合は [Breadcrumb](breadcrumb.md) を使います。TreeView は `tree.path_for(item)` で祖先pathを解決し、`tree_view_breadcrumb` で標準的なbreadcrumb markupを描画します。
