@@ -94,6 +94,8 @@ const literalExports = {
   TreeViewEventNames: deepCamelizeKeys(manifest.event_names),
   TreeViewEventDetailKeys: deepCamelizeKeys(manifest.event_detail_keys),
   TreeViewRemoteStateValues: manifest.remote_state_values,
+  TreeViewRemoteStateDataHooks: deepCamelizeKeys(manifest.remote_state_data_hooks),
+  TreeViewToolbarDataHooks: deepCamelizeKeys(manifest.toolbar_data_hooks),
   TreeViewTransferDropPositions: manifest.transfer_drop_positions,
   TreeViewTransferDataMimeTypes: deepCamelizeKeys(manifest.transfer_data_mime_types),
   TreeViewControllerIdentifiers: Object.fromEntries(
