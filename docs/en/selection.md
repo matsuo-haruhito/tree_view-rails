@@ -77,6 +77,8 @@ selection: {
 
 The return value from `disabled_reason_builder` is rendered as the checkbox `title` and `data-tree-selection-disabled-reason`.
 
+If host-app JavaScript or browser tests need to find rendered selection checkboxes or the disabled-reason attribute without hand-copying raw strings, use `TreeViewSelectionCheckboxHooks.checkboxClass` and `TreeViewSelectionCheckboxHooks.disabledReasonAttribute` from the package root. The raw `.tree-selection-checkbox` class and `data-tree-selection-disabled-reason` attribute remain the documented DOM contract; the export is a machine-readable reference to those names. See [Selection checkbox hooks](selection-checkbox-hooks.md).
+
 ## JavaScript selection API
 
 `tree-view-selection` can collect checked node payloads from rendered selection checkboxes.
