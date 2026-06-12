@@ -10,7 +10,7 @@ export class TreeViewStateController extends Controller {
 
   connect() {
     if (this.keyboardValue) this.prepareKeyboardNavigation()
-    this.dispatchStateChanged()
+    this.dispatchStateChanged("connect")
   }
 
   expandedKeys() {
@@ -30,7 +30,7 @@ export class TreeViewStateController extends Controller {
 
   refresh() {
     if (this.keyboardValue) this.prepareKeyboardNavigation()
-    this.dispatchStateChanged()
+    this.dispatchStateChanged("refresh")
   }
 
   keydown(event) {
@@ -69,7 +69,7 @@ export class TreeViewStateController extends Controller {
     if (!node) return
 
     node.dataset.treeViewStateExpanded = expanded ? "true" : "false"
-    this.dispatchStateChanged()
+    this.dispatchStateChanged(expanded ? "expanded" : "collapsed")
   }
 
   findNodeFromEvent(event) {
@@ -79,11 +79,12 @@ export class TreeViewStateController extends Controller {
     return target.closest("[data-tree-view-state-target~='node']")
   }
 
-  dispatchStateChanged() {
+  dispatchStateChanged(reason) {
     this.dispatch("state-changed", {
       detail: {
         viewKey: this.hasViewKeyValue ? this.viewKeyValue : null,
-        expandedKeys: this.expandedKeys()
+        expandedKeys: this.expandedKeys(),
+        reason
       }
     })
   }

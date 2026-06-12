@@ -60,6 +60,8 @@ render_state = TreeView::RenderState.new(
 
 TreeView keeps existing host app classes and data, then adds the documented TreeView status class/data keys when `row_disabled_builder` or `row_readonly_builder` returns `true`. Disabled reasons are added when `row_disabled_reason_builder` returns a present value.
 
+`row_data_builder` is a host-app metadata hook. The public API manifest tracks the `row_data_builder` callback key as an initializer keyword and reader, but it does not make the callback's return shape or every merged row data attribute a manifest-backed schema. Keep host-app metadata under app-owned keys such as `document_id`; do not rely on overwriting TreeView-owned status keys like `tree_view_row_disabled`, `tree_view_row_readonly`, or `tree_view_row_disabled_reason`.
+
 ## Difference from selection disabled state
 
 `selection[:disabled_builder]` disables a checkbox.
@@ -79,6 +81,8 @@ Row status expresses state for the whole row.
 |---|---|---|
 | status builder invocation | yes | provides builders |
 | row class/data merge | yes | provides additional attributes |
+| TreeView-owned status data keys | yes | should not treat them as app-owned metadata |
+| host-app metadata keys from `row_data_builder` | preserves during merge | owns names, values, and JavaScript use |
 | business rule | no | yes |
 | authorization | no | yes |
 | action disabling | no | yes |

@@ -311,7 +311,7 @@ render_state = TreeView::RenderState.new(
 )
 ```
 
-host app JavaScriptが安定したmetadataを必要とする場合は `row_data_builder` を使います。TreeView levelのinteractionとしてreadonly / disabledを表したい場合は [Row status](row-status.md) も参照してください。authorization decisionや業務ruleは引き続きhost app側で扱います。
+host app JavaScriptが安定したmetadataを必要とする場合は、host app が所有する key に置く用途で `row_data_builder` を使います。TreeView levelのinteractionとしてreadonly / disabledを表したい場合は [Row status](row-status.md) も参照し、`tree_view_row_disabled` のような TreeView-owned status key を app metadata として上書き前提にしないでください。authorization decisionや業務ruleは引き続きhost app側で扱います。
 
 ## 名前順で安定ソートする
 

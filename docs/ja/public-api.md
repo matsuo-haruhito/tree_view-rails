@@ -168,6 +168,8 @@ localized display-name helper は、利用できる場合に host app の Rails 
 
 対象 key は `row_class_builder`、`row_data_builder`、`row_event_payload_builder`、`loading_builder`、`error_builder`、`depth_label_builder`、`badge_builder`、`icon_builder`、`toggle_icon_builder` です。これは key surface の contract であり、grouped option hash、個別 scalar option、宣言的な `toggle_icons` map とは別の surface です。callback arity、return value validation、row rendering、`NodePresenter` fallback、toggle icon lookup priority は変更しません。
 
+`row_data_builder` もこの key-surface contract に留まります。host app の data hash shape、merge 後の row data attribute、TreeView-owned row status key との境界は [Row status](row-status.md) の docs/spec-level guidance で扱い、manifest-backed return-shape schema には昇格しません。
+
 ## Host app extension points
 
 host app が提供する主な拡張点は以下です。

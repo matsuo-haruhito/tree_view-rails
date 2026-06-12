@@ -42,6 +42,18 @@ The documented optional bridge keywords are:
 
 Other keyword options are accepted through `**render_options` and passed to `TreeView::RenderState`. Treat those options as the existing RenderState option surface, not as a separate resource-table-specific contract. For example, grouped options such as `initial_expansion:`, `selection:`, or `lazy_loading:` remain governed by the RenderState docs and manifest sections.
 
+### Row data composition
+
+`row_data_builder:` can be passed through `ResourceTableRenderState.call` when the host app needs extra row-level data for authorization hints, row state, or table-layer integration. The host builder may use the same one-argument shape as `RenderState`, or it may accept a second row context argument when it needs rendering context such as depth.
+
+Resource-table bridge data is reserved and remains TreeView-owned. Host data is merged first, then the bridge writes these keys last:
+
+- `rails_ui_row`
+- `tree_view_resource_table_row`
+- `rails_table_preferences_table_key`
+
+That precedence lets host apps add app-owned keys such as `resource_id`, `business_state`, or `can_edit`, while preventing bridge-owned hooks from being removed accidentally. If the host builder returns `nil`, it is treated as empty data. The bridge does not implement authorization, business actions, or table preference state; it only keeps the row data composition boundary stable.
+
 ## Intended integration with Rails Table Preferences
 
 A table preferences layer can infer columns from Active Record, merge saved table settings into a table state, and then pass that table state to TreeView:
