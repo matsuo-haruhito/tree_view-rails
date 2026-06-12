@@ -99,13 +99,13 @@ For markup changes that need custom wrappers, conditional authorization copy, or
 | `separator:` | Separator between items. |
 | `aria_label:` | Accessible label for the breadcrumb `<nav>` element. |
 
-The option names in this table are also listed in `config/public_api_manifest.yml` under `helper_option_keys.tree_view_breadcrumb`. That manifest-backed list is a compatibility contract for the existing helper option surface; it does not add markup, route, or authorization behavior.
+The option names in this table are also listed in `config/public_api_manifest.yml` under `helper_option_keys.tree_view_breadcrumb`. That manifest-backed list is a compatibility contract for the existing helper option surface; it does not add markup, route, authorization, mode inference, or exact HTML structure behavior. Records-mode lookup, unsupported-mode failure, `aria-current="page"`, and the additive HTML merge hooks are guarded by focused specs and this guide rather than by a broader manifest schema.
 
 ## Supported mode
 
 The breadcrumb helper expects a records-mode tree.
 
-Resolver mode and adapter mode may not have a unique parent path. For unsupported modes, TreeView raises through the tree path helper so the failure is explicit.
+Resolver mode and adapter mode may not have a unique parent path. For unsupported modes, TreeView raises through the tree path helper so the failure is explicit. TreeView does not infer breadcrumb trails for GraphAdapter or resolver-mode data; if the host app owns that path policy, render from its own trail data instead.
 
 ## Visual reference
 
