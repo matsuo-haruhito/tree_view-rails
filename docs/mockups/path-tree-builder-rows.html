@@ -26,7 +26,15 @@
 .path-builder-columns { width: 100%; border-collapse: collapse; }
 .path-builder-columns th, .path-builder-columns td { border-bottom: 1px solid #e4e7eb; padding: 0.7rem 0.75rem; text-align: left; vertical-align: top; }
 .path-builder-columns th { background: #f1f5f9; color: #334e68; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
-@media (max-width: 860px) { .path-builder-grid { grid-template-columns: 1fr; } }
+.path-builder-stress-table td { min-width: 8rem; }
+.path-builder-stress-table .tree-toggle-cell { min-width: 18rem; }
+.path-builder-long-label { display: inline-block; max-width: 34rem; overflow-wrap: anywhere; }
+.path-builder-path-stack { display: grid; gap: 0.35rem; min-width: 12rem; }
+.path-builder-path-fragment { color: #52606d; font-size: 0.82rem; overflow-wrap: anywhere; }
+.path-builder-boundary-list { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.2rem 0 0; }
+.path-builder-boundary-chip { display: inline-flex; align-items: center; border: 1px solid #d8dee8; border-radius: 999px; background: #f8fafc; color: #334e68; font-size: 0.76rem; font-weight: 700; line-height: 1.25; padding: 0.18rem 0.5rem; }
+.path-builder-boundary-chip--host { background: #fefce8; border-color: #fde68a; color: #854d0e; }
+@media (max-width: 860px) { .path-builder-grid { grid-template-columns: 1fr; } .path-builder-stress-table .tree-toggle-cell { min-width: 16rem; } }
 </style>
 </head>
 <body>
@@ -126,12 +134,69 @@ RecordNode
       </aside>
     </section>
 
+    <section class="mock-section" aria-labelledby="path-builder-stress-heading">
+      <h2 id="path-builder-stress-heading">Deep and long path segment stress</h2>
+      <p class="path-builder-note">Long generated folders and long record labels should wrap without hiding the hierarchy cue. Record metadata and actions remain review aids for host-app-owned columns.</p>
+      <div class="path-builder-table-wrap">
+        <table class="tree-view-table path-builder-stress-table" aria-label="Deep and long PathTreeBuilder segment states">
+          <thead>
+            <tr>
+              <th scope="col">kind</th><th scope="col">tree</th><th scope="col">path segment</th><th scope="col">boundary cue</th><th scope="col">host-owned action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="path_stress_folder_client" class="tree-row is-expanded" data-tree-node-key="folder:client-deliverables" data-tree-parent-key="" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+              <td><span class="path-builder-row-kind path-builder-row-kind--folder">folder</span></td>
+              <td class="btn-cell tree-toggle-cell" id="path_stress_folder_client_button">
+                <span class="tree-toggle" aria-label="Client deliverables folder expanded"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a><span class="tree-toggle__level">root</span></span></span>
+                <span class="tree-node-marker" title="Generated folder node">generated</span><span class="tree-depth-label">L0</span><span class="tree-node-badge" title="Visible child count">3</span>
+              </td>
+              <td><span class="path-builder-long-label"><strong>Client deliverables and implementation evidence archive</strong></span><span class="path-builder-path-fragment">segment: client-deliverables-and-implementation-evidence-archive</span></td>
+              <td><span class="path-builder-boundary-list"><span class="path-builder-boundary-chip">folder marker</span><span class="path-builder-boundary-chip">depth cue</span><span class="path-builder-boundary-chip">child count</span></span></td>
+              <td class="tree-row-actions">-</td>
+            </tr>
+            <tr id="path_stress_folder_design" class="tree-row is-expanded" data-tree-node-key="folder:design-review" data-tree-parent-key="folder:client-deliverables" data-tree-depth="1" data-tree-expanded="true" aria-level="2" aria-expanded="true">
+              <td><span class="path-builder-row-kind path-builder-row-kind--folder">folder</span></td>
+              <td class="btn-cell tree-toggle-cell" id="path_stress_folder_design_button">
+                <span class="tree-toggle" aria-label="Long design review folder expanded"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a><span class="tree-toggle__level">child</span></span></span>
+                <span class="tree-node-marker" title="Generated folder node">generated</span><span class="tree-depth-label">L1</span><span class="tree-node-badge tree-node-badge--info" title="Nested segment count">nested</span>
+              </td>
+              <td><span class="path-builder-long-label"><strong>Design-review-notes-with-very-long-product-neutral-folder-name</strong></span><span class="path-builder-path-fragment">segment wraps before record columns become the primary cue</span></td>
+              <td><span class="path-builder-boundary-list"><span class="path-builder-boundary-chip">generated row</span><span class="path-builder-boundary-chip">no route</span></span></td>
+              <td class="tree-row-actions">-</td>
+            </tr>
+            <tr id="path_stress_folder_accessibility" class="tree-row is-collapsed" data-tree-node-key="folder:accessibility-evidence" data-tree-parent-key="folder:design-review" data-tree-depth="2" data-tree-expanded="false" aria-level="3" aria-expanded="false">
+              <td><span class="path-builder-row-kind path-builder-row-kind--folder">folder</span></td>
+              <td class="btn-cell tree-toggle-cell" id="path_stress_folder_accessibility_button">
+                <span class="tree-toggle" aria-label="Accessibility evidence folder collapsed"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a><span class="tree-toggle__level">grandchild</span><span class="tree-toggle__hidden-count" title="Hidden descendants">8</span></span></span>
+                <span class="tree-node-marker" title="Generated folder node">generated</span><span class="tree-depth-label">L2</span><span class="tree-node-badge tree-node-badge--warning" title="Hidden generated and record descendants">8 hidden</span>
+              </td>
+              <td><span class="path-builder-long-label"><strong>Accessibility evidence and long-screen-reader-review-captures</strong></span><span class="path-builder-path-fragment">collapsed folder keeps hidden-count cue separate from record status</span></td>
+              <td><span class="path-builder-boundary-list"><span class="path-builder-boundary-chip">hidden count</span><span class="path-builder-boundary-chip">folder cue</span></span></td>
+              <td class="tree-row-actions">-</td>
+            </tr>
+            <tr id="path_stress_record_report" class="tree-row is-leaf is-selected" data-tree-node-key="record:long-review-report" data-tree-parent-key="folder:accessibility-evidence" data-tree-depth="3" data-tree-expanded="false" aria-level="4" aria-current="page">
+              <td><span class="path-builder-row-kind path-builder-row-kind--record">record</span></td>
+              <td class="btn-cell tree-toggle-cell" id="path_stress_record_report_button">
+                <span class="tree-toggle" aria-label="Long review report record"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">leaf</span></span></span>
+                <span class="tree-node-marker" title="Record node">record</span><span class="tree-depth-label">L3</span><span class="tree-node-badge tree-node-badge--info" title="Current record">current</span>
+              </td>
+              <td><span class="path-builder-long-label"><strong>2026-06-12-desktop-and-narrow-viewport-accessibility-review-notes-with-expanded-folder-context.pdf</strong></span><span class="path-builder-path-fragment">record label may be long, but metadata and actions stay host-owned</span></td>
+              <td><span class="path-builder-boundary-list"><span class="path-builder-boundary-chip">record marker</span><span class="path-builder-boundary-chip path-builder-boundary-chip--host">owner metadata</span><span class="path-builder-boundary-chip path-builder-boundary-chip--host">final status</span></span></td>
+              <td class="tree-row-actions"><span class="path-builder-record-actions"><button type="button">Open</button><button type="button">Details</button><button type="button" aria-disabled="true">Download</button></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="mock-section" aria-labelledby="path-builder-notes-heading">
       <h2 id="path-builder-notes-heading">What this mock covers</h2>
       <ul>
         <li>Generated folder row markers, toggle affordance, depth label, and hidden-count cue</li>
         <li>Record row markers beside host-app-owned columns and action buttons</li>
         <li>A current record row that keeps TreeView current cue separate from business status</li>
+        <li>Deep folder and record paths with long labels that wrap without hiding hierarchy cues</li>
         <li>The boundary between generic folder output and final file-manager behavior</li>
       </ul>
     </section>
