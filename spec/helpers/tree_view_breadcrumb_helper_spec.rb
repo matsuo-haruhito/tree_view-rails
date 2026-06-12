@@ -47,7 +47,7 @@ RSpec.describe TreeViewBreadcrumbHelper do
       tree,
       grandchild,
       label_builder: ->(item) { item.name },
-      path_builder: ->(item) { item == root ? nil : "/nodes/#{item.id}" },
+      path_builder: ->(item) { (item == root) ? nil : "/nodes/#{item.id}" },
       link_html: ->(item) { {data: {crumb_id: item.id}} }
     )
 
