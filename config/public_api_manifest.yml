@@ -387,6 +387,8 @@ javascript_package_root:
         - selectedCount
         - selectedValues
         - selectedPayloads
+        - sourceCheckbox
+        - attemptedChecked
       selected:
         - payloads
       limit_exceeded:

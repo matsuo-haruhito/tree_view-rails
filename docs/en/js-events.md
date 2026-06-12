@@ -37,6 +37,12 @@ Dispatched when the current checkbox selection is refreshed or toggled.
 | `selectedCount` | Number | Count of checked, enabled TreeView selection checkboxes. |
 | `selectedValues` | Array<String> | Raw checkbox values for checked, enabled checkboxes. |
 | `selectedPayloads` | Array<Object> | Parsed JSON payloads from checked, enabled checkboxes. Invalid JSON values are omitted. |
+| `sourceCheckbox` | HTMLInputElement or null | Checkbox that triggered this change when the event comes from a user toggle. Initial connect, explicit refresh, submit, and other source-less paths set this to `null`. |
+| `attemptedChecked` | Boolean or null | Toggle state attempted on `sourceCheckbox`. Source-less paths set this to `null`. |
+
+When cascade selection is enabled, `sourceCheckbox` is the checkbox the user toggled. It is not a descendant delta list. Use `selectedCount`, `selectedValues`, and `selectedPayloads` for the resulting selection snapshot.
+
+`sourceCheckbox` is specific to `tree-view-selection:change`. The `checkbox` field on `tree-view-selection:limit-exceeded` and `tree-view-selection:invalid-payload` names the checkbox involved in those error or guard events.
 
 ### `tree-view-selection:selected`
 
