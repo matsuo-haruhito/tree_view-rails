@@ -52,6 +52,18 @@ GitHub Release notes を書く前に、[Release note candidate collector](releas
 
 committed `package-lock.json` はまだ `package.json` と同期していないため、JavaScript lane は local setup / CI ともに現時点では `npm install` 前提です。lockfile refresh 作業が入ったら、release checks も `npm ci` 前提へ戻します。
 
+### Lockfile refresh handoff
+
+registry-enabled な環境で lockfile refresh が入ったら、JavaScript lane を `npm ci` に戻す前に、release-facing な確認点を見直してください。
+
+- `package-lock.json` が current `package.json` に対して refresh され、関係ない dependency upgrade を同じ PR に混ぜていないことを確認する。
+- `npm ci` が現在の local / Docker install path になる場合は、`docs/en/development.md` と `docs/ja/development.md` の setup 説明も同期する。
+- この release checklist と、`npm install` 例外を説明している CI wording を更新する。
+- Node 22 source guard とは責務を分ける。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version`、`script/test_node_version_sources.mjs` は Node major の整合を確認し、lockfile refresh は `npm ci` に戻して安全かどうかを判断する。
+- 切り替え後は fresh な PR CI または main-push CI を観測し、refreshed lockfile が CI の JavaScript lane で動くことを確認する。
+
+この checklist だけを根拠に `package-lock.json`、workflow setup、dependency version、Node major を変更しないでください。実際の切り替えは、lockfile refresh または CI 変更を担当する PR に閉じます。
+
 ローカル確認:
 
 ```bash
