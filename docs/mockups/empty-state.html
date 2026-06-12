@@ -5,6 +5,122 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TreeView empty state mock</title>
 <link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-empty-toolbar-shell {
+  display: grid;
+  gap: 14px;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.mock-empty-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e4e7eb;
+  background: #f8fafc;
+}
+
+.mock-empty-toolbar__copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mock-empty-toolbar__title,
+.mock-empty-toolbar__meta {
+  margin: 0;
+}
+
+.mock-empty-toolbar__title {
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-empty-toolbar__meta {
+  color: #52606d;
+  font-size: 0.92rem;
+}
+
+.mock-empty-toolbar__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mock-empty-toolbar__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.35rem;
+  padding: 0.42rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #1d4ed8;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mock-empty-toolbar__action[aria-disabled="true"] {
+  border-style: dashed;
+  color: #94a3b8;
+  background: #f8fafc;
+  pointer-events: none;
+}
+
+.mock-empty-toolbar__reset {
+  color: #334155;
+}
+
+.mock-empty-toolbar__table-wrap {
+  overflow-x: auto;
+  padding: 0 16px 16px;
+}
+
+.mock-boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.mock-boundary-card {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid #e4e7eb;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.mock-boundary-card h3,
+.mock-boundary-card p {
+  margin: 0;
+}
+
+.mock-boundary-card h3 {
+  color: #102a43;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .mock-empty-toolbar {
+    align-items: stretch;
+  }
+
+  .mock-empty-toolbar__actions,
+  .mock-empty-toolbar__action {
+    width: 100%;
+  }
+}
+</style>
 </head>
 <body>
   <main class="mock-page">
@@ -85,6 +201,64 @@
           </tr>
         </tbody>
       </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="toolbar-empty-heading">
+      <h2 id="toolbar-empty-heading">Empty state with toolbar actions nearby</h2>
+      <p class="mock-empty-note">
+        Empty rows often sit below tree-wide actions. This focused state keeps toolbar availability,
+        empty copy, CTA, and filter reset as host-app decisions while preserving the TreeView empty-row hook.
+      </p>
+      <div class="mock-empty-toolbar-shell" data-tree-view-sample="empty-toolbar-boundary">
+        <div class="mock-empty-toolbar" aria-label="Host-owned toolbar beside empty TreeView state">
+          <div class="mock-empty-toolbar__copy">
+            <p class="mock-empty-toolbar__title">Repository folders</p>
+            <p class="mock-empty-toolbar__meta">Filtered by archived status and current team.</p>
+          </div>
+          <div class="mock-empty-toolbar__actions">
+            <span class="mock-empty-toolbar__action" aria-disabled="true">Expand all</span>
+            <span class="mock-empty-toolbar__action" aria-disabled="true">Collapse all</span>
+            <a class="mock-empty-toolbar__action mock-empty-toolbar__reset" href="#">Reset filters</a>
+          </div>
+        </div>
+        <div class="mock-empty-toolbar__table-wrap">
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">name</th>
+                <th scope="col">owner</th>
+                <th scope="col">state</th>
+                <th scope="col">actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="5">
+                  <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+                    <p class="tree-view-empty-row__message">No folders match this view.</p>
+                    <p class="mock-empty-note">TreeView keeps this slot full-width. Host apps decide whether reset, create, permission, or saved-view actions should be enabled.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="mock-boundary-grid" aria-label="Toolbar and empty state responsibility boundary">
+        <section class="mock-boundary-card">
+          <h3>TreeView owns</h3>
+          <p>The empty-row wrapper, full-width message slot, and reusable hook attributes.</p>
+        </section>
+        <section class="mock-boundary-card">
+          <h3>Host app owns</h3>
+          <p>Toolbar routes, disabled action policy, filter reset behavior, CTA copy, and permission messaging.</p>
+        </section>
+        <section class="mock-boundary-card">
+          <h3>Review focus</h3>
+          <p>Toolbar controls and empty copy should remain readable together at desktop and narrow widths.</p>
+        </section>
+      </div>
     </section>
 
     <section class="mock-section" aria-labelledby="comparison-heading">
