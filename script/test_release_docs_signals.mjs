@@ -74,3 +74,50 @@ const releaseDocs = [
 releaseDocs.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release checklist changelog policy", signals)
 })
+
+assertSignals("script/release_note_candidates.rb", "Release note candidate helper output", [
+  "# Release note candidates for #{repo}",
+  "Source: #{source}",
+  "This is a maintainer review aid. It does not rewrite CHANGELOG.md and does not decide the final release notes.",
+  "Merged pull requests",
+  "Closed issues",
+  "--since DATE",
+  "--since-tag TAG"
+])
+
+const releaseNoteCandidateDocs = [
+  [
+    "docs/en/release-note-candidates.md",
+    [
+      "script/release_note_candidates.rb",
+      "candidate collector only",
+      "It does not edit `CHANGELOG.md`.",
+      "It does not decide the final release notes.",
+      "--since 2026-06-01",
+      "--since-tag v0.1.0",
+      "# Release note candidates for matsuo-haruhito/tree_view-rails",
+      "## Merged pull requests",
+      "## Closed issues",
+      "release preparation notes, not committed as the final release text"
+    ]
+  ],
+  [
+    "docs/ja/release-note-candidates.md",
+    [
+      "script/release_note_candidates.rb",
+      "candidate collector に限定します",
+      "`CHANGELOG.md` は編集しません。",
+      "最終的な release notes を自動判断しません。",
+      "--since 2026-06-01",
+      "--since-tag v0.1.0",
+      "# Release note candidates for matsuo-haruhito/tree_view-rails",
+      "## Merged pull requests",
+      "## Closed issues",
+      "release preparation の確認メモへ貼るためのもの"
+    ]
+  ]
+]
+
+releaseNoteCandidateDocs.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release note candidate docs", signals)
+})
