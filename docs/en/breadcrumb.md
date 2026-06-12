@@ -89,7 +89,7 @@ Use `html:` for the `<nav>` element and item-aware `link_html:` / `current_html:
 
 TreeView merges these attributes with its built-in classes and accessibility attributes. `aria-label` on the `<nav>` still comes from `aria_label:`, and the current item keeps `aria-current="page"`.
 
-When `path_builder:` returns `nil` for a non-current item, TreeView applies the `link_class:` and `link_html:` hook to the fallback `<span>` so lightweight data attributes remain available without emitting an href-less anchor.
+When `path_builder:` returns `nil` for a non-current item, TreeView uses a plain fallback `<span>` with the `link_class:` class only. It does not apply `link_html:` to that fallback span, because route-specific data attributes and link semantics belong to actual links.
 
 For markup changes that need custom wrappers, conditional authorization copy, or route-specific behavior beyond attributes, render from `tree.path_for(item)` directly in the host app instead of stretching the bundled helper.
 
@@ -102,7 +102,7 @@ For markup changes that need custom wrappers, conditional authorization copy, or
 | `html:` | Additional attributes for the `<nav>` element. |
 | `list_html:` | Additional attributes for the `<ol>` element. |
 | `item_html:` | Additional attributes for each `<li>` element. A callable receives the item. |
-| `link_html:` | Additional attributes for link elements. A callable receives the item. Also applies to the fallback `<span>` when `path_builder:` returns `nil` for a non-current item. |
+| `link_html:` | Additional attributes for link elements. A callable receives the item. Not applied to non-current fallback labels when `path_builder:` returns `nil`. |
 | `current_html:` | Additional attributes for the current label element. A callable receives the item. |
 | `separator_html:` | Additional attributes for separator elements. A callable receives the previous item. |
 | `nav_class:` | Class for the breadcrumb `<nav>` container. |
@@ -136,7 +136,7 @@ Use that mockup as a visual companion to this helper boundary: it highlights pat
 | breadcrumb HTML helper | yes | calls helper |
 | label customization | builder hook | provides builder |
 | URL/path customization | builder hook, including item-level `nil` fallback | provides routes and decides non-linkable items |
-| lightweight HTML/data attributes | merge hooks | provides attributes and behavior |
+| lightweight HTML/data attributes | merge hooks for nav, list, items, links, current label, and separators | provides attributes and behavior |
 | authorization | no | yes |
 | current item selection | no | yes |
 | layout placement | no | yes |
