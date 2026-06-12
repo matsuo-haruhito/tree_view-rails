@@ -67,7 +67,7 @@ RSpec.describe TreeView::ResourceTableRenderState do
   end
 
   it "treats nil host row data as empty data" do
-    state = build_state(row_data_builder: ->(_item, _row_context = {}) { nil })
+    state = build_state(row_data_builder: ->(_item, _row_context = {}) {})
 
     expect(state.row_data_builder.call(root, {depth: 0})).to eq(
       rails_ui_row: true,
