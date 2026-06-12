@@ -36,6 +36,28 @@ RSpec.describe TreeViewBreadcrumbHelper do
     expect(rendered).to include("Grandchild")
   end
 
+  it "renders non-linkable ancestor crumbs as plain labels when path_builder returns nil" do
+    root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
+    child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
+    grandchild = BreadcrumbNode.new(id: 3, parent_item_id: 2, name: "Grandchild")
+    tree = build_tree([root, child, grandchild])
+    helper = build_helper
+
+    rendered = helper.tree_view_breadcrumb(
+      tree,
+      grandchild,
+      label_builder: ->(item) { item.name },
+      path_builder: ->(item) { item == root ? nil : "/nodes/#{item.id}" },
+      link_html: ->(item) { {data: {crumb_id: item.id}} }
+    )
+
+    expect(rendered).to include('<span data-crumb-id="1" class="tree-view-breadcrumb__link">Root</span>')
+    expect(rendered).to include('href="/nodes/2"')
+    expect(rendered).to include('data-crumb-id="2"')
+    expect(rendered).not_to include('href=""')
+    expect(rendered.scan('aria-current="page"').length).to eq(1)
+  end
+
   it "renders plain labels when path_builder is omitted" do
     root = BreadcrumbNode.new(id: 1, parent_item_id: nil, name: "Root")
     child = BreadcrumbNode.new(id: 2, parent_item_id: 1, name: "Child")
