@@ -46,8 +46,8 @@ test.describe("localized row labels mockup smoke", () => {
     const mockup = readFileSync(localizedMockupPath, "utf8")
     const row = deliberateExceptionRowFor(readme, "localized-row-labels.html")
 
-    expect(row).toContain("Long localized-style row labels and metadata")
-    expect(row).toContain("Stress primary label wrapping, badge placement, attribute labels, secondary metadata, and tooltip cues without choosing final translations.")
+    expect(row).toContain("Long localized-style row labels and metadata, plus deliberate CJK / Japanese-width sample text")
+    expect(row).toContain("CJK character width / badge proximity using intentional Japanese sample copy.")
     expect(mockup).toContain("Deliberate CJK width stress sample")
     expect(mockup).toContain("Final translation、permission wording、business action labels remain host-app owned.")
   })
