@@ -18,7 +18,16 @@
 .mock-presenter-boundary-table { width: 100%; border-collapse: collapse; }
 .mock-presenter-boundary-table th, .mock-presenter-boundary-table td { border-bottom: 1px solid #e4e7eb; padding: 0.7rem 0.75rem; text-align: left; vertical-align: top; }
 .mock-presenter-boundary-table th { background: #f1f5f9; color: #334e68; font-size: 0.8rem; text-transform: uppercase; }
-@media (max-width: 820px) { .mock-presenter-grid { grid-template-columns: 1fr; } .tree-view-table { display: block; overflow-x: auto; } }
+.mock-presenter-density-table td { vertical-align: top; }
+.mock-presenter-density-table .tree-row-actions { min-width: 8rem; }
+.mock-presenter-density-meta { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.45rem; }
+.mock-presenter-density-chip { display: inline-flex; align-items: center; border: 1px solid #d8dee8; border-radius: 999px; background: #f8fafc; color: #334e68; font-size: 0.78rem; line-height: 1.2; padding: 0.18rem 0.5rem; }
+.mock-presenter-density-chip--host { background: #fefce8; border-color: #fde68a; color: #854d0e; }
+.mock-presenter-density-note { display: block; color: #52606d; font-size: 0.86rem; line-height: 1.35; margin-top: 0.35rem; }
+.mock-presenter-action-group { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
+.mock-presenter-action-secondary { color: #52606d; font-weight: 700; text-decoration: none; }
+.mock-presenter-action-secondary:hover, .mock-presenter-action-secondary:focus { text-decoration: underline; }
+@media (max-width: 820px) { .mock-presenter-grid { grid-template-columns: 1fr; } .tree-view-table { display: block; overflow-x: auto; } .mock-presenter-action-group { min-width: 10rem; } }
 </style>
 </head>
 <body>
@@ -51,6 +60,34 @@
           <tr id="presenter_node_3" class="tree-row is-collapsed" data-tree-node-key="node:archive" data-tree-parent-key="node:platform" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false">
             <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Archived branch collapsed"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#">show</a><span class="tree-toggle__level">child</span><span class="tree-toggle__hidden-count" title="Hidden descendants">4</span></span></span><span class="mock-node-stack"><span class="mock-node-primary"><span class="mock-presenter-icon" aria-hidden="true">R</span><a class="mock-presenter-link" href="#archive" title="Open read-only branch">Reference archive</a><span class="tree-node-badge tree-node-badge--warning" title="Optional presenter badge">readonly</span></span><span class="mock-node-secondary">Optional action can render disabled while final permission behavior stays in the host app.</span></span></td>
             <td>Host-owned policy note</td><td><span class="mock-status mock-status--archived">readonly</span></td><td class="tree-row-actions"><a class="mock-presenter-action" href="#" aria-disabled="true">Unavailable</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="dense-presenter-heading">
+      <h2 id="dense-presenter-heading">Dense href, tooltip, badge, and action states</h2>
+      <p class="mock-presenter-note">These rows stress the same presenter-owned values in denser host contexts. The hierarchy cue remains first, while final routing, permission copy, and business columns stay outside TreeView.</p>
+      <table class="tree-view-table mock-presenter-density-table" aria-label="Dense NodePresenter row partial states">
+        <thead><tr><th scope="col">tree node</th><th scope="col">presenter density</th><th scope="col">host-owned adjacent state</th><th scope="col">optional action</th></tr></thead>
+        <tbody>
+          <tr id="presenter_dense_node_1" class="tree-row is-expanded" data-tree-node-key="dense:ops" data-tree-parent-key="" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Operations root expanded"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#">hide</a><span class="tree-toggle__level">root</span></span></span><span class="mock-node-stack"><span class="mock-node-primary"><span class="mock-presenter-icon" aria-hidden="true">O</span><a class="mock-presenter-link" href="#operations" title="Presenter tooltip: open operations workspace">Operations workspace with a longer presenter label</a><span class="tree-node-badge tree-node-badge--info" title="Presenter badge from resolver metadata">resolver badge</span></span><span class="mock-node-secondary">Presenter label, href, tooltip, icon, and badge wrap together without hiding the root cue.</span></span></td>
+            <td><span class="mock-presenter-density-chip">href</span><span class="mock-presenter-density-chip">tooltip</span><span class="mock-presenter-density-chip">badge</span><span class="mock-presenter-density-note">Presenter data is display input for the row partial, not a route or permission policy.</span></td>
+            <td><div class="mock-presenter-density-meta"><span class="mock-presenter-density-chip mock-presenter-density-chip--host">host status</span><span class="mock-presenter-density-chip mock-presenter-density-chip--host">owner column</span><span class="mock-presenter-density-chip mock-presenter-density-chip--host">count</span></div></td>
+            <td class="tree-row-actions"><div class="mock-presenter-action-group"><a class="mock-presenter-action" href="#operations-open">Open</a><a class="mock-presenter-action-secondary" href="#operations-preview">Preview</a></div></td>
+          </tr>
+          <tr id="presenter_dense_node_2" class="tree-row is-selected" data-tree-node-key="dense:incident" data-tree-parent-key="dense:ops" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-current="page">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Current incident leaf"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">child</span></span></span><span class="mock-node-stack"><span class="mock-node-primary"><span class="mock-presenter-icon" aria-hidden="true">I</span><a class="mock-presenter-link" href="#incident" title="Presenter tooltip: current incident detail">Current incident response node</a><span class="tree-node-badge" title="Current presenter target">current</span><span class="tree-node-badge tree-node-badge--warning" title="Presenter badge: escalated">escalated</span></span><span class="mock-node-secondary">Multiple badges remain presenter-owned cues; current-row styling remains TreeView-owned.</span></span></td>
+            <td><span class="mock-presenter-density-chip">two badges</span><span class="mock-presenter-density-chip">long tooltip</span><span class="mock-presenter-density-note">Badge wording is neutral here. Host apps own the final label and severity taxonomy.</span></td>
+            <td><div class="mock-presenter-density-meta"><span class="mock-presenter-density-chip mock-presenter-density-chip--host">permission note</span><span class="mock-presenter-density-chip mock-presenter-density-chip--host">SLA 2h</span></div></td>
+            <td class="tree-row-actions"><div class="mock-presenter-action-group"><a class="mock-presenter-action" href="#incident-open">Open</a><a class="mock-presenter-action-secondary" href="#incident-audit">Audit</a></div></td>
+          </tr>
+          <tr id="presenter_dense_node_3" class="tree-row is-collapsed" data-tree-node-key="dense:archive" data-tree-parent-key="dense:ops" data-tree-depth="1" data-tree-expanded="false" aria-level="2" aria-expanded="false">
+            <td class="btn-cell tree-toggle-cell"><span class="tree-toggle" aria-label="Archive branch collapsed"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><a class="tree-toggle__action" href="#">show</a><span class="tree-toggle__level">child</span><span class="tree-toggle__hidden-count" title="Hidden descendants">6</span></span></span><span class="mock-node-stack"><span class="mock-node-primary"><span class="mock-presenter-icon" aria-hidden="true">L</span><a class="mock-presenter-link" href="#archive" title="Presenter tooltip: readonly archive branch">Legacy archive branch</a><span class="tree-node-badge tree-node-badge--warning" title="Presenter badge: readonly">readonly</span></span><span class="mock-node-secondary">Disabled or secondary actions can be shown as review cues without promising authorization behavior.</span></span></td>
+            <td><span class="mock-presenter-density-chip">collapsed</span><span class="mock-presenter-density-chip">readonly badge</span><span class="mock-presenter-density-note">Hidden descendant count is still a TreeView cue; action availability remains host-owned.</span></td>
+            <td><div class="mock-presenter-density-meta"><span class="mock-presenter-density-chip mock-presenter-density-chip--host">archive policy</span><span class="mock-presenter-density-chip mock-presenter-density-chip--host">business copy</span></div></td>
+            <td class="tree-row-actions"><div class="mock-presenter-action-group"><a class="mock-presenter-action" href="#" aria-disabled="true">Unavailable</a><a class="mock-presenter-action-secondary" href="#archive-log">View log</a></div></td>
           </tr>
         </tbody>
       </table>
