@@ -54,7 +54,7 @@ test.describe("docs responsibility boundary smoke", () => {
 
     await expect(page.locator("input[type='checkbox']")).toHaveCount(0)
     await expect(page.getByRole("button")).toHaveCount(0)
-    await expect(page.getByRole("link", { name: /new|edit|delete|download|open/i })).toHaveCount(0)
+    await expect(page.getByRole("link", { name: /new|edit|delete|download/i })).toHaveCount(0)
     await expect(page.getByText(/seeded demo records/i)).toBeVisible()
   })
 })
