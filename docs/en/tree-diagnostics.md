@@ -74,7 +74,7 @@ end
 
 `Result#success?` only reflects collected errors. Orphan reports are warnings, so review `warnings` when filtered, imported, or permission-scoped data can leave records outside the rendered tree.
 
-The manifest-backed diagnostics contract covers the accepted check names and the `Result` reader surface. The stable check names are `node_keys`, `dom_ids`, `orphans`, and `cycles`. A diagnostics `Result` exposes `checks`, `errors`, `warnings`, and `success?`. The manifest intentionally does not freeze individual error entry internals, warning detail shape, orphan warning semantics, or cycle validation policy; those remain documented behavior and host-app data policy boundaries rather than a broader manifest schema.
+The manifest-backed diagnostics contract covers the accepted check names, the `TreeView::Diagnostics.run` option key surface, and the `Result` reader surface. The stable check names are `node_keys`, `dom_ids`, `orphans`, and `cycles`. The run option keys are `checks` and `raise_errors`: `checks:` selects from the accepted check names, while `raise_errors:` selects whether failures are collected into a `Result` or raised immediately. A diagnostics `Result` exposes `checks`, `errors`, `warnings`, and `success?`. The manifest intentionally does not freeze accepted value schemas, boolean coercion, individual error entry internals, warning detail shape, orphan warning semantics, or cycle validation policy; those remain documented behavior and host-app data policy boundaries rather than a broader manifest schema.
 
 ## Pre-render validation review note
 

@@ -60,6 +60,8 @@ render_state = TreeView::RenderState.new(
 
 TreeView は host app 側の class / data を残したうえで、`row_disabled_builder` または `row_readonly_builder` が `true` を返したときに documented な TreeView status class/data key を追加します。disabled reason は `row_disabled_reason_builder` が present な値を返したときに追加されます。
 
+`row_data_builder` は host app metadata 用の hook です。public API manifest が追跡するのは `row_data_builder` callback key が initializer keyword かつ reader として存在することまでで、callback の戻り値 shape や merge 後のすべての row data attribute を manifest-backed schema にするものではありません。host app metadata は `document_id` のような app-owned key に置き、`tree_view_row_disabled`、`tree_view_row_readonly`、`tree_view_row_disabled_reason` のような TreeView-owned status key を上書き前提で使わないでください。
+
 ## selectionとの違い
 
 selection の `disabled_builder` は checkbox を選択不可にします。
@@ -79,6 +81,8 @@ row status は行全体の見た目や状態を表すための hook です。
 |---|---|---|
 | status builder invocation | yes | provides builders |
 | row class/data merge | yes | provides additional attributes |
+| TreeView-owned status data keys | yes | app-owned metadata として扱わない |
+| `row_data_builder` 由来の host-app metadata key | merge 時に維持する | name、value、JavaScript 利用を所有する |
 | business rule | no | yes |
 | authorization | no | yes |
 | action disabling | no | yes |

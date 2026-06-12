@@ -99,13 +99,13 @@ TreeView は、これらの属性をbuilt-in classやaccessibility属性とmerge
 | `separator:` | item間のseparator。 |
 | `aria_label:` | breadcrumb の `<nav>` 要素に付与するaccessible label。 |
 
-この表の option 名は、`config/public_api_manifest.yml` の `helper_option_keys.tree_view_breadcrumb` にも載っています。この manifest-backed list は既存 helper option surface の互換性 contract であり、markup、route、authorization behavior を追加するものではありません。
+この表の option 名は、`config/public_api_manifest.yml` の `helper_option_keys.tree_view_breadcrumb` にも載っています。この manifest-backed list は既存 helper option surface の互換性 contract であり、markup、route、authorization、mode 推測、exact HTML structure の挙動を追加するものではありません。records mode lookup、unsupported mode failure、`aria-current="page"`、追加HTML属性の merge hook は、より広い manifest schema ではなく focused spec とこのguideでguardします。
 
 ## 対応mode
 
 breadcrumb helper は records mode のtreeを前提にします。
 
-resolver mode や adapter mode では、親方向のpathを一意に辿れない場合があります。そのため、unsupported modeでは `TreeView::Tree` 側のpath helper errorを使って明確に失敗します。
+resolver mode や adapter mode では、親方向のpathを一意に辿れない場合があります。そのため、unsupported modeでは `TreeView::Tree` 側のpath helper errorを使って明確に失敗します。TreeView は GraphAdapter や resolver mode のdataから breadcrumb trail を推測しません。host app がそのpath policyを持つ場合は、host app側のtrail dataから直接renderしてください。
 
 ## Visual reference
 
