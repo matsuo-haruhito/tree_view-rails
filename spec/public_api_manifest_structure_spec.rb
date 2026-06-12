@@ -20,6 +20,7 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   path_tree_builder_node_shapes
   helper_methods
   helper_option_keys
+  render_window_metadata
   toolbar_actions
   toolbar_action_metadata
   setup_generators
@@ -130,6 +131,14 @@ RSpec.describe "Public API manifest structure" do
     end
   end
 
+  it "keeps NodePresenter builder names shaped as a non-empty string list" do
+    builder_names = manifest.fetch("node_presenter_builder_names")
+
+    expect(builder_names).to be_an(Array)
+    expect(builder_names).not_to be_empty
+    expect(builder_names).to all(be_a(String))
+  end
+
   it "keeps grouped option key sections shaped as non-empty string lists" do
     manifest.fetch("grouped_option_keys").each do |group_name, keys|
       expect(group_name).to be_a(String)
@@ -139,12 +148,12 @@ RSpec.describe "Public API manifest structure" do
     end
   end
 
-  it "keeps NodePresenter builder names shaped as a non-empty string list" do
-    builder_names = manifest.fetch("node_presenter_builder_names")
+  it "keeps render window metadata shaped as a non-empty string list" do
+    metadata = manifest.fetch("render_window_metadata")
 
-    expect(builder_names).to be_an(Array)
-    expect(builder_names).not_to be_empty
-    expect(builder_names).to all(be_a(String))
+    expect(metadata).to be_an(Array)
+    expect(metadata).not_to be_empty
+    expect(metadata).to all(be_a(String))
   end
 
   it "keeps diagnostics sections shaped as explicit public contract lists" do

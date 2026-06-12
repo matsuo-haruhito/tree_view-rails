@@ -175,6 +175,20 @@ helper_option_keys:
     - button_class_name
     - html
     - action_html
+render_window_metadata:
+  - rows
+  - offset
+  - limit
+  - total_count
+  - before_count
+  - after_count
+  - start_index
+  - end_index
+  - previous?
+  - next?
+  - previous_offset
+  - next_offset
+  - empty?
 toolbar_actions:
   expand_all: expanded
   collapse_all: collapsed
@@ -283,8 +297,12 @@ javascript_package_root:
     - registerTreeViewControllers
     - TreeViewControllerIdentifiers
     - TreeViewControllerEntries
+    - TreeViewIntegrationHooks
     - TreeViewSelectionDataHooks
+    - TreeViewSelectionCheckboxHooks
     - TreeViewEmptyStateHooks
+    - TreeViewRemoteStateDataHooks
+    - TreeViewToolbarDataHooks
     - TreeViewTransferDropPositions
     - TreeViewTransferDataMimeTypes
     - TreeViewRemoteStateValues
@@ -306,6 +324,15 @@ javascript_package_root:
     loading: loading
     loaded: loaded
     error: error
+  remote_state_data_hooks:
+    lazy_attribute: data-tree-lazy
+    children_url_attribute: data-tree-children-url
+    loaded_attribute: data-tree-loaded
+    remote_state_attribute: data-tree-remote-state
+  toolbar_data_hooks:
+    toolbar_attribute: data-tree-view-toolbar
+    action_attribute: data-tree-view-toolbar-action
+    disabled_attribute: data-tree-view-toolbar-disabled
   controller_registrations:
     - key: state
       identifier: tree-view-state
@@ -398,11 +425,22 @@ javascript_package_root:
         - row
       invalid_transfer:
         - value
+  integration_hooks:
+    state:
+      view_key_value: data-tree-view-state-view-key-value
+      node_key: data-tree-view-state-node-key
+    remote_state:
+      children_url: data-tree-children-url
+    transfer:
+      payload: data-tree-transfer-payload
   selection_data_hooks:
     hidden_input_name_value: data-tree-view-selection-hidden-input-name-value
     max_count_value: data-tree-view-selection-max-count-value
     cascade_value: data-tree-view-selection-cascade-value
     indeterminate_value: data-tree-view-selection-indeterminate-value
+  selection_checkbox_hooks:
+    checkbox_class: tree-selection-checkbox
+    disabled_reason_attribute: data-tree-selection-disabled-reason
   empty_state_hooks:
     wrapper_attribute: data-tree-view-empty-state
     content_class: tree-view-empty-row__content
