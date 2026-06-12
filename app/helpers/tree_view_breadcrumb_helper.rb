@@ -77,13 +77,13 @@ module TreeViewBreadcrumbHelper
     return tree_view_breadcrumb_current_label(item, label_builder, current_class, current_html) if current
 
     unless path_builder
-      return tree_view_breadcrumb_plain_label(item, label_builder, current_class, current_html, :current_html)
+      return tree_view_breadcrumb_plain_label(item, label_builder, current_class)
     end
 
     href = path_builder.call(item)
     return tree_view_breadcrumb_link(item, label_builder, href, link_class, link_html) if href
 
-    tree_view_breadcrumb_plain_label(item, label_builder, link_class, link_html, :link_html)
+    tree_view_breadcrumb_plain_label(item, label_builder, link_class)
   end
 
   def tree_view_breadcrumb_link(item, label_builder, href, link_class, link_html)
@@ -99,15 +99,10 @@ module TreeViewBreadcrumbHelper
     )
   end
 
-  def tree_view_breadcrumb_plain_label(item, label_builder, label_class, label_html, option_name)
+  def tree_view_breadcrumb_plain_label(item, label_builder, label_class)
     tag.span(
       label_builder.call(item),
-      **tree_view_breadcrumb_html_options(
-        label_html,
-        item,
-        option_name: option_name,
-        class_name: label_class
-      )
+      class: label_class
     )
   end
 
