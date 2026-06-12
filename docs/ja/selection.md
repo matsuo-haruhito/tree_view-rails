@@ -77,6 +77,8 @@ selection: {
 
 `disabled_reason_builder` の戻り値は、checkboxの `title` と `data-tree-selection-disabled-reason` に出力されます。
 
+host app の JavaScript や browser test で、描画済み selection checkbox や disabled reason attribute を raw string の写経なしで参照したい場合は、package root の `TreeViewSelectionCheckboxHooks.checkboxClass` と `TreeViewSelectionCheckboxHooks.disabledReasonAttribute` を使えます。raw `.tree-selection-checkbox` class と `data-tree-selection-disabled-reason` attribute は引き続き documented DOM contract であり、export はそれらの名前を machine-readable に参照するためのものです。詳しくは [Selection checkbox hooks](selection-checkbox-hooks.md) を参照してください。
+
 ## JavaScript selection API
 
 `tree-view-selection` は、描画済みselection checkboxからchecked node payloadを収集できます。

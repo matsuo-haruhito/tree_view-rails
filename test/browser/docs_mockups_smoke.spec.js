@@ -52,6 +52,7 @@ const focusedMockupSmokeTargets = [
   { file: "default-tree.html", sample: ".tree-view-table tbody tr", minimumCount: 4 },
   { file: "minimal-usage-first-render.html", sample: "[data-tree-view-sample='minimal-usage-first-render'] .tree-view-table tbody tr", minimumCount: 3 },
   { file: "resource-table-bridge.html", sample: ".mock-bridge-table tbody tr", minimumCount: 4 },
+  { file: "resource-table-empty-colspan-boundary.html", sample: "[data-tree-view-sample='resource-table-empty-colspan-boundary'] .tree-view-empty-row__content", minimumCount: 2 },
   { file: "table-caption-context.html", sample: ".tree-view-table caption", minimumCount: 1 },
   { file: "narrow-sidebar-tree.html", sample: ".mock-narrow-frame", minimumCount: 2 },
   { file: "current-branch-sidebar.html", sample: ".tree-row.is-selected[aria-current='page']", minimumCount: 1 },
@@ -61,6 +62,7 @@ const focusedMockupSmokeTargets = [
   { file: "children-pagination.html", sample: ".mock-pagination-card", minimumCount: 3 },
   { file: "reduced-motion-state-cues.html", sample: "[data-tree-view-sample='reduced-motion-state-cues'] .tree-view-table tbody tr", minimumCount: 5 },
   { file: "keyboard-focus-states.html", sample: ".focus-sample, .focus-sample--soft", minimumCount: 5 },
+  { file: "accessibility-semantics.html", sample: "[data-tree-view-sample='accessibility-semantics'] .tree-view-table tbody tr", minimumCount: 5 },
   { file: "keyboard-current-row/index.html", sample: ".keyboard-current-row, .keyboard-current-focus", minimumCount: 3 },
   { file: "high-contrast-state-cues/index.html", sample: "[data-tree-view-sample='high-contrast-state-cues']", minimumCount: 1 },
   { file: "direction-aware-cues/index.html", sample: ".direction-frame .tree-view-table tbody tr", minimumCount: 10 },
@@ -87,6 +89,7 @@ const focusedMockupSmokeTargets = [
 const narrowOverflowExpectedMockups = new Map([
   ["default-tree.html", "wide baseline table columns are intentionally visible in the reference mockup"],
   ["resource-table-bridge.html", "resource-table comparison keeps fuller columns visible for review"],
+  ["resource-table-empty-colspan-boundary.html", "resource-table colspan boundary keeps selection, metadata, and action columns visible for review"],
   ["table-caption-context.html", "table caption reference keeps host-owned action and status columns visible"],
   ["row-status-depth-labels.html", "status/depth table columns are intentionally preserved"],
   ["toggle-icon-states.html", "toggle-state comparison uses a wide table matrix"],
@@ -94,6 +97,7 @@ const narrowOverflowExpectedMockups = new Map([
   ["children-pagination.html", "children pagination examples keep branch page-state columns visible"],
   ["reduced-motion-state-cues.html", "state-cue comparison keeps the table matrix visible"],
   ["keyboard-focus-states.html", "focus samples include multiple side-by-side controls"],
+  ["accessibility-semantics.html", "table-first ARIA comparison keeps state and boundary columns visible"],
   ["keyboard-current-row/index.html", "keyboard current-row comparison keeps focus/current/action columns visible"],
   ["high-contrast-state-cues/index.html", "high-contrast state-cue panels stay side by side for comparison"],
   ["direction-aware-cues/index.html", "direction-aware examples keep multiple writing directions visible for comparison"],
@@ -122,18 +126,19 @@ test.describe("docs mockup browser smoke", () => {
 
     await expect(page.getByRole("heading", { name: "TreeView mockup review gallery", level: 1 })).toBeVisible()
     await expect(page.getByRole("navigation", { name: "Documentation entry points" })).toBeVisible()
-    await expect(page.getByRole("link", { name: "Baseline" })).toHaveAttribute("href", "#gallery-default-heading")
-    await expect(page.getByRole("link", { name: "Minimal usage" })).toHaveAttribute("href", "#gallery-minimal-usage-heading")
-    await expect(page.getByRole("link", { name: "Interaction states" })).toHaveAttribute("href", "#gallery-interaction-heading")
-    await expect(page.getByRole("link", { name: "Current branch" })).toHaveAttribute("href", "#gallery-current-branch-heading")
-    await expect(page.getByRole("link", { name: "Keyboard current row" })).toHaveAttribute("href", "#gallery-keyboard-current-heading")
-    await expect(page.getByRole("link", { name: "Direction-aware cues" })).toHaveAttribute("href", "#gallery-direction-heading")
-    await expect(page.getByRole("link", { name: "Presenter row partials" })).toHaveAttribute("href", "#gallery-node-presenter-heading")
-    await expect(page.getByRole("link", { name: "Localized labels" })).toHaveAttribute("href", "#gallery-localized-heading")
-    await expect(page.getByRole("link", { name: "Selection form" })).toHaveAttribute("href", "#gallery-selection-form-heading")
-    await expect(page.getByRole("link", { name: "Pagination selection" })).toHaveAttribute("href", "#gallery-pagination-selection-heading")
+    await expect(page.getByRole("link", { name: "Baseline", exact: true })).toHaveAttribute("href", "#gallery-default-heading")
+    await expect(page.getByRole("link", { name: "Minimal usage", exact: true })).toHaveAttribute("href", "#gallery-minimal-usage-heading")
+    await expect(page.getByRole("link", { name: "Interaction states", exact: true })).toHaveAttribute("href", "#gallery-interaction-heading")
+    await expect(page.getByRole("link", { name: "Current branch", exact: true })).toHaveAttribute("href", "#gallery-current-branch-heading")
+    await expect(page.getByRole("link", { name: "Keyboard current row", exact: true })).toHaveAttribute("href", "#gallery-keyboard-current-heading")
+    await expect(page.getByRole("link", { name: "Direction-aware cues", exact: true })).toHaveAttribute("href", "#gallery-direction-heading")
+    await expect(page.getByRole("link", { name: "Presenter row partials", exact: true })).toHaveAttribute("href", "#gallery-node-presenter-heading")
+    await expect(page.getByRole("link", { name: "Localized labels", exact: true })).toHaveAttribute("href", "#gallery-localized-heading")
+    await expect(page.getByRole("link", { name: "Selection form", exact: true })).toHaveAttribute("href", "#gallery-selection-form-heading")
+    await expect(page.getByRole("link", { name: "Pagination selection", exact: true })).toHaveAttribute("href", "#gallery-pagination-selection-heading")
     await expect(page.frameLocator("iframe[title='Default tree mock preview']").getByRole("heading", { name: "Default TreeView rendering mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Minimal usage first render mock preview']").getByRole("heading", { name: "Minimal usage first render mock", level: 1 })).toBeVisible()
+    await expect(page.frameLocator("iframe[title='Resource table empty colspan boundary mock preview']").getByRole("heading", { name: "Resource table empty colspan boundary mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Table caption context mock preview']").getByRole("heading", { name: "Table caption context mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Current branch sidebar mock preview']").getByRole("heading", { name: "Current branch sidebar mock", level: 1 })).toBeVisible()
     await expect(page.frameLocator("iframe[title='Keyboard current row mock preview']").getByRole("heading", { name: "Keyboard focus and current-row cues", level: 1 })).toBeVisible()
@@ -154,11 +159,13 @@ test.describe("docs mockup browser smoke", () => {
 
     expect(linkedFiles).toContain("default-tree.html")
     expect(linkedFiles).toContain("minimal-usage-first-render.html")
+    expect(linkedFiles).toContain("resource-table-empty-colspan-boundary.html")
     expect(linkedFiles).toContain("table-caption-context.html")
     expect(linkedFiles).toContain("interaction-states.html")
     expect(linkedFiles).toContain("children-pagination.html")
     expect(linkedFiles).toContain("reduced-motion-state-cues.html")
     expect(linkedFiles).toContain("current-branch-sidebar.html")
+    expect(linkedFiles).toContain("accessibility-semantics.html")
     expect(linkedFiles).toContain("keyboard-current-row/index.html")
     expect(linkedFiles).toContain("direction-aware-cues/index.html")
     expect(linkedFiles).toContain("node-presenter-row-partials.html")

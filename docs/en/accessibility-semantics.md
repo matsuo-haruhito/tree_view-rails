@@ -45,6 +45,8 @@ For a static comparison of no-root-items and no-results rows, the reusable empty
 
 Use that mockup as a visual companion to this policy; it does not redefine ARIA behavior, CTA copy, or filter-reset workflow.
 
+For a focused visual companion to the table-first ARIA policy, see [accessibility-semantics.html](../mockups/accessibility-semantics.html). It shows representative row-level ARIA placement, toggle `aria-expanded`, omitted `aria-controls`, and host-app-owned page-structure boundaries without redefining runtime behavior or promising a full treegrid model.
+
 ## Supported rendering examples
 
 ### Static table rows

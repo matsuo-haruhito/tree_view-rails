@@ -201,6 +201,42 @@ RSpec.describe TreeView::VisibleRows do
     expect(rows.map(&:node_key)).to eq([1] + direct_child_ids(wide_nodes))
   end
 
+  it "feeds a representative wide tree into a render window with stable boundary counts" do
+    wide_nodes = build_wide_tree(child_count: 5)
+    wide_tree = TreeView::Tree.new(
+      records: wide_nodes,
+      parent_id_method: :parent_item_id,
+      sorter: ->(items, _tree) { items.sort_by(&:id) }
+    )
+
+    rows = described_class.new(
+      tree: wide_tree,
+      root_items: wide_tree.root_items,
+      render_state: build_render_state(tree: wide_tree)
+    ).to_a
+    window = TreeView::RenderWindow.new(rows, offset: 2, limit: 3)
+
+    expect(rows.map(&:node_key)).to eq([1] + direct_child_ids(wide_nodes))
+    expect(window.rows.map(&:node_key)).to eq([3, 4, 5])
+    expect(window.total_count).to eq(6)
+    expect(window.before_count).to eq(2)
+    expect(window.after_count).to eq(1)
+    expect(window.previous_offset).to eq(0)
+    expect(window.next_offset).to eq(5)
+  end
+
+  it "keeps out-of-range render windows explainable for visible row output" do
+    rows = described_class.new(tree: tree, root_items: tree.root_items, render_state: build_render_state).to_a
+    window = TreeView::RenderWindow.new(rows, offset: 10, limit: 3)
+
+    expect(window.rows).to eq([])
+    expect(window.total_count).to eq(4)
+    expect(window.before_count).to eq(4)
+    expect(window.after_count).to eq(0)
+    expect(window.next_offset).to be_nil
+    expect(window.previous_offset).to eq(7)
+  end
+
   it "does not traverse hidden grandchildren for collapsed wide branches" do
     mixed_nodes = build_wide_tree(child_count: 40, grandchildren_per_child: 5)
     mixed_tree = TreeView::Tree.new(

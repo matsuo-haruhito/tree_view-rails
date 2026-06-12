@@ -19,6 +19,82 @@ cookbook は、個別APIの詳細仕様ではなく、host appでよく使う構
 - [Localized names](localized-names.md)
 - [toggle icon のカスタマイズ](toggle-icons.md)
 
+## よくある組み合わせから組み立てる
+
+[API判断ガイド](decision-guide.md#よくある組み合わせ) で scenario を選んだ後、この節を使ってください。各 recipe は組み合わせる TreeView primitive を示し、product route、authorization、保存、最終copyは host app 側に残します。
+
+### 大きな folder browser
+
+branch を開いたときに必要な子要素だけ取得したい場合は [Lazy Loading](lazy-loading.md) から始めます。読み込んだ branch だけでも直接 children が多い場合は [Children Pagination](children-pagination.md) を足し、ユーザーが再訪時に同じ開閉状態へ戻る必要がある場合だけ [Persisted State](persisted-state.md) を足します。
+
+TreeView は lazy-loading hook、children container ID、remote-state placeholder、row rendering、persisted-state helper を提供します。folder query、cursor / offset strategy、stable ordering、authorization、retry copy、scroll位置に応じた virtualization は host app 側の責務です。問題が server-side child fetching ではなく HTML 出力量なら、[描画スケール](render-scale.md) と [Windowed Rendering](windowed-rendering.md) を使います。
+
+### bulk action page
+
+選択した row を host app action に送信する画面では `selection:` option から始めます。`checkbox_name`、`visibility`、`disabled_builder`、`disabled_reason_builder` で row 単位の selection shape を描画し、周辺の form と submit endpoint は host app 側で接続します。未読み込み descendants がある場合は [Children Pagination](children-pagination.md#selectionとbulk-action) と合わせ、TreeView が描画も authorization もしていない row を送信できるように見せないでください。
+
+TreeView は checkbox state、selected values、selected payloads、disabled reason、hidden-input sync、client-side max-count guard を担当します。bulk operation、permission check、query filter、server-side intent、confirmation copy、成功 / 失敗 handling は host app 側で扱います。event と payload contract は [Selection](selection.md) を参照し、静的な UI copy を確認するときは [selection-multi-tree-form.html](../mockups/selection-multi-tree-form.html) や [children-pagination-selection-boundary.html](../mockups/children-pagination-selection-boundary.html) を比較してください。
+
+### status が多い tree table
+
+業務列は `row_partial` から始め、TreeView が一貫して描画できる row 状態には `row_class_builder`、`row_data_builder`、`badge_builder` を使います。status table に行単位 action も必要な場合だけ `row_actions_partial` を足します。cookbook を完成した product table にせず、[Row status](row-status.md)、[Form と編集行](form-editing.md)、static mockup map へ導線を置いて status rule を読みやすくします。
+
+TreeView は rendering slot と再利用可能な row-state hook を担当します。status vocabulary、permission model、action availability、保存、route target、最終的な badge / action copy は host app 側の責務です。status + depth label の組み合わせは [row-status-depth-labels.html](../mockups/row-status-depth-labels.html)、業務列と TreeView hierarchy control を並べる場合は [resource-table-bridge.html](../mockups/resource-table-bridge.html) を参照してください。
+
+### path らしい record から documents / attachments を表示する
+
+Database 上に folder record はないが、documents、attachments、generated artifacts、export file などが path らしい値を持つ場合は [PathTreeBuilder](path-tree-builder.md) を使います。builder は生成 folder node と record-backed leaf node を提供し、query、permission scope、download route、preview behavior、最終的な業務copy は host app 側に残します。
+
+```ruby
+builder = TreeView::PathTreeBuilder.new(
+  records: current_project.documents.visible_to(current_user),
+  path_resolver: ->(document) { document.source_relative_path },
+  id_resolver: ->(document) { TreeView.node_key(:document, document.id) },
+  label_resolver: ->(document) { document.title },
+  sort: { folders_first: true }
+)
+
+render_state = TreeView::RenderState.new(
+  tree: builder.tree,
+  root_items: builder.root_items,
+  row_partial: "documents/tree_columns",
+  row_actions_partial: "documents/tree_actions",
+  ui_config: tree_ui
+)
+```
+
+row partial の分岐は小さく保ちます。folder row は生成された grouping context を説明し、record row は `item.record` を取り出して host app 固有の metadata や action を描画します。
+
+```erb
+<!-- app/views/documents/_tree_columns.html.erb -->
+<% if item.folder_node? %>
+  <td><%= item.label %></td>
+  <td><%= item.path %></td>
+  <td>Generated folder</td>
+<% elsif item.record_node? %>
+  <% document = item.record %>
+  <td><%= item.label %></td>
+  <td><%= item.path %></td>
+  <td><%= document.owner_name %></td>
+  <td><%= document.review_state %></td>
+<% end %>
+```
+
+```erb
+<!-- app/views/documents/_tree_actions.html.erb -->
+<% if item.record_node? %>
+  <% document = item.record %>
+  <td>
+    <%= link_to "Preview", document_path(document) %>
+    <%= link_to "Download", download_document_path(document) %>
+  </td>
+<% else %>
+  <td></td>
+<% end %>
+```
+
+TreeView は generated folder shape、record node wrapping、row rendering slot、再利用可能な hierarchy cue を担当します。どの record を含めるか、描画や download 前の permission check、path normalization policy、preview availability、file size / status metadata、最終的な action label は host app 側の責務です。長い path segment や folder / record row の組み合わせを確認する場合は [PathTreeBuilder row mockup](../mockups/path-tree-builder-rows.html) を参照してください。
+
 ## 現在itemのbreadcrumbを追加する
 
 records mode のtreeと現在itemがあり、rootからそのitemまでの短いpathをUIに出したい場合は [Breadcrumb](breadcrumb.md) を使います。TreeView は `tree.path_for(item)` で祖先pathを解決し、`tree_view_breadcrumb` で標準的なbreadcrumb markupを描画します。
@@ -235,7 +311,7 @@ render_state = TreeView::RenderState.new(
 )
 ```
 
-host app JavaScriptが安定したmetadataを必要とする場合は `row_data_builder` を使います。TreeView levelのinteractionとしてreadonly / disabledを表したい場合は [Row status](row-status.md) も参照してください。authorization decisionや業務ruleは引き続きhost app側で扱います。
+host app JavaScriptが安定したmetadataを必要とする場合は、host app が所有する key に置く用途で `row_data_builder` を使います。TreeView levelのinteractionとしてreadonly / disabledを表したい場合は [Row status](row-status.md) も参照し、`tree_view_row_disabled` のような TreeView-owned status key を app metadata として上書き前提にしないでください。authorization decisionや業務ruleは引き続きhost app側で扱います。
 
 ## 名前順で安定ソートする
 

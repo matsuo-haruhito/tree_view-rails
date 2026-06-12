@@ -37,4 +37,22 @@ RSpec.describe "TreeView row status builders" do
     expect(state.row_data_builder.call(root)).to include(name: "root", tree_view_row_disabled: true, tree_view_row_disabled_reason: "locked")
     expect(state.row_data_builder.call(child)).to include(name: "child", tree_view_row_readonly: true)
   end
+
+  it "preserves host data while TreeView-owned status keys describe row status" do
+    state = TreeView::RenderState.new(
+      tree: tree,
+      root_items: tree.root_items,
+      row_partial: "items/tree_columns",
+      ui_config: ui_config,
+      row_data_builder: ->(item) { {name: item.name, tree_view_row_disabled: false, tree_view_row_disabled_reason: "host"} },
+      row_disabled_builder: ->(item) { item.locked },
+      row_disabled_reason_builder: ->(item) { item.locked ? "locked" : nil }
+    )
+
+    expect(state.row_data_builder.call(root)).to include(
+      name: "root",
+      tree_view_row_disabled: true,
+      tree_view_row_disabled_reason: "locked"
+    )
+  end
 end

@@ -42,6 +42,18 @@ default row partialは `tree_view/resource_table_row` です。`table_state["vis
 
 その他の keyword option は `**render_options` として受け取り、`TreeView::RenderState` に渡します。これらは resource-table 専用 contract ではなく、既存の RenderState option surface として扱ってください。たとえば `initial_expansion:`、`selection:`、`lazy_loading:` のような grouped option は RenderState 側の docs と manifest section が責務を持ちます。
 
+### row data composition
+
+host app が authorization hint、row state、table layer integration 用の追加 data を行に持たせたい場合は、`ResourceTableRenderState.call` に `row_data_builder:` を渡せます。host builder は既存 `RenderState` と同じ1引数の形でも使えますし、depth などの描画contextが必要な場合は第2引数の row context も受け取れます。
+
+resource-table bridge の data は予約済みで、TreeView が所有します。host data を先に merge し、その後で bridge が次の key を最後に書き込みます。
+
+- `rails_ui_row`
+- `tree_view_resource_table_row`
+- `rails_table_preferences_table_key`
+
+この優先順位により、host app は `resource_id`、`business_state`、`can_edit` のような app-owned key を追加できます。一方で、bridge-owned hook が host data によって誤って消えることはありません。host builder が `nil` を返した場合は空 data として扱います。bridge は authorization、business action、table preference state を実装せず、row data composition の境界だけを安定させます。
+
 ## Rails Table Preferencesとの連携
 
 Rails Table Preferencesのようなtable layerがActive Recordからカラムを推論し、保存済み設定を `table_state` にmergeしてからTreeViewへ渡す想定です。

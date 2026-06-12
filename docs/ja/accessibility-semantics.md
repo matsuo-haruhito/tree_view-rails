@@ -45,6 +45,8 @@ no-root-items と no-results row、再利用可能な empty-row wrapper hook、h
 
 この mockup は、この policy を視覚的に補うためのものです。ARIA behavior、CTA copy、filter-reset workflow を定義し直すものではありません。
 
+table-first ARIA policy を静的に見比べたい場合は [accessibility-semantics.html](../mockups/accessibility-semantics.html) を参照してください。この mockup は、row-level ARIA placement、toggle の `aria-expanded`、`aria-controls` 非採用、host-app-owned page structure boundary を確認する visual companion であり、runtime behavior を定義し直したり full treegrid model を約束したりするものではありません。
+
 ## 対応している描画例
 
 ### Static table rows
