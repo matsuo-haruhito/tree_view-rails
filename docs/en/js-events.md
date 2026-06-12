@@ -23,6 +23,9 @@ Dispatched whenever the state controller publishes the current expanded-state sn
 |---|---|---|
 | `viewKey` | String or null | Value from `data-tree-view-state-view-key-value`, when present. Host apps can align this with the persisted `tree_instance_key` they save against. |
 | `expandedKeys` | Array<String> | Current expanded node keys collected from the state controller's tracked rows. |
+| `reason` | String | Why the snapshot was published: `connect`, `refresh`, `expanded`, or `collapsed`. Host apps can use this to skip initial sync or save only user expansion changes. |
+
+`reason` does not change the snapshot meaning. `expandedKeys` is still the full current expanded-state snapshot, not a delta list.
 
 ## Selection events
 
@@ -212,6 +215,8 @@ element.addEventListener(TreeViewEventNames.transfer.drop, (event) => {
 ```
 
 `TreeViewEventNames` names events, `TreeViewEventDetailKeys` lists documented payload field names, and these value exports carry documented enum-like values for those fields. `TreeViewRemoteStateValues` is limited to remote-state row values (`loading`, `loaded`, `error`), and `TreeViewTransferDropPositions` is limited to transfer drop positions (`before`, `inside`, `after`). They do not add listener helpers or change controller dispatch behavior.
+
+`tree-view-state:state-changed` also publishes a documented `reason` value (`connect`, `refresh`, `expanded`, or `collapsed`). Those strings are part of the event detail contract, but they are not a separate package-root value export.
 
 ## Compatibility policy
 
