@@ -81,6 +81,37 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Development docs CI policy and drift recovery",
+    files: [
+      [
+        "docs/en/development.md",
+        [
+          "Docs-only pull requests that touch only",
+          "docs/mockups/**",
+          "Pull requests that change `test/browser/**`",
+          ".github/workflows/**",
+          "A green check suite does not by itself mean a pull request is ready to merge after `main` has moved",
+          "known public-contract drift",
+          "not as permission to widen the pull request automatically",
+          "drift owner issue or pull request"
+        ]
+      ],
+      [
+        "docs/ja/development.md",
+        [
+          "docs-only Pull Request",
+          "`docs/mockups/**`",
+          "`test/browser/**` を変更する Pull Request",
+          "`.github/workflows/**`",
+          "green checks だけでは merge ready と判断しません",
+          "既知 drift の recovery",
+          "Pull Request scope を自動で広げないでください",
+          "drift を所有する Pull Request"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Resource-table empty colspan boundary mockup",
     files: [
       [
