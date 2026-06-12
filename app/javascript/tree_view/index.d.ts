@@ -65,6 +65,19 @@ export declare const TreeViewRemoteStateValues: Readonly<{
   error: "error"
 }>
 
+export declare const TreeViewRemoteStateDataHooks: Readonly<{
+  lazyAttribute: "data-tree-lazy"
+  childrenUrlAttribute: "data-tree-children-url"
+  loadedAttribute: "data-tree-loaded"
+  remoteStateAttribute: "data-tree-remote-state"
+}>
+
+export declare const TreeViewToolbarDataHooks: Readonly<{
+  toolbarAttribute: "data-tree-view-toolbar"
+  actionAttribute: "data-tree-view-toolbar-action"
+  disabledAttribute: "data-tree-view-toolbar-disabled"
+}>
+
 export declare const TreeViewTransferDropPositions: Readonly<{
   before: "before"
   inside: "inside"
@@ -112,11 +125,29 @@ export declare const TreeViewControllerEntries: readonly [
   }>
 ]
 
+export declare const TreeViewIntegrationHooks: Readonly<{
+  state: Readonly<{
+    viewKeyValue: "data-tree-view-state-view-key-value"
+    nodeKey: "data-tree-view-state-node-key"
+  }>
+  remoteState: Readonly<{
+    childrenUrl: "data-tree-children-url"
+  }>
+  transfer: Readonly<{
+    payload: "data-tree-transfer-payload"
+  }>
+}>
+
 export declare const TreeViewSelectionDataHooks: Readonly<{
   hiddenInputNameValue: "data-tree-view-selection-hidden-input-name-value"
   maxCountValue: "data-tree-view-selection-max-count-value"
   cascadeValue: "data-tree-view-selection-cascade-value"
   indeterminateValue: "data-tree-view-selection-indeterminate-value"
+}>
+
+export declare const TreeViewSelectionCheckboxHooks: Readonly<{
+  checkboxClass: "tree-selection-checkbox"
+  disabledReasonAttribute: "data-tree-selection-disabled-reason"
 }>
 
 export declare const TreeViewEmptyStateHooks: Readonly<{

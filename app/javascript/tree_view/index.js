@@ -68,6 +68,19 @@ export const TreeViewRemoteStateValues = Object.freeze({
   error: "error"
 })
 
+export const TreeViewRemoteStateDataHooks = Object.freeze({
+  lazyAttribute: "data-tree-lazy",
+  childrenUrlAttribute: "data-tree-children-url",
+  loadedAttribute: "data-tree-loaded",
+  remoteStateAttribute: "data-tree-remote-state"
+})
+
+export const TreeViewToolbarDataHooks = Object.freeze({
+  toolbarAttribute: "data-tree-view-toolbar",
+  actionAttribute: "data-tree-view-toolbar-action",
+  disabledAttribute: "data-tree-view-toolbar-disabled"
+})
+
 export const TreeViewTransferDropPositions = Object.freeze({
   before: "before",
   inside: "inside",
@@ -115,11 +128,29 @@ export const TreeViewControllerEntries = Object.freeze([
   })
 ])
 
+export const TreeViewIntegrationHooks = Object.freeze({
+  state: Object.freeze({
+    viewKeyValue: "data-tree-view-state-view-key-value",
+    nodeKey: "data-tree-view-state-node-key"
+  }),
+  remoteState: Object.freeze({
+    childrenUrl: "data-tree-children-url"
+  }),
+  transfer: Object.freeze({
+    payload: "data-tree-transfer-payload"
+  })
+})
+
 export const TreeViewSelectionDataHooks = Object.freeze({
   hiddenInputNameValue: "data-tree-view-selection-hidden-input-name-value",
   maxCountValue: "data-tree-view-selection-max-count-value",
   cascadeValue: "data-tree-view-selection-cascade-value",
   indeterminateValue: "data-tree-view-selection-indeterminate-value"
+})
+
+export const TreeViewSelectionCheckboxHooks = Object.freeze({
+  checkboxClass: "tree-selection-checkbox",
+  disabledReasonAttribute: "data-tree-selection-disabled-reason"
 })
 
 export const TreeViewEmptyStateHooks = Object.freeze({

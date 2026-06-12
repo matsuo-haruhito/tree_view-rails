@@ -16,6 +16,8 @@ TreeView is responsible for:
 
 The host app remains responsible for storage ownership, authorization, save timing, cleanup policy, controller actions, and UI wiring.
 
+Use [Public Setup Surface](public-setup-surface.md) when you need the path-level contract for the persisted-state install generator. It tracks the generator name, optional owner argument, and generated destination paths without freezing the migration schema or generated template contents.
+
 For a static visual reference of the save/restore handoff, see [Persisted State boundary mockup](../mockups/persisted-state-boundary.html). The mockup shows representative before, changed, restored, save-failed, and retry cues without turning storage, save endpoints, authorization, or retry policy into gem-owned behavior.
 
 ## PersistedState.from normalization

@@ -46,6 +46,12 @@ export class TreeViewStateController extends Controller {
     } else if (event.key === "ArrowUp") {
       event.preventDefault()
       this.focusRelativeNode(row, -1)
+    } else if (event.key === "Home") {
+      event.preventDefault()
+      this.focusBoundaryNode("first")
+    } else if (event.key === "End") {
+      event.preventDefault()
+      this.focusBoundaryNode("last")
     } else if (event.key === "ArrowRight") {
       event.preventDefault()
       this.activateToggle(row, "show")
@@ -110,6 +116,12 @@ export class TreeViewStateController extends Controller {
 
     const next = nodes[index + offset]
     if (next) next.focus()
+  }
+
+  focusBoundaryNode(position) {
+    const nodes = this.visibleNodes()
+    const node = position === "first" ? nodes[0] : nodes[nodes.length - 1]
+    if (node) node.focus()
   }
 
   activateToggle(row, preferredAction = null) {
