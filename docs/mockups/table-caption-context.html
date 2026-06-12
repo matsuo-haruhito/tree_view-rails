@@ -5,6 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Table caption context mock</title>
 <link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-caption-density-frame {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.mock-caption-density-header {
+  display: grid;
+  gap: 10px;
+}
+
+.mock-caption-density-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mock-caption-density-title-row h3,
+.mock-caption-density-title-row p,
+.mock-caption-density-summary p {
+  margin: 0;
+}
+
+.mock-caption-density-title-copy {
+  display: grid;
+  gap: 4px;
+  min-width: min(100%, 20rem);
+  flex: 1 1 22rem;
+}
+
+.mock-caption-density-title-copy h3 {
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.mock-caption-density-actions {
+  display: inline-flex;
+  flex: 1 1 18rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mock-caption-density-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.mock-caption-density-summary .mock-filter-chip {
+  max-width: 100%;
+}
+
+.mock-caption-density-caption {
+  caption-side: top;
+  padding-block-end: 0.75rem;
+  color: #52606d;
+  text-align: left;
+}
+
+.mock-caption-density-note {
+  color: #52606d;
+}
+
+@media (max-width: 720px) {
+  .mock-caption-density-actions {
+    justify-content: flex-start;
+  }
+
+  .mock-caption-density-frame {
+    padding: 14px;
+  }
+}
+</style>
 </head>
 <body>
   <main class="mock-page">
@@ -149,6 +230,85 @@
           </tr>
         </tbody>
       </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="dense-caption-heading">
+      <p class="mock-kicker">Dense host context</p>
+      <h2 id="dense-caption-heading">Dense heading and adjacent actions</h2>
+      <div class="mock-caption-density-frame">
+        <div class="mock-caption-density-header">
+          <div class="mock-caption-density-title-row">
+            <div class="mock-caption-density-title-copy">
+              <h3>Workspace hierarchy review for quarterly planning, archived dependencies, and handoff ownership</h3>
+              <p class="mock-caption-density-note">Long host-owned heading copy should wrap before it competes with TreeView branch, depth, current, and hidden-count cues.</p>
+            </div>
+            <div class="mock-caption-density-actions" aria-label="Dense host app actions">
+              <button type="button">Review selected</button>
+              <button type="button">Export visible</button>
+              <button type="button">Open settings</button>
+            </div>
+          </div>
+          <div class="mock-caption-density-summary" aria-label="Dense host app summary">
+            <span class="mock-filter-chip">4 visible nodes</span>
+            <span class="mock-filter-chip">2 owners</span>
+            <span class="mock-filter-chip">host-owned action copy</span>
+            <span class="mock-filter-chip">TreeView row cues remain inside tbody</span>
+          </div>
+        </div>
+
+        <table class="tree-view-table" data-controller="tree-view-state" data-tree-view-state-keyboard-value="true">
+          <caption class="mock-caption-density-caption">
+            Host-owned caption with metadata and action context. It can be long, but it should stay visually separate from row hierarchy cues, branch lines, and action availability.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">tree</th>
+              <th scope="col">name</th>
+              <th scope="col">summary</th>
+              <th scope="col">actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tree-row is-expanded" aria-level="1" aria-expanded="true">
+              <td class="btn-cell tree-toggle-cell">
+                <span class="tree-toggle" aria-label="Dense root row expanded">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                    <span class="tree-toggle__level">root</span>
+                  </span>
+                </span>
+                <span class="tree-node-marker" title="Folder">folder</span>
+                <span class="tree-depth-label">L0</span>
+              </td>
+              <td>Planning program</td>
+              <td>Host metadata and caption text are adjacent, but row hierarchy stays readable.</td>
+              <td class="tree-row-actions"><button type="button">Open</button></td>
+            </tr>
+            <tr class="tree-row is-selected" aria-level="2" aria-selected="true" aria-current="page">
+              <td class="btn-cell tree-toggle-cell">
+                <span class="tree-toggle" aria-label="Dense selected child row">
+                  <span class="tree-toggle__branches" aria-hidden="true">
+                    <span class="tree-toggle__branch-slot has-line"></span>
+                    <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                  </span>
+                  <span class="tree-toggle__control">
+                    <span class="tree-toggle__level">child</span>
+                  </span>
+                </span>
+                <span class="tree-node-marker" title="Folder">folder</span>
+                <span class="tree-depth-label">L1</span>
+                <span class="tree-node-badge tree-node-badge--info" title="Current row">current</span>
+              </td>
+              <td>Owner handoff checklist with a deliberately longer label</td>
+              <td>Current row cue and metadata should wrap without hiding the branch slots.</td>
+              <td class="tree-row-actions"><button type="button">Open</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section class="mock-section" aria-labelledby="boundary-heading">
