@@ -208,8 +208,9 @@ const element = document.querySelector("[data-controller~='tree-view-state']")
 
 if (element) {
   element.addEventListener("tree-view-state:state-changed", async (event) => {
-    const { viewKey, expandedKeys } = event.detail
+    const { viewKey, expandedKeys, reason } = event.detail
     if (!viewKey) return
+    if (reason === "connect") return
 
     await fetch("/tree_states", {
       method: "PATCH",
@@ -230,7 +231,7 @@ if (element) {
 
 - `viewKey` は `data-tree-view-state-view-key-value` の値です。browser 側で追加 lookup を増やさないため、server-side の `tree_instance_key` とそろえておくのがよくある形です。
 - `expandedKeys` は、state controller が connect、`refresh`、expand/collapse 更新後に公開する current expanded node-key snapshot です。
-- controller は初回 connect 時にも 1 回 dispatch するため、利用者操作だけを保存したい host app では debounce する、最初の event を無視する、独自の dirty-state policy を挟む、などの制御を host app 側で行えます。
+- `reason` は snapshot が公開された理由を示します。値は `connect`, `refresh`, `expanded`, `collapsed` です。利用者操作だけを保存したい host app は `connect` を skip する、または `expanded` / `collapsed` だけを保存する、などの制御を host app 側の保存方針として扱えます。
 - TreeView が提供するのは event dispatch までです。route、認可、retry、毎回保存するか明示 checkpoint だけ保存するか、という保存方針は引き続き host app 側が持ちます。
 
 ## RenderStateとの連携

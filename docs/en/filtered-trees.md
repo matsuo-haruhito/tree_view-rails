@@ -31,6 +31,8 @@ render_state = TreeView::RenderState.new(
 
 ## Modes
 
+The mode set below is a manifest-backed public contract tracked in `config/public_api_manifest.yml` and guarded against `TreeView::FilteredTree::VALID_MODES`.
+
 | mode | meaning |
 |---|---|
 | `:matched_only` | Include only matched nodes. |
