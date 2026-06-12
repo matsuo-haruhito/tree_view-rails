@@ -75,6 +75,60 @@ releaseDocs.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release checklist changelog policy", signals)
 })
 
+const packageContentsVerificationSignals = [
+  [
+    "script/check_gem_package_contents.rb",
+    [
+      "REQUIRED_PACKAGED_PATHS",
+      "INSTALLATION_REQUIRED_SIGNALS",
+      "app/helpers/tree_view_helper.rb",
+      "app/views/tree_view/_tree_row.html.erb",
+      "app/assets/stylesheets/tree_view.scss",
+      "app/javascript/tree_view/index.js",
+      "config/importmap.tree_view.rb",
+      "config/locales/tree_view.toolbar.en.yml",
+      "config/locales/tree_view.toolbar.ja.yml",
+      "config/public_api_manifest.yml",
+      "docs/en/release.md",
+      "docs/ja/release.md",
+      "docs/mockups/review-gallery.html",
+      "Gem package contents verification failed"
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "ruby script/check_gem_package_contents.rb tree_view-*.gem",
+      "representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, and public API manifest",
+      "Package-sensitive PR paths include `tree_view.gemspec`",
+      "Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`",
+      "config/importmap.tree_view.rb",
+      "config/public_api_manifest.yml",
+      "config/locales/**",
+      "docs/en/release.md",
+      "docs/ja/release.md"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "ruby script/check_gem_package_contents.rb tree_view-*.gem",
+      "Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest",
+      "package-sensitive path には、`tree_view.gemspec`",
+      "Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`",
+      "config/importmap.tree_view.rb",
+      "config/public_api_manifest.yml",
+      "config/locales/**",
+      "docs/en/release.md",
+      "docs/ja/release.md"
+    ]
+  ]
+]
+
+packageContentsVerificationSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Gem package release docs category signal", signals)
+})
+
 assertSignals("script/release_note_candidates.rb", "Release note candidate helper output", [
   "# Release note candidates for #{repo}",
   "Source: #{source}",
