@@ -59,6 +59,8 @@ host app が直接使ってよい主な入口は以下です。
 
 `TreeView::ResourceTableRenderState.call` は、別の table layer が列推論や table state を持っていて、TreeView には階層 render state の組み立てだけを任せたい場合の公開入口です。詳細は [Resource table bridge](resource-table-bridge.md) を参照してください。
 
+`TreeView::FilteredTree` は filtered tree result 用の安定した公開入口です。mode set も `config/public_api_manifest.yml` の `filtered_tree_modes` contract として追跡されています。documented mode table と、search query、ranking、authorization、highlighting を host app 側に置く責務境界は [Filtered Trees: Modes](filtered-trees.md#modes) を参照してください。
+
 ## Public error surface
 
 host app は `TreeView::Error` を rescue することで、documented された TreeView の validation / configuration failure を、他の application error と分けて扱えます。

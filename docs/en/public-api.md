@@ -59,6 +59,8 @@ Host apps may use these entry points directly:
 
 Use `TreeView::ResourceTableRenderState.call` when another table layer already owns column inference and table state, and TreeView should only build the hierarchical render state. See [Resource table bridge](resource-table-bridge.md).
 
+`TreeView::FilteredTree` is a stable public entry point for filtered tree results. Its mode set is also tracked in `config/public_api_manifest.yml` as the `filtered_tree_modes` contract; see [Filtered Trees: Modes](filtered-trees.md#modes) for the documented mode table and the host-app boundary for search query, ranking, authorization, and highlighting.
+
 ## Public error surface
 
 Host apps may rescue `TreeView::Error` to handle documented TreeView validation and configuration failures separately from unrelated application errors.
