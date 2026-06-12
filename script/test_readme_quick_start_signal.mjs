@@ -10,7 +10,7 @@ function assert(condition, message) {
 }
 
 function extractSection(source, heading) {
-  const sectionPattern = new RegExp(`^## ${heading}\\n([\\s\\S]*?)(?=^## |\\z)`, "m")
+  const sectionPattern = new RegExp(`^## ${heading}\\n([\\s\\S]*?)(?=^## |$)`, "m")
   const match = source.match(sectionPattern)
 
   assert(match, `README.md is missing the ${heading} section`)
