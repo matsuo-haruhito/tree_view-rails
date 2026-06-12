@@ -10,12 +10,18 @@ function assert(condition, message) {
 }
 
 function extractSection(source, heading) {
-  const sectionPattern = new RegExp(`^## ${heading}\\n([\\s\\S]*?)(?=^## |$)`, "m")
-  const match = source.match(sectionPattern)
+  const headingLine = `## ${heading}`
+  const headingStart = source.indexOf(`${headingLine}\n`)
 
-  assert(match, `README.md is missing the ${heading} section`)
+  assert(headingStart >= 0, `README.md is missing the ${heading} section`)
 
-  return match[1]
+  const sectionStart = headingStart + headingLine.length + 1
+  const nextHeadingStart = source.indexOf("\n## ", sectionStart)
+
+  return source.slice(
+    sectionStart,
+    nextHeadingStart === -1 ? undefined : nextHeadingStart
+  )
 }
 
 function assertQuickStartSignal(signal, pattern, message) {
