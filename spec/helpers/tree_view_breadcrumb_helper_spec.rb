@@ -51,7 +51,8 @@ RSpec.describe TreeViewBreadcrumbHelper do
       link_html: ->(item) { {data: {crumb_id: item.id}} }
     )
 
-    expect(rendered).to include('<span data-crumb-id="1" class="tree-view-breadcrumb__link">Root</span>')
+    expect(rendered).to include('<span class="tree-view-breadcrumb__link">Root</span>')
+    expect(rendered).not_to include('data-crumb-id="1"')
     expect(rendered).to include('href="/nodes/2"')
     expect(rendered).to include('data-crumb-id="2"')
     expect(rendered).not_to include('href=""')
