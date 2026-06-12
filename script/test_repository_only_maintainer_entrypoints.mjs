@@ -83,6 +83,55 @@ const repositoryOnlyEntrypoints = [
         "Japanese docs README no longer exposes the repository-only maintainer table"
       ]
     ]
+  },
+  {
+    feature: "AGENTS maintainer first-read entrypoints",
+    links: [
+      ["AGENTS.md", "README.md"],
+      ["AGENTS.md", "docs/README.md"],
+      ["AGENTS.md", "Product Profile.md"],
+      ["AGENTS.md", "CHANGELOG.md"],
+      ["AGENTS.md", "docs/i18n-audit.md"]
+    ],
+    signals: [
+      [
+        "AGENTS.md",
+        /## First Read[\s\S]*1\. `AGENTS\.md`[\s\S]*2\. `README\.md`[\s\S]*3\. `docs\/README\.md`[\s\S]*4\. `Product Profile\.md`[\s\S]*docs\/i18n-audit\.md[\s\S]*CHANGELOG\.md/,
+        "AGENTS.md no longer preserves the maintainer first-read order and docs-change follow-up signals"
+      ],
+      [
+        "AGENTS.md",
+        /Use these files as the durable documentation source:[\s\S]*`README\.md`[\s\S]*`Product Profile\.md`[\s\S]*`docs\/README\.md`[\s\S]*`CHANGELOG\.md`[\s\S]*`docs\/i18n-audit\.md`/,
+        "AGENTS.md no longer lists the durable documentation source files"
+      ]
+    ]
+  },
+  {
+    feature: "Product Profile maintainer source-of-truth entrypoints",
+    links: [
+      ["Product Profile.md", "AGENTS.md"],
+      ["Product Profile.md", "README.md"],
+      ["Product Profile.md", "docs/README.md"],
+      ["Product Profile.md", "docs/en/README.md"],
+      ["Product Profile.md", "docs/ja/README.md"],
+      ["Product Profile.md", "docs/i18n-audit.md"],
+      ["Product Profile.md", "config/public_api_manifest.yml"],
+      ["Product Profile.md", "docs/en/release.md"],
+      ["Product Profile.md", "docs/ja/release.md"],
+      ["Product Profile.md", "CHANGELOG.md"]
+    ],
+    signals: [
+      [
+        "Product Profile.md",
+        /## Source of truth[\s\S]*Current code[\s\S]*Machine-readable public API contracts[\s\S]*Explicit decisions[\s\S]*Durable docs[\s\S]*Entry-point summaries[\s\S]*README\.md[\s\S]*docs\/README\.md[\s\S]*AGENTS\.md[\s\S]*this profile/,
+        "Product Profile no longer documents the source-of-truth order for maintainers"
+      ],
+      [
+        "Product Profile.md",
+        /## Recommended first reads[\s\S]*`AGENTS\.md`[\s\S]*`README\.md`[\s\S]*`docs\/README\.md`[\s\S]*`docs\/en\/README\.md` or `docs\/ja\/README\.md`[\s\S]*`docs\/i18n-audit\.md`[\s\S]*`config\/public_api_manifest\.yml`[\s\S]*`CHANGELOG\.md`/,
+        "Product Profile no longer preserves the recommended first-read maintainer path"
+      ]
+    ]
   }
 ]
 
