@@ -168,6 +168,8 @@ See [API reference](api.md), [Localized names](localized-names.md), and [Turbo F
 
 These keys are a key-surface contract only: `row_class_builder`, `row_data_builder`, `row_event_payload_builder`, `loading_builder`, `error_builder`, `depth_label_builder`, `badge_builder`, `icon_builder`, and `toggle_icon_builder` remain distinct from grouped option hashes, individual scalar options, and the declarative `toggle_icons` map. This contract does not change callback arity, return-value validation, row rendering, `NodePresenter` fallback behavior, or toggle icon lookup priority.
 
+`row_data_builder` stays inside that key-surface contract. Host-app data hash shape, merged row data attributes, and TreeView-owned row status keys are documented and guarded in [Row status](row-status.md) rather than promoted to a manifest-backed return-shape schema.
+
 ## Host app extension points
 
 Host apps are expected to provide these pieces:

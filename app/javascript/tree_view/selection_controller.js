@@ -34,14 +34,16 @@ export class TreeViewSelectionController extends Controller {
     return this.selectedCheckboxes().map((checkbox) => checkbox.value)
   }
 
-  selectionDetail() {
+  selectionDetail({ sourceCheckbox = null, attemptedChecked = null } = {}) {
     const selectedCheckboxes = this.selectedCheckboxes()
     return {
       selectedCount: selectedCheckboxes.length,
       selectedValues: selectedCheckboxes.map((checkbox) => checkbox.value),
       selectedPayloads: selectedCheckboxes
         .map((checkbox) => this.parsePayload(checkbox))
-        .filter((payload) => payload !== null)
+        .filter((payload) => payload !== null),
+      sourceCheckbox,
+      attemptedChecked
     }
   }
 
@@ -58,18 +60,18 @@ export class TreeViewSelectionController extends Controller {
     })
   }
 
-  refresh() {
+  refresh(detail = null) {
     this.updateIndeterminateStates()
 
-    const detail = this.selectionDetail()
-    this.syncHiddenInputs(detail.selectedPayloads)
+    const selectionDetail = detail || this.selectionDetail()
+    this.syncHiddenInputs(selectionDetail.selectedPayloads)
 
     this.dispatch("selected", {
       detail: {
-        payloads: detail.selectedPayloads
+        payloads: selectionDetail.selectedPayloads
       }
     })
-    this.dispatchSelectionChanged(detail)
+    this.dispatchSelectionChanged(selectionDetail)
   }
 
   dispatchSelectionChanged(detail = this.selectionDetail()) {
@@ -84,11 +86,11 @@ export class TreeViewSelectionController extends Controller {
     const checkbox = event.target
     if (!checkbox || !checkbox.matches || !checkbox.matches(".tree-selection-checkbox")) return
 
-    const wasChecked = checkbox.checked
+    const attemptedChecked = checkbox.checked
     if (this.cascadeValue) this.setDescendantChecked(checkbox, checkbox.checked)
-    this.enforceMaxCount(checkbox, wasChecked)
+    this.enforceMaxCount(checkbox, attemptedChecked)
     this.updateIndeterminateStates()
-    this.refresh()
+    this.refresh(this.selectionDetail({ sourceCheckbox: checkbox, attemptedChecked }))
   }
 
   selectedCheckboxes() {

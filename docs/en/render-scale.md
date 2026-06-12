@@ -15,6 +15,8 @@ TreeView provides several rendering controls for large trees.
 
 TreeView does not control host-app server-side queries or the amount of data fetched.
 
+`TreeView::VisibleRows` is the TreeView-owned flattening step for the current render state. Each `TreeView::VisibleRows::Row` exposes the manifest-backed row metadata readers `item`, `depth`, `node_key`, `parent_key`, `has_children`, and `expanded`, plus the boolean predicate helpers `has_children?` and `expanded?`. These values describe the visible row list that TreeView has already calculated; host apps still own server-side query scope, pagination controls, analytics interpretation, and any virtual scrolling strategy.
+
 `TreeView::RenderWindow` is an HTML-output control. Even though it accepts `offset` and `limit`, it slices rows that are already visible in the current render state. It is not a server-side pagination API, a database query optimizer, or a built-in virtual scrolling solution.
 
 ## First things to consider
@@ -79,6 +81,12 @@ render_state = TreeView::RenderState.new(
 )
 ```
 
+## Visible rows metadata
+
+Use `TreeView::VisibleRows` when a host app needs the flattened visible row list before rendering or window slicing. The public `VisibleRows::Row` metadata surface is limited to row identity and display context: `item`, `depth`, `node_key`, `parent_key`, `has_children`, `expanded`, `has_children?`, and `expanded?`.
+
+This row metadata does not choose database queries, server-side pagination, child-page cursors, analytics grouping, or scroll-driven virtualization. It also stays separate from `TreeView::RenderWindow`, which adds `offset` / `limit` slicing metadata after visible rows have already been calculated.
+
 ## Windowed rendering
 
 ```erb
@@ -122,6 +130,7 @@ TreeView does not choose cursor, offset, limit, ordering, next-page detection, o
 |---|---|---|
 | render depth controls | yes | chooses settings |
 | visible rows calculation | yes | no |
+| visible row metadata contract | yes | consumes for UI or analysis |
 | window slicing | yes | renders controls |
 | lazy loading hooks | yes | implements fetch/query |
 | children pagination algorithm | no | yes |
