@@ -86,8 +86,8 @@ RSpec.describe "mockup inventory" do
         reason: "Stress wrapping, metadata fallback, disabled state, and current-state cues without choosing final translations."
       },
       "localized-row-labels.html" => {
-        exception: "Long localized-style row labels and metadata",
-        reason: "Stress primary label wrapping, badge placement, attribute labels, secondary metadata, and tooltip cues without choosing final translations."
+        exception: "Long localized-style row labels and metadata, plus deliberate CJK / Japanese-width sample text",
+        reason: "Stress primary label wrapping, badge placement, attribute labels, secondary metadata, tooltip cues without choosing final translations, and CJK character width / badge proximity using intentional Japanese sample copy."
       }
     )
 
