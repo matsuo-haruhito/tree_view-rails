@@ -17,6 +17,12 @@
   gap: 16px;
 }
 
+.persisted-event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
 .persisted-state-card,
 .persisted-boundary-card {
   display: grid;
@@ -352,6 +358,164 @@
       </div>
     </section>
 
+    <section class="mock-section persisted-shell" aria-labelledby="event-save-flow-heading">
+      <div>
+        <h2 id="event-save-flow-heading">Browser event save flow</h2>
+        <p>
+          Host apps can listen to <code>tree-view-state:state-changed</code>, but the browser save policy decides whether initial connect, dirty changes, pending saves, and failed saves become stored snapshots.
+        </p>
+      </div>
+
+      <div class="persisted-event-grid" aria-label="Browser event save flow comparison">
+        <article class="persisted-state-card">
+          <p class="persisted-step-label">Initial connect</p>
+          <h3>Gate the first event</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--idle">Read-only signal</span>
+            <span class="mock-status mock-status--pending">Host policy</span>
+          </div>
+          <div class="persisted-snapshot">
+            <span>reason: connect</span>
+            <span>expandedKeys: ["documents"]</span>
+            <span>save_decision: ignore or compare first</span>
+          </div>
+          <ul>
+            <li>The first event can describe already-rendered state rather than a user change.</li>
+            <li>Host apps decide whether to skip, debounce, or compare it with the stored snapshot.</li>
+          </ul>
+        </article>
+
+        <article class="persisted-state-card">
+          <p class="persisted-step-label">Dirty change</p>
+          <h3>Queue a save</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--pending">Pending save</span>
+            <span class="mock-status mock-status--active">User action</span>
+          </div>
+          <div class="persisted-snapshot">
+            <span>reason: expanded</span>
+            <span>expandedKeys: ["documents", "policies"]</span>
+            <span>save_decision: enqueue PATCH</span>
+          </div>
+          <ul>
+            <li>The rendered state updates immediately because TreeView owns expansion rendering.</li>
+            <li>Debounce timing, request body, and conflict handling remain host-app behavior.</li>
+          </ul>
+        </article>
+
+        <article class="persisted-state-card">
+          <p class="persisted-step-label">Saved or failed</p>
+          <h3>Keep recovery visible</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--saved">Saved</span>
+            <span class="persisted-status persisted-status--failed">Retry copy owned by host</span>
+          </div>
+          <div class="persisted-snapshot">
+            <span>last_saved_keys: ["documents", "policies"]</span>
+            <span>failure_copy: product neutral</span>
+            <span>retry_policy: host app</span>
+          </div>
+          <ul>
+            <li>A failed save should not imply the row collapsed or that TreeView retried automatically.</li>
+            <li>The host app chooses toast, inline note, navigation guard, or silent retry behavior.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section persisted-shell" aria-labelledby="reset-clear-flow-heading">
+      <div>
+        <h2 id="reset-clear-flow-heading">Reset and clear flow</h2>
+        <p>
+          Clearing a stored snapshot is a host-app action built around the TreeView state store helper. This reference shows the reset boundary without adding a standard reset button, confirmation dialog, route, or authorization policy.
+        </p>
+      </div>
+
+      <div class="persisted-flow-grid" aria-label="Persisted state reset and clear comparison">
+        <article class="persisted-state-card">
+          <p class="persisted-step-label">Before clear</p>
+          <h3>Restored branch is visible</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--saved">Stored snapshot</span>
+            <span class="mock-status mock-status--active">Reset available</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Node</th>
+                <th scope="col">Visible cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Collapse</a>
+                      <span class="tree-node-title">Documents</span>
+                      <span class="tree-node-badge tree-node-badge--success">Restored</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Saved branch restored on render</td>
+              </tr>
+              <tr class="tree-row">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Collapse</a>
+                      <span class="tree-node-title">Policies</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Host app may offer a clear saved state action</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="persisted-state-card">
+          <p class="persisted-step-label">After clear</p>
+          <h3>Return to default expansion</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--idle">No stored snapshot</span>
+            <span class="mock-status mock-status--pending">Default tree state</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Node</th>
+                <th scope="col">Visible cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Expand</a>
+                      <span class="tree-node-title">Documents</span>
+                      <span class="tree-node-badge tree-node-badge--info">Default</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Cleared snapshot no longer restores the branch</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="persisted-snapshot">
+            <span>clear_helper: StateStore#clear!(owner:, tree_instance_key:)</span>
+            <span>post_clear: host app redirects or re-renders default tree</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section class="mock-section persisted-boundary-grid" aria-labelledby="failure-boundary-heading">
       <div class="persisted-state-card">
         <p class="persisted-step-label">Failure / retry cue</p>
@@ -378,15 +542,15 @@
       <aside class="persisted-boundary-card" aria-label="Responsibility boundary summary">
         <h3>Responsibility boundary</h3>
         <ul>
-          <li><strong>TreeView owns:</strong> expansion state rendering, <code>tree-view-state:state-changed</code> event details, and the opt-in <code>StateStore#prune!</code> cleanup helper.</li>
-          <li><strong>Host app owns:</strong> persistence storage, save endpoint, authorization, retry policy, cleanup schedule, default TTL, deleted-owner policy, audit retention, privacy retention, and visible error copy.</li>
-          <li><strong>Review focus:</strong> compare state cues and cleanup boundaries without implying that the gem ships a browser save helper, cleanup job, or retention policy.</li>
+          <li><strong>TreeView owns:</strong> expansion state rendering, <code>tree-view-state:state-changed</code> event details, and opt-in <code>StateStore#prune!</code> / <code>StateStore#clear!</code> helpers.</li>
+          <li><strong>Host app owns:</strong> persistence storage, save endpoint, authorization, reset route, confirmation copy, retry policy, cleanup schedule, default TTL, deleted-owner policy, audit retention, privacy retention, and visible error copy.</li>
+          <li><strong>Review focus:</strong> compare state cues, browser save policy, and reset / cleanup boundaries without implying that the gem ships a browser save helper, cleanup job, retention policy, or reset UI.</li>
         </ul>
       </aside>
     </section>
 
     <p class="persisted-note">
-      This mockup is static. It does not add a database table, controller action, debounce helper, retry loop, cleanup schedule, default retention period, authorization policy, or persisted state runtime behavior.
+      This mockup is static. It does not add a database table, controller action, debounce helper, retry loop, cleanup schedule, reset button, confirmation dialog, default retention period, authorization policy, or persisted state runtime behavior.
     </p>
   </main>
 </body>
