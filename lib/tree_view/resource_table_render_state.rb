@@ -33,14 +33,17 @@ module TreeView
     end
 
     def call
+      options = render_options.dup
+      host_row_data_builder = options.delete(:row_data_builder)
+
       RenderState.new(
         tree: tree,
         root_items: tree.root_items,
         row_partial: row_partial,
         ui_config: resolved_ui_config,
         row_locals: row_locals,
-        row_data_builder: row_data_builder,
-        **render_options
+        row_data_builder: row_data_builder(host_row_data_builder),
+        **options
       )
     end
 
@@ -79,14 +82,44 @@ module TreeView
       }.compact
     end
 
-    def row_data_builder
-      lambda do |_item, _row_context = {}|
-        {
-          rails_ui_row: true,
-          tree_view_resource_table_row: true,
-          rails_table_preferences_table_key: table_key
-        }.compact
+    def row_data_builder(host_row_data_builder = nil)
+      lambda do |item, row_context = {}|
+        host_row_data(item, host_row_data_builder, row_context).merge(bridge_row_data)
       end
+    end
+
+    def host_row_data(item, builder, row_context)
+      return {} if builder.nil?
+
+      data = if builder_accepts_row_context?(builder)
+        builder.call(item, row_context)
+      else
+        builder.call(item)
+      end
+      return {} if data.nil?
+      return data.to_h if data.respond_to?(:to_h)
+
+      raise ArgumentError, "row_data_builder must return a Hash-like object for ResourceTableRenderState rows"
+    end
+
+    def builder_accepts_row_context?(builder)
+      arity = builder_arity(builder)
+      arity.nil? || arity.negative? || arity >= 2
+    end
+
+    def builder_arity(builder)
+      return builder.arity if builder.respond_to?(:arity)
+      return builder.method(:call).arity if builder.respond_to?(:method) && builder.respond_to?(:call)
+
+      nil
+    end
+
+    def bridge_row_data
+      {
+        rails_ui_row: true,
+        tree_view_resource_table_row: true,
+        rails_table_preferences_table_key: table_key
+      }.compact
     end
   end
 end

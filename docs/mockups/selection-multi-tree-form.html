@@ -109,6 +109,16 @@
   color: #047857;
 }
 
+.mock-selection-chip--error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.mock-selection-chip--warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
 .mock-selection-actions {
   display: inline-flex;
   flex-wrap: wrap;
@@ -185,6 +195,62 @@
 
 .mock-selection-tree-wrap .tree-view-table {
   min-width: 520px;
+}
+
+.mock-selection-alert {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #dc2626;
+  border-radius: 12px;
+  background: #fff7f7;
+}
+
+.mock-selection-alert h3,
+.mock-selection-alert p {
+  margin: 0;
+}
+
+.mock-selection-alert--warning {
+  border-color: #fde68a;
+  border-left-color: #d97706;
+  background: #fffbeb;
+}
+
+.mock-selection-validation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.mock-selection-source-message {
+  display: grid;
+  gap: 8px;
+  padding: 13px 14px;
+  border: 1px solid #e4e7eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.mock-selection-source-message h3,
+.mock-selection-source-message p {
+  margin: 0;
+}
+
+.mock-selection-source-message--error {
+  border-color: #fecaca;
+  background: #fff7f7;
+}
+
+.mock-selection-source-message--warning {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+
+.mock-selection-source-message--success {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
 }
 
 @media (max-width: 720px) {
@@ -305,6 +371,56 @@
             <button class="mock-selection-button" type="button">Apply review action</button>
             <button class="mock-selection-button mock-selection-button--secondary" type="button">Clear visible selection</button>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mock-section mock-selection-layout" aria-labelledby="submit-error-heading">
+      <div class="mock-selection-frame">
+        <div class="mock-selection-form-header">
+          <div class="mock-selection-form-header__copy">
+            <h2 id="submit-error-heading">Submit error and partial failure state</h2>
+            <p class="mock-selection-note">Static review lane for host-app validation after submit. TreeView keeps the checked rows and generated hidden inputs; the host app owns error placement, retry copy, and final business policy.</p>
+          </div>
+          <div class="mock-selection-chip-row" aria-label="Representative submit result">
+            <span class="mock-selection-chip mock-selection-chip--error">1 source blocked</span>
+            <span class="mock-selection-chip mock-selection-chip--warning">1 source needs retry</span>
+            <span class="mock-selection-chip mock-selection-chip--boundary">messages are host-app owned</span>
+          </div>
+        </div>
+
+        <div class="mock-selection-alert" role="status" aria-live="polite">
+          <h3>Bulk review could not be completed</h3>
+          <p>Fix the policy selection issue before retrying. Asset folders were accepted by the host app, but the action is not final until the whole form is submitted again.</p>
+        </div>
+
+        <div class="mock-selection-validation-grid">
+          <article class="mock-selection-source-message mock-selection-source-message--error" aria-labelledby="policy-error-heading">
+            <h3 id="policy-error-heading">Policy library issue</h3>
+            <p class="mock-selection-note">Escalation matrix is blocked by a host-app validation rule. Keep the selected row visible so the user can remove it or choose another policy.</p>
+            <div class="mock-selection-chip-row">
+              <span class="mock-selection-chip mock-selection-chip--error">source-level error</span>
+              <span class="mock-selection-chip mock-selection-chip--boundary">TreeView does not own error copy</span>
+            </div>
+          </article>
+
+          <article class="mock-selection-source-message mock-selection-source-message--success" aria-labelledby="asset-accepted-heading">
+            <h3 id="asset-accepted-heading">Asset folders accepted</h3>
+            <p class="mock-selection-note">Launch banners is valid for the action. This positive state is host-app feedback, not a TreeView selection controller state.</p>
+            <div class="mock-selection-chip-row">
+              <span class="mock-selection-chip mock-selection-chip--boundary">partial success boundary</span>
+              <span class="mock-selection-chip">selection still checked</span>
+            </div>
+          </article>
+
+          <article class="mock-selection-source-message mock-selection-source-message--warning" aria-labelledby="retry-boundary-heading">
+            <h3 id="retry-boundary-heading">Retry and recovery boundary</h3>
+            <p class="mock-selection-note">The host app decides whether to retry the whole form, preserve accepted rows, or ask the user to clear one source. TreeView only mirrors the current checked payloads.</p>
+            <div class="mock-selection-chip-row">
+              <span class="mock-selection-chip mock-selection-chip--warning">host-app retry policy</span>
+              <span class="mock-selection-chip mock-selection-chip--boundary">no server params change</span>
+            </div>
+          </article>
         </div>
       </div>
     </section>

@@ -109,6 +109,46 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Render log level reader journey",
+    files: [
+      [
+        "README.md",
+        [
+          "docs/en/render-log-level.md",
+          "docs/ja/render-log-level.md",
+          "accepted values",
+          "host app's global Rails logger level"
+        ]
+      ],
+      [
+        "docs/README.md",
+        [
+          "en/render-log-level.md",
+          "ja/render-log-level.md",
+          "host app's global Rails logger level"
+        ]
+      ],
+      [
+        "docs/en/README.md",
+        [
+          "Render log level",
+          "render-log-level.md",
+          "Configure TreeView partial render log silencing",
+          "TreeView render log verbosity in host app logs"
+        ]
+      ],
+      [
+        "docs/ja/README.md",
+        [
+          "render log レベル",
+          "render-log-level.md",
+          "TreeView partial render log の抑制設定",
+          "host app log 上の TreeView render log"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Selection and children pagination unloaded descendants boundary",
     files: [
       [
@@ -155,6 +195,40 @@ const signalGroups = [
           "DOMから送られるcheckbox値",
           "Selection](selection.md#連動checkbox挙動)",
           "children-pagination-selection-boundary.html"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Accessibility semantics mockup reader journey",
+    files: [
+      [
+        "docs/en/accessibility-semantics.md",
+        [
+          "accessibility-semantics.html",
+          "table-first ARIA policy",
+          "toggle `aria-expanded`",
+          "omitted `aria-controls`",
+          "host-app-owned page-structure boundaries"
+        ]
+      ],
+      [
+        "docs/ja/accessibility-semantics.md",
+        [
+          "accessibility-semantics.html",
+          "table-first ARIA policy",
+          "toggle の `aria-expanded`",
+          "`aria-controls` 非採用",
+          "host-app-owned page structure boundary"
+        ]
+      ],
+      [
+        "docs/mockups/accessibility-semantics.html",
+        [
+          "data-tree-view-sample=\"accessibility-semantics\"",
+          "Table-first, not treegrid",
+          "aria-controls",
+          "host-app decisions"
         ]
       ]
     ]

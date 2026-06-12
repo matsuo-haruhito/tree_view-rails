@@ -2,6 +2,7 @@
 
 require "spec_helper"
 require "psych"
+require "tree_view/diagnostics"
 require "tree_view/resource_table_render_state"
 require "yaml"
 
@@ -10,6 +11,9 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   module_methods
   configuration_options
   public_constants
+  localized_name_i18n_keys
+  filtered_tree_modes
+  visible_rows_row_metadata
   node_presenter_builder_names
   graph_adapter_initializer
   ui_config_builder_option_keys
@@ -85,6 +89,48 @@ RSpec.describe "Public API manifest structure" do
     expect(duplicate_mapping_keys(yaml)).to eq(["javascript_package_root.event_names.state"])
   end
 
+  it "keeps localized name i18n key sections shaped as explicit hash contracts" do
+    section = manifest.fetch("localized_name_i18n_keys")
+
+    expect(section.keys).to eq(%w[model_names attribute_names node_type_names])
+
+    %w[model_names attribute_names].each do |section_name|
+      contract = section.fetch(section_name)
+
+      expect(contract.fetch("helper")).to be_a(String)
+      expect(contract.fetch("delegated_lookup_prefixes")).to be_an(Array)
+      expect(contract.fetch("delegated_lookup_prefixes")).not_to be_empty
+      expect(contract.fetch("delegated_lookup_prefixes")).to all(be_a(String))
+      expect(contract.fetch("fallback")).to be_a(String)
+    end
+
+    node_type_contract = section.fetch("node_type_names")
+
+    expect(node_type_contract.fetch("helper")).to be_a(String)
+    expect(node_type_contract.fetch("lookup_prefix")).to be_a(String)
+    expect(node_type_contract.fetch("fallback")).to be_a(String)
+  end
+
+  it "keeps filtered tree modes shaped as a non-empty string list" do
+    modes = manifest.fetch("filtered_tree_modes")
+
+    expect(modes).to be_an(Array)
+    expect(modes).not_to be_empty
+    expect(modes).to all(be_a(String))
+  end
+
+  it "keeps VisibleRows row metadata shaped as non-empty string lists" do
+    section = manifest.fetch("visible_rows_row_metadata")
+
+    %w[fields predicates].each do |section_name|
+      methods = section.fetch(section_name)
+
+      expect(methods).to be_an(Array), "expected #{section_name} to be an array"
+      expect(methods).not_to be_empty, "expected #{section_name} to list public row methods"
+      expect(methods).to all(be_a(String))
+    end
+  end
+
   it "keeps NodePresenter builder names shaped as a non-empty string list" do
     builder_names = manifest.fetch("node_presenter_builder_names")
 
@@ -108,6 +154,28 @@ RSpec.describe "Public API manifest structure" do
     expect(metadata).to be_an(Array)
     expect(metadata).not_to be_empty
     expect(metadata).to all(be_a(String))
+  end
+
+  it "keeps diagnostics sections shaped as explicit public contract lists" do
+    diagnostics = manifest.fetch("diagnostics")
+
+    expect(diagnostics.fetch("accepted_checks")).to all(be_a(String))
+    expect(diagnostics.fetch("accepted_checks")).not_to be_empty
+    expect(diagnostics.fetch("run_options")).to all(be_a(String))
+    expect(diagnostics.fetch("run_options")).not_to be_empty
+    expect(diagnostics.fetch("result_surface").fetch("attributes")).to all(be_a(String))
+    expect(diagnostics.fetch("result_surface").fetch("methods")).to all(be_a(String))
+  end
+
+  it "keeps diagnostics run option keys synchronized with the public runtime entrypoint" do
+    diagnostics = manifest.fetch("diagnostics")
+    parameters = TreeView::Diagnostics.method(:run).parameters
+    parameters_by_kind = parameters.group_by(&:first)
+    keyword_names = parameters_by_kind.fetch(:key, []).map(&:last).map(&:to_s)
+
+    expect(keyword_names).to include("tree", "render_state")
+    expect(diagnostics.fetch("run_options")).to eq(%w[checks raise_errors])
+    expect(keyword_names & diagnostics.fetch("run_options")).to eq(diagnostics.fetch("run_options"))
   end
 
   it "keeps resource table render state keyword sections shaped as non-empty string lists" do

@@ -18,6 +18,16 @@ Do not add a direct demo repository link from this gem's public docs until the d
 
 When a public demo repository is available, add a short link from the root README or docs index and keep the wording clear that the demo app is an example host application, not part of TreeView's gem contract.
 
+## Current entry points
+
+Until the demo repository is public, this boundary page is the durable handoff point for demo-link questions. The intentional entry points are:
+
+- root `README.md`, near the mockup and empty-state overview
+- root `docs/README.md`, beside the static mockups and language-specific docs map
+- `docs/en/README.md` and `docs/ja/README.md`, as the language-specific user-facing docs index entries
+
+Treat `docs/mockups/README.md` as the source for static mockup review policy. It may point readers back to this boundary, but it should not become a demo app catalog or collect private demo links. Treat release docs as a checklist for shipped gem changes; only add demo-app wording there if a release actually changes public docs navigation or publication status.
+
 ## Publication checklist
 
 When the demo repository becomes public, update only the docs entry points that help readers choose between the gem contract and the example host app.

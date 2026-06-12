@@ -23,6 +23,9 @@ Dispatched whenever the state controller publishes the current expanded-state sn
 |---|---|---|
 | `viewKey` | String or null | Value from `data-tree-view-state-view-key-value`, when present. Host apps can align this with the persisted `tree_instance_key` they save against. |
 | `expandedKeys` | Array<String> | Current expanded node keys collected from the state controller's tracked rows. |
+| `reason` | String | Why the snapshot was published: `connect`, `refresh`, `expanded`, or `collapsed`. Host apps can use this to skip initial sync or save only user expansion changes. |
+
+`reason` does not change the snapshot meaning. `expandedKeys` is still the full current expanded-state snapshot, not a delta list.
 
 ## Selection events
 
@@ -37,6 +40,12 @@ Dispatched when the current checkbox selection is refreshed or toggled.
 | `selectedCount` | Number | Count of checked, enabled TreeView selection checkboxes. |
 | `selectedValues` | Array<String> | Raw checkbox values for checked, enabled checkboxes. |
 | `selectedPayloads` | Array<Object> | Parsed JSON payloads from checked, enabled checkboxes. Invalid JSON values are omitted. |
+| `sourceCheckbox` | HTMLInputElement or null | Checkbox that triggered this change when the event comes from a user toggle. Initial connect, explicit refresh, submit, and other source-less paths set this to `null`. |
+| `attemptedChecked` | Boolean or null | Toggle state attempted on `sourceCheckbox`. Source-less paths set this to `null`. |
+
+When cascade selection is enabled, `sourceCheckbox` is the checkbox the user toggled. It is not a descendant delta list. Use `selectedCount`, `selectedValues`, and `selectedPayloads` for the resulting selection snapshot.
+
+`sourceCheckbox` is specific to `tree-view-selection:change`. The `checkbox` field on `tree-view-selection:limit-exceeded` and `tree-view-selection:invalid-payload` names the checkbox involved in those error or guard events.
 
 ### `tree-view-selection:selected`
 
@@ -206,6 +215,8 @@ element.addEventListener(TreeViewEventNames.transfer.drop, (event) => {
 ```
 
 `TreeViewEventNames` names events, `TreeViewEventDetailKeys` lists documented payload field names, and these value exports carry documented enum-like values for those fields. `TreeViewRemoteStateValues` is limited to remote-state row values (`loading`, `loaded`, `error`), and `TreeViewTransferDropPositions` is limited to transfer drop positions (`before`, `inside`, `after`). They do not add listener helpers or change controller dispatch behavior.
+
+`tree-view-state:state-changed` also publishes a documented `reason` value (`connect`, `refresh`, `expanded`, or `collapsed`). Those strings are part of the event detail contract, but they are not a separate package-root value export.
 
 ## Compatibility policy
 

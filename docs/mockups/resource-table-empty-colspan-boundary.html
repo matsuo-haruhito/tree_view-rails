@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView resource table empty colspan boundary mock</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-colspan-page {
+  max-width: 1240px;
+}
+
+.mock-colspan-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.mock-colspan-principles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.mock-colspan-principle,
+.mock-colspan-table-card {
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+}
+
+.mock-colspan-principle {
+  padding: 16px;
+}
+
+.mock-colspan-principle h2,
+.mock-colspan-principle p,
+.mock-colspan-table-card h2,
+.mock-colspan-table-card p,
+.mock-colspan-note,
+.mock-colspan-checklist th,
+.mock-colspan-checklist td {
+  margin: 0;
+}
+
+.mock-colspan-principle h2 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.mock-colspan-table-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.mock-colspan-table-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mock-colspan-eyebrow {
+  color: #52606d;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mock-colspan-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mock-colspan-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.8rem;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.mock-colspan-pill--muted {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.mock-colspan-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #dde4ec;
+  border-radius: 10px;
+}
+
+.mock-colspan-table {
+  width: 100%;
+  min-width: 820px;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.mock-colspan-table th,
+.mock-colspan-table td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.mock-colspan-table th {
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mock-colspan-table td.is-muted {
+  color: #52606d;
+}
+
+.mock-colspan-selection,
+.mock-colspan-action-cell {
+  white-space: nowrap;
+}
+
+.mock-colspan-selection input {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+
+.mock-colspan-empty td {
+  background: #f8fafc;
+}
+
+.mock-colspan-empty-cell {
+  padding: 0 !important;
+}
+
+.mock-colspan-empty-box {
+  display: grid;
+  gap: 8px;
+  padding: 1rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.mock-colspan-empty-box strong {
+  color: #0f172a;
+}
+
+.mock-colspan-empty-box p {
+  color: #52606d;
+}
+
+.mock-colspan-note {
+  color: #52606d;
+}
+
+.mock-colspan-code {
+  color: #0f172a;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.88em;
+}
+
+.mock-colspan-checklist {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mock-colspan-checklist th,
+.mock-colspan-checklist td {
+  border-bottom: 1px solid #e4e7eb;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-colspan-checklist th {
+  background: #f1f5f9;
+  color: #334e68;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .mock-colspan-table {
+    min-width: 700px;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="mock-page mock-colspan-page">
+    <header class="mock-header">
+      <p class="mock-kicker">tree_view-rails</p>
+      <h1>Resource table empty colspan boundary mock</h1>
+      <p>
+        Static reference for the boundary between TreeView's reusable empty-row wrapper and a surrounding resource table
+        that owns selection columns, row actions, and table-preference columns. The mock keeps exact column counts,
+        empty copy, and CTA behavior in the host app.
+      </p>
+    </header>
+
+    <nav class="mock-return-nav" aria-label="Mockup return links">
+      <a class="mock-return-nav__link" href="review-gallery.html">Back to review gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="README.md">Open mockup index</a>
+    </nav>
+
+    <section class="mock-section mock-colspan-grid" aria-labelledby="colspan-principles-heading">
+      <div>
+        <h2 id="colspan-principles-heading">Boundary responsibilities</h2>
+        <p class="mock-colspan-note">
+          Use this mock when resource-table review intersects with empty rows, selection checkboxes, row actions,
+          and table-owned visible columns.
+        </p>
+      </div>
+
+      <div class="mock-colspan-principles">
+        <article class="mock-colspan-principle">
+          <h2>TreeView owns the wrapper hook</h2>
+          <p>The reusable empty row exposes <code>data-tree-view-empty-state="true"</code> and the message slot.</p>
+        </article>
+        <article class="mock-colspan-principle">
+          <h2>Resource tables own exact width</h2>
+          <p>Selection columns, actions, visible columns, and exact <code>colspan</code> remain table-layer decisions.</p>
+        </article>
+        <article class="mock-colspan-principle">
+          <h2>Host apps own final recovery</h2>
+          <p>Empty copy, permission messaging, reset links, and create actions stay outside the gem contract.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section mock-colspan-grid" aria-labelledby="fallback-heading" data-tree-view-sample="resource-table-empty-colspan-boundary">
+      <article class="mock-colspan-table-card">
+        <div class="mock-colspan-table-header">
+          <div>
+            <p class="mock-colspan-eyebrow">State A</p>
+            <h2 id="fallback-heading">Built-in fallback spans the resource table</h2>
+            <p class="mock-colspan-note">
+              The generic empty row can use a broad <span class="mock-colspan-code">colspan="999"</span> fallback so it
+              visually covers selection, tree, table-owned metadata, and action columns without TreeView inferring them.
+            </p>
+          </div>
+          <div class="mock-colspan-pill-row" aria-label="Column ownership summary">
+            <span class="mock-colspan-pill">selection: host app</span>
+            <span class="mock-colspan-pill">tree cell: TreeView</span>
+            <span class="mock-colspan-pill">metadata: table layer</span>
+            <span class="mock-colspan-pill">actions: host app</span>
+          </div>
+        </div>
+
+        <div class="mock-colspan-table-wrap">
+          <table class="mock-colspan-table">
+            <thead>
+              <tr>
+                <th scope="col">Select</th>
+                <th scope="col">Tree</th>
+                <th scope="col">Owner</th>
+                <th scope="col">Due</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mock-colspan-empty">
+                <td class="mock-colspan-empty-cell" colspan="999">
+                  <div class="tree-view-empty-row__content mock-colspan-empty-box" data-tree-view-empty-state="true">
+                    <strong>Built-in fallback: no matching rows</strong>
+                    <p class="tree-view-empty-row__message">
+                      The empty row covers the whole rendered table without TreeView knowing whether selection,
+                      table preferences, or row actions are visible.
+                    </p>
+                    <p class="mock-colspan-note">
+                      Final reset links, onboarding copy, and permission-specific messages belong to the host app.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="mock-colspan-table-card">
+        <div class="mock-colspan-table-header">
+          <div>
+            <p class="mock-colspan-eyebrow">State B</p>
+            <h2>Host table can replace the exact empty row</h2>
+            <p class="mock-colspan-note">
+              When the surrounding table already knows its current columns, it can provide an exact span and richer
+              recovery copy while keeping the same TreeView empty-state hook.
+            </p>
+          </div>
+          <div class="mock-colspan-pill-row" aria-label="Visible columns summary">
+            <span class="mock-colspan-pill">exact colspan: 6</span>
+            <span class="mock-colspan-pill mock-colspan-pill--muted">hidden columns stay table-owned</span>
+          </div>
+        </div>
+
+        <div class="mock-colspan-table-wrap">
+          <table class="mock-colspan-table">
+            <thead>
+              <tr>
+                <th scope="col">Select</th>
+                <th scope="col">Tree</th>
+                <th scope="col">Owner</th>
+                <th scope="col">Due</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="mock-colspan-empty">
+                <td class="mock-colspan-empty-cell" colspan="6">
+                  <div class="tree-view-empty-row__content mock-colspan-empty-box" data-tree-view-empty-state="true">
+                    <strong>Host-owned exact span: no visible tasks</strong>
+                    <p class="tree-view-empty-row__message">
+                      This table has selection, hierarchy, metadata, status, and action columns, so the host app can
+                      choose the exact span and add product-specific recovery actions around it.
+                    </p>
+                    <p class="mock-colspan-note">
+                      TreeView still only owns the reusable wrapper hook and hierarchy boundary, not final CTA copy.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="mock-colspan-table-card">
+        <div class="mock-colspan-table-header">
+          <div>
+            <p class="mock-colspan-eyebrow">Reference row</p>
+            <h2>Populated resource row keeps each owner visible</h2>
+            <p class="mock-colspan-note">
+              Compare the empty states against a row where selection, hierarchy, metadata, and actions all appear as
+              separate responsibilities.
+            </p>
+          </div>
+        </div>
+
+        <div class="mock-colspan-table-wrap">
+          <table class="mock-colspan-table">
+            <thead>
+              <tr>
+                <th scope="col">Select</th>
+                <th scope="col">Tree</th>
+                <th scope="col">Owner</th>
+                <th scope="col">Due</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="resource_task_1" class="tree-row is-expanded" data-tree-node-key="task:1" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+                <td class="mock-colspan-selection"><input type="checkbox" aria-label="Select API migration" checked></td>
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle" aria-label="Loaded branch">
+                    <span class="tree-toggle__branches" aria-hidden="true"></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                      <span class="tree-toggle__level">L0</span>
+                      <strong>API migration</strong>
+                    </span>
+                  </span>
+                  <span class="tree-node-badge tree-node-badge--info">current</span>
+                </td>
+                <td>Platform</td>
+                <td class="is-muted">Friday</td>
+                <td><span class="mock-status mock-status--pending">Review</span></td>
+                <td class="mock-colspan-action-cell"><button type="button">Open</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="mock-section" aria-labelledby="colspan-review-heading">
+      <h2 id="colspan-review-heading">Review checklist</h2>
+      <table class="mock-colspan-checklist">
+        <thead>
+          <tr>
+            <th scope="col">Review concern</th>
+            <th scope="col">What this mock should answer</th>
+            <th scope="col">Keep outside scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Fallback width</td>
+            <td>The broad empty-row fallback can cover a mixed resource table without TreeView inferring exact columns.</td>
+            <td>Exact colspan inference, table preference implementation, or column visibility algorithms.</td>
+          </tr>
+          <tr>
+            <td>Host override</td>
+            <td>A host table can choose an exact span and richer recovery copy while reusing the empty-state hook.</td>
+            <td>Final empty copy, create actions, permission messages, routes, or CRUD flows.</td>
+          </tr>
+          <tr>
+            <td>Responsibility boundary</td>
+            <td>Selection, metadata, and row actions remain visible as host/table-layer responsibilities beside TreeView hierarchy cues.</td>
+            <td>Rails Table Preferences integration, cross-gem specs, or runtime helper behavior changes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
