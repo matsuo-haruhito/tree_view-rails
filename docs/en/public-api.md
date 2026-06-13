@@ -209,6 +209,7 @@ Stable enough for host apps to use:
 - `TreeViewRemoteStateValues`
 - `TreeViewRemoteStateDataHooks`
 - `TreeViewControllerIdentifiers`
+- `TreeViewControllerEntries`
 - `TreeViewIntegrationHooks`
 - `TreeViewToolbarDataHooks`
 - `TreeViewSelectionDataHooks`
@@ -232,6 +233,7 @@ Stable enough for host apps to use:
 `TreeViewRemoteStateValues` exposes the documented remote-state value set for lazy-loading rows: `loading`, `loaded`, and `error`. Use it when host-app JavaScript or tests need to compare `data-tree-remote-state` values without hand-copying strings; `TreeViewEventNames.remoteState.*` still names controller-emitted events, and `TreeViewEventDetailKeys.remoteState.*` still lists their `event.detail` keys.
 `TreeViewRemoteStateDataHooks` exposes the documented lazy-loading and remote-state data attribute names as a machine-readable package-root export. Use it when custom lazy-loading markup, tests, or copied host-app partials need to reference `data-tree-lazy`, `data-tree-children-url`, `data-tree-loaded`, or `data-tree-remote-state` without hand-copying strings; request dispatch, response handling, retry UI, and authorization-safe copy stay with the host app and [Lazy Loading](lazy-loading.md).
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
+`TreeViewControllerEntries` exposes the documented identifier/controller pairs in bundled registration order. Use it when host apps need custom registration, boot-order review, or tests that should not hand-copy identifier/controller tuples. `registerTreeViewControllers(application)` remains the standard registration path; the entries list is a manifest-backed convenience for selective wiring, not a new registration policy.
 `TreeViewIntegrationHooks` exposes documented integration hook attribute names as a machine-readable object for host-app JavaScript and tests that need to query or assert TreeView-owned wiring without hand-copying strings. Representative keys cover state row identity, remote-state children URLs, and transfer payload hooks; their detailed behavior still lives in the feature docs and [JavaScript event contract](js-events.md).
 `TreeViewToolbarDataHooks` exposes the documented toolbar container, action, and disabled data hook attribute names as a machine-readable package-root export. Use it when custom toolbar markup or tests need to reference TreeView-owned toolbar hooks without hand-copying strings; supported actions and metadata still come from the toolbar helpers, while action policy, labels, authorization copy, and final UI remain host-app responsibilities documented in [Toolbar](toolbar.md).
 `TreeViewSelectionDataHooks` exposes the documented `tree-view-selection` host-element value attribute names as a machine-readable object. Use it when JavaScript needs to author or query those host-owned attributes without hand-copying strings such as `TreeViewSelectionDataHooks.hiddenInputNameValue`.
@@ -266,6 +268,14 @@ Documented keys on `TreeViewRemoteStateDataHooks`:
 - `remoteStateAttribute`
 
 Documented keys on `TreeViewControllerIdentifiers`:
+
+- `state`
+- `client`
+- `selection`
+- `transfer`
+- `remoteState`
+
+Documented entry keys on `TreeViewControllerEntries`:
 
 - `state`
 - `client`
@@ -313,7 +323,7 @@ The `tree-view-selection` controller's documented host-element value attributes 
 
 Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. Generated hidden input marker attributes and source-id attributes are managed by TreeView and are not host-authored public hooks. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
-The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, transfer drop-position values, transfer data MIME type values, remote-state values, remote-state data hook values, toolbar data hook values, integration hook values, selection data hook values, selection checkbox hook values, and empty-state hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, controller entry list, transfer drop-position values, transfer data MIME type values, remote-state values, remote-state data hook values, toolbar data hook values, integration hook values, selection data hook values, selection checkbox hook values, and empty-state hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
