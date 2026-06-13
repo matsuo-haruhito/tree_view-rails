@@ -52,6 +52,18 @@ Minimum release conditions:
 
 The committed `package-lock.json` is not yet in sync with `package.json`, so both local setup and CI still use `npm install` for the JavaScript lane. Switch these release checks back to `npm ci` after the lockfile refresh work lands.
 
+### Lockfile refresh handoff
+
+When a registry-enabled lockfile refresh lands, review these release-facing points before switching the JavaScript lane back to `npm ci`:
+
+- Confirm `package-lock.json` was refreshed against the current `package.json` without bundling unrelated dependency upgrades.
+- Update the setup wording in `docs/en/development.md` and `docs/ja/development.md` if `npm ci` becomes the current local and Docker install path.
+- Update this release checklist and any CI wording that still describes the `npm install` exception.
+- Keep the Node 22 source guard separate: `.nvmrc`, `package.json` `engines.node`, workflow `node-version`, and `script/test_node_version_sources.mjs` confirm the Node major, while the lockfile refresh decides whether `npm ci` is safe again.
+- Observe fresh PR or main-push CI after the switch so the JavaScript lane proves the refreshed lockfile works in CI.
+
+Do not change `package-lock.json`, workflow setup, dependency versions, or the Node major from this checklist alone; those belong in the lockfile refresh or CI change PR that owns the actual switch.
+
 Local checks:
 
 ```bash
