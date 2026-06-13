@@ -117,6 +117,27 @@ document.addEventListener(TreeViewEventNames.selection.change, (event) => {
 
 Only checked and enabled `.tree-selection-checkbox` elements are included. Invalid JSON values are skipped and reported through the same documented invalid-payload event (`TreeViewEventNames.selection.invalidPayload` or raw `tree-view-selection:invalid-payload`).
 
+### Selected count target
+
+When the host app only needs the current selected count as text, add an optional `selectedCount` target inside the `tree-view-selection` controller.
+
+```erb
+<p>
+  Selected nodes:
+  <strong data-tree-view-selection-target="selectedCount">0</strong>
+</p>
+
+<tbody
+  data-controller="tree-view-selection"
+  data-action="change->tree-view-selection#toggle">
+  <%= tree_view_rows(@render_state) %>
+</tbody>
+```
+
+The controller writes the numeric `selectedCount` into every `selectedCount` target on connect and after selection changes. If the target is omitted, existing event-only usage is unchanged.
+
+The target owns the number only. Surrounding copy, bulk action enable/disable, max-count messages, and business-specific behavior remain host-app responsibility. The `tree-view-selection:change` event still carries the full `selectedCount`, `selectedValues`, and `selectedPayloads` detail for richer integrations.
+
 ## Hidden input sync for regular form submit
 
 When the tree sits inside a normal HTML form, the same controller can mirror checked payloads into hidden inputs on the nearest form.
@@ -214,6 +235,7 @@ See [Children Pagination](children-pagination.md#selection-and-dragdrop-interact
 | Rendering checkboxes | yes | no |
 | JSON payload generation | yes | optional customization |
 | Submitted value parsing and hidden input sync | helper provided, optional form bridge | owns controller placement and business action |
+| Selected count target | syncs the numeric count when the optional target is present | owns surrounding copy, action state, and messages |
 | Cascade / indeterminate | rendered DOM only | decides unloaded/server-side semantics |
 | Max count event | dispatches event | shows message or blocks business action |
 | Delete / move / relate / API calls | no | yes |

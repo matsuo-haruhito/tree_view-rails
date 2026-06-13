@@ -17,6 +17,11 @@ const checks = [
     args: ["script/test_docs_entrypoint_signals.mjs"]
   },
   {
+    group: "Host app extension diagnostics signals",
+    command: "node",
+    args: ["script/test_host_app_extension_diagnostics_signals.mjs"]
+  },
+  {
     group: "Development docs Node version signals",
     command: "node",
     args: ["script/test_development_docs_node_version_signals.mjs"]
@@ -47,6 +52,11 @@ const checks = [
     args: ["script/test_quality_docs_smoke_signals.mjs"]
   },
   {
+    group: "Docs policy signal guards",
+    command: "node",
+    args: ["script/test_docs_policy_signal_guards.mjs"]
+  },
+  {
     group: "Release docs signals",
     command: "node",
     args: ["script/test_release_docs_signals.mjs"]
@@ -60,6 +70,11 @@ const checks = [
     group: "Public API docs signals",
     command: "node",
     args: ["script/test_public_api_docs_signals.mjs"]
+  },
+  {
+    group: "Render window and resource table docs signals",
+    command: "node",
+    args: ["script/test_render_window_resource_table_docs_signals.mjs"]
   },
   {
     group: "Localized and hook docs signals",
