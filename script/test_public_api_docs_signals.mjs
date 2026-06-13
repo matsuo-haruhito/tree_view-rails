@@ -29,6 +29,10 @@ const selectionDocs = [
   ["docs/en/selection.md", read("docs/en/selection.md")],
   ["docs/ja/selection.md", read("docs/ja/selection.md")]
 ]
+const toolbarDocs = [
+  ["docs/en/toolbar.md", read("docs/en/toolbar.md")],
+  ["docs/ja/toolbar.md", read("docs/ja/toolbar.md")]
+]
 const graphAdapterDocs = [
   ["docs/en/graph-adapter.md", read("docs/en/graph-adapter.md")],
   ["docs/ja/graph-adapter.md", read("docs/ja/graph-adapter.md")]
@@ -84,6 +88,34 @@ const selectionDataHookSignals = [
   "TreeViewSelectionDataHooks",
   "TreeViewSelectionDataHooks.hiddenInputNameValue",
   "data-tree-view-selection-hidden-input-name-value"
+]
+
+const selectionHiddenInputSubmissionBoundarySignals = [
+  "TreeView.parse_selection_params",
+  "data-tree-view-selection-hidden-input-name-value",
+  "TreeViewSelectionDataHooks.hiddenInputNameValue",
+  "selection-multi-tree-form.html"
+]
+
+const selectionHiddenInputBookkeepingSignals = [
+  "data-tree-view-selection-source-id",
+  "data-tree-view-selection-generated-hidden-input"
+]
+
+const toolbarActionMetadataSignals = [
+  "toolbar_actions",
+  "toolbar_action_metadata",
+  "tree_view_toolbar_action_metadata",
+  "action",
+  "state",
+  "label",
+  "path",
+  "disabled",
+  "data",
+  "tree_view_toolbar_action",
+  "tree_view_toolbar_disabled",
+  "path: nil",
+  "disabled: true"
 ]
 
 const emptyStateHookSignals = [
@@ -164,6 +196,8 @@ const manifestBackedDocsSignalSurfaces = [
   ["remote-state values", "remote_state_values:"],
   ["selection data hooks", "selection_data_hooks:"],
   ["empty-state hooks", "empty_state_hooks:"],
+  ["toolbar actions", "toolbar_actions:"],
+  ["toolbar action metadata", "toolbar_action_metadata:"],
   ["GraphAdapter initializer", "graph_adapter_initializer:"],
   ["diagnostics accepted checks", "diagnostics:"],
   ["diagnostics accepted checks", "accepted_checks:"],
@@ -182,6 +216,10 @@ callbackBuilderSignals.forEach((signal) => {
 
 graphAdapterInitializerSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest GraphAdapter initializer surface")
+})
+
+toolbarActionMetadataSignals.slice(0, 10).forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest toolbar action metadata surface")
 })
 
 diagnosticsAcceptedCheckSignals.forEach((signal) => {
@@ -268,6 +306,50 @@ selectionDocs.forEach(([relativePath, document]) => {
   selectionDataHookSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} selection data hook docs`)
   })
+
+  selectionHiddenInputSubmissionBoundarySignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} selection hidden input submission docs`)
+  })
+
+  selectionHiddenInputBookkeepingSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} selection hidden input bookkeeping boundary docs`)
+  })
+
+  assert(
+    /hidden input `name` stays host-app controlled|hidden input の `name` は host app 側で決められます/.test(document),
+    `${relativePath}: selection hidden input docs no longer state that submitted param names are host-app controlled`
+  )
+
+  assert(
+    /Values are written as JSON strings|value は JSON 文字列で書き込まれる/.test(document),
+    `${relativePath}: selection hidden input docs no longer preserve the JSON submitted-value contract`
+  )
+
+  assert(
+    /Disabled checkboxes and invalid JSON payloads are skipped|disabled checkbox と不正な JSON payload は.*skip/.test(document),
+    `${relativePath}: selection hidden input docs no longer match the disabled and invalid-payload skip boundary`
+  )
+
+  assert(
+    /TreeView-owned bookkeeping|TreeView 側の bookkeeping/.test(document),
+    `${relativePath}: selection hidden input docs no longer keep generated marker and source-id attributes as TreeView-owned bookkeeping`
+  )
+})
+
+toolbarDocs.forEach(([relativePath, document]) => {
+  toolbarActionMetadataSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} toolbar action metadata docs`)
+  })
+
+  assert(
+    /Authorization, route availability, and final fallback copy still belong to the host app|authorization、route availability、fallback copy の最終判断は引き続き host app 側の責務/.test(document),
+    `${relativePath}: toolbar action metadata docs no longer preserve the host-app-owned fallback boundary`
+  )
+
+  assert(
+    /compatibility checks and integration audits|compatibility check と integration audit/.test(document),
+    `${relativePath}: toolbar action metadata docs no longer point readers at the manifest-backed integration contract`
+  )
 })
 
 graphAdapterDocs.forEach(([relativePath, document]) => {
