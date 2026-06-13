@@ -117,6 +117,27 @@ document.addEventListener(TreeViewEventNames.selection.change, (event) => {
 
 対象になるのは、checked かつ enabled な `.tree-selection-checkbox` だけです。不正なJSON値はskipされ、同じ documented invalid-payload event (`TreeViewEventNames.selection.invalidPayload` または raw `tree-view-selection:invalid-payload`) で通知されます。
 
+### selected count target
+
+host app が現在の選択数だけを text として表示したい場合は、`tree-view-selection` controller の内側に optional な `selectedCount` target を置けます。
+
+```erb
+<p>
+  選択中:
+  <strong data-tree-view-selection-target="selectedCount">0</strong>
+</p>
+
+<tbody
+  data-controller="tree-view-selection"
+  data-action="change->tree-view-selection#toggle">
+  <%= tree_view_rows(@render_state) %>
+</tbody>
+```
+
+controller は connect 時と selection 変更後に、すべての `selectedCount` target へ数値の `selectedCount` を書き込みます。target を置かない既存の event-only 利用では挙動は変わりません。
+
+target が担当するのは数値だけです。周辺文言、bulk action の enable / disable、max count message、業務固有の挙動は host app 側で実装します。より細かい連携が必要な場合は、従来どおり `tree-view-selection:change` event の `selectedCount`、`selectedValues`、`selectedPayloads` detail を使ってください。
+
 ## 通常form送信用の hidden input 同期
 
 tree が通常の HTML form の中にある場合、同じ controller で checked payload を最寄りの form に hidden input としてミラーできます。
@@ -214,6 +235,7 @@ pagination 固有の境界は [Children Pagination](children-pagination.md#selec
 | Rendering checkboxes | yes | no |
 | JSON payload generation | yes | optional customization |
 | Submitted value parsing と hidden input sync | helper 提供、form bridge は optional | controller の配置と業務 action を決める |
+| Selected count target | optional target がある場合に数値だけ同期 | 周辺文言、action state、message を決める |
 | Cascade / indeterminate | rendered DOM only | decides unloaded/server-side semantics |
 | Max count event | dispatches event | shows message or blocks business action |
 | Delete / move / relate / API calls | no | yes |
