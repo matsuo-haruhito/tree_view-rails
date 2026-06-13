@@ -273,6 +273,33 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByRole("button", { name: "Download" })).toHaveAttribute("aria-disabled", "true")
   })
 
+  test("lazy-loading-handoff.html preserves placeholder, loaded, and retry handoff boundaries", async ({ page }) => {
+    await openMockup(page, "lazy-loading-handoff.html")
+
+    await expect(page.getByRole("heading", { name: "Responsibility boundary" })).toBeVisible()
+    await expect(page.getByRole("heading", { name: "TreeView-owned cues" })).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Host-app-owned slots" })).toBeVisible()
+    await expect(page.locator("code", { hasText: "tree_children_container_dom_id(node)" })).toBeVisible()
+    await expect(page.locator("code", { hasText: "tree_remote_state_placeholder_attributes(state:)" })).toBeVisible()
+
+    await expect(page.locator("#project_alpha[data-tree-remote-state='idle'][aria-expanded='false']")).toBeVisible()
+    await expect(page.locator("#project_alpha_children")).toContainText("Host app owns the placeholder content")
+    await expect(page.locator("#project_alpha_remote_state")).toContainText("remote-state placeholder is reserved")
+
+    await expect(page.locator("#project_delta[data-tree-remote-state='loading'][aria-busy='true']")).toBeVisible()
+    await expect(page.locator("#project_delta_children")).toContainText("Children are not committed yet")
+    await expect(page.locator("#project_delta_remote_state")).toContainText("Loading child rows...")
+
+    await expect(page.locator("#project_beta[data-tree-remote-state='loaded'][aria-expanded='true']")).toBeVisible()
+    await expect(page.locator("#project_beta_task_1[data-tree-parent-key='project:beta']")).toContainText("Loaded task one")
+    await expect(page.locator("#project_beta_task_2[data-tree-parent-key='project:beta']")).toContainText("Remote-state placeholder is cleared")
+
+    await expect(page.locator("#project_gamma[data-tree-remote-state='error'][aria-expanded='false']")).toBeVisible()
+    await expect(page.locator("#project_gamma_remote_state")).toContainText("Could not load children.")
+    await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible()
+    await expect(page.getByText("No real Turbo request, fetch controller, or retry implementation is included.", { exact: true })).toBeVisible()
+  })
+
   test("non-exempt focused mockups avoid document-level horizontal overflow at narrow width", async ({ page }) => {
     const overflowingMockups = []
     const checkedMockups = focusedMockupSmokeTargets.filter((mockup) => !narrowOverflowExpectedMockups.has(mockup.file))
