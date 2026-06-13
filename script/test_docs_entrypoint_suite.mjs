@@ -47,6 +47,11 @@ const checks = [
     args: ["script/test_quality_docs_smoke_signals.mjs"]
   },
   {
+    group: "Docs policy signal guards",
+    command: "node",
+    args: ["script/test_docs_policy_signal_guards.mjs"]
+  },
+  {
     group: "Release docs signals",
     command: "node",
     args: ["script/test_release_docs_signals.mjs"]
