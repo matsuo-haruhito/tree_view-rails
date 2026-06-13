@@ -5,6 +5,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TreeView empty state mock</title>
 <link rel="stylesheet" href="default-tree.css">
+<style>
+.message-state-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.message-state-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #dde4ec;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.message-state-card h3,
+.message-state-card p {
+  margin: 0;
+}
+
+.message-state-card h3 {
+  color: #102a43;
+  font-size: 1rem;
+}
+
+.message-state-card p {
+  color: #52606d;
+}
+
+.message-state-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 0.16rem 0.48rem;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.message-state-badge--hidden {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.message-state-badge--host {
+  background: #ecfdf3;
+  color: #166534;
+}
+
+.message-state-card .tree-view-empty-row__content {
+  padding: 0.85rem;
+}
+
+.message-state-card .tree-view-empty-row__message {
+  font-size: 0.95rem;
+}
+
+.message-state-boundary {
+  margin: 16px 0 0;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid #3b82f6;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
+@media (max-width: 920px) {
+  .message-state-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 </head>
 <body>
   <main class="mock-page">
@@ -85,6 +161,49 @@
           </tr>
         </tbody>
       </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="message-options-heading">
+      <h2 id="message-options-heading">Empty and hidden message options</h2>
+      <p class="mock-empty-note">
+        Use these cards to compare TreeView-provided message slots with host-app-owned final copy,
+        CTA placement, filter reset links, and permission wording. The visual states mirror the
+        responsibilities of <code>empty_message</code> and <code>hidden_message</code> without changing RenderState behavior.
+      </p>
+
+      <div class="message-state-grid" aria-label="Empty and hidden message state comparison">
+        <article class="message-state-card">
+          <span class="message-state-badge">empty_message</span>
+          <h3>No root items</h3>
+          <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+            <p class="tree-view-empty-row__message">No root items are available yet.</p>
+            <p class="mock-empty-note">TreeView supplies the full-width message slot; onboarding copy and create actions stay with the host app.</p>
+          </div>
+        </article>
+
+        <article class="message-state-card">
+          <span class="message-state-badge">empty_message</span>
+          <h3>Filtered no results</h3>
+          <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+            <p class="tree-view-empty-row__message">No rows match the current filters.</p>
+            <p class="mock-empty-note">Filter chips, reset links, saved views, and search explanations remain outside the gem.</p>
+          </div>
+        </article>
+
+        <article class="message-state-card">
+          <span class="message-state-badge message-state-badge--hidden">hidden_message</span>
+          <h3>Permission-hidden rows</h3>
+          <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+            <p class="tree-view-empty-row__message">Some rows are hidden by the current view.</p>
+            <p class="mock-empty-note">TreeView can reserve the hidden-state message slot; authorization policy and permission wording belong to the host app.</p>
+          </div>
+        </article>
+      </div>
+
+      <p class="message-state-boundary">
+        <span class="message-state-badge message-state-badge--host">Host app boundary</span>
+        Final empty copy, CTA choice, permission explanation, and filter reset behavior are intentionally not modeled here.
+      </p>
     </section>
 
     <section class="mock-section" aria-labelledby="comparison-heading">
