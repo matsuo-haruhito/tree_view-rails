@@ -138,6 +138,8 @@ Add the importmap pin when needed:
 pin "tree_view", to: "tree_view/index.js"
 ```
 
+Host apps that write tests or custom renderers against TreeView browser hooks can avoid raw event names, data attributes, and controller identifiers by using the package-root exports from `tree_view/index.js`, such as `TreeViewEventNames`, `TreeViewEventDetailKeys`, and the documented data hook objects. See the [Public API JavaScript surface](docs/en/public-api.md#javascript-surface) / [日本語](docs/ja/public-api.md#javascript-surface) and the [JavaScript event contract](docs/en/js-events.md) / [日本語](docs/ja/js-events.md).
+
 See [Installation](docs/en/installation.md) for details.
 
 日本語の導入手順は [docs/ja/installation.md](docs/ja/installation.md) を参照してください。
