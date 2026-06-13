@@ -61,6 +61,10 @@ Use `TreeView::ResourceTableRenderState.call` when another table layer already o
 
 `TreeView::FilteredTree` is a stable public entry point for filtered tree results. Its mode set is also tracked in `config/public_api_manifest.yml` as the `filtered_tree_modes` contract; see [Filtered Trees: Modes](filtered-trees.md#modes) for the documented mode table and the host-app boundary for search query, ranking, authorization, and highlighting.
 
+`TreeView::GraphAdapter` is the adapter-mode entry point for heterogeneous or graph-like nodes that do not fit one parent-id column. See [GraphAdapter](graph-adapter.md) and [API overview: adapter mode](api-overview.md#adapter-mode) for the host-app traversal, authorization, query planning, and node-key boundaries.
+
+`TreeView::Diagnostics` is the aggregate pre-render validation entry point for node key, DOM ID, orphan, and cycle checks. See [Tree diagnostics](tree-diagnostics.md) for the `TreeView::Diagnostics.run` flow, `Result` surface, and host-app data correction boundary.
+
 ## Public error surface
 
 Host apps may rescue `TreeView::Error` to handle documented TreeView validation and configuration failures separately from unrelated application errors.
