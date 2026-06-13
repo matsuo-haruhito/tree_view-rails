@@ -29,14 +29,17 @@ async function expectNoAxeViolations(page, label, options = {}) {
 // state on table rows. The documented policy lives in
 // docs/en/accessibility-semantics.md and docs/ja/accessibility-semantics.md, so
 // this first smoke keeps that allowance explicit instead of silently suppressing
-// table-first findings.
+// table-first findings. axe-core reports that allowance as aria-allowed-attr
+// and aria-conditional-attr for row-level attributes such as aria-level and
+// aria-expanded on table rows.
 const tableFirstAxeOptions = {
   runOnly: {
     type: "tag",
     values: ["wcag2a", "wcag2aa"]
   },
   rules: {
-    "aria-allowed-attr": { enabled: false }
+    "aria-allowed-attr": { enabled: false },
+    "aria-conditional-attr": { enabled: false }
   }
 }
 
