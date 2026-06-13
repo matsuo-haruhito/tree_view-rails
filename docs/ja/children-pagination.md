@@ -157,6 +157,8 @@ host app側で、children rowsと「もっと見る」UIを返します。
 
 次page placeholder の配置や branch-scoped load-more affordance を静的に確認したい場合は、[children-pagination.html](../mockups/children-pagination.html) を使ってください。この mockup は review aid であり、cursor encoding、Turbo Stream response、最終 button copy、retry behavior は host app 側の責務です。
 
+TreeView は、次page placeholder row のための helper option や public metadata API を意図的に提供しません。placeholder DOM、disabled state、retry affordance、最終 copy は host app 側に置き、各productの cursor、route、authorization、paging policy に合わせてください。
+
 ## lazy loadingとの関係
 
 children pagination は lazy loading の上にhost app側で作る仕組みです。
@@ -192,6 +194,7 @@ loaded-row checkbox payload、hidden input sync、rendered-only cascade / indete
 | children URL hook | yes | provides builder |
 | row lazy-loading data | yes | consumes data |
 | remote-state events | hook only | dispatches events |
+| next-page placeholder row | no | yes |
 | cursor / offset / token | no | yes |
 | query and ordering | no | yes |
 | next-page detection | no | yes |
