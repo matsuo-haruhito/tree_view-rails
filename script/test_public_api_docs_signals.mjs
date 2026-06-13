@@ -29,6 +29,10 @@ const selectionDocs = [
   ["docs/en/selection.md", read("docs/en/selection.md")],
   ["docs/ja/selection.md", read("docs/ja/selection.md")]
 ]
+const graphAdapterDocs = [
+  ["docs/en/graph-adapter.md", read("docs/en/graph-adapter.md")],
+  ["docs/ja/graph-adapter.md", read("docs/ja/graph-adapter.md")]
+]
 const diagnosticsDocs = [
   ["docs/en/tree-diagnostics.md", read("docs/en/tree-diagnostics.md")],
   ["docs/ja/tree-diagnostics.md", read("docs/ja/tree-diagnostics.md")]
@@ -90,6 +94,19 @@ const emptyStateHookSignals = [
   "data-tree-view-empty-state"
 ]
 
+const graphAdapterInitializerSignals = [
+  "graph_adapter_initializer",
+  "roots",
+  "children_resolver",
+  "node_key_resolver"
+]
+
+const graphAdapterBoundarySignals = [
+  "authorization",
+  "query planning",
+  "host-app responsibility"
+]
+
 const diagnosticsAcceptedCheckSignals = [
   "node_keys",
   "dom_ids",
@@ -147,6 +164,7 @@ const manifestBackedDocsSignalSurfaces = [
   ["remote-state values", "remote_state_values:"],
   ["selection data hooks", "selection_data_hooks:"],
   ["empty-state hooks", "empty_state_hooks:"],
+  ["GraphAdapter initializer", "graph_adapter_initializer:"],
   ["diagnostics accepted checks", "diagnostics:"],
   ["diagnostics accepted checks", "accepted_checks:"],
   ["diagnostics run options", "run_options:"],
@@ -160,6 +178,10 @@ manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
 
 callbackBuilderSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest callback builder key surface")
+})
+
+graphAdapterInitializerSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest GraphAdapter initializer surface")
 })
 
 diagnosticsAcceptedCheckSignals.forEach((signal) => {
@@ -246,6 +268,28 @@ selectionDocs.forEach(([relativePath, document]) => {
   selectionDataHookSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} selection data hook docs`)
   })
+})
+
+graphAdapterDocs.forEach(([relativePath, document]) => {
+  assertIncludes(document, "TreeView::GraphAdapter", `${relativePath} GraphAdapter guide entrypoint docs`)
+
+  graphAdapterInitializerSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} GraphAdapter initializer manifest boundary docs`)
+  })
+
+  graphAdapterBoundarySignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} GraphAdapter host-app responsibility boundary docs`)
+  })
+
+  assert(
+    /constructor surface|constructor surface|constructor surface/.test(document),
+    `${relativePath}: GraphAdapter docs no longer identify the initializer constructor surface boundary`
+  )
+
+  assert(
+    /traversal semantics|traversal semantics|traversal semantics/.test(document),
+    `${relativePath}: GraphAdapter docs no longer separate traversal semantics from the manifest schema`
+  )
 })
 
 diagnosticsDocs.forEach(([relativePath, document]) => {
