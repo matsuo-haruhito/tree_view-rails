@@ -150,7 +150,7 @@ const signalGroups = [
           "TreeView::Diagnostics.run",
           "pre-render validation",
           "Result",
-          "host-app data policy boundaries"
+          "data policy"
         ]
       ],
       [
@@ -159,7 +159,7 @@ const signalGroups = [
           "TreeView::Diagnostics.run",
           "pre-render validation",
           "Result",
-          "host-app data policy boundaries"
+          "data policy"
         ]
       ]
     ]
