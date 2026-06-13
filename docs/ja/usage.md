@@ -94,6 +94,7 @@ bundled HTML helperを使わず、host app側でtoolbar markupを組み立てた
 - `:state` 例: `:expanded`
 - `:label`
 - `:path`。現在の mode が tree-wide toggle を持たない場合は `nil`
+- `:disabled`
 - host app 側の button / link に使う `:data`
 
 TreeView は metadata だけを提供します。最終的な HTML 構造、style、icon、authorization rule は host app 側で決めます。
