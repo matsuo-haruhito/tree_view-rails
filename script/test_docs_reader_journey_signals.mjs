@@ -157,7 +157,7 @@ const signalGroups = [
         "docs/ja/tree-diagnostics.md",
         [
           "TreeView::Diagnostics.run",
-          "pre-render validation",
+          "描画前validation",
           "Result",
           "data policy"
         ]
