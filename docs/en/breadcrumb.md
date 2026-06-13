@@ -40,6 +40,19 @@ The host app remains responsible for routes, authorization, choosing the current
 
 The current item is rendered as a current label instead of a link.
 
+If a specific ancestor cannot be linked, return `nil` for that item from `path_builder:`. TreeView renders that ancestor as a plain `<span>` while keeping linked ancestors, separators, and the current item behavior intact.
+
+```erb
+<%= tree_view_breadcrumb(
+  @tree,
+  @document,
+  label_builder: ->(item) { item.name },
+  path_builder: ->(item) { policy(item).show? ? document_path(item) : nil }
+) %>
+```
+
+Use this for item-level route or authorization gaps. TreeView does not decide why a crumb is non-linkable, does not add disabled-link semantics, and does not change Turbo navigation behavior.
+
 ## Classes and separator
 
 ```erb
@@ -76,6 +89,8 @@ Use `html:` for the `<nav>` element and item-aware `link_html:` / `current_html:
 
 TreeView merges these attributes with its built-in classes and accessibility attributes. `aria-label` on the `<nav>` still comes from `aria_label:`, and the current item keeps `aria-current="page"`.
 
+When `path_builder:` returns `nil` for a non-current item, TreeView uses a plain fallback `<span>` with the `link_class:` class only. It does not apply `link_html:` to that fallback span, because route-specific data attributes and link semantics belong to actual links.
+
 For markup changes that need custom wrappers, conditional authorization copy, or route-specific behavior beyond attributes, render from `tree.path_for(item)` directly in the host app instead of stretching the bundled helper.
 
 ## Builders
@@ -83,17 +98,17 @@ For markup changes that need custom wrappers, conditional authorization copy, or
 | option | meaning |
 |---|---|
 | `label_builder:` | Required callable that returns the display label for each item. |
-| `path_builder:` | Callable that returns the URL/path for each item. Plain labels are rendered when omitted. |
+| `path_builder:` | Callable that returns the URL/path for each item. Plain labels are rendered when omitted, and item-level `nil` returns render that non-current crumb as a plain label. |
 | `html:` | Additional attributes for the `<nav>` element. |
 | `list_html:` | Additional attributes for the `<ol>` element. |
 | `item_html:` | Additional attributes for each `<li>` element. A callable receives the item. |
-| `link_html:` | Additional attributes for link elements. A callable receives the item. |
+| `link_html:` | Additional attributes for link elements. A callable receives the item. Not applied to non-current fallback labels when `path_builder:` returns `nil`. |
 | `current_html:` | Additional attributes for the current label element. A callable receives the item. |
 | `separator_html:` | Additional attributes for separator elements. A callable receives the previous item. |
 | `nav_class:` | Class for the breadcrumb `<nav>` container. |
 | `list_class:` | Class for the root list element. |
 | `item_class:` | Class for each item element. |
-| `link_class:` | Class for link elements. |
+| `link_class:` | Class for link elements and non-current fallback labels. |
 | `current_class:` | Class for the current node label. |
 | `separator_class:` | Class for separator elements. |
 | `separator:` | Separator between items. |
@@ -120,8 +135,8 @@ Use that mockup as a visual companion to this helper boundary: it highlights pat
 | path lookup in records mode | yes | provides tree/item |
 | breadcrumb HTML helper | yes | calls helper |
 | label customization | builder hook | provides builder |
-| URL/path customization | builder hook | provides routes |
-| lightweight HTML/data attributes | merge hooks | provides attributes and behavior |
+| URL/path customization | builder hook, including item-level `nil` fallback | provides routes and decides non-linkable items |
+| lightweight HTML/data attributes | merge hooks for nav, list, items, links, current label, and separators | provides attributes and behavior |
 | authorization | no | yes |
 | current item selection | no | yes |
 | layout placement | no | yes |

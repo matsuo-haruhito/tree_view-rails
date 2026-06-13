@@ -191,6 +191,22 @@ test.describe("docs mockup browser smoke", () => {
     expect(missingGalleryFiles).toEqual([])
   })
 
+  test("localized-row-labels.html preserves CJK and language exception signals", async ({ page }) => {
+    await openMockup(page, "localized-row-labels.html")
+
+    await expect(page.getByText("Deliberate CJK width stress sample", { exact: true })).toBeVisible()
+    await expect(page.locator("table[lang='ja'].tree-view-table")).toBeVisible()
+    await expect(page.getByText("四半期契約レビューの地域別確認資料と承認経路一覧", { exact: true })).toBeVisible()
+    await expect(page.getByText("確認資料タイプ", { exact: true })).toBeVisible()
+    await expect(page.locator("#localized_cjk_node_2[aria-current='page']")).toBeVisible()
+    await expect(page.locator("#localized_cjk_node_2 .tree-node-badge")).toContainText("current")
+    await expect(page.getByText("tooltip cue: primary link title に全文を保持", { exact: true })).toBeVisible()
+
+    const readme = readFileSync(mockupsReadmePath, "utf8")
+    expect(readme).toContain("localized-row-labels.html` intentionally uses long localized-style English labels and a deliberate CJK / Japanese-width sample")
+    expect(readme).toContain("| `localized-row-labels.html` | Long localized-style row labels and metadata, plus deliberate CJK / Japanese-width sample text |")
+  })
+
   test("narrow overflow exceptions stay explicit and attached to focused smoke targets", () => {
     const coveredFiles = focusedMockupSmokeTargets.map((mockup) => mockup.file)
     const staleExceptions = [...narrowOverflowExpectedMockups.keys()].filter((file) => !coveredFiles.includes(file))

@@ -81,6 +81,99 @@ describe("TreeViewSelectionController", () => {
     ])
   })
 
+  it("syncs selected count targets on connect and checkbox changes", async () => {
+    document.body.innerHTML = `
+      <table>
+        <tbody
+          data-controller="tree-view-selection"
+          data-action="change->tree-view-selection#toggle">
+          <tr data-tree-depth="0">
+            <td>
+              <span id="count" data-tree-view-selection-target="selectedCount">pending</span>
+              <span id="toolbar-count" data-tree-view-selection-target="selectedCount">pending</span>
+            </td>
+            <td>
+              <input
+                id="node-1"
+                class="tree-selection-checkbox"
+                type="checkbox"
+                checked
+                value='{"id":1}'>
+            </td>
+          </tr>
+          <tr data-tree-depth="0">
+            <td></td>
+            <td>
+              <input
+                id="node-2"
+                class="tree-selection-checkbox"
+                type="checkbox"
+                value='{"id":2}'>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `
+
+    await flush()
+
+    expect(document.getElementById("count").textContent).toBe("1")
+    expect(document.getElementById("toolbar-count").textContent).toBe("1")
+
+    const second = document.getElementById("node-2")
+    second.checked = true
+    second.dispatchEvent(new Event("change", { bubbles: true }))
+
+    await flush()
+
+    expect(document.getElementById("count").textContent).toBe("2")
+    expect(document.getElementById("toolbar-count").textContent).toBe("2")
+  })
+
+  it("keeps selected count targets aligned after max-count rollback", async () => {
+    document.body.innerHTML = `
+      <table>
+        <tbody
+          data-controller="tree-view-selection"
+          data-action="change->tree-view-selection#toggle"
+          data-tree-view-selection-max-count-value="1">
+          <tr data-tree-depth="0">
+            <td><span id="count" data-tree-view-selection-target="selectedCount">pending</span></td>
+            <td>
+              <input
+                id="node-1"
+                class="tree-selection-checkbox"
+                type="checkbox"
+                checked
+                value='{"id":1}'>
+            </td>
+          </tr>
+          <tr data-tree-depth="0">
+            <td></td>
+            <td>
+              <input
+                id="node-2"
+                class="tree-selection-checkbox"
+                type="checkbox"
+                value='{"id":2}'>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    `
+
+    await flush()
+
+    const second = document.getElementById("node-2")
+    second.checked = true
+    second.dispatchEvent(new Event("change", { bubbles: true }))
+
+    await flush()
+
+    expect(second.checked).toBe(false)
+    expect(document.getElementById("count").textContent).toBe("1")
+  })
+
   it("skips disabled and invalid payloads when syncing hidden inputs", async () => {
     document.body.innerHTML = `
       <form id="bulk-form">
