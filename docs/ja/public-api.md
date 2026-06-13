@@ -61,6 +61,10 @@ host app が直接使ってよい主な入口は以下です。
 
 `TreeView::FilteredTree` は filtered tree result 用の安定した公開入口です。mode set も `config/public_api_manifest.yml` の `filtered_tree_modes` contract として追跡されています。documented mode table と、search query、ranking、authorization、highlighting を host app 側に置く責務境界は [Filtered Trees: Modes](filtered-trees.md#modes) を参照してください。
 
+`TreeView::GraphAdapter` は、単一の parent-id column では表せない heterogeneous / graph-like nodes のための adapter-mode 入口です。host app 側の traversal、authorization、query planning、node-key 境界は [GraphAdapter](graph-adapter.md) と [API概要: adapter mode](api-overview.md#adapter-mode) を参照してください。
+
+`TreeView::Diagnostics` は、node key、DOM ID、orphan、cycle をまとめて確認する pre-render validation 入口です。`TreeView::Diagnostics.run` の流れ、`Result` surface、host-app data correction boundary は [Tree diagnostics](tree-diagnostics.md) を参照してください。
+
 ## Public error surface
 
 host app は `TreeView::Error` を rescue することで、documented された TreeView の validation / configuration failure を、他の application error と分けて扱えます。
