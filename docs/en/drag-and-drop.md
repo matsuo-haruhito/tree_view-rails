@@ -39,6 +39,8 @@ render_state = TreeView::RenderState.new(
 
 The return value must be hash-like.
 
+TreeView renders the resulting payload on the documented `data-tree-transfer-payload` attribute. Host apps that already import the package root can use `TreeViewIntegrationHooks.transfer.payload` instead of hand-copying that attribute name in JavaScript, browser tests, or shared helper code. The export names the hook string only; payload shape, authorization, persistence, and final drop behavior remain host-app responsibilities.
+
 ## View example
 
 ```erb
@@ -77,6 +79,8 @@ Use `data-tree-view-ignore-drag="true"` when only drag start should be ignored a
   <span data-tree-view-ignore-drag="true">Drag-safe widget</span>
 </td>
 ```
+
+These opt-out markers are documented DOM attributes. They are separate from `TreeViewIntegrationHooks.transfer.payload`, which points to the transfer payload attribute rather than to drag-safe control markers.
 
 See [Usage](usage.md#interactive-controls-inside-rows) for keyboard and row interaction markers.
 
