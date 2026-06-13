@@ -67,6 +67,11 @@ const checks = [
     args: ["script/test_readme_quick_start_signal.mjs"]
   },
   {
+    group: "Mockup docs and asset signals",
+    command: "node",
+    args: ["script/test_mockup_docs_asset_signals.mjs"]
+  },
+  {
     group: "Public API docs signals",
     command: "node",
     args: ["script/test_public_api_docs_signals.mjs"]
