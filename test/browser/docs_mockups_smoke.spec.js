@@ -199,7 +199,7 @@ test.describe("docs mockup browser smoke", () => {
     await expect(page.getByText("四半期契約レビューの地域別確認資料と承認経路一覧", { exact: true })).toBeVisible()
     await expect(page.getByText("確認資料タイプ", { exact: true })).toBeVisible()
     await expect(page.locator("#localized_cjk_node_2[aria-current='page']")).toBeVisible()
-    await expect(page.getByText("current", { exact: true })).toBeVisible()
+    await expect(page.locator("#localized_cjk_node_2 .tree-node-badge")).toContainText("current")
     await expect(page.getByText("tooltip cue: primary link title に全文を保持", { exact: true })).toBeVisible()
 
     const readme = readFileSync(mockupsReadmePath, "utf8")
