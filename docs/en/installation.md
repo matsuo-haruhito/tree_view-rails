@@ -100,6 +100,22 @@ registerTreeViewControllers(application)
 
 Use `registerTreeViewControllers(application)` as the quick-start path for JavaScript-powered TreeView features. Host apps that need selective registration or a custom boot order can use `TreeViewControllerIdentifiers` from the public JavaScript surface; see [Public API](public-api.md#javascript-surface).
 
+## Persisted-state setup generator
+
+When the host app enables persisted expansion state, run the persisted-state install generator after the gem is installed:
+
+```bash
+bin/rails generate tree_view:state:install
+```
+
+Pass an owner model name when the generated concern should be included in an existing owner model:
+
+```bash
+bin/rails generate tree_view:state:install User
+```
+
+The generator name, optional owner argument, and generated destination paths are documented as the [Public Setup Surface](public-setup-surface.md). That path-level contract tracks `db/migrate/*_create_tree_view_states.rb`, `app/models/tree_view_state.rb`, and `app/models/concerns/tree_view_state_owner.rb` without freezing the migration schema or generated template contents. Review the generated files in the host app, then continue with [Persisted State](persisted-state.md) for storage ownership, authorization, save timing, cleanup policy, controller actions, and UI wiring boundaries.
+
 ## Packaged files
 
 The gem package should include the files needed by Rails host apps:
