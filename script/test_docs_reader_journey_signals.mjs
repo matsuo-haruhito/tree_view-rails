@@ -109,6 +109,62 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Tree diagnostics reader journey",
+    files: [
+      [
+        "README.md",
+        [
+          "Tree identity and diagnostics",
+          "docs/en/tree-diagnostics.md",
+          "docs/ja/tree-diagnostics.md"
+        ]
+      ],
+      [
+        "docs/README.md",
+        [
+          "en/tree-diagnostics.md",
+          "ja/tree-diagnostics.md"
+        ]
+      ],
+      [
+        "docs/en/README.md",
+        [
+          "Tree diagnostics",
+          "tree-diagnostics.md",
+          "Structure inspection APIs for node keys, DOM IDs, orphans, and cycles",
+          "Diagnose symptoms or responsibility boundaries"
+        ]
+      ],
+      [
+        "docs/ja/README.md",
+        [
+          "Tree diagnostics",
+          "tree-diagnostics.md",
+          "node_key、DOM ID、orphan、cycle などの構造確認 API",
+          "症状や責務境界から調べる"
+        ]
+      ],
+      [
+        "docs/en/tree-diagnostics.md",
+        [
+          "TreeView::Diagnostics.run",
+          "pre-render validation",
+          "Result",
+          "data policy"
+        ]
+      ],
+      [
+        "docs/ja/tree-diagnostics.md",
+        [
+          "TreeView::Diagnostics.run",
+          "描画前validation",
+          "Result",
+          "data policy"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Render log level reader journey",
     files: [
       [
