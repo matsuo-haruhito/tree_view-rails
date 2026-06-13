@@ -72,6 +72,11 @@ const checks = [
     args: ["script/test_public_api_docs_signals.mjs"]
   },
   {
+    group: "Render window and resource table docs signals",
+    command: "node",
+    args: ["script/test_render_window_resource_table_docs_signals.mjs"]
+  },
+  {
     group: "Localized and hook docs signals",
     command: "node",
     args: ["script/test_localized_and_hook_docs_signals.mjs"]
