@@ -39,6 +39,8 @@ render_state = TreeView::RenderState.new(
 
 戻り値はhash-like objectである必要があります。
 
+TreeView はこの payload を documented な `data-tree-transfer-payload` attribute に描画します。host app が package root をすでに import している場合、JavaScript、browser test、shared helper code では attribute 名を raw string で写経せず `TreeViewIntegrationHooks.transfer.payload` を使えます。この export は hook string を指すだけです。payload shape、authorization、保存、最終的な drop behavior は引き続き host app 側の責務です。
+
 ## viewでの利用例
 
 ```erb
@@ -77,6 +79,8 @@ Drag startだけを無視し、他のTreeView動作は残したい場合は `dat
   <span data-tree-view-ignore-drag="true">Drag-safe widget</span>
 </td>
 ```
+
+これらの opt-out marker は documented DOM attribute です。`TreeViewIntegrationHooks.transfer.payload` は transfer payload attribute を指すもので、drag-safe control marker を指すものではありません。
 
 keyboardやrow interaction向けのmarkerは [使い方](usage.md#行内のinteractive-control) を参照してください。
 
@@ -151,7 +155,7 @@ JavaScript event contract全体は [JavaScript event contract](js-events.md#tran
 | Area | TreeView | Host app |
 |---|---|---|
 | row transfer payload builder validation | yes | provides builder |
-| transfer data attributes | yes | consumes them |
+| transfer data attributes | yes | consumes data |
 | dragstart helper | yes | wires action |
 | browser transfer cue | 現在の helper cue を `move` にする | 業務 operation と最終UXを決める |
 | interactive-control drag-start guard | yes | marks custom widgets when needed |
