@@ -12,8 +12,8 @@
       <p class="mock-kicker">tree_view-rails</p>
       <h1>TreeView interaction states mock</h1>
       <p>
-        Static HTML for reviewing representative lazy-loading, loading, error or retry, children-pagination, and drag or drop states.
-        Rails controllers, Turbo Stream responses, queries, and authorization remain host-app responsibilities and are intentionally not modeled here.
+        Static HTML for reviewing representative lazy-loading, loading, error or retry, builder-slot, children-pagination, and drag or drop states.
+        Rails controllers, Turbo Stream responses, queries, callback behavior, final retry copy, and authorization remain host-app responsibilities and are intentionally not modeled here.
       </p>
     </header>
 
@@ -60,7 +60,7 @@
               </span>
             </td>
             <td>Loading folder</td>
-            <td><span class="mock-status mock-status--pending">loading children…</span></td>
+            <td><span class="mock-status mock-status--pending">loading children...</span></td>
             <td class="tree-row-actions"><button type="button" disabled>Loading</button></td>
           </tr>
 
@@ -77,6 +77,43 @@
             <td>Failed folder</td>
             <td><span class="mock-status mock-status--error">load failed</span></td>
             <td class="tree-row-actions"><button type="button">Retry</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="builder-slot-heading">
+      <h2 id="builder-slot-heading">Builder slot ownership boundary</h2>
+      <p>
+        These rows compare the public callback keys with the visible loading, error, and retry slots a host app may render. TreeView exposes the slot boundary; final copy, retry policy, safe error details, and request lifecycle remain outside this mockup.
+      </p>
+      <table class="tree-view-table" aria-label="Loading and error builder slot boundary examples">
+        <thead>
+          <tr>
+            <th scope="col">callback key</th>
+            <th scope="col">rendered slot cue</th>
+            <th scope="col">host-app-owned decision</th>
+            <th scope="col">TreeView boundary</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tree-row is-loading" aria-busy="true">
+            <td><code>loading_builder</code></td>
+            <td><span class="mock-status mock-status--pending">Loading children...</span></td>
+            <td>Spinner, placeholder wording, skeleton density, and whether parent content stays interactive.</td>
+            <td>Provides the loading slot location beside remote-state hooks; does not define fetch timing.</td>
+          </tr>
+          <tr class="tree-row is-error">
+            <td><code>error_builder</code></td>
+            <td><span class="mock-status mock-status--error">Could not load this branch.</span></td>
+            <td>Authorization-safe copy, diagnostics visibility, and whether the failure is retryable.</td>
+            <td>Provides the error slot location; does not expose exception details or security policy.</td>
+          </tr>
+          <tr class="tree-row">
+            <td><code>error_builder</code> + retry</td>
+            <td class="tree-row-actions"><button type="button">Try again</button></td>
+            <td>Button label, disabled state, backoff, audit messaging, and final retry behavior.</td>
+            <td>Keeps retry affordance visually adjacent to the failed branch without owning the request.</td>
           </tr>
         </tbody>
       </table>
