@@ -98,30 +98,107 @@ function formatDuration(milliseconds) {
   return `${(milliseconds / 1000).toFixed(1)}s`
 }
 
-function printCheckList() {
-  console.log(`[docs-entrypoints] ${checks.length} checks configured`)
+function formatAvailableGroups() {
+  return checks.map((check, index) => `  ${index + 1}. ${check.group}`).join("\n")
+}
 
-  checks.forEach((check, index) => {
+function printCheckList(selectedChecks = checks) {
+  console.log(`[docs-entrypoints] ${selectedChecks.length} checks configured`)
+
+  selectedChecks.forEach((check, index) => {
     console.log(
       `[docs-entrypoints] ${index + 1}. ${check.group}: ${commandLine(check)}`
     )
   })
 }
 
-if (process.argv.includes("--list")) {
+function usage() {
+  console.error("[docs-entrypoints] usage: node script/test_docs_entrypoint_suite.mjs [--list] [--only <group>]")
+  console.error("[docs-entrypoints] use --list to show available groups")
+}
+
+function resolveOnlyGroup(groupName) {
+  const exactMatches = checks.filter((check) => check.group === groupName)
+  if (exactMatches.length === 1) return exactMatches[0]
+
+  const normalizedGroupName = groupName.toLowerCase()
+  const caseInsensitiveExactMatches = checks.filter(
+    (check) => check.group.toLowerCase() === normalizedGroupName
+  )
+  if (caseInsensitiveExactMatches.length === 1) return caseInsensitiveExactMatches[0]
+
+  const partialMatches = checks.filter((check) =>
+    check.group.toLowerCase().includes(normalizedGroupName)
+  )
+
+  if (partialMatches.length === 1) return partialMatches[0]
+
+  if (partialMatches.length > 1) {
+    console.error(`[docs-entrypoints] ambiguous --only group: ${groupName}`)
+    console.error("[docs-entrypoints] matching groups:")
+    console.error(partialMatches.map((check) => `  - ${check.group}`).join("\n"))
+  } else {
+    console.error(`[docs-entrypoints] unknown --only group: ${groupName}`)
+  }
+
+  console.error("[docs-entrypoints] available groups:")
+  console.error(formatAvailableGroups())
+  console.error("[docs-entrypoints] run with --list to inspect commands")
+  process.exit(1)
+}
+
+function parseArgs(argv) {
+  const options = { list: false, only: null }
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index]
+
+    if (arg === "--list") {
+      options.list = true
+      continue
+    }
+
+    if (arg === "--only") {
+      const groupName = argv[index + 1]
+
+      if (!groupName || groupName.startsWith("--")) {
+        console.error("[docs-entrypoints] --only requires a group name")
+        usage()
+        console.error("[docs-entrypoints] available groups:")
+        console.error(formatAvailableGroups())
+        process.exit(1)
+      }
+
+      options.only = resolveOnlyGroup(groupName)
+      index += 1
+      continue
+    }
+
+    console.error(`[docs-entrypoints] unknown argument: ${arg}`)
+    usage()
+    process.exit(1)
+  }
+
+  return options
+}
+
+const options = parseArgs(process.argv.slice(2))
+
+if (options.list) {
   printCheckList()
   process.exit(0)
 }
 
+const selectedChecks = options.only ? [options.only] : checks
 const suiteStartedAt = Date.now()
 const passedChecks = []
 
-printCheckList()
+printCheckList(selectedChecks)
 
-for (const [index, check] of checks.entries()) {
+for (const [index, check] of selectedChecks.entries()) {
   const checkStartedAt = Date.now()
 
-  console.log(`\n[docs-entrypoints] ${index + 1}/${checks.length} ${check.group}`)
+  console.log(`\n[docs-entrypoints] ${index + 1}/${selectedChecks.length} ${check.group}`)
   console.log(`$ ${commandLine(check)}`)
 
   const result = spawnSync(check.command, check.args, { stdio: "inherit" })
@@ -132,7 +209,7 @@ for (const [index, check] of checks.entries()) {
       `[docs-entrypoints] ${check.group} failed to start after ${formatDuration(elapsed)}: ${result.error.message}`
     )
     console.error(
-      `[docs-entrypoints] summary: ${passedChecks.length}/${checks.length} checks passed before failure`
+      `[docs-entrypoints] summary: ${passedChecks.length}/${selectedChecks.length} checks passed before failure`
     )
     process.exit(1)
   }
@@ -142,7 +219,7 @@ for (const [index, check] of checks.entries()) {
       `[docs-entrypoints] ${check.group} stopped by signal ${result.signal} after ${formatDuration(elapsed)}: ${commandLine(check)}`
     )
     console.error(
-      `[docs-entrypoints] summary: ${passedChecks.length}/${checks.length} checks passed before failure`
+      `[docs-entrypoints] summary: ${passedChecks.length}/${selectedChecks.length} checks passed before failure`
     )
     process.exit(1)
   }
@@ -152,7 +229,7 @@ for (const [index, check] of checks.entries()) {
       `[docs-entrypoints] ${check.group} failed with exit code ${result.status} after ${formatDuration(elapsed)}: ${commandLine(check)}`
     )
     console.error(
-      `[docs-entrypoints] summary: ${passedChecks.length}/${checks.length} checks passed before failure`
+      `[docs-entrypoints] summary: ${passedChecks.length}/${selectedChecks.length} checks passed before failure`
     )
     process.exit(result.status ?? 1)
   }
@@ -164,5 +241,5 @@ for (const [index, check] of checks.entries()) {
 }
 
 console.log(
-  `\n[docs-entrypoints] all ${checks.length} checks passed in ${formatDuration(Date.now() - suiteStartedAt)}`
+  `\n[docs-entrypoints] all ${selectedChecks.length} checks passed in ${formatDuration(Date.now() - suiteStartedAt)}`
 )
