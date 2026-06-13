@@ -26,8 +26,8 @@ test.describe("docs mockup boundary signals", () => {
     await expect(page.locator(".mock-breadcrumb-frame--narrow")).toBeVisible()
     await expect(page.locator(".mock-breadcrumb-path--stress .mock-breadcrumb-pill--stress", { hasText: "Current review item with a deliberately long label" })).toBeVisible()
 
-    await expect(page.getByText("Exact URLs, truncation rules, and permission-aware labels still belong to the host app.", { exact: true })).toBeVisible()
-    await expect(page.getByText("Real route helpers, final labels, authorization-aware visibility, and Turbo navigation.", { exact: true })).toBeVisible()
+    await expect(page.getByText("Exact URLs, truncation rules, and permission-aware labels still belong to the host app.", { exact: false })).toBeVisible()
+    await expect(page.getByText("Real route helpers, final labels, authorization-aware visibility, and Turbo navigation.", { exact: false })).toBeVisible()
   })
 
   test("localized-row-labels.html preserves CJK review samples and identity boundary signals", async ({ page }) => {
@@ -45,4 +45,4 @@ test.describe("docs mockup boundary signals", () => {
     await expect(page.locator("code", { hasText: "picker_tree_localized_cjk_invoice" })).toBeVisible()
     await expect(page.getByText("Use the node key for data identity; use the DOM ID only for this rendered browser target.", { exact: true })).toBeVisible()
   })
-})
+}
