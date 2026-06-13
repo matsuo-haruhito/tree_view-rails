@@ -27,7 +27,7 @@ describe("TreeView JavaScript public event contract", () => {
     document.body.innerHTML = ""
   })
 
-  it("dispatches tree-view-state:state-changed with stable view and expansion detail", async () => {
+  it("dispatches tree-view-state:state-changed with stable view, expansion, and reason detail", async () => {
     document.body.innerHTML = `
       <section id="root">
         <table data-controller="tree-view-state" data-tree-view-state-view-key-value="projects">
@@ -51,21 +51,30 @@ describe("TreeView JavaScript public event contract", () => {
     expect(initialEvent.cancelable).toBe(true)
     expect(initialEvent.detail).toEqual({
       viewKey: "projects",
-      expandedKeys: ["project:1"]
+      expandedKeys: ["project:1"],
+      reason: "connect"
     })
 
     const element = document.querySelector("[data-controller='tree-view-state']")
     const controller = application.getControllerForElementAndIdentifier(element, "tree-view-state")
+    controller.refresh()
     controller.markCollapsed({ target: document.querySelector("#alpha-toggle") })
     controller.markExpanded({ target: document.querySelector("#beta-toggle") })
 
+    expect(stateSpy.mock.calls.at(-3)[0].detail).toEqual({
+      viewKey: "projects",
+      expandedKeys: ["project:1"],
+      reason: "refresh"
+    })
     expect(stateSpy.mock.calls.at(-2)[0].detail).toEqual({
       viewKey: "projects",
-      expandedKeys: []
+      expandedKeys: [],
+      reason: "collapsed"
     })
     expect(stateSpy.mock.calls.at(-1)[0].detail).toEqual({
       viewKey: "projects",
-      expandedKeys: ["project:2"]
+      expandedKeys: ["project:2"],
+      reason: "expanded"
     })
   })
 

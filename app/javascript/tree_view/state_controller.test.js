@@ -76,7 +76,8 @@ describe("TreeViewStateController state-changed details", () => {
     expect(eventSpy).toHaveBeenCalledOnce()
     expect(eventSpy.mock.calls[0][0].detail).toEqual({
       viewKey: "project-tree",
-      expandedKeys: ["project:1"]
+      expandedKeys: ["project:1"],
+      reason: "connect"
     })
   })
 
@@ -95,7 +96,8 @@ describe("TreeViewStateController state-changed details", () => {
     expect(eventSpy).toHaveBeenCalledOnce()
     expect(eventSpy.mock.calls[0][0].detail).toEqual({
       viewKey: "project-tree",
-      expandedKeys: []
+      expandedKeys: [],
+      reason: "collapsed"
     })
 
     document.getElementById("project-2").dataset.treeViewStateExpanded = "true"
@@ -104,7 +106,8 @@ describe("TreeViewStateController state-changed details", () => {
     expect(eventSpy).toHaveBeenCalledTimes(2)
     expect(eventSpy.mock.calls[1][0].detail).toEqual({
       viewKey: "project-tree",
-      expandedKeys: ["project:2"]
+      expandedKeys: ["project:2"],
+      reason: "refresh"
     })
   })
 

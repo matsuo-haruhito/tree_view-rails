@@ -29,6 +29,8 @@
 - [日本語FAQ](ja/faq.md): 責務境界とよくある誤解を短く確認する入口。
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
+- [English Tree diagnostics](en/tree-diagnostics.md): inspect node keys, DOM IDs, orphan nodes, and cycles before rendering.
+- [日本語Tree diagnostics](ja/tree-diagnostics.md): node_key、DOM ID、orphan、cycle などの構造を描画前に確認する入口。
 - [English Accessibility Semantics](en/accessibility-semantics.md): table-first ARIA policy, empty-state wrapper hooks, keyboard helper boundary, and intentional automated-check allowances.
 - [日本語Accessibility Semantics](ja/accessibility-semantics.md): table-first ARIA 方針、empty-state wrapper hook、keyboard helper の責務境界、自動 accessibility check の意図的な許容事項。
 - [English Selection](en/selection.md): checkbox selection hooks, hidden input form sync, max-count limits, multi-tree form boundaries, unloaded-descendant boundaries, and submitted value parsing.

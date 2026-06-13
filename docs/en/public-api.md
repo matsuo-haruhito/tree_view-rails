@@ -59,6 +59,12 @@ Host apps may use these entry points directly:
 
 Use `TreeView::ResourceTableRenderState.call` when another table layer already owns column inference and table state, and TreeView should only build the hierarchical render state. See [Resource table bridge](resource-table-bridge.md).
 
+`TreeView::FilteredTree` is a stable public entry point for filtered tree results. Its mode set is also tracked in `config/public_api_manifest.yml` as the `filtered_tree_modes` contract; see [Filtered Trees: Modes](filtered-trees.md#modes) for the documented mode table and the host-app boundary for search query, ranking, authorization, and highlighting.
+
+`TreeView::GraphAdapter` is the adapter-mode entry point for heterogeneous or graph-like nodes that do not fit one parent-id column. See [GraphAdapter](graph-adapter.md) and [API overview: adapter mode](api-overview.md#adapter-mode) for the host-app traversal, authorization, query planning, and node-key boundaries.
+
+`TreeView::Diagnostics` is the aggregate pre-render validation entry point for node key, DOM ID, orphan, and cycle checks. See [Tree diagnostics](tree-diagnostics.md) for the `TreeView::Diagnostics.run` flow, `Result` surface, and host-app data correction boundary.
+
 ## Public error surface
 
 Host apps may rescue `TreeView::Error` to handle documented TreeView validation and configuration failures separately from unrelated application errors.
@@ -168,6 +174,10 @@ See [API reference](api.md), [Localized names](localized-names.md), and [Turbo F
 
 These keys are a key-surface contract only: `row_class_builder`, `row_data_builder`, `row_event_payload_builder`, `loading_builder`, `error_builder`, `depth_label_builder`, `badge_builder`, `icon_builder`, and `toggle_icon_builder` remain distinct from grouped option hashes, individual scalar options, and the declarative `toggle_icons` map. This contract does not change callback arity, return-value validation, row rendering, `NodePresenter` fallback behavior, or toggle icon lookup priority.
 
+`loading_builder` and `error_builder` are row-level callback surfaces that let host apps render documented loading or error rows while keeping request lifecycle, retry UI, authorization-safe error copy, and response handling in the host app. See [Lazy Loading](lazy-loading.md) for the request-state boundary and the related interaction-state references.
+
+`row_data_builder` stays inside that key-surface contract. Host-app data hash shape, merged row data attributes, and TreeView-owned row status keys are documented and guarded in [Row status](row-status.md) rather than promoted to a manifest-backed return-shape schema.
+
 ## Host app extension points
 
 Host apps are expected to provide these pieces:
@@ -197,8 +207,10 @@ Stable enough for host apps to use:
 - `TreeViewTransferDropPositions`
 - `TreeViewTransferDataMimeTypes`
 - `TreeViewRemoteStateValues`
+- `TreeViewRemoteStateDataHooks`
 - `TreeViewControllerIdentifiers`
 - `TreeViewIntegrationHooks`
+- `TreeViewToolbarDataHooks`
 - `TreeViewSelectionDataHooks`
 - `TreeViewSelectionCheckboxHooks`
 - `TreeViewEmptyStateHooks`
@@ -218,8 +230,10 @@ Stable enough for host apps to use:
 `TreeViewTransferDropPositions` exposes the documented coarse drop-position values for transfer events: `before`, `inside`, and `after`. `TreeViewEventNames.transfer.*` names transfer events, `TreeViewEventDetailKeys.transfer.*` lists the documented `event.detail` keys, and `TreeViewTransferDropPositions` carries the position values described in [Drag and Drop](drag-and-drop.md#drop-behavior).
 `TreeViewTransferDataMimeTypes` exposes the documented TreeView transfer MIME type values: `application/json` for the primary JSON payload and `text/plain` as the browser compatibility fallback. Use it when host-app JavaScript or tests need to read or assert TreeView transfer data without hand-copying MIME strings; drag/drop behavior, payload shape, and final business handling still live in [Drag and Drop](drag-and-drop.md#drop-behavior).
 `TreeViewRemoteStateValues` exposes the documented remote-state value set for lazy-loading rows: `loading`, `loaded`, and `error`. Use it when host-app JavaScript or tests need to compare `data-tree-remote-state` values without hand-copying strings; `TreeViewEventNames.remoteState.*` still names controller-emitted events, and `TreeViewEventDetailKeys.remoteState.*` still lists their `event.detail` keys.
+`TreeViewRemoteStateDataHooks` exposes the documented lazy-loading and remote-state data attribute names as a machine-readable package-root export. Use it when custom lazy-loading markup, tests, or copied host-app partials need to reference `data-tree-lazy`, `data-tree-children-url`, `data-tree-loaded`, or `data-tree-remote-state` without hand-copying strings; request dispatch, response handling, retry UI, and authorization-safe copy stay with the host app and [Lazy Loading](lazy-loading.md).
 `TreeViewControllerIdentifiers` exposes the same documented identifiers as a machine-readable object. Host apps that selectively register controllers or choose a custom boot order should use this export instead of hand-copying identifier strings.
 `TreeViewIntegrationHooks` exposes documented integration hook attribute names as a machine-readable object for host-app JavaScript and tests that need to query or assert TreeView-owned wiring without hand-copying strings. Representative keys cover state row identity, remote-state children URLs, and transfer payload hooks; their detailed behavior still lives in the feature docs and [JavaScript event contract](js-events.md).
+`TreeViewToolbarDataHooks` exposes the documented toolbar container, action, and disabled data hook attribute names as a machine-readable package-root export. Use it when custom toolbar markup or tests need to reference TreeView-owned toolbar hooks without hand-copying strings; supported actions and metadata still come from the toolbar helpers, while action policy, labels, authorization copy, and final UI remain host-app responsibilities documented in [Toolbar](toolbar.md).
 `TreeViewSelectionDataHooks` exposes the documented `tree-view-selection` host-element value attribute names as a machine-readable object. Use it when JavaScript needs to author or query those host-owned attributes without hand-copying strings such as `TreeViewSelectionDataHooks.hiddenInputNameValue`.
 `TreeViewSelectionCheckboxHooks` exposes the rendered selection checkbox class and disabled-reason attribute emitted by TreeView's selection cell partial. Use it for browser-level tests or host-app JavaScript that needs to find TreeView-rendered checkbox elements, not for host-authored `tree-view-selection` controller values. See [Selection checkbox hooks](selection-checkbox-hooks.md).
 `TreeViewEmptyStateHooks` exposes the documented empty-state wrapper attribute and baseline row classes as a machine-readable object. Use it when host-app JavaScript, tests, or copied styling need to target the shipped empty-state reference pattern without hand-copying `data-tree-view-empty-state`, `.tree-view-empty-row__content`, or `.tree-view-empty-row__message`. The final empty-state copy, CTA, permission message, and filter-reset behavior stay host-app responsibilities.
@@ -244,6 +258,13 @@ Documented keys on `TreeViewRemoteStateValues`:
 - `loaded`
 - `error`
 
+Documented keys on `TreeViewRemoteStateDataHooks`:
+
+- `lazyAttribute`
+- `childrenUrlAttribute`
+- `loadedAttribute`
+- `remoteStateAttribute`
+
 Documented keys on `TreeViewControllerIdentifiers`:
 
 - `state`
@@ -258,6 +279,12 @@ Documented keys on `TreeViewIntegrationHooks`:
 - `state.nodeKey`
 - `remoteState.childrenUrl`
 - `transfer.payload`
+
+Documented keys on `TreeViewToolbarDataHooks`:
+
+- `toolbarAttribute`
+- `actionAttribute`
+- `disabledAttribute`
 
 Documented keys on `TreeViewSelectionDataHooks`:
 
@@ -286,7 +313,7 @@ The `tree-view-selection` controller's documented host-element value attributes 
 
 Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. Generated hidden input marker attributes and source-id attributes are managed by TreeView and are not host-authored public hooks. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
-The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, transfer drop-position values, transfer data MIME type values, remote-state values, integration hook values, selection data hook values, selection checkbox hook values, and empty-state hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, transfer drop-position values, transfer data MIME type values, remote-state values, remote-state data hook values, toolbar data hook values, integration hook values, selection data hook values, selection checkbox hook values, and empty-state hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
