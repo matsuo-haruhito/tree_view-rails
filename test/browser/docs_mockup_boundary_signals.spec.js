@@ -45,4 +45,4 @@ test.describe("docs mockup boundary signals", () => {
     await expect(page.locator("code", { hasText: "picker_tree_localized_cjk_invoice" })).toBeVisible()
     await expect(page.getByText("Use the node key for data identity; use the DOM ID only for this rendered browser target.", { exact: true })).toBeVisible()
   })
-}
+})
