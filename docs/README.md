@@ -47,6 +47,8 @@
 - [日本語Render log level](ja/render-log-level.md): host app 全体の Rails logger level を変えずに、TreeView helper-rendered partial log の出力を調整する入口。
 - [English direction-aware styling boundary](en/direction-aware-styling.md): host-app override guidance for RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing.
 - [日本語Direction-aware styling boundary](ja/direction-aware-styling.md): RTL、writing direction、current-row cue、hierarchy connector、toggle spacing の host-app override guidance。
+- [English styling state cues](en/styling-state-cues.md): CSS custom properties for the packaged stylesheet's small state-cue surface.
+- [日本語State cue のスタイリング](ja/styling-state-cues.md): 同梱 stylesheet の小さな state-cue surface 向け CSS custom properties。
 - [TreeView mockups](mockups/README.md): static visual reference for baseline DOM structure, interaction states, and focused empty-state rows. Start with [review-gallery.html](mockups/review-gallery.html) for the fastest side-by-side first look, open [default-tree.html](mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, and use [empty-state.html](mockups/empty-state.html) when checking no-root-items / no-results wrapper hooks and host-app-owned copy boundaries.
 - [English demo application boundary](en/demo-application-boundary.md): decide when to use static mockups versus a real Rails demo app, without adding private or unavailable demo links.
 - [日本語Demo application boundary](ja/demo-application-boundary.md): static mockup と real Rails demo app の役割分担、未公開 demo link を増やさない方針。
