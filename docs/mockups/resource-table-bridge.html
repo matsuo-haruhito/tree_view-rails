@@ -93,6 +93,11 @@
   color: #334155;
 }
 
+.mock-bridge-pill--warning {
+  background: #fff7ed;
+  color: #9a3412;
+}
+
 .mock-bridge-table-wrap {
   overflow-x: auto;
   border: 1px solid #dde4ec;
@@ -124,6 +129,42 @@
 
 .mock-bridge-table td.is-muted {
   color: #52606d;
+}
+
+.mock-bridge-table--minimal {
+  min-width: 520px;
+}
+
+.mock-bridge-minimal-label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.mock-bridge-minimal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  color: #52606d;
+  font-size: 0.82rem;
+}
+
+.mock-bridge-action-boundary {
+  color: #52606d;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.mock-bridge-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #1d4ed8;
+  font-weight: 700;
 }
 
 .mock-bridge-section-label {
@@ -170,6 +211,10 @@
 @media (max-width: 720px) {
   .mock-bridge-table {
     min-width: 640px;
+  }
+
+  .mock-bridge-table--minimal {
+    min-width: 520px;
   }
 }
 </style>
@@ -390,6 +435,98 @@
           </table>
         </div>
       </article>
+
+      <article class="mock-bridge-table-card">
+        <div class="mock-bridge-table-header">
+          <div>
+            <p class="mock-bridge-eyebrow">State C</p>
+            <h2>Minimal visible column state</h2>
+            <p class="mock-bridge-note">
+              Use this surface to review the near-empty column set where optional table columns are hidden but the primary hierarchy
+              label, selection cue, and a host-owned row boundary remain understandable.
+            </p>
+          </div>
+          <div class="mock-bridge-pill-row" aria-label="Visible columns summary">
+            <span class="mock-bridge-pill">visible_columns: name</span>
+            <span class="mock-bridge-pill mock-bridge-pill--warning">minimal table layer</span>
+            <span class="mock-bridge-pill mock-bridge-pill--muted">hidden: owner</span>
+            <span class="mock-bridge-pill mock-bridge-pill--muted">hidden: region</span>
+            <span class="mock-bridge-pill mock-bridge-pill--muted">hidden: updated</span>
+            <span class="mock-bridge-pill mock-bridge-pill--muted">hidden: status</span>
+          </div>
+        </div>
+
+        <div class="mock-bridge-table-wrap">
+          <table class="mock-bridge-table mock-bridge-table--minimal">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Row boundary</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 0 expanded current row">
+                    <span class="tree-toggle__branches" aria-hidden="true"></span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">-</span>
+                      <span class="tree-toggle__level">L0</span>
+                      <span class="mock-bridge-minimal-label">
+                        <strong>Platform rollout</strong>
+                        <span class="mock-bridge-minimal-meta"><span>Current selection cue</span><span>Primary label remains visible</span></span>
+                      </span>
+                      <span class="tree-node-badge tree-node-badge--info">current</span>
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span class="mock-bridge-action-button" aria-disabled="true">Review</span>
+                  <p class="mock-bridge-action-boundary">Host app owns whether actions stay visible when table columns are minimized.</p>
+                </td>
+              </tr>
+              <tr>
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 1 expanded child row">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">-</span>
+                      <span class="tree-toggle__level">L1</span>
+                      <span class="mock-bridge-minimal-label">
+                        <strong>North America launch</strong>
+                        <span class="mock-bridge-minimal-meta"><span>Optional metadata hidden</span><span>Depth cue still leads</span></span>
+                      </span>
+                    </span>
+                  </div>
+                </td>
+                <td><p class="mock-bridge-action-boundary">Row-specific metadata can move to host-owned detail surfaces instead of becoming TreeView state.</p></td>
+              </tr>
+              <tr class="tree-row is-collapsed">
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 2 collapsed row with hidden children">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-last"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">+</span>
+                      <span class="tree-toggle__level">L2</span>
+                      <span class="mock-bridge-minimal-label">
+                        <strong>Warehouse checklist</strong>
+                        <span class="mock-bridge-minimal-meta"><span>Collapsed branch</span><span>Hidden child count remains inspectable</span></span>
+                      </span>
+                      <span class="tree-toggle__hidden-count">4</span>
+                    </span>
+                  </div>
+                </td>
+                <td><p class="mock-bridge-action-boundary">Minimal columns should not imply TreeView owns column recovery, saved preferences, or authorization.</p></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
     </section>
 
     <section class="mock-section" aria-labelledby="bridge-review-heading">
@@ -405,13 +542,18 @@
         <tbody>
           <tr>
             <td>Column sharing</td>
-            <td>The same tree rows stay readable across a fuller and a narrower visible column set.</td>
+            <td>The same tree rows stay readable across a fuller, narrower, and near-minimal visible column set.</td>
             <td>Automatic column inference, saved preference UI, or table personalization controls.</td>
           </tr>
           <tr>
             <td>Hierarchy cues</td>
             <td>Indent guides, toggles, current-row emphasis, and hidden-child counts remain legible in the first data column.</td>
             <td>Real expand or collapse behavior, controller wiring, or asynchronous loading.</td>
+          </tr>
+          <tr>
+            <td>Minimal column recovery</td>
+            <td>The near-empty table state still shows the primary label, current cue, and host-owned row boundary without pretending TreeView owns column recovery.</td>
+            <td>Saved table preferences, required action policy, authorization-aware columns, or column recovery UI.</td>
           </tr>
           <tr>
             <td>Responsibility boundary</td>
