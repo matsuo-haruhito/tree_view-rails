@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView diagnostics and integration troubleshooting mockup</title>
+<link rel="stylesheet" href="default-tree.css">
+<style>
+.troubleshooting-page { max-width: 1180px; }
+.troubleshooting-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 18px; }
+.troubleshooting-summary__item, .troubleshooting-card, .troubleshooting-note { border: 1px solid #d8e0ea; border-radius: 8px; background: #fff; padding: 14px; }
+.troubleshooting-summary__item strong, .troubleshooting-card h3, .troubleshooting-note h3 { display: block; margin: 0 0 0.35rem; color: #102a43; }
+.troubleshooting-summary__item p, .troubleshooting-card p, .troubleshooting-note p { margin: 0; }
+.troubleshooting-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.troubleshooting-card { display: grid; gap: 10px; align-content: start; }
+.troubleshooting-card--ok { border-color: #86efac; background: #f0fdf4; }
+.troubleshooting-card--warn { border-color: #facc15; background: #fefce8; }
+.troubleshooting-card--error { border-color: #fda4af; background: #fff1f2; }
+.troubleshooting-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.troubleshooting-chip { display: inline-flex; max-width: 100%; padding: 0.18rem 0.5rem; border: 1px solid #cbd5e1; border-radius: 999px; background: #f8fafc; color: #334155; font-size: 0.78rem; font-weight: 700; overflow-wrap: anywhere; }
+.troubleshooting-chip--tree { border-color: #93c5fd; background: #eff6ff; color: #1d4ed8; }
+.troubleshooting-chip--host { border-color: #facc15; background: #fefce8; color: #854d0e; }
+.troubleshooting-chip--risk { border-color: #fda4af; background: #fff1f2; color: #be123c; }
+.troubleshooting-demo { overflow-x: auto; border: 1px solid #d8e0ea; border-radius: 8px; background: #fff; }
+.troubleshooting-demo .tree-view-table { min-width: 860px; margin: 0; }
+.troubleshooting-state-table { width: 100%; border-collapse: collapse; }
+.troubleshooting-state-table th, .troubleshooting-state-table td { padding: 0.72rem 0.8rem; border-bottom: 1px solid #e4e7eb; text-align: left; vertical-align: top; }
+.troubleshooting-state-table th { background: #f1f5f9; color: #334e68; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.troubleshooting-state-table code { overflow-wrap: anywhere; }
+.troubleshooting-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(270px, 0.75fr); gap: 18px; align-items: start; }
+.troubleshooting-notes { display: grid; gap: 12px; }
+.troubleshooting-checklist { margin: 0; padding-left: 1.2rem; }
+@media (max-width: 760px) { .troubleshooting-layout { grid-template-columns: 1fr; } .troubleshooting-demo .tree-view-table { min-width: 720px; } }
+</style>
+</head>
+<body>
+  <main class="mock-page troubleshooting-page">
+    <header class="mock-header">
+      <p class="mock-kicker">focused mockup</p>
+      <h1>Diagnostics and integration troubleshooting</h1>
+      <p>Static reference for reviewing two setup-time surfaces: pre-render diagnostics signals and CSS / JavaScript wiring symptoms. The examples keep correction policy, asset loading, controller registration, routes, and release gates host-app owned.</p>
+      <nav class="mock-return-nav" aria-label="Mockup navigation">
+        <a class="mock-return-nav__link" href="review-gallery.html">Back to gallery</a>
+        <a class="mock-return-nav__link" href="README.md">Mockup README</a>
+        <a class="mock-return-nav__link" href="../en/tree-diagnostics.md">Diagnostics docs</a>
+        <a class="mock-return-nav__link" href="../en/troubleshooting.md">Troubleshooting docs</a>
+      </nav>
+      <div class="troubleshooting-summary" aria-label="Review summary">
+        <div class="troubleshooting-summary__item"><strong>Diagnostics signals</strong><p>Duplicate keys, DOM ID collisions, orphans, and cycle risk are shown as TreeView-provided signals before render.</p></div>
+        <div class="troubleshooting-summary__item"><strong>Integration symptoms</strong><p>Normal wiring, CSS missing, JavaScript missing, and Turbo route gaps are separated so reviewers do not conflate setup failures.</p></div>
+        <div class="troubleshooting-summary__item"><strong>Host-app boundary</strong><p>Repair workflow, release gates, asset pipeline choices, Stimulus boot order, and Turbo endpoints stay outside the gem.</p></div>
+      </div>
+    </header>
+
+    <section class="mock-section troubleshooting-layout" aria-labelledby="diagnostics-heading">
+      <div>
+        <h2 id="diagnostics-heading">Pre-render diagnostics states</h2>
+        <div class="troubleshooting-demo" data-tree-view-sample="diagnostics-states">
+          <table class="tree-view-table" aria-label="Pre-render diagnostics state comparison">
+            <thead><tr><th scope="col">State</th><th scope="col">TreeView signal</th><th scope="col">Host-app decision</th><th scope="col">Review cue</th></tr></thead>
+            <tbody>
+              <tr class="tree-row is-error"><td><strong>Duplicate node key</strong></td><td><code>validate_node_keys: true</code> or <code>node_keys</code> error</td><td>Choose stable <code>id_method:</code> or <code>node_key_resolver:</code></td><td><span class="troubleshooting-chip troubleshooting-chip--risk">render should stop early</span></td></tr>
+              <tr class="tree-row is-error"><td><strong>DOM ID collision</strong></td><td><code>render_state.validate_unique_dom_ids!</code> or <code>dom_ids</code> error</td><td>Fix prefix, DOM ID builder, or browser-facing normalized keys</td><td><span class="troubleshooting-chip troubleshooting-chip--tree">same UiConfig as page</span></td></tr>
+              <tr class="tree-row is-loading"><td><strong>Orphaned record</strong></td><td><code>tree.orphan_items</code> or <code>orphans</code> warning</td><td>Raise, render as roots, show only orphans, or document filtered subset</td><td><span class="troubleshooting-chip troubleshooting-chip--host">data policy</span></td></tr>
+              <tr class="tree-row is-error"><td><strong>Cycle risk</strong></td><td><code>TreeView::CycleDiagnostics.new(tree).report</code> or <code>cycles</code> error</td><td>Correct imported or user-editable parent data before rendering</td><td><span class="troubleshooting-chip troubleshooting-chip--risk">repair before UI</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <aside class="troubleshooting-notes" aria-label="Diagnostics responsibility notes">
+        <div class="troubleshooting-note"><h3>TreeView signal</h3><p>Diagnostics expose reviewable signals. They do not decide whether a release gate blocks, how data is repaired, or which dashboard copy appears.</p></div>
+        <div class="troubleshooting-note"><h3>Same render state</h3><p>DOM ID checks should use the same tree, root items, row partial, and UI config as the page being reviewed.</p></div>
+        <div class="troubleshooting-note"><h3>Visual scope</h3><p>The table is a static inspection surface, not a production diagnostics console or validation workflow.</p></div>
+      </aside>
+    </section>
+
+    <section class="mock-section" aria-labelledby="integration-heading">
+      <h2 id="integration-heading">CSS / JavaScript integration symptoms</h2>
+      <div class="troubleshooting-grid" data-tree-view-sample="integration-states">
+        <article class="troubleshooting-card troubleshooting-card--ok" aria-labelledby="integration-wired-heading">
+          <h3 id="integration-wired-heading">Normal wired state</h3>
+          <p>Stylesheet import, importmap pin, and controller registration are present.</p>
+          <div class="troubleshooting-chip-row"><span class="troubleshooting-chip troubleshooting-chip--tree">state cues visible</span><span class="troubleshooting-chip troubleshooting-chip--tree">controllers respond</span></div>
+          <p>Review next: TreeView output and host-app copy.</p>
+        </article>
+        <article class="troubleshooting-card troubleshooting-card--warn" aria-labelledby="integration-css-heading">
+          <h3 id="integration-css-heading">CSS missing</h3>
+          <p>Rows render and JavaScript may fire, but hierarchy, current, selected, loading, or error cues look unstyled.</p>
+          <div class="troubleshooting-chip-row"><span class="troubleshooting-chip troubleshooting-chip--host">asset pipeline</span><span class="troubleshooting-chip troubleshooting-chip--host">stylesheet loaded by layout</span></div>
+          <p>Review next: host stylesheet import and Propshaft / Sprockets setup.</p>
+        </article>
+        <article class="troubleshooting-card troubleshooting-card--warn" aria-labelledby="integration-js-heading">
+          <h3 id="integration-js-heading">JavaScript missing</h3>
+          <p>Styles apply, but client-side toggles, selection sync, transfer hooks, or remote-state behavior do not run.</p>
+          <div class="troubleshooting-chip-row"><span class="troubleshooting-chip troubleshooting-chip--host">importmap pin</span><span class="troubleshooting-chip troubleshooting-chip--host">Stimulus boot order</span></div>
+          <p>Review next: <code>registerTreeViewControllers(application)</code> or selective identifiers.</p>
+        </article>
+        <article class="troubleshooting-card troubleshooting-card--error" aria-labelledby="integration-turbo-heading">
+          <h3 id="integration-turbo-heading">Turbo route gap</h3>
+          <p>Turbo-mode links render, but expand / collapse cannot complete because host endpoints or Turbo Stream responses are absent.</p>
+          <div class="troubleshooting-chip-row"><span class="troubleshooting-chip troubleshooting-chip--host">routes</span><span class="troubleshooting-chip troubleshooting-chip--host">authorization</span><span class="troubleshooting-chip troubleshooting-chip--host">Turbo response</span></div>
+          <p>Review next: host path builders and controller actions, not CSS or controller registration.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">Responsibility boundary</h2>
+      <table class="troubleshooting-state-table" aria-label="Diagnostics and integration responsibility boundary">
+        <thead><tr><th scope="col">Question</th><th scope="col">TreeView provides</th><th scope="col">Host app owns</th></tr></thead>
+        <tbody>
+          <tr><td>Can the tree render safely?</td><td>Node key, DOM ID, orphan, and cycle diagnostics signals.</td><td>Data repair policy, release gates, dashboards, alerts, and remediation copy.</td></tr>
+          <tr><td>Why does the UI look unstyled?</td><td>Documented stylesheet and CSS hooks.</td><td>Asset loading, layout includes, Propshaft / Sprockets choices, and theme overrides.</td></tr>
+          <tr><td>Why do browser interactions not work?</td><td>Controller entrypoint, identifiers, and registration helper.</td><td>Importmap pin, Stimulus application boot order, selective registration, and custom bundler setup.</td></tr>
+          <tr><td>Why do Turbo toggles fail?</td><td>Toggle link attributes and path-builder hooks.</td><td>Routes, controller actions, Turbo Stream responses, authorization, and persistence behavior.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="review-checklist-heading">
+      <h2 id="review-checklist-heading">Review checklist</h2>
+      <ul class="troubleshooting-checklist">
+        <li>Duplicate key, DOM ID collision, orphan, and cycle risk are visually separate and map back to the diagnostics docs.</li>
+        <li>CSS missing and JavaScript missing states are distinguishable without implying TreeView owns host-app asset or Stimulus setup.</li>
+        <li>Turbo route gaps are shown as host-app endpoint / response issues, not as stylesheet or JavaScript registration problems.</li>
+        <li>Runtime Ruby, JavaScript, diagnostics behavior, public API manifest, asset setup, and Turbo endpoints are intentionally unchanged.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
