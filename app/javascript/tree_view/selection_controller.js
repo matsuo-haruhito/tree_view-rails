@@ -1,6 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 
 export class TreeViewSelectionController extends Controller {
+  static targets = ["selectedCount"]
+
   static values = {
     cascade: Boolean,
     indeterminate: Boolean,
@@ -76,6 +78,7 @@ export class TreeViewSelectionController extends Controller {
 
   dispatchSelectionChanged(detail = this.selectionDetail()) {
     this.syncHiddenInputs(detail.selectedPayloads)
+    this.syncSelectedCountTargets(detail.selectedCount)
 
     this.dispatch("change", {
       detail
@@ -97,6 +100,14 @@ export class TreeViewSelectionController extends Controller {
     return Array.from(
       this.element.querySelectorAll(".tree-selection-checkbox:checked:not(:disabled)")
     )
+  }
+
+  syncSelectedCountTargets(count) {
+    if (!this.hasSelectedCountTarget) return
+
+    this.selectedCountTargets.forEach((target) => {
+      target.textContent = String(count)
+    })
   }
 
   parsePayload(checkbox) {
