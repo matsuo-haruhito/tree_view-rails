@@ -106,7 +106,7 @@ When a review starts from the gallery or a focused mockup page, confirm this sta
 
 - Mockups use short, product-neutral English copy so reviewers can compare layout and state cues without language changes becoming visual noise.
 - `toolbar-actions.html` intentionally includes a narrow long/localized label stress case so reviewers can inspect wrapping, metadata fallback, disabled state, and current-state cues without choosing final translations.
-- `localized-row-labels.html` intentionally uses long localized-style English labels to stress row wrapping, badge placement, attribute labels, secondary metadata, and tooltip cues without choosing final translations.
+- `localized-row-labels.html` intentionally uses long localized-style English labels and a deliberate CJK / Japanese-width sample to stress row wrapping, badge placement, attribute labels, secondary metadata, tooltip cues, and CJK character width without choosing final translations.
 - Final labels, localization, permission messaging, and business wording remain host-app responsibilities.
 - If a future mockup intentionally uses another language, document that exception here so reviewers know it is deliberate.
 
@@ -115,7 +115,7 @@ Record deliberate copy or language exceptions in this list. Add a row when a moc
 | Mockup | Deliberate exception | Review reason |
 |---|---|---|
 | `toolbar-actions.html` | Long / localized-style toolbar labels | Stress wrapping, metadata fallback, disabled state, and current-state cues without choosing final translations. |
-| `localized-row-labels.html` | Long localized-style row labels and metadata | Stress primary label wrapping, badge placement, attribute labels, secondary metadata, and tooltip cues without choosing final translations. |
+| `localized-row-labels.html` | Long localized-style row labels and metadata, plus deliberate CJK / Japanese-width sample text | Stress primary label wrapping, badge placement, attribute labels, secondary metadata, tooltip cues without choosing final translations, and CJK character width / badge proximity using intentional Japanese sample copy. |
 
 ## Selection form guidance
 
@@ -161,7 +161,7 @@ Record deliberate copy or language exceptions in this list. Add a row when a moc
 
 - Use `toolbar-actions.html` to review visual action availability, current-path emphasis, disabled fallback, and missing-path fallback without treating the page as a public API manifest for `tree_view_toolbar_action_metadata`.
 - Keep route builders, authorization policy, final localized labels, and permission messages in the host app.
-- Use #1449 for helper return-shape / manifest-backed public contract decisions instead of expanding this mockup into API documentation.
+- Treat `docs/en/toolbar.md`, `docs/ja/toolbar.md`, `docs/en/public-api.md`, `docs/ja/public-api.md`, and `config/public_api_manifest.yml` as the helper metadata contract sources; use this mockup only as the visual review aid for those states.
 
 ## Drag/drop guidance
 
