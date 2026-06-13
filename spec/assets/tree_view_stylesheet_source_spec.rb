@@ -4,6 +4,21 @@ require "spec_helper"
 
 RSpec.describe "tree_view stylesheet source" do
   let(:stylesheet_source) { File.read(File.expand_path("../../app/assets/stylesheets/tree_view.scss", __dir__)) }
+  let(:english_styling_docs) { File.read(File.expand_path("../../docs/en/styling-state-cues.md", __dir__)) }
+  let(:japanese_styling_docs) { File.read(File.expand_path("../../docs/ja/styling-state-cues.md", __dir__)) }
+
+  def tree_view_tokens(source)
+    source.scan(/--tree-view-[a-z0-9-]+/).uniq.sort
+  end
+
+  it "keeps documented styling token lists aligned with stylesheet token usage" do
+    stylesheet_tokens = tree_view_tokens(stylesheet_source)
+
+    aggregate_failures do
+      expect(tree_view_tokens(english_styling_docs)).to eq(stylesheet_tokens)
+      expect(tree_view_tokens(japanese_styling_docs)).to eq(stylesheet_tokens)
+    end
+  end
 
   it "adds a distinct focus-visible state for tree toggle actions" do
     aggregate_failures do
