@@ -100,6 +100,22 @@ registerTreeViewControllers(application)
 
 JavaScript-powered な TreeView 機能を使う場合は、quick-start として `registerTreeViewControllers(application)` を使ってください。controller を部分登録したい場合や custom boot order が必要な場合は、public JavaScript surface の `TreeViewControllerIdentifiers` を使えます。詳しくは [Public API](public-api.md#javascript-surface) を参照してください。
 
+## persisted-state setup generator
+
+persisted expansion state を有効にする host app では、gem の導入後に persisted-state install generator を実行します。
+
+```bash
+bin/rails generate tree_view:state:install
+```
+
+既存の owner model に generated concern を include したい場合は、owner model 名を渡します。
+
+```bash
+bin/rails generate tree_view:state:install User
+```
+
+generator 名、任意の owner 引数、生成先 path は [Public Setup Surface](public-setup-surface.md) に documented setup surface としてまとめています。この path-level contract は `db/migrate/*_create_tree_view_states.rb`、`app/models/tree_view_state.rb`、`app/models/concerns/tree_view_state_owner.rb` を追跡しますが、migration schema や生成 template 内容そのものを固定するものではありません。生成後のファイルは host app 側で確認し、storage ownership、認可、保存タイミング、cleanup policy、controller action、UI wiring の責務境界は [Persisted State](persisted-state.md) で確認してください。
+
 ## Packaged files
 
 TreeView gem package には、Rails host app で必要になる以下を含めます。

@@ -17,6 +17,11 @@ const checks = [
     args: ["script/test_docs_entrypoint_signals.mjs"]
   },
   {
+    group: "Development docs Node version signals",
+    command: "node",
+    args: ["script/test_development_docs_node_version_signals.mjs"]
+  },
+  {
     group: "Public setup surface docs signals",
     command: "node",
     args: ["script/test_public_setup_surface_docs_signals.mjs"]
@@ -72,32 +77,77 @@ function commandLine({ command, args }) {
   return [command, ...args].join(" ")
 }
 
-for (const check of checks) {
-  console.log(`\n[docs-entrypoints] ${check.group}`)
+function formatDuration(milliseconds) {
+  if (milliseconds < 1000) return `${milliseconds}ms`
+
+  return `${(milliseconds / 1000).toFixed(1)}s`
+}
+
+function printCheckList() {
+  console.log(`[docs-entrypoints] ${checks.length} checks configured`)
+
+  checks.forEach((check, index) => {
+    console.log(
+      `[docs-entrypoints] ${index + 1}. ${check.group}: ${commandLine(check)}`
+    )
+  })
+}
+
+if (process.argv.includes("--list")) {
+  printCheckList()
+  process.exit(0)
+}
+
+const suiteStartedAt = Date.now()
+const passedChecks = []
+
+printCheckList()
+
+for (const [index, check] of checks.entries()) {
+  const checkStartedAt = Date.now()
+
+  console.log(`\n[docs-entrypoints] ${index + 1}/${checks.length} ${check.group}`)
   console.log(`$ ${commandLine(check)}`)
 
   const result = spawnSync(check.command, check.args, { stdio: "inherit" })
+  const elapsed = Date.now() - checkStartedAt
 
   if (result.error) {
     console.error(
-      `[docs-entrypoints] ${check.group} failed to start: ${result.error.message}`
+      `[docs-entrypoints] ${check.group} failed to start after ${formatDuration(elapsed)}: ${result.error.message}`
+    )
+    console.error(
+      `[docs-entrypoints] summary: ${passedChecks.length}/${checks.length} checks passed before failure`
     )
     process.exit(1)
   }
 
   if (result.signal) {
     console.error(
-      `[docs-entrypoints] ${check.group} stopped by signal ${result.signal}: ${commandLine(check)}`
+      `[docs-entrypoints] ${check.group} stopped by signal ${result.signal} after ${formatDuration(elapsed)}: ${commandLine(check)}`
+    )
+    console.error(
+      `[docs-entrypoints] summary: ${passedChecks.length}/${checks.length} checks passed before failure`
     )
     process.exit(1)
   }
 
   if (result.status !== 0) {
     console.error(
-      `[docs-entrypoints] ${check.group} failed with exit code ${result.status}: ${commandLine(check)}`
+      `[docs-entrypoints] ${check.group} failed with exit code ${result.status} after ${formatDuration(elapsed)}: ${commandLine(check)}`
+    )
+    console.error(
+      `[docs-entrypoints] summary: ${passedChecks.length}/${checks.length} checks passed before failure`
     )
     process.exit(result.status ?? 1)
   }
+
+  passedChecks.push(check.group)
+  console.log(
+    `[docs-entrypoints] ${check.group} passed in ${formatDuration(elapsed)}`
+  )
 }
 
-console.log("\n[docs-entrypoints] all checks passed")
+console.log(
+  `\n[docs-entrypoints] all ${checks.length} checks passed in ${formatDuration(Date.now() - suiteStartedAt)}`
+)
