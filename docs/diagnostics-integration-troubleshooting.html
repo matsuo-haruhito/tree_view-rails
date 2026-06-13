@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TreeView Diagnostics and Integration Troubleshooting Reference</title>
+    <link rel="stylesheet" href="mockups/default-tree.css">
+    <style>
+      :root {
+        color-scheme: light;
+        --reference-bg: #f6f7f9;
+        --reference-surface: #ffffff;
+        --reference-border: #d7dce3;
+        --reference-muted: #596273;
+        --reference-strong: #1d2430;
+        --reference-accent: #2563eb;
+        --reference-warning: #b45309;
+        --reference-danger: #b91c1c;
+        --reference-ok: #047857;
+      }
+
+      body {
+        margin: 0;
+        background: var(--reference-bg);
+        color: var(--reference-strong);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .mock-page {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+
+      .reference-header {
+        display: grid;
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+
+      .reference-header__nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .reference-header__nav a,
+      .reference-link {
+        color: var(--reference-accent);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .reference-header__nav a:hover,
+      .reference-link:hover {
+        text-decoration: underline;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.25;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        max-width: 820px;
+        font-size: clamp(2rem, 4vw, 3.25rem);
+      }
+
+      h2 {
+        font-size: 1.35rem;
+      }
+
+      h3 {
+        font-size: 1rem;
+      }
+
+      p {
+        margin: 0;
+        line-height: 1.65;
+      }
+
+      .reference-lead {
+        max-width: 860px;
+        color: var(--reference-muted);
+        font-size: 1.05rem;
+      }
+
+      .section {
+        display: grid;
+        gap: 16px;
+        margin-top: 28px;
+      }
+
+      .state-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .state-card,
+      .comparison-table,
+      .review-notes {
+        background: var(--reference-surface);
+        border: 1px solid var(--reference-border);
+        border-radius: 8px;
+      }
+
+      .state-card {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+      }
+
+      .state-card__badge {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        border-radius: 999px;
+        padding: 4px 9px;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .state-card__badge--danger {
+        background: #fee2e2;
+        color: var(--reference-danger);
+      }
+
+      .state-card__badge--warning {
+        background: #fef3c7;
+        color: var(--reference-warning);
+      }
+
+      .state-card__badge--ok {
+        background: #dcfce7;
+        color: var(--reference-ok);
+      }
+
+      .tree-sample {
+        display: grid;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid #e3e7ee;
+        border-radius: 8px;
+        background: #fbfcfe;
+      }
+
+      .tree-row {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
+        align-items: center;
+        min-height: 32px;
+        padding: 6px 8px;
+        border-radius: 6px;
+        background: #ffffff;
+      }
+
+      .tree-row--subtle {
+        color: var(--reference-muted);
+        background: #f4f6f9;
+      }
+
+      .tree-row__icon {
+        width: 18px;
+        color: #64748b;
+        text-align: center;
+      }
+
+      .tree-row__meta {
+        color: var(--reference-muted);
+        font-size: 0.82rem;
+      }
+
+      .status-list {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .status-list li {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 8px;
+        align-items: start;
+        color: var(--reference-muted);
+        line-height: 1.5;
+      }
+
+      .status-dot {
+        width: 9px;
+        height: 9px;
+        margin-top: 7px;
+        border-radius: 999px;
+        background: var(--reference-accent);
+      }
+
+      .status-dot--danger {
+        background: var(--reference-danger);
+      }
+
+      .status-dot--warning {
+        background: var(--reference-warning);
+      }
+
+      .status-dot--ok {
+        background: var(--reference-ok);
+      }
+
+      .comparison-table {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        min-width: 780px;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--reference-border);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: #f8fafc;
+        color: #334155;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .review-notes {
+        display: grid;
+        gap: 12px;
+        padding: 18px;
+      }
+
+      .review-notes ol {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding-left: 22px;
+        color: var(--reference-muted);
+        line-height: 1.6;
+      }
+
+      @media (max-width: 980px) {
+        .state-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 620px) {
+        .mock-page {
+          padding: 22px 14px 36px;
+        }
+
+        .state-grid {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mock-page">
+      <header class="reference-header">
+        <nav class="reference-header__nav" aria-label="Reference links">
+          <a href="mockups/review-gallery.html">Review gallery</a>
+          <a href="mockups/README.md">Mockup inventory</a>
+          <a href="en/tree-diagnostics.md">Tree diagnostics docs</a>
+          <a href="en/troubleshooting.md">Troubleshooting docs</a>
+        </nav>
+        <h1>Diagnostics and integration troubleshooting reference</h1>
+        <p class="reference-lead">
+          A focused companion reference for comparing tree validation states with CSS and JavaScript integration failures. It keeps product copy, owner boundaries, and visual status treatment reviewable without changing runtime behavior.
+        </p>
+      </header>
+
+      <section class="section" aria-labelledby="diagnostics-heading">
+        <h2 id="diagnostics-heading">Pre-render diagnostics states</h2>
+        <div class="state-grid">
+          <article class="state-card" data-tree-view-sample="duplicate-node-key">
+            <span class="state-card__badge state-card__badge--danger">Block render</span>
+            <h3>Duplicate node key</h3>
+            <div class="tree-sample" aria-label="Duplicate node key sample">
+              <div class="tree-row"><span class="tree-row__icon">▸</span><strong>North America</strong><span class="tree-row__meta">id: 42</span></div>
+              <div class="tree-row tree-row--subtle"><span class="tree-row__icon">▸</span><span>Sales archive</span><span class="tree-row__meta">id: 42</span></div>
+            </div>
+            <ul class="status-list">
+              <li><span class="status-dot status-dot--danger"></span><span>Reviewer can verify that the duplicate identifier is named directly.</span></li>
+              <li><span class="status-dot status-dot--danger"></span><span>Copy points to data preparation instead of suggesting a CSS fix.</span></li>
+            </ul>
+          </article>
+
+          <article class="state-card" data-tree-view-sample="dom-id-collision">
+            <span class="state-card__badge state-card__badge--danger">Block render</span>
+            <h3>DOM ID collision</h3>
+            <div class="tree-sample" aria-label="DOM ID collision sample">
+              <div class="tree-row"><span class="tree-row__icon">▾</span><strong>Operations</strong><span class="tree-row__meta">dom: tree-node-9</span></div>
+              <div class="tree-row tree-row--subtle"><span class="tree-row__icon">•</span><span>Legacy import</span><span class="tree-row__meta">dom: tree-node-9</span></div>
+            </div>
+            <ul class="status-list">
+              <li><span class="status-dot status-dot--danger"></span><span>Highlights the conflicting DOM target before Stimulus binding.</span></li>
+              <li><span class="status-dot status-dot--warning"></span><span>Review should confirm the message does not imply authorization changes.</span></li>
+            </ul>
+          </article>
+
+          <article class="state-card" data-tree-view-sample="orphaned-record">
+            <span class="state-card__badge state-card__badge--warning">Warn</span>
+            <h3>Orphaned record</h3>
+            <div class="tree-sample" aria-label="Orphaned record sample">
+              <div class="tree-row"><span class="tree-row__icon">▾</span><strong>Products</strong><span class="tree-row__meta">root</span></div>
+              <div class="tree-row tree-row--subtle"><span class="tree-row__icon">?</span><span>Unassigned launch</span><span class="tree-row__meta">missing parent</span></div>
+            </div>
+            <ul class="status-list">
+              <li><span class="status-dot status-dot--warning"></span><span>Separates recoverable data gaps from fatal render errors.</span></li>
+              <li><span class="status-dot status-dot--ok"></span><span>Preserves a clear path for rendering known safe nodes.</span></li>
+            </ul>
+          </article>
+
+          <article class="state-card" data-tree-view-sample="cycle-risk">
+            <span class="state-card__badge state-card__badge--warning">Warn</span>
+            <h3>Cycle risk</h3>
+            <div class="tree-sample" aria-label="Cycle risk sample">
+              <div class="tree-row"><span class="tree-row__icon">↺</span><strong>Finance</strong><span class="tree-row__meta">parent: Audit</span></div>
+              <div class="tree-row tree-row--subtle"><span class="tree-row__icon">↺</span><span>Audit</span><span class="tree-row__meta">parent: Finance</span></div>
+            </div>
+            <ul class="status-list">
+              <li><span class="status-dot status-dot--warning"></span><span>Shows the smallest loop reviewers need to understand the risk.</span></li>
+              <li><span class="status-dot status-dot--ok"></span><span>Keeps the remediation language inside data validation ownership.</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="integration-heading">
+        <h2 id="integration-heading">CSS and JavaScript integration states</h2>
+        <div class="state-grid">
+          <article class="state-card" data-tree-view-sample="integration-ready">
+            <span class="state-card__badge state-card__badge--ok">Ready</span>
+            <h3>Styles and controller loaded</h3>
+            <p>Tree rows have spacing, disclosure affordances, and keyboard focus treatment. Expand and collapse actions remain discoverable.</p>
+          </article>
+          <article class="state-card" data-tree-view-sample="missing-css">
+            <span class="state-card__badge state-card__badge--warning">CSS missing</span>
+            <h3>Unstyled tree</h3>
+            <p>Markup is present, but spacing and status color are missing. The message should direct reviewers to asset loading, not data cleanup.</p>
+          </article>
+          <article class="state-card" data-tree-view-sample="missing-js">
+            <span class="state-card__badge state-card__badge--warning">JavaScript missing</span>
+            <h3>Static disclosure controls</h3>
+            <p>Buttons render but do not expand or collapse nodes. The copy should name the controller registration and remain framework-neutral.</p>
+          </article>
+          <article class="state-card" data-tree-view-sample="turbo-route-gap">
+            <span class="state-card__badge state-card__badge--warning">Route gap</span>
+            <h3>Turbo response unavailable</h3>
+            <p>Lazy loading cannot fetch children. The message should keep the boundary at route wiring and avoid implying permission changes.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="ownership-heading">
+        <h2 id="ownership-heading">Reviewer comparison matrix</h2>
+        <div class="comparison-table">
+          <table>
+            <thead>
+              <tr>
+                <th>State</th>
+                <th>Visible signal</th>
+                <th>Likely owner</th>
+                <th>Reviewer check</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Duplicate node key</td>
+                <td>Blocking danger badge and two conflicting IDs</td>
+                <td>Data preparation</td>
+                <td>Message names the conflicting key and does not suggest presentation fixes.</td>
+              </tr>
+              <tr>
+                <td>Orphaned record</td>
+                <td>Warning badge with missing parent note</td>
+                <td>Data import or sync job</td>
+                <td>Recoverable state remains visually distinct from fatal diagnostics.</td>
+              </tr>
+              <tr>
+                <td>CSS missing</td>
+                <td>Integration warning without data error language</td>
+                <td>Host app asset pipeline</td>
+                <td>Guidance points to stylesheet loading and preserves existing tree data.</td>
+              </tr>
+              <tr>
+                <td>JavaScript missing</td>
+                <td>Controls render but behavior is described as unavailable</td>
+                <td>Host app JavaScript registration</td>
+                <td>Copy names controller wiring and avoids changing runtime assumptions.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="review-checklist-heading">
+        <div class="review-notes">
+          <h2 id="review-checklist-heading">Review checklist</h2>
+          <ol>
+            <li>Confirm diagnostic states are visually stronger than integration warnings because they can block safe rendering.</li>
+            <li>Confirm each integration state keeps responsibility with asset, controller, or route wiring instead of data shape.</li>
+            <li>Confirm responsive layout stacks the state cards without hiding status labels or row metadata.</li>
+            <li>Confirm the reference remains documentation-only and does not change generated component behavior.</li>
+          </ol>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
