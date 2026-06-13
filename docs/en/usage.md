@@ -277,6 +277,8 @@ Use narrower markers when only one tree behavior should ignore the control:
 
 These markers only opt a control out of TreeView behavior. Validation, persistence, authorization, CRUD routes, and inline editing flows still belong to the host app.
 
+The interactive-control opt-out markers are documented raw DOM attributes. They are intentionally separate from the package-root `TreeViewIntegrationHooks` export, which names machine-readable TreeView integration hooks such as `TreeViewIntegrationHooks.state.viewKeyValue`, `TreeViewIntegrationHooks.state.nodeKey`, `TreeViewIntegrationHooks.remoteState.childrenUrl`, and `TreeViewIntegrationHooks.transfer.payload`. Use those exports when JavaScript or tests need the state, remote-loading, or transfer payload hook strings; keep using the documented raw opt-out marker strings for keyboard, row-click, and drag-safe controls.
+
 For static visual references, use [interactive-marker-behaviors.html](../mockups/interactive-marker-behaviors.html) to compare the broad interactive marker against the narrower keyboard, row-click, and drag markers, and use [drag-interactive-controls.html](../mockups/drag-interactive-controls.html) when draggable rows mix native controls with drag-safe custom widgets.
 
 ## Grouped options
