@@ -100,6 +100,8 @@ Release preparation notes:
 - Corrected Windowed Rendering docs examples and metadata tables to use the implemented `TreeView::RenderWindow#previous?` / `#next?` API names.
 - Clarified mockup copy and language policy exception recording for deliberate review stress cases.
 - Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
+- Added root docs index entry points for the English and Japanese Rendering Boundaries guides.
+- Added malformed selection params troubleshooting guidance in English and Japanese, including `TreeView.parse_selection_params` error boundaries and host-app-owned request policy.
 
 ### Tests
 
@@ -128,6 +130,7 @@ Release preparation notes:
 - Added browser smoke coverage for representative docs mockup pages and the review gallery.
 - Added docs entrypoint guard coverage for keeping README feature links and docs index targets aligned.
 - Expanded package verification coverage for TreeViewHelper subfiles, the breadcrumb helper, representative Japanese toolbar locale, and Japanese release docs files.
+- Added docs smoke coverage for troubleshooting diagnostics reader journeys, toolbar contract source docs, public API hook signals, mockup review flow / gallery alignment, and docs entrypoint group selection.
 
 ## 0.1.0 - 2026-05-07
 
