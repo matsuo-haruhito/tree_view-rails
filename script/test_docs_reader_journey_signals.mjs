@@ -278,7 +278,7 @@ const signalGroups = [
           "Tree diagnostics",
           "Node keys",
           "GraphAdapter の行が重複する / 足りない / 想定と違う形になる",
-          "nil は空の child list",
+          "`nil` は空の child list",
           "node_key_resolver:",
           "cycle や duplicate key",
           "duplicate node key / orphan / DOM ID collision / cycle が出る",
