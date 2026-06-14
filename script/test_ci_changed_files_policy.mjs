@@ -123,11 +123,20 @@ function workflowChangesOutputs(workflowSource) {
   return [...outputsBlock.groups.body.matchAll(/^      (?<key>[a-z_]+): /gm)].map((match) => match.groups.key).sort();
 }
 
-function workflowJavaScriptJob(workflowSource) {
-  const jobBlock = workflowSource.match(/^  javascript:\n(?<body>(?:    .*\n)+?)(?=^  [a-z_]+:\n|$)/m);
-  assert.ok(jobBlock, `${workflowPath} must define jobs.javascript`);
+function workflowJobBlock(workflowSource, jobName) {
+  const marker = `  ${jobName}:\n`;
+  const start = workflowSource.indexOf(marker);
+  assert.notEqual(start, -1, `${workflowPath} must define jobs.${jobName}`);
 
-  return jobBlock.groups.body;
+  const bodyStart = start + marker.length;
+  const remainingWorkflow = workflowSource.slice(bodyStart);
+  const nextJobOffset = remainingWorkflow.search(/\n  [a-z_]+:\n/);
+
+  return nextJobOffset === -1 ? remainingWorkflow : remainingWorkflow.slice(0, nextJobOffset + 1);
+}
+
+function workflowJavaScriptJob(workflowSource) {
+  return workflowJobBlock(workflowSource, "javascript");
 }
 
 function npmRunScripts(workflowSource) {
