@@ -259,7 +259,7 @@ const signalGroups = [
           "Tree diagnostics",
           "Node keys",
           "GraphAdapter rows look duplicated, incomplete, or shaped differently than expected",
-          "nil becomes an empty child list",
+          "`nil` becomes an empty child list",
           "node_key_resolver:",
           "cycles or duplicate keys",
           "Duplicate node keys, orphan records, DOM ID collisions, or cycles appear",
