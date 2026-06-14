@@ -112,6 +112,46 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Code quality docs command and checklist signals",
+    files: [
+      [
+        "docs/README.md",
+        [
+          "Code quality",
+          "en/code-quality.md",
+          "ja/code-quality.md",
+          "lint, tests, error message quality, and documentation quality policy"
+        ]
+      ],
+      [
+        "docs/en/code-quality.md",
+        [
+          "bundle exec standardrb",
+          "bundle exec rspec",
+          "npm run test:js",
+          "bundle exec rake build",
+          "Public API compatibility",
+          "Documentation quality",
+          "Review checklist",
+          "CHANGELOG.md"
+        ]
+      ],
+      [
+        "docs/ja/code-quality.md",
+        [
+          "bundle exec standardrb",
+          "bundle exec rspec",
+          "npm run test:js",
+          "bundle exec rake build",
+          "Public API compatibility",
+          "Documentation quality",
+          "Review checklist",
+          "CHANGELOG.md"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Resource-table empty colspan boundary mockup",
     files: [
       [
