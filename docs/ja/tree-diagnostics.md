@@ -61,20 +61,16 @@ result = TreeView::Diagnostics.run(
   raise_errors: false
 )
 
-unless result.success?
-  Rails.logger.warn(result.errors.map { |entry| entry[:message] })
-end
-
-result.warnings.each do |warning|
-  Rails.logger.info(warning[:message])
+result.summary_messages.each do |message|
+  Rails.logger.warn(message)
 end
 ```
 
 `checks:` には実行したいdiagnosticsを指定できます。省略すると、defaultの `node_keys`、`dom_ids`、`orphans`、`cycles` が実行されます。host appのtestで一部だけ確認したい場合は、より小さいlistを渡してください。`raise_errors: false` のままなら `errors` と `warnings` を持つ `Result` が返り、`raise_errors: true` にすると失敗したcheckが即座に例外をraiseします。
 
-`Result#success?` は収集されたerrorsだけを見ます。orphan reportはwarningsとして返るため、filter、import、permission scopeによって描画対象外のrecordsが生じる可能性がある場合は `warnings` も確認してください。
+`Result#success?` は収集されたerrorsだけを見ます。orphan reportはwarningsとして返るため、filter、import、permission scopeによって描画対象外のrecordsが生じる可能性がある場合は `warnings` も確認してください。host app が readable な log line だけを必要とする場合は `Result#summary_messages` を使えます。これは error message の後に warning message を並べ、収集された errors / warnings がなければ `[]` を返します。severity、logging destination、alerting、remediation copy は引き続き host app 側の責務です。
 
-manifest-backed な diagnostics contract は、accepted check names、`TreeView::Diagnostics.run` の option key surface、`Result` の reader surface を対象にします。stable な check names は `node_keys`、`dom_ids`、`orphans`、`cycles` です。run option keys は `checks` と `raise_errors` で、`checks:` は accepted check names から実行対象を選び、`raise_errors:` は失敗を `Result` に収集するか即座に例外としてraiseするかを選びます。diagnostics `Result` は `checks`、`errors`、`warnings`、`success?` を公開します。一方で、accepted value schema、boolean coercion、個々の error entry 内部、warning detail shape、orphan warning semantics、cycle validation policy までは manifest で固定しません。これらは documented behavior と host app data policy の境界として扱い、manifest schema を広げすぎないようにします。
+manifest-backed な diagnostics contract は、accepted check names、`TreeView::Diagnostics.run` の option key surface、`Result` の reader / helper surface を対象にします。stable な check names は `node_keys`、`dom_ids`、`orphans`、`cycles` です。run option keys は `checks` と `raise_errors` で、`checks:` は accepted check names から実行対象を選び、`raise_errors:` は失敗を `Result` に収集するか即座に例外としてraiseするかを選びます。diagnostics `Result` は `checks`、`errors`、`warnings`、`success?`、`summary_messages` を公開します。一方で、accepted value schema、boolean coercion、個々の error entry 内部、warning detail shape、orphan warning semantics、cycle validation policy、remediation policy までは manifest で固定しません。これらは documented behavior と host app data policy の境界として扱い、manifest schema を広げすぎないようにします。
 
 ## 描画前validation review note
 
@@ -197,6 +193,7 @@ cycleが見つかった場合は、描画前にhost app側のdataやresolver log
 | Area | TreeView | Host app |
 |---|---|---|
 | diagnostics helper | yes | calls helper |
+| readable summary messages | `summary_messages` を返す | logging、alerting、remediation policy を決める |
 | duplicate key detection | yes | chooses stable keys |
 | DOM ID collision detection | yes | fixes config/prefixes |
 | orphan detection | yes | decides data policy |
