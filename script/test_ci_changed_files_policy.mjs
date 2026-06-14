@@ -74,7 +74,7 @@ const cases = [
       mockups_changed: false,
       browser_smoke_changed: false,
       package_sensitive: true,
-      docker_setup_sensitive: true,
+      docker_setup_sensitive: false,
       docs_entrypoint_sensitive: true
     }
   },
@@ -86,7 +86,7 @@ const cases = [
       mockups_changed: false,
       browser_smoke_changed: false,
       package_sensitive: true,
-      docker_setup_sensitive: true,
+      docker_setup_sensitive: false,
       docs_entrypoint_sensitive: true
     }
   },
