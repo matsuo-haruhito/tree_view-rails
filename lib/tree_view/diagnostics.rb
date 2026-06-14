@@ -8,6 +8,10 @@ module TreeView
       def success?
         errors.empty?
       end
+
+      def summary_messages
+        errors.map { |entry| entry[:message] } + warnings.map { |entry| entry[:message] }
+      end
     end
 
     def self.run(tree: nil, render_state: nil, checks: DEFAULT_CHECKS, raise_errors: false)
