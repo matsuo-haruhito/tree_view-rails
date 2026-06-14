@@ -417,6 +417,8 @@ render_state = TreeView::RenderState.new(
 <%= tree_view_rows(@render_state, window: { offset: 0, limit: 50 }) %>
 ```
 
+Previous / Next control、summary count、Turbo refresh 時の offset handoff が必要な場合は、partial 内で paging metadata を組み立てず `tree_view_window` から始めます。`tree_view_window` は `total_count`、`before_count`、`after_count`、`previous?`、`next?`、`previous_offset`、`next_offset` を返します。route helper、query parameter 名、disabled button の扱い、link / button / Turbo Frame toolbar のどれで出すかは host app 側で決めます。現在行を window 内に残したい場合は、`TreeView::VisibleRows` から anchored offset を計算してから window を描画してください。詳しい recipe は [Windowed Rendering](windowed-rendering.md#tree_view_window-helper)、[current row を window 内に寄せる](windowed-rendering.md#current-row-を-window-内に寄せる)、[Turbo 更新時に offset を持ち回る](windowed-rendering.md#turbo-更新時に-offset-を持ち回る) を参照してください。
+
 子nodeを必要な分だけ読み込みたい場合は lazy loading を使います。
 
 product要件として scroll位置に応じたDOM仮想化が必要な場合は、そのcontrollerをhost app側に置き、TreeViewには描画すべきHTML row sliceだけを任せます。`TreeView::RenderWindow` は、すでにvisibleとして計算されたrowを小さく出力するには使えますが、scroll位置の監視、host app queryの削減、page取得、scroll anchoringの維持は行いません。

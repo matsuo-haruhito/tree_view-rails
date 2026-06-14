@@ -161,7 +161,7 @@ Record deliberate copy or language exceptions in this list. Add a row when a moc
 
 - Use `toolbar-actions.html` to review visual action availability, current-path emphasis, disabled fallback, and missing-path fallback without treating the page as a public API manifest for `tree_view_toolbar_action_metadata`.
 - Keep route builders, authorization policy, final localized labels, and permission messages in the host app.
-- Use #1449 for helper return-shape / manifest-backed public contract decisions instead of expanding this mockup into API documentation.
+- Treat `docs/en/toolbar.md`, `docs/ja/toolbar.md`, `docs/en/public-api.md`, `docs/ja/public-api.md`, and `config/public_api_manifest.yml` as the helper metadata contract sources; use this mockup only as the visual review aid for those states.
 
 ## Drag/drop guidance
 
