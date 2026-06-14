@@ -388,7 +388,7 @@ toolbarDocs.forEach(([relativePath, document]) => {
   )
 
   assert(
-    /final labels, locale files|最終 label、locale file/.test(document),
+    /final labels, locale files|final label、locale file|最終文言、locale file policy/.test(document),
     `${relativePath}: toolbar data hook docs no longer preserve the host-app-owned label and locale boundary`
   )
 
