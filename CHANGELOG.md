@@ -129,6 +129,7 @@ Release preparation notes:
 - Added browser smoke coverage for the direction-aware hierarchy cue mockup across desktop and narrow viewports.
 - Added browser smoke coverage for representative docs mockup pages and the review gallery.
 - Added docs entrypoint guard coverage for keeping README feature links and docs index targets aligned.
+- Added README orientation asset smoke coverage for the root README image, default-tree baseline mockup, and focused mockup review links.
 - Expanded package verification coverage for TreeViewHelper subfiles, the breadcrumb helper, representative Japanese toolbar locale, and Japanese release docs files.
 - Added docs smoke coverage for troubleshooting diagnostics reader journeys, toolbar contract source docs, public API hook signals, mockup review flow / gallery alignment, and docs entrypoint group selection.
 
