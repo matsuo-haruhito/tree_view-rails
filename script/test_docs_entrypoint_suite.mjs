@@ -82,6 +82,11 @@ const checks = [
     args: ["script/test_public_api_docs_signals.mjs"]
   },
   {
+    group: "Public API manifest structure",
+    command: "node",
+    args: ["script/test_public_api_manifest_structure.mjs"]
+  },
+  {
     group: "Public API entrypoint guard signals",
     command: "node",
     args: ["script/test_public_api_entrypoint_guard_signals.mjs"]
