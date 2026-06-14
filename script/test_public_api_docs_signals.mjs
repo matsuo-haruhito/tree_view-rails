@@ -84,6 +84,14 @@ const remoteStateValueSignals = [
   "error"
 ]
 
+const remoteStateDataHookSignals = [
+  "TreeViewRemoteStateDataHooks",
+  "data-tree-lazy",
+  "data-tree-children-url",
+  "data-tree-loaded",
+  "data-tree-remote-state"
+]
+
 const selectionDataHookSignals = [
   "TreeViewSelectionDataHooks",
   "TreeViewSelectionDataHooks.hiddenInputNameValue",
@@ -100,6 +108,13 @@ const selectionHiddenInputSubmissionBoundarySignals = [
 const selectionHiddenInputBookkeepingSignals = [
   "data-tree-view-selection-source-id",
   "data-tree-view-selection-generated-hidden-input"
+]
+
+const toolbarDataHookSignals = [
+  "TreeViewToolbarDataHooks",
+  "data-tree-view-toolbar",
+  "data-tree-view-toolbar-action",
+  "data-tree-view-toolbar-disabled"
 ]
 
 const toolbarActionMetadataSignals = [
@@ -194,8 +209,10 @@ const manifestBackedDocsSignalSurfaces = [
   ["host lifecycle no-detail events", "event_names_without_detail:"],
   ["host lifecycle event names", "host_lifecycle:"],
   ["remote-state values", "remote_state_values:"],
+  ["remote-state data hooks", "remote_state_data_hooks:"],
   ["selection data hooks", "selection_data_hooks:"],
   ["empty-state hooks", "empty_state_hooks:"],
+  ["toolbar data hooks", "toolbar_data_hooks:"],
   ["toolbar actions", "toolbar_actions:"],
   ["toolbar action metadata", "toolbar_action_metadata:"],
   ["GraphAdapter initializer", "graph_adapter_initializer:"],
@@ -216,6 +233,14 @@ callbackBuilderSignals.forEach((signal) => {
 
 graphAdapterInitializerSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest GraphAdapter initializer surface")
+})
+
+remoteStateDataHookSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest remote-state data hook surface")
+})
+
+toolbarDataHookSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest toolbar data hook surface")
 })
 
 toolbarActionMetadataSignals.slice(0, 10).forEach((signal) => {
@@ -263,6 +288,9 @@ publicApiDocs.forEach(([relativePath, document]) => {
     `${relativePath}: host lifecycle event docs no longer name the host-app ownership boundary`
   )
 
+  assertIncludes(document, "TreeViewRemoteStateDataHooks", `${relativePath} remote-state data hook docs`)
+  assertIncludes(document, "TreeViewToolbarDataHooks", `${relativePath} toolbar data hook docs`)
+
   selectionDataHookSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} selection data hook docs`)
   })
@@ -282,6 +310,10 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
     assertIncludes(document, signal, `${relativePath} remote-state value docs`)
   })
 
+  remoteStateDataHookSignals.slice(1).forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} remote-state data hook docs`)
+  })
+
   assert(
     /not event names|event 名ではありません/.test(document),
     `${relativePath}: remote-state value docs no longer separate state values from event names`
@@ -294,6 +326,11 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
   assert(
     /The host app can dispatch these events|host app側は、fetchやTurbo requestの状態に応じてこれらのeventをdispatchできます/.test(document),
     `${relativePath}: Lazy Loading docs no longer say host apps dispatch the lifecycle events`
+  )
+
+  assert(
+    /host app remains responsible for fetch behavior|実際のfetch、Turbo request、controller action、認可、query、retry UI、children pagination/.test(document),
+    `${relativePath}: Lazy Loading docs no longer preserve the host-app-owned remote loading boundary`
   )
 
   assert(
@@ -337,6 +374,10 @@ selectionDocs.forEach(([relativePath, document]) => {
 })
 
 toolbarDocs.forEach(([relativePath, document]) => {
+  toolbarDataHookSignals.slice(1).forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} toolbar data hook docs`)
+  })
+
   toolbarActionMetadataSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} toolbar action metadata docs`)
   })
@@ -344,6 +385,11 @@ toolbarDocs.forEach(([relativePath, document]) => {
   assert(
     /Authorization, route availability, and final fallback copy still belong to the host app|authorization、route availability、fallback copy の最終判断は引き続き host app 側の責務/.test(document),
     `${relativePath}: toolbar action metadata docs no longer preserve the host-app-owned fallback boundary`
+  )
+
+  assert(
+    /final labels, locale files|final label、locale file|最終文言、locale file policy/.test(document),
+    `${relativePath}: toolbar data hook docs no longer preserve the host-app-owned label and locale boundary`
   )
 
   assert(
