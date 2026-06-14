@@ -109,6 +109,46 @@ const signalGroups = [
     ]
   },
   {
+    feature: "FAQ responsibility-boundary reader journey",
+    files: [
+      [
+        "docs/en/faq.md",
+        [
+          "Why does persisted state save as soon as the page loads?",
+          "tree-view-state:state-changed",
+          "initial connect",
+          "not proof that the user changed the tree",
+          "host app should save only user-initiated changes",
+          "dirty-state policy in the host app",
+          "Does TreeView infer breadcrumbs for resolver or adapter mode?",
+          "GraphAdapter",
+          "host app choose the breadcrumb trail",
+          "Does selecting a parent include descendants that have not loaded yet?",
+          "rendered DOM",
+          "unloaded descendants",
+          "host-app-owned server-side intent or query filter"
+        ]
+      ],
+      [
+        "docs/ja/faq.md",
+        [
+          "persisted state が画面表示直後に保存されるのはなぜですか？",
+          "tree-view-state:state-changed",
+          "初回 connect",
+          "ユーザーが tree を変更した証拠ではありません",
+          "host app 側の dirty-state policy",
+          "resolver mode や adapter mode でも TreeView が breadcrumb を推測しますか？",
+          "GraphAdapter",
+          "host app 側で breadcrumb trail を選び",
+          "parent を選択すると、まだ読み込まれていない descendants も含まれますか？",
+          "描画済み DOM",
+          "unloaded descendants",
+          "host app 側の server-side intent や query filter"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Tree diagnostics reader journey",
     files: [
       [
