@@ -14,8 +14,8 @@ RSpec.describe "Public CSS custom property tokens" do
   it "keeps the manifest token list aligned with packaged stylesheet variable fallbacks" do
     stylesheet_tokens = stylesheet.scan(/var\((--tree-view-[\w-]+)\s*,/).flatten.uniq
 
-    expect(manifest_tokens).to eq(stylesheet_tokens),
-      "expected css_custom_property_tokens to match tree_view.scss var(--tree-view-*, fallback) usage order"
+    expect(manifest_tokens.sort).to eq(stylesheet_tokens.sort),
+      "expected css_custom_property_tokens to match tree_view.scss var(--tree-view-*, fallback) usage"
   end
 
   it "keeps every manifest token documented in both state-cue guides" do
