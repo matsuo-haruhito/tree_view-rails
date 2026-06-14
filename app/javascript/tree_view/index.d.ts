@@ -59,6 +59,13 @@ export declare const TreeViewEventDetailKeys: Readonly<{
   }>
 }>
 
+export declare const TreeViewStateChangeReasons: Readonly<{
+  connect: "connect"
+  refresh: "refresh"
+  expanded: "expanded"
+  collapsed: "collapsed"
+}>
+
 export declare const TreeViewRemoteStateValues: Readonly<{
   loading: "loading"
   loaded: "loaded"
