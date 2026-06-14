@@ -27,9 +27,31 @@ function readmeMockupFiles() {
   return Array.from(new Set(Array.from(matches, (match) => match[1])))
 }
 
+function readmeReviewFlowMockupFiles() {
+  const readme = readFileSync(mockupsReadmePath, "utf8")
+  const reviewFlow = readme.split("## Recommended review flow")[1]?.split("## Demo boundary guidance")[0] || ""
+  const matches = reviewFlow.matchAll(/\[[^\]]+\]\(([^)#?]+\.html)\)/g)
+
+  return Array.from(new Set(Array.from(matches, (match) => match[1])))
+}
+
 function reviewGalleryMockupFiles() {
   const gallery = readFileSync(mockupPath("review-gallery.html"), "utf8")
   const matches = gallery.matchAll(/\b(?:href|src)="([^"#?]+\.html)"/g)
+
+  return Array.from(new Set(Array.from(matches, (match) => match[1])))
+}
+
+function reviewGalleryAnchorHrefs() {
+  const gallery = readFileSync(mockupPath("review-gallery.html"), "utf8")
+  const matches = gallery.matchAll(/\bhref="#([^"]+)"/g)
+
+  return Array.from(new Set(Array.from(matches, (match) => match[1])))
+}
+
+function reviewGalleryElementIds() {
+  const gallery = readFileSync(mockupPath("review-gallery.html"), "utf8")
+  const matches = gallery.matchAll(/\bid="([^"]+)"/g)
 
   return Array.from(new Set(Array.from(matches, (match) => match[1])))
 }
@@ -189,6 +211,16 @@ test.describe("docs mockup browser smoke", () => {
     const missingGalleryFiles = expectedFiles.filter((file) => !galleryFiles.includes(file))
 
     expect(missingGalleryFiles).toEqual([])
+  })
+
+  test("README review flow stays aligned with review gallery links and anchors", () => {
+    const reviewFlowFiles = readmeReviewFlowMockupFiles().filter((file) => file !== "review-gallery.html").sort()
+    const galleryFiles = reviewGalleryMockupFiles().sort()
+    const missingReviewFlowFiles = reviewFlowFiles.filter((file) => !galleryFiles.includes(file))
+    const staleGalleryAnchors = reviewGalleryAnchorHrefs().filter((anchor) => !reviewGalleryElementIds().includes(anchor))
+
+    expect(missingReviewFlowFiles).toEqual([])
+    expect(staleGalleryAnchors).toEqual([])
   })
 
   test("localized-row-labels.html preserves CJK and language exception signals", async ({ page }) => {
