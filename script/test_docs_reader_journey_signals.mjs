@@ -165,6 +165,49 @@ const signalGroups = [
     ]
   },
   {
+    feature: "ActiveRecord repeated-query troubleshooting reader journey",
+    files: [
+      [
+        "docs/en/troubleshooting.md",
+        [
+          "Tree rendering triggers repeated queries or high ActiveRecord time",
+          "ActiveRecord:",
+          "Views:",
+          "Document Load",
+          "DocumentVersion Load",
+          "CACHE",
+          "row partial calls helpers or associations that perform database work for every row",
+          "Return arrays, not lazy ActiveRecord relations, from `GraphAdapter` `children_resolver` callbacks",
+          "Cache child collections by parent id in the host app",
+          "Precompute authorization, version, or display metadata before the row partial renders",
+          "Cookbook: GraphAdapter and ActiveRecord performance",
+          "cookbook.md#graphadapter-and-activerecord-performance",
+          "Rendering Boundaries",
+          "Tree diagnostics"
+        ]
+      ],
+      [
+        "docs/ja/troubleshooting.md",
+        [
+          "tree rendering 中に query が繰り返される / ActiveRecord time が大きい",
+          "ActiveRecord:",
+          "Views:",
+          "Document Load",
+          "DocumentVersion Load",
+          "CACHE",
+          "row partial から呼ぶ helper や association access が row ごとに DB work",
+          "`GraphAdapter` の `children_resolver` から lazy な ActiveRecord relation ではなく配列を返す",
+          "parent id ごとの children cache",
+          "authorization、version、表示用 metadata",
+          "Cookbook: GraphAdapter と ActiveRecord の性能",
+          "cookbook.md#graphadapter-と-activerecord-の性能",
+          "Rendering Boundaries",
+          "Tree diagnostics"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Render log level reader journey",
     files: [
       [
