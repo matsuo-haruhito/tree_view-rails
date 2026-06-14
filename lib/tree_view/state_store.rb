@@ -24,6 +24,10 @@ module TreeView
       PersistedState.new(tree_instance_key: tree_instance_key, expanded_keys: [])
     end
 
+    def clear_owner!(owner:)
+      model.where(owner: owner).delete_all
+    end
+
     def prune!(older_than:, owner: nil, tree_instance_key: nil)
       raise ArgumentError, "older_than is required" if older_than.nil?
 
