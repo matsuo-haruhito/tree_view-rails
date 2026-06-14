@@ -81,6 +81,21 @@ function assertObjectWithLists(value, path, keys) {
   keys.forEach((key) => assertUniqueStringList(value[key], `${path}.${key}`))
 }
 
+function assertRequiredObjectKeys(value, path, keys) {
+  assertObject(value, path)
+  keys.forEach((key) => assertObject(value[key], `${path}.${key}`))
+}
+
+function assertPathTreeBuilderNodeShapes(value, path, keys) {
+  assertRequiredObjectKeys(value, path, keys)
+  keys.forEach((key) => {
+    const shape = value[key]
+    assertString(shape.constant, `${path}.${key}.constant`)
+    assertUniqueStringList(shape.fields, `${path}.${key}.fields`)
+    assertUniqueStringList(shape.predicates, `${path}.${key}.predicates`)
+  })
+}
+
 function assertEntries(value, path, requiredKeys) {
   assert(Array.isArray(value), `${path} must be an array, got ${valueType(value)}`)
   assert(value.length > 0, `${path} must not be empty`)
@@ -160,7 +175,7 @@ assertObjectWithLists(manifest.visible_rows_row_metadata, "visible_rows_row_meta
 assertUniqueStringList(manifest.node_presenter_builder_names, "node_presenter_builder_names")
 assertObjectWithLists(manifest.graph_adapter_initializer, "graph_adapter_initializer", ["required_keywords", "optional_keywords"])
 assertObjectWithLists(manifest.ui_config_builder_option_keys, "ui_config_builder_option_keys", requiredUiConfigBuilderOptionKeys)
-assertObjectWithLists(manifest.path_tree_builder_node_shapes, "path_tree_builder_node_shapes", requiredPathTreeBuilderNodeShapeKeys)
+assertPathTreeBuilderNodeShapes(manifest.path_tree_builder_node_shapes, "path_tree_builder_node_shapes", requiredPathTreeBuilderNodeShapeKeys)
 assertObjectWithLists(manifest.helper_option_keys, "helper_option_keys", requiredHelperOptionKeys)
 assertUniqueStringList(manifest.render_window_metadata, "render_window_metadata")
 assertStringMap(manifest.toolbar_actions, "toolbar_actions")
