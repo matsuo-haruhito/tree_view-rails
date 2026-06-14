@@ -93,6 +93,7 @@ const declarationSource = readFileSync("app/javascript/tree_view/index.d.ts", "u
 const literalExports = {
   TreeViewEventNames: deepCamelizeKeys(manifest.event_names),
   TreeViewEventDetailKeys: deepCamelizeKeys(manifest.event_detail_keys),
+  TreeViewStateChangeReasons: manifest.state_change_reasons,
   TreeViewRemoteStateValues: manifest.remote_state_values,
   TreeViewRemoteStateDataHooks: deepCamelizeKeys(manifest.remote_state_data_hooks),
   TreeViewToolbarDataHooks: deepCamelizeKeys(manifest.toolbar_data_hooks),
