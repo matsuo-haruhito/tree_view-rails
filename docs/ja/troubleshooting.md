@@ -307,6 +307,8 @@ selection checkbox の送信値は plain ID ではなく JSON string です。
 - server side では `TreeView.parse_selection_params` で parse する
 - JavaScript では checked かつ enabled な checkbox だけが対象になる
 - JSON が壊れている値は selected payload array から除外され、`tree-view-selection:invalid-payload` で通知される
+- 通常 form submit 後に `ArgumentError` が出る場合は、parser を変える前に送信された checkbox value を確認する。`TreeView.parse_selection_params` は `nil` と空文字列を skip し、hash-like entry と JSON object を受け付け、空でない値が不正な JSON または JSON object 以外に parse された場合に raise します
+- malformed submitted value を rescue するか、request を reject するか、記録するか、validation copy を表示するかは host app 側で決める。TreeView はその request policy を選びません
 - row payload 生成、disabled-state 判定、checkbox visibility は grouped `selection:` option 側で設定する
 - checkbox は見えているのに通常 form submit で selection params が送られない場合は、`tree-view-selection` host element に `data-tree-view-selection-hidden-input-name-value` を設定する。`tree-view-selection:selected` や `tree-view-selection:change` を listen するだけでは form params は作られません
 - hidden input 同期は、valid な checked payload ごとに hidden input を 1 つずつ最寄りの form に書き込みます。tree が form の外にある場合、TreeView は selection event だけを dispatch し、hidden input は生成しません
@@ -314,7 +316,7 @@ selection checkbox の送信値は plain ID ではなく JSON string です。
 - 1つの form に複数 tree がある場合、server 側で別々の params として受け取りたいなら hidden input name を分ける。同じ name を使うのは、host app が1つの配列としてまとめて受け取る設計のときだけです。TreeView の source id は、各 controller が他 controller の generated input を消さないために使われます
 - client-side の最大選択数制限や連動 checkbox 挙動を使う場合は、同じ host element に `data-tree-view-selection-max-count-value`、`data-tree-view-selection-cascade-value`、`data-tree-view-selection-indeterminate-value` を設定する
 - cascade と indeterminate は、現在 DOM に描画されている row にだけ効く
-- max-count、multi-tree、unloaded descendant の挙動が product action の期待とまだ合わない場合、最終的な params grouping、bulk action semantics、server-side validation、ユーザー向け business copy は host app 側に置く
+- max-count、multi-tree、unloaded descendant の挙動が product action の期待とまだ合わない場合、最終的な params grouping、bulk-action semantics、server-side validation、ユーザー向け business copy は host app 側に置く
 
 次に読む文書:
 
