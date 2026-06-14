@@ -121,6 +121,34 @@ function assertTopLevelKeys(manifest) {
   })
 }
 
+const requiredUiConfigBuilderOptionKeys = [
+  "build",
+  "build_turbo",
+  "build_static",
+  "build_client_side"
+]
+
+const requiredPathTreeBuilderNodeShapeKeys = ["folder_node", "record_node"]
+
+const requiredHelperOptionKeys = [
+  "tree_view_rows",
+  "tree_view_window",
+  "tree_view_breadcrumb",
+  "tree_view_toolbar"
+]
+
+const requiredGroupedOptionKeys = [
+  "initial_expansion",
+  "render_scope",
+  "toggle_scope",
+  "toggle_icons",
+  "selection",
+  "lazy_loading",
+  "row_status"
+]
+
+const requiredIntegrationHookKeys = ["state", "remote_state", "transfer"]
+
 const manifest = loadManifest()
 
 assertTopLevelKeys(manifest)
@@ -131,11 +159,13 @@ assertUniqueStringList(manifest.filtered_tree_modes, "filtered_tree_modes")
 assertObjectWithLists(manifest.visible_rows_row_metadata, "visible_rows_row_metadata", ["fields", "predicates"])
 assertUniqueStringList(manifest.node_presenter_builder_names, "node_presenter_builder_names")
 assertObjectWithLists(manifest.graph_adapter_initializer, "graph_adapter_initializer", ["required_keywords", "optional_keywords"])
-assertObjectWithLists(manifest.helper_option_keys, "helper_option_keys", Object.keys(manifest.helper_option_keys))
+assertObjectWithLists(manifest.ui_config_builder_option_keys, "ui_config_builder_option_keys", requiredUiConfigBuilderOptionKeys)
+assertObjectWithLists(manifest.path_tree_builder_node_shapes, "path_tree_builder_node_shapes", requiredPathTreeBuilderNodeShapeKeys)
+assertObjectWithLists(manifest.helper_option_keys, "helper_option_keys", requiredHelperOptionKeys)
 assertUniqueStringList(manifest.render_window_metadata, "render_window_metadata")
 assertStringMap(manifest.toolbar_actions, "toolbar_actions")
 assertObjectWithLists(manifest.toolbar_action_metadata, "toolbar_action_metadata", ["keys", "data_keys"])
-assertObjectWithLists(manifest.grouped_option_keys, "grouped_option_keys", Object.keys(manifest.grouped_option_keys))
+assertObjectWithLists(manifest.grouped_option_keys, "grouped_option_keys", requiredGroupedOptionKeys)
 assertObjectWithLists(manifest.resource_table_render_state_call, "resource_table_render_state_call", ["required_keywords", "optional_keywords"])
 assertString(manifest.resource_table_render_state_call.render_options_contract, "resource_table_render_state_call.render_options_contract")
 assertUniqueStringList(manifest.render_state_callback_builder_keys, "render_state_callback_builder_keys")
@@ -181,9 +211,10 @@ assertStringMap(javascriptPackageRoot.transfer_data_mime_types, "javascript_pack
 assertStringMap(javascriptPackageRoot.remote_state_values, "javascript_package_root.remote_state_values")
 assertStringMap(javascriptPackageRoot.remote_state_data_hooks, "javascript_package_root.remote_state_data_hooks")
 assertStringMap(javascriptPackageRoot.toolbar_data_hooks, "javascript_package_root.toolbar_data_hooks")
-assertStringMap(javascriptPackageRoot.integration_hooks.state, "javascript_package_root.integration_hooks.state")
-assertStringMap(javascriptPackageRoot.integration_hooks.remote_state, "javascript_package_root.integration_hooks.remote_state")
-assertStringMap(javascriptPackageRoot.integration_hooks.transfer, "javascript_package_root.integration_hooks.transfer")
+assertObject(javascriptPackageRoot.integration_hooks, "javascript_package_root.integration_hooks")
+requiredIntegrationHookKeys.forEach((key) => {
+  assertStringMap(javascriptPackageRoot.integration_hooks[key], `javascript_package_root.integration_hooks.${key}`)
+})
 assertStringMap(javascriptPackageRoot.selection_data_hooks, "javascript_package_root.selection_data_hooks")
 assertStringMap(javascriptPackageRoot.selection_checkbox_hooks, "javascript_package_root.selection_checkbox_hooks")
 assertStringMap(javascriptPackageRoot.empty_state_hooks, "javascript_package_root.empty_state_hooks")
