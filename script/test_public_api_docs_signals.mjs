@@ -329,7 +329,7 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
   )
 
   assert(
-    /host app remains responsible for fetch behavior|実際のfetch、Turbo request、controller action、authorization、query、retry UI、children pagination/.test(document),
+    /host app remains responsible for fetch behavior|実際のfetch、Turbo request、controller action、認可、query、retry UI、children pagination/.test(document),
     `${relativePath}: Lazy Loading docs no longer preserve the host-app-owned remote loading boundary`
   )
 
