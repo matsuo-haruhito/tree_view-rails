@@ -93,6 +93,7 @@ Release preparation notes:
 - Added transfer disabled / invalid boundary states to the drop-position mockup and updated the mockup review guidance.
 - Added static mockup references for multi-tree selection forms, toggle icon states, high-contrast state cues, reduced-motion state cues, and localized row labels.
 - Added focused mockup references for RenderWindow boundary metadata and direction-aware visual cue boundaries.
+- Added a current-branch sidebar breadcrumb mockup for reviewing route context and row-local hierarchy cues in narrow panes.
 - Added direction-aware styling boundary docs for host-app-owned RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing overrides.
 - Added Decision guide guidance for choosing Static, Turbo, or Client-side toggle mode before tuning render depth or loading strategy.
 - Clarified docs index entry points for PathTreeBuilder, Children Pagination, and large-tree reading paths.
@@ -129,6 +130,7 @@ Release preparation notes:
 - Added browser smoke coverage for the direction-aware hierarchy cue mockup across desktop and narrow viewports.
 - Added browser smoke coverage for representative docs mockup pages and the review gallery.
 - Added docs entrypoint guard coverage for keeping README feature links and docs index targets aligned.
+- Added README orientation asset smoke coverage for the root README image, default-tree baseline mockup, and focused mockup review links.
 - Expanded package verification coverage for TreeViewHelper subfiles, the breadcrumb helper, representative Japanese toolbar locale, and Japanese release docs files.
 - Added docs smoke coverage for troubleshooting diagnostics reader journeys, toolbar contract source docs, public API hook signals, mockup review flow / gallery alignment, and docs entrypoint group selection.
 

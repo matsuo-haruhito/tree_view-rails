@@ -351,7 +351,7 @@ host app が依存してよい browser-facing surface は、documented された
 
 この inventory は代表例であり、網羅一覧ではありません。`config/public_api_manifest.yml` は helper method、JavaScript package-root export、controller identifier、integration hook、selection data hook、selection checkbox hook、empty-state hook、RenderState grouped option key の machine-readable source of truth です。docs-only の hook inventory は feature guide と mockup への導線を示すもので、出力されるすべての class や `data-*` attribute を compatibility contract にするものではありません。
 
-manifest に載っていない DOM helper 名は、生成される DOM ID や attribute が bundled markup に現れていても内部扱いです。特に button、selection checkbox、toggle path、lazy-loading path helper 名は、manifest に昇格されこのページで document されるまでは host app の公開依存先ではありません。
+manifest に載っていない DOM helper 名は、生成される DOM ID や attribute が bundled markup に現れても内部扱いです。特に button、selection checkbox、toggle path、lazy-loading path helper 名は、manifest に昇格されこのページで document されるまでは host app の公開依存先ではありません。
 
 undocumented な CSS helper class、data attribute、DOM 構造詳細、gem partial 内部 locals は内部実装です。
 
