@@ -248,6 +248,49 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Troubleshooting diagnostics reader journey",
+    files: [
+      [
+        "docs/en/troubleshooting.md",
+        [
+          "Row partial output looks broken or table cells do not line up",
+          "tree node keys and UI DOM IDs",
+          "tree.node_key_for(item)",
+          "Tree diagnostics",
+          "Node keys",
+          "GraphAdapter rows look duplicated, incomplete, or shaped differently than expected",
+          "`nil` becomes an empty child list",
+          "node_key_resolver:",
+          "cycles or duplicate keys",
+          "Duplicate node keys, orphan records, DOM ID collisions, or cycles appear",
+          "validate_node_keys: true",
+          "orphan_strategy:",
+          "render_state.validate_unique_dom_ids!",
+          "TreeView::CycleDiagnostics.new(tree).report"
+        ]
+      ],
+      [
+        "docs/ja/troubleshooting.md",
+        [
+          "row partial の表示が崩れる / table cell 数が合わない",
+          "tree node key と UI DOM ID",
+          "tree.node_key_for(item)",
+          "Tree diagnostics",
+          "Node keys",
+          "GraphAdapter の行が重複する / 足りない / 想定と違う形になる",
+          "`nil` は空の child list",
+          "node_key_resolver:",
+          "cycle や duplicate key",
+          "duplicate node key / orphan / DOM ID collision / cycle が出る",
+          "validate_node_keys: true",
+          "orphan_strategy:",
+          "render_state.validate_unique_dom_ids!",
+          "TreeView::CycleDiagnostics.new(tree).report"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Render log level reader journey",
     files: [
       [
