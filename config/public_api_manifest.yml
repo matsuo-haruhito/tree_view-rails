@@ -304,6 +304,7 @@ javascript_package_root:
     - TreeViewRemoteStateDataHooks
     - TreeViewToolbarDataHooks
     - TreeViewTransferDropPositions
+    - TreeViewTransferDataAttributes
     - TreeViewTransferDataMimeTypes
     - TreeViewRemoteStateValues
     - TreeViewStateController
@@ -317,6 +318,9 @@ javascript_package_root:
     before: before
     inside: inside
     after: after
+  transfer_data_attributes:
+    payload: data-tree-transfer-payload
+    disabled: data-tree-transfer-disabled
   transfer_data_mime_types:
     application_json: application/json
     text_plain: text/plain
