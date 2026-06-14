@@ -68,7 +68,7 @@ host app 側の stylesheet で TreeView 用CSSを読み込みます。
 
 同梱 stylesheet は、TreeView の再利用可能な構造と軽量な state cue をすぐ確認するための quick-start baseline です。selected、current、collapsed、loading、error、drop target など代表的な row state の見た目は含みますが、最終的な theme、density、brand color、product wording は host app 側の責務です。
 
-host app 側の見た目に合わせる場合も import は残し、TreeView import の後に host app の stylesheet で documented な row / toggle / table selector を上書きしてください。同梱色を必須の public theme API として扱う必要はありません。host app は class selector rules で独自の見た目へ置き換えられます。
+host app 側の見た目に合わせる場合も import は残し、TreeView import の後に host app の stylesheet で documented な row / toggle / table selector を上書きしてください。同梱 stylesheet の小さな documented CSS custom property surface は [State cue のスタイリング](styling-state-cues.md) で確認できます。これらの token は state cue color の host-app override guidance であり、complete theme system や manifest-backed Ruby / JavaScript API ではありません。
 
 ## JavaScript / importmap
 

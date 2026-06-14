@@ -111,6 +111,24 @@ const signalGroups = [
         ]
       ]
     ]
+  },
+  {
+    feature: "i18n audit maintenance checklist docs signal",
+    files: [
+      [
+        "docs/i18n-audit.md",
+        [
+          "Documentation maintenance checklist",
+          "Root-level prose docs should stay limited to intentional entry points, maintenance notes, or technical assets",
+          "## Update matrix",
+          "## Root-level docs policy",
+          "## Technical assets",
+          "docs/mockups/README.md` is the source of truth for the current static mockup file inventory",
+          "this checklist should describe responsibility rather than repeat every individual mockup HTML page",
+          "Update this technical-assets section only when the source-of-truth rule or asset-group responsibility changes"
+        ]
+      ]
+    ]
   }
 ]
 
