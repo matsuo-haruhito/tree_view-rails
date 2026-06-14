@@ -82,6 +82,11 @@ const checks = [
     args: ["script/test_public_api_docs_signals.mjs"]
   },
   {
+    group: "Public API entrypoint guard signals",
+    command: "node",
+    args: ["script/test_public_api_entrypoint_guard_signals.mjs"]
+  },
+  {
     group: "Render window and resource table docs signals",
     command: "node",
     args: ["script/test_render_window_resource_table_docs_signals.mjs"]
