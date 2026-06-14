@@ -91,7 +91,7 @@ For a namespaced or module-wrapped owner, add the include inside the actual clas
 ```ruby
 # app/models/admin/user.rb
 module Admin
-  class AdminUser < ApplicationRecord
+  class User < ApplicationRecord
     include TreeViewStateOwner
   end
 end
