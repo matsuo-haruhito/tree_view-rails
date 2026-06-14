@@ -124,7 +124,7 @@ function workflowChangesOutputs(workflowSource) {
 }
 
 function workflowJavaScriptJob(workflowSource) {
-  const jobBlock = workflowSource.match(/^  javascript:\n(?<body>(?:    .*\n)+?)(?=^  [a-z_]+:\n|\z)/m);
+  const jobBlock = workflowSource.match(/^  javascript:\n(?<body>(?:    .*\n)+?)(?=^  [a-z_]+:\n|$)/m);
   assert.ok(jobBlock, `${workflowPath} must define jobs.javascript`);
 
   return jobBlock.groups.body;
