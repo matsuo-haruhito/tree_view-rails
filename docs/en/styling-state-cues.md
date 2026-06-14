@@ -40,6 +40,8 @@ These tokens are intended for host-app stylesheet overrides:
 
 Each token has the same fallback value that TreeView used before the token was introduced, so importing the stylesheet without overrides keeps the existing quick-start appearance.
 
+`config/public_api_manifest.yml` tracks this list under `css_custom_property_tokens`. The manifest-backed contract covers the token names used by the packaged stylesheet and documented here; it does not turn the fallback values into host-app configuration or a theme API.
+
 ## Boundary
 
 TreeView owns these tokens only as a small state-cue surface for the packaged stylesheet. It does not own a complete theme system, dark-mode policy, density scale, product copy, or host-app design tokens.
