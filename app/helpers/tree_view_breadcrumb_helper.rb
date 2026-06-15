@@ -35,9 +35,16 @@ module TreeViewBreadcrumbHelper
     list_items = path_items.each_with_index.map do |path_item, index|
       current = index == path_items.length - 1
       tag.li(**tree_view_breadcrumb_html_options(item_html, path_item, option_name: :item_html, class_name: item_class)) do
-        content = (current || path_builder.nil?) ?
-          tree_view_breadcrumb_current_label(path_item, label_builder, current_class, current_html) :
-          tree_view_breadcrumb_link(path_item, label_builder, path_builder, link_class, link_html)
+        content = tree_view_breadcrumb_content(
+          path_item,
+          label_builder,
+          path_builder,
+          current,
+          link_class,
+          link_html,
+          current_class,
+          current_html
+        )
 
         if current || separator.nil?
           content
@@ -66,16 +73,36 @@ module TreeViewBreadcrumbHelper
 
   private
 
-  def tree_view_breadcrumb_link(item, label_builder, path_builder, link_class, link_html)
+  def tree_view_breadcrumb_content(item, label_builder, path_builder, current, link_class, link_html, current_class, current_html)
+    return tree_view_breadcrumb_current_label(item, label_builder, current_class, current_html) if current
+
+    unless path_builder
+      return tree_view_breadcrumb_plain_label(item, label_builder, current_class)
+    end
+
+    href = path_builder.call(item)
+    return tree_view_breadcrumb_link(item, label_builder, href, link_class, link_html) if href
+
+    tree_view_breadcrumb_plain_label(item, label_builder, link_class)
+  end
+
+  def tree_view_breadcrumb_link(item, label_builder, href, link_class, link_html)
     tag.a(
       label_builder.call(item),
       **tree_view_breadcrumb_html_options(
         link_html,
         item,
         option_name: :link_html,
-        href: path_builder.call(item),
+        href: href,
         class_name: link_class
       )
+    )
+  end
+
+  def tree_view_breadcrumb_plain_label(item, label_builder, label_class)
+    tag.span(
+      label_builder.call(item),
+      class: label_class
     )
   end
 

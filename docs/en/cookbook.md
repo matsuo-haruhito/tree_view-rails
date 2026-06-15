@@ -417,6 +417,8 @@ Use windowed rendering when many visible rows remain.
 <%= tree_view_rows(@render_state, window: { offset: 0, limit: 50 }) %>
 ```
 
+When the host app needs Previous / Next controls, summary counts, or an offset handoff across Turbo refreshes, start with `tree_view_window` instead of inventing pagination metadata in the partial. It exposes `total_count`, `before_count`, `after_count`, `previous?`, `next?`, `previous_offset`, and `next_offset`; the host app still chooses the route helper, query parameter name, disabled-button behavior, and whether the controls render as links, buttons, or a Turbo Frame toolbar. If the current row must stay visible, derive the anchored offset from `TreeView::VisibleRows` before rendering the window. The full recipe is in [Windowed Rendering](windowed-rendering.md#tree_view_window-helper), [Keep the current row inside the window](windowed-rendering.md#keep-the-current-row-inside-the-window), and [Hand off offset across Turbo updates](windowed-rendering.md#hand-off-offset-across-turbo-updates).
+
 Use lazy loading when children should be loaded only as needed.
 
 When the product needs scroll-position-driven DOM virtualization, keep that controller in the host app and use TreeView only for the HTML row slice it should render. `TreeView::RenderWindow` is useful for outputting a bounded list of already-visible rows, but it does not observe scroll position, reduce host-app queries, fetch pages, or preserve scroll anchoring.
