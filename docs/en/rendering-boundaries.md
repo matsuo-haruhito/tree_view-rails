@@ -8,6 +8,19 @@ TreeView provides Rails helpers, partials, contexts, and builder hooks for rende
 
 The host app owns business-specific columns, buttons, forms, authorization, Turbo responses, and controller actions.
 
+## How to use this page
+
+Use this page when you need the short responsibility map before choosing a more specific guide.
+
+- Start with [Usage](usage.md) for the basic RenderState and `row_partial` setup.
+- Use [FAQ](faq.md) for short answers about common expectation-setting questions.
+- Use [Troubleshooting](troubleshooting.md) when a symptom points to a likely integration problem.
+- Use [Design policy](design-policy.md) for broader scope, non-goals, and why business workflows stay in the host app.
+- Use [Resource table bridge](resource-table-bridge.md) when a separate table layer owns columns, table state, or visible-column policy.
+- Use [Host App Extension Points](host-app-extension-points.md) when you already know the host-app-owned hook you need to wire.
+
+The quick rule is: TreeView renders tree structure and stable hooks; the host app owns product decisions, data loading, authorization, final copy, table columns, and design-system integration.
+
 ## TreeView responsibilities
 
 - tree traversal

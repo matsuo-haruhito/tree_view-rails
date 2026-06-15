@@ -138,6 +138,8 @@ Add the importmap pin when needed:
 pin "tree_view", to: "tree_view/index.js"
 ```
 
+Host apps that write tests or custom renderers against TreeView browser hooks can avoid raw event names, data attributes, and controller identifiers by using the package-root exports from `tree_view/index.js`, such as `TreeViewEventNames`, `TreeViewEventDetailKeys`, and the documented data hook objects. See the [Public API JavaScript surface](docs/en/public-api.md#javascript-surface) / [日本語](docs/ja/public-api.md#javascript-surface) and the [JavaScript event contract](docs/en/js-events.md) / [日本語](docs/ja/js-events.md).
+
 See [Installation](docs/en/installation.md) for details.
 
 日本語の導入手順は [docs/ja/installation.md](docs/ja/installation.md) を参照してください。
@@ -233,6 +235,7 @@ Key documents:
 | Tree identity and diagnostics | [Node keys](docs/en/node-keys.md) and [Tree diagnostics](docs/en/tree-diagnostics.md) | [Node key 設計](docs/ja/node-keys.md) and [Tree diagnostics](docs/ja/tree-diagnostics.md) |
 | Large tree rendering strategy | [Render Scale](docs/en/render-scale.md), [Lazy Loading](docs/en/lazy-loading.md), [Children Pagination](docs/en/children-pagination.md), [Windowed Rendering](docs/en/windowed-rendering.md), [Rendering Boundaries](docs/en/rendering-boundaries.md), and [Render log level](docs/en/render-log-level.md) | [描画スケール](docs/ja/render-scale.md), [Lazy Loading](docs/ja/lazy-loading.md), [Children Pagination](docs/ja/children-pagination.md), [Windowed Rendering](docs/ja/windowed-rendering.md), [描画責務の境界](docs/ja/rendering-boundaries.md), and [render log レベル](docs/ja/render-log-level.md) |
 | Styling and direction-aware boundary | [Direction-aware styling boundary](docs/en/direction-aware-styling.md) | [Direction-aware styling boundary](docs/ja/direction-aware-styling.md) |
+| Packaged stylesheet state cues | [Styling state cues](docs/en/styling-state-cues.md) | [State cue のスタイリング](docs/ja/styling-state-cues.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
 | GraphAdapter | [GraphAdapter](docs/en/graph-adapter.md) | [GraphAdapter](docs/ja/graph-adapter.md) |
 | API reference | [API reference](docs/en/api.md) | [API仕様](docs/ja/api.md) |
