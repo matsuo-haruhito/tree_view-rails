@@ -123,6 +123,10 @@ const literalExportsByManifestGroup = {
     exportName: "TreeViewEventDetailKeys",
     expectedShape: deepCamelizeKeys(manifest.event_detail_keys)
   },
+  state_change_reasons: {
+    exportName: "TreeViewStateChangeReasons",
+    expectedShape: manifest.state_change_reasons
+  },
   remote_state_values: {
     exportName: "TreeViewRemoteStateValues",
     expectedShape: manifest.remote_state_values
