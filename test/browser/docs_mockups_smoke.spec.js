@@ -108,38 +108,46 @@ const focusedMockupSmokeTargets = [
   { file: "empty-state.html", sample: "[data-tree-view-empty-state='true']", minimumCount: 2 }
 ]
 
+const narrowOverflowReasonCategories = new Set([
+  "wide-table-reference",
+  "side-by-side-comparison",
+  "inspectable-columns",
+  "long-label-stress",
+  "form-boundary-reference"
+])
+
 const narrowOverflowExpectedMockups = new Map([
-  ["default-tree.html", "wide baseline table columns are intentionally visible in the reference mockup"],
-  ["resource-table-bridge.html", "resource-table comparison keeps fuller columns visible for review"],
-  ["resource-table-empty-colspan-boundary.html", "resource-table colspan boundary keeps selection, metadata, and action columns visible for review"],
-  ["table-caption-context.html", "table caption reference keeps host-owned action and status columns visible"],
-  ["row-status-depth-labels.html", "status/depth table columns are intentionally preserved"],
-  ["toggle-icon-states.html", "toggle-state comparison uses a wide table matrix"],
-  ["interaction-states.html", "interaction-state table keeps multiple state columns visible"],
-  ["children-pagination.html", "children pagination examples keep branch page-state columns visible"],
-  ["reduced-motion-state-cues.html", "state-cue comparison keeps the table matrix visible"],
-  ["keyboard-focus-states.html", "focus samples include multiple side-by-side controls"],
-  ["accessibility-semantics.html", "table-first ARIA comparison keeps state and boundary columns visible"],
-  ["keyboard-current-row/index.html", "keyboard current-row comparison keeps focus/current/action columns visible"],
-  ["high-contrast-state-cues/index.html", "high-contrast state-cue panels stay side by side for comparison"],
-  ["direction-aware-cues/index.html", "direction-aware examples keep multiple writing directions visible for comparison"],
-  ["drop-positions.html", "drop-position comparison keeps before/inside/after states side by side"],
-  ["persisted-state-boundary.html", "persisted-state comparison keeps multiple state columns visible"],
-  ["turbo-frame-target.html", "Turbo Frame reference keeps target and row columns visible"],
-  ["drag-interactive-controls.html", "interactive-control rows keep native controls visible"],
-  ["interactive-marker-behaviors.html", "marker-behavior comparison keeps multiple controls visible"],
-  ["windowed-rendering.html", "window metadata columns are intentionally visible"],
-  ["breadcrumb-paths.html", "breadcrumb path examples keep long path segments inspectable"],
-  ["filtered-tree-modes.html", "filtered-mode comparison keeps mode columns visible"],
-  ["path-tree-builder-rows.html", "PathTreeBuilder examples keep generated path columns inspectable"],
-  ["node-presenter-row-partials.html", "NodePresenter partial examples keep host-owned columns visible"],
-  ["localized-row-labels.html", "localized label comparison keeps multilingual columns visible"],
-  ["form-editing-rows.html", "bulk-edit controls are intentionally visible in the reference"],
-  ["toolbar-actions.html", "toolbar action labels include long/localized stress cases"],
-  ["selection-max-count.html", "selection limit comparison keeps multiple state panels visible"],
-  ["selection-multi-tree-form.html", "multi-tree form comparison keeps source groups side by side"],
-  ["children-pagination-selection-boundary.html", "pagination selection boundary keeps rendered and unloaded state columns visible"],
-  ["empty-state.html", "empty-state comparison keeps table wrappers inspectable"]
+  ["default-tree.html", { category: "wide-table-reference", reason: "wide baseline table columns are intentionally visible in the reference mockup" }],
+  ["resource-table-bridge.html", { category: "inspectable-columns", reason: "resource-table comparison keeps fuller columns visible for review" }],
+  ["resource-table-empty-colspan-boundary.html", { category: "inspectable-columns", reason: "resource-table colspan boundary keeps selection, metadata, and action columns visible for review" }],
+  ["table-caption-context.html", { category: "inspectable-columns", reason: "table caption reference keeps host-owned action and status columns visible" }],
+  ["row-status-depth-labels.html", { category: "inspectable-columns", reason: "status/depth table columns are intentionally preserved" }],
+  ["toggle-icon-states.html", { category: "side-by-side-comparison", reason: "toggle-state comparison uses a wide table matrix" }],
+  ["interaction-states.html", { category: "side-by-side-comparison", reason: "interaction-state table keeps multiple state columns visible" }],
+  ["children-pagination.html", { category: "inspectable-columns", reason: "children pagination examples keep branch page-state columns visible" }],
+  ["reduced-motion-state-cues.html", { category: "side-by-side-comparison", reason: "state-cue comparison keeps the table matrix visible" }],
+  ["keyboard-focus-states.html", { category: "side-by-side-comparison", reason: "focus samples include multiple side-by-side controls" }],
+  ["accessibility-semantics.html", { category: "inspectable-columns", reason: "table-first ARIA comparison keeps state and boundary columns visible" }],
+  ["keyboard-current-row/index.html", { category: "inspectable-columns", reason: "keyboard current-row comparison keeps focus/current/action columns visible" }],
+  ["high-contrast-state-cues/index.html", { category: "side-by-side-comparison", reason: "high-contrast state-cue panels stay side by side for comparison" }],
+  ["direction-aware-cues/index.html", { category: "side-by-side-comparison", reason: "direction-aware examples keep multiple writing directions visible for comparison" }],
+  ["drop-positions.html", { category: "side-by-side-comparison", reason: "drop-position comparison keeps before/inside/after states side by side" }],
+  ["persisted-state-boundary.html", { category: "side-by-side-comparison", reason: "persisted-state comparison keeps multiple state columns visible" }],
+  ["turbo-frame-target.html", { category: "inspectable-columns", reason: "Turbo Frame reference keeps target and row columns visible" }],
+  ["drag-interactive-controls.html", { category: "inspectable-columns", reason: "interactive-control rows keep native controls visible" }],
+  ["interactive-marker-behaviors.html", { category: "side-by-side-comparison", reason: "marker-behavior comparison keeps multiple controls visible" }],
+  ["windowed-rendering.html", { category: "inspectable-columns", reason: "window metadata columns are intentionally visible" }],
+  ["breadcrumb-paths.html", { category: "long-label-stress", reason: "breadcrumb path examples keep long path segments inspectable" }],
+  ["filtered-tree-modes.html", { category: "side-by-side-comparison", reason: "filtered-mode comparison keeps mode columns visible" }],
+  ["path-tree-builder-rows.html", { category: "inspectable-columns", reason: "PathTreeBuilder examples keep generated path columns inspectable" }],
+  ["node-presenter-row-partials.html", { category: "inspectable-columns", reason: "NodePresenter partial examples keep host-owned columns visible" }],
+  ["localized-row-labels.html", { category: "long-label-stress", reason: "localized label comparison keeps multilingual columns visible" }],
+  ["form-editing-rows.html", { category: "form-boundary-reference", reason: "bulk-edit controls are intentionally visible in the reference" }],
+  ["toolbar-actions.html", { category: "long-label-stress", reason: "toolbar action labels include long/localized stress cases" }],
+  ["selection-max-count.html", { category: "side-by-side-comparison", reason: "selection limit comparison keeps multiple state panels visible" }],
+  ["selection-multi-tree-form.html", { category: "side-by-side-comparison", reason: "multi-tree form comparison keeps source groups side by side" }],
+  ["children-pagination-selection-boundary.html", { category: "inspectable-columns", reason: "pagination selection boundary keeps rendered and unloaded state columns visible" }],
+  ["empty-state.html", { category: "inspectable-columns", reason: "empty-state comparison keeps table wrappers inspectable" }]
 ])
 
 test.describe("docs mockup browser smoke", () => {
@@ -243,6 +251,9 @@ test.describe("docs mockup browser smoke", () => {
     const coveredFiles = focusedMockupSmokeTargets.map((mockup) => mockup.file)
     const staleExceptions = [...narrowOverflowExpectedMockups.keys()].filter((file) => !coveredFiles.includes(file))
     const uncheckedFiles = coveredFiles.filter((file) => !narrowOverflowExpectedMockups.has(file))
+    const invalidExceptions = [...narrowOverflowExpectedMockups.entries()].filter(([, exception]) =>
+      !narrowOverflowReasonCategories.has(exception.category) || !exception.reason
+    )
 
     expect(staleExceptions).toEqual([])
     expect(uncheckedFiles).toEqual([
@@ -251,6 +262,7 @@ test.describe("docs mockup browser smoke", () => {
       "current-branch-sidebar.html",
       "lazy-loading-handoff.html"
     ])
+    expect(invalidExceptions).toEqual([])
   })
 
   for (const mockup of focusedMockupSmokeTargets) {
