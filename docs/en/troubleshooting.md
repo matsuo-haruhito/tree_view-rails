@@ -307,6 +307,8 @@ Check these points.
 - Parse submitted values with `TreeView.parse_selection_params` on the server side.
 - In JavaScript, remember that TreeView only reports checked and enabled checkboxes.
 - Invalid JSON payloads are omitted from the selected payload array and reported through `tree-view-selection:invalid-payload`.
+- If a regular form submit raises `ArgumentError`, inspect the submitted checkbox values before changing the parser. `TreeView.parse_selection_params` skips `nil` and empty strings, accepts hash-like entries and JSON objects, and raises when a non-empty value is invalid JSON or parses to something other than a JSON object.
+- Decide in the host app whether malformed submitted values should be rescued, rejected, logged, or shown as validation copy. TreeView does not choose that request policy.
 - Use grouped `selection:` options for row payload generation, disabled-state decisions, and checkbox visibility.
 - If a user can check boxes but a regular HTML form submit sends no selection params, configure `data-tree-view-selection-hidden-input-name-value` on the `tree-view-selection` host element. Listening for `tree-view-selection:selected` or `tree-view-selection:change` alone does not create form params.
 - Hidden input sync writes one hidden input per valid checked payload to the nearest form. If the tree is outside the form, TreeView still dispatches selection events but does not create hidden inputs.

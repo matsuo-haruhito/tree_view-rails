@@ -27,6 +27,8 @@
 - [日本語PathTreeBuilder](ja/path-tree-builder.md): pathらしいrecord値から生成folder行とrecord行を作る入口。
 - [English FAQ](en/faq.md): quick answers about responsibility boundaries and common misunderstandings.
 - [日本語FAQ](ja/faq.md): 責務境界とよくある誤解を短く確認する入口。
+- [English Rendering Boundaries](en/rendering-boundaries.md): check which rendering responsibilities belong to TreeView and which remain in the host app.
+- [日本語描画責務の境界](ja/rendering-boundaries.md): TreeView が担う描画責務と host app 側に残す責務を確認する入口。
 - [English troubleshooting](en/troubleshooting.md): reverse-lookup entry point for common integration symptoms.
 - [日本語Troubleshooting](ja/troubleshooting.md): よくある統合トラブルを症状から逆引きする入口。
 - [English Tree diagnostics](en/tree-diagnostics.md): inspect node keys, DOM IDs, orphan nodes, and cycles before rendering.
