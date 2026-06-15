@@ -269,6 +269,7 @@ diagnostics:
       - warnings
     methods:
       - success?
+      - summary_messages
 resource_table_render_state_call:
   required_keywords:
     - records
