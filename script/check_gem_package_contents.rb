@@ -61,9 +61,21 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/public-api.md
     docs/ja/public-api.md
   ],
+  "README-linked public JavaScript docs" => %w[
+    docs/en/js-events.md
+    docs/ja/js-events.md
+  ],
+  "Public setup surface docs" => %w[
+    docs/en/public-setup-surface.md
+    docs/ja/public-setup-surface.md
+  ],
   "Bilingual release docs" => %w[
     docs/en/release.md
     docs/ja/release.md
+  ],
+  "Release note candidate docs" => %w[
+    docs/en/release-note-candidates.md
+    docs/ja/release-note-candidates.md
   ]
 }.freeze
 

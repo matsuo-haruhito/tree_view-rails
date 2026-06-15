@@ -137,6 +137,8 @@ Release preparation notes:
 - Added CI changed-file policy guard coverage for workflow output key drift, docs entrypoint routing, and JavaScript npm command references.
 - Added package-sensitive CI guard coverage for `Gemfile` and `Gemfile.lock` changes so Ruby dependency updates reach gem package verification.
 - Added maintenance guard coverage for Ruby version source drift, grouped package contents verification, and Public API manifest event classification.
+- Added docs smoke and package verification coverage for grouped RenderState option docs signals, Public Setup Surface reader journeys, and README-linked public JavaScript / setup docs packaging.
+- Added setup generator optional-argument manifest guard coverage and release-note candidate docs package verification.
 
 ## 0.1.0 - 2026-05-07
 
