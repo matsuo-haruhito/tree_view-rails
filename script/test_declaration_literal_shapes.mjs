@@ -55,6 +55,22 @@ function assertBlockContains(block, pattern, message) {
   assert(pattern.test(block), message)
 }
 
+function assertSameMembers(actual, expected, message) {
+  const actualSet = new Set(actual)
+  const expectedSet = new Set(expected)
+  const missing = expected.filter((item) => !actualSet.has(item))
+  const unexpected = actual.filter((item) => !expectedSet.has(item))
+
+  assert(
+    missing.length === 0 && unexpected.length === 0,
+    [
+      message,
+      missing.length > 0 ? `Missing: ${missing.join(", ")}` : null,
+      unexpected.length > 0 ? `Unexpected: ${unexpected.join(", ")}` : null
+    ].filter(Boolean).join("\n")
+  )
+}
+
 function assertDeclarationShape(block, expectedValue, path = []) {
   Object.entries(expectedValue).forEach(([key, value]) => {
     const currentPath = [...path, key]
@@ -90,22 +106,73 @@ function assertDeclarationShape(block, expectedValue, path = []) {
 
 const manifest = loadJavascriptPackageManifest()
 const declarationSource = readFileSync("app/javascript/tree_view/index.d.ts", "utf8")
-const literalExports = {
-  TreeViewEventNames: deepCamelizeKeys(manifest.event_names),
-  TreeViewEventDetailKeys: deepCamelizeKeys(manifest.event_detail_keys),
-  TreeViewRemoteStateValues: manifest.remote_state_values,
-  TreeViewRemoteStateDataHooks: deepCamelizeKeys(manifest.remote_state_data_hooks),
-  TreeViewToolbarDataHooks: deepCamelizeKeys(manifest.toolbar_data_hooks),
-  TreeViewTransferDropPositions: manifest.transfer_drop_positions,
-  TreeViewTransferDataMimeTypes: deepCamelizeKeys(manifest.transfer_data_mime_types),
-  TreeViewControllerIdentifiers: Object.fromEntries(
-    manifest.controller_registrations.map(({ key, identifier }) => [key, identifier])
-  ),
-  TreeViewSelectionDataHooks: deepCamelizeKeys(manifest.selection_data_hooks),
-  TreeViewEmptyStateHooks: deepCamelizeKeys(manifest.empty_state_hooks)
+const expectedManifestLiteralGroups = [
+  "event_names",
+  "event_detail_keys",
+  "remote_state_values",
+  "remote_state_data_hooks",
+  "toolbar_data_hooks",
+  "transfer_drop_positions",
+  "transfer_data_mime_types",
+  "integration_hooks",
+  "selection_data_hooks",
+  "selection_checkbox_hooks",
+  "empty_state_hooks"
+]
+const literalExportsByManifestGroup = {
+  event_names: {
+    exportName: "TreeViewEventNames",
+    expectedShape: deepCamelizeKeys(manifest.event_names)
+  },
+  event_detail_keys: {
+    exportName: "TreeViewEventDetailKeys",
+    expectedShape: deepCamelizeKeys(manifest.event_detail_keys)
+  },
+  remote_state_values: {
+    exportName: "TreeViewRemoteStateValues",
+    expectedShape: manifest.remote_state_values
+  },
+  remote_state_data_hooks: {
+    exportName: "TreeViewRemoteStateDataHooks",
+    expectedShape: deepCamelizeKeys(manifest.remote_state_data_hooks)
+  },
+  toolbar_data_hooks: {
+    exportName: "TreeViewToolbarDataHooks",
+    expectedShape: deepCamelizeKeys(manifest.toolbar_data_hooks)
+  },
+  transfer_drop_positions: {
+    exportName: "TreeViewTransferDropPositions",
+    expectedShape: manifest.transfer_drop_positions
+  },
+  transfer_data_mime_types: {
+    exportName: "TreeViewTransferDataMimeTypes",
+    expectedShape: deepCamelizeKeys(manifest.transfer_data_mime_types)
+  },
+  integration_hooks: {
+    exportName: "TreeViewIntegrationHooks",
+    expectedShape: deepCamelizeKeys(manifest.integration_hooks)
+  },
+  selection_data_hooks: {
+    exportName: "TreeViewSelectionDataHooks",
+    expectedShape: deepCamelizeKeys(manifest.selection_data_hooks)
+  },
+  selection_checkbox_hooks: {
+    exportName: "TreeViewSelectionCheckboxHooks",
+    expectedShape: deepCamelizeKeys(manifest.selection_checkbox_hooks)
+  },
+  empty_state_hooks: {
+    exportName: "TreeViewEmptyStateHooks",
+    expectedShape: deepCamelizeKeys(manifest.empty_state_hooks)
+  }
 }
 
-Object.entries(literalExports).forEach(([exportName, expectedShape]) => {
+assertSameMembers(
+  Object.keys(literalExportsByManifestGroup),
+  expectedManifestLiteralGroups,
+  "script/test_declaration_literal_shapes.mjs must cover every javascript_package_root literal export group"
+)
+
+Object.values(literalExportsByManifestGroup).forEach(({ exportName, expectedShape }) => {
   assertDeclarationShape(declarationBlock(declarationSource, exportName), expectedShape, [exportName])
 })
 
