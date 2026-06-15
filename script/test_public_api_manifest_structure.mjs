@@ -86,6 +86,11 @@ function assertRequiredObjectKeys(value, path, keys) {
   keys.forEach((key) => assertObject(value[key], `${path}.${key}`))
 }
 
+function assertRequiredKeys(value, path, keys) {
+  assertObject(value, path)
+  keys.forEach((key) => assert(key in value, `${path} missing required key: ${key}`))
+}
+
 function assertPathTreeBuilderNodeShapes(value, path, keys) {
   assertRequiredObjectKeys(value, path, keys)
   keys.forEach((key) => {
@@ -151,7 +156,7 @@ function assertEventClassification(javascriptPackageRoot) {
     "javascript_package_root.event_detail_keys",
     requiredEventDetailGroups
   )
-  assertRequiredObjectKeys(
+  assertRequiredKeys(
     javascriptPackageRoot.event_names_without_detail,
     "javascript_package_root.event_names_without_detail",
     requiredNoDetailGroups
