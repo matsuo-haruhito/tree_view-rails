@@ -3,50 +3,83 @@
 
 require "rubygems/package"
 
-# Keep representative English and Japanese files in this list so package
+# Keep representative English and Japanese files in these groups so package
 # verification covers the bilingual locale, public API, docs entrypoints,
-# release docs, and user-facing mockup entrypoints shipped by the gem.
-REQUIRED_PACKAGED_PATHS = %w[
-  app/helpers/tree_view_helper.rb
-  app/helpers/tree_view_helper/support.rb
-  app/helpers/tree_view_helper/rendering.rb
-  app/helpers/tree_view_helper/dom.rb
-  app/helpers/tree_view_helper/row_attributes.rb
-  app/helpers/tree_view_helper/selection.rb
-  app/helpers/tree_view_helper/transfer.rb
-  app/helpers/tree_view_helper/visuals.rb
-  app/helpers/tree_view_helper/render_scope.rb
-  app/helpers/tree_view_helper/lazy_loading.rb
-  app/helpers/tree_view_helper/toolbar.rb
-  app/helpers/tree_view_breadcrumb_helper.rb
-  app/views/tree_view/_tree_row.html.erb
-  app/assets/stylesheets/tree_view.scss
-  app/javascript/tree_view/index.js
-  app/javascript/tree_view/index.d.ts
-  app/javascript/tree_view/client_controller.js
-  app/javascript/tree_view/remote_state_controller.js
-  app/javascript/tree_view/selection_controller.js
-  app/javascript/tree_view/state_controller.js
-  app/javascript/tree_view/transfer_controller.js
-  config/importmap.tree_view.rb
-  config/public_api_manifest.yml
-  config/locales/tree_view.toolbar.en.yml
-  config/locales/tree_view.toolbar.ja.yml
-  CHANGELOG.md
-  README.md
-  docs/README.md
-  docs/mockups/README.md
-  docs/mockups/review-gallery.html
-  docs/mockups/default-tree.html
-  docs/mockups/default-tree.css
-  docs/mockups/assets/readme-default-tree.svg
-  docs/en/installation.md
-  docs/ja/installation.md
-  docs/en/public-api.md
-  docs/ja/public-api.md
-  docs/en/release.md
-  docs/ja/release.md
-].freeze
+# release docs, and user-facing mockup entrypoints shipped by the gem. The
+# groups are intentionally representative rather than a mirror of the gemspec
+# glob; add a path here when a new public-facing surface needs release-package
+# evidence beyond inclusion in `spec.files`.
+REQUIRED_PACKAGED_PATH_GROUPS = {
+  "Rails helpers" => %w[
+    app/helpers/tree_view_helper.rb
+    app/helpers/tree_view_helper/support.rb
+    app/helpers/tree_view_helper/rendering.rb
+    app/helpers/tree_view_helper/dom.rb
+    app/helpers/tree_view_helper/row_attributes.rb
+    app/helpers/tree_view_helper/selection.rb
+    app/helpers/tree_view_helper/transfer.rb
+    app/helpers/tree_view_helper/visuals.rb
+    app/helpers/tree_view_helper/render_scope.rb
+    app/helpers/tree_view_helper/lazy_loading.rb
+    app/helpers/tree_view_helper/toolbar.rb
+    app/helpers/tree_view_breadcrumb_helper.rb
+  ],
+  "Rails views and assets" => %w[
+    app/views/tree_view/_tree_row.html.erb
+    app/assets/stylesheets/tree_view.scss
+  ],
+  "JavaScript entrypoints" => %w[
+    app/javascript/tree_view/index.js
+    app/javascript/tree_view/index.d.ts
+    app/javascript/tree_view/client_controller.js
+    app/javascript/tree_view/remote_state_controller.js
+    app/javascript/tree_view/selection_controller.js
+    app/javascript/tree_view/state_controller.js
+    app/javascript/tree_view/transfer_controller.js
+  ],
+  "Configuration and locales" => %w[
+    config/importmap.tree_view.rb
+    config/public_api_manifest.yml
+    config/locales/tree_view.toolbar.en.yml
+    config/locales/tree_view.toolbar.ja.yml
+  ],
+  "Root docs" => %w[
+    CHANGELOG.md
+    README.md
+    docs/README.md
+  ],
+  "Mockup entrypoints" => %w[
+    docs/mockups/README.md
+    docs/mockups/review-gallery.html
+    docs/mockups/default-tree.html
+    docs/mockups/default-tree.css
+    docs/mockups/assets/readme-default-tree.svg
+  ],
+  "Bilingual setup and public API docs" => %w[
+    docs/en/installation.md
+    docs/ja/installation.md
+    docs/en/public-api.md
+    docs/ja/public-api.md
+  ],
+  "README-linked public JavaScript docs" => %w[
+    docs/en/js-events.md
+    docs/ja/js-events.md
+  ],
+  "Public setup surface docs" => %w[
+    docs/en/public-setup-surface.md
+    docs/ja/public-setup-surface.md
+  ],
+  "Bilingual release docs" => %w[
+    docs/en/release.md
+    docs/ja/release.md
+  ],
+  "Release note candidate docs" => %w[
+    docs/en/release-note-candidates.md
+    docs/ja/release-note-candidates.md
+  ]
+}.freeze
+
+REQUIRED_PACKAGED_PATHS = REQUIRED_PACKAGED_PATH_GROUPS.values.flatten.freeze
 
 INSTALLATION_DOC_PATHS = %w[
   docs/en/installation.md
@@ -81,7 +114,10 @@ gem_path = ARGV.first || Dir[File.join(root, "tree_view-*.gem")].max_by { |path|
 abort "No built gem found. Run `gem build tree_view.gemspec` first." unless gem_path
 
 files = Gem::Package.new(gem_path).spec.files
-missing = REQUIRED_PACKAGED_PATHS.reject { |path| files.include?(path) }
+missing_by_group = REQUIRED_PACKAGED_PATH_GROUPS.transform_values do |paths|
+  paths.reject { |path| files.include?(path) }
+end.reject { |_group, paths| paths.empty? }
+missing = missing_by_group.values.flatten
 missing_installation_signals = INSTALLATION_DOC_PATHS.to_h do |path|
   content = File.read(File.join(root, path))
   [path, INSTALLATION_REQUIRED_SIGNALS.reject { |signal| content.include?(signal) }]
@@ -100,9 +136,9 @@ if missing.empty? && missing_installation_signals.empty? && forbidden_packaged_d
 else
   warn "Gem package contents verification failed: #{File.basename(gem_path)}"
 
-  unless missing.empty?
-    warn "Missing packaged files:"
-    missing.each { |path| warn "  - #{path}" }
+  missing_by_group.each do |group, paths|
+    warn "Missing packaged files for #{group}:"
+    paths.each { |path| warn "  - #{path}" }
   end
 
   missing_installation_signals.each do |path, signals|
