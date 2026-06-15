@@ -87,6 +87,11 @@ export const TreeViewTransferDropPositions = Object.freeze({
   after: "after"
 })
 
+export const TreeViewTransferDataAttributes = Object.freeze({
+  payload: "data-tree-transfer-payload",
+  disabled: "data-tree-transfer-disabled"
+})
+
 export const TreeViewTransferDataMimeTypes = Object.freeze({
   applicationJson: "application/json",
   textPlain: "text/plain"
