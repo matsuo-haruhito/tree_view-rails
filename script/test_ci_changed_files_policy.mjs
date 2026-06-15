@@ -227,6 +227,32 @@ assertJobMatches(javascriptJob, /uses: actions\/setup-node@v6/, `${workflowPath}
 assertJobMatches(javascriptJob, /node-version: "22"/, `${workflowPath} jobs.javascript must keep the Node 22 CI lane`);
 assertJobMatches(javascriptJob, /cache: npm/, `${workflowPath} jobs.javascript must keep npm cache enabled`);
 
+const dockerDevelopmentSetupJob = workflowJobBlock(workflowSource, "docker_development_setup");
+assertJobMatches(
+  dockerDevelopmentSetupJob,
+  /if: github\.event_name == 'pull_request' && needs\.changes\.outputs\.docker_setup_sensitive == 'true'/,
+  `${workflowPath} jobs.docker_development_setup must stay gated by docker_setup_sensitive pull request changes`
+);
+assertJobMatches(
+  dockerDevelopmentSetupJob,
+  /needs: changes/,
+  `${workflowPath} jobs.docker_development_setup must depend on changed-file detection`
+);
+assertJobMatches(
+  dockerDevelopmentSetupJob,
+  /run: docker compose build app/,
+  `${workflowPath} jobs.docker_development_setup must keep the Docker app build smoke`
+);
+assertJobMatches(
+  dockerDevelopmentSetupJob,
+  /run: docker compose run --rm app/,
+  `${workflowPath} jobs.docker_development_setup must keep the Docker app setup smoke`
+);
+assert.ok(
+  dockerDevelopmentSetupJob.includes('node --version | grep -E "^v22\\." && npm --version && npm install'),
+  `${workflowPath} jobs.docker_development_setup must keep the representative Node/npm setup smoke`
+);
+
 const gemPackageJob = workflowJobBlock(workflowSource, "gem_package");
 assertJobMatches(gemPackageJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.gem_package must keep Ruby 3.3`);
 assertJobMatches(gemPackageJob, /bundler-cache: true/, `${workflowPath} jobs.gem_package must keep bundler-cache enabled`);
