@@ -140,6 +140,7 @@ Release preparation notes:
 - Added docs smoke and package verification coverage for grouped RenderState option docs signals, Public Setup Surface reader journeys, and README-linked public JavaScript / setup docs packaging.
 - Added setup generator optional-argument manifest guard coverage and release-note candidate docs package verification.
 - Added CI changed-file detection workflow signal and configuration docs signal coverage for base-ref diff routing and `TreeView.configure` option docs.
+- Added controller entries contract smoke and `tree_view_rows` / Windowed Rendering docs signal coverage to the docs entrypoint suite.
 
 ## 0.1.0 - 2026-05-07
 
