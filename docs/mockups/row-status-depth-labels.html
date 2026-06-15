@@ -108,6 +108,103 @@
   background: #ecfdf5;
   color: #047857;
 }
+
+.mock-status-heavy-table th,
+.mock-status-heavy-table td {
+  vertical-align: top;
+}
+
+.mock-status-heavy-table .tree-toggle-cell {
+  min-width: 18rem;
+}
+
+.mock-business-stack {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.mock-business-stack strong {
+  color: #0f172a;
+}
+
+.mock-business-meta {
+  color: #52606d;
+  font-size: 0.86rem;
+}
+
+.mock-badge-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mock-status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.7rem;
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.mock-status-badge--ready {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mock-status-badge--review {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.mock-status-badge--blocked {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.mock-action-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.mock-action-link,
+.mock-action-disabled {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  border-radius: 8px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mock-action-link {
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.mock-action-disabled {
+  border: 1px solid #e5e7eb;
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.mock-action-note {
+  display: block;
+  margin-top: 0.35rem;
+  color: #52606d;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 720px) {
+  .mock-status-heavy-table .tree-toggle-cell {
+    min-width: 15rem;
+  }
+}
 </style>
 </head>
 <body>
@@ -210,6 +307,99 @@
             </td>
             <td><span class="tree-depth-label mock-depth-label--leaf">record</span></td>
             <td>Disabled row styling, disabled selection, and disabled reason metadata are related but separate cues.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="status-heavy-composition-heading">
+      <h2 id="status-heavy-composition-heading">Status-heavy table composition</h2>
+      <p>
+        This second pass keeps the same row status hooks but adds business columns, status badges, and host-app-owned
+        action availability in one dense table. It is a layout review surface, not an authorization or workflow contract.
+      </p>
+      <table class="tree-view-table mock-status-heavy-table">
+        <thead>
+          <tr>
+            <th scope="col">tree item</th>
+            <th scope="col">workflow</th>
+            <th scope="col">owner and due date</th>
+            <th scope="col">actions</th>
+            <th scope="col">boundary cue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tree-row is-expanded" data-tree-node-key="program:onboarding" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Expanded program">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                  <span class="tree-depth-label mock-depth-label--team">program</span>
+                  <span class="mock-node-title">Customer onboarding</span>
+                </span>
+              </span>
+            </td>
+            <td>
+              <div class="mock-business-stack">
+                <div class="mock-badge-line"><span class="mock-status-badge mock-status-badge--ready">ready</span><span class="mock-status mock-status--active">on track</span></div>
+                <span class="mock-business-meta">4 active child tasks</span>
+              </div>
+            </td>
+            <td><div class="mock-business-stack"><strong>Operations lead</strong><span class="mock-business-meta">Due this week</span></div></td>
+            <td>
+              <div class="mock-action-set"><a class="mock-action-link" href="#">Review</a><a class="mock-action-link" href="#">Open</a></div>
+              <span class="mock-action-note">Host app decides final action labels and permission checks.</span>
+            </td>
+            <td>Normal rows can combine TreeView hierarchy, badges, and business columns without extra generated hooks.</td>
+          </tr>
+          <tr class="tree-row tree-view-row--readonly mock-host-row--readonly" data-tree-node-key="phase:legal-review" data-tree-depth="1" data-tree-view-row-readonly="true" aria-level="2">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Readonly phase">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">branch</span>
+                  <span class="tree-depth-label mock-depth-label--folder">phase</span>
+                  <span class="mock-node-title">Legal review</span>
+                </span>
+              </span>
+            </td>
+            <td>
+              <div class="mock-business-stack">
+                <div class="mock-badge-line"><span class="mock-status-badge mock-status-badge--review">review</span><span class="mock-status mock-status--pending">readonly</span></div>
+                <span class="mock-business-meta">Waiting for external sign-off</span>
+              </div>
+            </td>
+            <td><div class="mock-business-stack"><strong>Legal partner</strong><span class="mock-business-meta">Due tomorrow</span></div></td>
+            <td>
+              <div class="mock-action-set"><a class="mock-action-link" href="#">View</a><span class="mock-action-disabled" aria-disabled="true">Edit locked</span></div>
+              <span class="mock-action-note">Readonly tone and disabled action copy are host-app presentation decisions.</span>
+            </td>
+            <td>TreeView exposes readonly row hooks; host apps decide whether edit actions remain visible, disabled, or hidden.</td>
+          </tr>
+          <tr class="tree-row tree-view-row--disabled mock-host-row--disabled" data-tree-node-key="task:blocked-record" data-tree-depth="2" data-tree-view-row-disabled="true" data-tree-view-row-disabled-reason="Blocked by dependency" aria-level="3">
+            <td class="tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Disabled task">
+                <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                <span class="tree-toggle__control">
+                  <span class="tree-toggle__level">leaf</span>
+                  <span class="tree-depth-label mock-depth-label--leaf">task</span>
+                  <span class="mock-node-title">Blocked account setup</span>
+                </span>
+              </span>
+            </td>
+            <td>
+              <div class="mock-business-stack">
+                <div class="mock-badge-line"><span class="mock-status-badge mock-status-badge--blocked">blocked</span><span class="mock-status mock-status--error">disabled</span></div>
+                <span class="mock-business-meta">Dependency unresolved</span>
+              </div>
+            </td>
+            <td><div class="mock-business-stack"><strong>Support queue</strong><span class="mock-business-meta">No due date</span></div></td>
+            <td>
+              <div class="mock-action-set"><span class="mock-action-disabled" aria-disabled="true">Unavailable</span></div>
+              <span class="mock-action-note">Action availability should not be communicated by row color alone.</span>
+            </td>
+            <td>Disabled rows can carry a reason hook, but final recovery flow and permission copy stay outside TreeView.</td>
           </tr>
         </tbody>
       </table>
