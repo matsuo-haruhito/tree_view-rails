@@ -52,6 +52,8 @@ function isPackageSensitivePath(file) {
     file === "README.md" ||
     file === "CHANGELOG.md" ||
     file.startsWith("docs/") ||
+    file === "Gemfile" ||
+    file === "Gemfile.lock" ||
     file === "tree_view.gemspec" ||
     file === "package.json" ||
     file === "package-lock.json" ||
