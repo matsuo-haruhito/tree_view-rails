@@ -32,6 +32,11 @@ const checks = [
     args: ["script/test_public_setup_surface_docs_signals.mjs"]
   },
   {
+    group: "Configuration docs signals",
+    command: "node",
+    args: ["script/test_configuration_docs_signals.mjs"]
+  },
+  {
     group: "Breadcrumb docs signals",
     command: "node",
     args: ["script/test_breadcrumb_docs_signals.mjs"]
@@ -80,6 +85,11 @@ const checks = [
     group: "Public API docs signals",
     command: "node",
     args: ["script/test_public_api_docs_signals.mjs"]
+  },
+  {
+    group: "tree_view_rows helper docs signals",
+    command: "node",
+    args: ["script/test_tree_view_rows_docs_signals.mjs"]
   },
   {
     group: "RenderState grouped option docs signals",
