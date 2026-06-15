@@ -209,6 +209,12 @@ const requiredGroupedOptionKeys = [
   "row_status"
 ]
 
+const requiredLocalizedNameI18nKeyGroups = [
+  "model_names",
+  "attribute_names",
+  "node_type_names"
+]
+
 const requiredIntegrationHookKeys = ["state", "remote_state", "transfer"]
 
 const manifest = loadManifest()
@@ -232,7 +238,11 @@ assertObjectWithLists(manifest.resource_table_render_state_call, "resource_table
 assertString(manifest.resource_table_render_state_call.render_options_contract, "resource_table_render_state_call.render_options_contract")
 assertUniqueStringList(manifest.render_state_callback_builder_keys, "render_state_callback_builder_keys")
 
-assertObject(manifest.localized_name_i18n_keys, "localized_name_i18n_keys")
+assertRequiredObjectKeys(
+  manifest.localized_name_i18n_keys,
+  "localized_name_i18n_keys",
+  requiredLocalizedNameI18nKeyGroups
+)
 for (const [name, config] of Object.entries(manifest.localized_name_i18n_keys)) {
   assertObject(config, `localized_name_i18n_keys.${name}`)
   assertString(config.helper, `localized_name_i18n_keys.${name}.helper`)
@@ -251,6 +261,7 @@ assertString(
   "localized_name_i18n_keys.node_type_names.lookup_prefix"
 )
 
+assertObject(manifest.setup_generators, "setup_generators")
 assertObject(manifest.setup_generators.persisted_state_install, "setup_generators.persisted_state_install")
 assertString(manifest.setup_generators.persisted_state_install.name, "setup_generators.persisted_state_install.name")
 assertString(manifest.setup_generators.persisted_state_install.class_name, "setup_generators.persisted_state_install.class_name")
