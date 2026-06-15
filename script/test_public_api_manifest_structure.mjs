@@ -265,6 +265,11 @@ assertObject(manifest.setup_generators, "setup_generators")
 assertObject(manifest.setup_generators.persisted_state_install, "setup_generators.persisted_state_install")
 assertString(manifest.setup_generators.persisted_state_install.name, "setup_generators.persisted_state_install.name")
 assertString(manifest.setup_generators.persisted_state_install.class_name, "setup_generators.persisted_state_install.class_name")
+assertEntries(
+  manifest.setup_generators.persisted_state_install.optional_arguments,
+  "setup_generators.persisted_state_install.optional_arguments",
+  ["name", "banner"]
+)
 assertUniqueStringList(
   manifest.setup_generators.persisted_state_install.generated_paths,
   "setup_generators.persisted_state_install.generated_paths"
