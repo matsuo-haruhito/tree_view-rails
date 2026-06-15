@@ -136,6 +136,7 @@ Release preparation notes:
 - Added docs smoke coverage for troubleshooting diagnostics reader journeys, toolbar contract source docs, public API hook signals, mockup review flow / gallery alignment, and docs entrypoint group selection.
 - Added CI changed-file policy guard coverage for workflow output key drift, docs entrypoint routing, and JavaScript npm command references.
 - Added package-sensitive CI guard coverage for `Gemfile` and `Gemfile.lock` changes so Ruby dependency updates reach gem package verification.
+- Added maintenance guard coverage for Ruby version source drift, grouped package contents verification, and Public API manifest event classification.
 
 ## 0.1.0 - 2026-05-07
 
