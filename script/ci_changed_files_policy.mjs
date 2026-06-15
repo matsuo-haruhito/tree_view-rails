@@ -4,7 +4,8 @@ export function classifyChangedFiles(files) {
     mockups_changed: false,
     browser_smoke_changed: false,
     package_sensitive: false,
-    docker_setup_sensitive: false
+    docker_setup_sensitive: false,
+    docs_entrypoint_sensitive: false
   };
 
   for (const file of files.map((entry) => entry.trim()).filter(Boolean)) {
@@ -27,6 +28,10 @@ export function classifyChangedFiles(files) {
     if (isDockerSetupSensitivePath(file)) {
       result.docker_setup_sensitive = true;
     }
+
+    if (isDocsEntrypointSensitivePath(file)) {
+      result.docs_entrypoint_sensitive = true;
+    }
   }
 
   return result;
@@ -47,6 +52,8 @@ function isPackageSensitivePath(file) {
     file === "README.md" ||
     file === "CHANGELOG.md" ||
     file.startsWith("docs/") ||
+    file === "Gemfile" ||
+    file === "Gemfile.lock" ||
     file === "tree_view.gemspec" ||
     file === "package.json" ||
     file === "package-lock.json" ||
@@ -61,6 +68,15 @@ function isPackageSensitivePath(file) {
     file.startsWith("app/assets/") ||
     file.startsWith("app/javascript/") ||
     file.startsWith("config/locales/")
+  );
+}
+
+function isDocsEntrypointSensitivePath(file) {
+  return (
+    file === "README.md" ||
+    file === "CHANGELOG.md" ||
+    file.startsWith("docs/") ||
+    file === "config/public_api_manifest.yml"
   );
 }
 
