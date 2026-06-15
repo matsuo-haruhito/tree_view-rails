@@ -93,6 +93,7 @@ Release preparation notes:
 - Added transfer disabled / invalid boundary states to the drop-position mockup and updated the mockup review guidance.
 - Added static mockup references for multi-tree selection forms, toggle icon states, high-contrast state cues, reduced-motion state cues, and localized row labels.
 - Added focused mockup references for RenderWindow boundary metadata and direction-aware visual cue boundaries.
+- Added a status-heavy row composition mockup section for dense business columns, row status cues, and host-app-owned action availability.
 - Added a current-branch sidebar breadcrumb mockup for reviewing route context and row-local hierarchy cues in narrow panes.
 - Added direction-aware styling boundary docs for host-app-owned RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing overrides.
 - Added Decision guide guidance for choosing Static, Turbo, or Client-side toggle mode before tuning render depth or loading strategy.
@@ -133,6 +134,9 @@ Release preparation notes:
 - Added README orientation asset smoke coverage for the root README image, default-tree baseline mockup, and focused mockup review links.
 - Expanded package verification coverage for TreeViewHelper subfiles, the breadcrumb helper, representative Japanese toolbar locale, and Japanese release docs files.
 - Added docs smoke coverage for troubleshooting diagnostics reader journeys, toolbar contract source docs, public API hook signals, mockup review flow / gallery alignment, and docs entrypoint group selection.
+- Added CI changed-file policy guard coverage for workflow output key drift, docs entrypoint routing, and JavaScript npm command references.
+- Added package-sensitive CI guard coverage for `Gemfile` and `Gemfile.lock` changes so Ruby dependency updates reach gem package verification.
+- Added maintenance guard coverage for Ruby version source drift, grouped package contents verification, and Public API manifest event classification.
 
 ## 0.1.0 - 2026-05-07
 
