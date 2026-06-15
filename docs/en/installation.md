@@ -68,7 +68,7 @@ Example:
 
 The packaged stylesheet is a quick-start baseline for TreeView's reusable structure and lightweight state cues. It covers common row states such as selected, current, collapsed, loading, error, and drop target rows, but the final theme, density, brand colors, and product wording remain host-app responsibilities.
 
-When the host app needs a different visual language, keep the import and override the documented row, toggle, and table selectors in the host app stylesheet after the TreeView import. Do not treat the packaged colors as a required public theme API; they are defaults that host apps may replace with their own class selector rules.
+When the host app needs a different visual language, keep the import and override the documented row, toggle, and table selectors in the host app stylesheet after the TreeView import. For the packaged stylesheet's small documented CSS custom property surface, see [Styling state cues](styling-state-cues.md). These tokens are host-app override guidance for state cue colors, not a complete theme system or a manifest-backed Ruby / JavaScript API.
 
 ## JavaScript / importmap
 
@@ -99,6 +99,22 @@ registerTreeViewControllers(application)
 ```
 
 Use `registerTreeViewControllers(application)` as the quick-start path for JavaScript-powered TreeView features. Host apps that need selective registration or a custom boot order can use `TreeViewControllerIdentifiers` from the public JavaScript surface; see [Public API](public-api.md#javascript-surface).
+
+## Persisted-state setup generator
+
+When the host app enables persisted expansion state, run the persisted-state install generator after the gem is installed:
+
+```bash
+bin/rails generate tree_view:state:install
+```
+
+Pass an owner model name when the generated concern should be included in an existing owner model:
+
+```bash
+bin/rails generate tree_view:state:install User
+```
+
+The generator name, optional owner argument, and generated destination paths are documented as the [Public Setup Surface](public-setup-surface.md). That path-level contract tracks `db/migrate/*_create_tree_view_states.rb`, `app/models/tree_view_state.rb`, and `app/models/concerns/tree_view_state_owner.rb` without freezing the migration schema or generated template contents. Review the generated files in the host app, then continue with [Persisted State](persisted-state.md) for storage ownership, authorization, save timing, cleanup policy, controller actions, and UI wiring boundaries.
 
 ## Packaged files
 
