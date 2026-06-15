@@ -133,6 +133,7 @@ Release preparation notes:
 - Added README orientation asset smoke coverage for the root README image, default-tree baseline mockup, and focused mockup review links.
 - Expanded package verification coverage for TreeViewHelper subfiles, the breadcrumb helper, representative Japanese toolbar locale, and Japanese release docs files.
 - Added docs smoke coverage for troubleshooting diagnostics reader journeys, toolbar contract source docs, public API hook signals, mockup review flow / gallery alignment, and docs entrypoint group selection.
+- Added CI changed-file policy guard coverage for workflow output key drift, docs entrypoint routing, and JavaScript npm command references.
 
 ## 0.1.0 - 2026-05-07
 
