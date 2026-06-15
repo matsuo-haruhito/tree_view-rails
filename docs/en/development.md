@@ -35,10 +35,11 @@ npm test
 npm run test:entrypoints
 npm run test:docs-entrypoints
 npm run test:node-version-sources
+npm run test:ruby-version-sources
 npm run test:browser
 ```
 
-Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, repository-only maintainer entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use `npm run test:node-version-sources` when you only need to confirm that `.nvmrc`, `package.json` `engines.node`, and CI workflow `node-version` still agree on Node 22. Use the individual npm commands when you are narrowing a failure.
+Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, repository-only maintainer entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use `npm run test:node-version-sources` when you only need to confirm that `.nvmrc`, `package.json` `engines.node`, and CI workflow `node-version` still agree on Node 22. Use `npm run test:ruby-version-sources` when you only need to confirm that the README, gemspec, CI workflow, Dockerfile Ruby base image, Development docs, and package script still agree on the supported Ruby sources and representative Ruby version matrix. Use the individual npm commands when you are narrowing a failure.
 
 For docs entrypoint suite triage, run `npm run test:docs-entrypoints -- --list` to print the numbered groups and commands. Then run `npm run test:docs-entrypoints -- --only <group-or-index>` with the 1-based number from that list, an exact group name, a case-insensitive group name, or a unique partial group name. Unknown, ambiguous, or out-of-range values exit non-zero and print the available groups plus the `--list` hint.
 
