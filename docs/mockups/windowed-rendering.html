@@ -182,6 +182,77 @@
   text-transform: uppercase;
 }
 
+.mock-virtual-boundary {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #dde4ec;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.mock-virtual-boundary__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.mock-virtual-card {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #d8e2ec;
+  border-radius: 12px;
+  background: #fbfdff;
+}
+
+.mock-virtual-card--host {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.mock-virtual-card__title {
+  margin: 0;
+  color: #102a43;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.mock-virtual-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mock-virtual-list li {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #e4e7eb;
+  border-radius: 10px;
+  background: #fff;
+  color: #334155;
+}
+
+.mock-virtual-flow {
+  display: grid;
+  gap: 8px;
+}
+
+.mock-virtual-flow__step {
+  display: grid;
+  gap: 4px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  background: #eff6ff;
+}
+
+.mock-virtual-flow__step strong {
+  color: #1d4ed8;
+}
+
 .tree-row.is-window-current {
   background: #ecfeff;
 }
@@ -198,7 +269,8 @@
 }
 
 @media (max-width: 760px) {
-  .mock-windowed-boundary-grid {
+  .mock-windowed-boundary-grid,
+  .mock-virtual-boundary__grid {
     grid-template-columns: 1fr;
   }
 }
@@ -211,7 +283,7 @@
       <h1>TreeView windowed rendering mock</h1>
       <p>
         Static HTML for reviewing representative <code>offset</code> and <code>limit</code> slices, current-row anchoring,
-        and previous or next metadata from windowed rendering. Pagination controls, query state, and data fetching remain host-app responsibilities and are intentionally not modeled here.
+        and previous or next metadata from windowed rendering. Pagination controls, query state, data fetching, scroll observers, and DOM virtualization remain host-app responsibilities and are intentionally not modeled here.
       </p>
     </header>
 
@@ -385,7 +457,7 @@
           </div>
           <div class="mock-windowed-body">
             <p class="mock-windowed-callout">
-              TreeView does not decide what “current” means. The host app owns that choice, then builds a window that keeps the chosen row inside view.
+              TreeView does not decide what "current" means. The host app owns that choice, then builds a window that keeps the chosen row inside view.
             </p>
             <div class="mock-windowed-pagination" aria-label="Anchored window availability">
               <span class="is-available">previous_offset: 69</span>
@@ -541,7 +613,7 @@
               <tbody>
                 <tr>
                   <td><code>rows</code>, <code>offset</code>, <code>limit</code>, <code>total_count</code>, <code>has_previous?</code>, and <code>has_next?</code></td>
-                  <td>Whether those values become numbered pages, “load more” controls, or infinite-scroll observers</td>
+                  <td>Whether those values become numbered pages, "load more" controls, or infinite-scroll observers</td>
                 </tr>
                 <tr>
                   <td>Visible-row slicing after expansion state and render scope are applied</td>
@@ -651,6 +723,76 @@
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      <div class="mock-windowed-state">
+        <div class="mock-windowed-state__header">
+          <p class="mock-windowed-eyebrow">Mode E</p>
+          <h2>RenderWindow versus virtual scrolling</h2>
+          <p class="mock-windowed-note">
+            Use this state when the review goal is to separate TreeView's render metadata from a host-app-owned scroll virtualization layer.
+          </p>
+        </div>
+
+        <div class="mock-virtual-boundary" aria-label="RenderWindow and virtual scrolling responsibility boundary">
+          <p class="mock-windowed-callout">
+            <code>RenderWindow</code> can reduce the number of TreeView rows emitted for a known visible list. It does not observe scroll position, recycle DOM nodes, synchronize URL state, or choose an external virtualization library.
+          </p>
+          <div class="mock-virtual-boundary__grid">
+            <article class="mock-virtual-card" aria-labelledby="render-window-owned-heading">
+              <h3 id="render-window-owned-heading" class="mock-virtual-card__title">TreeView render control</h3>
+              <ul class="mock-virtual-list">
+                <li><code>offset</code>, <code>limit</code>, visible row range, and boundary metadata.</li>
+                <li>Current-row anchoring once the host app has chosen the current record.</li>
+                <li>HTML output reduction for rows that are already known to the render pass.</li>
+              </ul>
+            </article>
+            <article class="mock-virtual-card mock-virtual-card--host" aria-labelledby="host-virtual-owned-heading">
+              <h3 id="host-virtual-owned-heading" class="mock-virtual-card__title">Host app virtualization</h3>
+              <ul class="mock-virtual-list">
+                <li>Scroll observers, viewport measurement, overscan, and DOM recycling.</li>
+                <li>Route or URL state for the current scroll window and restore behavior.</li>
+                <li>External virtualization library setup, fetch timing, and loading placeholders.</li>
+              </ul>
+            </article>
+          </div>
+          <div class="mock-virtual-flow" aria-label="Representative integration flow">
+            <div class="mock-virtual-flow__step">
+              <strong>1. Host app chooses the scroll policy.</strong>
+              <span>It decides whether the screen uses pagination, load-more, an IntersectionObserver, or a virtualization library.</span>
+            </div>
+            <div class="mock-virtual-flow__step">
+              <strong>2. Host app maps viewport state to render inputs.</strong>
+              <span>When useful, it converts its scroll state into a stable <code>offset</code> and <code>limit</code> for TreeView.</span>
+            </div>
+            <div class="mock-virtual-flow__step">
+              <strong>3. TreeView renders the requested window.</strong>
+              <span>The output keeps row cues and metadata readable, but final scrolling behavior remains outside the gem contract.</span>
+            </div>
+          </div>
+          <table class="mock-windowed-table">
+            <thead>
+              <tr>
+                <th scope="col">Review question</th>
+                <th scope="col">Boundary answer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Can this mock stand in for a virtual scrolling engine?</td>
+                <td>No. It only shows how a render window looks after the host app has chosen which rows to request.</td>
+              </tr>
+              <tr>
+                <td>Can a host app combine both approaches?</td>
+                <td>Yes, but the host app owns observer state, overscan, fetch policy, and restore behavior.</td>
+              </tr>
+              <tr>
+                <td>Should TreeView add infinite scroll controls here?</td>
+                <td>No. This mock keeps scroll-position-driven controls out of the gem surface.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
