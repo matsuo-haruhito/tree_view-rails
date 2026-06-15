@@ -28,6 +28,7 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   diagnostics
   resource_table_render_state_call
   render_state_callback_builder_keys
+  css_custom_property_tokens
   javascript_package_root
 ].freeze
 
@@ -117,6 +118,15 @@ RSpec.describe "Public API manifest structure" do
     expect(modes).to be_an(Array)
     expect(modes).not_to be_empty
     expect(modes).to all(be_a(String))
+  end
+
+  it "keeps CSS custom property tokens shaped as a non-empty string list" do
+    tokens = manifest.fetch("css_custom_property_tokens")
+
+    expect(tokens).to be_an(Array)
+    expect(tokens).not_to be_empty
+    expect(tokens).to all(be_a(String))
+    expect(tokens).to all(start_with("--tree-view-"))
   end
 
   it "keeps VisibleRows row metadata shaped as non-empty string lists" do
