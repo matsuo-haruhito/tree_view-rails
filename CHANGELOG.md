@@ -68,7 +68,7 @@ Release preparation notes:
 - Added render log level docs in Japanese and English.
 - Added JavaScript event contract docs in Japanese and English for public Stimulus events and payload details.
 - Clarified JavaScript event contract docs that `TreeViewEventDetailKeys` mirrors documented detail key names for machine-readable test assertions without changing event payload shape.
-- Clarified release checklist guidance for documented JavaScript wiring surfaces, including `data-tree-view-*` integration hooks and selection controller host-element value attributes, alongside machine-readable package-root exports.
+- Clarified release checklist guidance for documented JavaScript wiring surfaces, including `data-tree_view-*` integration hooks and selection controller host-element value attributes, alongside machine-readable package-root exports.
 - Added migration guides in Japanese and English to summarize compatibility promises, deprecations, rename handling, and release-note expectations.
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified development docs for the Ruby-backed `npm run test:entrypoints` manifest loader path and setup expectations.
@@ -93,6 +93,7 @@ Release preparation notes:
 - Added transfer disabled / invalid boundary states to the drop-position mockup and updated the mockup review guidance.
 - Added static mockup references for multi-tree selection forms, toggle icon states, high-contrast state cues, reduced-motion state cues, and localized row labels.
 - Added focused mockup references for RenderWindow boundary metadata and direction-aware visual cue boundaries.
+- Added a status-heavy row composition mockup section for dense business columns, row status cues, and host-app-owned action availability.
 - Added a current-branch sidebar breadcrumb mockup for reviewing route context and row-local hierarchy cues in narrow panes.
 - Added direction-aware styling boundary docs for host-app-owned RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing overrides.
 - Added Decision guide guidance for choosing Static, Turbo, or Client-side toggle mode before tuning render depth or loading strategy.
