@@ -35,10 +35,11 @@ npm test
 npm run test:entrypoints
 npm run test:docs-entrypoints
 npm run test:node-version-sources
+npm run test:ruby-version-sources
 npm run test:browser
 ```
 
-CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。docs-only failure を、docs entrypoints、repository-only maintainer entrypoints、README Quick Start signal、Public API docs signal、i18n parity の範囲で先に切り分けたい場合は `npm run test:docs-entrypoints` を使います。その後、より広い `npm run test:entrypoints` や browser smoke checks に進んでください。`.nvmrc`、`package.json` の `engines.node`、CI workflow の `node-version` が Node 22 でそろっていることだけを確認したい場合は `npm run test:node-version-sources` を使います。失敗箇所を切り分ける場合は個別の npm command を使ってください。
+CI の JavaScript lane と同じ entrypoint、unit、browser smoke coverage をまとめて確認したい場合は `npm run test:js` を使います。docs-only failure を、docs entrypoints、repository-only maintainer entrypoints、README Quick Start signal、Public API docs signal、i18n parity の範囲で先に切り分けたい場合は `npm run test:docs-entrypoints` を使います。その後、より広い `npm run test:entrypoints` や browser smoke checks に進んでください。`.nvmrc`、`package.json` の `engines.node`、CI workflow の `node-version` が Node 22 でそろっていることだけを確認したい場合は `npm run test:node-version-sources` を使います。README、gemspec、CI workflow、Dockerfile の Ruby base image、Development docs、package script が supported Ruby sources と代表 Ruby version matrix に沿っていることだけを確認したい場合は `npm run test:ruby-version-sources` を使います。失敗箇所を切り分ける場合は個別の npm command を使ってください。
 
 Docs entrypoint suite を切り分ける場合は、`npm run test:docs-entrypoints -- --list` で番号付きの group と command を表示します。その後、`npm run test:docs-entrypoints -- --only <group-or-index>` に `--list` の 1-based 番号、完全一致の group 名、大文字小文字を問わない group 名、または一意に絞れる部分一致の group 名を渡すと、該当 group だけを実行できます。unknown、ambiguous、範囲外の値は非 0 終了し、available groups と `--list` の案内を表示します。
 
