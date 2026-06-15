@@ -109,6 +109,46 @@ const signalGroups = [
     ]
   },
   {
+    feature: "FAQ responsibility-boundary reader journey",
+    files: [
+      [
+        "docs/en/faq.md",
+        [
+          "Why does persisted state save as soon as the page loads?",
+          "tree-view-state:state-changed",
+          "initial connect",
+          "not proof that the user changed the tree",
+          "host app should save only user-initiated changes",
+          "dirty-state policy in the host app",
+          "Does TreeView infer breadcrumbs for resolver or adapter mode?",
+          "GraphAdapter",
+          "host app choose the breadcrumb trail",
+          "Does selecting a parent include descendants that have not loaded yet?",
+          "rendered DOM",
+          "unloaded descendants",
+          "host-app-owned server-side intent or query filter"
+        ]
+      ],
+      [
+        "docs/ja/faq.md",
+        [
+          "persisted state が画面表示直後に保存されるのはなぜですか？",
+          "tree-view-state:state-changed",
+          "初回 connect",
+          "ユーザーが tree を変更した証拠ではありません",
+          "host app 側の dirty-state policy",
+          "resolver mode や adapter mode でも TreeView が breadcrumb を推測しますか？",
+          "GraphAdapter",
+          "host app 側で breadcrumb trail を選び",
+          "parent を選択すると、まだ読み込まれていない descendants も含まれますか？",
+          "描画済み DOM",
+          "unloaded descendants",
+          "host app 側の server-side intent や query filter"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Tree diagnostics reader journey",
     files: [
       [
@@ -160,6 +200,92 @@ const signalGroups = [
           "描画前validation",
           "Result",
           "data policy"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "ActiveRecord repeated-query troubleshooting reader journey",
+    files: [
+      [
+        "docs/en/troubleshooting.md",
+        [
+          "Tree rendering triggers repeated queries or high ActiveRecord time",
+          "ActiveRecord:",
+          "Views:",
+          "Document Load",
+          "DocumentVersion Load",
+          "CACHE",
+          "row partial calls helpers or associations that perform database work for every row",
+          "Return arrays, not lazy ActiveRecord relations, from `GraphAdapter` `children_resolver` callbacks",
+          "Cache child collections by parent id in the host app",
+          "Precompute authorization, version, or display metadata before the row partial renders",
+          "Cookbook: GraphAdapter and ActiveRecord performance",
+          "cookbook.md#graphadapter-and-activerecord-performance",
+          "Rendering Boundaries",
+          "Tree diagnostics"
+        ]
+      ],
+      [
+        "docs/ja/troubleshooting.md",
+        [
+          "tree rendering 中に query が繰り返される / ActiveRecord time が大きい",
+          "ActiveRecord:",
+          "Views:",
+          "Document Load",
+          "DocumentVersion Load",
+          "CACHE",
+          "row partial から呼ぶ helper や association access が row ごとに DB work",
+          "`GraphAdapter` の `children_resolver` から lazy な ActiveRecord relation ではなく配列を返す",
+          "parent id ごとの children cache",
+          "authorization、version、表示用 metadata",
+          "Cookbook: GraphAdapter と ActiveRecord の性能",
+          "cookbook.md#graphadapter-と-activerecord-の性能",
+          "Rendering Boundaries",
+          "Tree diagnostics"
+        ]
+      ]
+    ]
+  },
+  {
+    feature: "Troubleshooting diagnostics reader journey",
+    files: [
+      [
+        "docs/en/troubleshooting.md",
+        [
+          "Row partial output looks broken or table cells do not line up",
+          "tree node keys and UI DOM IDs",
+          "tree.node_key_for(item)",
+          "Tree diagnostics",
+          "Node keys",
+          "GraphAdapter rows look duplicated, incomplete, or shaped differently than expected",
+          "`nil` becomes an empty child list",
+          "node_key_resolver:",
+          "cycles or duplicate keys",
+          "Duplicate node keys, orphan records, DOM ID collisions, or cycles appear",
+          "validate_node_keys: true",
+          "orphan_strategy:",
+          "render_state.validate_unique_dom_ids!",
+          "TreeView::CycleDiagnostics.new(tree).report"
+        ]
+      ],
+      [
+        "docs/ja/troubleshooting.md",
+        [
+          "row partial の表示が崩れる / table cell 数が合わない",
+          "tree node key と UI DOM ID",
+          "tree.node_key_for(item)",
+          "Tree diagnostics",
+          "Node keys",
+          "GraphAdapter の行が重複する / 足りない / 想定と違う形になる",
+          "`nil` は空の child list",
+          "node_key_resolver:",
+          "cycle や duplicate key",
+          "duplicate node key / orphan / DOM ID collision / cycle が出る",
+          "validate_node_keys: true",
+          "orphan_strategy:",
+          "render_state.validate_unique_dom_ids!",
+          "TreeView::CycleDiagnostics.new(tree).report"
         ]
       ]
     ]

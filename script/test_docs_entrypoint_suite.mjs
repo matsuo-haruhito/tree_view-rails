@@ -72,9 +72,24 @@ const checks = [
     args: ["script/test_mockup_docs_asset_signals.mjs"]
   },
   {
+    group: "README orientation asset signals",
+    command: "node",
+    args: ["script/test_readme_orientation_asset_signals.mjs"]
+  },
+  {
     group: "Public API docs signals",
     command: "node",
     args: ["script/test_public_api_docs_signals.mjs"]
+  },
+  {
+    group: "Public API manifest structure",
+    command: "node",
+    args: ["script/test_public_api_manifest_structure.mjs"]
+  },
+  {
+    group: "Public API entrypoint guard signals",
+    command: "node",
+    args: ["script/test_public_api_entrypoint_guard_signals.mjs"]
   },
   {
     group: "Render window and resource table docs signals",
@@ -118,11 +133,23 @@ function printCheckList(selectedChecks = checks) {
 }
 
 function usage() {
-  console.error("[docs-entrypoints] usage: node script/test_docs_entrypoint_suite.mjs [--list] [--only <group>]")
+  console.error("[docs-entrypoints] usage: node script/test_docs_entrypoint_suite.mjs [--list] [--only <group-or-index>]")
   console.error("[docs-entrypoints] use --list to show available groups")
 }
 
 function resolveOnlyGroup(groupName) {
+  if (/^\d+$/.test(groupName)) {
+    const groupIndex = Number(groupName) - 1
+    const indexedMatch = checks[groupIndex]
+    if (indexedMatch) return indexedMatch
+
+    console.error(`[docs-entrypoints] --only index out of range: ${groupName}`)
+    console.error("[docs-entrypoints] available groups:")
+    console.error(formatAvailableGroups())
+    console.error("[docs-entrypoints] run with --list to inspect commands")
+    process.exit(1)
+  }
+
   const exactMatches = checks.filter((check) => check.group === groupName)
   if (exactMatches.length === 1) return exactMatches[0]
 
@@ -167,7 +194,7 @@ function parseArgs(argv) {
       const groupName = argv[index + 1]
 
       if (!groupName || groupName.startsWith("--")) {
-        console.error("[docs-entrypoints] --only requires a group name")
+        console.error("[docs-entrypoints] --only requires a group name or index")
         usage()
         console.error("[docs-entrypoints] available groups:")
         console.error(formatAvailableGroups())
