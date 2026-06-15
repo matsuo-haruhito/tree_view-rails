@@ -106,19 +106,14 @@ function assertDeclarationShape(block, expectedValue, path = []) {
 
 const manifest = loadJavascriptPackageManifest()
 const declarationSource = readFileSync("app/javascript/tree_view/index.d.ts", "utf8")
-const expectedManifestLiteralGroups = [
-  "event_names",
-  "event_detail_keys",
-  "remote_state_values",
-  "remote_state_data_hooks",
-  "toolbar_data_hooks",
-  "transfer_drop_positions",
-  "transfer_data_mime_types",
-  "integration_hooks",
-  "selection_data_hooks",
-  "selection_checkbox_hooks",
-  "empty_state_hooks"
-]
+const nonLiteralManifestGroups = new Set([
+  "named_exports",
+  "controller_registrations",
+  "event_names_without_detail"
+])
+const expectedManifestLiteralGroups = Object.keys(manifest)
+  .filter((manifestGroup) => !nonLiteralManifestGroups.has(manifestGroup))
+  .sort()
 const literalExportsByManifestGroup = {
   event_names: {
     exportName: "TreeViewEventNames",
