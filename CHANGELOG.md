@@ -142,6 +142,8 @@ Release preparation notes:
 - Added setup generator optional-argument manifest guard coverage and release-note candidate docs package verification.
 - Added CI changed-file detection workflow signal and configuration docs signal coverage for base-ref diff routing and `TreeView.configure` option docs.
 - Added controller entries contract smoke and `tree_view_rows` / Windowed Rendering docs signal coverage to the docs entrypoint suite.
+- Added Docker Ruby base image source guard coverage to the Ruby version source drift smoke.
+- Added Docker development setup workflow wiring coverage to the CI changed-file policy guard.
 
 ## 0.1.0 - 2026-05-07
 
