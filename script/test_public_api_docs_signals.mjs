@@ -33,6 +33,8 @@ const toolbarDocs = [
   ["docs/en/toolbar.md", read("docs/en/toolbar.md")],
   ["docs/ja/toolbar.md", read("docs/ja/toolbar.md")]
 ]
+const toolbarBoundaryNote = read("docs/toolbar_action_html_boundary.md")
+const mockupDocsReadme = read("docs/mockups/README.md")
 const graphAdapterDocs = [
   ["docs/en/graph-adapter.md", read("docs/en/graph-adapter.md")],
   ["docs/ja/graph-adapter.md", read("docs/ja/graph-adapter.md")]
@@ -84,6 +86,14 @@ const remoteStateValueSignals = [
   "error"
 ]
 
+const remoteStateDataHookSignals = [
+  "TreeViewRemoteStateDataHooks",
+  "data-tree-lazy",
+  "data-tree-children-url",
+  "data-tree-loaded",
+  "data-tree-remote-state"
+]
+
 const selectionDataHookSignals = [
   "TreeViewSelectionDataHooks",
   "TreeViewSelectionDataHooks.hiddenInputNameValue",
@@ -102,6 +112,13 @@ const selectionHiddenInputBookkeepingSignals = [
   "data-tree-view-selection-generated-hidden-input"
 ]
 
+const toolbarDataHookSignals = [
+  "TreeViewToolbarDataHooks",
+  "data-tree-view-toolbar",
+  "data-tree-view-toolbar-action",
+  "data-tree-view-toolbar-disabled"
+]
+
 const toolbarActionMetadataSignals = [
   "toolbar_actions",
   "toolbar_action_metadata",
@@ -116,6 +133,25 @@ const toolbarActionMetadataSignals = [
   "tree_view_toolbar_disabled",
   "path: nil",
   "disabled: true"
+]
+
+const toolbarHelperOptionKeySignals = [
+  "helper_option_keys:",
+  "tree_view_toolbar:",
+  "- actions",
+  "- labels",
+  "- class_name",
+  "- button_class_name",
+  "- html",
+  "- action_html"
+]
+
+const toolbarContractSourceSignals = [
+  ["visual companion link", "../mockups/toolbar-actions.html"],
+  ["HTML boundary note link", "../toolbar_action_html_boundary.md"],
+  ["action-state manifest key", "toolbar_actions"],
+  ["action metadata manifest key", "toolbar_action_metadata"],
+  ["helper option-key contract", "tree_view_toolbar"]
 ]
 
 const emptyStateHookSignals = [
@@ -194,8 +230,10 @@ const manifestBackedDocsSignalSurfaces = [
   ["host lifecycle no-detail events", "event_names_without_detail:"],
   ["host lifecycle event names", "host_lifecycle:"],
   ["remote-state values", "remote_state_values:"],
+  ["remote-state data hooks", "remote_state_data_hooks:"],
   ["selection data hooks", "selection_data_hooks:"],
   ["empty-state hooks", "empty_state_hooks:"],
+  ["toolbar data hooks", "toolbar_data_hooks:"],
   ["toolbar actions", "toolbar_actions:"],
   ["toolbar action metadata", "toolbar_action_metadata:"],
   ["GraphAdapter initializer", "graph_adapter_initializer:"],
@@ -218,8 +256,20 @@ graphAdapterInitializerSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest GraphAdapter initializer surface")
 })
 
+remoteStateDataHookSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest remote-state data hook surface")
+})
+
+toolbarDataHookSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest toolbar data hook surface")
+})
+
 toolbarActionMetadataSignals.slice(0, 10).forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest toolbar action metadata surface")
+})
+
+toolbarHelperOptionKeySignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest tree_view_toolbar helper option-key surface")
 })
 
 diagnosticsAcceptedCheckSignals.forEach((signal) => {
@@ -263,6 +313,9 @@ publicApiDocs.forEach(([relativePath, document]) => {
     `${relativePath}: host lifecycle event docs no longer name the host-app ownership boundary`
   )
 
+  assertIncludes(document, "TreeViewRemoteStateDataHooks", `${relativePath} remote-state data hook docs`)
+  assertIncludes(document, "TreeViewToolbarDataHooks", `${relativePath} toolbar data hook docs`)
+
   selectionDataHookSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} selection data hook docs`)
   })
@@ -282,6 +335,10 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
     assertIncludes(document, signal, `${relativePath} remote-state value docs`)
   })
 
+  remoteStateDataHookSignals.slice(1).forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} remote-state data hook docs`)
+  })
+
   assert(
     /not event names|event 名ではありません/.test(document),
     `${relativePath}: remote-state value docs no longer separate state values from event names`
@@ -294,6 +351,11 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
   assert(
     /The host app can dispatch these events|host app側は、fetchやTurbo requestの状態に応じてこれらのeventをdispatchできます/.test(document),
     `${relativePath}: Lazy Loading docs no longer say host apps dispatch the lifecycle events`
+  )
+
+  assert(
+    /host app remains responsible for fetch behavior|実際のfetch、Turbo request、controller action、認可、query、retry UI、children pagination/.test(document),
+    `${relativePath}: Lazy Loading docs no longer preserve the host-app-owned remote loading boundary`
   )
 
   assert(
@@ -337,8 +399,16 @@ selectionDocs.forEach(([relativePath, document]) => {
 })
 
 toolbarDocs.forEach(([relativePath, document]) => {
+  toolbarDataHookSignals.slice(1).forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} toolbar data hook docs`)
+  })
+
   toolbarActionMetadataSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} toolbar action metadata docs`)
+  })
+
+  toolbarContractSourceSignals.forEach(([label, signal]) => {
+    assertIncludes(document, signal, `${relativePath} toolbar contract source ${label}`)
   })
 
   assert(
@@ -347,10 +417,33 @@ toolbarDocs.forEach(([relativePath, document]) => {
   )
 
   assert(
+    /final labels, locale files|final label、locale file|最終文言、locale file policy/.test(document),
+    `${relativePath}: toolbar data hook docs no longer preserve the host-app-owned label and locale boundary`
+  )
+
+  assert(
     /compatibility checks and integration audits|compatibility check と integration audit/.test(document),
     `${relativePath}: toolbar action metadata docs no longer point readers at the manifest-backed integration contract`
   )
 })
+
+toolbarDataHookSignals.slice(1).forEach((signal) => {
+  assertIncludes(toolbarBoundaryNote, signal, "docs/toolbar_action_html_boundary.md toolbar owned hook boundary")
+})
+
+assert(
+  /Host-app attributes may be added|host app 側/.test(toolbarBoundaryNote),
+  "docs/toolbar_action_html_boundary.md: toolbar boundary note no longer separates host-app-owned attributes from TreeView-owned hooks"
+)
+
+assertIncludes(mockupDocsReadme, "toolbar-actions.html", "docs/mockups/README.md toolbar visual companion inventory")
+assertIncludes(mockupDocsReadme, "docs/en/toolbar.md", "docs/mockups/README.md toolbar helper contract source guidance")
+assertIncludes(mockupDocsReadme, "docs/ja/toolbar.md", "docs/mockups/README.md toolbar helper contract source guidance")
+assertIncludes(mockupDocsReadme, "config/public_api_manifest.yml", "docs/mockups/README.md toolbar manifest source guidance")
+assert(
+  /helper metadata contract sources|helper metadata contract sources/.test(mockupDocsReadme),
+  "docs/mockups/README.md: toolbar guidance no longer separates manifest/docs contract sources from the visual mockup responsibility boundary"
+)
 
 graphAdapterDocs.forEach(([relativePath, document]) => {
   assertIncludes(document, "TreeView::GraphAdapter", `${relativePath} GraphAdapter guide entrypoint docs`)
