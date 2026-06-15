@@ -91,6 +91,18 @@ const cases = [
     }
   },
   {
+    name: "Ruby dependency files are package-sensitive full CI changes",
+    files: ["Gemfile", "Gemfile.lock"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false
+    }
+  },
+  {
     name: "package and Node metadata are package-sensitive full CI changes",
     files: ["package.json", "package-lock.json", ".nvmrc"],
     expected: {
