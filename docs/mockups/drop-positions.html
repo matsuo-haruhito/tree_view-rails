@@ -104,6 +104,30 @@
   outline-offset: -2px;
 }
 
+.drop-position-row--pending {
+  background: #eff6ff;
+  outline: 2px solid #bfdbfe;
+  outline-offset: -2px;
+}
+
+.drop-position-row--accepted {
+  background: #ecfdf5;
+  outline: 2px solid #bbf7d0;
+  outline-offset: -2px;
+}
+
+.drop-position-row--rejected {
+  background: #fff7ed;
+  outline: 2px dashed #fed7aa;
+  outline-offset: -2px;
+}
+
+.drop-position-row--retry {
+  background: #fefce8;
+  outline: 2px dashed #fde68a;
+  outline-offset: -2px;
+}
+
 .drop-position-row--disabled .tree-toggle,
 .drop-position-row--invalid .tree-toggle {
   opacity: 0.78;
@@ -147,6 +171,50 @@
 .drop-position-boundary-card p {
   color: #52606d;
   font-size: 0.92rem;
+}
+
+.drop-position-outcome-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 14px;
+}
+
+.drop-position-outcome-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #dde4ec;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.drop-position-outcome-card h3,
+.drop-position-outcome-card p {
+  margin: 0;
+}
+
+.drop-position-outcome-card p {
+  color: #52606d;
+  font-size: 0.92rem;
+}
+
+.drop-position-outcome-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.drop-position-outcome-meta li {
+  padding: 0.22rem 0.48rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 700;
 }
 
 @media (max-width: 680px) {
@@ -257,13 +325,86 @@
       </div>
     </section>
 
+    <section class="mock-section" aria-labelledby="outcome-heading">
+      <h2 id="outcome-heading">Post-drop outcome states</h2>
+      <div class="drop-position-boundary">
+        <p>These states start after TreeView has already reported a drop. They show reviewable host-app outcomes without turning TreeView into the persistence, authorization, or final copy owner.</p>
+        <ul class="drop-position-note-list">
+          <li>Use pending and accepted cues to review feedback timing after a host app begins saving the move.</li>
+          <li>Use rejected and retry-needed cues to keep authorization, validation, and recovery copy in the host app.</li>
+          <li>Keep undo, audit logs, reorder policy, and final business wording outside the static TreeView mockup.</li>
+        </ul>
+      </div>
+      <div class="drop-position-outcome-grid" data-tree-view-sample="post-drop-outcomes">
+        <article class="drop-position-outcome-card" aria-labelledby="outcome-pending-heading">
+          <h3 id="outcome-pending-heading">Pending save</h3>
+          <p>The host app has accepted the drop event and is saving the requested move.</p>
+          <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+            <thead><tr><th scope="col">tree</th><th scope="col">outcome cue</th></tr></thead>
+            <tbody>
+              <tr class="tree-row drop-position-row drop-position-row--pending" data-tree-node-key="task:queued" aria-level="1" aria-busy="true">
+                <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">save</span><span class="mock-node-title">Queued move</span></span></span></td>
+                <td><span class="mock-status mock-status--pending">saving move</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="drop-position-outcome-meta" aria-label="Pending save boundary"><li>host persistence</li><li>TreeView event already sent</li></ul>
+        </article>
+
+        <article class="drop-position-outcome-card" aria-labelledby="outcome-accepted-heading">
+          <h3 id="outcome-accepted-heading">Accepted move</h3>
+          <p>The host app saved the reorder or parent move and may keep a short success cue.</p>
+          <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+            <thead><tr><th scope="col">tree</th><th scope="col">outcome cue</th></tr></thead>
+            <tbody>
+              <tr class="tree-row drop-position-row drop-position-row--accepted" data-tree-node-key="task:accepted" aria-level="2">
+                <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span><span class="tree-toggle__control"><span class="tree-toggle__level">moved</span><span class="mock-node-title">Accepted child row</span></span></span></td>
+                <td><span class="mock-status mock-status--active">move saved</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="drop-position-outcome-meta" aria-label="Accepted move boundary"><li>host success copy</li><li>final row order</li></ul>
+        </article>
+
+        <article class="drop-position-outcome-card" aria-labelledby="outcome-rejected-heading">
+          <h3 id="outcome-rejected-heading">Rejected by policy</h3>
+          <p>The host app rejects a valid transfer because permission, target type, or position rules fail.</p>
+          <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+            <thead><tr><th scope="col">tree</th><th scope="col">outcome cue</th></tr></thead>
+            <tbody>
+              <tr class="tree-row drop-position-row drop-position-row--rejected" data-tree-node-key="task:rejected" aria-level="1" aria-disabled="true">
+                <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">reject</span><span class="mock-node-title">Cross-project move</span></span></span></td>
+                <td><span class="mock-status mock-status--error">not allowed</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="drop-position-outcome-meta" aria-label="Rejected by policy boundary"><li>authorization</li><li>validation</li><li>final copy</li></ul>
+        </article>
+
+        <article class="drop-position-outcome-card" aria-labelledby="outcome-retry-heading">
+          <h3 id="outcome-retry-heading">Retry needed</h3>
+          <p>The host app could not persist the move and owns the retry, undo, or reload path.</p>
+          <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+            <thead><tr><th scope="col">tree</th><th scope="col">outcome cue</th></tr></thead>
+            <tbody>
+              <tr class="tree-row drop-position-row drop-position-row--retry" data-tree-node-key="task:retry" aria-level="1">
+                <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">retry</span><span class="mock-node-title">Unsaved move</span></span></span></td>
+                <td><span class="mock-status mock-status--pending">retry save</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <ul class="drop-position-outcome-meta" aria-label="Retry needed boundary"><li>network failure</li><li>host recovery</li></ul>
+        </article>
+      </div>
+    </section>
+
     <section class="mock-section" aria-labelledby="boundary-heading">
       <h2 id="boundary-heading">Transfer boundary states</h2>
       <div class="drop-position-boundary">
         <p>These static states show how transfer guards and invalid events can be reviewed without making TreeView responsible for final move policy.</p>
         <ul class="drop-position-note-list">
           <li>Use <code>data-tree-transfer-disabled="true"</code> as a representative disabled target cue.</li>
-          <li>Use invalid styling to show the event boundary for malformed row payloads or transferred values.</li>
+          <li>Use invalid styling to show the event boundary for malformed row payloads, missing external source payloads, or transferred values.</li>
           <li>Keep final permission wording, persistence, audit trails, and reorder rules outside this mockup.</li>
         </ul>
       </div>
@@ -277,6 +418,20 @@
               <tr class="tree-row drop-position-row drop-position-row--disabled" data-tree-node-key="folder:archive" data-tree-transfer-disabled="true" aria-level="1" aria-disabled="true">
                 <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">blocked</span><span class="mock-node-title">Archived folder</span></span></span></td>
                 <td><span class="mock-status">transfer disabled</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="drop-position-boundary-card" aria-labelledby="external-source-heading">
+          <h3 id="external-source-heading">External source payload</h3>
+          <p>An outside drag may reach a TreeView row with no trusted TreeView source payload.</p>
+          <table class="tree-view-table drop-position-table" data-controller="tree-view-transfer">
+            <thead><tr><th scope="col">tree</th><th scope="col">boundary cue</th></tr></thead>
+            <tbody>
+              <tr class="tree-row drop-position-row drop-position-row--invalid" data-tree-node-key="folder:external" data-tree-drop-position="inside" aria-level="1">
+                <td class="tree-toggle-cell"><span class="tree-toggle"><span class="tree-toggle__control"><span class="tree-toggle__level">external</span><span class="mock-node-title">External browser drag</span></span></span></td>
+                <td><span class="mock-status mock-status--error">source unavailable</span></td>
               </tr>
             </tbody>
           </table>
