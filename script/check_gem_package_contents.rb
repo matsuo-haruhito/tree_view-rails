@@ -61,6 +61,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/public-api.md
     docs/ja/public-api.md
   ],
+  "Bilingual development docs" => %w[
+    docs/en/development.md
+    docs/ja/development.md
+  ],
   "README-linked public JavaScript docs" => %w[
     docs/en/js-events.md
     docs/ja/js-events.md
