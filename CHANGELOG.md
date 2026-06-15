@@ -73,6 +73,7 @@ Release preparation notes:
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified development docs for the Ruby-backed `npm run test:entrypoints` manifest loader path and setup expectations.
 - Clarified development docs that `.nvmrc`, `package.json` `engines.node`, and workflow `node-version` stay aligned by a Node version source drift guard.
+- Clarified Development docs for the Ruby version source and CI changed-file policy guard commands, including Bundler dependency package-sensitive guidance.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
