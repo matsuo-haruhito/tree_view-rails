@@ -5,6 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Current branch sidebar TreeView mock</title>
 <link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-branch-context-frame {
+  display: grid;
+  gap: 14px;
+}
+
+.mock-branch-breadcrumb {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #d8e0ea;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.mock-branch-breadcrumb__label {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mock-branch-breadcrumb__path {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mock-branch-breadcrumb__path li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.mock-branch-breadcrumb__path li + li::before {
+  content: ">";
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.mock-branch-breadcrumb__pill {
+  display: inline-flex;
+  max-width: 100%;
+  padding: 0.24rem 0.56rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #102a43;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.mock-branch-breadcrumb__pill--current {
+  border-color: #0ea5e9;
+  background: #ecfeff;
+  color: #0f4c81;
+}
+
+.mock-branch-context-note {
+  margin: 0;
+  color: #52606d;
+  font-size: 0.9rem;
+}
+
+.mock-branch-compact-table .mock-node-secondary {
+  font-size: 0.86rem;
+}
+
+@media (max-width: 720px) {
+  .mock-branch-breadcrumb__path {
+    align-items: flex-start;
+  }
+}
+</style>
 </head>
 <body>
   <main class="mock-page">
@@ -141,11 +224,112 @@
       </div>
     </section>
 
+    <section class="mock-section" aria-labelledby="branch-breadcrumb-heading">
+      <h2 id="branch-breadcrumb-heading">Breadcrumb path beside the current branch</h2>
+      <p class="mock-narrow-note">
+        This focused state puts a breadcrumb path above the same current-branch sidebar surface so reviewers can check whether route context and row-local hierarchy cues become repetitive in a narrow pane.
+      </p>
+      <div class="mock-narrow-frame mock-narrow-frame--tight mock-branch-context-frame">
+        <p class="mock-narrow-caption">Representative frame width: 18rem</p>
+        <nav class="mock-branch-breadcrumb" aria-label="Representative breadcrumb path for the sidebar current item">
+          <p class="mock-branch-breadcrumb__label">Path context</p>
+          <ol class="mock-branch-breadcrumb__path">
+            <li><span class="mock-branch-breadcrumb__pill">Workspace</span></li>
+            <li><span class="mock-branch-breadcrumb__pill">Docs</span></li>
+            <li><span class="mock-branch-breadcrumb__pill">API</span></li>
+            <li><span class="mock-branch-breadcrumb__pill mock-branch-breadcrumb__pill--current" aria-current="page">Controller helpers</span></li>
+          </ol>
+          <p class="mock-branch-context-note">The breadcrumb owns route context. The table rows below still own expansion, depth, current-row, and collapsed-sibling cues.</p>
+        </nav>
+        <table class="tree-view-table tree-view-table--narrow mock-branch-compact-table" data-controller="tree-view-state" data-tree-view-state-keyboard-value="true">
+          <thead>
+            <tr>
+              <th scope="col">tree</th>
+              <th scope="col">navigation item</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="sidebar_combo_workspace" class="tree-row is-expanded" data-tree-node-key="combo-workspace" data-tree-depth="0" data-tree-expanded="true" aria-level="1" aria-expanded="true" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_combo_workspace_button">
+                <span class="tree-toggle" aria-label="Workspace ancestor expanded">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a><span class="tree-toggle__level">root</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Workspace</span><span class="tree-node-badge tree-node-badge--info">ancestor</span></div>
+                  <div class="mock-node-secondary">Ancestor cue remains short because the breadcrumb already names the path.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_combo_docs" class="tree-row is-expanded" data-tree-node-key="combo-docs" data-tree-parent-key="combo-workspace" data-tree-depth="1" data-tree-expanded="true" aria-level="2" aria-expanded="true" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_combo_docs_button">
+                <span class="tree-toggle" aria-label="Docs ancestor expanded">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a><span class="tree-toggle__level">child</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Docs</span><span class="tree-node-badge tree-node-badge--info">ancestor</span></div>
+                  <div class="mock-node-secondary">Expanded ancestor path stays visible under the breadcrumb.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_combo_guides" class="tree-row is-collapsed" data-tree-node-key="combo-guides" data-tree-parent-key="combo-docs" data-tree-depth="2" data-tree-expanded="false" aria-level="3" aria-expanded="false" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_combo_guides_button">
+                <span class="tree-toggle" aria-label="Collapsed sibling branch">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a><span class="tree-toggle__level">branch</span><span class="tree-toggle__hidden-count" title="Hidden descendants">4</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Guides</span><span class="mock-status mock-status--pending">sibling</span></div>
+                  <div class="mock-node-secondary">Collapsed sibling remains distinct from the breadcrumb trail.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_combo_api" class="tree-row is-expanded" data-tree-node-key="combo-api" data-tree-parent-key="combo-docs" data-tree-depth="2" data-tree-expanded="true" aria-level="3" aria-expanded="true" aria-selected="false">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_combo_api_button">
+                <span class="tree-toggle" aria-label="API ancestor expanded">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                  <span class="tree-toggle__control"><a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a><span class="tree-toggle__level">branch</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">API</span><span class="tree-node-badge tree-node-badge--info">ancestor</span></div>
+                  <div class="mock-node-secondary">Last ancestor before the current row.</div>
+                </div>
+              </td>
+            </tr>
+            <tr id="sidebar_combo_current" class="tree-row is-selected is-leaf" data-tree-node-key="combo-controller-helpers" data-tree-parent-key="combo-api" data-tree-depth="3" aria-level="4" aria-selected="true" aria-current="page">
+              <td class="btn-cell tree-toggle-cell" id="sidebar_combo_current_button">
+                <span class="tree-toggle" aria-label="Current leaf row">
+                  <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                  <span class="tree-toggle__control"><span class="tree-toggle__level">leaf</span></span>
+                </span>
+              </td>
+              <td>
+                <div class="mock-node-stack">
+                  <div class="mock-node-primary"><span class="mock-node-title">Controller helpers</span><span class="mock-status mock-status--active">current</span></div>
+                  <div class="mock-node-secondary">Current cue remains row-local even when the breadcrumb repeats the label.</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="mock-section" aria-labelledby="branch-rules-heading">
       <h2 id="branch-rules-heading">Review cues</h2>
       <ul>
         <li>Expanded rows should communicate the current path, not a full sidebar product policy.</li>
         <li>Collapsed sibling branches should keep toggle, depth, and hidden-count cues visible without exposing their children.</li>
+        <li>Breadcrumb labels and current-row labels may repeat, but their responsibilities stay separate: path context outside the table, hierarchy state inside the table.</li>
         <li>Current-row copy, routes, permissions, and final sidebar behavior remain host-app responsibilities.</li>
       </ul>
     </section>
