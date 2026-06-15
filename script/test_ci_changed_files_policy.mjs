@@ -157,8 +157,29 @@ function npmRunScripts(workflowSource) {
     .sort();
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
+}
+
+function workflowActionVersions(workflowSource, actionName) {
+  const pattern = new RegExp(`uses: ${escapeRegExp(actionName)}@(?<version>[^\\s]+)`, "g");
+  return [...new Set([...workflowSource.matchAll(pattern)].map((match) => match.groups.version))].sort();
+}
+
 function assertSameMembers(actual, expected, message) {
   assert.deepEqual([...actual].sort(), [...expected].sort(), message);
+}
+
+function assertWorkflowActionVersions(workflowSource, actionName, expectedVersions) {
+  assertSameMembers(
+    workflowActionVersions(workflowSource, actionName),
+    expectedVersions,
+    `${workflowPath} must use ${actionName}@${expectedVersions.join(" or ")} for its representative setup surface`
+  );
+}
+
+function assertJobMatches(jobBlock, pattern, message) {
+  assert.match(jobBlock, pattern, message);
 }
 
 for (const testCase of cases) {
@@ -176,6 +197,21 @@ assertSameMembers(
   `${workflowPath} jobs.changes.outputs must match classifyChangedFiles result keys`
 );
 
+assertWorkflowActionVersions(workflowSource, "actions/checkout", ["v6"]);
+assertWorkflowActionVersions(workflowSource, "actions/setup-node", ["v6"]);
+assertWorkflowActionVersions(workflowSource, "ruby/setup-ruby", ["v1"]);
+
+const changesJob = workflowJobBlock(workflowSource, "changes");
+assertJobMatches(
+  changesJob,
+  /uses: actions\/checkout@v6[\s\S]*fetch-depth: 0/,
+  `${workflowPath} jobs.changes must keep a full checkout for changed-file detection`
+);
+
+const lintJob = workflowJobBlock(workflowSource, "lint");
+assertJobMatches(lintJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.lint must keep Ruby 3.3`);
+assertJobMatches(lintJob, /bundler-cache: true/, `${workflowPath} jobs.lint must keep bundler-cache enabled`);
+
 const javascriptJob = workflowJavaScriptJob(workflowSource);
 assert.match(
   javascriptJob,
@@ -187,6 +223,13 @@ assert.match(
   /run: npm run test:docs-entrypoints/,
   `${workflowPath} jobs.javascript must still run docs entrypoint checks for docs_entrypoint_sensitive changes`
 );
+assertJobMatches(javascriptJob, /uses: actions\/setup-node@v6/, `${workflowPath} jobs.javascript must keep setup-node v6`);
+assertJobMatches(javascriptJob, /node-version: "22"/, `${workflowPath} jobs.javascript must keep the Node 22 CI lane`);
+assertJobMatches(javascriptJob, /cache: npm/, `${workflowPath} jobs.javascript must keep npm cache enabled`);
+
+const gemPackageJob = workflowJobBlock(workflowSource, "gem_package");
+assertJobMatches(gemPackageJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.gem_package must keep Ruby 3.3`);
+assertJobMatches(gemPackageJob, /bundler-cache: true/, `${workflowPath} jobs.gem_package must keep bundler-cache enabled`);
 
 for (const scriptName of npmRunScripts(workflowSource)) {
   assert.ok(
@@ -197,3 +240,4 @@ for (const scriptName of npmRunScripts(workflowSource)) {
 
 console.log(`Checked ${cases.length} CI changed-file policy cases.`);
 console.log(`Checked ${workflowOutputKeys.length} workflow output keys and ${npmRunScripts(workflowSource).length} JavaScript npm commands.`);
+console.log("Checked representative CI workflow setup surfaces.");
