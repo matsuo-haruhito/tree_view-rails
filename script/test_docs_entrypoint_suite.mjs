@@ -72,9 +72,24 @@ const checks = [
     args: ["script/test_mockup_docs_asset_signals.mjs"]
   },
   {
+    group: "README orientation asset signals",
+    command: "node",
+    args: ["script/test_readme_orientation_asset_signals.mjs"]
+  },
+  {
     group: "Public API docs signals",
     command: "node",
     args: ["script/test_public_api_docs_signals.mjs"]
+  },
+  {
+    group: "Public API manifest structure",
+    command: "node",
+    args: ["script/test_public_api_manifest_structure.mjs"]
+  },
+  {
+    group: "Public API entrypoint guard signals",
+    command: "node",
+    args: ["script/test_public_api_entrypoint_guard_signals.mjs"]
   },
   {
     group: "Render window and resource table docs signals",
