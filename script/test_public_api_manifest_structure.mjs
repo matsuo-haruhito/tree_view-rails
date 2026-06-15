@@ -136,6 +136,48 @@ function assertTopLevelKeys(manifest) {
   })
 }
 
+function assertEventClassification(javascriptPackageRoot) {
+  const requiredEventNameGroups = ["state", "selection", "remote_state", "host_lifecycle", "transfer"]
+  const requiredEventDetailGroups = ["state", "selection", "remote_state", "transfer"]
+  const requiredNoDetailGroups = ["host_lifecycle"]
+
+  assertRequiredObjectKeys(
+    javascriptPackageRoot.event_names,
+    "javascript_package_root.event_names",
+    requiredEventNameGroups
+  )
+  assertRequiredObjectKeys(
+    javascriptPackageRoot.event_detail_keys,
+    "javascript_package_root.event_detail_keys",
+    requiredEventDetailGroups
+  )
+  assertRequiredObjectKeys(
+    javascriptPackageRoot.event_names_without_detail,
+    "javascript_package_root.event_names_without_detail",
+    requiredNoDetailGroups
+  )
+
+  requiredNoDetailGroups.forEach((group) => {
+    const groupEvents = javascriptPackageRoot.event_names[group]
+    const noDetailEventNames = javascriptPackageRoot.event_names_without_detail[group]
+
+    assertStringMap(groupEvents, `javascript_package_root.event_names.${group}`)
+    assertUniqueStringList(noDetailEventNames, `javascript_package_root.event_names_without_detail.${group}`)
+
+    const validEventNames = new Set(Object.keys(groupEvents))
+    noDetailEventNames.forEach((eventName) => {
+      assert(
+        validEventNames.has(eventName),
+        `javascript_package_root.event_names_without_detail.${group} includes unknown event: ${eventName}`
+      )
+      assert(
+        !(javascriptPackageRoot.event_detail_keys[group] && javascriptPackageRoot.event_detail_keys[group][eventName]),
+        `javascript_package_root.event_names_without_detail.${group} overlaps detail-bearing event: ${eventName}`
+      )
+    })
+  })
+}
+
 const requiredUiConfigBuilderOptionKeys = [
   "build",
   "build_turbo",
@@ -237,6 +279,7 @@ assertStringMap(javascriptPackageRoot.empty_state_hooks, "javascript_package_roo
 assertObject(javascriptPackageRoot.event_names, "javascript_package_root.event_names")
 assertObject(javascriptPackageRoot.event_detail_keys, "javascript_package_root.event_detail_keys")
 assertObject(javascriptPackageRoot.event_names_without_detail, "javascript_package_root.event_names_without_detail")
+assertEventClassification(javascriptPackageRoot)
 
 Object.entries(javascriptPackageRoot.event_names).forEach(([group, events]) => {
   assertStringMap(events, `javascript_package_root.event_names.${group}`)
