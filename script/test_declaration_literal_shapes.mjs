@@ -160,6 +160,11 @@ const literalExportsByManifestGroup = {
     expectedShape: deepCamelizeKeys(manifest.empty_state_hooks)
   }
 }
+const controllerRegistrationExports = {
+  TreeViewControllerIdentifiers: Object.fromEntries(
+    manifest.controller_registrations.map(({ key, identifier }) => [key, identifier])
+  )
+}
 
 assertSameMembers(
   Object.keys(literalExportsByManifestGroup),
@@ -168,6 +173,10 @@ assertSameMembers(
 )
 
 Object.values(literalExportsByManifestGroup).forEach(({ exportName, expectedShape }) => {
+  assertDeclarationShape(declarationBlock(declarationSource, exportName), expectedShape, [exportName])
+})
+
+Object.entries(controllerRegistrationExports).forEach(([exportName, expectedShape]) => {
   assertDeclarationShape(declarationBlock(declarationSource, exportName), expectedShape, [exportName])
 })
 
