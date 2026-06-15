@@ -13,7 +13,7 @@
     "test:ruby-version-sources": "node script/test_ruby_version_sources.mjs",
     "test:docs-i18n": "node script/test_docs_i18n_parity.mjs",
     "test:docs-entrypoints": "node script/test_docs_entrypoint_suite.mjs",
-    "test:entrypoints": "script/test_entrypoints.mjs && node script/test_declaration_literal_shapes.mjs && npm run test:docs-entrypoints && npm run test:ci-policy && npm run test:node-version-sources && npm run test:ruby-version-sources",
+    "test:entrypoints": "node script/test_entrypoints.mjs && node script/test_declaration_literal_shapes.mjs && npm run test:docs-entrypoints && npm run test:ci-policy && npm run test:node-version-sources && npm run test:ruby-version-sources",
     "test:js:core": "npm run test:entrypoints && npm test",
     "test:js": "npm run test:js:core && npm run test:browser"
   },
