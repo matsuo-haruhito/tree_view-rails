@@ -72,6 +72,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
   "Bilingual release docs" => %w[
     docs/en/release.md
     docs/ja/release.md
+  ],
+  "Release note candidate docs" => %w[
+    docs/en/release-note-candidates.md
+    docs/ja/release-note-candidates.md
   ]
 }.freeze
 
