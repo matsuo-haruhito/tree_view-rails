@@ -165,7 +165,7 @@ Release preparation notes:
 - `TreeView::Tree` for parent-child records.
 - `TreeView::GraphAdapter` for graph-like or heterogeneous node structures.
 - `TreeView::PathTree` via `Tree#path_tree_for(items)` for rendering matched items with completed parent paths.
-- `TreeView::ReverseTree` for rendering child-to-parent paths.
+- `TreeView::ReverseTree` via `Tree#reverse_tree_for(items)` for rendering child-to-parent paths.
 - `TreeView::RenderState` for screen-level rendering options.
 - `tree_view_rows(render_state)` helper.
 - `TreeView::RenderWindow` and opt-in windowed rendering through `tree_view_rows(render_state, window: { offset:, limit: })`.
