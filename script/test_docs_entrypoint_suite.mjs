@@ -27,6 +27,11 @@ const checks = [
     args: ["script/test_development_docs_node_version_signals.mjs"]
   },
   {
+    group: "Development docs command signals",
+    command: "npm",
+    args: ["run", "test:development-docs-commands"]
+  },
+  {
     group: "Public setup surface docs signals",
     command: "node",
     args: ["script/test_public_setup_surface_docs_signals.mjs"]
