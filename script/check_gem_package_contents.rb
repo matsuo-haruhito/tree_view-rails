@@ -49,6 +49,9 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     README.md
     docs/README.md
   ],
+  "License files" => %w[
+    LICENSE
+  ],
   "Mockup entrypoints" => %w[
     docs/mockups/README.md
     docs/mockups/review-gallery.html
@@ -91,6 +94,14 @@ EXPECTED_GEM_METADATA = {
   "source_code_uri" => "https://github.com/matsuo-haruhito/tree_view-rails",
   "changelog_uri" => "https://github.com/matsuo-haruhito/tree_view-rails/blob/main/CHANGELOG.md",
   "bug_tracker_uri" => "https://github.com/matsuo-haruhito/tree_view-rails/issues"
+}.freeze
+
+EXPECTED_RELEASE_METADATA = {
+  required_ruby_version: ">= 3.2",
+  allowed_push_host: "https://rubygems.org",
+  runtime_dependencies: {
+    "railties" => ">= 7.0"
+  }
 }.freeze
 
 PUBLIC_CONSTANT_RUNTIME_FILES = {
@@ -162,6 +173,31 @@ missing = missing_by_group.values.flatten
 missing_gem_metadata = EXPECTED_GEM_METADATA.reject do |key, expected_value|
   package_spec.metadata[key] == expected_value
 end
+unexpected_release_metadata = {}
+if package_spec.required_ruby_version.to_s != EXPECTED_RELEASE_METADATA.fetch(:required_ruby_version)
+  unexpected_release_metadata["required_ruby_version"] = {
+    expected: EXPECTED_RELEASE_METADATA.fetch(:required_ruby_version),
+    actual: package_spec.required_ruby_version.to_s
+  }
+end
+if package_spec.metadata["allowed_push_host"] != EXPECTED_RELEASE_METADATA.fetch(:allowed_push_host)
+  unexpected_release_metadata["allowed_push_host"] = {
+    expected: EXPECTED_RELEASE_METADATA.fetch(:allowed_push_host),
+    actual: package_spec.metadata["allowed_push_host"]
+  }
+end
+EXPECTED_RELEASE_METADATA.fetch(:runtime_dependencies).each do |dependency_name, expected_requirement|
+  dependency = package_spec.dependencies.find do |candidate|
+    candidate.type == :runtime && candidate.name == dependency_name
+  end
+  actual_requirement = dependency&.requirement&.to_s
+  next if actual_requirement == expected_requirement
+
+  unexpected_release_metadata["runtime dependency #{dependency_name}"] = {
+    expected: expected_requirement,
+    actual: actual_requirement
+  }
+end
 missing_manifest_constant_paths = manifest.fetch("public_constants").each_with_object({}) do |constant, missing_paths|
   expected_path = PUBLIC_CONSTANT_RUNTIME_FILES[constant]
   missing_paths[constant] = expected_path unless expected_path && files.include?(expected_path)
@@ -180,7 +216,7 @@ importmap_path = File.join(root, "config/importmap.tree_view.rb")
 importmap_content = File.read(importmap_path)
 importmap_pin_missing = !importmap_content.include?("pin \"tree_view\", to: \"tree_view/index.js\"")
 
-if missing.empty? && missing_gem_metadata.empty? && missing_manifest_constant_paths.empty? && unknown_manifest_constants.empty? && missing_installation_signals.empty? && forbidden_packaged_doc_links.empty? && !importmap_pin_missing
+if missing.empty? && missing_gem_metadata.empty? && unexpected_release_metadata.empty? && missing_manifest_constant_paths.empty? && unknown_manifest_constants.empty? && missing_installation_signals.empty? && forbidden_packaged_doc_links.empty? && !importmap_pin_missing
   puts "Gem package contents verified: #{File.basename(gem_path)}"
 else
   warn "Gem package contents verification failed: #{File.basename(gem_path)}"
@@ -195,6 +231,13 @@ else
     missing_gem_metadata.each do |key, expected_value|
       actual_value = package_spec.metadata[key]
       warn "  - #{key}: expected #{expected_value.inspect}, got #{actual_value.inspect}"
+    end
+  end
+
+  unless unexpected_release_metadata.empty?
+    warn "Missing or unexpected release metadata values:"
+    unexpected_release_metadata.each do |key, values|
+      warn "  - #{key}: expected #{values.fetch(:expected).inspect}, got #{values.fetch(:actual).inspect}"
     end
   end
 
