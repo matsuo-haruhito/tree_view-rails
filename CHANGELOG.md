@@ -147,6 +147,7 @@ Release preparation notes:
 - Added Docker development setup workflow wiring coverage to the CI changed-file policy guard.
 - Added a standalone Public API manifest structure command and docs entrypoint suite wiring for manifest structure smoke.
 - Added Development docs package verification coverage to the gem package contents guard.
+- Added release:check package contents verification plus gem metadata URI and public runtime packaging guard coverage.
 
 ## 0.1.0 - 2026-05-07
 
