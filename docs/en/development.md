@@ -30,17 +30,21 @@ Keep using `npm install` for now. The repository has a committed `package-lock.j
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
+gem build tree_view.gemspec
+ruby script/check_gem_package_contents.rb tree_view-*.gem
 npm run test:js
 npm test
 npm run test:entrypoints
 npm run test:docs-entrypoints
+npm run test:public-api-manifest-structure
+npm run test:docs-i18n
 npm run test:ci-policy
 npm run test:node-version-sources
 npm run test:ruby-version-sources
 npm run test:browser
 ```
 
-Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, repository-only maintainer entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use `npm run test:ci-policy` when you only need to confirm changed-file classification and workflow detection signals before the broader entrypoint suite. Use `npm run test:node-version-sources` when you only need to confirm that `.nvmrc`, `package.json` `engines.node`, and CI workflow `node-version` still agree on Node 22. Use `npm run test:ruby-version-sources` when you only need to confirm that the README, gemspec, CI workflow, Dockerfile Ruby base image, Development docs, and package script still agree on the supported Ruby sources and representative Ruby version matrix. Use the individual npm commands when you are narrowing a failure.
+Use `npm run test:js` when you want the same JavaScript entrypoint, unit, and browser smoke coverage as the CI JavaScript lane. Use `npm run test:docs-entrypoints` when you are narrowing docs-only failures across docs entrypoints, repository-only maintainer entrypoints, README Quick Start signals, Public API docs signals, and i18n parity before running the broader `npm run test:entrypoints` or browser smoke checks. Use `npm run test:public-api-manifest-structure` when a manifest-structure failure needs the narrow Node smoke for top-level keys, nested JavaScript package-root and event/detail shapes, or duplicate-key guardrails without running the broader docs entrypoint suite. Use `npm run test:docs-i18n` when you only need to confirm English/Japanese docs parity without running the full docs entrypoint suite. Use `npm run test:ci-policy` when you only need to confirm changed-file classification and workflow detection signals before the broader entrypoint suite. Use `npm run test:node-version-sources` when you only need to confirm that `.nvmrc`, `package.json` `engines.node`, and CI workflow `node-version` still agree on Node 22. Use `npm run test:ruby-version-sources` when you only need to confirm that the README, gemspec, CI workflow, Dockerfile Ruby base image, Development docs, and package script still agree on the supported Ruby sources and representative Ruby version matrix. Use `gem build tree_view.gemspec` followed by `ruby script/check_gem_package_contents.rb tree_view-*.gem` when you only need to reproduce the `gem_package` job's package contents verification. Use the individual npm commands when you are narrowing a failure.
 
 For docs entrypoint suite triage, run `npm run test:docs-entrypoints -- --list` to print the numbered groups and commands. Then run `npm run test:docs-entrypoints -- --only <group-or-index>` with the 1-based number from that list, an exact group name, a case-insensitive group name, or a unique partial group name. Unknown, ambiguous, or out-of-range values exit non-zero and print the available groups plus the `--list` hint.
 
@@ -68,6 +72,8 @@ Docs entrypoint smoke and public API docs signal smoke have separate responsibil
 When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
 
 `config/public_api_manifest.yml` is the machine-readable source of truth for the public surface covered by compatibility checks. It currently tracks Ruby module methods, public constants, configuration options, localized-name I18n key groups, filtered-tree modes, VisibleRows row metadata, NodePresenter builder names, GraphAdapter initializer keywords, helper names, helper option keys, toolbar actions, toolbar action metadata, grouped option keys, setup generator output paths, PathTreeBuilder node shapes, RenderWindow metadata, ResourceTableRenderState call keywords, RenderState callback builder keys, diagnostics accepted checks / run options / Result surface, JavaScript package-root named exports, transfer drop positions, transfer data MIME types, remote-state values and data hooks, controller registrations, public event names, intentional no-detail event names, documented `event.detail` keys, integration hooks, toolbar data hooks, selection data and checkbox hooks, and empty-state hooks.
+
+Use `npm run test:public-api-manifest-structure` when you only need to confirm the manifest structure smoke for top-level sections, nested public JavaScript groups, event/detail shape, and duplicate YAML keys. The broader `npm run test:docs-entrypoints` command still runs the same manifest-structure group through the docs entrypoint suite, so keep the single-command smoke and suite entry aligned when that guard changes.
 
 `event_names_without_detail` is the intentional classification for host lifecycle events that do not publish public `event.detail` fields. Do not use that list to add or freeze host lifecycle payload shapes; keep payload-bearing events under the documented `event.detail` key groups instead.
 
@@ -167,7 +173,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 - If Standard Ruby reports a mechanical formatting issue such as a missing final newline or trailing whitespace, apply the formatter or a minimal file rewrite before opening the pull request.
 - Check `docs/ja/api-overview.md` and `docs/en/api-overview.md`.
 - Update public API compatibility specs when documented entry points, helpers, or options are intentionally changed.
-- If `config/public_api_manifest.yml` changes, update `docs/en/public-api.md` / `docs/ja/public-api.md`, then review the related README, usage docs, feature docs, JavaScript event docs, `CHANGELOG.md`, and `docs/en/release.md` / `docs/ja/release.md`.
+- If `config/public_api_manifest.yml` changes, update `docs/en/public-api.md` / `docs/ja/public-api.md`, then review the related README, usage docs, feature docs, configuration option docs, JavaScript event docs, `CHANGELOG.md`, and `docs/en/release.md` / `docs/ja/release.md`.
 - Update `docs/en/api.md` / `docs/ja/api.md` when needed.
 - Update CHANGELOG.
 

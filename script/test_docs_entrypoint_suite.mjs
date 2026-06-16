@@ -98,8 +98,8 @@ const checks = [
   },
   {
     group: "Public API manifest structure",
-    command: "node",
-    args: ["script/test_public_api_manifest_structure.mjs"]
+    command: "npm",
+    args: ["run", "test:public-api-manifest-structure"]
   },
   {
     group: "Public API entrypoint guard signals",

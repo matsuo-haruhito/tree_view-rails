@@ -99,7 +99,7 @@ const packageContentsVerificationSignals = [
     "docs/en/release.md",
     [
       "ruby script/check_gem_package_contents.rb tree_view-*.gem",
-      "representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, and public API manifest",
+      "representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces",
       "Package-sensitive PR paths include `tree_view.gemspec`",
       "Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`",
       "config/importmap.tree_view.rb",
@@ -113,7 +113,7 @@ const packageContentsVerificationSignals = [
     "docs/ja/release.md",
     [
       "ruby script/check_gem_package_contents.rb tree_view-*.gem",
-      "Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest",
+      "Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI",
       "package-sensitive path には、`tree_view.gemspec`",
       "Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`",
       "config/importmap.tree_view.rb",
