@@ -8,6 +8,10 @@ function dependencyKeys(metadata, section) {
   return Object.keys(metadata?.[section] || {}).sort();
 }
 
+function dependencySpecs(metadata, section) {
+  return metadata?.[section] || {};
+}
+
 function assertDependencyKeysMatch(packageMetadata, lockRootPackage, section) {
   const packageKeys = dependencyKeys(packageMetadata, section);
   const lockKeys = dependencyKeys(lockRootPackage, section);
@@ -21,6 +25,25 @@ function assertDependencyKeysMatch(packageMetadata, lockRootPackage, section) {
   );
 }
 
+function assertDependencySpecsMatch(packageMetadata, lockRootPackage, section) {
+  const packageSpecs = dependencySpecs(packageMetadata, section);
+  const lockSpecs = dependencySpecs(lockRootPackage, section);
+  const mismatches = dependencyKeys(packageMetadata, section)
+    .filter((key) => packageSpecs[key] !== lockSpecs[key])
+    .map((key) => ({
+      section,
+      name: key,
+      packageJson: packageSpecs[key],
+      packageLock: lockSpecs[key]
+    }));
+
+  assert.deepEqual(
+    mismatches,
+    [],
+    `${packageLockPath} root package ${section} specs must match ${packagePath} ${section} specs`
+  );
+}
+
 const packageMetadata = JSON.parse(readFileSync(packagePath, "utf8"));
 const packageLock = JSON.parse(readFileSync(packageLockPath, "utf8"));
 const lockRootPackage = packageLock.packages?.[""];
@@ -29,4 +52,5 @@ assert.ok(lockRootPackage, `${packageLockPath} must include packages[""] root pa
 
 for (const section of ["dependencies", "devDependencies"]) {
   assertDependencyKeysMatch(packageMetadata, lockRootPackage, section);
+  assertDependencySpecsMatch(packageMetadata, lockRootPackage, section);
 }
