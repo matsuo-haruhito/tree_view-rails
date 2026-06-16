@@ -3,23 +3,23 @@
 require "spec_helper"
 
 RSpec.describe "Public API manifest top-level key parity" do
-  MANIFEST_STRUCTURE_SPEC_PATH = File.expand_path("public_api_manifest_structure_spec.rb", __dir__)
-  MANIFEST_STRUCTURE_SMOKE_PATH = File.expand_path("../script/test_public_api_manifest_structure.mjs", __dir__)
+  let(:manifest_structure_spec_path) { File.expand_path("public_api_manifest_structure_spec.rb", __dir__) }
+  let(:manifest_structure_smoke_path) { File.expand_path("../script/test_public_api_manifest_structure.mjs", __dir__) }
 
   def ruby_expected_top_level_keys
-    source = File.read(MANIFEST_STRUCTURE_SPEC_PATH)
+    source = File.read(manifest_structure_spec_path)
     match = source.match(/PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w\[\n(?<keys>.*?)\n\]\.freeze/m)
 
-    raise "Could not find PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS literal in #{MANIFEST_STRUCTURE_SPEC_PATH}" unless match
+    raise "Could not find PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS literal in #{manifest_structure_spec_path}" unless match
 
     match[:keys].lines.map(&:strip).reject(&:empty?)
   end
 
   def node_expected_top_level_keys
-    source = File.read(MANIFEST_STRUCTURE_SMOKE_PATH)
+    source = File.read(manifest_structure_smoke_path)
     match = source.match(/const expectedKeys = \[\n(?<keys>.*?)\n  \]/m)
 
-    raise "Could not find assertTopLevelKeys expectedKeys literal in #{MANIFEST_STRUCTURE_SMOKE_PATH}" unless match
+    raise "Could not find assertTopLevelKeys expectedKeys literal in #{manifest_structure_smoke_path}" unless match
 
     match[:keys].scan(/"([^"]+)"/).flatten
   end
