@@ -139,6 +139,12 @@ function assertTopLevelKeys(manifest) {
   expectedKeys.forEach((key) => {
     assert(key in manifest, `config/public_api_manifest.yml missing top-level key: ${key}`)
   })
+
+  const unexpectedKeys = Object.keys(manifest).filter((key) => !expectedKeys.includes(key)).sort()
+  assert(
+    unexpectedKeys.length === 0,
+    `config/public_api_manifest.yml contains unexpected top-level key(s): ${unexpectedKeys.join(", ")}. Update script/test_public_api_manifest_structure.mjs before adding manifest sections.`
+  )
 }
 
 function assertEventClassification(javascriptPackageRoot) {
