@@ -74,6 +74,14 @@ npm run test:js
 
 `bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, builds the gem, confirms release-facing files are packaged, runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The package contents guard checks representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces. The main-push `gem_package` CI job repeats the same package contents verification against its built gem. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
 
+After creating the release tag, rerun the release check with tag alignment required:
+
+```bash
+TREE_VIEW_REQUIRE_RELEASE_TAG=1 bundle exec rake release:check
+```
+
+Use the default command during release preparation PRs because the tag usually does not exist yet. Use the flagged command after tagging so the check fails if `vX.Y.Z` is missing or points at a different commit from the current `HEAD`.
+
 Pull request CI checks:
 
 - Ruby lint through `bundle exec standardrb`
