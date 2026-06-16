@@ -73,6 +73,7 @@ Release preparation notes:
 - Clarified the CI policy split between pull request Ruby checks and broader `main` / release checks.
 - Clarified development docs for the Ruby-backed `npm run test:entrypoints` manifest loader path and setup expectations.
 - Clarified development docs that `.nvmrc`, `package.json` `engines.node`, and workflow `node-version` stay aligned by a Node version source drift guard.
+- Clarified Development docs for the Ruby version source and CI changed-file policy guard commands, including Bundler dependency package-sensitive guidance.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
@@ -137,6 +138,13 @@ Release preparation notes:
 - Added CI changed-file policy guard coverage for workflow output key drift, docs entrypoint routing, and JavaScript npm command references.
 - Added package-sensitive CI guard coverage for `Gemfile` and `Gemfile.lock` changes so Ruby dependency updates reach gem package verification.
 - Added maintenance guard coverage for Ruby version source drift, grouped package contents verification, and Public API manifest event classification.
+- Added docs smoke and package verification coverage for grouped RenderState option docs signals, Public Setup Surface reader journeys, and README-linked public JavaScript / setup docs packaging.
+- Added setup generator optional-argument manifest guard coverage and release-note candidate docs package verification.
+- Added CI changed-file detection workflow signal and configuration docs signal coverage for base-ref diff routing and `TreeView.configure` option docs.
+- Added controller entries contract smoke and `tree_view_rows` / Windowed Rendering docs signal coverage to the docs entrypoint suite.
+- Added Docker Ruby base image source guard coverage to the Ruby version source drift smoke.
+- Added Docker development setup workflow wiring coverage to the CI changed-file policy guard.
+- Added CI changed-file policy CLI output guard coverage for workflow `key=value` handoff formatting and stdin trimming.
 
 ## 0.1.0 - 2026-05-07
 
