@@ -94,6 +94,18 @@ RSpec.describe TreeView::ReleaseCheck::Runner do
     end
   end
 
+  it "accepts release notes that only use the Tests category" do
+    with_fixture_root(changelog_body: <<~MD) do |root|
+      ### Tests
+
+      - Keep release verification evidence visible for the release.
+    MD
+      runner = described_class.new(root: root, stdout: StringIO.new, verify_package: false)
+
+      expect { runner.validate_metadata! }.not_to raise_error
+    end
+  end
+
   it "fails when the changelog does not have a dated section for the current version" do
     with_fixture_root(changelog_version: "0.0.9") do |root|
       runner = described_class.new(root: root, stdout: StringIO.new, verify_package: false)
