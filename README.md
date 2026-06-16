@@ -30,7 +30,7 @@ TreeView does not provide:
 - server-side pagination algorithms
 - a full virtual scrolling engine
 
-For very large trees, combine TreeView's render controls with host-app loading and paging strategies. Start with [Render Scale](docs/en/render-scale.md), then add [Lazy Loading](docs/en/lazy-loading.md), [Children Pagination](docs/en/children-pagination.md), or custom virtual scrolling owned by the host app when your UI needs it.
+For very large trees, combine TreeView's render controls with host-app loading and paging strategies. Start with [Render Scale](docs/en/render-scale.md) and [Rendering Boundaries](docs/en/rendering-boundaries.md), then add [Lazy Loading](docs/en/lazy-loading.md), [Children Pagination](docs/en/children-pagination.md), or custom virtual scrolling owned by the host app when your UI needs it.
 
 ## FAQ
 
