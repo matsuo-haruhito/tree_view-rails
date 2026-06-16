@@ -11,7 +11,7 @@ module TreeView
     GEMSPEC_PATH = "tree_view.gemspec"
     CHANGELOG_PATH = "CHANGELOG.md"
     RELEASE_DOC_PATHS = %w[docs/en/release.md docs/ja/release.md].freeze
-    CHANGELOG_CATEGORY_HEADINGS = %w[Added Changed Fixed Deprecated Removed Security Documentation].freeze
+    CHANGELOG_CATEGORY_HEADINGS = %w[Added Changed Fixed Deprecated Removed Security Documentation Tests].freeze
 
     class Failure < StandardError; end
 
