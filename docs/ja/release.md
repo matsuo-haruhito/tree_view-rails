@@ -73,7 +73,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。main-push の `gem_package` CI job では、built gem に Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest の代表ファイルが残っていることを `ruby script/check_gem_package_contents.rb tree_view-*.gem` でも確認します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
+`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、built gem に対する `ruby script/check_gem_package_contents.rb tree_view-*.gem`、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。package contents guard は Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI の代表surfaceを確認します。main-push の `gem_package` CI job でも、同じ package contents verification を CI で build した gem に対して再実行します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
 
 Pull Request CI の確認項目:
 
@@ -90,7 +90,7 @@ package-sensitive path には、`tree_view.gemspec`、`script/check_gem_package_
 - Ruby version matrix
 - Rails version matrix
 - `package-lock.json` が `package.json` と同期するまでの間は、`npm install` と `npm run test:js` による JavaScript tests
-- Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest の代表ファイルを含む Gem package verification
+- Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI の代表ファイルとmetadataを含む Gem package verification
 
 merge前にPR CIを通します。release判定には、full compatibility matrices、JavaScript coverage、unconditional package verificationを含む、より広い `main` CIを使います。
 
