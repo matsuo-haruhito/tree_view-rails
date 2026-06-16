@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { classifyChangedFiles } from "./ci_changed_files_policy.mjs";
 
 const workflowPath = ".github/workflows/ci.yml";
 const packagePath = "package.json";
+const policyCliPath = "script/ci_changed_files_policy.mjs";
 
 const cases = [
   {
@@ -194,6 +196,37 @@ function assertJobMatches(jobBlock, pattern, message) {
   assert.match(jobBlock, pattern, message);
 }
 
+function policyCliOutput(input) {
+  return execFileSync(process.execPath, [policyCliPath], {
+    input,
+    encoding: "utf8"
+  });
+}
+
+function parsePolicyCliOutput(output) {
+  const result = {};
+
+  for (const line of output.trim().split(/\r?\n/)) {
+    assert.match(line, /^[a-z_]+=(true|false)$/, `${policyCliPath} must emit key=value boolean lines, got "${line}"`);
+    const [key, value] = line.split("=");
+    result[key] = value === "true";
+  }
+
+  return result;
+}
+
+function assertPolicyCliOutput(input, expected, message) {
+  const output = policyCliOutput(input);
+  const parsedOutput = parsePolicyCliOutput(output);
+
+  assertSameMembers(
+    Object.keys(parsedOutput),
+    Object.keys(classifyChangedFiles([])),
+    `${policyCliPath} must emit every classifyChangedFiles key for ${message}`
+  );
+  assert.deepEqual(parsedOutput, expected, message);
+}
+
 for (const testCase of cases) {
   assert.deepEqual(classifyChangedFiles(testCase.files), testCase.expected, testCase.name);
 }
@@ -202,6 +235,17 @@ const policyKeys = Object.keys(classifyChangedFiles([])).sort();
 const workflowSource = readFileSync(workflowPath, "utf8");
 const packageScripts = JSON.parse(readFileSync(packagePath, "utf8")).scripts;
 const workflowOutputKeys = workflowChangesOutputs(workflowSource);
+
+assertPolicyCliOutput(
+  "\n README.md \n docs/en/development.md \n\n",
+  classifyChangedFiles(["README.md", "docs/en/development.md"]),
+  `${policyCliPath} must trim blank and padded stdin lines while emitting workflow output values`
+);
+assertPolicyCliOutput(
+  "Dockerfile\npackage-lock.json\n",
+  classifyChangedFiles(["Dockerfile", "package-lock.json"]),
+  `${policyCliPath} must emit Docker and package-sensitive workflow output values from stdin`
+);
 
 assertSameMembers(
   workflowOutputKeys,
