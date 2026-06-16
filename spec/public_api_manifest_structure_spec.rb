@@ -2,8 +2,10 @@
 
 require "spec_helper"
 require "psych"
+require "tree_view"
 require "tree_view/diagnostics"
 require "tree_view/resource_table_render_state"
+require_relative "../app/helpers/tree_view_helper"
 require "yaml"
 
 PUBLIC_API_MANIFEST_STRUCTURE_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
@@ -30,6 +32,72 @@ PUBLIC_API_MANIFEST_TOP_LEVEL_KEYS = %w[
   render_state_callback_builder_keys
   javascript_package_root
 ].freeze
+PUBLIC_API_DOC_PATHS = [
+  File.expand_path("../docs/en/public-api.md", __dir__),
+  File.expand_path("../docs/ja/public-api.md", __dir__)
+].freeze
+DOCUMENTED_TREE_VIEW_MODULE_METHODS = %w[
+  configure
+  configuration
+  reset_configuration!
+  parse_selection_params
+  node_key
+  model_name_for
+  attribute_name_for
+  type_name_for
+].freeze
+DOCUMENTED_TREE_VIEW_PUBLIC_CONSTANTS = %w[
+  Error
+  ConfigurationError
+  InvalidTreeError
+  DuplicateNodeKeyError
+  CycleDetectedError
+  InvalidRenderWindowError
+  Configuration
+  LocalizedNames
+  Tree
+  RenderState
+  ResourceTableRenderState
+  VisibleRows
+  RenderWindow
+  FilteredTree
+  UiConfig
+  UiConfigBuilder
+  GraphAdapter
+  NodePresenter
+  PathTree
+  PathTreeBuilder
+  ReverseTree
+  PersistedState
+  StateStore
+  Diagnostics
+].freeze
+DOCUMENTED_TREE_VIEW_HELPER_METHODS = %w[
+  tree_view_rows
+  tree_view_window
+  tree_node_dom_id
+  tree_children_container_dom_id
+  tree_remote_state_placeholder_dom_id
+  tree_remote_state_placeholder_attributes
+  tree_selection_value
+  tree_view_breadcrumb
+  tree_view_toolbar
+  tree_view_toolbar_supported_actions
+  tree_view_toolbar_actions
+  tree_view_toolbar_action_metadata
+].freeze
+INTENTIONALLY_INTERNAL_TREE_VIEW_HELPER_METHODS = %w[
+  tree_button_dom_id
+  tree_show_button_dom_id
+  tree_selection_checkbox_dom_id
+  tree_hide_descendants_path
+  tree_show_descendants_path
+  tree_load_children_path
+  tree_toggle_all_path
+  tree_turbo_frame
+  tree_expand_all_path
+  tree_collapse_all_path
+].freeze
 
 RSpec.describe "Public API manifest structure" do
   def manifest_source
@@ -38,6 +106,22 @@ RSpec.describe "Public API manifest structure" do
 
   def manifest
     @manifest ||= YAML.safe_load(manifest_source)
+  end
+
+  def public_api_docs
+    @public_api_docs ||= PUBLIC_API_DOC_PATHS.to_h do |path|
+      [path, File.read(path)]
+    end
+  end
+
+  def expect_manifest_list(section_name, expected_values)
+    actual_values = manifest.fetch(section_name)
+
+    expect(actual_values).to eq(expected_values), <<~MESSAGE
+      expected config/public_api_manifest.yml##{section_name} to match the documented public API surface.
+      missing: #{(expected_values - actual_values).inspect}
+      extra: #{(actual_values - expected_values).inspect}
+    MESSAGE
   end
 
   def duplicate_mapping_keys(yaml_source)
@@ -87,6 +171,58 @@ RSpec.describe "Public API manifest structure" do
     YAML
 
     expect(duplicate_mapping_keys(yaml)).to eq(["javascript_package_root.event_names.state"])
+  end
+
+  it "keeps TreeView module methods synchronized with the public manifest and docs" do
+    expect_manifest_list("module_methods", DOCUMENTED_TREE_VIEW_MODULE_METHODS)
+
+    missing_runtime_methods = DOCUMENTED_TREE_VIEW_MODULE_METHODS.reject { |method_name| TreeView.respond_to?(method_name) }
+    expect(missing_runtime_methods).to eq([]), "missing TreeView public module methods from runtime: #{missing_runtime_methods.inspect}"
+
+    public_api_docs.each do |path, document|
+      missing_doc_methods = DOCUMENTED_TREE_VIEW_MODULE_METHODS.reject do |method_name|
+        document.include?("`TreeView.#{method_name}`")
+      end
+
+      expect(missing_doc_methods).to eq([]), "missing documented TreeView module methods in #{path}: #{missing_doc_methods.inspect}"
+    end
+  end
+
+  it "keeps TreeView public constants synchronized with the public manifest and docs" do
+    expect_manifest_list("public_constants", DOCUMENTED_TREE_VIEW_PUBLIC_CONSTANTS)
+
+    missing_runtime_constants = DOCUMENTED_TREE_VIEW_PUBLIC_CONSTANTS.reject { |constant_name| TreeView.const_defined?(constant_name, false) }
+    expect(missing_runtime_constants).to eq([]), "missing TreeView public constants from runtime: #{missing_runtime_constants.inspect}"
+
+    public_api_docs.each do |path, document|
+      missing_doc_constants = DOCUMENTED_TREE_VIEW_PUBLIC_CONSTANTS.reject do |constant_name|
+        document.include?("`TreeView::#{constant_name}`") || document.include?("`TreeView::#{constant_name}.call`")
+      end
+
+      expect(missing_doc_constants).to eq([]), "missing documented TreeView public constants in #{path}: #{missing_doc_constants.inspect}"
+    end
+  end
+
+  it "keeps TreeViewHelper public helper methods synchronized with the public manifest and docs" do
+    expect_manifest_list("helper_methods", DOCUMENTED_TREE_VIEW_HELPER_METHODS)
+
+    runtime_helper_methods = TreeViewHelper.public_instance_methods.map(&:to_s)
+    missing_runtime_helpers = DOCUMENTED_TREE_VIEW_HELPER_METHODS - runtime_helper_methods
+    expect(missing_runtime_helpers).to eq([]), "missing TreeViewHelper public helper methods from runtime: #{missing_runtime_helpers.inspect}"
+
+    leaked_internal_helpers = INTENTIONALLY_INTERNAL_TREE_VIEW_HELPER_METHODS & manifest.fetch("helper_methods")
+    expect(leaked_internal_helpers).to eq([]), <<~MESSAGE
+      config/public_api_manifest.yml#helper_methods should not list internal composition helpers.
+      leaked internal helpers: #{leaked_internal_helpers.inspect}
+    MESSAGE
+
+    public_api_docs.each do |path, document|
+      missing_doc_helpers = DOCUMENTED_TREE_VIEW_HELPER_METHODS.reject do |helper_name|
+        document.include?("`#{helper_name}")
+      end
+
+      expect(missing_doc_helpers).to eq([]), "missing documented TreeViewHelper methods in #{path}: #{missing_doc_helpers.inspect}"
+    end
   end
 
   it "keeps localized name i18n key sections shaped as explicit hash contracts" do
