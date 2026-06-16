@@ -157,6 +157,8 @@ Render the initial next-page placeholder where the host app wants it to appear:
 
 Use [children-pagination.html](../mockups/children-pagination.html) when you want a static visual reference for next-page placeholder placement and branch-scoped load-more affordances. The mockup is a review aid only; cursor encoding, Turbo Stream responses, final button copy, and retry behavior remain host-app responsibilities.
 
+TreeView intentionally does not expose a helper option or public metadata API for next-page placeholder rows. Keep the placeholder DOM, disabled state, retry affordance, and final copy in the host app so each product can match its own cursor, route, authorization, and paging policy.
+
 ## Relationship to lazy loading
 
 Children pagination is built by the host app on top of lazy loading.
@@ -192,6 +194,7 @@ The [Selection](selection.md#linked-checkbox-behavior) guide is the contract for
 | child URL hook | yes | provides builder |
 | lazy-loading row data | yes | consumes data |
 | remote-state events | hooks only | dispatches events |
+| next-page placeholder row | no | yes |
 | cursor / offset / token | no | yes |
 | query and ordering | no | yes |
 | next-page detection | no | yes |
