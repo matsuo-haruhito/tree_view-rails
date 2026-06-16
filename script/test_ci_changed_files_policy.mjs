@@ -55,14 +55,14 @@ const cases = [
     }
   },
   {
-    name: "workflow changes are package-sensitive full CI changes",
+    name: "workflow changes are package- and Docker-sensitive full CI changes",
     files: [".github/workflows/ci.yml"],
     expected: {
       docs_only: false,
       mockups_changed: false,
       browser_smoke_changed: false,
       package_sensitive: true,
-      docker_setup_sensitive: false,
+      docker_setup_sensitive: true,
       docs_entrypoint_sensitive: false
     }
   },
