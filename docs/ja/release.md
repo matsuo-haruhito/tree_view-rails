@@ -82,7 +82,9 @@ Pull Request CI の確認項目:
 - JavaScript tests: `npm ci`、Playwright browser setup、`npm run test:js`
 - package-sensitive path を触るPRでの Gem package verification
 
-package-sensitive path には、`tree_view.gemspec`、`script/check_gem_package_contents.rb`、`.github/workflows/ci.yml`、`lib/**`、Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`、さらに `config/importmap.tree_view.rb`、`config/public_api_manifest.yml`、`config/locales/**` が含まれます。これらを触るPRでは `gem build tree_view.gemspec`、`ruby script/check_gem_package_contents.rb tree_view-*.gem`、`gem install tree_view-*.gem`、`ruby -e "require 'tree_view'"` を実行します。prose-only docs PR は、その package-sensitive path も触らない限り、従来どおり軽い docs-only 挙動を維持します。
+package-sensitive path には、`tree_view.gemspec`、`Rakefile`、root / packaged docs である `README.md`、`CHANGELOG.md`、`docs/**`、JavaScript install / Node source files である `package.json`、`package-lock.json`、`.nvmrc`、Bundler source files である `Gemfile` と `Gemfile.lock`、`script/check_gem_package_contents.rb`、`.github/workflows/ci.yml`、`lib/**`、Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`、さらに `config/importmap.tree_view.rb`、`config/public_api_manifest.yml`、`config/locales/**` が含まれます。これらを触るPRでは `gem build tree_view.gemspec`、`ruby script/check_gem_package_contents.rb tree_view-*.gem`、`gem install tree_view-*.gem`、`ruby -e "require 'tree_view'"` を実行します。docs-only PR は docs path だけを触る場合 runtime-heavy lane を避けますが、README、CHANGELOG、packaged docs の変更は built gem に release-facing docs が含まれ、整合していることを確認するため package-sensitive として扱います。
+
+Signal guard 用に、package-sensitive path には、`tree_view.gemspec` という代表フレーズを維持します。
 
 `main` push CI の確認項目:
 
@@ -157,7 +159,7 @@ release前に確認すること:
 - 生成gemをローカルinstallして `require "tree_view"` を確認する
 - packaged filesに以下が含まれることを確認する
   - `lib/**/*`
-  - Rails helpers, views, stylesheets, JavaScript, importmap files
+  - Rails helpers, views, stylesheets, JavaScript, and importmap files
   - `app/helpers/tree_view_helper.rb`
   - `app/views/tree_view/_tree_row.html.erb`
   - `app/javascript/tree_view/index.js`
