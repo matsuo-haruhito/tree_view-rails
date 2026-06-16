@@ -136,7 +136,8 @@ const cases = [
       mockups_changed: false,
       browser_smoke_changed: false,
       package_sensitive: false,
-      docker_setup_sensitive: true
+      docker_setup_sensitive: true,
+      docs_entrypoint_sensitive: false
     }
   }
 ];
