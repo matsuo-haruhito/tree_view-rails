@@ -57,7 +57,7 @@ const nodeVersionSourceSignals = [
 ]
 
 nodeVersionSourceSignals.forEach(({ feature, sourcePath, signals }) => {
-  assertSignals(sourcePath, feature, sourcePath, signals)
+  assertSignals(sourcePath, feature, signals)
 })
 
 const nodeVersionSourceFiles = [
