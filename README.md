@@ -30,7 +30,7 @@ TreeView does not provide:
 - server-side pagination algorithms
 - a full virtual scrolling engine
 
-For very large trees, combine TreeView's render controls with host-app loading and paging strategies. Start with [Render Scale](docs/en/render-scale.md), then add [Lazy Loading](docs/en/lazy-loading.md), [Children Pagination](docs/en/children-pagination.md), or custom virtual scrolling owned by the host app when your UI needs it.
+For very large trees, combine TreeView's render controls with host-app loading and paging strategies. Start with [Render Scale](docs/en/render-scale.md) and [Rendering Boundaries](docs/en/rendering-boundaries.md), then add [Lazy Loading](docs/en/lazy-loading.md), [Children Pagination](docs/en/children-pagination.md), or custom virtual scrolling owned by the host app when your UI needs it.
 
 ## FAQ
 
@@ -233,7 +233,7 @@ Key documents:
 | Drag and drop | [Drag and Drop](docs/en/drag-and-drop.md) | [Drag and Drop](docs/ja/drag-and-drop.md) |
 | Children pagination | [Children Pagination](docs/en/children-pagination.md) | [Children Pagination](docs/ja/children-pagination.md) |
 | Tree identity and diagnostics | [Node keys](docs/en/node-keys.md) and [Tree diagnostics](docs/en/tree-diagnostics.md) | [Node key 設計](docs/ja/node-keys.md) and [Tree diagnostics](docs/ja/tree-diagnostics.md) |
-| Large tree rendering strategy | [Render Scale](docs/en/render-scale.md), [Lazy Loading](docs/en/lazy-loading.md), [Children Pagination](docs/en/children-pagination.md), [Windowed Rendering](docs/en/windowed-rendering.md), [Rendering Boundaries](docs/en/rendering-boundaries.md), and [Render log level](docs/en/render-log-level.md) | [描画スケール](docs/ja/render-scale.md), [Lazy Loading](docs/ja/lazy-loading.md), [Children Pagination](docs/ja/children-pagination.md), [Windowed Rendering](docs/ja/windowed-rendering.md), [描画責務の境界](docs/ja/rendering-boundaries.md), and [render log レベル](docs/ja/render-log-level.md) |
+| Large tree rendering strategy | [Render Scale](docs/en/render-scale.md), [Lazy Loading](docs/en/lazy-loading.md), [Children Pagination](docs/en/children-pagination.md), [Windowed Rendering](docs/en/windowed-rendering.md), and [Render log level](docs/en/render-log-level.md) | [描画スケール](docs/ja/render-scale.md), [Lazy Loading](docs/ja/lazy-loading.md), [Children Pagination](docs/ja/children-pagination.md), [Windowed Rendering](docs/ja/windowed-rendering.md), [描画責務の境界](docs/ja/rendering-boundaries.md), and [render log レベル](docs/ja/render-log-level.md) |
 | Styling and direction-aware boundary | [Direction-aware styling boundary](docs/en/direction-aware-styling.md) | [Direction-aware styling boundary](docs/ja/direction-aware-styling.md) |
 | Packaged stylesheet state cues | [Styling state cues](docs/en/styling-state-cues.md) | [State cue のスタイリング](docs/ja/styling-state-cues.md) |
 | API overview | [API overview](docs/en/api-overview.md) | [API概要](docs/ja/api-overview.md) |
@@ -264,7 +264,7 @@ bundle install
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
-npm install
+npm ci
 npm run test:js
 ```
 
@@ -272,4 +272,4 @@ Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the 
 
 `npm run test:js` runs the documented JavaScript pull-request checks together: entrypoint smoke (`npm run test:entrypoints`), Vitest (`npm test`), and Playwright browser smoke (`npm run test:browser`). See the [English development guide](docs/en/development.md) and [日本語の開発・保守方針](docs/ja/development.md) for details.
 
-A committed `package-lock.json` is present, but it is not yet in sync with `package.json`, so CI and local setup keep using `npm install` until that lockfile is refreshed in a registry-enabled environment.
+Use `npm ci` for local JavaScript setup. The committed `package-lock.json` is the source of truth for repeatable installs, and CI/Docker setup use the same lockfile-backed install path.

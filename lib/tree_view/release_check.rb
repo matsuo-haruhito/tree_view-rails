@@ -113,6 +113,7 @@ module TreeView
       def verify_package!
         gem_file_name = build_gem!
         verify_packaged_files!(gem_file_name)
+        verify_package_contents!(gem_file_name)
         verify_library_load!
       end
 
@@ -143,6 +144,18 @@ module TreeView
         return if missing.empty?
 
         raise Failure, "built gem is missing required release files: #{missing.join(", ")}"
+      end
+
+      def verify_package_contents!(gem_file_name)
+        stdout.puts("Running ruby script/check_gem_package_contents.rb #{gem_file_name}")
+
+        output, errors, status = Open3.capture3(RbConfig.ruby, "script/check_gem_package_contents.rb", gem_file_name, chdir: root)
+        stdout.print(output) unless output.empty?
+        stdout.print(errors) unless errors.empty?
+
+        return if status.success?
+
+        raise Failure, "script/check_gem_package_contents.rb failed for #{gem_file_name}"
       end
 
       def verify_library_load!
