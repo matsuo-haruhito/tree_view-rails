@@ -32,7 +32,47 @@ function assertOrdered(source, earlier, later, label) {
   assert(earlierIndex < laterIndex, `${label}: expected ${earlier} before ${later}`)
 }
 
+function workflowNonPullRequestDefaultOutputBlock(changesJob) {
+  const match = changesJob.match(
+    /if \[ "\$\{\{ github\.event_name \}\}" != "pull_request" \]; then\n(?<body>(?:            echo "[a-z_]+=(?:true|false)" >> "\$GITHUB_OUTPUT"\n)+)            exit 0\n          fi/
+  )
+
+  assert(
+    match,
+    `${workflowPath} jobs.changes must define non-pull-request default outputs before pull request file detection`
+  )
+  return match.groups.body
+}
+
+function assertDefaultWorkflowOutput(block, key, value) {
+  assertIncludes(
+    block,
+    `echo "${key}=${value}" >> "$GITHUB_OUTPUT"`,
+    `${workflowPath} jobs.changes non-pull-request default output ${key}`
+  )
+}
+
 const changesJob = workflowJobBlock(workflowSource, "changes")
+
+const nonPullRequestDefaultOutputs = {
+  docs_only: false,
+  mockups_changed: false,
+  browser_smoke_changed: false,
+  package_sensitive: true,
+  docker_setup_sensitive: true,
+  docs_entrypoint_sensitive: true
+}
+const nonPullRequestDefaultOutputBlock = workflowNonPullRequestDefaultOutputBlock(changesJob)
+Object.entries(nonPullRequestDefaultOutputs).forEach(([key, value]) => {
+  assertDefaultWorkflowOutput(nonPullRequestDefaultOutputBlock, key, value)
+})
+
+assertOrdered(
+  changesJob,
+  'if [ "${{ github.event_name }}" != "pull_request" ]; then',
+  'git fetch origin "${{ github.base_ref }}" --depth=1',
+  `${workflowPath} jobs.changes must emit non-pull-request defaults before pull request fetch`
+)
 
 const changedFileDetectionSignals = [
   ["base ref fetch", 'git fetch origin "${{ github.base_ref }}" --depth=1'],
@@ -76,3 +116,4 @@ assertOrdered(
 )
 
 console.log("Checked CI changed-file detection workflow signals.")
+console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
