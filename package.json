@@ -11,6 +11,7 @@
     "test:ci-policy": "node script/test_ci_changed_files_policy.mjs && node script/test_ci_workflow_changed_file_detection_signals.mjs",
     "test:node-version-sources": "node script/test_node_version_sources.mjs",
     "test:ruby-version-sources": "node script/test_ruby_version_sources.mjs",
+    "test:development-docs-commands": "node script/test_development_docs_command_signals.mjs",
     "test:public-api-manifest-structure": "node script/test_public_api_manifest_structure.mjs",
     "test:docs-i18n": "node script/test_docs_i18n_parity.mjs",
     "test:docs-entrypoints": "node script/test_docs_entrypoint_suite.mjs",
