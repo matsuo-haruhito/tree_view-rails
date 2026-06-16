@@ -155,6 +155,7 @@ RSpec.describe TreeView::ReleaseCheck::Runner do
       hide_const("TreeView::VERSION")
       allow(runner).to receive(:build_gem!).and_return("tree_view-0.1.0.gem")
       allow(runner).to receive(:verify_packaged_files!).with("tree_view-0.1.0.gem")
+      expect(runner).to receive(:verify_package_contents!).with("tree_view-0.1.0.gem")
 
       expect { runner.send(:verify_package!) }.not_to raise_error
     end

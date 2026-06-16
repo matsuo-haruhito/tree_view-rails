@@ -288,12 +288,24 @@ assert(
 )
 assertFrozenObject(entrypointModule.TreeViewControllerIdentifiers, "TreeViewControllerIdentifiers")
 
+const expectedIntegrationHooks = deepCamelizeKeys(javascriptPackageManifest.integration_hooks)
+assertDeepEqualExport(entrypointModule.TreeViewIntegrationHooks, expectedIntegrationHooks, "TreeViewIntegrationHooks")
+assertFrozenObject(entrypointModule.TreeViewIntegrationHooks, "TreeViewIntegrationHooks", { deep: true })
+
 const expectedSelectionDataHooks = deepCamelizeKeys(javascriptPackageManifest.selection_data_hooks)
 assert(
   JSON.stringify(entrypointModule.TreeViewSelectionDataHooks) === JSON.stringify(expectedSelectionDataHooks),
   "TreeViewSelectionDataHooks export is out of sync"
 )
 assertFrozenObject(entrypointModule.TreeViewSelectionDataHooks, "TreeViewSelectionDataHooks")
+
+const expectedSelectionCheckboxHooks = deepCamelizeKeys(javascriptPackageManifest.selection_checkbox_hooks)
+assertDeepEqualExport(
+  entrypointModule.TreeViewSelectionCheckboxHooks,
+  expectedSelectionCheckboxHooks,
+  "TreeViewSelectionCheckboxHooks"
+)
+assertFrozenObject(entrypointModule.TreeViewSelectionCheckboxHooks, "TreeViewSelectionCheckboxHooks")
 
 const expectedEmptyStateHooks = deepCamelizeKeys(javascriptPackageManifest.empty_state_hooks)
 assert(

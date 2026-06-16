@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { classifyChangedFiles } from "./ci_changed_files_policy.mjs";
 
 const workflowPath = ".github/workflows/ci.yml";
 const packagePath = "package.json";
+const policyCliPath = "script/ci_changed_files_policy.mjs";
 
 const cases = [
   {
@@ -55,14 +57,14 @@ const cases = [
     }
   },
   {
-    name: "workflow changes are package-sensitive full CI changes",
+    name: "workflow changes are package- and Docker-sensitive full CI changes",
     files: [".github/workflows/ci.yml"],
     expected: {
       docs_only: false,
       mockups_changed: false,
       browser_smoke_changed: false,
       package_sensitive: true,
-      docker_setup_sensitive: false,
+      docker_setup_sensitive: true,
       docs_entrypoint_sensitive: false
     }
   },
@@ -88,6 +90,30 @@ const cases = [
       package_sensitive: true,
       docker_setup_sensitive: false,
       docs_entrypoint_sensitive: true
+    }
+  },
+  {
+    name: "Ruby dependency files are package-sensitive full CI changes",
+    files: ["Gemfile", "Gemfile.lock"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false
+    }
+  },
+  {
+    name: "release task wiring is package-sensitive without Docker setup verification",
+    files: ["Rakefile"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false
     }
   },
   {
@@ -145,8 +171,60 @@ function npmRunScripts(workflowSource) {
     .sort();
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
+}
+
+function workflowActionVersions(workflowSource, actionName) {
+  const pattern = new RegExp(`uses: ${escapeRegExp(actionName)}@(?<version>[^\\s]+)`, "g");
+  return [...new Set([...workflowSource.matchAll(pattern)].map((match) => match.groups.version))].sort();
+}
+
 function assertSameMembers(actual, expected, message) {
   assert.deepEqual([...actual].sort(), [...expected].sort(), message);
+}
+
+function assertWorkflowActionVersions(workflowSource, actionName, expectedVersions) {
+  assertSameMembers(
+    workflowActionVersions(workflowSource, actionName),
+    expectedVersions,
+    `${workflowPath} must use ${actionName}@${expectedVersions.join(" or ")} for its representative setup surface`
+  );
+}
+
+function assertJobMatches(jobBlock, pattern, message) {
+  assert.match(jobBlock, pattern, message);
+}
+
+function policyCliOutput(input) {
+  return execFileSync(process.execPath, [policyCliPath], {
+    input,
+    encoding: "utf8"
+  });
+}
+
+function parsePolicyCliOutput(output) {
+  const result = {};
+
+  for (const line of output.trim().split(/\r?\n/)) {
+    assert.match(line, /^[a-z_]+=(true|false)$/, `${policyCliPath} must emit key=value boolean lines, got "${line}"`);
+    const [key, value] = line.split("=");
+    result[key] = value === "true";
+  }
+
+  return result;
+}
+
+function assertPolicyCliOutput(input, expected, message) {
+  const output = policyCliOutput(input);
+  const parsedOutput = parsePolicyCliOutput(output);
+
+  assertSameMembers(
+    Object.keys(parsedOutput),
+    Object.keys(classifyChangedFiles([])),
+    `${policyCliPath} must emit every classifyChangedFiles key for ${message}`
+  );
+  assert.deepEqual(parsedOutput, expected, message);
 }
 
 for (const testCase of cases) {
@@ -158,11 +236,37 @@ const workflowSource = readFileSync(workflowPath, "utf8");
 const packageScripts = JSON.parse(readFileSync(packagePath, "utf8")).scripts;
 const workflowOutputKeys = workflowChangesOutputs(workflowSource);
 
+assertPolicyCliOutput(
+  "\n README.md \n docs/en/development.md \n\n",
+  classifyChangedFiles(["README.md", "docs/en/development.md"]),
+  `${policyCliPath} must trim blank and padded stdin lines while emitting workflow output values`
+);
+assertPolicyCliOutput(
+  "Dockerfile\npackage-lock.json\n",
+  classifyChangedFiles(["Dockerfile", "package-lock.json"]),
+  `${policyCliPath} must emit Docker and package-sensitive workflow output values from stdin`
+);
+
 assertSameMembers(
   workflowOutputKeys,
   policyKeys,
   `${workflowPath} jobs.changes.outputs must match classifyChangedFiles result keys`
 );
+
+assertWorkflowActionVersions(workflowSource, "actions/checkout", ["v6"]);
+assertWorkflowActionVersions(workflowSource, "actions/setup-node", ["v6"]);
+assertWorkflowActionVersions(workflowSource, "ruby/setup-ruby", ["v1"]);
+
+const changesJob = workflowJobBlock(workflowSource, "changes");
+assertJobMatches(
+  changesJob,
+  /uses: actions\/checkout@v6[\s\S]*fetch-depth: 0/,
+  `${workflowPath} jobs.changes must keep a full checkout for changed-file detection`
+);
+
+const lintJob = workflowJobBlock(workflowSource, "lint");
+assertJobMatches(lintJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.lint must keep Ruby 3.3`);
+assertJobMatches(lintJob, /bundler-cache: true/, `${workflowPath} jobs.lint must keep bundler-cache enabled`);
 
 const javascriptJob = workflowJavaScriptJob(workflowSource);
 assert.match(
@@ -175,6 +279,39 @@ assert.match(
   /run: npm run test:docs-entrypoints/,
   `${workflowPath} jobs.javascript must still run docs entrypoint checks for docs_entrypoint_sensitive changes`
 );
+assertJobMatches(javascriptJob, /uses: actions\/setup-node@v6/, `${workflowPath} jobs.javascript must keep setup-node v6`);
+assertJobMatches(javascriptJob, /node-version: "22"/, `${workflowPath} jobs.javascript must keep the Node 22 CI lane`);
+assertJobMatches(javascriptJob, /cache: npm/, `${workflowPath} jobs.javascript must keep npm cache enabled`);
+
+const dockerDevelopmentSetupJob = workflowJobBlock(workflowSource, "docker_development_setup");
+assertJobMatches(
+  dockerDevelopmentSetupJob,
+  /if: github\.event_name == 'pull_request' && needs\.changes\.outputs\.docker_setup_sensitive == 'true'/,
+  `${workflowPath} jobs.docker_development_setup must stay gated by docker_setup_sensitive pull request changes`
+);
+assertJobMatches(
+  dockerDevelopmentSetupJob,
+  /needs: changes/,
+  `${workflowPath} jobs.docker_development_setup must depend on changed-file detection`
+);
+assertJobMatches(
+  dockerDevelopmentSetupJob,
+  /run: docker compose build app/,
+  `${workflowPath} jobs.docker_development_setup must keep the Docker app build smoke`
+);
+assertJobMatches(
+  dockerDevelopmentSetupJob,
+  /run: docker compose run --rm app/,
+  `${workflowPath} jobs.docker_development_setup must keep the Docker app setup smoke`
+);
+assert.ok(
+  dockerDevelopmentSetupJob.includes('node --version | grep -E "^v22\\." && npm --version && npm ci'),
+  `${workflowPath} jobs.docker_development_setup must keep the representative Node/npm setup smoke`
+);
+
+const gemPackageJob = workflowJobBlock(workflowSource, "gem_package");
+assertJobMatches(gemPackageJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.gem_package must keep Ruby 3.3`);
+assertJobMatches(gemPackageJob, /bundler-cache: true/, `${workflowPath} jobs.gem_package must keep bundler-cache enabled`);
 
 for (const scriptName of npmRunScripts(workflowSource)) {
   assert.ok(
@@ -185,3 +322,4 @@ for (const scriptName of npmRunScripts(workflowSource)) {
 
 console.log(`Checked ${cases.length} CI changed-file policy cases.`);
 console.log(`Checked ${workflowOutputKeys.length} workflow output keys and ${npmRunScripts(workflowSource).length} JavaScript npm commands.`);
+console.log("Checked representative CI workflow setup surfaces.");
