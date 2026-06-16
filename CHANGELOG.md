@@ -144,6 +144,7 @@ Release preparation notes:
 - Added controller entries contract smoke and `tree_view_rows` / Windowed Rendering docs signal coverage to the docs entrypoint suite.
 - Added Docker Ruby base image source guard coverage to the Ruby version source drift smoke.
 - Added Docker development setup workflow wiring coverage to the CI changed-file policy guard.
+- Added CI changed-file policy CLI output guard coverage for workflow `key=value` handoff formatting and stdin trimming.
 
 ## 0.1.0 - 2026-05-07
 
