@@ -86,7 +86,8 @@ function isDockerSetupSensitivePath(file) {
     file === "docker-compose.yml" ||
     file === "package.json" ||
     file === "package-lock.json" ||
-    file === ".nvmrc"
+    file === ".nvmrc" ||
+    file === ".github/workflows/ci.yml"
   );
 }
 
