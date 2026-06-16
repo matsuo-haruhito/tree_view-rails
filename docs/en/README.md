@@ -80,8 +80,8 @@ If you are integrating TreeView into a Rails host app, start with these document
 
 | Document | Description |
 |---|---|
-| [Product Profile](../../Product%20Profile.md) | Repository positioning, source-of-truth order, maintainership boundaries, and non-goals |
-| [AGENTS.md](../../AGENTS.md) | Repository-specific maintainer workflow, first-read order, and documentation update rules |
+| Product Profile (repository-only) | Repository positioning, source-of-truth order, maintainership boundaries, and non-goals. This root-level maintainer document is not a packaged docs entry point. |
+| AGENTS.md (repository-only) | Repository-specific maintainer workflow, first-read order, and documentation update rules. This root-level maintainer document is not a packaged docs entry point. |
 | [Root docs index](../README.md) | Cross-language docs map and maintenance entry point for durable maintainer docs |
 | [CHANGELOG.md](../../CHANGELOG.md) | Release-facing summary of public changes, compatibility notes, and notable documentation additions |
 | [Documentation i18n audit](../i18n-audit.md) | Cross-language sync rules, technical-asset inventory, and translation priority checks |
