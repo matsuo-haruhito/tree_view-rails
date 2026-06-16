@@ -73,7 +73,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, verifies the gem can be built, confirms release-facing files are packaged, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The main-push `gem_package` CI job additionally runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem so representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, and public API manifest files remain packaged. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
+`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, builds the gem, confirms release-facing files are packaged, runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The package contents guard checks representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces. The main-push `gem_package` CI job repeats the same package contents verification against its built gem. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
 
 Pull request CI checks:
 
@@ -90,7 +90,7 @@ Main-push CI checks:
 - Ruby version matrix
 - Rails version matrix
 - JavaScript tests through `npm install` and `npm run test:js` until the lockfile is refreshed in sync with `package.json`
-- Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, and public API manifest file contents
+- Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI contents
 
 PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes full compatibility matrices, JavaScript coverage, and unconditional package verification.
 

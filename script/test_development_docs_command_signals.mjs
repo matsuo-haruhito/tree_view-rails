@@ -11,7 +11,8 @@ const requiredMaintenanceScripts = [
   "test:ci-policy",
   "test:node-version-sources",
   "test:ruby-version-sources",
-  "test:public-api-manifest-structure"
+  "test:public-api-manifest-structure",
+  "test:docs-i18n"
 ]
 
 const missingSignals = []
