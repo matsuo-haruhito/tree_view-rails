@@ -50,19 +50,18 @@ GitHub Release notes を書く前に、[Release note candidate collector](releas
 
 ## コードとテスト
 
-committed `package-lock.json` はまだ `package.json` と同期していないため、JavaScript lane は local setup / CI ともに現時点では `npm install` 前提です。lockfile refresh 作業が入ったら、release checks も `npm ci` 前提へ戻します。
+commit 済みの `package-lock.json` は JavaScript dependency install の source of truth です。ローカルセットアップ、Pull Request CI、Docker setup smoke、main-push JavaScript checks は `npm ci` を使い、release evidence の検証中に dependency resolution を更新しません。
 
-### Lockfile refresh handoff
+### JavaScript install path
 
-registry-enabled な環境で lockfile refresh が入ったら、JavaScript lane を `npm ci` に戻す前に、release-facing な確認点を見直してください。
+JavaScript dependencies を変更するときは、release-facing な確認点をそろえてください。
 
-- `package-lock.json` が current `package.json` に対して refresh され、関係ない dependency upgrade を同じ PR に混ぜていないことを確認する。
-- `npm ci` が現在の local / Docker install path になる場合は、`docs/en/development.md` と `docs/ja/development.md` の setup 説明も同期する。
-- この release checklist と、`npm install` 例外を説明している CI wording を更新する。
-- Node 22 source guard とは責務を分ける。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version`、`script/test_node_version_sources.mjs` は Node major の整合を確認し、lockfile refresh は `npm ci` に戻して安全かどうかを判断する。
-- 切り替え後は fresh な PR CI または main-push CI を観測し、refreshed lockfile が CI の JavaScript lane で動くことを確認する。
+- `package.json` と `package-lock.json` を一緒に更新し、関係ない dependency upgrade を同じ PR に混ぜない。
+- `README.md`、`docs/en/installation.md`、`docs/ja/installation.md`、`docs/en/development.md`、`docs/ja/development.md` の setup 説明を `npm ci` とそろえる。
+- Node 22 source guard とは責務を分ける。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version`、`script/test_node_version_sources.mjs` は Node major の整合を確認し、lockfile-backed install path は dependency resolution の整合を確認する。
+- dependency 変更後は fresh な PR CI または main-push CI を観測し、更新した lockfile が CI の JavaScript lane で動くことを確認する。
 
-この checklist だけを根拠に `package-lock.json`、workflow setup、dependency version、Node major を変更しないでください。実際の切り替えは、lockfile refresh または CI 変更を担当する PR に閉じます。
+この checklist だけを根拠に dependency version、Node major、package manager policy を変更しないでください。実際の切り替えは、その dependency または CI 変更を担当する PR に閉じます。
 
 ローカル確認:
 
@@ -73,24 +72,26 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。main-push の `gem_package` CI job では、built gem に Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest の代表ファイルが残っていることを `ruby script/check_gem_package_contents.rb tree_view-*.gem` でも確認します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
+`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、built gem に対する `ruby script/check_gem_package_contents.rb tree_view-*.gem`、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。package contents guard は Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI の代表surfaceを確認します。main-push の `gem_package` CI job でも、同じ package contents verification を CI で build した gem に対して再実行します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
 
 Pull Request CI の確認項目:
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
 - representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
-- JavaScript tests: `npm install`、Playwright browser setup、`npm run test:js`
+- JavaScript tests: `npm ci`、Playwright browser setup、`npm run test:js`
 - package-sensitive path を触るPRでの Gem package verification
 
-package-sensitive path には、`tree_view.gemspec`、`script/check_gem_package_contents.rb`、`.github/workflows/ci.yml`、`lib/**`、Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`、さらに `config/importmap.tree_view.rb`、`config/public_api_manifest.yml`、`config/locales/**` が含まれます。これらを触るPRでは `gem build tree_view.gemspec`、`ruby script/check_gem_package_contents.rb tree_view-*.gem`、`gem install tree_view-*.gem`、`ruby -e "require 'tree_view'"` を実行します。prose-only docs PR は、その package-sensitive path も触らない限り、従来どおり軽い docs-only 挙動を維持します。
+package-sensitive path には、`tree_view.gemspec`、`Rakefile`、root / packaged docs である `README.md`、`CHANGELOG.md`、`docs/**`、JavaScript install / Node source files である `package.json`、`package-lock.json`、`.nvmrc`、Bundler source files である `Gemfile` と `Gemfile.lock`、`script/check_gem_package_contents.rb`、`.github/workflows/ci.yml`、`lib/**`、Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`、さらに `config/importmap.tree_view.rb`、`config/public_api_manifest.yml`、`config/locales/**` が含まれます。これらを触るPRでは `gem build tree_view.gemspec`、`ruby script/check_gem_package_contents.rb tree_view-*.gem`、`gem install tree_view-*.gem`、`ruby -e "require 'tree_view'"` を実行します。docs-only PR は docs path だけを触る場合 runtime-heavy lane を避けますが、README、CHANGELOG、packaged docs の変更は built gem に release-facing docs が含まれ、整合していることを確認するため package-sensitive として扱います。
+
+Signal guard 用に、package-sensitive path には、`tree_view.gemspec` という代表フレーズを維持します。
 
 `main` push CI の確認項目:
 
 - Ruby version matrix
 - Rails version matrix
-- `package-lock.json` が `package.json` と同期するまでの間は、`npm install` と `npm run test:js` による JavaScript tests
-- Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest の代表ファイルを含む Gem package verification
+- `npm ci` と `npm run test:js` による JavaScript tests
+- Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI の代表ファイルとmetadataを含む Gem package verification
 
 merge前にPR CIを通します。release判定には、full compatibility matrices、JavaScript coverage、unconditional package verificationを含む、より広い `main` CIを使います。
 
@@ -158,7 +159,7 @@ release前に確認すること:
 - 生成gemをローカルinstallして `require "tree_view"` を確認する
 - packaged filesに以下が含まれることを確認する
   - `lib/**/*`
-  - Rails helpers, views, stylesheets, JavaScript, importmap files
+  - Rails helpers, views, stylesheets, JavaScript, and importmap files
   - `app/helpers/tree_view_helper.rb`
   - `app/views/tree_view/_tree_row.html.erb`
   - `app/javascript/tree_view/index.js`

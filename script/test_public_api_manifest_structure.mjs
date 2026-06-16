@@ -86,6 +86,11 @@ function assertRequiredObjectKeys(value, path, keys) {
   keys.forEach((key) => assertObject(value[key], `${path}.${key}`))
 }
 
+function assertRequiredKeys(value, path, keys) {
+  assertObject(value, path)
+  keys.forEach((key) => assert(key in value, `${path} missing required key: ${key}`))
+}
+
 function assertPathTreeBuilderNodeShapes(value, path, keys) {
   assertRequiredObjectKeys(value, path, keys)
   keys.forEach((key) => {
@@ -136,6 +141,48 @@ function assertTopLevelKeys(manifest) {
   })
 }
 
+function assertEventClassification(javascriptPackageRoot) {
+  const requiredEventNameGroups = ["state", "selection", "remote_state", "host_lifecycle", "transfer"]
+  const requiredEventDetailGroups = ["state", "selection", "remote_state", "transfer"]
+  const requiredNoDetailGroups = ["host_lifecycle"]
+
+  assertRequiredObjectKeys(
+    javascriptPackageRoot.event_names,
+    "javascript_package_root.event_names",
+    requiredEventNameGroups
+  )
+  assertRequiredObjectKeys(
+    javascriptPackageRoot.event_detail_keys,
+    "javascript_package_root.event_detail_keys",
+    requiredEventDetailGroups
+  )
+  assertRequiredKeys(
+    javascriptPackageRoot.event_names_without_detail,
+    "javascript_package_root.event_names_without_detail",
+    requiredNoDetailGroups
+  )
+
+  requiredNoDetailGroups.forEach((group) => {
+    const groupEvents = javascriptPackageRoot.event_names[group]
+    const noDetailEventNames = javascriptPackageRoot.event_names_without_detail[group]
+
+    assertStringMap(groupEvents, `javascript_package_root.event_names.${group}`)
+    assertUniqueStringList(noDetailEventNames, `javascript_package_root.event_names_without_detail.${group}`)
+
+    const validEventNames = new Set(Object.keys(groupEvents))
+    noDetailEventNames.forEach((eventName) => {
+      assert(
+        validEventNames.has(eventName),
+        `javascript_package_root.event_names_without_detail.${group} includes unknown event: ${eventName}`
+      )
+      assert(
+        !(javascriptPackageRoot.event_detail_keys[group] && javascriptPackageRoot.event_detail_keys[group][eventName]),
+        `javascript_package_root.event_names_without_detail.${group} overlaps detail-bearing event: ${eventName}`
+      )
+    })
+  })
+}
+
 const requiredUiConfigBuilderOptionKeys = [
   "build",
   "build_turbo",
@@ -162,6 +209,12 @@ const requiredGroupedOptionKeys = [
   "row_status"
 ]
 
+const requiredLocalizedNameI18nKeyGroups = [
+  "model_names",
+  "attribute_names",
+  "node_type_names"
+]
+
 const requiredIntegrationHookKeys = ["state", "remote_state", "transfer"]
 
 const manifest = loadManifest()
@@ -185,7 +238,11 @@ assertObjectWithLists(manifest.resource_table_render_state_call, "resource_table
 assertString(manifest.resource_table_render_state_call.render_options_contract, "resource_table_render_state_call.render_options_contract")
 assertUniqueStringList(manifest.render_state_callback_builder_keys, "render_state_callback_builder_keys")
 
-assertObject(manifest.localized_name_i18n_keys, "localized_name_i18n_keys")
+assertRequiredObjectKeys(
+  manifest.localized_name_i18n_keys,
+  "localized_name_i18n_keys",
+  requiredLocalizedNameI18nKeyGroups
+)
 for (const [name, config] of Object.entries(manifest.localized_name_i18n_keys)) {
   assertObject(config, `localized_name_i18n_keys.${name}`)
   assertString(config.helper, `localized_name_i18n_keys.${name}.helper`)
@@ -204,9 +261,15 @@ assertString(
   "localized_name_i18n_keys.node_type_names.lookup_prefix"
 )
 
+assertObject(manifest.setup_generators, "setup_generators")
 assertObject(manifest.setup_generators.persisted_state_install, "setup_generators.persisted_state_install")
 assertString(manifest.setup_generators.persisted_state_install.name, "setup_generators.persisted_state_install.name")
 assertString(manifest.setup_generators.persisted_state_install.class_name, "setup_generators.persisted_state_install.class_name")
+assertEntries(
+  manifest.setup_generators.persisted_state_install.optional_arguments,
+  "setup_generators.persisted_state_install.optional_arguments",
+  ["name", "banner"]
+)
 assertUniqueStringList(
   manifest.setup_generators.persisted_state_install.generated_paths,
   "setup_generators.persisted_state_install.generated_paths"
@@ -237,6 +300,7 @@ assertStringMap(javascriptPackageRoot.empty_state_hooks, "javascript_package_roo
 assertObject(javascriptPackageRoot.event_names, "javascript_package_root.event_names")
 assertObject(javascriptPackageRoot.event_detail_keys, "javascript_package_root.event_detail_keys")
 assertObject(javascriptPackageRoot.event_names_without_detail, "javascript_package_root.event_names_without_detail")
+assertEventClassification(javascriptPackageRoot)
 
 Object.entries(javascriptPackageRoot.event_names).forEach(([group, events]) => {
   assertStringMap(events, `javascript_package_root.event_names.${group}`)
