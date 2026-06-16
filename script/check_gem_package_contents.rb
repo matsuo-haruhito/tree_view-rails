@@ -162,10 +162,10 @@ missing = missing_by_group.values.flatten
 missing_gem_metadata = EXPECTED_GEM_METADATA.reject do |key, expected_value|
   package_spec.metadata[key] == expected_value
 end
-missing_manifest_constant_paths = manifest.fetch("public_constants").to_h do |constant|
+missing_manifest_constant_paths = manifest.fetch("public_constants").each_with_object({}) do |constant, missing_paths|
   expected_path = PUBLIC_CONSTANT_RUNTIME_FILES[constant]
-  [constant, expected_path] unless expected_path && files.include?(expected_path)
-end.compact
+  missing_paths[constant] = expected_path unless expected_path && files.include?(expected_path)
+end
 unknown_manifest_constants = manifest.fetch("public_constants") - PUBLIC_CONSTANT_RUNTIME_FILES.keys
 missing_installation_signals = INSTALLATION_DOC_PATHS.to_h do |path|
   content = File.read(File.join(root, path))
