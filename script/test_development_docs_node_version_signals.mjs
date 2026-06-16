@@ -36,7 +36,7 @@ const nodeVersionSourceSignals = [
       "script/test_node_version_sources.mjs",
       "npm run test:node-version-sources",
       "npm run test:entrypoints",
-      "without changing the current install policy"
+      "without changing the lockfile-backed install policy"
     ]
   },
   {
@@ -51,13 +51,13 @@ const nodeVersionSourceSignals = [
       "script/test_node_version_sources.mjs",
       "npm run test:node-version-sources",
       "npm run test:entrypoints",
-      "現在の install policy を変えずに確認します"
+      "lockfile-backed install policy を変えずに確認します"
     ]
   }
 ]
 
 nodeVersionSourceSignals.forEach(({ feature, sourcePath, signals }) => {
-  assertSignals(sourcePath, feature, signals)
+  assertSignals(sourcePath, feature, sourcePath, signals)
 })
 
 const nodeVersionSourceFiles = [
