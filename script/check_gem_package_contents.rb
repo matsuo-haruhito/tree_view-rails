@@ -77,6 +77,12 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
   ],
+  "Public setup generator files" => %w[
+    lib/generators/tree_view/state/install_generator.rb
+    lib/generators/tree_view/state/templates/create_tree_view_states.rb
+    lib/generators/tree_view/state/templates/tree_view_state.rb
+    lib/generators/tree_view/state/templates/tree_view_state_owner.rb
+  ],
   "Bilingual release docs" => %w[
     docs/en/release.md
     docs/ja/release.md
