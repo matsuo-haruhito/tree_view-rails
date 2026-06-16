@@ -74,6 +74,8 @@ Release preparation notes:
 - Clarified development docs for the Ruby-backed `npm run test:entrypoints` manifest loader path and setup expectations.
 - Clarified development docs that `.nvmrc`, `package.json` `engines.node`, and workflow `node-version` stay aligned by a Node version source drift guard.
 - Clarified Development docs for the Ruby version source and CI changed-file policy guard commands, including Bundler dependency package-sensitive guidance.
+- Clarified Development docs for standalone gem package verification and docs i18n parity commands.
+- Clarified `npm ci` install path guidance across README, installation, development, and release checklist docs so local setup, PR CI, Docker setup smoke, and main-push JavaScript checks share lockfile-backed evidence.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
@@ -144,6 +146,11 @@ Release preparation notes:
 - Added controller entries contract smoke and `tree_view_rows` / Windowed Rendering docs signal coverage to the docs entrypoint suite.
 - Added Docker Ruby base image source guard coverage to the Ruby version source drift smoke.
 - Added Docker development setup workflow wiring coverage to the CI changed-file policy guard.
+- Added `npm ci` CI and Docker setup smoke coverage so workflow routing, JavaScript setup, and docs install guidance stay aligned.
+- Added a standalone Public API manifest structure command and docs entrypoint suite wiring for manifest structure smoke.
+- Added Development docs command signal smoke coverage for maintainer npm command guidance.
+- Added Development docs package verification coverage to the gem package contents guard.
+- Added release:check package contents verification plus gem metadata URI and public runtime packaging guard coverage.
 
 ## 0.1.0 - 2026-05-07
 
@@ -222,6 +229,7 @@ Release preparation notes:
 
 - Added coverage for the persisted state install generator outputs.
 - Added unit and integration coverage for windowed rendering.
+
 - Added JavaScript controller tests for state, selection, transfer, and remote-state behavior.
 
 ### Notes
