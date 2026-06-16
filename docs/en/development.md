@@ -6,7 +6,7 @@ This page summarizes common development and maintenance tasks for the TreeView g
 
 ```bash
 bundle install
-npm install
+npm ci
 ```
 
 With Docker:
@@ -15,14 +15,14 @@ With Docker:
 cp .env.example .env
 docker compose build
 docker compose run --rm app bundle install
-docker compose run --rm app npm install
+docker compose run --rm app npm ci
 ```
 
 The development Docker image installs Node 22 and npm so the Docker setup can run the same JavaScript install path as local development. Keep the Dockerfile Node major aligned with `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value when any of them changes.
 
-Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version. Keep `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value aligned when any of them changes. The automated drift guard is `script/test_node_version_sources.mjs`, exposed as `npm run test:node-version-sources` and included in `npm run test:entrypoints`; it verifies those Node version sources stay on Node 22 without changing the current install policy.
+Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version. Keep `.nvmrc`, `package.json` `engines.node`, and the workflow `node-version` value aligned when any of them changes. The automated drift guard is `script/test_node_version_sources.mjs`, exposed as `npm run test:node-version-sources` and included in `npm run test:entrypoints`; it verifies those Node version sources stay on Node 22 without changing the lockfile-backed install policy.
 
-Keep using `npm install` for now. The repository has a committed `package-lock.json`, but it is not yet refreshed in sync with `package.json`, so local setup and pull-request CI stay on `npm install` until that lockfile refresh is completed in a registry-enabled environment. See [Installation](installation.md) for the current CI and install-path summary.
+Use `npm ci` for local JavaScript setup. The committed `package-lock.json` is now the source of truth for repeatable installs, and pull-request CI and Docker setup use the same lockfile-backed install path. See [Installation](installation.md) for the current CI and install-path summary.
 
 ## Common commands
 
@@ -67,7 +67,7 @@ BUNDLE_GEMFILE=gemfiles/rails_8_0.gemfile bundle exec rake
 
 Public API compatibility specs protect documented Ruby entry points, helper methods, helper option keys, grouped options, and JavaScript package-root exports from accidental removals or renames. The JavaScript entrypoint smoke also checks manifest-backed controller registrations, public event names, and documented `event.detail` key groups. Keep these specs focused on API existence and representative behavior rather than full implementation details.
 
-Docs entrypoint smoke and public API docs signal smoke have separate responsibilities within `npm run test:docs-entrypoints`: `script/test_docs_entrypoints.mjs` protects broad documentation entry points, links, and feature-guide signals, while `script/test_repository_only_maintainer_entrypoints.mjs` protects repository-only maintainer entry points such as `Product Profile.md`, `AGENTS.md`, `CHANGELOG.md`, and `docs/i18n-audit.md` from disappearing out of the root docs map or language README files. `script/test_public_api_docs_signals.mjs` protects representative Public API and feature-doc signals. When a public API manifest entry, package-root export, public helper surface, or docs signal is added or renamed, review and update the public API docs signal smoke alongside the affected English and Japanese docs.
+Docs entrypoint smoke and public API docs signal smoke have separate responsibilities within `npm run test:docs-entrypoints`: `script/test_docs_entrypoints.mjs` protects broad documentation entry points, links, and feature-guide signals, while `script/test_repository_only_maintainer_entrypoints.mjs` protects repository-only maintainer entry points such as `Product Profile.md`, `AGENTS.md`, `CHANGELOG.md`, and `docs/i18n-audit.md` from disappearing out of the root docs map or language README files without treating them as gem-packaged host-app API guides. `script/test_public_api_docs_signals.mjs` protects representative Public API and feature-doc signals. When a public API manifest entry, package-root export, public helper surface, or docs signal is added or renamed, review and update the public API docs signal smoke alongside the affected English and Japanese docs.
 
 When an intentional breaking change is accepted, update the public API docs and the compatibility specs together so the documented contract and test coverage stay aligned.
 

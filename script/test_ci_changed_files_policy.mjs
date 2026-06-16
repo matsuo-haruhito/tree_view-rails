@@ -55,14 +55,14 @@ const cases = [
     }
   },
   {
-    name: "workflow changes are package-sensitive full CI changes",
+    name: "workflow changes are package- and Docker-sensitive full CI changes",
     files: [".github/workflows/ci.yml"],
     expected: {
       docs_only: false,
       mockups_changed: false,
       browser_smoke_changed: false,
       package_sensitive: true,
-      docker_setup_sensitive: false,
+      docker_setup_sensitive: true,
       docs_entrypoint_sensitive: false
     }
   },
@@ -249,7 +249,7 @@ assertJobMatches(
   `${workflowPath} jobs.docker_development_setup must keep the Docker app setup smoke`
 );
 assert.ok(
-  dockerDevelopmentSetupJob.includes('node --version | grep -E "^v22\\." && npm --version && npm install'),
+  dockerDevelopmentSetupJob.includes('node --version | grep -E "^v22\\." && npm --version && npm ci'),
   `${workflowPath} jobs.docker_development_setup must keep the representative Node/npm setup smoke`
 );
 
