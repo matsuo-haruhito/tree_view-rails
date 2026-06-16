@@ -155,6 +155,7 @@ Release preparation notes:
 - Added CI changed-file policy CLI output guard coverage for workflow `key=value` handoff formatting and stdin trimming.
 - Added dependency spec, non-PR workflow output, public API manifest unknown-key, and duplicate YAML-key guard coverage for package-lock, CI changed-file policy, and manifest structure smoke.
 - Added public setup generator file package contents guard coverage for install generator and state templates.
+- Added public API manifest top-level key parity coverage to keep Ruby and Node manifest structure guards synchronized.
 
 ## 0.1.0 - 2026-05-07
 
@@ -164,7 +165,7 @@ Release preparation notes:
 - `TreeView::Tree` for parent-child records.
 - `TreeView::GraphAdapter` for graph-like or heterogeneous node structures.
 - `TreeView::PathTree` via `Tree#path_tree_for(items)` for rendering matched items with completed parent paths.
-- `TreeView::ReverseTree` via `Tree#reverse_tree_for(items)` for rendering child-to-parent paths.
+- `TreeView::ReverseTree` for rendering child-to-parent paths.
 - `TreeView::RenderState` for screen-level rendering options.
 - `tree_view_rows(render_state)` helper.
 - `TreeView::RenderWindow` and opt-in windowed rendering through `tree_view_rows(render_state, window: { offset:, limit: })`.
