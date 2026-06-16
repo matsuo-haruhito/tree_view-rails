@@ -74,6 +74,14 @@ npm run test:js
 
 `bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、built gem に対する `ruby script/check_gem_package_contents.rb tree_view-*.gem`、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。package contents guard は Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI の代表surfaceを確認します。main-push の `gem_package` CI job でも、同じ package contents verification を CI で build した gem に対して再実行します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
 
+tag 作成後は、tag alignment を必須にして release check を再実行します。
+
+```bash
+TREE_VIEW_REQUIRE_RELEASE_TAG=1 bundle exec rake release:check
+```
+
+release preparation PR の段階では tag がまだ無いことが多いため、通常の command を使います。tag 後はこの flag 付き command を使い、`vX.Y.Z` が存在しない場合や current `HEAD` とは別の commit を指している場合に失敗させます。
+
 Pull Request CI の確認項目:
 
 - Ruby lint: `bundle exec standardrb`
