@@ -8,7 +8,7 @@
   "scripts": {
     "test": "vitest run",
     "test:browser": "playwright test",
-    "test:ci-policy": "node script/test_ci_changed_files_policy.mjs && node script/test_ci_workflow_changed_file_detection_signals.mjs",
+    "test:ci-policy": "node script/test_ci_changed_files_policy.mjs && node script/test_ci_workflow_changed_file_detection_signals.mjs && node script/test_package_lock_dependency_drift.mjs",
     "test:node-version-sources": "node script/test_node_version_sources.mjs",
     "test:ruby-version-sources": "node script/test_ruby_version_sources.mjs",
     "test:development-docs-commands": "node script/test_development_docs_command_signals.mjs",

@@ -151,6 +151,8 @@ Release preparation notes:
 - Added Development docs command signal smoke coverage for maintainer npm command guidance.
 - Added Development docs package verification coverage to the gem package contents guard.
 - Added release:check package contents verification plus gem metadata URI and public runtime packaging guard coverage.
+- Added Public API manifest runtime surface guard coverage for documented module methods, constants, and helper methods.
+- Added CI changed-file policy CLI output guard coverage for workflow `key=value` handoff formatting and stdin trimming.
 
 ## 0.1.0 - 2026-05-07
 
@@ -229,7 +231,6 @@ Release preparation notes:
 
 - Added coverage for the persisted state install generator outputs.
 - Added unit and integration coverage for windowed rendering.
-
 - Added JavaScript controller tests for state, selection, transfer, and remote-state behavior.
 
 ### Notes
