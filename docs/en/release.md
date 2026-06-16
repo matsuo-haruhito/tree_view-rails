@@ -50,19 +50,18 @@ Minimum release conditions:
 
 ## Code and tests
 
-The committed `package-lock.json` is not yet in sync with `package.json`, so both local setup and CI still use `npm install` for the JavaScript lane. Switch these release checks back to `npm ci` after the lockfile refresh work lands.
+The committed `package-lock.json` is the source of truth for JavaScript dependency installs. Local setup, pull-request CI, Docker setup smoke, and main-push JavaScript checks use `npm ci` so release evidence does not update dependency resolution during verification.
 
-### Lockfile refresh handoff
+### JavaScript install path
 
-When a registry-enabled lockfile refresh lands, review these release-facing points before switching the JavaScript lane back to `npm ci`:
+When JavaScript dependencies change, keep these release-facing points aligned:
 
-- Confirm `package-lock.json` was refreshed against the current `package.json` without bundling unrelated dependency upgrades.
-- Update the setup wording in `docs/en/development.md` and `docs/ja/development.md` if `npm ci` becomes the current local and Docker install path.
-- Update this release checklist and any CI wording that still describes the `npm install` exception.
-- Keep the Node 22 source guard separate: `.nvmrc`, `package.json` `engines.node`, workflow `node-version`, and `script/test_node_version_sources.mjs` confirm the Node major, while the lockfile refresh decides whether `npm ci` is safe again.
-- Observe fresh PR or main-push CI after the switch so the JavaScript lane proves the refreshed lockfile works in CI.
+- Update `package.json` and `package-lock.json` together without bundling unrelated dependency upgrades.
+- Keep setup wording in `README.md`, `docs/en/installation.md`, `docs/ja/installation.md`, `docs/en/development.md`, and `docs/ja/development.md` aligned with `npm ci`.
+- Keep the Node 22 source guard separate: `.nvmrc`, `package.json` `engines.node`, workflow `node-version`, and `script/test_node_version_sources.mjs` confirm the Node major, while the lockfile-backed install path confirms dependency resolution.
+- Observe fresh PR or main-push CI after dependency changes so the JavaScript lane proves the updated lockfile works in CI.
 
-Do not change `package-lock.json`, workflow setup, dependency versions, or the Node major from this checklist alone; those belong in the lockfile refresh or CI change PR that owns the actual switch.
+Do not change dependency versions, the Node major, or package manager policy from this checklist alone; those belong in the dependency or CI change PR that owns the actual switch.
 
 Local checks:
 
@@ -80,7 +79,7 @@ Pull request CI checks:
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
 - Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
-- JavaScript tests through `npm install`, Playwright browser setup, and `npm run test:js`
+- JavaScript tests through `npm ci`, Playwright browser setup, and `npm run test:js`
 - Gem package verification when the PR touches package-sensitive paths
 
 Package-sensitive PR paths include `tree_view.gemspec`, `script/check_gem_package_contents.rb`, `.github/workflows/ci.yml`, `lib/**`, Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`, plus `config/importmap.tree_view.rb`, `config/public_api_manifest.yml`, and `config/locales/**`. Those PRs run `gem build tree_view.gemspec`, `ruby script/check_gem_package_contents.rb tree_view-*.gem`, `gem install tree_view-*.gem`, and `ruby -e "require 'tree_view'"`. Prose-only docs PRs keep the lighter docs-only behavior unless they also touch one of those package-sensitive paths.
@@ -89,7 +88,7 @@ Main-push CI checks:
 
 - Ruby version matrix
 - Rails version matrix
-- JavaScript tests through `npm install` and `npm run test:js` until the lockfile is refreshed in sync with `package.json`
+- JavaScript tests through `npm ci` and `npm run test:js`
 - Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI contents
 
 PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes full compatibility matrices, JavaScript coverage, and unconditional package verification.
