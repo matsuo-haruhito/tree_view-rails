@@ -249,7 +249,7 @@ assertJobMatches(
   `${workflowPath} jobs.docker_development_setup must keep the Docker app setup smoke`
 );
 assert.ok(
-  dockerDevelopmentSetupJob.includes('node --version | grep -E "^v22\\." && npm --version && npm install'),
+  dockerDevelopmentSetupJob.includes('node --version | grep -E "^v22\\." && npm --version && npm ci'),
   `${workflowPath} jobs.docker_development_setup must keep the representative Node/npm setup smoke`
 );
 
