@@ -153,6 +153,7 @@ Release preparation notes:
 - Added release:check package contents verification plus gem metadata URI and public runtime packaging guard coverage.
 - Added Public API manifest runtime surface guard coverage for documented module methods, constants, and helper methods.
 - Added CI changed-file policy CLI output guard coverage for workflow `key=value` handoff formatting and stdin trimming.
+- Added dependency spec, non-PR workflow output, public API manifest unknown-key, and duplicate YAML-key guard coverage for package-lock, CI changed-file policy, and manifest structure smoke.
 
 ## 0.1.0 - 2026-05-07
 
