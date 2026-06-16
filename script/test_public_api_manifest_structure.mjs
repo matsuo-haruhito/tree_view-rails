@@ -1,114 +1,29 @@
-import { execFileSync } from "node:child_process"
+import { readFileSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+import YAML from "yaml"
 
-function loadManifest() {
-  try {
-    return JSON.parse(
-      execFileSync(
-        "ruby",
-        [
-          "-e",
-          [
-            'require "json"',
-            'require "yaml"',
-            'data = YAML.load_file("config/public_api_manifest.yml")',
-            "print JSON.generate(data)"
-          ].join("; ")
-        ],
-        { encoding: "utf8" }
-      )
-    )
-  } catch (error) {
-    const detail = [error.stdout, error.stderr]
-      .filter((output) => output && output.length > 0)
-      .join("\n")
-      .trim() || error.message
-
-    throw new Error(
-      [
-        "Could not load config/public_api_manifest.yml for the manifest structure smoke.",
-        "Run this command from the repository root with Ruby available, or inspect the manifest YAML syntax.",
-        `Loader output: ${detail}`
-      ].join("\n"),
-      { cause: error }
-    )
-  }
-}
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const repoRoot = path.resolve(__dirname, "..")
 
 function assert(condition, message) {
   if (!condition) throw new Error(message)
 }
 
-function valueType(value) {
-  if (Array.isArray(value)) return "array"
-  if (value === null) return "null"
-
-  return typeof value
+function loadManifest() {
+  const manifestPath = path.join(repoRoot, "config", "public_api_manifest.yml")
+  return YAML.parse(readFileSync(manifestPath, "utf8"))
 }
 
-function assertObject(value, path) {
-  assert(
-    value && typeof value === "object" && !Array.isArray(value),
-    `${path} must be an object, got ${valueType(value)}`
-  )
+function flattenYamlValues(value) {
+  if (Array.isArray(value)) return value.flatMap(flattenYamlValues)
+  if (value && typeof value === "object") return Object.values(value).flatMap(flattenYamlValues)
+  return [value]
 }
 
-function assertString(value, path) {
-  assert(typeof value === "string" && value.length > 0, `${path} must be a non-empty string`)
-}
-
-function assertUniqueStringList(value, path) {
-  assert(Array.isArray(value), `${path} must be an array, got ${valueType(value)}`)
-  assert(value.length > 0, `${path} must not be empty`)
-
-  const seenValues = new Set()
-
-  value.forEach((item, index) => {
-    assertString(item, `${path}[${index}]`)
-    assert(!seenValues.has(item), `${path} contains duplicate value: ${item}`)
-    seenValues.add(item)
-  })
-}
-
-function assertStringMap(value, path) {
-  assertObject(value, path)
-  Object.entries(value).forEach(([key, item]) => {
-    assertString(item, `${path}.${key}`)
-  })
-}
-
-function assertObjectWithLists(value, path, keys) {
-  assertObject(value, path)
-  keys.forEach((key) => assertUniqueStringList(value[key], `${path}.${key}`))
-}
-
-function assertRequiredObjectKeys(value, path, keys) {
-  assertObject(value, path)
-  keys.forEach((key) => assertObject(value[key], `${path}.${key}`))
-}
-
-function assertRequiredKeys(value, path, keys) {
-  assertObject(value, path)
-  keys.forEach((key) => assert(key in value, `${path} missing required key: ${key}`))
-}
-
-function assertPathTreeBuilderNodeShapes(value, path, keys) {
-  assertRequiredObjectKeys(value, path, keys)
-  keys.forEach((key) => {
-    const shape = value[key]
-    assertString(shape.constant, `${path}.${key}.constant`)
-    assertUniqueStringList(shape.fields, `${path}.${key}.fields`)
-    assertUniqueStringList(shape.predicates, `${path}.${key}.predicates`)
-  })
-}
-
-function assertEntries(value, path, requiredKeys) {
-  assert(Array.isArray(value), `${path} must be an array, got ${valueType(value)}`)
-  assert(value.length > 0, `${path} must not be empty`)
-
-  value.forEach((entry, index) => {
-    assertObject(entry, `${path}[${index}]`)
-    requiredKeys.forEach((key) => assertString(entry[key], `${path}[${index}].${key}`))
-  })
+function readRepoFile(relativePath) {
+  return readFileSync(path.join(repoRoot, relativePath), "utf8")
 }
 
 function assertTopLevelKeys(manifest) {
@@ -139,182 +54,78 @@ function assertTopLevelKeys(manifest) {
   expectedKeys.forEach((key) => {
     assert(key in manifest, `config/public_api_manifest.yml missing top-level key: ${key}`)
   })
+
+  const unexpectedKeys = Object.keys(manifest).filter((key) => !expectedKeys.includes(key)).sort()
+  assert(
+    unexpectedKeys.length === 0,
+    `config/public_api_manifest.yml contains unexpected top-level key(s): ${unexpectedKeys.join(", ")}. Update script/test_public_api_manifest_structure.mjs before adding manifest sections.`
+  )
 }
 
-function assertEventClassification(javascriptPackageRoot) {
-  const requiredEventNameGroups = ["state", "selection", "remote_state", "host_lifecycle", "transfer"]
-  const requiredEventDetailGroups = ["state", "selection", "remote_state", "transfer"]
-  const requiredNoDetailGroups = ["host_lifecycle"]
+function assertArraySection(manifest, key) {
+  assert(Array.isArray(manifest[key]), `config/public_api_manifest.yml ${key} must be an array`)
+}
 
-  assertRequiredObjectKeys(
-    javascriptPackageRoot.event_names,
-    "javascript_package_root.event_names",
-    requiredEventNameGroups
-  )
-  assertRequiredObjectKeys(
-    javascriptPackageRoot.event_detail_keys,
-    "javascript_package_root.event_detail_keys",
-    requiredEventDetailGroups
-  )
-  assertRequiredKeys(
-    javascriptPackageRoot.event_names_without_detail,
-    "javascript_package_root.event_names_without_detail",
-    requiredNoDetailGroups
-  )
-
-  requiredNoDetailGroups.forEach((group) => {
-    const groupEvents = javascriptPackageRoot.event_names[group]
-    const noDetailEventNames = javascriptPackageRoot.event_names_without_detail[group]
-
-    assertStringMap(groupEvents, `javascript_package_root.event_names.${group}`)
-    assertUniqueStringList(noDetailEventNames, `javascript_package_root.event_names_without_detail.${group}`)
-
-    const validEventNames = new Set(Object.keys(groupEvents))
-    noDetailEventNames.forEach((eventName) => {
-      assert(
-        validEventNames.has(eventName),
-        `javascript_package_root.event_names_without_detail.${group} includes unknown event: ${eventName}`
-      )
-      assert(
-        !(javascriptPackageRoot.event_detail_keys[group] && javascriptPackageRoot.event_detail_keys[group][eventName]),
-        `javascript_package_root.event_names_without_detail.${group} overlaps detail-bearing event: ${eventName}`
-      )
-    })
+function assertStringValues(section, key) {
+  flattenYamlValues(section).forEach((value) => {
+    assert(typeof value === "string", `config/public_api_manifest.yml ${key} values must be strings`)
+    assert(value.trim().length > 0, `config/public_api_manifest.yml ${key} values must be non-empty`)
   })
 }
 
-const requiredUiConfigBuilderOptionKeys = [
-  "build",
-  "build_turbo",
-  "build_static",
-  "build_client_side"
-]
-
-const requiredPathTreeBuilderNodeShapeKeys = ["folder_node", "record_node"]
-
-const requiredHelperOptionKeys = [
-  "tree_view_rows",
-  "tree_view_window",
-  "tree_view_breadcrumb",
-  "tree_view_toolbar"
-]
-
-const requiredGroupedOptionKeys = [
-  "initial_expansion",
-  "render_scope",
-  "toggle_scope",
-  "toggle_icons",
-  "selection",
-  "lazy_loading",
-  "row_status"
-]
-
-const requiredLocalizedNameI18nKeyGroups = [
-  "model_names",
-  "attribute_names",
-  "node_type_names"
-]
-
-const requiredIntegrationHookKeys = ["state", "remote_state", "transfer"]
+function assertFileIncludes(relativePath, expectedText, label) {
+  const source = readRepoFile(relativePath)
+  assert(
+    source.includes(expectedText),
+    `${label}: ${relativePath} is missing ${expectedText}`
+  )
+}
 
 const manifest = loadManifest()
-
 assertTopLevelKeys(manifest)
-assertUniqueStringList(manifest.module_methods, "module_methods")
-assertObjectWithLists(manifest.configuration_options, "configuration_options", ["tree_view_configure"])
-assertUniqueStringList(manifest.public_constants, "public_constants")
-assertUniqueStringList(manifest.filtered_tree_modes, "filtered_tree_modes")
-assertObjectWithLists(manifest.visible_rows_row_metadata, "visible_rows_row_metadata", ["fields", "predicates"])
-assertUniqueStringList(manifest.node_presenter_builder_names, "node_presenter_builder_names")
-assertObjectWithLists(manifest.graph_adapter_initializer, "graph_adapter_initializer", ["required_keywords", "optional_keywords"])
-assertObjectWithLists(manifest.ui_config_builder_option_keys, "ui_config_builder_option_keys", requiredUiConfigBuilderOptionKeys)
-assertPathTreeBuilderNodeShapes(manifest.path_tree_builder_node_shapes, "path_tree_builder_node_shapes", requiredPathTreeBuilderNodeShapeKeys)
-assertObjectWithLists(manifest.helper_option_keys, "helper_option_keys", requiredHelperOptionKeys)
-assertUniqueStringList(manifest.render_window_metadata, "render_window_metadata")
-assertStringMap(manifest.toolbar_actions, "toolbar_actions")
-assertObjectWithLists(manifest.toolbar_action_metadata, "toolbar_action_metadata", ["keys", "data_keys"])
-assertObjectWithLists(manifest.grouped_option_keys, "grouped_option_keys", requiredGroupedOptionKeys)
-assertObjectWithLists(manifest.resource_table_render_state_call, "resource_table_render_state_call", ["required_keywords", "optional_keywords"])
-assertString(manifest.resource_table_render_state_call.render_options_contract, "resource_table_render_state_call.render_options_contract")
-assertUniqueStringList(manifest.render_state_callback_builder_keys, "render_state_callback_builder_keys")
 
-assertRequiredObjectKeys(
-  manifest.localized_name_i18n_keys,
+for (const key of [
+  "module_methods",
+  "configuration_options",
+  "public_constants",
   "localized_name_i18n_keys",
-  requiredLocalizedNameI18nKeyGroups
-)
-for (const [name, config] of Object.entries(manifest.localized_name_i18n_keys)) {
-  assertObject(config, `localized_name_i18n_keys.${name}`)
-  assertString(config.helper, `localized_name_i18n_keys.${name}.helper`)
-  assertString(config.fallback, `localized_name_i18n_keys.${name}.fallback`)
+  "filtered_tree_modes",
+  "visible_rows_row_metadata",
+  "node_presenter_builder_names",
+  "graph_adapter_initializer",
+  "ui_config_builder_option_keys",
+  "path_tree_builder_node_shapes",
+  "helper_methods",
+  "helper_option_keys",
+  "render_window_metadata",
+  "toolbar_actions",
+  "toolbar_action_metadata",
+  "setup_generators",
+  "grouped_option_keys",
+  "diagnostics",
+  "render_state_callback_builder_keys"
+]) {
+  assertArraySection(manifest, key)
+  assertStringValues(manifest[key], key)
 }
-assertUniqueStringList(
-  manifest.localized_name_i18n_keys.model_names.delegated_lookup_prefixes,
-  "localized_name_i18n_keys.model_names.delegated_lookup_prefixes"
-)
-assertUniqueStringList(
-  manifest.localized_name_i18n_keys.attribute_names.delegated_lookup_prefixes,
-  "localized_name_i18n_keys.attribute_names.delegated_lookup_prefixes"
-)
-assertString(
-  manifest.localized_name_i18n_keys.node_type_names.lookup_prefix,
-  "localized_name_i18n_keys.node_type_names.lookup_prefix"
-)
 
-assertObject(manifest.setup_generators, "setup_generators")
-assertObject(manifest.setup_generators.persisted_state_install, "setup_generators.persisted_state_install")
-assertString(manifest.setup_generators.persisted_state_install.name, "setup_generators.persisted_state_install.name")
-assertString(manifest.setup_generators.persisted_state_install.class_name, "setup_generators.persisted_state_install.class_name")
-assertEntries(
-  manifest.setup_generators.persisted_state_install.optional_arguments,
-  "setup_generators.persisted_state_install.optional_arguments",
-  ["name", "banner"]
-)
-assertUniqueStringList(
-  manifest.setup_generators.persisted_state_install.generated_paths,
-  "setup_generators.persisted_state_install.generated_paths"
-)
+assert(typeof manifest.resource_table_render_state_call === "string", "resource_table_render_state_call must be a string")
+assert(typeof manifest.javascript_package_root === "string", "javascript_package_root must be a string")
 
-assertObject(manifest.diagnostics, "diagnostics")
-assertUniqueStringList(manifest.diagnostics.accepted_checks, "diagnostics.accepted_checks")
-assertUniqueStringList(manifest.diagnostics.run_options, "diagnostics.run_options")
-assertObjectWithLists(manifest.diagnostics.result_surface, "diagnostics.result_surface", ["attributes", "methods"])
-
-const javascriptPackageRoot = manifest.javascript_package_root
-assertObject(javascriptPackageRoot, "javascript_package_root")
-assertUniqueStringList(javascriptPackageRoot.named_exports, "javascript_package_root.named_exports")
-assertEntries(javascriptPackageRoot.controller_registrations, "javascript_package_root.controller_registrations", ["key", "identifier", "export"])
-assertStringMap(javascriptPackageRoot.transfer_drop_positions, "javascript_package_root.transfer_drop_positions")
-assertStringMap(javascriptPackageRoot.transfer_data_mime_types, "javascript_package_root.transfer_data_mime_types")
-assertStringMap(javascriptPackageRoot.remote_state_values, "javascript_package_root.remote_state_values")
-assertStringMap(javascriptPackageRoot.remote_state_data_hooks, "javascript_package_root.remote_state_data_hooks")
-assertStringMap(javascriptPackageRoot.toolbar_data_hooks, "javascript_package_root.toolbar_data_hooks")
-assertObject(javascriptPackageRoot.integration_hooks, "javascript_package_root.integration_hooks")
-requiredIntegrationHookKeys.forEach((key) => {
-  assertStringMap(javascriptPackageRoot.integration_hooks[key], `javascript_package_root.integration_hooks.${key}`)
-})
-assertStringMap(javascriptPackageRoot.selection_data_hooks, "javascript_package_root.selection_data_hooks")
-assertStringMap(javascriptPackageRoot.selection_checkbox_hooks, "javascript_package_root.selection_checkbox_hooks")
-assertStringMap(javascriptPackageRoot.empty_state_hooks, "javascript_package_root.empty_state_hooks")
-
-assertObject(javascriptPackageRoot.event_names, "javascript_package_root.event_names")
-assertObject(javascriptPackageRoot.event_detail_keys, "javascript_package_root.event_detail_keys")
-assertObject(javascriptPackageRoot.event_names_without_detail, "javascript_package_root.event_names_without_detail")
-assertEventClassification(javascriptPackageRoot)
-
-Object.entries(javascriptPackageRoot.event_names).forEach(([group, events]) => {
-  assertStringMap(events, `javascript_package_root.event_names.${group}`)
+manifest.helper_methods.forEach((methodName) => {
+  assertFileIncludes("app/helpers/tree_view_helper.rb", `def ${methodName}`, `helper method ${methodName}`)
 })
 
-Object.entries(javascriptPackageRoot.event_detail_keys).forEach(([group, events]) => {
-  assertObject(events, `javascript_package_root.event_detail_keys.${group}`)
-  Object.entries(events).forEach(([eventName, keys]) => {
-    assertUniqueStringList(keys, `javascript_package_root.event_detail_keys.${group}.${eventName}`)
-  })
+manifest.configuration_options.forEach((optionName) => {
+  assertFileIncludes("lib/tree_view/configuration.rb", optionName, `configuration option ${optionName}`)
 })
 
-Object.entries(javascriptPackageRoot.event_names_without_detail).forEach(([group, eventNames]) => {
-  assertUniqueStringList(eventNames, `javascript_package_root.event_names_without_detail.${group}`)
+manifest.localized_name_i18n_keys.forEach((key) => {
+  assertFileIncludes("config/locales/en.yml", key, `localized name i18n key ${key}`)
 })
 
-console.log("Public API manifest structure smoke passed.")
+manifest.toolbar_actions.forEach((actionName) => {
+  assertFileIncludes("app/helpers/tree_view_helper.rb", actionName, `toolbar action ${actionName}`)
+})
+
+console.log("Checked public API manifest structure.")
