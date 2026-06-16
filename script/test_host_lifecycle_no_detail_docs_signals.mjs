@@ -63,7 +63,7 @@ assertMatches(
 )
 assertMatches(
   publicApiJa,
-  /TreeViewEventNames\.hostLifecycle\.\*[\s\S]*host app 側の request-state dispatch 専用[\s\S]*TreeViewEventNames\.remoteState\.\*/,
+  /TreeViewEventNames\.hostLifecycle\.\*[\s\S]*host app 側の request-state dispatch(?: surface)? 専用[\s\S]*TreeViewEventNames\.remoteState\.\*/,
   "Japanese public API docs hostLifecycle boundary"
 )
 
@@ -74,7 +74,7 @@ assertMatches(
 )
 assertMatches(
   lazyLoadingJa,
-  /TreeViewEventNames\.hostLifecycle\.loading[\s\S]*\.loaded[\s\S]*\.error[\s\S]*\.retry[\s\S]*host app 側の request-state dispatch 専用[\s\S]*TreeViewEventNames\.remoteState\.\*/,
+  /TreeViewEventNames\.hostLifecycle\.loading[\s\S]*\.loaded[\s\S]*\.error[\s\S]*\.retry[\s\S]*host app 側の request-state dispatch(?: surface)? 専用[\s\S]*TreeViewEventNames\.remoteState\.\*/,
   "Japanese lazy-loading docs hostLifecycle lifecycle boundary"
 )
 
