@@ -93,6 +93,11 @@ const checks = [
     args: ["script/test_public_api_docs_signals.mjs"]
   },
   {
+    group: "Public API exported controller class docs signals",
+    command: "node",
+    args: ["script/test_public_api_exported_controller_class_docs_signals.mjs"]
+  },
+  {
     group: "Host lifecycle no-detail docs signals",
     command: "node",
     args: ["script/test_host_lifecycle_no_detail_docs_signals.mjs"]
@@ -273,6 +278,7 @@ function runSelfTest() {
     ambiguous.matches.map((check) => check.group),
     [
       "Public API docs signals",
+      "Public API exported controller class docs signals",
       "Public API manifest structure",
       "Public API entrypoint guard signals"
     ],
