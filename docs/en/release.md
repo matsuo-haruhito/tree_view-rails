@@ -84,6 +84,8 @@ Pull request CI checks:
 
 Package-sensitive PR paths include `tree_view.gemspec`, `Rakefile`, root and packaged docs (`README.md`, `CHANGELOG.md`, and `docs/**`), JavaScript install and Node source files (`package.json`, `package-lock.json`, and `.nvmrc`), Bundler source files (`Gemfile` and `Gemfile.lock`), `script/check_gem_package_contents.rb`, `.github/workflows/ci.yml`, `lib/**`, Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`, plus `config/importmap.tree_view.rb`, `config/public_api_manifest.yml`, and `config/locales/**`. Those PRs run `gem build tree_view.gemspec`, `ruby script/check_gem_package_contents.rb tree_view-*.gem`, `gem install tree_view-*.gem`, and `ruby -e "require 'tree_view'"`. Docs-only PRs still avoid runtime-heavy lanes when they touch only docs paths, but README, CHANGELOG, and packaged docs changes are package-sensitive because the built gem must keep release-facing docs present and aligned.
 
+Signal guards keep the representative phrase: Package-sensitive PR paths include `tree_view.gemspec`.
+
 Main-push CI checks:
 
 - Ruby version matrix
