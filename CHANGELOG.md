@@ -154,6 +154,7 @@ Release preparation notes:
 - Added Public API manifest runtime surface guard coverage for documented module methods, constants, and helper methods.
 - Added CI changed-file policy CLI output guard coverage for workflow `key=value` handoff formatting and stdin trimming.
 - Added dependency spec, non-PR workflow output, public API manifest unknown-key, and duplicate YAML-key guard coverage for package-lock, CI changed-file policy, and manifest structure smoke.
+- Added public setup generator file package contents guard coverage for install generator and state templates.
 
 ## 0.1.0 - 2026-05-07
 
