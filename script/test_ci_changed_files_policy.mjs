@@ -279,6 +279,17 @@ assertJobMatches(
 const lintJob = workflowJobBlock(workflowSource, "lint");
 assertJobMatches(lintJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.lint must keep Ruby 3.3`);
 assertJobMatches(lintJob, /bundler-cache: true/, `${workflowPath} jobs.lint must keep bundler-cache enabled`);
+assertJobMatches(lintJob, /run: bundle exec standardrb/, `${workflowPath} jobs.lint must run StandardRB`);
+
+const prSpecsJob = workflowJobBlock(workflowSource, "pr_specs");
+assertJobMatches(
+  prSpecsJob,
+  /if: github\.event_name == 'pull_request'/,
+  `${workflowPath} jobs.pr_specs must stay pull-request gated`
+);
+assertJobMatches(prSpecsJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.pr_specs must keep Ruby 3.3`);
+assertJobMatches(prSpecsJob, /bundler-cache: true/, `${workflowPath} jobs.pr_specs must keep bundler-cache enabled`);
+assertJobMatches(prSpecsJob, /run: bundle exec rspec/, `${workflowPath} jobs.pr_specs must run the RSpec suite`);
 
 const prRailsMatrixJob = workflowJobBlock(workflowSource, "pr_rails_matrix");
 assertJobMatches(
@@ -314,6 +325,11 @@ assertJobMatches(
 });
 
 const javascriptJob = workflowJavaScriptJob(workflowSource);
+assertJobMatches(
+  javascriptJob,
+  /needs: changes/,
+  `${workflowPath} jobs.javascript must depend on changed-file detection`
+);
 assert.match(
   javascriptJob,
   /needs\.changes\.outputs\.docs_entrypoint_sensitive == 'true'/,
