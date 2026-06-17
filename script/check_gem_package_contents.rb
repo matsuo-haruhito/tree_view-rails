@@ -72,6 +72,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
   "README-linked public JavaScript docs" => %w[
     docs/en/js-events.md
     docs/ja/js-events.md
+    docs/en/controller-registration.md
+    docs/ja/controller-registration.md
+    docs/en/selection-checkbox-hooks.md
+    docs/ja/selection-checkbox-hooks.md
   ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
