@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TreeView stylesheet theme boundary mockup</title>
+<link rel="stylesheet" href="../default-tree.css">
+<style>
+.theme-boundary-page { max-width: 1180px; }
+.theme-boundary-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 18px; }
+.theme-boundary-summary__item { border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; padding: 14px; }
+.theme-boundary-summary__item strong { display: block; margin-bottom: 0.35rem; color: #0f172a; }
+.theme-boundary-grid { display: grid; grid-template-columns: repeat(3, minmax(260px, 1fr)); gap: 16px; align-items: start; }
+.theme-boundary-frame { display: grid; gap: 12px; border: 1px solid var(--frame-border); border-radius: 10px; background: var(--frame-bg); color: var(--frame-text); padding: 16px; }
+.theme-boundary-frame h3, .theme-boundary-frame p { margin: 0; }
+.theme-boundary-frame h3 { color: var(--frame-heading); }
+.theme-boundary-frame--light { --frame-bg: #ffffff; --frame-text: #334155; --frame-heading: #0f172a; --frame-border: #cbd5e1; --row-border: #d8e0ea; --row-bg: #ffffff; --row-muted: #f8fafc; --row-current: #e0f2fe; --row-selected: #ecfdf5; --row-warning: #fff7ed; --row-danger: #fef2f2; --row-drop: #f0fdf4; }
+.theme-boundary-frame--dark { --frame-bg: #111827; --frame-text: #d1d5db; --frame-heading: #f9fafb; --frame-border: #475569; --row-border: #334155; --row-bg: #1f2937; --row-muted: #111827; --row-current: #1e3a8a; --row-selected: #14532d; --row-warning: #7c2d12; --row-danger: #7f1d1d; --row-drop: #064e3b; }
+.theme-boundary-frame--contrast { --frame-bg: #fdfdfd; --frame-text: #111827; --frame-heading: #000000; --frame-border: #111827; --row-border: #111827; --row-bg: #ffffff; --row-muted: #f3f4f6; --row-current: #dbeafe; --row-selected: #fef9c3; --row-warning: #ffedd5; --row-danger: #fee2e2; --row-drop: #dcfce7; }
+.theme-boundary-table { width: 100%; border-collapse: collapse; border: 1px solid var(--row-border); background: var(--row-bg); }
+.theme-boundary-table th, .theme-boundary-table td { border-bottom: 1px solid var(--row-border); padding: 0.5rem 0.55rem; text-align: left; vertical-align: top; }
+.theme-boundary-table th { font-size: 0.78rem; text-transform: uppercase; color: var(--frame-text); background: var(--row-muted); }
+.theme-boundary-node { display: grid; gap: 0.2rem; }
+.theme-boundary-label { font-weight: 700; color: var(--frame-heading); }
+.theme-boundary-meta { color: var(--frame-text); font-size: 0.85rem; }
+.theme-boundary-token { display: inline-flex; align-items: center; min-height: 1.45rem; padding: 0.1rem 0.45rem; border: 1px solid currentColor; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+.theme-boundary-row--current { background: var(--row-current); }
+.theme-boundary-row--selected { background: var(--row-selected); }
+.theme-boundary-row--collapsed { background: var(--row-warning); }
+.theme-boundary-row--loading { background: var(--row-muted); }
+.theme-boundary-row--error { background: var(--row-danger); }
+.theme-boundary-row--drop { background: var(--row-drop); outline: 2px solid var(--frame-heading); outline-offset: -3px; }
+.theme-boundary-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.theme-boundary-note { border: 1px solid #d8e0ea; border-radius: 8px; background: #f8fafc; padding: 14px; }
+.theme-boundary-note h3, .theme-boundary-note p { margin: 0; }
+.theme-boundary-note h3 { margin-bottom: 0.35rem; color: #0f172a; }
+@media (max-width: 920px) { .theme-boundary-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .theme-boundary-table { min-width: 520px; } .theme-boundary-frame { overflow-x: auto; } }
+</style>
+</head>
+<body>
+  <main class="mock-page theme-boundary-page">
+    <nav class="mock-return-nav" aria-label="Mockup navigation">
+      <a class="mock-return-nav__link" href="../review-gallery.html">Back to gallery</a>
+      <a class="mock-return-nav__link mock-return-nav__link--secondary" href="../README.md">Mockup README</a>
+    </nav>
+
+    <header class="mock-header">
+      <p class="mock-kicker">focused mockup</p>
+      <h1>Stylesheet theme boundary</h1>
+      <p>Static reference for comparing TreeView baseline state cues on light, dark, and high-contrast-like host themes. The page keeps runtime stylesheet behavior, public hooks, and CSS custom property policy out of scope.</p>
+      <div class="theme-boundary-summary" aria-label="Review summary">
+        <div class="theme-boundary-summary__item"><strong>TreeView-owned cue</strong>Rows expose reusable current, selected, collapsed, loading, error, and drop-target cues.</div>
+        <div class="theme-boundary-summary__item"><strong>Host-owned theme</strong>Typography, palette, density, brand tone, and final contrast policy stay with the host app.</div>
+        <div class="theme-boundary-summary__item"><strong>First slice scope</strong>This standalone page is intentionally not promoted into the gallery inventory yet.</div>
+      </div>
+    </header>
+
+    <section class="mock-section" aria-labelledby="variant-heading">
+      <h2 id="variant-heading">Representative theme variants</h2>
+      <div class="theme-boundary-grid" data-tree-view-sample="stylesheet-theme-boundary">
+        <article class="theme-boundary-frame theme-boundary-frame--light" aria-labelledby="light-theme-heading">
+          <h3 id="light-theme-heading">Light host surface</h3>
+          <p>Baseline neutral app shell with TreeView state rows left visible.</p>
+          <table class="theme-boundary-table" aria-label="Light theme state cue sample">
+            <thead><tr><th scope="col">Node</th><th scope="col">Cue</th></tr></thead>
+            <tbody>
+              <tr class="theme-boundary-row--current"><td><span class="theme-boundary-node"><span class="theme-boundary-label">Operations</span><span class="theme-boundary-meta">current branch</span></span></td><td><span class="theme-boundary-token">current</span></td></tr>
+              <tr class="theme-boundary-row--selected"><td><span class="theme-boundary-label">Release checklist</span></td><td><span class="theme-boundary-token">selected</span></td></tr>
+              <tr class="theme-boundary-row--collapsed"><td><span class="theme-boundary-label">Archive</span></td><td><span class="theme-boundary-token">collapsed</span></td></tr>
+              <tr class="theme-boundary-row--loading"><td><span class="theme-boundary-label">Children</span></td><td><span class="theme-boundary-token">loading</span></td></tr>
+              <tr class="theme-boundary-row--error"><td><span class="theme-boundary-label">Supplier import</span></td><td><span class="theme-boundary-token">error</span></td></tr>
+              <tr class="theme-boundary-row--drop"><td><span class="theme-boundary-label">Archive target</span></td><td><span class="theme-boundary-token">drop</span></td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="theme-boundary-frame theme-boundary-frame--dark" aria-labelledby="dark-theme-heading">
+          <h3 id="dark-theme-heading">Dark host surface</h3>
+          <p>Host app chooses dark palette; TreeView keeps state meaning as row hooks.</p>
+          <table class="theme-boundary-table" aria-label="Dark theme state cue sample">
+            <thead><tr><th scope="col">Node</th><th scope="col">Cue</th></tr></thead>
+            <tbody>
+              <tr class="theme-boundary-row--current"><td><span class="theme-boundary-label">Operations</span></td><td><span class="theme-boundary-token">current</span></td></tr>
+              <tr class="theme-boundary-row--selected"><td><span class="theme-boundary-label">Release checklist</span></td><td><span class="theme-boundary-token">selected</span></td></tr>
+              <tr class="theme-boundary-row--collapsed"><td><span class="theme-boundary-label">Archive</span></td><td><span class="theme-boundary-token">collapsed</span></td></tr>
+              <tr class="theme-boundary-row--loading"><td><span class="theme-boundary-label">Children</span></td><td><span class="theme-boundary-token">loading</span></td></tr>
+              <tr class="theme-boundary-row--error"><td><span class="theme-boundary-label">Supplier import</span></td><td><span class="theme-boundary-token">error</span></td></tr>
+              <tr class="theme-boundary-row--drop"><td><span class="theme-boundary-label">Archive target</span></td><td><span class="theme-boundary-token">drop</span></td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="theme-boundary-frame theme-boundary-frame--contrast" aria-labelledby="contrast-theme-heading">
+          <h3 id="contrast-theme-heading">High-contrast-like surface</h3>
+          <p>State labels and outline cues stay inspectable beyond color alone.</p>
+          <table class="theme-boundary-table" aria-label="High contrast theme state cue sample">
+            <thead><tr><th scope="col">Node</th><th scope="col">Cue</th></tr></thead>
+            <tbody>
+              <tr class="theme-boundary-row--current"><td><span class="theme-boundary-label">Operations</span></td><td><span class="theme-boundary-token">current</span></td></tr>
+              <tr class="theme-boundary-row--selected"><td><span class="theme-boundary-label">Release checklist</span></td><td><span class="theme-boundary-token">selected</span></td></tr>
+              <tr class="theme-boundary-row--collapsed"><td><span class="theme-boundary-label">Archive</span></td><td><span class="theme-boundary-token">collapsed</span></td></tr>
+              <tr class="theme-boundary-row--loading"><td><span class="theme-boundary-label">Children</span></td><td><span class="theme-boundary-token">loading</span></td></tr>
+              <tr class="theme-boundary-row--error"><td><span class="theme-boundary-label">Supplier import</span></td><td><span class="theme-boundary-token">error</span></td></tr>
+              <tr class="theme-boundary-row--drop"><td><span class="theme-boundary-label">Archive target</span></td><td><span class="theme-boundary-token">drop</span></td></tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <section class="mock-section" aria-labelledby="boundary-heading">
+      <h2 id="boundary-heading">Review boundaries</h2>
+      <div class="theme-boundary-notes">
+        <article class="theme-boundary-note"><h3>In scope</h3><p>Compare whether reusable TreeView state cues remain visible when a host theme changes surrounding color and density.</p></article>
+        <article class="theme-boundary-note"><h3>Out of scope</h3><p>No dark-mode implementation, CSS custom property API, public hook promotion, screenshot baseline, route, CRUD, or authorization policy is introduced here.</p></article>
+        <article class="theme-boundary-note"><h3>Promotion path</h3><p>Gallery, README Files table, and browser smoke inventory should be synchronized in a follow-up checkout-capable pass before this closes #940.</p></article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
