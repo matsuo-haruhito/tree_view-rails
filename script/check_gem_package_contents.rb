@@ -49,6 +49,9 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     README.md
     docs/README.md
   ],
+  "License files" => %w[
+    LICENSE
+  ],
   "Mockup entrypoints" => %w[
     docs/mockups/README.md
     docs/mockups/review-gallery.html
@@ -74,6 +77,12 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
   ],
+  "Public setup generator files" => %w[
+    lib/generators/tree_view/state/install_generator.rb
+    lib/generators/tree_view/state/templates/create_tree_view_states.rb
+    lib/generators/tree_view/state/templates/tree_view_state.rb
+    lib/generators/tree_view/state/templates/tree_view_state_owner.rb
+  ],
   "Bilingual release docs" => %w[
     docs/en/release.md
     docs/ja/release.md
@@ -91,6 +100,14 @@ EXPECTED_GEM_METADATA = {
   "source_code_uri" => "https://github.com/matsuo-haruhito/tree_view-rails",
   "changelog_uri" => "https://github.com/matsuo-haruhito/tree_view-rails/blob/main/CHANGELOG.md",
   "bug_tracker_uri" => "https://github.com/matsuo-haruhito/tree_view-rails/issues"
+}.freeze
+
+EXPECTED_RELEASE_METADATA = {
+  required_ruby_version: ">= 3.2",
+  allowed_push_host: "https://rubygems.org",
+  runtime_dependencies: {
+    "railties" => ">= 7.0"
+  }
 }.freeze
 
 PUBLIC_CONSTANT_RUNTIME_FILES = {
@@ -140,12 +157,32 @@ INSTALLATION_REQUIRED_SIGNALS = [
   "pin \"tree_view\", to: \"tree_view/index.js\""
 ].freeze
 
-PACKAGED_DOCS_FORBIDDEN_RELATIVE_ROOT_LINKS = {
-  "docs/README.md" => [
-    "../Product%20Profile.md",
-    "../AGENTS.md"
+EXPECTED_PUBLIC_SETUP_GENERATOR = {
+  "name" => "tree_view:state:install",
+  "class_name" => "TreeView::Generators::State::InstallGenerator",
+  "optional_arguments" => [
+    {"name" => "owner_model_name", "banner" => "OWNER_MODEL"}
+  ],
+  "generated_paths" => [
+    "db/migrate/*_create_tree_view_states.rb",
+    "app/models/tree_view_state.rb",
+    "app/models/concerns/tree_view_state_owner.rb"
   ]
 }.freeze
+
+PUBLIC_SETUP_GENERATOR_SOURCE_SIGNALS = [
+  "argument :owner_model_name, type: :string, required: false, banner: \"OWNER_MODEL\"",
+  "template \"create_tree_view_states.rb\", migration_path",
+  "template \"tree_view_state.rb\", \"app/models/tree_view_state.rb\"",
+  "template \"tree_view_state_owner.rb\", \"app/models/concerns/tree_view_state_owner.rb\""
+].freeze
+
+PUBLIC_SETUP_GENERATOR_REQUIRED_PACKAGED_PATHS = REQUIRED_PACKAGED_PATH_GROUPS.fetch("Public setup generator files").freeze
+
+PACKAGED_DOCS_FORBIDDEN_RELATIVE_ROOT_LINKS = [
+  "../Product%20Profile.md",
+  "../AGENTS.md"
+].freeze
 
 root = File.expand_path("..", __dir__)
 gem_path = ARGV.first || Dir[File.join(root, "tree_view-*.gem")].max_by { |path| File.mtime(path) }
@@ -162,6 +199,31 @@ missing = missing_by_group.values.flatten
 missing_gem_metadata = EXPECTED_GEM_METADATA.reject do |key, expected_value|
   package_spec.metadata[key] == expected_value
 end
+unexpected_release_metadata = {}
+if package_spec.required_ruby_version.to_s != EXPECTED_RELEASE_METADATA.fetch(:required_ruby_version)
+  unexpected_release_metadata["required_ruby_version"] = {
+    expected: EXPECTED_RELEASE_METADATA.fetch(:required_ruby_version),
+    actual: package_spec.required_ruby_version.to_s
+  }
+end
+if package_spec.metadata["allowed_push_host"] != EXPECTED_RELEASE_METADATA.fetch(:allowed_push_host)
+  unexpected_release_metadata["allowed_push_host"] = {
+    expected: EXPECTED_RELEASE_METADATA.fetch(:allowed_push_host),
+    actual: package_spec.metadata["allowed_push_host"]
+  }
+end
+EXPECTED_RELEASE_METADATA.fetch(:runtime_dependencies).each do |dependency_name, expected_requirement|
+  dependency = package_spec.dependencies.find do |candidate|
+    candidate.type == :runtime && candidate.name == dependency_name
+  end
+  actual_requirement = dependency&.requirement&.to_s
+  next if actual_requirement == expected_requirement
+
+  unexpected_release_metadata["runtime dependency #{dependency_name}"] = {
+    expected: expected_requirement,
+    actual: actual_requirement
+  }
+end
 missing_manifest_constant_paths = manifest.fetch("public_constants").each_with_object({}) do |constant, missing_paths|
   expected_path = PUBLIC_CONSTANT_RUNTIME_FILES[constant]
   missing_paths[constant] = expected_path unless expected_path && files.include?(expected_path)
@@ -171,16 +233,33 @@ missing_installation_signals = INSTALLATION_DOC_PATHS.to_h do |path|
   content = File.read(File.join(root, path))
   [path, INSTALLATION_REQUIRED_SIGNALS.reject { |signal| content.include?(signal) }]
 end.reject { |_path, missing_signals| missing_signals.empty? }
-forbidden_packaged_doc_links = PACKAGED_DOCS_FORBIDDEN_RELATIVE_ROOT_LINKS.to_h do |path, forbidden_links|
+
+public_setup_generator = manifest.fetch("setup_generators").fetch("persisted_state_install")
+unexpected_public_setup_generator = EXPECTED_PUBLIC_SETUP_GENERATOR.filter_map do |key, expected_value|
+  actual_value = public_setup_generator[key]
+  next if actual_value == expected_value
+
+  [key, {expected: expected_value, actual: actual_value}]
+end.to_h
+public_setup_generator_source = File.read(File.join(root, "lib/generators/tree_view/state/install_generator.rb"))
+missing_public_setup_generator_source_signals = PUBLIC_SETUP_GENERATOR_SOURCE_SIGNALS.reject do |signal|
+  public_setup_generator_source.include?(signal)
+end
+missing_public_setup_generator_package_paths = PUBLIC_SETUP_GENERATOR_REQUIRED_PACKAGED_PATHS.reject do |path|
+  files.include?(path)
+end
+
+packaged_doc_paths = files.grep(/\Adocs\/.*\.(?:md|html)\z/).sort
+forbidden_packaged_doc_links = packaged_doc_paths.to_h do |path|
   content = File.read(File.join(root, path))
-  [path, forbidden_links.select { |link| content.include?(link) }]
+  [path, PACKAGED_DOCS_FORBIDDEN_RELATIVE_ROOT_LINKS.select { |link| content.include?(link) }]
 end.reject { |_path, links| links.empty? }
 
 importmap_path = File.join(root, "config/importmap.tree_view.rb")
 importmap_content = File.read(importmap_path)
 importmap_pin_missing = !importmap_content.include?("pin \"tree_view\", to: \"tree_view/index.js\"")
 
-if missing.empty? && missing_gem_metadata.empty? && missing_manifest_constant_paths.empty? && unknown_manifest_constants.empty? && missing_installation_signals.empty? && forbidden_packaged_doc_links.empty? && !importmap_pin_missing
+if missing.empty? && missing_gem_metadata.empty? && unexpected_release_metadata.empty? && missing_manifest_constant_paths.empty? && unknown_manifest_constants.empty? && missing_installation_signals.empty? && unexpected_public_setup_generator.empty? && missing_public_setup_generator_source_signals.empty? && missing_public_setup_generator_package_paths.empty? && forbidden_packaged_doc_links.empty? && !importmap_pin_missing
   puts "Gem package contents verified: #{File.basename(gem_path)}"
 else
   warn "Gem package contents verification failed: #{File.basename(gem_path)}"
@@ -195,6 +274,13 @@ else
     missing_gem_metadata.each do |key, expected_value|
       actual_value = package_spec.metadata[key]
       warn "  - #{key}: expected #{expected_value.inspect}, got #{actual_value.inspect}"
+    end
+  end
+
+  unless unexpected_release_metadata.empty?
+    warn "Missing or unexpected release metadata values:"
+    unexpected_release_metadata.each do |key, values|
+      warn "  - #{key}: expected #{values.fetch(:expected).inspect}, got #{values.fetch(:actual).inspect}"
     end
   end
 
@@ -213,6 +299,23 @@ else
   missing_installation_signals.each do |path, signals|
     warn "Missing installation docs signals in #{path}:"
     signals.each { |signal| warn "  - #{signal}" }
+  end
+
+  unless unexpected_public_setup_generator.empty?
+    warn "Missing or unexpected public setup generator manifest values:"
+    unexpected_public_setup_generator.each do |key, values|
+      warn "  - setup_generators.persisted_state_install.#{key}: expected #{values.fetch(:expected).inspect}, got #{values.fetch(:actual).inspect}"
+    end
+  end
+
+  unless missing_public_setup_generator_source_signals.empty?
+    warn "Missing public setup generator implementation signals in lib/generators/tree_view/state/install_generator.rb:"
+    missing_public_setup_generator_source_signals.each { |signal| warn "  - #{signal}" }
+  end
+
+  unless missing_public_setup_generator_package_paths.empty?
+    warn "Missing manifest-backed public setup generator package guard files:"
+    missing_public_setup_generator_package_paths.each { |path| warn "  - #{path}" }
   end
 
   forbidden_packaged_doc_links.each do |path, links|

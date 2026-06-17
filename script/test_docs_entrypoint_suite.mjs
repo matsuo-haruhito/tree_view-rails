@@ -1,4 +1,10 @@
+import assert from "node:assert/strict"
 import { spawnSync } from "node:child_process"
+import { readdirSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+
+const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 
 const checks = [
   {
@@ -25,6 +31,11 @@ const checks = [
     group: "Development docs Node version signals",
     command: "node",
     args: ["script/test_development_docs_node_version_signals.mjs"]
+  },
+  {
+    group: "Development docs command signals",
+    command: "npm",
+    args: ["run", "test:development-docs-commands"]
   },
   {
     group: "Public setup surface docs signals",
@@ -87,6 +98,16 @@ const checks = [
     args: ["script/test_public_api_docs_signals.mjs"]
   },
   {
+    group: "Public API exported controller class docs signals",
+    command: "node",
+    args: ["script/test_public_api_exported_controller_class_docs_signals.mjs"]
+  },
+  {
+    group: "Host lifecycle no-detail docs signals",
+    command: "node",
+    args: ["script/test_host_lifecycle_no_detail_docs_signals.mjs"]
+  },
+  {
     group: "tree_view_rows helper docs signals",
     command: "node",
     args: ["script/test_tree_view_rows_docs_signals.mjs"]
@@ -120,7 +141,35 @@ const checks = [
     group: "Docs i18n parity",
     command: "npm",
     args: ["run", "test:docs-i18n"]
+  },
+  {
+    group: "Docs entrypoint suite option contract",
+    command: "node",
+    args: ["script/test_docs_entrypoint_suite.mjs", "--self-test"]
   }
+]
+
+const docsEntrypointScriptExclusions = new Map([
+  [
+    "test_development_docs_command_signals.mjs",
+    "registered through npm run test:development-docs-commands"
+  ],
+  ["test_docs_entrypoint_suite.mjs", "this suite's self-test entrypoint"],
+  ["test_docs_i18n_parity.mjs", "registered through npm run test:docs-i18n"]
+])
+
+const docsEntrypointScriptPatterns = [
+  /^test_.*docs.*\.mjs$/,
+  /^test_.*readme.*signals\.mjs$/,
+  /^test_.*mockup.*signals\.mjs$/,
+  /^test_breadcrumb_.*signals\.mjs$/,
+  /^test_configuration_.*signals\.mjs$/,
+  /^test_decision_guide_signals\.mjs$/,
+  /^test_grouped_option_.*signals\.mjs$/,
+  /^test_localized_and_hook_.*signals\.mjs$/,
+  /^test_quality_.*signals\.mjs$/,
+  /^test_release_.*signals\.mjs$/,
+  /^test_tree_view_rows_.*signals\.mjs$/
 ]
 
 function commandLine({ command, args }) {
@@ -148,60 +197,189 @@ function printCheckList(selectedChecks = checks) {
 }
 
 function usage() {
-  console.error("[docs-entrypoints] usage: node script/test_docs_entrypoint_suite.mjs [--list] [--only <group-or-index>]")
+  console.error("[docs-entrypoints] usage: node script/test_docs_entrypoint_suite.mjs [--list] [--only <group-or-index>] [--self-test]")
   console.error("[docs-entrypoints] use --list to show available groups")
 }
 
-function resolveOnlyGroup(groupName) {
+function registeredNodeScriptPaths() {
+  return new Set(
+    checks
+      .filter((check) => check.command === "node" && check.args[0]?.startsWith("script/"))
+      .map((check) => check.args[0])
+  )
+}
+
+function isDocsEntrypointCandidate(filename) {
+  if (!filename.endsWith(".mjs")) return false
+  if (docsEntrypointScriptExclusions.has(filename)) return false
+
+  return docsEntrypointScriptPatterns.some((pattern) => pattern.test(filename))
+}
+
+function docsEntrypointCandidateScriptPaths() {
+  return readdirSync(scriptDir)
+    .filter(isDocsEntrypointCandidate)
+    .map((filename) => `script/${filename}`)
+    .sort()
+}
+
+function unregisteredDocsEntrypointScriptPaths() {
+  const registeredPaths = registeredNodeScriptPaths()
+  return docsEntrypointCandidateScriptPaths().filter((scriptPath) => !registeredPaths.has(scriptPath))
+}
+
+function assertDocsEntrypointScriptsRegistered() {
+  const unregisteredScripts = unregisteredDocsEntrypointScriptPaths()
+
+  assert.deepEqual(
+    unregisteredScripts,
+    [],
+    [
+      "docs entrypoint suite is missing docs smoke/signal script registrations:",
+      ...unregisteredScripts.map((scriptPath) => `  - ${scriptPath}`),
+      "Add each script to the checks array or document an explicit exclusion."
+    ].join("\n")
+  )
+}
+
+function resolveOnlyGroupResult(groupName) {
   if (/^\d+$/.test(groupName)) {
     const groupIndex = Number(groupName) - 1
     const indexedMatch = checks[groupIndex]
-    if (indexedMatch) return indexedMatch
+    if (indexedMatch) return { check: indexedMatch }
 
-    console.error(`[docs-entrypoints] --only index out of range: ${groupName}`)
-    console.error("[docs-entrypoints] available groups:")
-    console.error(formatAvailableGroups())
-    console.error("[docs-entrypoints] run with --list to inspect commands")
-    process.exit(1)
+    return {
+      error: "out_of_range",
+      message: `[docs-entrypoints] --only index out of range: ${groupName}`
+    }
   }
 
   const exactMatches = checks.filter((check) => check.group === groupName)
-  if (exactMatches.length === 1) return exactMatches[0]
+  if (exactMatches.length === 1) return { check: exactMatches[0] }
 
   const normalizedGroupName = groupName.toLowerCase()
   const caseInsensitiveExactMatches = checks.filter(
     (check) => check.group.toLowerCase() === normalizedGroupName
   )
-  if (caseInsensitiveExactMatches.length === 1) return caseInsensitiveExactMatches[0]
+  if (caseInsensitiveExactMatches.length === 1) return { check: caseInsensitiveExactMatches[0] }
 
   const partialMatches = checks.filter((check) =>
     check.group.toLowerCase().includes(normalizedGroupName)
   )
 
-  if (partialMatches.length === 1) return partialMatches[0]
+  if (partialMatches.length === 1) return { check: partialMatches[0] }
 
   if (partialMatches.length > 1) {
-    console.error(`[docs-entrypoints] ambiguous --only group: ${groupName}`)
+    return {
+      error: "ambiguous",
+      message: `[docs-entrypoints] ambiguous --only group: ${groupName}`,
+      matches: partialMatches
+    }
+  }
+
+  return {
+    error: "unknown",
+    message: `[docs-entrypoints] unknown --only group: ${groupName}`
+  }
+}
+
+function printOnlyGroupError(result) {
+  console.error(result.message)
+
+  if (result.error === "ambiguous") {
     console.error("[docs-entrypoints] matching groups:")
-    console.error(partialMatches.map((check) => `  - ${check.group}`).join("\n"))
-  } else {
-    console.error(`[docs-entrypoints] unknown --only group: ${groupName}`)
+    console.error(result.matches.map((check) => `  - ${check.group}`).join("\n"))
   }
 
   console.error("[docs-entrypoints] available groups:")
   console.error(formatAvailableGroups())
   console.error("[docs-entrypoints] run with --list to inspect commands")
+}
+
+function resolveOnlyGroup(groupName) {
+  const result = resolveOnlyGroupResult(groupName)
+  if (result.check) return result.check
+
+  printOnlyGroupError(result)
   process.exit(1)
 }
 
+function runSelfTest() {
+  const availableGroups = formatAvailableGroups()
+
+  assert.match(
+    availableGroups,
+    /1\. Foundational docs entrypoints/,
+    "available group list should include a stable first index"
+  )
+  assert.ok(
+    availableGroups.includes(`${checks.length}. Docs entrypoint suite option contract`),
+    "available group list should include the self-test group"
+  )
+
+  assert.equal(
+    resolveOnlyGroupResult("1").check.group,
+    "Foundational docs entrypoints",
+    "numeric --only should resolve a one-based index"
+  )
+  assert.equal(
+    resolveOnlyGroupResult("public api docs signals").check.group,
+    "Public API docs signals",
+    "case-insensitive exact --only should resolve a group"
+  )
+  assert.equal(
+    resolveOnlyGroupResult("Localized and hook").check.group,
+    "Localized and hook docs signals",
+    "unique partial --only should resolve a group"
+  )
+
+  const outOfRange = resolveOnlyGroupResult("999")
+  assert.equal(outOfRange.error, "out_of_range")
+  assert.match(outOfRange.message, /--only index out of range: 999/)
+
+  const unknown = resolveOnlyGroupResult("does-not-exist")
+  assert.equal(unknown.error, "unknown")
+  assert.match(unknown.message, /unknown --only group: does-not-exist/)
+
+  const ambiguous = resolveOnlyGroupResult("Public API")
+  assert.equal(ambiguous.error, "ambiguous")
+  assert.deepEqual(
+    ambiguous.matches.map((check) => check.group),
+    [
+      "Public API docs signals",
+      "Public API exported controller class docs signals",
+      "Public API manifest structure",
+      "Public API entrypoint guard signals"
+    ],
+    "ambiguous --only should report all matching groups"
+  )
+
+  assert.ok(
+    docsEntrypointCandidateScriptPaths().includes("script/test_public_api_docs_signals.mjs"),
+    "docs script registration candidates should include public API docs signals"
+  )
+  assert.ok(
+    !docsEntrypointCandidateScriptPaths().includes("script/test_docs_i18n_parity.mjs"),
+    "npm-registered docs checks should stay out of direct node script registration candidates"
+  )
+  assertDocsEntrypointScriptsRegistered()
+
+  console.log("[docs-entrypoints] self-test passed")
+}
+
 function parseArgs(argv) {
-  const options = { list: false, only: null }
+  const options = { list: false, only: null, selfTest: false }
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index]
 
     if (arg === "--list") {
       options.list = true
+      continue
+    }
+
+    if (arg === "--self-test") {
+      options.selfTest = true
       continue
     }
 
@@ -230,6 +408,11 @@ function parseArgs(argv) {
 }
 
 const options = parseArgs(process.argv.slice(2))
+
+if (options.selfTest) {
+  runSelfTest()
+  process.exit(0)
+}
 
 if (options.list) {
   printCheckList()

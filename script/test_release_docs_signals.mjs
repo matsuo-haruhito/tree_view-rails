@@ -92,6 +92,10 @@ const packageContentsVerificationSignals = [
       "docs/en/release.md",
       "docs/ja/release.md",
       "docs/mockups/review-gallery.html",
+      "EXPECTED_RELEASE_METADATA",
+      "required_ruby_version",
+      "allowed_push_host",
+      "runtime_dependencies",
       "Gem package contents verification failed"
     ]
   ],
@@ -100,8 +104,13 @@ const packageContentsVerificationSignals = [
     [
       "ruby script/check_gem_package_contents.rb tree_view-*.gem",
       "representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces",
+      "required Ruby version, allowed push host, and runtime dependency metadata",
       "Package-sensitive PR paths include `tree_view.gemspec`",
       "Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`",
+      "`docs_entrypoint_sensitive`",
+      "`package_sensitive`",
+      "`README.md`, `CHANGELOG.md`, `docs/**`, and `config/public_api_manifest.yml`",
+      "docs entrypoint smoke",
       "config/importmap.tree_view.rb",
       "config/public_api_manifest.yml",
       "config/locales/**",
@@ -114,8 +123,13 @@ const packageContentsVerificationSignals = [
     [
       "ruby script/check_gem_package_contents.rb tree_view-*.gem",
       "Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI",
+      "required Ruby version、allowed push host、runtime dependency metadata",
       "package-sensitive path には、`tree_view.gemspec`",
       "Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`",
+      "`docs_entrypoint_sensitive`",
+      "`package_sensitive`",
+      "`README.md`、`CHANGELOG.md`、`docs/**`、`config/public_api_manifest.yml`",
+      "docs entrypoint smoke",
       "config/importmap.tree_view.rb",
       "config/public_api_manifest.yml",
       "config/locales/**",

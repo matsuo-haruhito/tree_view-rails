@@ -6,7 +6,7 @@
 
 ```bash
 bundle install
-npm install
+npm ci
 ```
 
 Dockerを使う場合:
@@ -15,14 +15,14 @@ Dockerを使う場合:
 cp .env.example .env
 docker compose build
 docker compose run --rm app bundle install
-docker compose run --rm app npm install
+docker compose run --rm app npm ci
 ```
 
 開発用 Docker image は Node 22 と npm を含めるため、Docker setup でもローカル開発と同じ JavaScript install path を実行できます。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` を変更する場合は、Dockerfile の Node major も同じ方針にそろえてください。
 
-ローカルの JavaScript 作業では Node 22 を使ってください。repository root の `.nvmrc` が CI の JavaScript lane とそろった、推奨 Node major version の source of truth です。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` は、どれかを変更するときに同じ Node major を指すように同期してください。自動 drift guard は `script/test_node_version_sources.mjs` です。`npm run test:node-version-sources` として実行でき、`npm run test:entrypoints` にも含まれており、これらの Node version source が Node 22 を指し続けることを現在の install policy を変えずに確認します。
+ローカルの JavaScript 作業では Node 22 を使ってください。repository root の `.nvmrc` が CI の JavaScript lane とそろった、推奨 Node major version の source of truth です。`.nvmrc`、`package.json` の `engines.node`、workflow の `node-version` は、どれかを変更するときに同じ Node major を指すように同期してください。自動 drift guard は `script/test_node_version_sources.mjs` です。`npm run test:node-version-sources` として実行でき、`npm run test:entrypoints` にも含まれており、これらの Node version source が Node 22 を指し続けることを lockfile-backed install policy を変えずに確認します。
 
-現状は `npm install` を使い続けてください。repo には `package-lock.json` を commit していますが、まだ `package.json` と同期していないため、ローカルセットアップと Pull Request CI は、registry-enabled な環境で lockfile refresh が完了するまで `npm install` を前提にしています。現在の CI と install path の整理は [導入手順](installation.md) を参照してください。
+ローカルの JavaScript setup には `npm ci` を使ってください。commit 済みの `package-lock.json` が repeatable install の source of truth になり、Pull Request CI と Docker setup も同じ lockfile-backed install path を使います。現在の CI と install path の整理は [導入手順](installation.md) を参照してください。
 
 ## よく使うコマンド
 
@@ -80,6 +80,8 @@ manifest structure の top-level sections、nested public JavaScript groups、ev
 NodePresenter builder names は manifest-backed な name surface です。`node_presenter_builder_names` を変更する場合は、manifest、focused compatibility spec、NodePresenter row partial patterns guide、そして同じ builder surface を public API overview で扱う場合は `docs/en/public-api.md` / `docs/ja/public-api.md` を同期します。manifest tracking summary では presenter return value、authorization、route policy、action semantics、host-app column formatting を定義しないでください。
 
 RenderState callback builder keys は manifest-backed な key surface であり、callback behavior 全体の contract ではありません。`render_state_callback_builder_keys` を変更する場合は、manifest、focused compatibility spec、`docs/en/public-api.md` / `docs/ja/public-api.md` の flat callback builder section、同じ key を名前で案内している feature docs を同期します。manifest tracking summary では callback arity、return-value validation、row rendering semantics、fallback behavior を定義しないでください。
+
+Public constants も package verification の対象です。`public_constants` を変更する場合は、`config/public_api_manifest.yml`、`spec/public_api_compatibility_spec.rb`、public API docs、`script/check_gem_package_contents.rb` をそろえてください。package verifier の `PUBLIC_CONSTANT_RUNTIME_FILES` mapping には、manifest-listed constant ごとに packaged gem 内で確認すべき runtime file を含めます。この mapping は constant の採用、rename、public API 方針を決める source of truth ではなく、manifest-backed public surface に追従する release package evidence です。
 
 これらの entry を追加・rename・削除する場合は、docs sync の導線を小さく明示します。
 
