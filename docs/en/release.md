@@ -119,6 +119,8 @@ When the change touches documented host-app wiring or machine-readable public co
 
 `config/public_api_manifest.yml` remains the machine-readable source of truth for package-root exports, controller identifiers, grouped option keys, and documented event detail keys. Public API and feature docs remain the source of truth for documented wiring attributes and hooks that are intentionally not exported there.
 
+When the change touches the public setup surface, review [Public Setup Surface](public-setup-surface.md) together with `config/public_api_manifest.yml`. The persisted-state setup generator name, optional owner argument, and generated destination paths are public setup compatibility surface; release verification should keep the package contents guard aligned with those setup files without changing generator implementation, generated templates, or migration schema from this checklist alone.
+
 For any public API manifest change, confirm the release-facing trail is complete before tagging:
 
 - the manifest change is reflected in `docs/en/public-api.md`, `docs/ja/public-api.md`, and any affected feature page
@@ -135,6 +137,7 @@ Documentation files to review when public behavior or public compatibility surfa
 - `docs/en/api.md`
 - `docs/ja/public-api.md`
 - `docs/en/public-api.md`
+- `docs/en/public-setup-surface.md` when setup generator names, optional arguments, or generated destination paths change
 - `config/public_api_manifest.yml` when it is the source of truth for the changed contract surface
 - feature-specific docs
 - `docs/i18n-audit.md` (documentation maintenance checklist)
