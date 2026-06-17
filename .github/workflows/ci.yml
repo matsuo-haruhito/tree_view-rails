@@ -154,6 +154,10 @@ jobs:
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true'
         uses: actions/checkout@v6
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: "22"
