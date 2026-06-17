@@ -280,6 +280,39 @@ const lintJob = workflowJobBlock(workflowSource, "lint");
 assertJobMatches(lintJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.lint must keep Ruby 3.3`);
 assertJobMatches(lintJob, /bundler-cache: true/, `${workflowPath} jobs.lint must keep bundler-cache enabled`);
 
+const prRailsMatrixJob = workflowJobBlock(workflowSource, "pr_rails_matrix");
+assertJobMatches(
+  prRailsMatrixJob,
+  /if: github\.event_name == 'pull_request'/,
+  `${workflowPath} jobs.pr_rails_matrix must stay limited to pull request compatibility checks`
+);
+assertJobMatches(
+  prRailsMatrixJob,
+  /needs: changes/,
+  `${workflowPath} jobs.pr_rails_matrix must depend on changed-file detection`
+);
+assertJobMatches(
+  prRailsMatrixJob,
+  /needs\.changes\.outputs\.docs_only == 'true'[\s\S]*Docs-only PR: skipping representative Rails compatibility lane\./,
+  `${workflowPath} jobs.pr_rails_matrix must keep the docs-only shortcut while preserving the check name`
+);
+assertJobMatches(
+  prRailsMatrixJob,
+  /needs\.changes\.outputs\.docs_only != 'true'[\s\S]*run: bundle exec rake/,
+  `${workflowPath} jobs.pr_rails_matrix must run the representative Rails compatibility command for non-docs changes`
+);
+[
+  ["7.0", "gemfiles/rails_7_0.gemfile", "3.2"],
+  ["7.2", "gemfiles/rails_7_2.gemfile", "3.2"],
+  ["8.0", "gemfiles/rails_8_0.gemfile", "3.3"]
+].forEach(([railsVersion, gemfile, rubyVersion]) => {
+  assertJobMatches(
+    prRailsMatrixJob,
+    new RegExp(`rails: "${railsVersion}"[\\s\\S]*gemfile: ${escapeRegExp(gemfile)}[\\s\\S]*ruby-version: "${rubyVersion}"`),
+    `${workflowPath} jobs.pr_rails_matrix must keep the Rails ${railsVersion} representative lane`
+  );
+});
+
 const javascriptJob = workflowJavaScriptJob(workflowSource);
 assert.match(
   javascriptJob,
