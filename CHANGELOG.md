@@ -128,6 +128,7 @@ Release preparation notes:
 - Added entrypoint smoke coverage that rejects package-root exports missing from `config/public_api_manifest.yml`.
 - Added Node version source drift guard coverage for `.nvmrc`, `package.json` `engines.node`, workflow `node-version`, and development docs.
 - Improved entrypoint smoke diagnostics for Ruby manifest loader and JSON parse failures without changing public export assertions.
+- Improved declaration literal shape smoke diagnostics for Public API manifest Ruby loader and JSON parse failures without changing declaration shape assertions.
 - Added transfer controller regression guards for drop position calculation and invalid payload event dispatch.
 - Added selection controller disconnect cleanup specs for generated hidden input lifecycle.
 - Added remote-state retry event contract coverage for the loading `change` event dispatched before retry.
