@@ -72,7 +72,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, builds the gem, confirms release-facing files are packaged, runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The package contents guard checks representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces. The main-push `gem_package` CI job repeats the same package contents verification against its built gem. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
+`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, builds the gem, confirms release-facing files are packaged, runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The package contents guard checks representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces. The metadata part of that guard also checks the required Ruby version, allowed push host, and runtime dependency metadata, so Ruby support, RubyGems push scope, and Rails runtime requirements drift are caught by package verification rather than by release prose alone. The main-push `gem_package` CI job repeats the same package contents verification against its built gem. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
 
 After creating the release tag, rerun the release check with tag alignment required:
 
@@ -90,7 +90,7 @@ Pull request CI checks:
 - JavaScript tests through `npm ci`, Playwright browser setup, and `npm run test:js`
 - Gem package verification when the PR touches package-sensitive paths
 
-Package-sensitive PR paths include `tree_view.gemspec`, `Rakefile`, root and packaged docs (`README.md`, `CHANGELOG.md`, and `docs/**`), JavaScript install and Node source files (`package.json`, `package-lock.json`, and `.nvmrc`), Bundler source files (`Gemfile` and `Gemfile.lock`), `script/check_gem_package_contents.rb`, `.github/workflows/ci.yml`, `lib/**`, Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`, plus `config/importmap.tree_view.rb`, `config/public_api_manifest.yml`, and `config/locales/**`. Those PRs run `gem build tree_view.gemspec`, `ruby script/check_gem_package_contents.rb tree_view-*.gem`, `gem install tree_view-*.gem`, and `ruby -e "require 'tree_view'"`. Docs-only PRs still avoid runtime-heavy lanes when they touch only docs paths, but README, CHANGELOG, and packaged docs changes are package-sensitive because the built gem must keep release-facing docs present and aligned.
+Package-sensitive PR paths include `tree_view.gemspec`, `Rakefile`, root and packaged docs (`README.md`, `CHANGELOG.md`, and `docs/**`), JavaScript install and Node source files (`package.json`, `package-lock.json`, and `.nvmrc`), Bundler source files (`Gemfile` and `Gemfile.lock`), `script/check_gem_package_contents.rb`, `.github/workflows/ci.yml`, `lib/**`, Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`, plus `config/importmap.tree_view.rb`, `config/public_api_manifest.yml`, and `config/locales/**`. Those PRs run `gem build tree_view.gemspec`, `ruby script/check_gem_package_contents.rb tree_view-*.gem`, `gem install tree_view-*.gem`, and `ruby -e "require 'tree_view'"`. Docs-only PRs still avoid runtime-heavy lanes when they touch only docs paths, but README, CHANGELOG, and packaged docs changes are package-sensitive because the built gem must keep release-facing docs present and aligned. That `package_sensitive` classification is separate from `docs_entrypoint_sensitive`: docs-only changes to `README.md`, `CHANGELOG.md`, `docs/**`, and `config/public_api_manifest.yml` also run docs entrypoint smoke so reader-facing docs and machine-readable public API guidance stay aligned without changing the runtime test matrix.
 
 Signal guards keep the representative phrase: Package-sensitive PR paths include `tree_view.gemspec`.
 
@@ -119,6 +119,8 @@ When the change touches documented host-app wiring or machine-readable public co
 
 `config/public_api_manifest.yml` remains the machine-readable source of truth for package-root exports, controller identifiers, grouped option keys, and documented event detail keys. Public API and feature docs remain the source of truth for documented wiring attributes and hooks that are intentionally not exported there.
 
+When the change touches the public setup surface, review [Public Setup Surface](public-setup-surface.md) together with `config/public_api_manifest.yml`. The persisted-state setup generator name, optional owner argument, and generated destination paths are public setup compatibility surface; release verification should keep the package contents guard aligned with those setup files without changing generator implementation, generated templates, or migration schema from this checklist alone.
+
 For any public API manifest change, confirm the release-facing trail is complete before tagging:
 
 - the manifest change is reflected in `docs/en/public-api.md`, `docs/ja/public-api.md`, and any affected feature page
@@ -135,6 +137,7 @@ Documentation files to review when public behavior or public compatibility surfa
 - `docs/en/api.md`
 - `docs/ja/public-api.md`
 - `docs/en/public-api.md`
+- `docs/en/public-setup-surface.md` when setup generator names, optional arguments, or generated destination paths change
 - `config/public_api_manifest.yml` when it is the source of truth for the changed contract surface
 - feature-specific docs
 - `docs/i18n-audit.md` (documentation maintenance checklist)
@@ -183,6 +186,8 @@ Before release:
   - `docs/en/release.md`
   - `docs/ja/release.md`
   - `LICENSE*`
+
+Because `docs/**/*` is packaged, keep package-facing docs independent from repository-only maintainer docs. `Product Profile.md` and `AGENTS.md` stay repository-only; do not add encoded parent-directory links from packaged docs back to those root-only files. The package contents guard reports `Forbidden repository-only root doc links in packaged <path>` when that boundary drifts.
 
 ## Repository
 
