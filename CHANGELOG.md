@@ -160,6 +160,7 @@ Release preparation notes:
 - Added public setup generator file package contents guard coverage for install generator and state templates.
 - Added public API manifest top-level key parity coverage to keep Ruby and Node manifest structure guards synchronized.
 - Added release docs signal coverage for release metadata guards and docs-entrypoint sensitive CI routing.
+- Added docs entrypoint suite self-test coverage for unregistered docs smoke / signal scripts.
 - Added CHANGELOG-only CI routing coverage to keep `CHANGELOG.md` changes on the docs-entrypoint and package verification paths.
 
 ## 0.1.0 - 2026-05-07
