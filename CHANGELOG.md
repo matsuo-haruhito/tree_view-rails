@@ -163,6 +163,8 @@ Release preparation notes:
 - Added docs entrypoint suite self-test coverage for unregistered docs smoke / signal scripts.
 - Added CHANGELOG-only CI routing coverage to keep `CHANGELOG.md` changes on the docs-entrypoint and package verification paths.
 - Added release note candidate helper contract specs for formatter output, CLI option validation, and since-tag reference collection without network access.
+- Added mockup demo application boundary docs signal coverage for static mockup / future real Rails demo app responsibility boundaries.
+- Added CI policy smoke coverage for gem package and JavaScript package install job signals, including package-sensitive routing and lockfile-backed `npm ci` expectations.
 
 ## 0.1.0 - 2026-05-07
 
