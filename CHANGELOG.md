@@ -166,6 +166,9 @@ Release preparation notes:
 - Added mockup demo application boundary docs signal coverage for static mockup / future real Rails demo app responsibility boundaries.
 - Added CI policy smoke coverage for gem package and JavaScript package install job signals, including package-sensitive routing and lockfile-backed `npm ci` expectations.
 - Added CI policy smoke coverage for JavaScript `needs: changes`, lint Standard Ruby command, and pull request specs Ruby / RSpec gate signals.
+- Added Development docs command smoke coverage for Docker setup command guidance and lockfile-backed Node/npm install signals.
+- Added CI changed-file policy coverage for public API, public setup surface, and release docs package/docs-entrypoint routing cases.
+- Expanded package contents verification coverage for README-linked public JavaScript docs, including controller registration and selection checkbox hook docs.
 
 ## 0.1.0 - 2026-05-07
 
