@@ -21,6 +21,18 @@ const cases = [
     }
   },
   {
+    name: "changelog-only docs request package and docs entrypoint guards",
+    files: ["CHANGELOG.md"],
+    expected: {
+      docs_only: true,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: true
+    }
+  },
+  {
     name: "repository-only docs stay docs-only without package or docs entrypoint guard",
     files: ["Product Profile.md", "AGENTS.md"],
     expected: {
