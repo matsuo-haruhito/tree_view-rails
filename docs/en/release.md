@@ -50,19 +50,18 @@ Minimum release conditions:
 
 ## Code and tests
 
-The committed `package-lock.json` is not yet in sync with `package.json`, so both local setup and CI still use `npm install` for the JavaScript lane. Switch these release checks back to `npm ci` after the lockfile refresh work lands.
+The committed `package-lock.json` is the source of truth for JavaScript dependency installs. Local setup, pull-request CI, Docker setup smoke, and main-push JavaScript checks use `npm ci` so release evidence does not update dependency resolution during verification.
 
-### Lockfile refresh handoff
+### JavaScript install path
 
-When a registry-enabled lockfile refresh lands, review these release-facing points before switching the JavaScript lane back to `npm ci`:
+When JavaScript dependencies change, keep these release-facing points aligned:
 
-- Confirm `package-lock.json` was refreshed against the current `package.json` without bundling unrelated dependency upgrades.
-- Update the setup wording in `docs/en/development.md` and `docs/ja/development.md` if `npm ci` becomes the current local and Docker install path.
-- Update this release checklist and any CI wording that still describes the `npm install` exception.
-- Keep the Node 22 source guard separate: `.nvmrc`, `package.json` `engines.node`, workflow `node-version`, and `script/test_node_version_sources.mjs` confirm the Node major, while the lockfile refresh decides whether `npm ci` is safe again.
-- Observe fresh PR or main-push CI after the switch so the JavaScript lane proves the refreshed lockfile works in CI.
+- Update `package.json` and `package-lock.json` together without bundling unrelated dependency upgrades.
+- Keep setup wording in `README.md`, `docs/en/installation.md`, `docs/ja/installation.md`, `docs/en/development.md`, and `docs/ja/development.md` aligned with `npm ci`.
+- Keep the Node 22 source guard separate: `.nvmrc`, `package.json` `engines.node`, workflow `node-version`, and `script/test_node_version_sources.mjs` confirm the Node major, while the lockfile-backed install path confirms dependency resolution.
+- Observe fresh PR or main-push CI after dependency changes so the JavaScript lane proves the updated lockfile works in CI.
 
-Do not change `package-lock.json`, workflow setup, dependency versions, or the Node major from this checklist alone; those belong in the lockfile refresh or CI change PR that owns the actual switch.
+Do not change dependency versions, the Node major, or package manager policy from this checklist alone; those belong in the dependency or CI change PR that owns the actual switch.
 
 Local checks:
 
@@ -73,24 +72,34 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, verifies the gem can be built, confirms release-facing files are packaged, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The main-push `gem_package` CI job additionally runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem so representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, and public API manifest files remain packaged. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
+`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, builds the gem, confirms release-facing files are packaged, runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The package contents guard checks representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces. The same guard also checks the public setup generator files for `tree_view:state:install` so generator name, optional owner argument, and generated destination path evidence stay aligned with the public setup surface docs. The metadata part of that guard also checks the required Ruby version, allowed push host, and runtime dependency metadata, so Ruby support, RubyGems push scope, and Rails runtime requirements drift are caught by package verification rather than by release prose alone. The main-push `gem_package` CI job repeats the same package contents verification against its built gem. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
+
+After creating the release tag, rerun the release check with tag alignment required:
+
+```bash
+TREE_VIEW_REQUIRE_RELEASE_TAG=1 bundle exec rake release:check
+```
+
+Use the default command during release preparation PRs because the tag usually does not exist yet. Use the flagged command after tagging so the check fails if `vX.Y.Z` is missing or points at a different commit from the current `HEAD`.
 
 Pull request CI checks:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
 - Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
-- JavaScript tests through `npm install`, Playwright browser setup, and `npm run test:js`
+- JavaScript tests through `npm ci`, Playwright browser setup, and `npm run test:js`
 - Gem package verification when the PR touches package-sensitive paths
 
-Package-sensitive PR paths include `tree_view.gemspec`, `script/check_gem_package_contents.rb`, `.github/workflows/ci.yml`, `lib/**`, Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`, plus `config/importmap.tree_view.rb`, `config/public_api_manifest.yml`, and `config/locales/**`. Those PRs run `gem build tree_view.gemspec`, `ruby script/check_gem_package_contents.rb tree_view-*.gem`, `gem install tree_view-*.gem`, and `ruby -e "require 'tree_view'"`. Prose-only docs PRs keep the lighter docs-only behavior unless they also touch one of those package-sensitive paths.
+Package-sensitive PR paths include `tree_view.gemspec`, `Rakefile`, root and packaged docs (`README.md`, `CHANGELOG.md`, and `docs/**`), JavaScript install and Node source files (`package.json`, `package-lock.json`, and `.nvmrc`), Bundler source files (`Gemfile` and `Gemfile.lock`), `script/check_gem_package_contents.rb`, `.github/workflows/ci.yml`, `lib/**`, Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`, plus `config/importmap.tree_view.rb`, `config/public_api_manifest.yml`, and `config/locales/**`. Those PRs run `gem build tree_view.gemspec`, `ruby script/check_gem_package_contents.rb tree_view-*.gem`, `gem install tree_view-*.gem`, and `ruby -e "require 'tree_view'"`. Docs-only PRs still avoid runtime-heavy lanes when they touch only docs paths, but README, CHANGELOG, and packaged docs changes are package-sensitive because the built gem must keep release-facing docs present and aligned. That `package_sensitive` classification is separate from `docs_entrypoint_sensitive`: docs-only changes to `README.md`, `CHANGELOG.md`, `docs/**`, and `config/public_api_manifest.yml` also run docs entrypoint smoke so reader-facing docs and machine-readable public API guidance stay aligned without changing the runtime test matrix.
+
+Signal guards keep the representative phrase: Package-sensitive PR paths include `tree_view.gemspec`.
 
 Main-push CI checks:
 
 - Ruby version matrix
 - Rails version matrix
-- JavaScript tests through `npm install` and `npm run test:js` until the lockfile is refreshed in sync with `package.json`
-- Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, and public API manifest file contents
+- JavaScript tests through `npm ci` and `npm run test:js`
+- Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, public setup generator files, and gem metadata URI contents
 
 PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes full compatibility matrices, JavaScript coverage, and unconditional package verification.
 
@@ -110,6 +119,8 @@ When the change touches documented host-app wiring or machine-readable public co
 
 `config/public_api_manifest.yml` remains the machine-readable source of truth for package-root exports, controller identifiers, grouped option keys, and documented event detail keys. Public API and feature docs remain the source of truth for documented wiring attributes and hooks that are intentionally not exported there.
 
+When the change touches the public setup surface, review [Public Setup Surface](public-setup-surface.md) together with `config/public_api_manifest.yml`. The persisted-state setup generator name, optional owner argument, and generated destination paths are public setup compatibility surface; release verification should keep the package contents guard aligned with those setup files without changing generator implementation, generated templates, or migration schema from this checklist alone.
+
 For any public API manifest change, confirm the release-facing trail is complete before tagging:
 
 - the manifest change is reflected in `docs/en/public-api.md`, `docs/ja/public-api.md`, and any affected feature page
@@ -126,6 +137,7 @@ Documentation files to review when public behavior or public compatibility surfa
 - `docs/en/api.md`
 - `docs/ja/public-api.md`
 - `docs/en/public-api.md`
+- `docs/en/public-setup-surface.md` when setup generator names, optional arguments, or generated destination paths change
 - `config/public_api_manifest.yml` when it is the source of truth for the changed contract surface
 - feature-specific docs
 - `docs/i18n-audit.md` (documentation maintenance checklist)
@@ -143,8 +155,9 @@ Use these categories:
 - Deprecated
 - Removed
 - Documentation
+- Tests
 
-Record public API manifest changes by their user-visible effect. Use Added or Changed for backward-compatible public surface updates, Deprecated or Removed for compatibility changes that require migration notes, and Documentation only when the manifest or docs guidance changed without a runtime contract change.
+Record test, CI, docs smoke, and package verification changes under Tests. Record public API manifest changes by their user-visible effect. Use Added or Changed for backward-compatible public surface updates, Deprecated or Removed for compatibility changes that require migration notes, and Documentation only when the manifest or docs guidance changed without a runtime contract change.
 
 Include migration notes for breaking changes or deprecations.
 
@@ -159,6 +172,7 @@ Before release:
 - Confirm packaged files include:
   - `lib/**/*`
   - Rails helpers, views, stylesheets, JavaScript, and importmap files
+  - public setup generator files for `tree_view:state:install`
   - `app/helpers/tree_view_helper.rb`
   - `app/views/tree_view/_tree_row.html.erb`
   - `app/javascript/tree_view/index.js`
@@ -167,12 +181,18 @@ Before release:
   - `config/public_api_manifest.yml`
   - `config/locales/tree_view.toolbar.en.yml`
   - `config/locales/tree_view.toolbar.ja.yml`
+  - `lib/generators/tree_view/state/install_generator.rb`
+  - `lib/generators/tree_view/state/templates/create_tree_view_states.rb`
+  - `lib/generators/tree_view/state/templates/tree_view_state.rb`
+  - `lib/generators/tree_view/state/templates/tree_view_state_owner.rb`
   - `README.md`
   - `CHANGELOG.md`
   - `docs/**/*`
   - `docs/en/release.md`
   - `docs/ja/release.md`
   - `LICENSE*`
+
+Because `docs/**/*` is packaged, keep package-facing docs independent from repository-only maintainer docs. `Product Profile.md` and `AGENTS.md` stay repository-only; do not add encoded parent-directory links from packaged docs back to those root-only files. The package contents guard reports `Forbidden repository-only root doc links in packaged <path>` when that boundary drifts.
 
 ## Repository
 
