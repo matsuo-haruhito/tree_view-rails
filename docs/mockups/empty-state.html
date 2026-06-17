@@ -87,6 +87,106 @@
       </table>
     </section>
 
+    <section class="mock-section" aria-labelledby="toolbar-empty-heading">
+      <h2 id="toolbar-empty-heading">Empty state with nearby toolbar actions</h2>
+      <p class="mock-empty-note">
+        Empty trees often sit near expand, collapse, and current-path toolbar actions. This reference
+        keeps action availability visible while final empty copy, CTA, reset behavior, and permission
+        wording remain host-app owned.
+      </p>
+      <div class="mock-toolbar-frame" aria-label="Empty tree toolbar boundary">
+        <div class="mock-toolbar" role="toolbar" aria-label="Tree actions while empty">
+          <button type="button" disabled>Expand all</button>
+          <button type="button" disabled>Collapse all</button>
+          <button type="button" aria-disabled="true">Current path unavailable</button>
+          <button type="button">Reset filters</button>
+        </div>
+        <p class="mock-empty-note">
+          Disabled expand/collapse buttons communicate that TreeView has no rendered branches to act on.
+          The reset affordance and final wording are examples of host-app-owned behavior.
+        </p>
+      </div>
+      <table class="tree-view-table">
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">name</th>
+            <th scope="col">owner</th>
+            <th scope="col">status</th>
+            <th scope="col">actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5">
+              <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+                <p class="tree-view-empty-row__message">Nothing is visible in this filtered tree.</p>
+                <p class="mock-empty-note">TreeView owns the full-width empty row hook; host apps own filter reset, create CTA, and authorization-aware action copy.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section" aria-labelledby="empty-variants-heading">
+      <h2 id="empty-variants-heading">Resource-table and narrow column variants</h2>
+      <p class="mock-empty-note">
+        The empty-row hook needs to remain legible when the surrounding table is owned by a resource-table
+        layer or when only a small set of columns is visible. These samples do not change colspan behavior;
+        they show the review surface for host-owned column policy.
+      </p>
+      <div class="mock-comparison-grid">
+        <div class="mock-comparison-card">
+          <h3>Resource-table style columns</h3>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">resource</th>
+                <th scope="col">owner</th>
+                <th scope="col">last update</th>
+                <th scope="col">state</th>
+                <th scope="col">actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6">
+                  <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+                    <p class="tree-view-empty-row__message">No resources match this table view.</p>
+                    <p class="mock-empty-note">Visible column policy, exact action availability, and table-preference recovery stay outside TreeView.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mock-comparison-card">
+          <h3>Narrow visible column set</h3>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">tree</th>
+                <th scope="col">name</th>
+                <th scope="col">actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="3">
+                  <div class="tree-view-empty-row__content" data-tree-view-empty-state="true">
+                    <p class="tree-view-empty-row__message">No rows are available in this compact view.</p>
+                    <p class="mock-empty-note">The message uses the same hook while host apps decide whether actions, metadata, or a reset CTA should stay nearby.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <section class="mock-section" aria-labelledby="comparison-heading">
       <h2 id="comparison-heading">Difference from a populated row</h2>
       <table class="tree-view-table">
@@ -129,6 +229,7 @@
         <li>Populated rows keep branch controls, badges, selection, and row actions.</li>
         <li>Empty rows collapse those row-level controls into one full-width message slot.</li>
         <li><code>data-tree-view-empty-state="true"</code> and the empty-row wrapper classes are the reusable surface.</li>
+        <li>Toolbar state, reset CTA, visible column policy, and final empty copy stay host-app owned.</li>
       </ul>
     </section>
   </main>
