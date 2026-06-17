@@ -21,6 +21,30 @@ const cases = [
     }
   },
   {
+    name: "public API docs stay docs-only and request package and docs entrypoint guards",
+    files: ["docs/en/public-api.md", "docs/ja/public-api.md"],
+    expected: {
+      docs_only: true,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: true
+    }
+  },
+  {
+    name: "public setup and release docs stay docs-only and request package and docs entrypoint guards",
+    files: ["docs/en/public-setup-surface.md", "docs/ja/release.md"],
+    expected: {
+      docs_only: true,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: true
+    }
+  },
+  {
     name: "changelog-only docs request package and docs entrypoint guards",
     files: ["CHANGELOG.md"],
     expected: {
