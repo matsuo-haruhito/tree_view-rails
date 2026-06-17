@@ -187,7 +187,7 @@ release前に確認すること:
   - `docs/ja/release.md`
   - `LICENSE*`
 
-`docs/**/*` は packaged docs として gem に含まれるため、package-facing docs は repository-only maintainer docs から独立させます。`Product Profile.md` と `AGENTS.md` は repository-only のまま扱い、packaged docs から `../Product%20Profile.md` や `../AGENTS.md` のような壊れやすい relative link を追加しないでください。この境界が崩れると、package contents guard は `Forbidden repository-only root doc links in packaged <path>` として対象 path を報告します。
+`docs/**/*` は packaged docs として gem に含まれるため、package-facing docs は repository-only maintainer docs から独立させます。`Product Profile.md` と `AGENTS.md` は repository-only のまま扱い、packaged docs から repository root 専用文書へ戻る encoded parent-directory link を追加しないでください。この境界が崩れると、package contents guard は `Forbidden repository-only root doc links in packaged <path>` として対象 path を報告します。
 
 ## Repository
 
