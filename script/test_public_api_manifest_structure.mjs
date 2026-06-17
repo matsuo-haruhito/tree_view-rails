@@ -9,8 +9,32 @@ function loadManifest() {
           "-e",
           [
             'require "json"',
+            'require "psych"',
             'require "yaml"',
-            'data = YAML.load_file("config/public_api_manifest.yml")',
+            'path = "config/public_api_manifest.yml"',
+            'duplicates = []',
+            'walk = lambda do |node, node_path|',
+            '  case node',
+            '  when Psych::Nodes::Stream, Psych::Nodes::Document',
+            '    node.children.each { |child| walk.call(child, node_path) }',
+            '  when Psych::Nodes::Sequence',
+            '    node.children.each_with_index { |child, index| walk.call(child, "#{node_path}[#{index}]") }',
+            '  when Psych::Nodes::Mapping',
+            '    seen = {}',
+            '    node.children.each_slice(2) do |key_node, value_node|',
+            '      key = key_node.value.to_s',
+            '      child_path = node_path.empty? ? key : "#{node_path}.#{key}"',
+            '      duplicates << child_path if seen.key?(key)',
+            '      seen[key] = true',
+            '      walk.call(value_node, child_path)',
+            '    end',
+            '  end',
+            'end',
+            'walk.call(Psych.parse_file(path), "")',
+            'unless duplicates.empty?',
+            '  abort "#{path} contains duplicate YAML key(s): #{duplicates.uniq.sort.join(", ")}"',
+            'end',
+            'data = YAML.load_file(path)',
             "print JSON.generate(data)"
           ].join("; ")
         ],
@@ -139,6 +163,12 @@ function assertTopLevelKeys(manifest) {
   expectedKeys.forEach((key) => {
     assert(key in manifest, `config/public_api_manifest.yml missing top-level key: ${key}`)
   })
+
+  const unexpectedKeys = Object.keys(manifest).filter((key) => !expectedKeys.includes(key)).sort()
+  assert(
+    unexpectedKeys.length === 0,
+    `config/public_api_manifest.yml contains unexpected top-level key(s): ${unexpectedKeys.join(", ")}. Update script/test_public_api_manifest_structure.mjs before adding manifest sections.`
+  )
 }
 
 function assertEventClassification(javascriptPackageRoot) {
@@ -209,6 +239,12 @@ const requiredGroupedOptionKeys = [
   "row_status"
 ]
 
+const requiredLocalizedNameI18nKeyGroups = [
+  "model_names",
+  "attribute_names",
+  "node_type_names"
+]
+
 const requiredIntegrationHookKeys = ["state", "remote_state", "transfer"]
 
 const manifest = loadManifest()
@@ -232,7 +268,11 @@ assertObjectWithLists(manifest.resource_table_render_state_call, "resource_table
 assertString(manifest.resource_table_render_state_call.render_options_contract, "resource_table_render_state_call.render_options_contract")
 assertUniqueStringList(manifest.render_state_callback_builder_keys, "render_state_callback_builder_keys")
 
-assertObject(manifest.localized_name_i18n_keys, "localized_name_i18n_keys")
+assertRequiredObjectKeys(
+  manifest.localized_name_i18n_keys,
+  "localized_name_i18n_keys",
+  requiredLocalizedNameI18nKeyGroups
+)
 for (const [name, config] of Object.entries(manifest.localized_name_i18n_keys)) {
   assertObject(config, `localized_name_i18n_keys.${name}`)
   assertString(config.helper, `localized_name_i18n_keys.${name}.helper`)
@@ -251,9 +291,15 @@ assertString(
   "localized_name_i18n_keys.node_type_names.lookup_prefix"
 )
 
+assertObject(manifest.setup_generators, "setup_generators")
 assertObject(manifest.setup_generators.persisted_state_install, "setup_generators.persisted_state_install")
 assertString(manifest.setup_generators.persisted_state_install.name, "setup_generators.persisted_state_install.name")
 assertString(manifest.setup_generators.persisted_state_install.class_name, "setup_generators.persisted_state_install.class_name")
+assertEntries(
+  manifest.setup_generators.persisted_state_install.optional_arguments,
+  "setup_generators.persisted_state_install.optional_arguments",
+  ["name", "banner"]
+)
 assertUniqueStringList(
   manifest.setup_generators.persisted_state_install.generated_paths,
   "setup_generators.persisted_state_install.generated_paths"

@@ -16,16 +16,16 @@ GitHub Actions runs the following checks on pull requests:
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
 - Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
-- JavaScript tests through `npm install`, Playwright browser setup, and `npm run test:js`
+- JavaScript tests through `npm ci`, Playwright browser setup, and `npm run test:js`
 
 Pushes to `main` keep the heavier compatibility and release checks:
 
 - Ruby version matrix
 - Full Rails version matrix
-- JavaScript tests through `npm install` and `npm run test:js` until the lockfile is refreshed in sync with `package.json`
+- JavaScript tests through `npm ci` and `npm run test:js`
 - gem package verification
 
-The repository keeps a committed `package-lock.json`, but CI stays on `npm install` until that lockfile is refreshed in sync with `package.json`.
+The repository keeps a committed `package-lock.json`. CI and local setup use `npm ci` so JavaScript checks install from the lockfile rather than updating dependency resolution during verification.
 
 Release tags should be placed only on `main` commits whose full CI has passed.
 
@@ -181,11 +181,11 @@ bundle install
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
-npm install
+npm ci
 npm run test:js
 ```
 
-Use `npm install` here for the same reason as CI: the committed `package-lock.json` still needs a refresh before `npm ci` can be trusted. `npm run test:js` runs the entrypoint smoke, Vitest suite, and Playwright browser smoke checks documented in the CI lane.
+Use `npm ci` here for the same reason as CI: the committed `package-lock.json` is the repeatable install source. `npm run test:js` runs the entrypoint smoke, Vitest suite, and Playwright browser smoke checks documented in the CI lane.
 
 Rails compatibility Gemfiles live under `gemfiles/`.
 
@@ -213,6 +213,6 @@ GitHub Actions runs the following on pull requests:
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
-- JavaScript checks through `npm install`, Playwright browser setup, and `npm run test:js`
+- JavaScript checks through `npm ci`, Playwright browser setup, and `npm run test:js`
 
 On pushes to `main`, GitHub Actions runs the Ruby version matrix, full Rails version matrix, JavaScript tests, and gem package verification.
