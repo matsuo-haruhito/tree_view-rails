@@ -72,7 +72,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, builds the gem, confirms release-facing files are packaged, runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The package contents guard checks representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces. The metadata part of that guard also checks the required Ruby version, allowed push host, and runtime dependency metadata, so Ruby support, RubyGems push scope, and Rails runtime requirements drift are caught by package verification rather than by release prose alone. The main-push `gem_package` CI job repeats the same package contents verification against its built gem. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
+`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, builds the gem, confirms release-facing files are packaged, runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The package contents guard checks representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, gem metadata URI surfaces, and the public setup generator files for `tree_view:state:install`. The metadata part of that guard also checks the required Ruby version, allowed push host, and runtime dependency metadata, so Ruby support, RubyGems push scope, and Rails runtime requirements drift are caught by package verification rather than by release prose alone. The main-push `gem_package` CI job repeats the same package contents verification against its built gem. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
 
 After creating the release tag, rerun the release check with tag alignment required:
 
@@ -99,7 +99,7 @@ Main-push CI checks:
 - Ruby version matrix
 - Rails version matrix
 - JavaScript tests through `npm ci` and `npm run test:js`
-- Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI contents
+- Gem package verification, including representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, public setup generator files, and gem metadata URI contents
 
 PR CI must pass before merge. Use the broader `main` CI for release decisions because it includes full compatibility matrices, JavaScript coverage, and unconditional package verification.
 
@@ -172,6 +172,7 @@ Before release:
 - Confirm packaged files include:
   - `lib/**/*`
   - Rails helpers, views, stylesheets, JavaScript, and importmap files
+  - public setup generator files for `tree_view:state:install`
   - `app/helpers/tree_view_helper.rb`
   - `app/views/tree_view/_tree_row.html.erb`
   - `app/javascript/tree_view/index.js`
@@ -180,6 +181,10 @@ Before release:
   - `config/public_api_manifest.yml`
   - `config/locales/tree_view.toolbar.en.yml`
   - `config/locales/tree_view.toolbar.ja.yml`
+  - `lib/generators/tree_view/state/install_generator.rb`
+  - `lib/generators/tree_view/state/templates/create_tree_view_states.rb`
+  - `lib/generators/tree_view/state/templates/tree_view_state.rb`
+  - `lib/generators/tree_view/state/templates/tree_view_state_owner.rb`
   - `README.md`
   - `CHANGELOG.md`
   - `docs/**/*`
