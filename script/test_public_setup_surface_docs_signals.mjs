@@ -42,7 +42,9 @@ const feature = "Public Setup Surface docs"
 
 ;[
   ["docs/README.md", "en/public-setup-surface.md"],
-  ["docs/README.md", "ja/public-setup-surface.md"]
+  ["docs/README.md", "ja/public-setup-surface.md"],
+  ["docs/en/persisted-state.md", "public-setup-surface.md"],
+  ["docs/ja/persisted-state.md", "public-setup-surface.md"]
 ].forEach(([sourcePath, href]) => assertRelativeLink(sourcePath, href, feature))
 
 assertSignals("docs/en/public-setup-surface.md", feature, [
@@ -65,4 +67,24 @@ assertSignals("docs/ja/public-setup-surface.md", feature, [
   "app/models/concerns/tree_view_state_owner.rb",
   "生成後のファイルは host app 側で確認してください",
   "storage ownership、認可、保存タイミング、controller action、UI wiring は host app 側の責務です"
+])
+
+assertSignals("docs/en/persisted-state.md", feature, [
+  "Public Setup Surface",
+  "public-setup-surface.md",
+  "path-level contract",
+  "generator name",
+  "optional owner argument",
+  "generated destination paths",
+  "without freezing the migration schema or generated template contents"
+])
+
+assertSignals("docs/ja/persisted-state.md", feature, [
+  "Public Setup Surface",
+  "public-setup-surface.md",
+  "path-level contract",
+  "generator 名",
+  "任意の owner 引数",
+  "生成先 path",
+  "migration schema や生成 template 内容そのものを固定するものではありません"
 ])

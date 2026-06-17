@@ -54,6 +54,7 @@ function isPackageSensitivePath(file) {
     file.startsWith("docs/") ||
     file === "Gemfile" ||
     file === "Gemfile.lock" ||
+    file === "Rakefile" ||
     file === "tree_view.gemspec" ||
     file === "package.json" ||
     file === "package-lock.json" ||
@@ -86,7 +87,8 @@ function isDockerSetupSensitivePath(file) {
     file === "docker-compose.yml" ||
     file === "package.json" ||
     file === "package-lock.json" ||
-    file === ".nvmrc"
+    file === ".nvmrc" ||
+    file === ".github/workflows/ci.yml"
   );
 }
 

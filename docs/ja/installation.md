@@ -16,16 +16,16 @@ GitHub Actions では、Pull Requestで以下を実行します。
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
 - representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
-- JavaScript tests: `npm install`、Playwright browser setup、`npm run test:js`
+- JavaScript tests: `npm ci`、Playwright browser setup、`npm run test:js`
 
 `main` へのpushでは、重めの互換性確認とrelease向けchecksを実行します。
 
 - Ruby version matrix
 - full Rails version matrix
-- `package-lock.json` が `package.json` と同期するまでは、`npm install` と `npm run test:js` による JavaScript tests
+- `npm ci` と `npm run test:js` による JavaScript tests
 - gem package verification
 
-repo には `package-lock.json` を commit していますが、まだ `package.json` と同期が取れていないため、CI は lockfile refresh が済むまで `npm install` を使います。
+repo には `package-lock.json` を commit しています。CI とローカルセットアップは `npm ci` を使い、検証中に dependency resolution を更新せず、lockfile から JavaScript dependencies を install します。
 
 release tag は、`main` のfull CIが成功したcommitに付けます。
 
@@ -179,11 +179,11 @@ bundle install
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
-npm install
+npm ci
 npm run test:js
 ```
 
-ローカル手順も CI と同じく `npm install` を使います。理由は、commit 済みの `package-lock.json` を `npm ci` で安全に使うには、まだ lockfile refresh が必要だからです。`npm run test:js` は CI lane と同じく entrypoint smoke、Vitest suite、Playwright browser smoke をまとめて実行します。
+ローカル手順も CI と同じく `npm ci` を使います。commit 済みの `package-lock.json` を repeatable install の source として使うためです。`npm run test:js` は CI lane と同じく entrypoint smoke、Vitest suite、Playwright browser smoke をまとめて実行します。
 
 Rails互換性確認用のGemfileは `gemfiles/` 配下にあります。
 
@@ -211,6 +211,6 @@ GitHub Actions では、Pull Requestで以下を実行します。
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
-- JavaScript checks: `npm install`、Playwright browser setup、`npm run test:js`
+- JavaScript checks: `npm ci`、Playwright browser setup、`npm run test:js`
 
 `main` へのpushでは、Ruby version matrix、full Rails version matrix、JavaScript tests、gem package verificationを実行します。
