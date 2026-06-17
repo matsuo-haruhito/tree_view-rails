@@ -61,6 +61,14 @@ assertSignals("docs/mockups/README.md", "README/default-tree mockup routing", [
   "broken HTML, blank pages, missing review links, and missing representative regions without adding screenshot baselines or visual diff review"
 ])
 
+assertSignals("docs/mockups/README.md", "mockup demo app responsibility boundary", [
+  "not a complete Rails application",
+  "host-app CRUD, query, authorization, seed data, or controller examples",
+  "future real Rails demo app",
+  "confirm this static mockup / real demo app boundary before requesting new routes, persistence, CRUD flows, seeded records, or authorization examples",
+  "Do not add direct public demo links from the mockups until the demo repository is public and its publication checklist is ready."
+])
+
 assertSignals("docs/mockups/README.md", "table caption context mockup routing", [
   "[table-caption-context.html](table-caption-context.html)",
   "Focused table caption and surrounding page structure reference showing host-app-owned heading, caption, summary, and actions around TreeView-owned row cues.",
