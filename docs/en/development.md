@@ -81,6 +81,8 @@ NodePresenter builder names are a manifest-backed name surface. When `node_prese
 
 RenderState callback builder keys are a manifest-backed key surface, not a full callback behavior contract. When `render_state_callback_builder_keys` changes, sync the manifest, the focused compatibility spec, the flat callback builder section in `docs/en/public-api.md` / `docs/ja/public-api.md`, and any feature docs that name the same key. Do not use the manifest tracking summary to define callback arity, return-value validation, row rendering semantics, or fallback behavior.
 
+Public constants are also a package-verification surface. When `public_constants` changes, keep `config/public_api_manifest.yml`, `spec/public_api_compatibility_spec.rb`, the public API docs, and `script/check_gem_package_contents.rb` aligned: the package verifier's `PUBLIC_CONSTANT_RUNTIME_FILES` mapping must include the runtime file that proves each manifest-listed constant is packaged. Do not treat that mapping as the source of truth for constant adoption, renaming, or public API policy; it is the release-package evidence that follows the manifest-backed public surface.
+
 When you add, rename, or remove one of those entries, keep the sync trail small and explicit:
 
 - Update the manifest and the owning compatibility spec, entrypoint smoke, or package guard that protects that surface.
