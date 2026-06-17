@@ -348,6 +348,48 @@ assertJobMatches(
   );
 });
 
+const rubyMatrixJob = workflowJobBlock(workflowSource, "ruby_matrix");
+assertJobMatches(
+  rubyMatrixJob,
+  /if: github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/,
+  `${workflowPath} jobs.ruby_matrix must stay limited to pushes on main`
+);
+assertJobMatches(rubyMatrixJob, /uses: actions\/checkout@v6/, `${workflowPath} jobs.ruby_matrix must keep checkout v6`);
+assertJobMatches(rubyMatrixJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.ruby_matrix must keep ruby/setup-ruby v1`);
+assertJobMatches(rubyMatrixJob, /bundler-cache: true/, `${workflowPath} jobs.ruby_matrix must keep bundler-cache enabled`);
+assertJobMatches(rubyMatrixJob, /run: bundle exec rake/, `${workflowPath} jobs.ruby_matrix must run the full rake task on main`);
+["3.2", "3.3"].forEach((rubyVersion) => {
+  assertJobMatches(
+    rubyMatrixJob,
+    new RegExp(`- "${escapeRegExp(rubyVersion)}"`),
+    `${workflowPath} jobs.ruby_matrix must keep the Ruby ${rubyVersion} main-branch lane`
+  );
+});
+
+const railsMatrixJob = workflowJobBlock(workflowSource, "rails_matrix");
+assertJobMatches(
+  railsMatrixJob,
+  /if: github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/,
+  `${workflowPath} jobs.rails_matrix must stay limited to pushes on main`
+);
+assertJobMatches(railsMatrixJob, /uses: actions\/checkout@v6/, `${workflowPath} jobs.rails_matrix must keep checkout v6`);
+assertJobMatches(railsMatrixJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.rails_matrix must keep ruby/setup-ruby v1`);
+assertJobMatches(railsMatrixJob, /bundler-cache: true/, `${workflowPath} jobs.rails_matrix must keep bundler-cache enabled`);
+assertJobMatches(railsMatrixJob, /BUNDLE_GEMFILE: \$\{\{ matrix\.gemfile \}\}/, `${workflowPath} jobs.rails_matrix must keep per-lane Gemfile wiring`);
+assertJobMatches(railsMatrixJob, /run: bundle exec rake/, `${workflowPath} jobs.rails_matrix must run the full rake task on main`);
+[
+  ["7.0", "gemfiles/rails_7_0.gemfile", "3.2"],
+  ["7.1", "gemfiles/rails_7_1.gemfile", "3.2"],
+  ["7.2", "gemfiles/rails_7_2.gemfile", "3.2"],
+  ["8.0", "gemfiles/rails_8_0.gemfile", "3.3"]
+].forEach(([railsVersion, gemfile, rubyVersion]) => {
+  assertJobMatches(
+    railsMatrixJob,
+    new RegExp(`rails: "${railsVersion}"[\\s\\S]*gemfile: ${escapeRegExp(gemfile)}[\\s\\S]*ruby-version: "${rubyVersion}"`),
+    `${workflowPath} jobs.rails_matrix must keep the Rails ${railsVersion} main-branch lane`
+  );
+});
+
 const javascriptJob = workflowJavaScriptJob(workflowSource);
 assertJobMatches(
   javascriptJob,
