@@ -187,6 +187,8 @@ Before release:
   - `docs/ja/release.md`
   - `LICENSE*`
 
+Because `docs/**/*` is packaged, keep package-facing docs independent from repository-only maintainer docs. `Product Profile.md` and `AGENTS.md` stay repository-only; do not add encoded parent-directory links from packaged docs back to those root-only files. The package contents guard reports `Forbidden repository-only root doc links in packaged <path>` when that boundary drifts.
+
 ## Repository
 
 - Confirm `main` is green before tagging.
