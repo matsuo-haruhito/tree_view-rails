@@ -75,6 +75,7 @@ Release preparation notes:
 - Clarified development docs that `.nvmrc`, `package.json` `engines.node`, and workflow `node-version` stay aligned by a Node version source drift guard.
 - Clarified Development docs for the Ruby version source and CI changed-file policy guard commands, including Bundler dependency package-sensitive guidance.
 - Clarified Development docs for standalone gem package verification and docs i18n parity commands.
+- Clarified Development docs for public constants package guard mapping and Release docs for public setup generator package checklist / repository-only packaged-doc link boundaries.
 - Clarified `npm ci` install path guidance across README, installation, development, and release checklist docs so local setup, PR CI, Docker setup smoke, and main-push JavaScript checks share lockfile-backed evidence.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
@@ -157,6 +158,7 @@ Release preparation notes:
 - Added dependency spec, non-PR workflow output, public API manifest unknown-key, and duplicate YAML-key guard coverage for package-lock, CI changed-file policy, and manifest structure smoke.
 - Added public setup generator file package contents guard coverage for install generator and state templates.
 - Added public API manifest top-level key parity coverage to keep Ruby and Node manifest structure guards synchronized.
+- Added release docs signal coverage for release metadata guards and docs-entrypoint sensitive CI routing.
 
 ## 0.1.0 - 2026-05-07
 
