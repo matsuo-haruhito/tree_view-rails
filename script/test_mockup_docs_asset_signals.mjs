@@ -62,7 +62,7 @@ assertSignals("docs/mockups/README.md", "README/default-tree mockup routing", [
 ])
 
 assertSignals("docs/mockups/README.md", "mockup demo app responsibility boundary", [
-  "not a complete Rails application",
+  "complete Rails application",
   "host-app CRUD, query, authorization, seed data, or controller examples",
   "future real Rails demo app",
   "confirm this static mockup / real demo app boundary before requesting new routes, persistence, CRUD flows, seeded records, or authorization examples",
