@@ -5,11 +5,13 @@ require_relative "../script/release_note_candidates"
 
 RSpec.describe ReleaseNoteCandidates::MarkdownFormatter do
   def entry(type:, number:, title:, closed_at: nil, merged_at: nil)
+    path_segment = (type == :pull_request) ? "pull" : "issues"
+
     ReleaseNoteCandidates::Entry.new(
       type: type,
       number: number,
       title: title,
-      url: "https://github.com/matsuo-haruhito/tree_view-rails/#{type == :pull_request ? "pull" : "issues"}/#{number}",
+      url: "https://github.com/matsuo-haruhito/tree_view-rails/#{path_segment}/#{number}",
       closed_at: closed_at,
       merged_at: merged_at
     )
