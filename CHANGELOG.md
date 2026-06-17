@@ -108,6 +108,7 @@ Release preparation notes:
 - Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
 - Added root docs index entry points for the English and Japanese Rendering Boundaries guides.
 - Added malformed selection params troubleshooting guidance in English and Japanese, including `TreeView.parse_selection_params` error boundaries and host-app-owned request policy.
+- Clarified Public API docs for `TreeViewControllerEntries` as a manifest-backed controller entry list while keeping `registerTreeViewControllers(application)` as the standard registration path.
 
 ### Tests
 
