@@ -108,6 +108,7 @@ Release preparation notes:
 - Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
 - Added root docs index entry points for the English and Japanese Rendering Boundaries guides.
 - Added malformed selection params troubleshooting guidance in English and Japanese, including `TreeView.parse_selection_params` error boundaries and host-app-owned request policy.
+- Clarified Public API docs for `TreeViewControllerEntries` as a manifest-backed controller entry list while keeping `registerTreeViewControllers(application)` as the standard registration path.
 
 ### Tests
 
@@ -159,6 +160,7 @@ Release preparation notes:
 - Added public setup generator file package contents guard coverage for install generator and state templates.
 - Added public API manifest top-level key parity coverage to keep Ruby and Node manifest structure guards synchronized.
 - Added release docs signal coverage for release metadata guards and docs-entrypoint sensitive CI routing.
+- Added CHANGELOG-only CI routing coverage to keep `CHANGELOG.md` changes on the docs-entrypoint and package verification paths.
 
 ## 0.1.0 - 2026-05-07
 
