@@ -294,6 +294,7 @@ assert.match(
 assertJobMatches(javascriptJob, /uses: actions\/setup-node@v6/, `${workflowPath} jobs.javascript must keep setup-node v6`);
 assertJobMatches(javascriptJob, /node-version: "22"/, `${workflowPath} jobs.javascript must keep the Node 22 CI lane`);
 assertJobMatches(javascriptJob, /cache: npm/, `${workflowPath} jobs.javascript must keep npm cache enabled`);
+assertJobMatches(javascriptJob, /run: npm ci/, `${workflowPath} jobs.javascript must use npm ci for lockfile-backed installs`);
 
 const dockerDevelopmentSetupJob = workflowJobBlock(workflowSource, "docker_development_setup");
 assertJobMatches(
@@ -322,8 +323,31 @@ assert.ok(
 );
 
 const gemPackageJob = workflowJobBlock(workflowSource, "gem_package");
+assertJobMatches(
+  gemPackageJob,
+  /github\.event_name == 'pull_request' && needs\.changes\.outputs\.package_sensitive == 'true'/,
+  `${workflowPath} jobs.gem_package must stay gated by package_sensitive pull request changes`
+);
+assertJobMatches(
+  gemPackageJob,
+  /needs: changes/,
+  `${workflowPath} jobs.gem_package must depend on changed-file detection`
+);
 assertJobMatches(gemPackageJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.gem_package must keep Ruby 3.3`);
 assertJobMatches(gemPackageJob, /bundler-cache: true/, `${workflowPath} jobs.gem_package must keep bundler-cache enabled`);
+assertJobMatches(gemPackageJob, /run: gem build tree_view\.gemspec/, `${workflowPath} jobs.gem_package must build the gem`);
+assertJobMatches(
+  gemPackageJob,
+  /run: ruby script\/check_gem_package_contents\.rb tree_view-\*\.gem/,
+  `${workflowPath} jobs.gem_package must run package contents verification`
+);
+assertJobMatches(gemPackageJob, /run: gem install tree_view-\*\.gem/, `${workflowPath} jobs.gem_package must install the built gem`);
+assertJobMatches(gemPackageJob, /run: ruby -e "require 'tree_view'"/, `${workflowPath} jobs.gem_package must keep the installed gem require smoke`);
+
+assert.ok(
+  packageScripts["test:ci-policy"].includes("script/test_package_lock_dependency_drift.mjs"),
+  `${packagePath} scripts.test:ci-policy must keep the package lock dependency drift guard`
+);
 
 for (const scriptName of npmRunScripts(workflowSource)) {
   assert.ok(
