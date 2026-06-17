@@ -324,6 +324,8 @@ assert.match(
   /run: npm run test:docs-entrypoints/,
   `${workflowPath} jobs.javascript must still run docs entrypoint checks for docs_entrypoint_sensitive changes`
 );
+assertJobMatches(javascriptJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.javascript must keep Ruby setup for manifest-loading Node smokes`);
+assertJobMatches(javascriptJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.javascript must keep Ruby 3.3 for manifest-loading Node smokes`);
 assertJobMatches(javascriptJob, /uses: actions\/setup-node@v6/, `${workflowPath} jobs.javascript must keep setup-node v6`);
 assertJobMatches(javascriptJob, /node-version: "22"/, `${workflowPath} jobs.javascript must keep the Node 22 CI lane`);
 assertJobMatches(javascriptJob, /cache: npm/, `${workflowPath} jobs.javascript must keep npm cache enabled`);
