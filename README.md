@@ -138,7 +138,7 @@ Add the importmap pin when needed:
 pin "tree_view", to: "tree_view/index.js"
 ```
 
-Host apps that write tests or custom renderers against TreeView browser hooks can avoid raw event names, data attributes, and controller identifiers by using the package-root exports from `tree_view/index.js`, such as `TreeViewEventNames`, `TreeViewEventDetailKeys`, and the documented data hook objects. See the [Public API JavaScript surface](docs/en/public-api.md#javascript-surface) / [日本語](docs/ja/public-api.md#javascript-surface) and the [JavaScript event contract](docs/en/js-events.md) / [日本語](docs/ja/js-events.md).
+Host apps that write tests or custom renderers against TreeView browser hooks can avoid raw event names, data attributes, and controller identifiers by using the package-root exports from `tree_view/index.js`, such as `TreeViewEventNames`, `TreeViewEventDetailKeys`, `TreeViewControllerEntries`, `TreeViewIntegrationHooks`, and documented data hook objects like `TreeViewRemoteStateDataHooks`, `TreeViewToolbarDataHooks`, `TreeViewSelectionCheckboxHooks`, and `TreeViewEmptyStateHooks`. See the [Public API JavaScript surface](docs/en/public-api.md#javascript-surface) / [日本語](docs/ja/public-api.md#javascript-surface) and the [JavaScript event contract](docs/en/js-events.md) / [日本語](docs/ja/js-events.md).
 
 See [Installation](docs/en/installation.md) for details.
 
@@ -215,7 +215,7 @@ Key documents:
 | Usage | [Usage](docs/en/usage.md) | [使い方](docs/ja/usage.md) |
 | Selection | [Selection](docs/en/selection.md) | [Selection](docs/ja/selection.md) |
 | Toolbar helper (`tree_view_toolbar`) | [Toolbar helper](docs/en/toolbar.md) | [Toolbar helper](docs/ja/toolbar.md) |
-| Breadcrumb helper (`tree_view_breadcrumb`) | [Breadcrumb helper](docs/en/breadcrumb.md) | [Breadcrumb helper](docs/ja/breadcrumb.md) |
+| Breadcrumb helper (`tree_view_breadcrumb`) | [Breadcrumb helper](docs/en/breadcrumb.md) |
 | Depth labels and row status | [Depth Labels](docs/en/depth-labels.md) and [Row Status](docs/en/row-status.md) | [Depth Labels](docs/ja/depth-labels.md) and [Row Status](docs/ja/row-status.md) |
 | Turbo Frame option | [Turbo Frame option](docs/en/turbo-frame.md) | [Turbo Frame オプション](docs/ja/turbo-frame.md) |
 | Persisted State | [Persisted State](docs/en/persisted-state.md) | [Persisted State](docs/ja/persisted-state.md) |
