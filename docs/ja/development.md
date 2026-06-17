@@ -81,6 +81,8 @@ NodePresenter builder names は manifest-backed な name surface です。`node_
 
 RenderState callback builder keys は manifest-backed な key surface であり、callback behavior 全体の contract ではありません。`render_state_callback_builder_keys` を変更する場合は、manifest、focused compatibility spec、`docs/en/public-api.md` / `docs/ja/public-api.md` の flat callback builder section、同じ key を名前で案内している feature docs を同期します。manifest tracking summary では callback arity、return-value validation、row rendering semantics、fallback behavior を定義しないでください。
 
+Public constants も package verification の対象です。`public_constants` を変更する場合は、`config/public_api_manifest.yml`、`spec/public_api_compatibility_spec.rb`、public API docs、`script/check_gem_package_contents.rb` をそろえてください。package verifier の `PUBLIC_CONSTANT_RUNTIME_FILES` mapping には、manifest-listed constant ごとに packaged gem 内で確認すべき runtime file を含めます。この mapping は constant の採用、rename、public API 方針を決める source of truth ではなく、manifest-backed public surface に追従する release package evidence です。
+
 これらの entry を追加・rename・削除する場合は、docs sync の導線を小さく明示します。
 
 - manifest と、その surface を守る compatibility spec、entrypoint smoke、package guard のいずれかを同期する

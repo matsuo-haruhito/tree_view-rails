@@ -44,11 +44,21 @@ function assertDependencySpecsMatch(packageMetadata, lockRootPackage, section) {
   );
 }
 
+function assertRootPackageEnginesMatch(packageMetadata, lockRootPackage) {
+  assert.deepEqual(
+    lockRootPackage.engines || {},
+    packageMetadata.engines || {},
+    `${packageLockPath} root package engines must match ${packagePath} engines; run npm install after changing Node engine metadata`
+  );
+}
+
 const packageMetadata = JSON.parse(readFileSync(packagePath, "utf8"));
 const packageLock = JSON.parse(readFileSync(packageLockPath, "utf8"));
 const lockRootPackage = packageLock.packages?.[""];
 
 assert.ok(lockRootPackage, `${packageLockPath} must include packages[""] root package metadata`);
+
+assertRootPackageEnginesMatch(packageMetadata, lockRootPackage);
 
 for (const section of ["dependencies", "devDependencies"]) {
   assertDependencyKeysMatch(packageMetadata, lockRootPackage, section);
