@@ -162,6 +162,7 @@ Release preparation notes:
 - Added release docs signal coverage for release metadata guards and docs-entrypoint sensitive CI routing.
 - Added docs entrypoint suite self-test coverage for unregistered docs smoke / signal scripts.
 - Added CHANGELOG-only CI routing coverage to keep `CHANGELOG.md` changes on the docs-entrypoint and package verification paths.
+- Added release note candidate helper contract specs for formatter output, CLI option validation, and since-tag reference collection without network access.
 
 ## 0.1.0 - 2026-05-07
 
