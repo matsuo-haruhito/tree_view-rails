@@ -210,6 +210,7 @@ Start with installation wiring.
 - Add the importmap pin when JavaScript-powered features are needed: `pin "tree_view", to: "tree_view/index.js"`.
 - Register TreeView controllers in the host app when using client-side toggling, selection, transfer hooks, remote loading state, or other browser-side features.
 - When the host app registers only some controllers or chooses a custom boot order, import `TreeViewControllerIdentifiers` from `tree_view/index.js` instead of hand-copying identifier strings.
+- When selective registration or boot-order tests need the documented identifier/controller pairs, import `TreeViewControllerEntries` from `tree_view/index.js` instead of hand-copying both identifier strings and controller imports.
 - Use [Installation: JavaScript / importmap](installation.md#javascript--importmap) for the minimal `registerTreeViewControllers(application)` example, and use [Public API: JavaScript surface](public-api.md#javascript-surface) when checking selective registration or custom boot order.
 
 Then split CSS loading symptoms from JavaScript registration symptoms.
