@@ -176,6 +176,7 @@ Release preparation notes:
 - Added gem package verification coverage for README-linked render log level docs so the packaged gem keeps the docs reached from README's render logging guidance.
 - Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, Ruby version, and Development docs wording stay aligned.
 - Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
+- Added release and CI docs signal coverage for workflow action major versions, Ruby / Rails release evidence, and gem package install / require checks.
 
 ## 0.1.0 - 2026-05-07
 
