@@ -161,6 +161,7 @@ Release preparation notes:
 - Added dependency spec, non-PR workflow output, public API manifest unknown-key, and duplicate YAML-key guard coverage for package-lock, CI changed-file policy, and manifest structure smoke.
 - Added public setup generator file package contents guard coverage for install generator and state templates.
 - Added public API manifest top-level key parity coverage to keep Ruby and Node manifest structure guards synchronized.
+- Added nested Public API manifest key parity coverage so Ruby and Node manifest structure guards stay synchronized for option key and integration hook lists.
 - Added release docs signal coverage for release metadata guards and docs-entrypoint sensitive CI routing.
 - Added docs entrypoint suite self-test coverage for unregistered docs smoke / signal scripts.
 - Added CHANGELOG-only CI routing coverage to keep `CHANGELOG.md` changes on the docs-entrypoint and package verification paths.
