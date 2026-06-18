@@ -171,6 +171,7 @@ Release preparation notes:
 - Added Development docs command smoke coverage for Docker setup command guidance and lockfile-backed Node/npm install signals.
 - Added CI changed-file policy coverage for public API, public setup surface, and release docs package/docs-entrypoint routing cases.
 - Expanded package contents verification coverage for README-linked public JavaScript docs, including controller registration and selection checkbox hook docs.
+- Added gem package verification coverage for manifest-listed package-root JavaScript named exports in packaged `index.js` and `index.d.ts`.
 
 ## 0.1.0 - 2026-05-07
 
