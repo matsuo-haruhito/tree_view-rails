@@ -119,7 +119,7 @@ documented な host-app wiring surface または machine-readable public contrac
 
 `config/public_api_manifest.yml` は、package-root export、controller identifier、grouped option key、documented event detail key の machine-readable source of truth です。一方で、そこに export していない documented wiring attribute や hook については、public API docs と feature docs を source of truth として扱います。
 
-public setup surface を変更する場合は、[Public Setup Surface](public-setup-surface.md) と `config/public_api_manifest.yml` を一緒に確認します。persisted-state setup generator の generator 名、任意引数、生成先 path は public setup compatibility surface です。release verification では package contents guard がそれらの setup files を追跡していることを確認しますが、この checklist だけを根拠に generator implementation、generated template、migration schema は変更しません。
+public setup surface を変更する場合は、[Public Setup Surface](public-setup-surface.md) と `config/public_api_manifest.yml` を一緒に確認します。persisted-state setup generator の generator 名、任意 owner 引数、生成先 path は public setup compatibility surface です。release verification では package contents guard がそれらの setup files を追跡していることを確認しますが、この checklist だけを根拠に generator implementation、generated template、migration schema は変更しません。
 
 public API manifest を変更する場合は、tag を打つ前に release-facing な導線も確認してください。
 
