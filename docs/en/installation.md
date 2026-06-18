@@ -15,14 +15,18 @@ GitHub Actions runs the following checks on pull requests:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
-- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
-- JavaScript tests through `npm ci`, Playwright browser setup, and `npm run test:js`
+- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`; docs-only pull requests keep the check names but skip the heavy Rails lanes
+- JavaScript checks through the changed-files policy:
+  - README, `docs/**`, and `CHANGELOG.md` changes run `npm ci` and `npm run test:docs-entrypoints`
+  - `docs/mockups/**` and `test/browser/**` changes install Playwright and run `npm run test:browser`
+  - non-docs pull requests run `npm run test:js:core`
+- Package-sensitive paths, including README, `CHANGELOG.md`, `docs/**`, runtime files, manifest files, and package metadata, run the `gem_package` job
 
 Pushes to `main` keep the heavier compatibility and release checks:
 
 - Ruby version matrix
 - Full Rails version matrix
-- JavaScript tests through `npm ci` and `npm run test:js`
+- JavaScript tests through `npm ci`, `npm run test:js:core`, and browser smoke when the workflow runs outside the pull request docs-only shortcut
 - gem package verification
 
 The repository keeps a committed `package-lock.json`. CI and local setup use `npm ci` so JavaScript checks install from the lockfile rather than updating dependency resolution during verification.
@@ -185,7 +189,7 @@ npm ci
 npm run test:js
 ```
 
-Use `npm ci` here for the same reason as CI: the committed `package-lock.json` is the repeatable install source. `npm run test:js` runs the entrypoint smoke, Vitest suite, and Playwright browser smoke checks documented in the CI lane.
+Use `npm ci` here for the same reason as CI: the committed `package-lock.json` is the repeatable install source. `npm run test:js` runs the full local JavaScript suite. Pull request CI may choose a lighter docs-entrypoint, browser-smoke, or JS core path from the changed-files policy described in the CI section.
 
 Rails compatibility Gemfiles live under `gemfiles/`.
 
@@ -212,7 +216,11 @@ GitHub Actions runs the following on pull requests:
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
-- representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
-- JavaScript checks through `npm ci`, Playwright browser setup, and `npm run test:js`
+- representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`, with docs-only pull requests keeping the check names while skipping the heavy Rails commands
+- JavaScript checks selected by changed files:
+  - README, `docs/**`, and `CHANGELOG.md` run `npm run test:docs-entrypoints`
+  - `docs/mockups/**` and `test/browser/**` install Playwright and run `npm run test:browser`
+  - non-docs pull requests run `npm run test:js:core`
+- package-sensitive paths run gem package verification
 
 On pushes to `main`, GitHub Actions runs the Ruby version matrix, full Rails version matrix, JavaScript tests, and gem package verification.
