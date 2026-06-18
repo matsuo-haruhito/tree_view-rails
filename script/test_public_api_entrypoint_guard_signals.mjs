@@ -51,6 +51,35 @@ assert(
   "README package-root export guidance no longer states the raw hook-copying boundary"
 )
 
+const publicApiDeclarationBoundarySignals = [
+  ["runtime entrypoint", "tree_view/index.js"],
+  ["TypeScript declaration", "app/javascript/tree_view/index.d.ts"],
+  ["manifest source of truth", "config/public_api_manifest.yml"],
+  ["compile-time declaration role", "compile-time aid"],
+  ["importmap-only host-app boundary", "importmap-only"]
+]
+
+publicApiDeclarationBoundarySignals.forEach(([label, signal]) => {
+  publicApiDocs.forEach(([relativePath, document]) => {
+    assertIncludes(document, signal, `${relativePath} JavaScript declaration boundary ${label}`)
+  })
+})
+
+publicApiDocs.forEach(([relativePath, document]) => {
+  assert(
+    /entrypoint smoke checks?/.test(document),
+    `${relativePath}: JavaScript declaration boundary no longer points to entrypoint smoke checks as source of truth`
+  )
+
+  assert(
+    /runtime behavior.*public surface/.test(document),
+    `${relativePath}: JavaScript declaration boundary no longer separates declaration files from runtime behavior and public surface`
+  )
+})
+
+assertIncludes(manifest, "javascript_package_root:", "public API manifest JavaScript package-root boundary")
+assertIncludes(manifest, "named_exports:", "public API manifest JavaScript package-root boundary")
+
 const resourceTableManifestSignals = [
   "resource_table_render_state_call:",
   "required_keywords:",
