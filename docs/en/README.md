@@ -64,6 +64,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Lazy Loading](lazy-loading.md) | Hooks and data attributes for loading children on demand |
 | [Windowed Rendering](windowed-rendering.md) | Opt-in API for rendering visible rows by offset / limit |
 | [Persisted State](persisted-state.md) | Persisting, restoring, clearing, and pruning expansion state with the generator and `StateStore`; host apps own retention policy and cleanup scheduling |
+| [Public Setup Surface](public-setup-surface.md) | Public setup-generator contract for persisted-state install paths, optional owner argument, and host-app review boundaries |
 | [Breadcrumb](breadcrumb.md) | Helper for rendering ancestor paths as breadcrumbs |
 | [Depth Labels](depth-labels.md) | Hook for displaying node depth labels |
 | [Row Status](row-status.md) | Hook for disabled / readonly row state |
@@ -80,8 +81,8 @@ If you are integrating TreeView into a Rails host app, start with these document
 
 | Document | Description |
 |---|---|
-| [Product Profile](../../Product%20Profile.md) | Repository positioning, source-of-truth order, maintainership boundaries, and non-goals |
-| [AGENTS.md](../../AGENTS.md) | Repository-specific maintainer workflow, first-read order, and documentation update rules |
+| Product Profile (repository-only) | Repository positioning, source-of-truth order, maintainership boundaries, and non-goals. This root-level maintainer document is not a packaged docs entry point. |
+| AGENTS.md (repository-only) | Repository-specific maintainer workflow, first-read order, and documentation update rules. This root-level maintainer document is not a packaged docs entry point. |
 | [Root docs index](../README.md) | Cross-language docs map and maintenance entry point for durable maintainer docs |
 | [CHANGELOG.md](../../CHANGELOG.md) | Release-facing summary of public changes, compatibility notes, and notable documentation additions |
 | [Documentation i18n audit](../i18n-audit.md) | Cross-language sync rules, technical-asset inventory, and translation priority checks |
@@ -89,7 +90,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Migration guide](migration.md) | Upgrade-oriented summary of compatibility promises, deprecations, and release-note expectations |
 | [Release checklist](release.md) | Release tests, documentation, and gem package checklist |
 | [Design policy](design-policy.md) | Gem responsibilities, included scope, excluded scope, and design decisions |
-| [Development](development.md) | Tests, CI, documentation updates, future work, and the current `npm install` exception while `package-lock.json` remains out of sync |
+| [Development](development.md) | Tests, CI, documentation updates, current `npm ci` setup, and lockfile-backed install policy |
 | [Code quality](code-quality.md) | Lint, tests, error messages, and documentation quality policy |
 
 ## Reading order

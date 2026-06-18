@@ -53,8 +53,6 @@ const repositoryOnlyEntrypoints = [
   {
     feature: "English repository-only maintainer entrypoints",
     links: [
-      ["docs/en/README.md", "../../Product%20Profile.md"],
-      ["docs/en/README.md", "../../AGENTS.md"],
       ["docs/en/README.md", "../README.md"],
       ["docs/en/README.md", "../../CHANGELOG.md"],
       ["docs/en/README.md", "../i18n-audit.md"]
@@ -62,7 +60,7 @@ const repositoryOnlyEntrypoints = [
     signals: [
       [
         "docs/en/README.md",
-        /For maintainers[\s\S]*Product Profile[\s\S]*AGENTS\.md[\s\S]*Root docs index[\s\S]*CHANGELOG\.md[\s\S]*Documentation i18n audit/,
+        /For maintainers[\s\S]*Product Profile[\s\S]*repository-only[\s\S]*AGENTS\.md[\s\S]*repository-only[\s\S]*Root docs index[\s\S]*CHANGELOG\.md[\s\S]*Documentation i18n audit/,
         "English docs README no longer exposes the repository-only maintainer table"
       ]
     ]
@@ -70,8 +68,6 @@ const repositoryOnlyEntrypoints = [
   {
     feature: "Japanese repository-only maintainer entrypoints",
     links: [
-      ["docs/ja/README.md", "../../Product%20Profile.md"],
-      ["docs/ja/README.md", "../../AGENTS.md"],
       ["docs/ja/README.md", "../README.md"],
       ["docs/ja/README.md", "../../CHANGELOG.md"],
       ["docs/ja/README.md", "../i18n-audit.md"]
@@ -79,7 +75,7 @@ const repositoryOnlyEntrypoints = [
     signals: [
       [
         "docs/ja/README.md",
-        /保守者向け[\s\S]*Product Profile[\s\S]*AGENTS\.md[\s\S]*root docs index[\s\S]*CHANGELOG\.md[\s\S]*Documentation i18n audit/,
+        /保守者向け[\s\S]*Product Profile[\s\S]*repository-only[\s\S]*AGENTS\.md[\s\S]*repository-only[\s\S]*root docs index[\s\S]*CHANGELOG\.md[\s\S]*Documentation i18n audit/,
         "Japanese docs README no longer exposes the repository-only maintainer table"
       ]
     ]
