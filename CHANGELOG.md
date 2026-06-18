@@ -110,6 +110,7 @@ Release preparation notes:
 - Added malformed selection params troubleshooting guidance in English and Japanese, including `TreeView.parse_selection_params` error boundaries and host-app-owned request policy.
 - Clarified Public API docs for `TreeViewControllerEntries` as a manifest-backed controller entry list while keeping `registerTreeViewControllers(application)` as the standard registration path.
 - Clarified README package-root JavaScript surface examples for controller entries, integration hooks, and documented data hook objects.
+- Clarified Public API docs for the shared `data-tree-children-url` hook boundary between `TreeViewRemoteStateDataHooks` and `TreeViewIntegrationHooks`.
 
 ### Tests
 
