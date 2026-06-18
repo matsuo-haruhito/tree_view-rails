@@ -174,6 +174,7 @@ Release preparation notes:
 - Expanded package contents verification coverage for README-linked public JavaScript docs, including controller registration and selection checkbox hook docs.
 - Added gem package verification coverage for manifest-listed package-root JavaScript named exports in packaged `index.js` and `index.d.ts`.
 - Added gem package verification coverage for README-linked render log level docs so the packaged gem keeps the docs reached from README's render logging guidance.
+- Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, Ruby version, and Development docs wording stay aligned.
 
 ## 0.1.0 - 2026-05-07
 
