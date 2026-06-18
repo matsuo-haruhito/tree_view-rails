@@ -15,14 +15,18 @@ GitHub Actions では、Pull Requestで以下を実行します。
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
-- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
-- JavaScript tests: `npm ci`、Playwright browser setup、`npm run test:js`
+- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`。docs-only PR では check name を維持したまま重い Rails lane を skip します
+- changed-files policy による JavaScript checks:
+  - README、`docs/**`、`CHANGELOG.md` の変更では `npm ci` と `npm run test:docs-entrypoints` を実行します
+  - `docs/mockups/**` と `test/browser/**` の変更では Playwright を install し、`npm run test:browser` を実行します
+  - docs 以外を含む PR では `npm run test:js:core` を実行します
+- README、`CHANGELOG.md`、`docs/**`、runtime files、manifest files、package metadata など package-sensitive path の変更では `gem_package` job を実行します
 
 `main` へのpushでは、重めの互換性確認とrelease向けchecksを実行します。
 
 - Ruby version matrix
 - full Rails version matrix
-- `npm ci` と `npm run test:js` による JavaScript tests
+- PR の docs-only shortcut 外で実行される JavaScript tests: `npm ci`、`npm run test:js:core`、必要な browser smoke
 - gem package verification
 
 repo には `package-lock.json` を commit しています。CI とローカルセットアップは `npm ci` を使い、検証中に dependency resolution を更新せず、lockfile から JavaScript dependencies を install します。
@@ -183,7 +187,7 @@ npm ci
 npm run test:js
 ```
 
-ローカル手順も CI と同じく `npm ci` を使います。commit 済みの `package-lock.json` を repeatable install の source として使うためです。`npm run test:js` は CI lane と同じく entrypoint smoke、Vitest suite、Playwright browser smoke をまとめて実行します。
+ローカル手順も CI と同じく `npm ci` を使います。commit 済みの `package-lock.json` を repeatable install の source として使うためです。`npm run test:js` は local の full JavaScript suite をまとめて実行します。Pull Request CI では、CI section に書いた changed-files policy により、docs-entrypoint、browser-smoke、JS core のいずれか軽い経路を選ぶことがあります。
 
 Rails互換性確認用のGemfileは `gemfiles/` 配下にあります。
 
@@ -210,7 +214,11 @@ GitHub Actions では、Pull Requestで以下を実行します。
 
 - `bundle exec standardrb`
 - `bundle exec rspec`
-- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
-- JavaScript checks: `npm ci`、Playwright browser setup、`npm run test:js`
+- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`。docs-only PR では check name を維持しつつ重い Rails command を skip します
+- changed-files policy で選ばれる JavaScript checks:
+  - README、`docs/**`、`CHANGELOG.md` は `npm run test:docs-entrypoints` を実行します
+  - `docs/mockups/**` と `test/browser/**` は Playwright を install し、`npm run test:browser` を実行します
+  - docs 以外を含む PR は `npm run test:js:core` を実行します
+- package-sensitive path の変更では gem package verification を実行します
 
 `main` へのpushでは、Ruby version matrix、full Rails version matrix、JavaScript tests、gem package verificationを実行します。
