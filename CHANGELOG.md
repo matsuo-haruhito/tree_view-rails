@@ -75,6 +75,7 @@ Release preparation notes:
 - Clarified development docs that `.nvmrc`, `package.json` `engines.node`, and workflow `node-version` stay aligned by a Node version source drift guard.
 - Clarified Development docs for the Ruby version source and CI changed-file policy guard commands, including Bundler dependency package-sensitive guidance.
 - Clarified Development docs for standalone gem package verification and docs i18n parity commands.
+- Clarified Development docs for public constants package guard mapping and Release docs for public setup generator package checklist / repository-only packaged-doc link boundaries.
 - Clarified `npm ci` install path guidance across README, installation, development, and release checklist docs so local setup, PR CI, Docker setup smoke, and main-push JavaScript checks share lockfile-backed evidence.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
@@ -107,6 +108,9 @@ Release preparation notes:
 - Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
 - Added root docs index entry points for the English and Japanese Rendering Boundaries guides.
 - Added malformed selection params troubleshooting guidance in English and Japanese, including `TreeView.parse_selection_params` error boundaries and host-app-owned request policy.
+- Clarified Public API docs for `TreeViewControllerEntries` as a manifest-backed controller entry list while keeping `registerTreeViewControllers(application)` as the standard registration path.
+- Clarified README package-root JavaScript surface examples for controller entries, integration hooks, and documented data hook objects.
+- Clarified Public API docs for the shared `data-tree-children-url` hook boundary between `TreeViewRemoteStateDataHooks` and `TreeViewIntegrationHooks`.
 
 ### Tests
 
@@ -157,6 +161,21 @@ Release preparation notes:
 - Added dependency spec, non-PR workflow output, public API manifest unknown-key, and duplicate YAML-key guard coverage for package-lock, CI changed-file policy, and manifest structure smoke.
 - Added public setup generator file package contents guard coverage for install generator and state templates.
 - Added public API manifest top-level key parity coverage to keep Ruby and Node manifest structure guards synchronized.
+- Added nested Public API manifest key parity coverage so Ruby and Node manifest structure guards stay synchronized for option key and integration hook lists.
+- Added release docs signal coverage for release metadata guards and docs-entrypoint sensitive CI routing.
+- Added docs entrypoint suite self-test coverage for unregistered docs smoke / signal scripts.
+- Added CHANGELOG-only CI routing coverage to keep `CHANGELOG.md` changes on the docs-entrypoint and package verification paths.
+- Added release note candidate helper contract specs for formatter output, CLI option validation, and since-tag reference collection without network access.
+- Added mockup demo application boundary docs signal coverage for static mockup / future real Rails demo app responsibility boundaries.
+- Added CI policy smoke coverage for gem package and JavaScript package install job signals, including package-sensitive routing and lockfile-backed `npm ci` expectations.
+- Added CI policy smoke coverage for JavaScript `needs: changes`, lint Standard Ruby command, and pull request specs Ruby / RSpec gate signals.
+- Added Development docs command smoke coverage for Docker setup command guidance and lockfile-backed Node/npm install signals.
+- Added CI changed-file policy coverage for public API, public setup surface, and release docs package/docs-entrypoint routing cases.
+- Expanded package contents verification coverage for README-linked public JavaScript docs, including controller registration and selection checkbox hook docs.
+- Added gem package verification coverage for manifest-listed package-root JavaScript named exports in packaged `index.js` and `index.d.ts`.
+- Added gem package verification coverage for README-linked render log level docs so the packaged gem keeps the docs reached from README's render logging guidance.
+- Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, Ruby version, and Development docs wording stay aligned.
+- Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
 
 ## 0.1.0 - 2026-05-07
 

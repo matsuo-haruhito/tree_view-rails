@@ -21,6 +21,54 @@ const cases = [
     }
   },
   {
+    name: "public API docs stay docs-only and request package and docs entrypoint guards",
+    files: ["docs/en/public-api.md", "docs/ja/public-api.md"],
+    expected: {
+      docs_only: true,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: true
+    }
+  },
+  {
+    name: "mixed public API docs and runtime changes request full package and docs entrypoint guards",
+    files: ["docs/en/public-api.md", "app/javascript/tree_view/index.js"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: true
+    }
+  },
+  {
+    name: "public setup and release docs stay docs-only and request package and docs entrypoint guards",
+    files: ["docs/en/public-setup-surface.md", "docs/ja/release.md"],
+    expected: {
+      docs_only: true,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: true
+    }
+  },
+  {
+    name: "changelog-only docs request package and docs entrypoint guards",
+    files: ["CHANGELOG.md"],
+    expected: {
+      docs_only: true,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: true
+    }
+  },
+  {
     name: "repository-only docs stay docs-only without package or docs entrypoint guard",
     files: ["Product Profile.md", "AGENTS.md"],
     expected: {
@@ -267,8 +315,99 @@ assertJobMatches(
 const lintJob = workflowJobBlock(workflowSource, "lint");
 assertJobMatches(lintJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.lint must keep Ruby 3.3`);
 assertJobMatches(lintJob, /bundler-cache: true/, `${workflowPath} jobs.lint must keep bundler-cache enabled`);
+assertJobMatches(lintJob, /run: bundle exec standardrb/, `${workflowPath} jobs.lint must run StandardRB`);
+
+const prSpecsJob = workflowJobBlock(workflowSource, "pr_specs");
+assertJobMatches(
+  prSpecsJob,
+  /if: github\.event_name == 'pull_request'/,
+  `${workflowPath} jobs.pr_specs must stay pull-request gated`
+);
+assertJobMatches(prSpecsJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.pr_specs must keep Ruby 3.3`);
+assertJobMatches(prSpecsJob, /bundler-cache: true/, `${workflowPath} jobs.pr_specs must keep bundler-cache enabled`);
+assertJobMatches(prSpecsJob, /run: bundle exec rspec/, `${workflowPath} jobs.pr_specs must run the RSpec suite`);
+
+const prRailsMatrixJob = workflowJobBlock(workflowSource, "pr_rails_matrix");
+assertJobMatches(
+  prRailsMatrixJob,
+  /if: github\.event_name == 'pull_request'/,
+  `${workflowPath} jobs.pr_rails_matrix must stay limited to pull request compatibility checks`
+);
+assertJobMatches(
+  prRailsMatrixJob,
+  /needs: changes/,
+  `${workflowPath} jobs.pr_rails_matrix must depend on changed-file detection`
+);
+assertJobMatches(
+  prRailsMatrixJob,
+  /needs\.changes\.outputs\.docs_only == 'true'[\s\S]*Docs-only PR: skipping representative Rails compatibility lane\./,
+  `${workflowPath} jobs.pr_rails_matrix must keep the docs-only shortcut while preserving the check name`
+);
+assertJobMatches(
+  prRailsMatrixJob,
+  /needs\.changes\.outputs\.docs_only != 'true'[\s\S]*run: bundle exec rake/,
+  `${workflowPath} jobs.pr_rails_matrix must run the representative Rails compatibility command for non-docs changes`
+);
+[
+  ["7.0", "gemfiles/rails_7_0.gemfile", "3.2"],
+  ["7.2", "gemfiles/rails_7_2.gemfile", "3.2"],
+  ["8.0", "gemfiles/rails_8_0.gemfile", "3.3"]
+].forEach(([railsVersion, gemfile, rubyVersion]) => {
+  assertJobMatches(
+    prRailsMatrixJob,
+    new RegExp(`rails: "${railsVersion}"[\\s\\S]*gemfile: ${escapeRegExp(gemfile)}[\\s\\S]*ruby-version: "${rubyVersion}"`),
+    `${workflowPath} jobs.pr_rails_matrix must keep the Rails ${railsVersion} representative lane`
+  );
+});
+
+const rubyMatrixJob = workflowJobBlock(workflowSource, "ruby_matrix");
+assertJobMatches(
+  rubyMatrixJob,
+  /if: github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/,
+  `${workflowPath} jobs.ruby_matrix must stay limited to pushes on main`
+);
+assertJobMatches(rubyMatrixJob, /uses: actions\/checkout@v6/, `${workflowPath} jobs.ruby_matrix must keep checkout v6`);
+assertJobMatches(rubyMatrixJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.ruby_matrix must keep ruby/setup-ruby v1`);
+assertJobMatches(rubyMatrixJob, /bundler-cache: true/, `${workflowPath} jobs.ruby_matrix must keep bundler-cache enabled`);
+assertJobMatches(rubyMatrixJob, /run: bundle exec rake/, `${workflowPath} jobs.ruby_matrix must run the full rake task on main`);
+["3.2", "3.3"].forEach((rubyVersion) => {
+  assertJobMatches(
+    rubyMatrixJob,
+    new RegExp(`- "${escapeRegExp(rubyVersion)}"`),
+    `${workflowPath} jobs.ruby_matrix must keep the Ruby ${rubyVersion} main-branch lane`
+  );
+});
+
+const railsMatrixJob = workflowJobBlock(workflowSource, "rails_matrix");
+assertJobMatches(
+  railsMatrixJob,
+  /if: github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/,
+  `${workflowPath} jobs.rails_matrix must stay limited to pushes on main`
+);
+assertJobMatches(railsMatrixJob, /uses: actions\/checkout@v6/, `${workflowPath} jobs.rails_matrix must keep checkout v6`);
+assertJobMatches(railsMatrixJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.rails_matrix must keep ruby/setup-ruby v1`);
+assertJobMatches(railsMatrixJob, /bundler-cache: true/, `${workflowPath} jobs.rails_matrix must keep bundler-cache enabled`);
+assertJobMatches(railsMatrixJob, /BUNDLE_GEMFILE: \$\{\{ matrix\.gemfile \}\}/, `${workflowPath} jobs.rails_matrix must keep per-lane Gemfile wiring`);
+assertJobMatches(railsMatrixJob, /run: bundle exec rake/, `${workflowPath} jobs.rails_matrix must run the full rake task on main`);
+[
+  ["7.0", "gemfiles/rails_7_0.gemfile", "3.2"],
+  ["7.1", "gemfiles/rails_7_1.gemfile", "3.2"],
+  ["7.2", "gemfiles/rails_7_2.gemfile", "3.2"],
+  ["8.0", "gemfiles/rails_8_0.gemfile", "3.3"]
+].forEach(([railsVersion, gemfile, rubyVersion]) => {
+  assertJobMatches(
+    railsMatrixJob,
+    new RegExp(`rails: "${railsVersion}"[\\s\\S]*gemfile: ${escapeRegExp(gemfile)}[\\s\\S]*ruby-version: "${rubyVersion}"`),
+    `${workflowPath} jobs.rails_matrix must keep the Rails ${railsVersion} main-branch lane`
+  );
+});
 
 const javascriptJob = workflowJavaScriptJob(workflowSource);
+assertJobMatches(
+  javascriptJob,
+  /needs: changes/,
+  `${workflowPath} jobs.javascript must depend on changed-file detection`
+);
 assert.match(
   javascriptJob,
   /needs\.changes\.outputs\.docs_entrypoint_sensitive == 'true'/,
@@ -279,9 +418,12 @@ assert.match(
   /run: npm run test:docs-entrypoints/,
   `${workflowPath} jobs.javascript must still run docs entrypoint checks for docs_entrypoint_sensitive changes`
 );
+assertJobMatches(javascriptJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.javascript must keep Ruby setup for manifest-loading Node smokes`);
+assertJobMatches(javascriptJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.javascript must keep Ruby 3.3 for manifest-loading Node smokes`);
 assertJobMatches(javascriptJob, /uses: actions\/setup-node@v6/, `${workflowPath} jobs.javascript must keep setup-node v6`);
 assertJobMatches(javascriptJob, /node-version: "22"/, `${workflowPath} jobs.javascript must keep the Node 22 CI lane`);
 assertJobMatches(javascriptJob, /cache: npm/, `${workflowPath} jobs.javascript must keep npm cache enabled`);
+assertJobMatches(javascriptJob, /run: npm ci/, `${workflowPath} jobs.javascript must use npm ci for lockfile-backed installs`);
 
 const dockerDevelopmentSetupJob = workflowJobBlock(workflowSource, "docker_development_setup");
 assertJobMatches(
@@ -310,8 +452,31 @@ assert.ok(
 );
 
 const gemPackageJob = workflowJobBlock(workflowSource, "gem_package");
+assertJobMatches(
+  gemPackageJob,
+  /github\.event_name == 'pull_request' && needs\.changes\.outputs\.package_sensitive == 'true'/,
+  `${workflowPath} jobs.gem_package must stay gated by package_sensitive pull request changes`
+);
+assertJobMatches(
+  gemPackageJob,
+  /needs: changes/,
+  `${workflowPath} jobs.gem_package must depend on changed-file detection`
+);
 assertJobMatches(gemPackageJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.gem_package must keep Ruby 3.3`);
 assertJobMatches(gemPackageJob, /bundler-cache: true/, `${workflowPath} jobs.gem_package must keep bundler-cache enabled`);
+assertJobMatches(gemPackageJob, /run: gem build tree_view\.gemspec/, `${workflowPath} jobs.gem_package must build the gem`);
+assertJobMatches(
+  gemPackageJob,
+  /run: ruby script\/check_gem_package_contents\.rb tree_view-\*\.gem/,
+  `${workflowPath} jobs.gem_package must run package contents verification`
+);
+assertJobMatches(gemPackageJob, /run: gem install tree_view-\*\.gem/, `${workflowPath} jobs.gem_package must install the built gem`);
+assertJobMatches(gemPackageJob, /run: ruby -e "require 'tree_view'"/, `${workflowPath} jobs.gem_package must keep the installed gem require smoke`);
+
+assert.ok(
+  packageScripts["test:ci-policy"].includes("script/test_package_lock_dependency_drift.mjs"),
+  `${packagePath} scripts.test:ci-policy must keep the package lock dependency drift guard`
+);
 
 for (const scriptName of npmRunScripts(workflowSource)) {
   assert.ok(

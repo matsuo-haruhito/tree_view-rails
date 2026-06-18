@@ -1,5 +1,10 @@
 import assert from "node:assert/strict"
 import { spawnSync } from "node:child_process"
+import { readdirSync } from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+
+const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 
 const checks = [
   {
@@ -144,6 +149,29 @@ const checks = [
   }
 ]
 
+const docsEntrypointScriptExclusions = new Map([
+  [
+    "test_development_docs_command_signals.mjs",
+    "registered through npm run test:development-docs-commands"
+  ],
+  ["test_docs_entrypoint_suite.mjs", "this suite's self-test entrypoint"],
+  ["test_docs_i18n_parity.mjs", "registered through npm run test:docs-i18n"]
+])
+
+const docsEntrypointScriptPatterns = [
+  /^test_.*docs.*\.mjs$/,
+  /^test_.*readme.*signals\.mjs$/,
+  /^test_.*mockup.*signals\.mjs$/,
+  /^test_breadcrumb_.*signals\.mjs$/,
+  /^test_configuration_.*signals\.mjs$/,
+  /^test_decision_guide_signals\.mjs$/,
+  /^test_grouped_option_.*signals\.mjs$/,
+  /^test_localized_and_hook_.*signals\.mjs$/,
+  /^test_quality_.*signals\.mjs$/,
+  /^test_release_.*signals\.mjs$/,
+  /^test_tree_view_rows_.*signals\.mjs$/
+]
+
 function commandLine({ command, args }) {
   return [command, ...args].join(" ")
 }
@@ -171,6 +199,47 @@ function printCheckList(selectedChecks = checks) {
 function usage() {
   console.error("[docs-entrypoints] usage: node script/test_docs_entrypoint_suite.mjs [--list] [--only <group-or-index>] [--self-test]")
   console.error("[docs-entrypoints] use --list to show available groups")
+}
+
+function registeredNodeScriptPaths() {
+  return new Set(
+    checks
+      .filter((check) => check.command === "node" && check.args[0]?.startsWith("script/"))
+      .map((check) => check.args[0])
+  )
+}
+
+function isDocsEntrypointCandidate(filename) {
+  if (!filename.endsWith(".mjs")) return false
+  if (docsEntrypointScriptExclusions.has(filename)) return false
+
+  return docsEntrypointScriptPatterns.some((pattern) => pattern.test(filename))
+}
+
+function docsEntrypointCandidateScriptPaths() {
+  return readdirSync(scriptDir)
+    .filter(isDocsEntrypointCandidate)
+    .map((filename) => `script/${filename}`)
+    .sort()
+}
+
+function unregisteredDocsEntrypointScriptPaths() {
+  const registeredPaths = registeredNodeScriptPaths()
+  return docsEntrypointCandidateScriptPaths().filter((scriptPath) => !registeredPaths.has(scriptPath))
+}
+
+function assertDocsEntrypointScriptsRegistered() {
+  const unregisteredScripts = unregisteredDocsEntrypointScriptPaths()
+
+  assert.deepEqual(
+    unregisteredScripts,
+    [],
+    [
+      "docs entrypoint suite is missing docs smoke/signal script registrations:",
+      ...unregisteredScripts.map((scriptPath) => `  - ${scriptPath}`),
+      "Add each script to the checks array or document an explicit exclusion."
+    ].join("\n")
+  )
 }
 
 function resolveOnlyGroupResult(groupName) {
@@ -284,6 +353,16 @@ function runSelfTest() {
     ],
     "ambiguous --only should report all matching groups"
   )
+
+  assert.ok(
+    docsEntrypointCandidateScriptPaths().includes("script/test_public_api_docs_signals.mjs"),
+    "docs script registration candidates should include public API docs signals"
+  )
+  assert.ok(
+    !docsEntrypointCandidateScriptPaths().includes("script/test_docs_i18n_parity.mjs"),
+    "npm-registered docs checks should stay out of direct node script registration candidates"
+  )
+  assertDocsEntrypointScriptsRegistered()
 
   console.log("[docs-entrypoints] self-test passed")
 }
