@@ -116,8 +116,8 @@ For implementation changes, run or preserve compatibility with:
 bundle exec standardrb
 bundle exec rspec
 bundle exec rake build
-npm test
-npm run test:entrypoints
+npm run test:js
+npm run test:docs-entrypoints
 npm run test:browser
 ```
 
@@ -126,7 +126,7 @@ GitHub Actions runs the following on pull requests:
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - representative Rails compatibility checks via `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
-- `npm run test:js`
+- JavaScript checks selected by the changed-files policy: `npm run test:docs-entrypoints` for package-facing docs entrypoints, `npm run test:browser` for mockup or browser-smoke paths, and `npm run test:js:core` for non-docs pull requests
 
 Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile.md`, `CHANGELOG.md`, and `AGENTS.md` keep the `lint` and `pr_specs` jobs, but short-circuit the representative Rails lanes while preserving the same check names for branch protection. Package-facing docs paths (`README.md`, `CHANGELOG.md`, and `docs/**`) are package-sensitive and run the `gem_package` job so the built gem keeps release-facing docs present. Repository-only maintainer docs (`Product Profile.md` and `AGENTS.md`) skip JavaScript and package checks unless they are paired with package-facing docs. The JavaScript job uses the changed-file policy outputs to choose the lightest useful docs check: README, `docs/**`, and `CHANGELOG.md` run `npm run test:docs-entrypoints`; `Product Profile.md` and `AGENTS.md` skip JavaScript when no package-facing docs changed; `docs/mockups/**` and `test/browser/**` changes install Playwright and run `npm run test:browser`. Pull requests that touch `test/browser/**` are not docs-only, and pull requests that touch `.github/workflows/**` do not use the docs-only shortcut.
 
@@ -134,6 +134,7 @@ Pushes to `main` also run the broader compatibility and release checks:
 
 - Ruby version matrix
 - full Rails version matrix
+- JavaScript checks outside the pull request docs-only shortcut
 - gem package verification
 
 ## Issue / Work Item Guidance
