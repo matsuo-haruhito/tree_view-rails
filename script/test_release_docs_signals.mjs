@@ -75,6 +75,72 @@ releaseDocs.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release checklist changelog policy", signals)
 })
 
+const releaseDocsRubyEvidenceSignals = [
+  [
+    "docs/en/release.md",
+    [
+      "main-push full CI is green",
+      "Ruby version matrix",
+      "Rails version matrix",
+      "full compatibility matrices",
+      "required Ruby version",
+      "Ruby support",
+      "release evidence"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "main-push full CI が green",
+      "Ruby version matrix",
+      "Rails version matrix",
+      "full compatibility matrices",
+      "required Ruby version",
+      "Ruby support",
+      "release evidence"
+    ]
+  ]
+]
+
+releaseDocsRubyEvidenceSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs Ruby and Rails evidence signal", signals)
+})
+
+const gemPackageWorkflowSignals = [
+  [
+    ".github/workflows/ci.yml",
+    [
+      "gem_package:",
+      "gem build tree_view.gemspec",
+      "ruby script/check_gem_package_contents.rb tree_view-*.gem",
+      "gem install tree_view-*.gem",
+      "ruby -e \"require 'tree_view'\""
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "gem build tree_view.gemspec",
+      "ruby script/check_gem_package_contents.rb tree_view-*.gem",
+      "gem install tree_view-*.gem",
+      "ruby -e \"require 'tree_view'\""
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "gem build tree_view.gemspec",
+      "ruby script/check_gem_package_contents.rb tree_view-*.gem",
+      "gem install tree_view-*.gem",
+      "ruby -e \"require 'tree_view'\""
+    ]
+  ]
+]
+
+gemPackageWorkflowSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Gem package install and require workflow signal", signals)
+})
+
 const packageContentsVerificationSignals = [
   [
     "script/check_gem_package_contents.rb",
