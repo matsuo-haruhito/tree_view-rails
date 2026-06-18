@@ -33,6 +33,18 @@ const cases = [
     }
   },
   {
+    name: "mixed public API docs and runtime changes request full package and docs entrypoint guards",
+    files: ["docs/en/public-api.md", "app/javascript/tree_view/index.js"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: true
+    }
+  },
+  {
     name: "public setup and release docs stay docs-only and request package and docs entrypoint guards",
     files: ["docs/en/public-setup-surface.md", "docs/ja/release.md"],
     expected: {
