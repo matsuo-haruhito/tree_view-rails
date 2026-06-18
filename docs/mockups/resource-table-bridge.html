@@ -126,6 +126,43 @@
   color: #52606d;
 }
 
+.mock-bridge-table--dense {
+  min-width: 620px;
+}
+
+.mock-bridge-table--dense th,
+.mock-bridge-table--dense td {
+  padding: 0.55rem 0.6rem;
+}
+
+.mock-bridge-primary {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.mock-bridge-primary strong {
+  overflow-wrap: anywhere;
+}
+
+.mock-bridge-meta-line {
+  color: #52606d;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.mock-bridge-action-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mock-bridge-action-group button {
+  min-height: 2rem;
+  padding: 0.25rem 0.55rem;
+  white-space: nowrap;
+}
+
 .mock-bridge-section-label {
   display: inline-flex;
   align-items: center;
@@ -170,6 +207,10 @@
 @media (max-width: 720px) {
   .mock-bridge-table {
     min-width: 640px;
+  }
+
+  .mock-bridge-table--dense {
+    min-width: 560px;
   }
 }
 </style>
@@ -390,6 +431,118 @@
           </table>
         </div>
       </article>
+
+      <article class="mock-bridge-table-card">
+        <div class="mock-bridge-table-header">
+          <div>
+            <p class="mock-bridge-eyebrow">State C</p>
+            <h2>Narrow columns with row actions</h2>
+            <p class="mock-bridge-note">
+              Use this surface when review needs to check whether dense table metadata and host-owned row actions crowd out
+              the TreeView hierarchy cue. The first column keeps the tree shape; the action column remains host-app policy.
+            </p>
+          </div>
+          <div class="mock-bridge-pill-row" aria-label="Density summary">
+            <span class="mock-bridge-pill">narrow columns</span>
+            <span class="mock-bridge-pill">metadata wraps</span>
+            <span class="mock-bridge-pill mock-bridge-pill--muted">actions: host-owned</span>
+          </div>
+        </div>
+
+        <div class="mock-bridge-table-wrap">
+          <table class="mock-bridge-table mock-bridge-table--dense">
+            <thead>
+              <tr>
+                <th scope="col">Tree item</th>
+                <th scope="col">Metadata</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 0 current row with compact metadata">
+                    <span class="tree-toggle__branches" aria-hidden="true"></span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">-</span>
+                      <span class="tree-toggle__level">L0</span>
+                      <span class="mock-bridge-primary">
+                        <strong>Fulfillment readiness program</strong>
+                        <span class="mock-bridge-meta-line">Current row · 4 child groups · table-owned column set</span>
+                      </span>
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span class="mock-status mock-status--active">Ready</span>
+                  <div class="mock-bridge-meta-line">Owner: Ops enablement · due today</div>
+                </td>
+                <td>
+                  <div class="mock-bridge-action-group" aria-label="Host-owned row actions">
+                    <button type="button">Open</button>
+                    <button type="button">Review</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 1 row with compact metadata">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">-</span>
+                      <span class="tree-toggle__level">L1</span>
+                      <span class="mock-bridge-primary">
+                        <strong>Warehouse cutover checklist</strong>
+                        <span class="mock-bridge-meta-line">Primary label stays beside hierarchy cue</span>
+                      </span>
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span class="mock-status mock-status--pending">Waiting</span>
+                  <div class="mock-bridge-meta-line">Region: NA · updated yesterday</div>
+                </td>
+                <td>
+                  <div class="mock-bridge-action-group" aria-label="Host-owned row actions">
+                    <button type="button">Open</button>
+                    <button type="button" disabled>Approve</button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="tree-row is-collapsed">
+                <td class="tree-toggle-cell">
+                  <div class="tree-toggle" aria-label="Depth 2 collapsed row with compact metadata">
+                    <span class="tree-toggle__branches" aria-hidden="true">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                      <span class="tree-toggle__branch-slot is-current is-last"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-toggle__action">+</span>
+                      <span class="tree-toggle__level">L2</span>
+                      <span class="mock-bridge-primary">
+                        <strong>Carrier exception follow-up</strong>
+                        <span class="mock-bridge-meta-line">Collapsed descendants remain a TreeView cue</span>
+                      </span>
+                      <span class="tree-toggle__hidden-count">3</span>
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span class="mock-status mock-status--archived">Blocked</span>
+                  <div class="mock-bridge-meta-line">Host app decides final reason copy</div>
+                </td>
+                <td>
+                  <div class="mock-bridge-action-group" aria-label="Host-owned row actions">
+                    <button type="button">Open</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
     </section>
 
     <section class="mock-section" aria-labelledby="bridge-review-heading">
@@ -412,6 +565,11 @@
             <td>Hierarchy cues</td>
             <td>Indent guides, toggles, current-row emphasis, and hidden-child counts remain legible in the first data column.</td>
             <td>Real expand or collapse behavior, controller wiring, or asynchronous loading.</td>
+          </tr>
+          <tr>
+            <td>Dense action rows</td>
+            <td>Narrow columns can carry status metadata and host-owned row actions without hiding the hierarchy cue.</td>
+            <td>Action authorization, saved column policy, row action controller behavior, or final business wording.</td>
           </tr>
           <tr>
             <td>Responsibility boundary</td>
