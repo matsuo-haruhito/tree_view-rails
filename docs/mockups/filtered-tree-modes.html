@@ -125,6 +125,18 @@
   background: #eef2ff;
 }
 
+.tree-row.is-reverse-root {
+  background: #f0fdf4;
+}
+
+.tree-row.is-reverse-ancestor {
+  background: #f8fafc;
+}
+
+.tree-row.is-shared-path {
+  background: #fefce8;
+}
+
 .tree-node-badge--match {
   background: #dcfce7;
   color: #166534;
@@ -138,6 +150,16 @@
 .tree-node-badge--descendant {
   background: #e0e7ff;
   color: #4338ca;
+}
+
+.tree-node-badge--reverse {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.tree-node-badge--shared {
+  background: #fef9c3;
+  color: #854d0e;
 }
 
 .mock-filtered-table {
@@ -522,6 +544,170 @@
       </div>
     </section>
 
+    <section class="mock-section mock-filtered-grid" aria-labelledby="reverse-path-heading">
+      <div class="mock-filtered-state">
+        <div class="mock-filtered-state__header">
+          <p class="mock-filtered-state__eyebrow">ReverseTree reference</p>
+          <h2 id="reverse-path-heading">Reverse path from matched leaf to ancestors</h2>
+          <p class="mock-filtered-note">
+            Use this focused section when the review question is child-to-parent path readability rather than search filtering, breadcrumbs, or route navigation.
+          </p>
+        </div>
+
+        <div class="mock-filtered-frame">
+          <div class="mock-filtered-toolbar">
+            <div class="mock-filtered-toolbar__copy">
+              <p class="mock-filtered-toolbar__title">Matched leaf becomes the visible root of the review path</p>
+            </div>
+            <div class="mock-filtered-toolbar__meta" aria-label="Representative ReverseTree context">
+              <span class="mock-filtered-chip">surface: ReverseTree</span>
+              <span class="mock-filtered-chip mock-filtered-chip--mode">path: leaf_to_root</span>
+            </div>
+          </div>
+          <div class="mock-filtered-summary">
+            <p class="mock-filtered-callout">
+              The matched item is first, then ancestor rows continue underneath it. TreeView owns the row cues; host apps own breadcrumbs, route wording, and final navigation policy.
+            </p>
+            <table class="tree-view-table" aria-label="ReverseTree leaf-to-root visual reference">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">node</th>
+                  <th scope="col">path role</th>
+                  <th scope="col">review cue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-reverse-root" aria-level="1" aria-current="page">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Matched leaf as reverse path root">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-depth-label">leaf root</span></span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--reverse">matched leaf</span>
+                  </td>
+                  <td>Invoice aging report</td>
+                  <td>Reverse path starting point</td>
+                  <td><span class="mock-status mock-status--active">current</span></td>
+                </tr>
+                <tr class="tree-row is-reverse-ancestor" aria-level="2">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Finance reports ancestor">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">ancestor</span></span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--context">ancestor</span>
+                  </td>
+                  <td>Finance reports</td>
+                  <td>Parent of the matched leaf</td>
+                  <td><span class="mock-status">context</span></td>
+                </tr>
+                <tr class="tree-row is-reverse-ancestor" aria-level="3">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Operations root ancestor">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__level">root</span></span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--context">top ancestor</span>
+                  </td>
+                  <td>Operations</td>
+                  <td>Shared ancestor shown once for this reverse path</td>
+                  <td><span class="mock-status mock-status--pending">context</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="mock-filtered-state">
+        <div class="mock-filtered-state__header">
+          <p class="mock-filtered-state__eyebrow">GraphAdapter reference</p>
+          <h2>Shared and duplicate path boundary</h2>
+          <p class="mock-filtered-note">
+            Use this focused section when the same logical node can appear through more than one parent path and reviewers need to see where node-key strategy matters.
+          </p>
+        </div>
+
+        <div class="mock-filtered-frame">
+          <div class="mock-filtered-toolbar">
+            <div class="mock-filtered-toolbar__copy">
+              <p class="mock-filtered-toolbar__title">Two paths can point to one logical node without choosing a dedup policy here</p>
+            </div>
+            <div class="mock-filtered-toolbar__meta" aria-label="Representative GraphAdapter context">
+              <span class="mock-filtered-chip">surface: GraphAdapter</span>
+              <span class="mock-filtered-chip mock-filtered-chip--mode">node keys: namespaced</span>
+            </div>
+          </div>
+          <div class="mock-filtered-summary">
+            <p class="mock-filtered-callout">
+              This sample keeps both graph paths visible and labels the shared node boundary. Resolver output, traversal policy, dedup decisions, and authorization stay in the host app.
+            </p>
+            <table class="tree-view-table" aria-label="GraphAdapter shared duplicate path visual reference">
+              <thead>
+                <tr>
+                  <th scope="col">tree</th>
+                  <th scope="col">node</th>
+                  <th scope="col">path role</th>
+                  <th scope="col">review cue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="tree-row is-expanded" aria-level="1" aria-expanded="true">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Projects path expanded">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__action tree-toggle__action--pending">open</span><span class="tree-toggle__level">path A</span></span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--context">parent path</span>
+                  </td>
+                  <td>Projects</td>
+                  <td>First graph parent</td>
+                  <td><span class="mock-status">visible path</span></td>
+                </tr>
+                <tr class="tree-row is-shared-path" aria-level="2">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Shared compliance node under projects">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-depth-label">shared</span></span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--shared">shared node</span>
+                  </td>
+                  <td>Compliance review</td>
+                  <td>Same logical node under Projects</td>
+                  <td><span class="mock-status mock-status--pending">key: graph:projects:compliance</span></td>
+                </tr>
+                <tr class="tree-row is-expanded" aria-level="1" aria-expanded="true">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Teams path expanded">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot is-current is-middle"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-toggle__action tree-toggle__action--pending">open</span><span class="tree-toggle__level">path B</span></span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--context">parent path</span>
+                  </td>
+                  <td>Teams</td>
+                  <td>Second graph parent</td>
+                  <td><span class="mock-status">visible path</span></td>
+                </tr>
+                <tr class="tree-row is-shared-path" aria-level="2">
+                  <td class="tree-toggle-cell">
+                    <span class="tree-toggle" aria-label="Shared compliance node under teams">
+                      <span class="tree-toggle__branches" aria-hidden="true"><span class="tree-toggle__branch-slot has-line"></span><span class="tree-toggle__branch-slot is-current is-last"></span></span>
+                      <span class="tree-toggle__control"><span class="tree-depth-label">shared</span></span>
+                    </span>
+                    <span class="tree-node-badge tree-node-badge--shared">shared node</span>
+                  </td>
+                  <td>Compliance review</td>
+                  <td>Same logical node under Teams</td>
+                  <td><span class="mock-status mock-status--pending">key: graph:teams:compliance</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="mock-section" aria-labelledby="filtered-boundary-heading">
       <h2 id="filtered-boundary-heading">What this mock compares</h2>
       <table class="mock-filtered-table">
@@ -553,10 +739,21 @@
             <td>Keeping both the path to the match and the rows below the matched branch visible.</td>
             <td>Search UI, ranked explanations, text highlighting, permission copy, or authorization-aware filtering.</td>
           </tr>
+          <tr>
+            <td><code>ReverseTree</code></td>
+            <td>Reviewing child-to-parent path cues with the matched leaf as the first visible row.</td>
+            <td>Breadcrumb routes, navigation IA, or ReverseTree API changes.</td>
+          </tr>
+          <tr>
+            <td><code>GraphAdapter</code></td>
+            <td>Reviewing shared logical nodes across duplicate graph paths and node-key namespacing cues.</td>
+            <td>Traversal policy, dedup behavior, resolver implementation, authorization, or database query choices.</td>
+          </tr>
         </tbody>
       </table>
       <ul>
         <li><code>:with_ancestors_and_descendants</code> combines the ancestor and descendant retention cues in one filtered output.</li>
+        <li><code>ReverseTree</code> and <code>GraphAdapter</code> samples are focused visual references on this existing page, so no new mockup inventory entry is needed.</li>
         <li>This focused page keeps product behavior outside the mock so reviewers can inspect mode differences without extra search workflow decisions.</li>
       </ul>
     </section>
