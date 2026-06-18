@@ -1,7 +1,9 @@
 import { readFileSync } from "node:fs"
 
 const workflowPath = ".github/workflows/ci.yml"
+const packagePath = "package.json"
 const workflowSource = readFileSync(workflowPath, "utf8")
+const packageJson = JSON.parse(readFileSync(packagePath, "utf8"))
 
 function assert(condition, message) {
   if (!condition) throw new Error(message)
@@ -52,7 +54,15 @@ function assertDefaultWorkflowOutput(block, key, value) {
   )
 }
 
+function assertPackageScript(scriptName) {
+  assert(
+    Object.hasOwn(packageJson.scripts ?? {}, scriptName),
+    `${packagePath} scripts must define ${scriptName} for the CI JavaScript job`
+  )
+}
+
 const changesJob = workflowJobBlock(workflowSource, "changes")
+const javascriptJob = workflowJobBlock(workflowSource, "javascript")
 
 const nonPullRequestDefaultOutputs = {
   docs_only: false,
@@ -115,5 +125,21 @@ assertOrdered(
   `${workflowPath} jobs.changes must pass the collected file list into the policy script`
 )
 
+const javascriptJobNpmScripts = [
+  "test:docs-entrypoints",
+  "test:js:core",
+  "test:browser"
+]
+
+javascriptJobNpmScripts.forEach((scriptName) => {
+  assertIncludes(
+    javascriptJob,
+    `npm run ${scriptName}`,
+    `${workflowPath} jobs.javascript npm script command`
+  )
+  assertPackageScript(scriptName)
+})
+
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
+console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
