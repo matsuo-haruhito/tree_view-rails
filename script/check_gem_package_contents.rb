@@ -91,6 +91,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/accessibility-semantics.md
     docs/ja/accessibility-semantics.md
   ],
+  "README-linked decision guide docs" => %w[
+    docs/en/decision-guide.md
+    docs/ja/decision-guide.md
+  ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
