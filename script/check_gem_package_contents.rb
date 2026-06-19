@@ -99,6 +99,16 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/decision-guide.md
     docs/ja/decision-guide.md
   ],
+  "README-linked API combination and GraphAdapter docs" => %w[
+    docs/en/cookbook.md
+    docs/ja/cookbook.md
+    docs/en/graph-adapter.md
+    docs/ja/graph-adapter.md
+  ],
+  "README-linked error hierarchy docs" => %w[
+    docs/en/errors.md
+    docs/ja/errors.md
+  ],
   "README-linked migration guide docs" => %w[
     docs/en/migration.md
     docs/ja/migration.md
