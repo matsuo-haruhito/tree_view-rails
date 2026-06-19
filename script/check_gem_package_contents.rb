@@ -83,6 +83,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/selection-checkbox-hooks.md
     docs/ja/selection-checkbox-hooks.md
   ],
+  "README-linked host app extension docs" => %w[
+    docs/en/host-app-extension-points.md
+    docs/ja/host-app-extension-points.md
+  ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
