@@ -227,6 +227,8 @@ Before opening a docs pull request, do a short maintenance sweep using `docs/i18
 - Larger docs-only inventory or split PRs are acceptable.
 - Before opening a pull request, check whether an open pull request already closes the same issue. Look for the same `Closes #NNN` line, linked issue, and overlapping changed files.
 - If a duplicate close-check finds an existing candidate, stop the new PR path and either add review/follow-up/supersede context to the existing PR or ask a maintainer to choose the adoption path.
+- When a Dependabot pull request branch has been edited by a human or agent, assume `@dependabot rebase` may no longer work and use `@dependabot recreate` or a replacement pull request instead of piling more refresh commits onto that branch.
+- Keep broad mechanical baseline cleanup, such as lint rewrites, in a dedicated baseline pull request when it affects multiple dependency updates; do not duplicate the same cleanup across several Dependabot branches just to make each update green.
 - PR CI must pass before merge.
 - Docs-only PRs may short-circuit the representative Rails and JavaScript jobs, but merge still waits for the named checks to stay green.
 - PRs that change workflow definitions should be observed on a fresh head SHA before merge.
