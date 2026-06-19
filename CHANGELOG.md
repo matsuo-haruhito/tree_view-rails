@@ -78,6 +78,7 @@ Release preparation notes:
 - Clarified Development docs for public constants package guard mapping and Release docs for public setup generator package checklist / repository-only packaged-doc link boundaries.
 - Clarified `npm ci` install path guidance across README, installation, development, and release checklist docs so local setup, PR CI, Docker setup smoke, and main-push JavaScript checks share lockfile-backed evidence.
 - Clarified Development docs for edited Dependabot branch rebase / recreate handling and keeping broad baseline cleanups out of overlapping dependency PRs.
+- Clarified Development docs for package-lock dependency drift guard guidance so dependency and Node engine metadata updates use `npm install` before returning to the lockfile-backed `npm ci` path.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
@@ -120,6 +121,7 @@ Release preparation notes:
 - Added CI changed-file policy coverage for Dependabot configuration changes so dependency automation config updates stay package-sensitive without Docker or docs-entrypoint routing.
 - Expanded package contents verification coverage for README-linked Host App Extension Points docs so packaged gems keep those public extension guides.
 - Expanded package contents verification coverage for README-linked Accessibility Semantics docs so packaged gems keep those public semantics guides.
+- Expanded package contents verification coverage for README-linked Decision guide, Migration guide, Render Scale, and Rendering Boundaries docs so packaged gems keep those docs available.
 - Added localized names specs and public API compatibility coverage.
 - Added Turbo Frame option unit and integration specs.
 - Added toolbar helper specs.
