@@ -5,6 +5,111 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Table caption context mock</title>
 <link rel="stylesheet" href="default-tree.css">
+<style>
+.mock-caption-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.mock-caption-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.mock-caption-title {
+  display: grid;
+  gap: 0.35rem;
+  min-width: min(100%, 22rem);
+}
+
+.mock-caption-title h2,
+.mock-caption-title p {
+  margin: 0;
+}
+
+.mock-caption-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.mock-caption-actions button {
+  min-height: 2rem;
+  padding: 0.25rem 0.6rem;
+  white-space: nowrap;
+}
+
+.mock-caption-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.6rem;
+}
+
+.mock-caption-summary-card {
+  border: 1px solid #dde4ec;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0.65rem;
+}
+
+.mock-caption-summary-card strong,
+.mock-caption-summary-card span {
+  display: block;
+}
+
+.mock-caption-summary-card span {
+  color: #52606d;
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.mock-caption-density-table {
+  border-collapse: collapse;
+  min-width: 700px;
+  width: 100%;
+}
+
+.mock-caption-density-table caption {
+  color: #52606d;
+  padding: 0.55rem 0;
+  text-align: left;
+}
+
+.mock-caption-density-table th,
+.mock-caption-density-table td {
+  border: 1px solid #dde4ec;
+  padding: 0.55rem 0.65rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mock-caption-density-table th {
+  background: #f6f8fb;
+}
+
+.mock-caption-density-table .tree-row-actions {
+  min-width: 9rem;
+}
+
+.mock-caption-primary {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.mock-caption-primary span {
+  color: #52606d;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 720px) {
+  .mock-caption-density-table {
+    min-width: 620px;
+  }
+}
+</style>
 </head>
 <body>
   <main class="mock-page">
@@ -144,6 +249,97 @@
             </td>
             <td>Archived workstream</td>
             <td>Team C</td>
+            <td><span class="mock-status mock-status--archived">archived</span></td>
+            <td class="tree-row-actions"><button type="button" disabled>Open</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="mock-section mock-caption-panel" aria-labelledby="dense-caption-heading">
+      <div class="mock-caption-toolbar">
+        <div class="mock-caption-title">
+          <p class="mock-kicker">Dense host context</p>
+          <h2 id="dense-caption-heading">Dense review heading with adjacent actions</h2>
+          <p>
+            This state keeps dense heading copy, metadata, and several host-owned actions near the table while preserving
+            the TreeView-owned branch lines, depth labels, current cue, and hidden descendant count inside the row cells.
+          </p>
+        </div>
+        <div class="mock-caption-actions" aria-label="Host app dense actions">
+          <button type="button">Create node</button>
+          <button type="button">Export view</button>
+          <button type="button">Share review</button>
+        </div>
+      </div>
+
+      <div class="mock-caption-summary-grid" aria-label="Host app summary metadata">
+        <div class="mock-caption-summary-card">
+          <strong>4 visible nodes</strong>
+          <span>Host app summary; not TreeView state.</span>
+        </div>
+        <div class="mock-caption-summary-card">
+          <strong>2 pending reviews</strong>
+          <span>Business status copy stays outside the gem.</span>
+        </div>
+        <div class="mock-caption-summary-card">
+          <strong>1 disabled action</strong>
+          <span>Permission messaging belongs to the host app.</span>
+        </div>
+      </div>
+
+      <table class="mock-caption-density-table" data-controller="tree-view-state" data-tree-view-state-keyboard-value="true">
+        <caption>
+          Host-owned caption for dense heading and adjacent-action review; TreeView row cues begin in the table body.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">tree</th>
+            <th scope="col">summary</th>
+            <th scope="col">status</th>
+            <th scope="col">actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tree-row is-selected" aria-current="page">
+            <td class="btn-cell tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Current root row in dense host context">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot is-current is-middle"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">hide</a>
+                  <span class="tree-toggle__level">root</span>
+                </span>
+              </span>
+              <span class="mock-caption-primary">
+                <strong>Platform program</strong>
+                <span>Current row cue belongs to TreeView.</span>
+              </span>
+            </td>
+            <td>Caption and summary density should not bury the row hierarchy.</td>
+            <td><span class="mock-status mock-status--active">active</span></td>
+            <td class="tree-row-actions"><button type="button">Open</button></td>
+          </tr>
+          <tr class="tree-row is-collapsed" aria-expanded="false">
+            <td class="btn-cell tree-toggle-cell">
+              <span class="tree-toggle" aria-label="Collapsed row in dense host context">
+                <span class="tree-toggle__branches" aria-hidden="true">
+                  <span class="tree-toggle__branch-slot has-line"></span>
+                  <span class="tree-toggle__branch-slot is-current is-last"></span>
+                </span>
+                <span class="tree-toggle__control">
+                  <a class="tree-toggle__action" href="#" data-turbo-stream="true">show</a>
+                  <span class="tree-toggle__level">child</span>
+                  <span class="tree-toggle__hidden-count" title="Hidden descendants">3</span>
+                </span>
+              </span>
+              <span class="mock-caption-primary">
+                <strong>Archived workstream with a longer label</strong>
+                <span>Hidden descendant count stays visible near the toggle.</span>
+              </span>
+            </td>
+            <td>Host app decides whether disabled actions remain visible in dense rows.</td>
             <td><span class="mock-status mock-status--archived">archived</span></td>
             <td class="tree-row-actions"><button type="button" disabled>Open</button></td>
           </tr>
