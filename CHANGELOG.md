@@ -122,6 +122,9 @@ Release preparation notes:
 - Expanded package contents verification coverage for README-linked Host App Extension Points docs so packaged gems keep those public extension guides.
 - Expanded package contents verification coverage for README-linked Accessibility Semantics docs so packaged gems keep those public semantics guides.
 - Expanded package contents verification coverage for README-linked Decision guide, Migration guide, Render Scale, and Rendering Boundaries docs so packaged gems keep those docs available.
+- Added ReleaseCheck metadata validation and tag alignment focused specs for representative release failure paths.
+- Added CI changed-file policy coverage for runtime Ruby and locale paths so package-sensitive routing remains guarded.
+- Expanded package contents verification coverage for README-linked Localized Names docs so packaged gems keep those public localization guides.
 - Added localized names specs and public API compatibility coverage.
 - Added Turbo Frame option unit and integration specs.
 - Added toolbar helper specs.
