@@ -131,12 +131,12 @@ browser-level の accessibility smoke を追加するときは、tree や treegr
 
 ## CI方針
 
-Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScript testsを実行します。
+Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScript checksを実行します。
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
 - representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
-- JavaScript entrypoint、unit、browser smoke tests: `npm run test:js`
+- JavaScript checks: changed-files policy に従い、docs-entrypoint-sensitive な docs-only PR では `npm run test:docs-entrypoints`、docs-only ではない PR では `npm run test:js:core`、mockup / browser-smoke sensitive な PR では Playwright Chromium setup と `npm run test:browser` を実行します。docs-entrypoint-sensitive ではなく、mockup / browser-smoke path も触らない docs-only PR は JavaScript checks を skip できます。
 
 Pull Request の Rails lanes では、lower / current / next-major の代表範囲に絞るため Rails 7.1 は意図的に含めていません。Rails 7.1 は `main` push の full Rails matrix で確認する最終互換ゲートです。
 
