@@ -13,6 +13,7 @@ const expectedReadmeSignal = `Ruby ${minimumRubyVersion} or later`;
 const readme = read("README.md");
 const gemspec = read("tree_view.gemspec");
 const workflow = read(".github/workflows/ci.yml");
+const dockerfile = read("Dockerfile");
 const englishDevelopment = read("docs/en/development.md");
 const japaneseDevelopment = read("docs/ja/development.md");
 const packageJson = JSON.parse(read("package.json"));
@@ -34,6 +35,29 @@ assertIncludes(workflow, '- "3.2"', ".github/workflows/ci.yml");
 assertIncludes(workflow, '- "3.3"', ".github/workflows/ci.yml");
 assertIncludes(workflow, "ruby_matrix:", ".github/workflows/ci.yml");
 assertIncludes(workflow, "rails_matrix:", ".github/workflows/ci.yml");
+[
+  '- rails: "7.1"',
+  "gemfile: gemfiles/rails_7_1.gemfile",
+  'ruby-version: "3.2"'
+].forEach((signal) => {
+  assertIncludes(
+    workflow,
+    signal,
+    ".github/workflows/ci.yml Rails 7.1 main-matrix signal"
+  );
+});
+
+const dockerRubyBaseImage = dockerfile.match(/^FROM ruby:(?<version>\d+\.\d+(?:\.\d+)?)-slim$/m);
+assert.ok(
+  dockerRubyBaseImage,
+  "Dockerfile must use a ruby:<major.minor[.patch]>-slim base image for development setup"
+);
+const [dockerRubyMajor, dockerRubyMinor] = dockerRubyBaseImage.groups.version.split(".");
+assert.equal(
+  `${dockerRubyMajor}.${dockerRubyMinor}`,
+  minimumRubyVersion,
+  `Dockerfile Ruby base image must stay on the minimum supported Ruby ${minimumRubyVersion}.x line for development setup; found ${dockerRubyBaseImage.groups.version}`
+);
 
 assert.equal(
   packageJson.scripts["test:ruby-version-sources"],
@@ -50,11 +74,13 @@ assert.ok(
   [japaneseDevelopment, "docs/ja/development.md"]
 ].forEach(([content, path]) => {
   assertIncludes(content, "gemfiles/rails_7_0.gemfile", path);
+  assertIncludes(content, "gemfiles/rails_7_1.gemfile", path);
   assertIncludes(content, "gemfiles/rails_7_2.gemfile", path);
   assertIncludes(content, "gemfiles/rails_8_0.gemfile", path);
   assertIncludes(content, "Ruby version matrix", path);
+  assertIncludes(content, "Rails 7.1", `${path} Rails 7.1 main-matrix wording`);
 });
 
 console.log(
-  `Ruby version sources stay aligned with Ruby ${minimumRubyVersion}+ and representative Ruby ${minimumRubyVersion}/${currentRubyVersion} CI lanes.`
+  `Ruby version sources stay aligned with Ruby ${minimumRubyVersion}+ and representative Ruby ${minimumRubyVersion}/${currentRubyVersion} CI lanes, Rails 7.1 main-matrix coverage, plus Docker Ruby ${dockerRubyBaseImage.groups.version}.`
 );

@@ -54,12 +54,14 @@ function isPackageSensitivePath(file) {
     file.startsWith("docs/") ||
     file === "Gemfile" ||
     file === "Gemfile.lock" ||
+    file === "Rakefile" ||
     file === "tree_view.gemspec" ||
     file === "package.json" ||
     file === "package-lock.json" ||
     file === ".nvmrc" ||
     file === "script/check_gem_package_contents.rb" ||
     file === ".github/workflows/ci.yml" ||
+    file === ".github/dependabot.yml" ||
     file === "config/importmap.tree_view.rb" ||
     file === "config/public_api_manifest.yml" ||
     file.startsWith("lib/") ||
@@ -86,7 +88,8 @@ function isDockerSetupSensitivePath(file) {
     file === "docker-compose.yml" ||
     file === "package.json" ||
     file === "package-lock.json" ||
-    file === ".nvmrc"
+    file === ".nvmrc" ||
+    file === ".github/workflows/ci.yml"
   );
 }
 

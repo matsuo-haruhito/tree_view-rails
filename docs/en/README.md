@@ -26,6 +26,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | Render large or partial trees | [Render Scale](render-scale.md), [Lazy Loading](lazy-loading.md), [Windowed Rendering](windowed-rendering.md), and [Children Pagination](children-pagination.md) |
 | Wire selection, forms, or table-owned columns | [Selection](selection.md), [Forms and editing rows](form-editing.md), and [Resource table bridge](resource-table-bridge.md) |
 | Check public contracts and integration hooks | [Public API](public-api.md), [JavaScript event contract](js-events.md), and [Host App Extension Points](host-app-extension-points.md) |
+| Register TreeView JavaScript controllers | [Controller registration](controller-registration.md), with [Public API](public-api.md#javascript-surface) for the package-root surface |
 | Review empty roots, no-results rows, or empty copy boundaries | [Usage: Empty root and no-results rows](usage.md#empty-root-and-no-results-rows) and [empty-state.html](../mockups/empty-state.html) |
 | Diagnose symptoms or responsibility boundaries | [Troubleshooting](troubleshooting.md), [FAQ](faq.md), and [Tree diagnostics](tree-diagnostics.md) |
 
@@ -54,6 +55,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [ReverseTree](reverse-tree.md) | Render child-to-parent paths when matched records should be roots and ancestors should appear below them |
 | [Error hierarchy](errors.md) | Public TreeView error classes and rescue guidance |
 | [JavaScript event contract](js-events.md) | Public Stimulus event names, detail payloads, and compatibility policy |
+| [Controller registration](controller-registration.md) | Register bundled Stimulus controllers with `registerTreeViewControllers(application)` or inspect `TreeViewControllerEntries` for custom boot flows |
 | [Migration guide](migration.md) | Upgrade-oriented compatibility, deprecation, rename, and release-note guidance |
 | [Render log level](render-log-level.md) | Configure TreeView partial render log silencing in host app logs |
 | [Glossary](glossary.md) | Main terms used in TreeView docs and code |
@@ -64,6 +66,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Lazy Loading](lazy-loading.md) | Hooks and data attributes for loading children on demand |
 | [Windowed Rendering](windowed-rendering.md) | Opt-in API for rendering visible rows by offset / limit |
 | [Persisted State](persisted-state.md) | Persisting, restoring, clearing, and pruning expansion state with the generator and `StateStore`; host apps own retention policy and cleanup scheduling |
+| [Public Setup Surface](public-setup-surface.md) | Public setup-generator contract for persisted-state install paths, optional owner argument, and host-app review boundaries |
 | [Breadcrumb](breadcrumb.md) | Helper for rendering ancestor paths as breadcrumbs |
 | [Depth Labels](depth-labels.md) | Hook for displaying node depth labels |
 | [Row Status](row-status.md) | Hook for disabled / readonly row state |
@@ -80,8 +83,8 @@ If you are integrating TreeView into a Rails host app, start with these document
 
 | Document | Description |
 |---|---|
-| [Product Profile](../../Product%20Profile.md) | Repository positioning, source-of-truth order, maintainership boundaries, and non-goals |
-| [AGENTS.md](../../AGENTS.md) | Repository-specific maintainer workflow, first-read order, and documentation update rules |
+| Product Profile (repository-only) | Repository positioning, source-of-truth order, maintainership boundaries, and non-goals. This root-level maintainer document is not a packaged docs entry point. |
+| AGENTS.md (repository-only) | Repository-specific maintainer workflow, first-read order, and documentation update rules. This root-level maintainer document is not a packaged docs entry point. |
 | [Root docs index](../README.md) | Cross-language docs map and maintenance entry point for durable maintainer docs |
 | [CHANGELOG.md](../../CHANGELOG.md) | Release-facing summary of public changes, compatibility notes, and notable documentation additions |
 | [Documentation i18n audit](../i18n-audit.md) | Cross-language sync rules, technical-asset inventory, and translation priority checks |
@@ -89,7 +92,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Migration guide](migration.md) | Upgrade-oriented summary of compatibility promises, deprecations, and release-note expectations |
 | [Release checklist](release.md) | Release tests, documentation, and gem package checklist |
 | [Design policy](design-policy.md) | Gem responsibilities, included scope, excluded scope, and design decisions |
-| [Development](development.md) | Tests, CI, documentation updates, future work, and the current `npm install` exception while `package-lock.json` remains out of sync |
+| [Development](development.md) | Tests, CI, documentation updates, current `npm ci` setup, and lockfile-backed install policy |
 | [Code quality](code-quality.md) | Lint, tests, error messages, and documentation quality policy |
 
 ## Reading order
@@ -131,6 +134,8 @@ When TreeView terminology or identifier design is unclear, see [Glossary](glossa
 For TreeView-specific rescue behavior, see [Error hierarchy](errors.md).
 
 For public Stimulus event names and payloads, see [JavaScript event contract](js-events.md).
+
+For default or custom Stimulus boot flows, see [Controller registration](controller-registration.md). It explains when to call `registerTreeViewControllers(application)`, when to inspect `TreeViewControllerEntries`, and where host apps own custom ordering or filtering.
 
 For upgrade planning, deprecations, and release-note expectations, see [Migration guide](migration.md).
 

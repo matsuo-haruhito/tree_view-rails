@@ -75,6 +75,72 @@ releaseDocs.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release checklist changelog policy", signals)
 })
 
+const releaseDocsRubyEvidenceSignals = [
+  [
+    "docs/en/release.md",
+    [
+      "main-push full CI is green",
+      "Ruby version matrix",
+      "Rails version matrix",
+      "full compatibility matrices",
+      "required Ruby version",
+      "Ruby support",
+      "release evidence"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "main-push full CI が green",
+      "Ruby version matrix",
+      "Rails version matrix",
+      "full compatibility matrices",
+      "required Ruby version",
+      "Ruby support",
+      "release evidence"
+    ]
+  ]
+]
+
+releaseDocsRubyEvidenceSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs Ruby and Rails evidence signal", signals)
+})
+
+const gemPackageWorkflowSignals = [
+  [
+    ".github/workflows/ci.yml",
+    [
+      "gem_package:",
+      "gem build tree_view.gemspec",
+      "ruby script/check_gem_package_contents.rb tree_view-*.gem",
+      "gem install tree_view-*.gem",
+      "ruby -e \"require 'tree_view'\""
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "gem build tree_view.gemspec",
+      "ruby script/check_gem_package_contents.rb tree_view-*.gem",
+      "gem install tree_view-*.gem",
+      "ruby -e \"require 'tree_view'\""
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "gem build tree_view.gemspec",
+      "ruby script/check_gem_package_contents.rb tree_view-*.gem",
+      "gem install tree_view-*.gem",
+      "ruby -e \"require 'tree_view'\""
+    ]
+  ]
+]
+
+gemPackageWorkflowSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Gem package install and require workflow signal", signals)
+})
+
 const packageContentsVerificationSignals = [
   [
     "script/check_gem_package_contents.rb",
@@ -92,6 +158,16 @@ const packageContentsVerificationSignals = [
       "docs/en/release.md",
       "docs/ja/release.md",
       "docs/mockups/review-gallery.html",
+      "EXPECTED_RELEASE_METADATA",
+      "EXPECTED_PUBLIC_SETUP_GENERATOR",
+      "PUBLIC_SETUP_GENERATOR_SOURCE_SIGNALS",
+      "lib/generators/tree_view/state/install_generator.rb",
+      "lib/generators/tree_view/state/templates/create_tree_view_states.rb",
+      "lib/generators/tree_view/state/templates/tree_view_state.rb",
+      "lib/generators/tree_view/state/templates/tree_view_state_owner.rb",
+      "required_ruby_version",
+      "allowed_push_host",
+      "runtime_dependencies",
       "Gem package contents verification failed"
     ]
   ],
@@ -99,9 +175,20 @@ const packageContentsVerificationSignals = [
     "docs/en/release.md",
     [
       "ruby script/check_gem_package_contents.rb tree_view-*.gem",
-      "representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, and public API manifest",
+      "representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces",
+      "required Ruby version, allowed push host, and runtime dependency metadata",
+      "public setup generator files for `tree_view:state:install`",
+      "lib/generators/tree_view/state/install_generator.rb",
+      "lib/generators/tree_view/state/templates/create_tree_view_states.rb",
+      "lib/generators/tree_view/state/templates/tree_view_state.rb",
+      "lib/generators/tree_view/state/templates/tree_view_state_owner.rb",
+      "Public Setup Surface",
       "Package-sensitive PR paths include `tree_view.gemspec`",
       "Rails integration files under `app/helpers/**`, `app/views/**`, `app/assets/**`, and `app/javascript/**`",
+      "`docs_entrypoint_sensitive`",
+      "`package_sensitive`",
+      "`README.md`, `CHANGELOG.md`, `docs/**`, and `config/public_api_manifest.yml`",
+      "docs entrypoint smoke",
       "config/importmap.tree_view.rb",
       "config/public_api_manifest.yml",
       "config/locales/**",
@@ -113,9 +200,20 @@ const packageContentsVerificationSignals = [
     "docs/ja/release.md",
     [
       "ruby script/check_gem_package_contents.rb tree_view-*.gem",
-      "Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest",
+      "Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI",
+      "required Ruby version、allowed push host、runtime dependency metadata",
+      "`tree_view:state:install` public setup generator files",
+      "lib/generators/tree_view/state/install_generator.rb",
+      "lib/generators/tree_view/state/templates/create_tree_view_states.rb",
+      "lib/generators/tree_view/state/templates/tree_view_state.rb",
+      "lib/generators/tree_view/state/templates/tree_view_state_owner.rb",
+      "Public Setup Surface",
       "package-sensitive path には、`tree_view.gemspec`",
       "Rails integration files である `app/helpers/**`、`app/views/**`、`app/assets/**`、`app/javascript/**`",
+      "`docs_entrypoint_sensitive`",
+      "`package_sensitive`",
+      "`README.md`、`CHANGELOG.md`、`docs/**`、`config/public_api_manifest.yml`",
+      "docs entrypoint smoke",
       "config/importmap.tree_view.rb",
       "config/public_api_manifest.yml",
       "config/locales/**",
@@ -127,6 +225,70 @@ const packageContentsVerificationSignals = [
 
 packageContentsVerificationSignals.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Gem package release docs category signal", signals)
+})
+
+const controllerRegistrationDocsSignals = [
+  [
+    "config/public_api_manifest.yml",
+    [
+      "controller_registrations:",
+      "TreeViewControllerEntries",
+      "tree-view-state",
+      "TreeViewStateController",
+      "tree-view-remote-state",
+      "TreeViewRemoteStateController"
+    ]
+  ],
+  [
+    "docs/en/controller-registration.md",
+    [
+      "TreeViewControllerEntries",
+      "registerTreeViewControllers(application)",
+      "identifier",
+      "controller",
+      "state",
+      "client",
+      "selection",
+      "transfer",
+      "remote state"
+    ]
+  ],
+  [
+    "docs/ja/controller-registration.md",
+    [
+      "TreeViewControllerEntries",
+      "registerTreeViewControllers(application)",
+      "identifier",
+      "controller",
+      "state",
+      "client",
+      "selection",
+      "transfer",
+      "remote state"
+    ]
+  ],
+  [
+    "docs/en/troubleshooting.md",
+    [
+      "TreeViewControllerIdentifiers",
+      "TreeViewControllerEntries",
+      "registerTreeViewControllers(application)",
+      "selective registration or boot-order tests"
+    ]
+  ],
+  [
+    "docs/ja/troubleshooting.md",
+    [
+      "TreeViewControllerIdentifiers",
+      "TreeViewControllerEntries",
+      "registerTreeViewControllers(application)",
+      "部分登録や boot-order test"
+    ]
+  ]
+]
+
+controllerRegistrationDocsSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Controller registration docs signal", signals)
 })
 
 assertSignals("script/release_note_candidates.rb", "Release note candidate helper output", [
