@@ -61,6 +61,18 @@ function assertPackageScript(scriptName) {
   )
 }
 
+function packageScript(scriptName) {
+  assertPackageScript(scriptName)
+
+  const script = packageJson.scripts[scriptName]
+  assert(
+    typeof script === "string" && script.length > 0,
+    `${packagePath} scripts.${scriptName} must be a non-empty command string`
+  )
+
+  return script
+}
+
 const changesJob = workflowJobBlock(workflowSource, "changes")
 const lintJob = workflowJobBlock(workflowSource, "lint")
 const prSpecsJob = workflowJobBlock(workflowSource, "pr_specs")
@@ -203,8 +215,23 @@ javascriptJobNpmScripts.forEach((scriptName) => {
   assertPackageScript(scriptName)
 })
 
+const docsEntrypointsScript = packageScript("test:docs-entrypoints")
+const docsEntrypointsScriptSignals = [
+  ["docs entrypoint suite", "node script/test_docs_entrypoint_suite.mjs"],
+  ["standalone controller registration docs signal", "node script/check_controller_registration_docs_signals.mjs"]
+]
+
+docsEntrypointsScriptSignals.forEach(([label, signal]) => {
+  assertIncludes(
+    docsEntrypointsScript,
+    signal,
+    `${packagePath} scripts.test:docs-entrypoints ${label}`
+  )
+})
+
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
 console.log(`Checked ${rubyMatrixVersionSignals.length} representative Ruby workflow version signals.`)
 console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
+console.log(`Checked ${docsEntrypointsScriptSignals.length} docs-entrypoints package script command signals.`)
