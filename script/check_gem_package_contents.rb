@@ -99,6 +99,12 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/migration.md
     docs/ja/migration.md
   ],
+  "README-linked large-tree and rendering boundary docs" => %w[
+    docs/en/render-scale.md
+    docs/ja/render-scale.md
+    docs/en/rendering-boundaries.md
+    docs/ja/rendering-boundaries.md
+  ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
