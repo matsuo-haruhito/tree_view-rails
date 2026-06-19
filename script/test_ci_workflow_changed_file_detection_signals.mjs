@@ -1,7 +1,11 @@
 import { readFileSync } from "node:fs"
 
 const workflowPath = ".github/workflows/ci.yml"
+const packagePath = "package.json"
+const docsEntrypointSuitePath = "script/test_docs_entrypoint_suite.mjs"
 const workflowSource = readFileSync(workflowPath, "utf8")
+const packageJson = JSON.parse(readFileSync(packagePath, "utf8"))
+const docsEntrypointSuiteSource = readFileSync(docsEntrypointSuitePath, "utf8")
 
 function assert(condition, message) {
   if (!condition) throw new Error(message)
@@ -52,7 +56,34 @@ function assertDefaultWorkflowOutput(block, key, value) {
   )
 }
 
+function assertPackageScript(scriptName) {
+  assert(
+    Object.hasOwn(packageJson.scripts ?? {}, scriptName),
+    `${packagePath} scripts must define ${scriptName} for the CI JavaScript job`
+  )
+}
+
+function packageScript(scriptName) {
+  assertPackageScript(scriptName)
+
+  const script = packageJson.scripts[scriptName]
+  assert(
+    typeof script === "string" && script.length > 0,
+    `${packagePath} scripts.${scriptName} must be a non-empty command string`
+  )
+
+  return script
+}
+
 const changesJob = workflowJobBlock(workflowSource, "changes")
+const lintJob = workflowJobBlock(workflowSource, "lint")
+const prSpecsJob = workflowJobBlock(workflowSource, "pr_specs")
+const prRailsMatrixJob = workflowJobBlock(workflowSource, "pr_rails_matrix")
+const rubyMatrixJob = workflowJobBlock(workflowSource, "ruby_matrix")
+const railsMatrixJob = workflowJobBlock(workflowSource, "rails_matrix")
+const javascriptJob = workflowJobBlock(workflowSource, "javascript")
+const dockerDevelopmentSetupJob = workflowJobBlock(workflowSource, "docker_development_setup")
+const gemPackageJob = workflowJobBlock(workflowSource, "gem_package")
 
 const nonPullRequestDefaultOutputs = {
   docs_only: false,
@@ -115,5 +146,94 @@ assertOrdered(
   `${workflowPath} jobs.changes must pass the collected file list into the policy script`
 )
 
+const workflowActionMajorSignals = [
+  ["changes", changesJob, "actions/checkout@v6"],
+  ["lint", lintJob, "actions/checkout@v6"],
+  ["pr_specs", prSpecsJob, "actions/checkout@v6"],
+  ["pr_rails_matrix", prRailsMatrixJob, "actions/checkout@v6"],
+  ["ruby_matrix", rubyMatrixJob, "actions/checkout@v6"],
+  ["rails_matrix", railsMatrixJob, "actions/checkout@v6"],
+  ["javascript", javascriptJob, "actions/checkout@v6"],
+  ["docker_development_setup", dockerDevelopmentSetupJob, "actions/checkout@v6"],
+  ["gem_package", gemPackageJob, "actions/checkout@v6"],
+  ["lint", lintJob, "ruby/setup-ruby@v1"],
+  ["pr_specs", prSpecsJob, "ruby/setup-ruby@v1"],
+  ["pr_rails_matrix", prRailsMatrixJob, "ruby/setup-ruby@v1"],
+  ["ruby_matrix", rubyMatrixJob, "ruby/setup-ruby@v1"],
+  ["rails_matrix", railsMatrixJob, "ruby/setup-ruby@v1"],
+  ["javascript", javascriptJob, "ruby/setup-ruby@v1"],
+  ["gem_package", gemPackageJob, "ruby/setup-ruby@v1"],
+  ["javascript", javascriptJob, "actions/setup-node@v6"]
+]
+
+workflowActionMajorSignals.forEach(([jobName, jobSource, action]) => {
+  assertIncludes(
+    jobSource,
+    `uses: ${action}`,
+    `${workflowPath} jobs.${jobName} workflow action major version signal`
+  )
+})
+
+assertIncludes(
+  javascriptJob,
+  'node-version: "22"',
+  `${workflowPath} jobs.javascript setup-node representative Node version`
+)
+assert(
+  packageJson.engines?.node === "22.x",
+  `${packagePath} engines.node must remain aligned with the CI JavaScript job Node major`
+)
+
+const rubyMatrixVersionSignals = [
+  ["ruby_matrix", rubyMatrixJob, 'ruby-version:'],
+  ["ruby_matrix", rubyMatrixJob, '- "3.2"'],
+  ["ruby_matrix", rubyMatrixJob, '- "3.3"'],
+  ["rails_matrix", railsMatrixJob, 'ruby-version: "3.2"'],
+  ["rails_matrix", railsMatrixJob, 'ruby-version: "3.3"'],
+  ["pr_rails_matrix", prRailsMatrixJob, 'ruby-version: "3.2"'],
+  ["pr_rails_matrix", prRailsMatrixJob, 'ruby-version: "3.3"']
+]
+
+rubyMatrixVersionSignals.forEach(([jobName, jobSource, signal]) => {
+  assertIncludes(
+    jobSource,
+    signal,
+    `${workflowPath} jobs.${jobName} representative Ruby version signal`
+  )
+})
+
+const javascriptJobNpmScripts = [
+  "test:docs-entrypoints",
+  "test:js:core",
+  "test:browser"
+]
+
+javascriptJobNpmScripts.forEach((scriptName) => {
+  assertIncludes(
+    javascriptJob,
+    `npm run ${scriptName}`,
+    `${workflowPath} jobs.javascript npm script command`
+  )
+  assertPackageScript(scriptName)
+})
+
+const docsEntrypointsScript = packageScript("test:docs-entrypoints")
+const docsEntrypointsSignals = [
+  ["package script uses docs entrypoint suite", docsEntrypointsScript, "node script/test_docs_entrypoint_suite.mjs"],
+  ["suite registers controller registration docs signal", docsEntrypointSuiteSource, "script/check_controller_registration_docs_signals.mjs"]
+]
+
+docsEntrypointsSignals.forEach(([label, source, signal]) => {
+  assertIncludes(
+    source,
+    signal,
+    `${packagePath} scripts.test:docs-entrypoints ${label}`
+  )
+})
+
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
+console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
+console.log(`Checked ${rubyMatrixVersionSignals.length} representative Ruby workflow version signals.`)
+console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
+console.log(`Checked ${docsEntrypointsSignals.length} docs-entrypoints package and suite command signals.`)
