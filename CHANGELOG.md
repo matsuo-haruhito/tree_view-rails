@@ -115,6 +115,8 @@ Release preparation notes:
 
 ### Tests
 
+- Added CI changed-file policy coverage for Dependabot configuration changes so dependency automation config updates stay package-sensitive without Docker or docs-entrypoint routing.
+- Expanded package contents verification coverage for README-linked Host App Extension Points docs so packaged gems keep those public extension guides.
 - Added localized names specs and public API compatibility coverage.
 - Added Turbo Frame option unit and integration specs.
 - Added toolbar helper specs.
