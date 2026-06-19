@@ -153,6 +153,30 @@ const cases = [
     }
   },
   {
+    name: "Ruby runtime files are package-sensitive full CI changes",
+    files: ["lib/tree_view/engine.rb"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false
+    }
+  },
+  {
+    name: "locale files are package-sensitive full CI changes",
+    files: ["config/locales/en.yml"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false
+    }
+  },
+  {
     name: "Ruby dependency files are package-sensitive full CI changes",
     files: ["Gemfile", "Gemfile.lock"],
     expected: {
