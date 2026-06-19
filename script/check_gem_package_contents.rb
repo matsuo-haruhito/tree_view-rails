@@ -95,6 +95,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/decision-guide.md
     docs/ja/decision-guide.md
   ],
+  "README-linked migration guide docs" => %w[
+    docs/en/migration.md
+    docs/ja/migration.md
+  ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
