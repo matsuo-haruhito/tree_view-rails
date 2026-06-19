@@ -109,6 +109,26 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/errors.md
     docs/ja/errors.md
   ],
+  "README-linked path and reverse tree docs" => %w[
+    docs/en/path-tree-builder.md
+    docs/ja/path-tree-builder.md
+    docs/en/reverse-tree.md
+    docs/ja/reverse-tree.md
+  ],
+  "README-linked first-time usage docs" => %w[
+    docs/en/minimal-usage.md
+    docs/ja/minimal-usage.md
+    docs/en/usage.md
+    docs/ja/usage.md
+  ],
+  "README-linked helper-adjacent row docs" => %w[
+    docs/en/breadcrumb.md
+    docs/ja/breadcrumb.md
+    docs/en/depth-labels.md
+    docs/ja/depth-labels.md
+    docs/en/row-status.md
+    docs/ja/row-status.md
+  ],
   "README-linked migration guide docs" => %w[
     docs/en/migration.md
     docs/ja/migration.md
