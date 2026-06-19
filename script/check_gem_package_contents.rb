@@ -87,6 +87,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/host-app-extension-points.md
     docs/ja/host-app-extension-points.md
   ],
+  "README-linked accessibility semantics docs" => %w[
+    docs/en/accessibility-semantics.md
+    docs/ja/accessibility-semantics.md
+  ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
