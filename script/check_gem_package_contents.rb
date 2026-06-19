@@ -67,6 +67,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/public-api.md
     docs/ja/public-api.md
   ],
+  "README-linked localized names docs" => %w[
+    docs/en/localized-names.md
+    docs/ja/localized-names.md
+  ],
   "README-linked render log level docs" => %w[
     docs/en/render-log-level.md
     docs/ja/render-log-level.md
