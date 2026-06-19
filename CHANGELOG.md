@@ -58,7 +58,7 @@ Release preparation notes:
 - Added Turbo Frame option docs in Japanese and English.
 - Added NodePresenter row partial cookbook docs and clarified criteria for promoting app-specific UI patterns into TreeView.
 - Added toolbar helper docs in Japanese and English.
-- Added README adoption guidance to help users decide whether TreeView fits their use case and to clarify the virtual scrolling boundary.
+- Added README adoption guidance to help users decide whether TreeView fits your use case and to clarify the virtual scrolling boundary.
 - Promoted accessibility semantics as a first-class capability in the README and docs indexes, including ARIA placement, keyboard boundaries, and host-app responsibilities.
 - Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
 - Added client-side toggle mode docs in Japanese and English, including static / Turbo / client-side mode comparison and CSS customization guidance using `aria-expanded`.
@@ -122,6 +122,7 @@ Release preparation notes:
 - Expanded package contents verification coverage for README-linked Host App Extension Points docs so packaged gems keep those public extension guides.
 - Expanded package contents verification coverage for README-linked Accessibility Semantics docs so packaged gems keep those public semantics guides.
 - Expanded package contents verification coverage for README-linked Decision guide, Migration guide, Render Scale, and Rendering Boundaries docs so packaged gems keep those docs available.
+- Expanded package contents verification coverage for README-linked Error hierarchy, Cookbook, and GraphAdapter docs so packaged gems keep those public guides available.
 - Added ReleaseCheck metadata validation and tag alignment focused specs for representative release failure paths.
 - Added CI changed-file policy coverage for runtime Ruby and locale paths so package-sensitive routing remains guarded.
 - Expanded package contents verification coverage for README-linked Localized Names docs so packaged gems keep those public localization guides.
