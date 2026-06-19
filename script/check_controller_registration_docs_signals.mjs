@@ -70,7 +70,7 @@ controllerRegistrationDocs.forEach(([relativePath, document]) => {
   )
 
   assert(
-    /host app.*filter.*reorder|host app.*boot sequence|host app 側.*boot sequence|host app は entry を filter \/ reorder/.test(document),
+    /filter.*reorder.*host app|host app.*filter.*reorder|host app.*boot sequence|host app 側.*boot sequence|host app は entry を filter \/ reorder/.test(document),
     `${relativePath}: controller registration docs no longer preserve the host-app-owned custom boot boundary`
   )
 
