@@ -223,7 +223,8 @@ function workflowJobBlock(workflowSource, jobName) {
 
 function workflowJavaScriptJob(workflowSource) {
   return workflowJobBlock(workflowSource, "javascript");
-}\n
+}
+
 function npmRunScripts(workflowSource) {
   return [...workflowJavaScriptJob(workflowSource).matchAll(/run: npm run (?<script>[\w:-]+)/g)]
     .map((match) => match.groups.script)
