@@ -131,12 +131,12 @@ When browser-level accessibility smoke is added, do not silently suppress tree o
 
 ## CI policy
 
-Pull requests run the fast Ruby checks and JavaScript tests that protect day-to-day changes:
+Pull requests run the fast Ruby checks and JavaScript checks that protect day-to-day changes:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
 - Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
-- JavaScript entrypoint, unit, and browser smoke tests through `npm run test:js`
+- JavaScript checks through the changed-files policy: docs-entrypoint-sensitive docs-only PRs run `npm run test:docs-entrypoints`, non-docs PRs run `npm run test:js:core`, and mockup or browser-smoke-sensitive PRs install Playwright Chromium and run `npm run test:browser`. Docs-only PRs that are not docs-entrypoint-sensitive and do not touch mockups or browser-smoke paths can skip JavaScript checks.
 
 The pull-request Rails lanes intentionally skip Rails 7.1 to keep PR feedback focused on representative lower, current, and next-major coverage; the `main` push full Rails matrix is the final compatibility gate that includes Rails 7.1.
 
