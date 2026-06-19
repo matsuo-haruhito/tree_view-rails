@@ -77,6 +77,7 @@ Release preparation notes:
 - Clarified Development docs for standalone gem package verification and docs i18n parity commands.
 - Clarified Development docs for public constants package guard mapping and Release docs for public setup generator package checklist / repository-only packaged-doc link boundaries.
 - Clarified `npm ci` install path guidance across README, installation, development, and release checklist docs so local setup, PR CI, Docker setup smoke, and main-push JavaScript checks share lockfile-backed evidence.
+- Clarified Development docs for edited Dependabot branch rebase / recreate handling and keeping broad baseline cleanups out of overlapping dependency PRs.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
