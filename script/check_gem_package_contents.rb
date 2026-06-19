@@ -83,6 +83,28 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/selection-checkbox-hooks.md
     docs/ja/selection-checkbox-hooks.md
   ],
+  "README-linked host app extension docs" => %w[
+    docs/en/host-app-extension-points.md
+    docs/ja/host-app-extension-points.md
+  ],
+  "README-linked accessibility semantics docs" => %w[
+    docs/en/accessibility-semantics.md
+    docs/ja/accessibility-semantics.md
+  ],
+  "README-linked decision guide docs" => %w[
+    docs/en/decision-guide.md
+    docs/ja/decision-guide.md
+  ],
+  "README-linked migration guide docs" => %w[
+    docs/en/migration.md
+    docs/ja/migration.md
+  ],
+  "README-linked large-tree and rendering boundary docs" => %w[
+    docs/en/render-scale.md
+    docs/ja/render-scale.md
+    docs/en/rendering-boundaries.md
+    docs/ja/rendering-boundaries.md
+  ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md

@@ -23,6 +23,50 @@
   gap: 14px;
 }
 
+.persisted-scope-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.persisted-scope-card {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #d6e0ea;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.persisted-scope-card h3,
+.persisted-scope-card p,
+.persisted-scope-card ul {
+  margin: 0;
+}
+
+.persisted-scope-card ul {
+  padding-left: 1.2rem;
+  color: #334e68;
+}
+
+.persisted-scope-meta {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #334e68;
+  font-size: 0.84rem;
+}
+
+.persisted-scope-meta span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .persisted-state-card,
 .persisted-boundary-card {
   display: grid;
@@ -358,6 +402,207 @@
       </div>
     </section>
 
+    <section class="mock-section persisted-shell" aria-labelledby="scope-boundary-heading">
+      <div>
+        <h2 id="scope-boundary-heading">Owner and tree instance scope comparison</h2>
+        <p>
+          These static cards compare the same host user across multiple trees, a different owner, and retention cleanup candidates. They show scope separation without adding storage schema, authorization, cleanup jobs, audit policy, or privacy wording to TreeView.
+        </p>
+      </div>
+
+      <div class="persisted-scope-grid" aria-label="Persisted state owner and tree instance scope comparison">
+        <article class="persisted-scope-card">
+          <p class="persisted-step-label">Same owner / primary tree</p>
+          <h3>Documents tree restores its own branch</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--saved">Restore match</span>
+            <span class="mock-status mock-status--active">owner: current_user</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Node</th>
+                <th scope="col">Scope cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Collapse</a>
+                      <span class="tree-node-title">Documents</span>
+                      <span class="tree-node-badge tree-node-badge--success">Restored</span>
+                    </span>
+                  </span>
+                </td>
+                <td><code>tree_instance_key</code> matched</td>
+              </tr>
+              <tr class="tree-row">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Collapse</a>
+                      <span class="tree-node-title">Policies</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Expanded only for this tree</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="persisted-scope-meta">
+            <span>owner: current_user</span>
+            <span>tree_instance_key: documents_tree</span>
+            <span>expanded_keys: ["documents", "policies"]</span>
+          </div>
+        </article>
+
+        <article class="persisted-scope-card">
+          <p class="persisted-step-label">Same owner / different tree</p>
+          <h3>Reports tree does not reuse document state</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--idle">No matching snapshot</span>
+            <span class="mock-status mock-status--pending">same owner</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Node</th>
+                <th scope="col">Scope cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Expand</a>
+                      <span class="tree-node-title">Reports</span>
+                      <span class="tree-node-badge tree-node-badge--info">Default</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Different <code>tree_instance_key</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="persisted-scope-meta">
+            <span>owner: current_user</span>
+            <span>tree_instance_key: reports_tree</span>
+            <span>expanded_keys: []</span>
+          </div>
+        </article>
+
+        <article class="persisted-scope-card">
+          <p class="persisted-step-label">Different owner</p>
+          <h3>Reviewer tree keeps a separate snapshot</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--policy">Owner scoped</span>
+            <span class="mock-status mock-status--pending">host authorization</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Node</th>
+                <th scope="col">Scope cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Collapse</a>
+                      <span class="tree-node-title">Documents</span>
+                      <span class="tree-node-badge tree-node-badge--warning">Reviewer</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Same key, different owner</td>
+              </tr>
+              <tr class="tree-row">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches">
+                      <span class="tree-toggle__branch-slot has-line"></span>
+                    </span>
+                    <span class="tree-toggle__control">
+                      <a class="tree-toggle__action" href="#">Collapse</a>
+                      <span class="tree-node-title">Approvals</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Reviewer-owned expansion path</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="persisted-scope-meta">
+            <span>owner: reviewer_account</span>
+            <span>tree_instance_key: documents_tree</span>
+            <span>expanded_keys: ["documents", "approvals"]</span>
+          </div>
+        </article>
+
+        <article class="persisted-scope-card">
+          <p class="persisted-step-label">Retention cleanup</p>
+          <h3>Cleanup can target a scope without defining policy</h3>
+          <div class="persisted-status-row">
+            <span class="persisted-status persisted-status--policy">Host cutoff</span>
+            <span class="persisted-status persisted-status--failed">Candidate</span>
+          </div>
+          <table class="tree-view-table">
+            <thead>
+              <tr>
+                <th scope="col">Stored row</th>
+                <th scope="col">Cleanup cue</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tree-row is-loading">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-depth-label">Prune</span>
+                      <span class="tree-node-title">archive_user / documents_tree</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Older than cutoff</td>
+              </tr>
+              <tr class="tree-row is-selected">
+                <td class="tree-toggle-cell">
+                  <span class="tree-toggle">
+                    <span class="tree-toggle__branches"></span>
+                    <span class="tree-toggle__control">
+                      <span class="tree-depth-label">Keep</span>
+                      <span class="tree-node-title">current_user / reports_tree</span>
+                    </span>
+                  </span>
+                </td>
+                <td>Fresh or out of scope</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="persisted-scope-meta">
+            <span>helper: prune!(older_than:, owner:, tree_instance_key:)</span>
+            <span>host owns: schedule, TTL, privacy, audit, deleted-owner handling</span>
+          </div>
+        </article>
+      </div>
+
+      <p class="persisted-note">
+        Scope comparison is visual only. TreeView can store and prune by owner and tree instance, but the host app decides which owner values are valid, which tree instance names are meaningful, when cleanup runs, and what retention policy applies.
+      </p>
+    </section>
+
     <section class="mock-section persisted-shell" aria-labelledby="event-save-flow-heading">
       <div>
         <h2 id="event-save-flow-heading">Browser event save flow</h2>
@@ -544,7 +789,7 @@
         <ul>
           <li><strong>TreeView owns:</strong> expansion state rendering, <code>tree-view-state:state-changed</code> event details, and opt-in <code>StateStore#prune!</code> / <code>StateStore#clear!</code> helpers.</li>
           <li><strong>Host app owns:</strong> persistence storage, save endpoint, authorization, reset route, confirmation copy, retry policy, cleanup schedule, default TTL, deleted-owner policy, audit retention, privacy retention, and visible error copy.</li>
-          <li><strong>Review focus:</strong> compare state cues, browser save policy, and reset / cleanup boundaries without implying that the gem ships a browser save helper, cleanup job, retention policy, or reset UI.</li>
+          <li><strong>Review focus:</strong> compare state cues, browser save policy, scope separation, and reset / cleanup boundaries without implying that the gem ships a browser save helper, cleanup job, retention policy, or reset UI.</li>
         </ul>
       </aside>
     </section>

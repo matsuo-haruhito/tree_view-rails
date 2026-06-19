@@ -77,6 +77,7 @@ Release preparation notes:
 - Clarified Development docs for standalone gem package verification and docs i18n parity commands.
 - Clarified Development docs for public constants package guard mapping and Release docs for public setup generator package checklist / repository-only packaged-doc link boundaries.
 - Clarified `npm ci` install path guidance across README, installation, development, and release checklist docs so local setup, PR CI, Docker setup smoke, and main-push JavaScript checks share lockfile-backed evidence.
+- Clarified Development docs for edited Dependabot branch rebase / recreate handling and keeping broad baseline cleanups out of overlapping dependency PRs.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
@@ -114,6 +115,11 @@ Release preparation notes:
 
 ### Tests
 
+- Added controller registration docs signal coverage to the docs-entrypoint suite so controller registration guides and manifest controller entries stay aligned.
+- Added CI changed-file detection workflow guard coverage for docs-entrypoints package script wiring so controller registration docs signals stay connected to `npm run test:docs-entrypoints`.
+- Added CI changed-file policy coverage for Dependabot configuration changes so dependency automation config updates stay package-sensitive without Docker or docs-entrypoint routing.
+- Expanded package contents verification coverage for README-linked Host App Extension Points docs so packaged gems keep those public extension guides.
+- Expanded package contents verification coverage for README-linked Accessibility Semantics docs so packaged gems keep those public semantics guides.
 - Added localized names specs and public API compatibility coverage.
 - Added Turbo Frame option unit and integration specs.
 - Added toolbar helper specs.
@@ -176,6 +182,7 @@ Release preparation notes:
 - Added gem package verification coverage for README-linked render log level docs so the packaged gem keeps the docs reached from README's render logging guidance.
 - Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, Ruby version, and Development docs wording stay aligned.
 - Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
+- Added release and CI docs signal coverage for workflow action major versions, Ruby / Rails release evidence, and gem package install / require checks.
 
 ## 0.1.0 - 2026-05-07
 
