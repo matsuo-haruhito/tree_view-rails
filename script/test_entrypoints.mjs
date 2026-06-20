@@ -376,6 +376,14 @@ assertDeepEqualExport(
 )
 assertFrozenObject(entrypointModule.TreeViewTransferDropPositions, "TreeViewTransferDropPositions")
 
+const expectedTransferDataAttributes = deepCamelizeKeys(javascriptPackageManifest.transfer_data_attributes)
+assertDeepEqualExport(
+  entrypointModule.TreeViewTransferDataAttributes,
+  expectedTransferDataAttributes,
+  "TreeViewTransferDataAttributes"
+)
+assertFrozenObject(entrypointModule.TreeViewTransferDataAttributes, "TreeViewTransferDataAttributes")
+
 const expectedTransferDataMimeTypes = deepCamelizeKeys(javascriptPackageManifest.transfer_data_mime_types)
 assertDeepEqualExport(
   entrypointModule.TreeViewTransferDataMimeTypes,
