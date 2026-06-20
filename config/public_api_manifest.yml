@@ -292,6 +292,24 @@ render_state_callback_builder_keys:
   - badge_builder
   - icon_builder
   - toggle_icon_builder
+css_custom_property_tokens:
+  - --tree-view-selected-row-background
+  - --tree-view-current-row-accent-color
+  - --tree-view-collapsed-row-background
+  - --tree-view-loading-row-background
+  - --tree-view-loading-action-color
+  - --tree-view-error-row-background
+  - --tree-view-drop-target-row-background
+  - --tree-view-focus-outline-color
+  - --tree-view-focus-background
+  - --tree-view-focus-ring-contrast-color
+  - --tree-view-toggle-hover-background
+  - --tree-view-branch-line-color
+  - --tree-view-current-branch-line-color
+  - --tree-view-level-background
+  - --tree-view-level-color
+  - --tree-view-hidden-count-background
+  - --tree-view-hidden-count-color
 javascript_package_root:
   named_exports:
     - registerTreeViewControllers
