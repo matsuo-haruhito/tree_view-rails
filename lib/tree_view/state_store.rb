@@ -24,6 +24,10 @@ module TreeView
       PersistedState.new(tree_instance_key: tree_instance_key, expanded_keys: [])
     end
 
+    def clear_owner!(owner:)
+      model.where(owner: owner).delete_all
+    end
+
     def prune_count(older_than:, owner: nil, tree_instance_key: nil)
       prune_scope(older_than: older_than, owner: owner, tree_instance_key: tree_instance_key).count
     end

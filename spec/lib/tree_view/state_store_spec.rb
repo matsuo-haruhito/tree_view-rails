@@ -65,7 +65,11 @@ class DummyModel
       DummyRecord.new(owner, tree_instance_key, []).tap { |record| records << record }
     end
 
-    def where(query, value)
+    def where(query, value = nil)
+      if query.is_a?(Hash)
+        return DummyRelation.new(records).where(query)
+      end
+
       raise ArgumentError, "unexpected query" unless query == "updated_at < ?"
 
       DummyRelation.new(records.select { |record| record.updated_at && record.updated_at < value })
@@ -127,6 +131,30 @@ RSpec.describe TreeView::StateStore do
 
     expect(state.tree_instance_key).to eq("documents")
     expect(state.expanded_keys).to eq([])
+  end
+
+  it "clears all persisted states for one owner" do
+    user_documents = DummyRecord.new(:user, "documents", ["node-1"])
+    user_projects = DummyRecord.new(:user, "projects", ["node-2"])
+    other_owner = DummyRecord.new(:admin, "documents", ["node-3"])
+    DummyModel.records = [user_documents, user_projects, other_owner]
+    store = described_class.new(model: DummyModel)
+
+    count = store.clear_owner!(owner: :user)
+
+    expect(count).to eq(2)
+    expect(DummyModel.records).to contain_exactly(other_owner)
+  end
+
+  it "returns zero when clearing an owner without records" do
+    other_owner = DummyRecord.new(:admin, "documents", ["node-3"])
+    DummyModel.records = [other_owner]
+    store = described_class.new(model: DummyModel)
+
+    count = store.clear_owner!(owner: :user)
+
+    expect(count).to eq(0)
+    expect(DummyModel.records).to contain_exactly(other_owner)
   end
 
   it "previews prune count without deleting matching records" do
