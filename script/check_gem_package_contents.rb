@@ -2,7 +2,9 @@
 # frozen_string_literal: true
 
 require "rubygems/package"
+require "stringio"
 require "yaml"
+require "zlib"
 
 # Keep representative English and Japanese files in these groups so package
 # verification covers the bilingual locale, public API, docs entrypoints,
@@ -65,6 +67,14 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/public-api.md
     docs/ja/public-api.md
   ],
+  "README-linked localized names docs" => %w[
+    docs/en/localized-names.md
+    docs/ja/localized-names.md
+  ],
+  "README-linked render log level docs" => %w[
+    docs/en/render-log-level.md
+    docs/ja/render-log-level.md
+  ],
   "Bilingual development docs" => %w[
     docs/en/development.md
     docs/ja/development.md
@@ -72,10 +82,116 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
   "README-linked public JavaScript docs" => %w[
     docs/en/js-events.md
     docs/ja/js-events.md
+    docs/en/controller-registration.md
+    docs/ja/controller-registration.md
+    docs/en/selection-checkbox-hooks.md
+    docs/ja/selection-checkbox-hooks.md
+  ],
+  "README-linked Turbo Frame docs" => %w[
+    docs/en/turbo-frame.md
+    docs/ja/turbo-frame.md
+  ],
+  "README-linked direction-aware styling docs" => %w[
+    docs/en/direction-aware-styling.md
+    docs/ja/direction-aware-styling.md
+  ],
+  "README-linked public name decision docs" => %w[
+    docs/en/public-name-decisions.md
+    docs/ja/public-name-decisions.md
+  ],
+  "README-linked host app extension docs" => %w[
+    docs/en/host-app-extension-points.md
+    docs/ja/host-app-extension-points.md
+  ],
+  "README-linked accessibility semantics docs" => %w[
+    docs/en/accessibility-semantics.md
+    docs/ja/accessibility-semantics.md
+  ],
+  "README-linked decision guide docs" => %w[
+    docs/en/decision-guide.md
+    docs/ja/decision-guide.md
+  ],
+  "README-linked API combination and GraphAdapter docs" => %w[
+    docs/en/cookbook.md
+    docs/ja/cookbook.md
+    docs/en/graph-adapter.md
+    docs/ja/graph-adapter.md
+  ],
+  "README-linked error hierarchy docs" => %w[
+    docs/en/errors.md
+    docs/ja/errors.md
+  ],
+  "README-linked path and reverse tree docs" => %w[
+    docs/en/path-tree-builder.md
+    docs/ja/path-tree-builder.md
+    docs/en/reverse-tree.md
+    docs/ja/reverse-tree.md
+  ],
+  "README-linked first-time usage docs" => %w[
+    docs/en/minimal-usage.md
+    docs/ja/minimal-usage.md
+    docs/en/usage.md
+    docs/ja/usage.md
+  ],
+  "README-linked helper-adjacent row docs" => %w[
+    docs/en/breadcrumb.md
+    docs/ja/breadcrumb.md
+    docs/en/depth-labels.md
+    docs/ja/depth-labels.md
+    docs/en/row-status.md
+    docs/ja/row-status.md
+  ],
+  "README-linked integration boundary docs" => %w[
+    docs/en/resource-table-bridge.md
+    docs/ja/resource-table-bridge.md
+    docs/en/form-editing.md
+    docs/ja/form-editing.md
+  ],
+  "README-linked row partial and identifier docs" => %w[
+    docs/en/node-presenter-row-partials.md
+    docs/ja/node-presenter-row-partials.md
+    docs/en/glossary.md
+    docs/ja/glossary.md
+    docs/en/node-keys.md
+    docs/ja/node-keys.md
+  ],
+  "README-linked filter and transfer docs" => %w[
+    docs/en/filtered-trees.md
+    docs/ja/filtered-trees.md
+    docs/en/drag-and-drop.md
+    docs/ja/drag-and-drop.md
+  ],
+  "README-linked selection and toolbar docs" => %w[
+    docs/en/selection.md
+    docs/ja/selection.md
+    docs/en/toolbar.md
+    docs/ja/toolbar.md
+  ],
+  "README-linked migration guide docs" => %w[
+    docs/en/migration.md
+    docs/ja/migration.md
+  ],
+  "README-linked large-tree and rendering boundary docs" => %w[
+    docs/en/render-scale.md
+    docs/ja/render-scale.md
+    docs/en/rendering-boundaries.md
+    docs/ja/rendering-boundaries.md
+  ],
+  "README-linked large-tree async interaction docs" => %w[
+    docs/en/lazy-loading.md
+    docs/ja/lazy-loading.md
+    docs/en/children-pagination.md
+    docs/ja/children-pagination.md
+    docs/en/windowed-rendering.md
+    docs/ja/windowed-rendering.md
   ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
+  ],
+  "README-linked persisted state docs" => %w[
+    docs/en/persisted-state.md
+    docs/ja/persisted-state.md
   ],
   "Public setup generator files" => %w[
     lib/generators/tree_view/state/install_generator.rb
@@ -137,6 +253,9 @@ PUBLIC_CONSTANT_RUNTIME_FILES = {
   "Diagnostics" => "lib/tree_view/diagnostics.rb"
 }.freeze
 
+JAVASCRIPT_PACKAGE_ROOT_PATH = "app/javascript/tree_view/index.js"
+TYPESCRIPT_PACKAGE_ROOT_PATH = "app/javascript/tree_view/index.d.ts"
+
 INSTALLATION_DOC_PATHS = %w[
   docs/en/installation.md
   docs/ja/installation.md
@@ -184,6 +303,41 @@ PACKAGED_DOCS_FORBIDDEN_RELATIVE_ROOT_LINKS = [
   "../AGENTS.md"
 ].freeze
 
+def packaged_file_content(gem_path, target_path)
+  data_tar_gz = nil
+
+  File.open(gem_path, "rb") do |gem_io|
+    Gem::Package::TarReader.new(gem_io) do |gem_tar|
+      gem_tar.each do |entry|
+        data_tar_gz = entry.read if entry.full_name == "data.tar.gz"
+      end
+    end
+  end
+
+  return nil unless data_tar_gz
+
+  Zlib::GzipReader.wrap(StringIO.new(data_tar_gz)) do |gzip|
+    Gem::Package::TarReader.new(gzip) do |data_tar|
+      data_tar.each do |entry|
+        return entry.read if entry.full_name == target_path
+      end
+    end
+  end
+
+  nil
+end
+
+def javascript_named_export?(source, export_name)
+  escaped_name = Regexp.escape(export_name)
+  source.match?(/export\s+(?:const|function|class)\s+#{escaped_name}\b/) ||
+    source.match?(/export\s*\{[^}]*\b#{escaped_name}\b[^}]*\}/m)
+end
+
+def typescript_named_export?(source, export_name)
+  escaped_name = Regexp.escape(export_name)
+  source.match?(/export\s+declare\s+(?:const|function|class)\s+#{escaped_name}\b/)
+end
+
 root = File.expand_path("..", __dir__)
 gem_path = ARGV.first || Dir[File.join(root, "tree_view-*.gem")].max_by { |path| File.mtime(path) }
 
@@ -229,6 +383,28 @@ missing_manifest_constant_paths = manifest.fetch("public_constants").each_with_o
   missing_paths[constant] = expected_path unless expected_path && files.include?(expected_path)
 end
 unknown_manifest_constants = manifest.fetch("public_constants") - PUBLIC_CONSTANT_RUNTIME_FILES.keys
+
+named_exports = manifest.fetch("javascript_package_root").fetch("named_exports")
+packaged_javascript_entrypoint = packaged_file_content(gem_path, JAVASCRIPT_PACKAGE_ROOT_PATH)
+packaged_typescript_entrypoint = packaged_file_content(gem_path, TYPESCRIPT_PACKAGE_ROOT_PATH)
+missing_package_root_named_exports = {}
+if packaged_javascript_entrypoint
+  missing_javascript_exports = named_exports.reject do |export_name|
+    javascript_named_export?(packaged_javascript_entrypoint, export_name)
+  end
+  missing_package_root_named_exports[JAVASCRIPT_PACKAGE_ROOT_PATH] = missing_javascript_exports unless missing_javascript_exports.empty?
+else
+  missing_package_root_named_exports[JAVASCRIPT_PACKAGE_ROOT_PATH] = named_exports
+end
+if packaged_typescript_entrypoint
+  missing_typescript_exports = named_exports.reject do |export_name|
+    typescript_named_export?(packaged_typescript_entrypoint, export_name)
+  end
+  missing_package_root_named_exports[TYPESCRIPT_PACKAGE_ROOT_PATH] = missing_typescript_exports unless missing_typescript_exports.empty?
+else
+  missing_package_root_named_exports[TYPESCRIPT_PACKAGE_ROOT_PATH] = named_exports
+end
+
 missing_installation_signals = INSTALLATION_DOC_PATHS.to_h do |path|
   content = File.read(File.join(root, path))
   [path, INSTALLATION_REQUIRED_SIGNALS.reject { |signal| content.include?(signal) }]
@@ -259,7 +435,7 @@ importmap_path = File.join(root, "config/importmap.tree_view.rb")
 importmap_content = File.read(importmap_path)
 importmap_pin_missing = !importmap_content.include?("pin \"tree_view\", to: \"tree_view/index.js\"")
 
-if missing.empty? && missing_gem_metadata.empty? && unexpected_release_metadata.empty? && missing_manifest_constant_paths.empty? && unknown_manifest_constants.empty? && missing_installation_signals.empty? && unexpected_public_setup_generator.empty? && missing_public_setup_generator_source_signals.empty? && missing_public_setup_generator_package_paths.empty? && forbidden_packaged_doc_links.empty? && !importmap_pin_missing
+if missing.empty? && missing_gem_metadata.empty? && unexpected_release_metadata.empty? && missing_manifest_constant_paths.empty? && unknown_manifest_constants.empty? && missing_package_root_named_exports.empty? && missing_installation_signals.empty? && unexpected_public_setup_generator.empty? && missing_public_setup_generator_source_signals.empty? && missing_public_setup_generator_package_paths.empty? && forbidden_packaged_doc_links.empty? && !importmap_pin_missing
   puts "Gem package contents verified: #{File.basename(gem_path)}"
 else
   warn "Gem package contents verification failed: #{File.basename(gem_path)}"
@@ -294,6 +470,11 @@ else
   unless unknown_manifest_constants.empty?
     warn "Public constants missing package guard mappings:"
     unknown_manifest_constants.each { |constant| warn "  - #{constant}" }
+  end
+
+  missing_package_root_named_exports.each do |path, export_names|
+    warn "Missing manifest-listed JavaScript package-root named exports in packaged #{path}:"
+    export_names.each { |export_name| warn "  - #{export_name}" }
   end
 
   missing_installation_signals.each do |path, signals|

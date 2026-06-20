@@ -9,7 +9,7 @@ Persisted state lets a host app save expansion state per user, screen, or owner 
 TreeView is responsible for:
 
 - `TreeView::PersistedState` as the persisted-state value object
-- `TreeView::StateStore` for loading, saving, clearing one tree instance, clearing one owner's persisted state, and scoped pruning through a host app model
+- `TreeView::StateStore` for loading, saving, clearing, previewing cleanup counts, and scoped pruning through a host app model
 - `TreeView::PersistedStateController` for a small controller concern that bridges request params to `StateStore#save!`
 - an install generator for the migration, model, and concern
 - passing persisted expanded keys into `RenderState`
@@ -145,15 +145,17 @@ persisted_state = store.clear!(
 
 `clear!` deletes the matching persisted-state record when one exists. When no record exists, it still returns a `TreeView::PersistedState` for the requested key with empty `expanded_keys`, matching the empty-state behavior of `find`.
 
-Clear every saved tree instance for one owner:
+Preview how many old persisted-state rows match the same cleanup scope without deleting them:
 
 ```ruby
-deleted_count = store.clear_owner!(owner: current_user)
+matching_count = store.prune_count(
+  older_than: 90.days.ago,
+  owner: current_user,
+  tree_instance_key: "documents:index"
+)
 ```
 
-`clear_owner!` deletes all persisted-state records for the given owner and returns the number of deleted rows. It does not return a `TreeView::PersistedState`, because there is no single `tree_instance_key` after an owner-wide reset. When the owner has no persisted-state records, it returns `0`.
-
-Owner-wide reset is still only a storage helper. The host app owns the route, authorization, confirmation UI, retry behavior, response shape, and any business rule that decides when a whole owner should be reset. If the host app needs prefix-based reset, such as clearing only keys under `workspace:123:*`, keep that query and policy in the host app model or service layer instead of widening TreeView's public helper surface.
+`prune_count` requires `older_than:` and returns only an integer count. It uses the same `updated_at < older_than`, `owner:`, and `tree_instance_key:` conditions as `prune!`, but it does not delete rows or expose matching records.
 
 Prune old persisted-state rows with an explicit timestamp:
 
@@ -167,15 +169,15 @@ deleted_count = store.prune!(
 
 `prune!` requires `older_than:` and returns the number of deleted rows. `owner:` and `tree_instance_key:` are optional scopes; omit one or both only when the host app intentionally wants a broader cleanup. The helper uses the generated model's `updated_at` timestamp from `t.timestamps`, and TreeView does not choose a default retention period.
 
-TreeView only provides the store API. The host app still owns the reset route, authorization, confirmation UI, retry behavior, response shape, deleted-owner handling, audit policy, and privacy retention rules.
+TreeView only provides the store API. The host app still owns the reset route, authorization, confirmation UI, retry behavior, response shape, deleted-owner handling, audit policy, and privacy retention rules. `prune_count` is a preview for the host app's cleanup plan; it does not move cleanup scheduling, retention selection, authorization, or audit policy into TreeView.
 
 ### Storage lifecycle and cleanup policy
 
-`StateStore#clear!` is a reset for one owner and one `tree_instance_key`. `StateStore#clear_owner!` is an owner-wide reset helper that clears all saved tree instances for that owner and returns only the deleted-row count. `StateStore#prune!` is an opt-in cleanup helper for rows older than an explicit `older_than:` timestamp.
+`StateStore#clear!` is a reset for one owner and one `tree_instance_key`. `StateStore#prune_count` previews the same scope that `StateStore#prune!` would delete, and `StateStore#prune!` is an opt-in cleanup helper for rows older than an explicit `older_than:` timestamp.
 
 Long-running host apps should still treat persisted-state lifecycle as part of their own storage policy. For example, the host app decides whether old rows should expire, whether rows for deleted owners should be removed by an existing dependent-destroy or cleanup job, and whether audit or privacy rules require a shorter retention period.
 
-TreeView does not provide a cleanup rake task or default TTL. If the host app needs scheduled cleanup, call `prune!` from an app-owned job or task with the owner, `tree_instance_key`, timestamp, authorization, and retention scope that matches the app's policy.
+TreeView does not provide a cleanup rake task or default TTL. If the host app needs scheduled cleanup, call `prune_count` when it wants a count-only preview, and call `prune!` from an app-owned job or task with the owner, `tree_instance_key`, timestamp, authorization, and retention scope that matches the app's policy.
 
 ## Minimal controller concern
 
@@ -343,9 +345,7 @@ TreeView stores expanded keys only. The host app still decides where save reques
 | persisted state value object | yes | no |
 | generated model/migration template | yes | reviews and migrates |
 | loading/saving through StateStore | yes | provides owner and key |
-| single-key clearing through StateStore | yes | chooses route, authorization, confirmation, and response shape |
-| owner-wide clearing through StateStore | delete count helper only | chooses route, authorization, confirmation, prefix policy, and response shape |
-| pruning old rows through StateStore | scoped helper only | chooses retention, owner scope, schedule, audit, and authorization policy |
+| previewing/pruning old rows through StateStore | scoped count/delete helpers only | chooses retention, owner scope, schedule, audit, and authorization policy |
 | save helper / controller concern | optional | includes and uses it |
 | choosing owner model | optional generator argument | yes |
 | deciding save timing | no | yes |

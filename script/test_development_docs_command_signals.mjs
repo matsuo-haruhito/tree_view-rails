@@ -15,6 +15,16 @@ const requiredMaintenanceScripts = [
   "test:docs-i18n"
 ]
 
+const requiredDockerSetupSignals = [
+  "cp .env.example .env",
+  "docker compose build",
+  "docker compose run --rm app bundle install",
+  "docker compose run --rm app npm ci",
+  "Node 22",
+  "npm",
+  "lockfile-backed install path"
+]
+
 const missingSignals = []
 
 for (const scriptName of requiredMaintenanceScripts) {
@@ -32,6 +42,14 @@ for (const scriptName of requiredMaintenanceScripts) {
   }
 }
 
+for (const signal of requiredDockerSetupSignals) {
+  for (const [docPath, doc] of docs) {
+    if (!doc.includes(signal)) {
+      missingSignals.push(`${docPath}: Docker setup signal ${signal}`)
+    }
+  }
+}
+
 if (missingSignals.length > 0) {
   console.error("[development-docs-command-signals] missing maintenance command signals:")
   for (const signal of missingSignals) {
@@ -41,5 +59,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands are present in package.json and both Development docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands and ${requiredDockerSetupSignals.length} Docker setup signals are present in package.json and both Development docs`
 )
