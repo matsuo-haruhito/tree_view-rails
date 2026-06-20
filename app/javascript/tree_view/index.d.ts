@@ -91,6 +91,11 @@ export declare const TreeViewTransferDropPositions: Readonly<{
   after: "after"
 }>
 
+export declare const TreeViewTransferDataAttributes: Readonly<{
+  payload: "data-tree-transfer-payload"
+  disabled: "data-tree-transfer-disabled"
+}>
+
 export declare const TreeViewTransferDataMimeTypes: Readonly<{
   applicationJson: "application/json"
   textPlain: "text/plain"
