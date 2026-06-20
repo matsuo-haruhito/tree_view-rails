@@ -171,6 +171,10 @@ const literalExportsByManifestGroup = {
     exportName: "TreeViewTransferDropPositions",
     expectedShape: manifest.transfer_drop_positions
   },
+  transfer_data_attributes: {
+    exportName: "TreeViewTransferDataAttributes",
+    expectedShape: deepCamelizeKeys(manifest.transfer_data_attributes)
+  },
   transfer_data_mime_types: {
     exportName: "TreeViewTransferDataMimeTypes",
     expectedShape: deepCamelizeKeys(manifest.transfer_data_mime_types)
