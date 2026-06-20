@@ -67,6 +67,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/public-api.md
     docs/ja/public-api.md
   ],
+  "README-linked localized names docs" => %w[
+    docs/en/localized-names.md
+    docs/ja/localized-names.md
+  ],
   "README-linked render log level docs" => %w[
     docs/en/render-log-level.md
     docs/ja/render-log-level.md
@@ -83,6 +87,32 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/selection-checkbox-hooks.md
     docs/ja/selection-checkbox-hooks.md
   ],
+  "README-linked Turbo Frame docs" => %w[
+    docs/en/turbo-frame.md
+    docs/ja/turbo-frame.md
+  ],
+  "README-linked direction-aware styling docs" => %w[
+    docs/en/direction-aware-styling.md
+    docs/ja/direction-aware-styling.md
+  ],
+  "README-linked public name decision docs" => %w[
+    docs/en/public-name-decisions.md
+    docs/ja/public-name-decisions.md
+  ],
+  "README-linked styling state cue docs" => %w[
+    docs/en/styling-state-cues.md
+    docs/ja/styling-state-cues.md
+  ],
+  "README-linked maintainer policy docs" => %w[
+    docs/en/design-policy.md
+    docs/ja/design-policy.md
+    docs/en/code-quality.md
+    docs/ja/code-quality.md
+  ],
+  "README-linked demo application boundary docs" => %w[
+    docs/en/demo-application-boundary.md
+    docs/ja/demo-application-boundary.md
+  ],
   "README-linked host app extension docs" => %w[
     docs/en/host-app-extension-points.md
     docs/ja/host-app-extension-points.md
@@ -95,6 +125,62 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/decision-guide.md
     docs/ja/decision-guide.md
   ],
+  "README-linked API combination and GraphAdapter docs" => %w[
+    docs/en/cookbook.md
+    docs/ja/cookbook.md
+    docs/en/graph-adapter.md
+    docs/ja/graph-adapter.md
+  ],
+  "README-linked error hierarchy docs" => %w[
+    docs/en/errors.md
+    docs/ja/errors.md
+  ],
+  "README-linked path and reverse tree docs" => %w[
+    docs/en/path-tree-builder.md
+    docs/ja/path-tree-builder.md
+    docs/en/reverse-tree.md
+    docs/ja/reverse-tree.md
+  ],
+  "README-linked first-time usage docs" => %w[
+    docs/en/minimal-usage.md
+    docs/ja/minimal-usage.md
+    docs/en/usage.md
+    docs/ja/usage.md
+  ],
+  "README-linked helper-adjacent row docs" => %w[
+    docs/en/breadcrumb.md
+    docs/ja/breadcrumb.md
+    docs/en/depth-labels.md
+    docs/ja/depth-labels.md
+    docs/en/row-status.md
+    docs/ja/row-status.md
+  ],
+  "README-linked integration boundary docs" => %w[
+    docs/en/resource-table-bridge.md
+    docs/ja/resource-table-bridge.md
+    docs/en/form-editing.md
+    docs/ja/form-editing.md
+  ],
+  "README-linked row partial and identifier docs" => %w[
+    docs/en/node-presenter-row-partials.md
+    docs/ja/node-presenter-row-partials.md
+    docs/en/glossary.md
+    docs/ja/glossary.md
+    docs/en/node-keys.md
+    docs/ja/node-keys.md
+  ],
+  "README-linked filter and transfer docs" => %w[
+    docs/en/filtered-trees.md
+    docs/ja/filtered-trees.md
+    docs/en/drag-and-drop.md
+    docs/ja/drag-and-drop.md
+  ],
+  "README-linked selection and toolbar docs" => %w[
+    docs/en/selection.md
+    docs/ja/selection.md
+    docs/en/toolbar.md
+    docs/ja/toolbar.md
+  ],
   "README-linked migration guide docs" => %w[
     docs/en/migration.md
     docs/ja/migration.md
@@ -105,9 +191,21 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/rendering-boundaries.md
     docs/ja/rendering-boundaries.md
   ],
+  "README-linked large-tree async interaction docs" => %w[
+    docs/en/lazy-loading.md
+    docs/ja/lazy-loading.md
+    docs/en/children-pagination.md
+    docs/ja/children-pagination.md
+    docs/en/windowed-rendering.md
+    docs/ja/windowed-rendering.md
+  ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
+  ],
+  "README-linked persisted state docs" => %w[
+    docs/en/persisted-state.md
+    docs/ja/persisted-state.md
   ],
   "Public setup generator files" => %w[
     lib/generators/tree_view/state/install_generator.rb

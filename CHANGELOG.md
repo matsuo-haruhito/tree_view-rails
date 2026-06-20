@@ -29,6 +29,7 @@ Release preparation notes:
 - Added `TreeView::NodePresenter` as a thin adapter for node-level resolver hooks and `RenderState` row class/data/icon/badge builders.
 - Added owner model argument support to the persisted state install generator so `tree_view:state:install User` can include `TreeViewStateOwner` in an existing owner model.
 - Added `TreeView::StateStore#clear!` so host apps can clear saved expansion state for an owner and tree instance key.
+- Added `TreeView::StateStore#clear_owner!` so host apps can clear all saved expansion state records for one owner while keeping per-tree-instance clear behavior separate.
 - Added `RenderState` current node ancestor expansion via `current_item` / `current_key` and `auto_expand_ancestors`.
 - Added `TreeView::PathTreeBuilder` for building generated folder nodes and record nodes from path-like record values.
 - Added `TreeView.configuration.render_log_level`, defaulting to `:warn`, so TreeView helper-rendered partial logs can be silenced without changing the host app's global Rails logger level.
@@ -38,6 +39,7 @@ Release preparation notes:
 - Added `TreeView::Diagnostics.run` as a consolidated diagnostics entrypoint for node keys, DOM IDs, orphans, and cycles.
 - Added `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` so host apps can reuse stable lazy-loading placeholder IDs and data attributes.
 - Added `TreeViewEventDetailKeys` as a package-root JavaScript export for host app tests that need machine-readable documented event detail key names.
+- Added `TreeViewTransferDataAttributes` as a package-root JavaScript export for documented transfer payload and disabled-row data attributes.
 - Added `toggle_icons` to the manifest-backed grouped option compatibility surface while keeping the existing RenderState option behavior unchanged.
 
 ### Changed
@@ -78,6 +80,8 @@ Release preparation notes:
 - Clarified Development docs for public constants package guard mapping and Release docs for public setup generator package checklist / repository-only packaged-doc link boundaries.
 - Clarified `npm ci` install path guidance across README, installation, development, and release checklist docs so local setup, PR CI, Docker setup smoke, and main-push JavaScript checks share lockfile-backed evidence.
 - Clarified Development docs for edited Dependabot branch rebase / recreate handling and keeping broad baseline cleanups out of overlapping dependency PRs.
+- Clarified Development docs for package-lock dependency drift guard guidance so dependency and Node engine metadata updates use `npm install` before returning to the lockfile-backed `npm ci` path.
+- Clarified Release docs for the Ruby support source guard and release checklist relationship across README, gemspec, CI workflow, Dockerfile Ruby base image, Development docs, and package script sources.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
@@ -120,6 +124,13 @@ Release preparation notes:
 - Added CI changed-file policy coverage for Dependabot configuration changes so dependency automation config updates stay package-sensitive without Docker or docs-entrypoint routing.
 - Expanded package contents verification coverage for README-linked Host App Extension Points docs so packaged gems keep those public extension guides.
 - Expanded package contents verification coverage for README-linked Accessibility Semantics docs so packaged gems keep those public semantics guides.
+- Expanded package contents verification coverage for README-linked Decision guide, Migration guide, Render Scale, and Rendering Boundaries docs so packaged gems keep those docs available.
+- Expanded package contents verification coverage for README-linked Error hierarchy, Cookbook, and GraphAdapter docs so packaged gems keep those public guides available.
+- Expanded package contents verification coverage for README-linked PathTreeBuilder, ReverseTree, first-time usage, and helper-adjacent row docs so packaged gems keep those public guides available.
+- Expanded package contents verification coverage for README-linked styling state cue docs, maintainer policy docs, and demo application boundary docs so packaged gems keep those public docs available.
+- Added ReleaseCheck metadata validation and tag alignment focused specs for representative release failure paths.
+- Added CI changed-file policy coverage for runtime Ruby and locale paths so package-sensitive routing remains guarded.
+- Expanded package contents verification coverage for README-linked Localized Names docs so packaged gems keep those public localization guides.
 - Added localized names specs and public API compatibility coverage.
 - Added Turbo Frame option unit and integration specs.
 - Added toolbar helper specs.
@@ -183,6 +194,8 @@ Release preparation notes:
 - Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, Ruby version, and Development docs wording stay aligned.
 - Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
 - Added release and CI docs signal coverage for workflow action major versions, Ruby / Rails release evidence, and gem package install / require checks.
+- Added CI observation guidance signal coverage so maintainers verify GitHub Actions workflow runs when combined status is empty.
+- Expanded package contents verification coverage for README-linked Turbo Frame option, Direction-aware styling, and Public Name Decisions docs so packaged gems keep those public guides available.
 
 ## 0.1.0 - 2026-05-07
 
