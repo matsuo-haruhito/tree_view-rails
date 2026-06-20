@@ -123,6 +123,7 @@ Release preparation notes:
 - Expanded package contents verification coverage for README-linked Accessibility Semantics docs so packaged gems keep those public semantics guides.
 - Expanded package contents verification coverage for README-linked Decision guide, Migration guide, Render Scale, and Rendering Boundaries docs so packaged gems keep those docs available.
 - Expanded package contents verification coverage for README-linked Error hierarchy, Cookbook, and GraphAdapter docs so packaged gems keep those public guides available.
+- Expanded package contents verification coverage for README-linked PathTreeBuilder, ReverseTree, first-time usage, and helper-adjacent row docs so packaged gems keep those public guides available.
 - Added ReleaseCheck metadata validation and tag alignment focused specs for representative release failure paths.
 - Added CI changed-file policy coverage for runtime Ruby and locale paths so package-sensitive routing remains guarded.
 - Expanded package contents verification coverage for README-linked Localized Names docs so packaged gems keep those public localization guides.
