@@ -99,6 +99,20 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/public-name-decisions.md
     docs/ja/public-name-decisions.md
   ],
+  "README-linked styling state cue docs" => %w[
+    docs/en/styling-state-cues.md
+    docs/ja/styling-state-cues.md
+  ],
+  "README-linked maintainer policy docs" => %w[
+    docs/en/design-policy.md
+    docs/ja/design-policy.md
+    docs/en/code-quality.md
+    docs/ja/code-quality.md
+  ],
+  "README-linked demo application boundary docs" => %w[
+    docs/en/demo-application-boundary.md
+    docs/ja/demo-application-boundary.md
+  ],
   "README-linked host app extension docs" => %w[
     docs/en/host-app-extension-points.md
     docs/ja/host-app-extension-points.md
