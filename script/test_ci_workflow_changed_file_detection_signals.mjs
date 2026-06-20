@@ -2,8 +2,10 @@ import { readFileSync } from "node:fs"
 
 const workflowPath = ".github/workflows/ci.yml"
 const packagePath = "package.json"
+const docsEntrypointSuitePath = "script/test_docs_entrypoint_suite.mjs"
 const workflowSource = readFileSync(workflowPath, "utf8")
 const packageJson = JSON.parse(readFileSync(packagePath, "utf8"))
+const docsEntrypointSuiteSource = readFileSync(docsEntrypointSuitePath, "utf8")
 
 function assert(condition, message) {
   if (!condition) throw new Error(message)
@@ -59,6 +61,18 @@ function assertPackageScript(scriptName) {
     Object.hasOwn(packageJson.scripts ?? {}, scriptName),
     `${packagePath} scripts must define ${scriptName} for the CI JavaScript job`
   )
+}
+
+function packageScript(scriptName) {
+  assertPackageScript(scriptName)
+
+  const script = packageJson.scripts[scriptName]
+  assert(
+    typeof script === "string" && script.length > 0,
+    `${packagePath} scripts.${scriptName} must be a non-empty command string`
+  )
+
+  return script
 }
 
 const changesJob = workflowJobBlock(workflowSource, "changes")
@@ -203,8 +217,23 @@ javascriptJobNpmScripts.forEach((scriptName) => {
   assertPackageScript(scriptName)
 })
 
+const docsEntrypointsScript = packageScript("test:docs-entrypoints")
+const docsEntrypointsSignals = [
+  ["package script uses docs entrypoint suite", docsEntrypointsScript, "node script/test_docs_entrypoint_suite.mjs"],
+  ["suite registers controller registration docs signal", docsEntrypointSuiteSource, "script/check_controller_registration_docs_signals.mjs"]
+]
+
+docsEntrypointsSignals.forEach(([label, source, signal]) => {
+  assertIncludes(
+    source,
+    signal,
+    `${packagePath} scripts.test:docs-entrypoints ${label}`
+  )
+})
+
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
 console.log(`Checked ${rubyMatrixVersionSignals.length} representative Ruby workflow version signals.`)
 console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
+console.log(`Checked ${docsEntrypointsSignals.length} docs-entrypoints package and suite command signals.`)

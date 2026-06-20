@@ -128,6 +128,11 @@ const checks = [
     args: ["script/test_public_api_entrypoint_guard_signals.mjs"]
   },
   {
+    group: "Controller registration docs signals",
+    command: "node",
+    args: ["script/check_controller_registration_docs_signals.mjs"]
+  },
+  {
     group: "Render window and resource table docs signals",
     command: "node",
     args: ["script/test_render_window_resource_table_docs_signals.mjs"]
@@ -159,6 +164,7 @@ const docsEntrypointScriptExclusions = new Map([
 ])
 
 const docsEntrypointScriptPatterns = [
+  /^check_controller_registration_docs_signals\.mjs$/,
   /^test_.*docs.*\.mjs$/,
   /^test_.*readme.*signals\.mjs$/,
   /^test_.*mockup.*signals\.mjs$/,
@@ -332,6 +338,11 @@ function runSelfTest() {
     "Localized and hook docs signals",
     "unique partial --only should resolve a group"
   )
+  assert.equal(
+    resolveOnlyGroupResult("Controller registration").check.group,
+    "Controller registration docs signals",
+    "unique partial --only should resolve the controller registration docs signal"
+  )
 
   const outOfRange = resolveOnlyGroupResult("999")
   assert.equal(outOfRange.error, "out_of_range")
@@ -357,6 +368,10 @@ function runSelfTest() {
   assert.ok(
     docsEntrypointCandidateScriptPaths().includes("script/test_public_api_docs_signals.mjs"),
     "docs script registration candidates should include public API docs signals"
+  )
+  assert.ok(
+    docsEntrypointCandidateScriptPaths().includes("script/check_controller_registration_docs_signals.mjs"),
+    "docs script registration candidates should include controller registration docs signals"
   )
   assert.ok(
     !docsEntrypointCandidateScriptPaths().includes("script/test_docs_i18n_parity.mjs"),

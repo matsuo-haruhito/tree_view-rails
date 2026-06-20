@@ -24,6 +24,10 @@ class DummyRelation
     self.class.new(filtered)
   end
 
+  def count
+    records.count
+  end
+
   def delete_all
     count = records.count
     records.each { |record| DummyModel.records.delete(record) }
@@ -61,7 +65,11 @@ class DummyModel
       DummyRecord.new(owner, tree_instance_key, []).tap { |record| records << record }
     end
 
-    def where(query, value)
+    def where(query, value = nil)
+      if query.is_a?(Hash)
+        return DummyRelation.new(records).where(query)
+      end
+
       raise ArgumentError, "unexpected query" unless query == "updated_at < ?"
 
       DummyRelation.new(records.select { |record| record.updated_at && record.updated_at < value })
@@ -123,6 +131,75 @@ RSpec.describe TreeView::StateStore do
 
     expect(state.tree_instance_key).to eq("documents")
     expect(state.expanded_keys).to eq([])
+  end
+
+  it "clears all persisted states for one owner" do
+    user_documents = DummyRecord.new(:user, "documents", ["node-1"])
+    user_projects = DummyRecord.new(:user, "projects", ["node-2"])
+    other_owner = DummyRecord.new(:admin, "documents", ["node-3"])
+    DummyModel.records = [user_documents, user_projects, other_owner]
+    store = described_class.new(model: DummyModel)
+
+    count = store.clear_owner!(owner: :user)
+
+    expect(count).to eq(2)
+    expect(DummyModel.records).to contain_exactly(other_owner)
+  end
+
+  it "returns zero when clearing an owner without records" do
+    other_owner = DummyRecord.new(:admin, "documents", ["node-3"])
+    DummyModel.records = [other_owner]
+    store = described_class.new(model: DummyModel)
+
+    count = store.clear_owner!(owner: :user)
+
+    expect(count).to eq(0)
+    expect(DummyModel.records).to contain_exactly(other_owner)
+  end
+
+  it "previews prune count without deleting matching records" do
+    cutoff = Time.utc(2026, 1, 1)
+    old_record = DummyRecord.new(:user, "documents", ["node-1"], cutoff - 60)
+    fresh_record = DummyRecord.new(:user, "documents", ["node-2"], cutoff + 60)
+    DummyModel.records = [old_record, fresh_record]
+    store = described_class.new(model: DummyModel)
+
+    count = store.prune_count(older_than: cutoff)
+
+    expect(count).to eq(1)
+    expect(DummyModel.records).to contain_exactly(old_record, fresh_record)
+  end
+
+  it "previews prune count only for matching owner records" do
+    cutoff = Time.utc(2026, 1, 1)
+    matching_record = DummyRecord.new(:user, "documents", ["node-1"], cutoff - 60)
+    other_owner_record = DummyRecord.new(:admin, "documents", ["node-2"], cutoff - 60)
+    DummyModel.records = [matching_record, other_owner_record]
+    store = described_class.new(model: DummyModel)
+
+    count = store.prune_count(older_than: cutoff, owner: :user)
+
+    expect(count).to eq(1)
+    expect(DummyModel.records).to contain_exactly(matching_record, other_owner_record)
+  end
+
+  it "previews prune count only for matching tree instance records" do
+    cutoff = Time.utc(2026, 1, 1)
+    matching_record = DummyRecord.new(:user, "documents", ["node-1"], cutoff - 60)
+    other_tree_record = DummyRecord.new(:user, "projects", ["node-2"], cutoff - 60)
+    DummyModel.records = [matching_record, other_tree_record]
+    store = described_class.new(model: DummyModel)
+
+    count = store.prune_count(older_than: cutoff, tree_instance_key: "documents")
+
+    expect(count).to eq(1)
+    expect(DummyModel.records).to contain_exactly(matching_record, other_tree_record)
+  end
+
+  it "requires an older_than timestamp before previewing prune count" do
+    store = described_class.new(model: DummyModel)
+
+    expect { store.prune_count(older_than: nil) }.to raise_error(ArgumentError, "older_than is required")
   end
 
   it "prunes records older than the given timestamp" do

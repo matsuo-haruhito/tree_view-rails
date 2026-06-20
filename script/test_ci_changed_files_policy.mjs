@@ -117,6 +117,18 @@ const cases = [
     }
   },
   {
+    name: "Dependabot config changes are package-sensitive full CI changes without Docker setup",
+    files: [".github/dependabot.yml"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false
+    }
+  },
+  {
     name: "public manifest changes request full JS and docs entrypoint guards",
     files: ["config/public_api_manifest.yml"],
     expected: {
@@ -138,6 +150,30 @@ const cases = [
       package_sensitive: true,
       docker_setup_sensitive: false,
       docs_entrypoint_sensitive: true
+    }
+  },
+  {
+    name: "Ruby runtime files are package-sensitive full CI changes",
+    files: ["lib/tree_view/engine.rb"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false
+    }
+  },
+  {
+    name: "locale files are package-sensitive full CI changes",
+    files: ["config/locales/en.yml"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: true,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false
     }
   },
   {

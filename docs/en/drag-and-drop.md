@@ -39,7 +39,7 @@ render_state = TreeView::RenderState.new(
 
 The return value must be hash-like.
 
-TreeView renders the resulting payload on the documented `data-tree-transfer-payload` attribute. Host apps that already import the package root can use `TreeViewIntegrationHooks.transfer.payload` instead of hand-copying that attribute name in JavaScript, browser tests, or shared helper code. The export names the hook string only; payload shape, authorization, persistence, and final drop behavior remain host-app responsibilities.
+TreeView renders the resulting payload on the documented `data-tree-transfer-payload` attribute. Host apps that already import the package root can use `TreeViewTransferDataAttributes.payload` instead of hand-copying that attribute name in JavaScript, browser tests, or shared helper code. `TreeViewTransferDataAttributes.disabled` names the documented disabled-row transfer hook used by transfer boundary states. These exports name DOM wiring attributes only; payload shape, authorization, persistence, and final drop behavior remain host-app responsibilities. The broader `TreeViewIntegrationHooks.transfer.payload` export remains available for existing integrations that use the grouped integration-hook object.
 
 ## View example
 
@@ -80,7 +80,7 @@ Use `data-tree-view-ignore-drag="true"` when only drag start should be ignored a
 </td>
 ```
 
-These opt-out markers are documented DOM attributes. They are separate from `TreeViewIntegrationHooks.transfer.payload`, which points to the transfer payload attribute rather than to drag-safe control markers.
+These opt-out markers are documented DOM attributes. They are separate from `TreeViewTransferDataAttributes`, which points to transfer payload and disabled-row attributes rather than to drag-safe control markers.
 
 See [Usage](usage.md#interactive-controls-inside-rows) for keyboard and row interaction markers.
 

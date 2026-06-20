@@ -137,6 +137,8 @@ Pushes to `main` also run the broader compatibility and release checks:
 - JavaScript checks outside the pull request docs-only shortcut
 - gem package verification
 
+CI observation rule: do not treat an empty GitHub combined status as proof that CI did not run. This repository can have pull request heads where combined status is empty while a GitHub Actions workflow run exists and carries the real status/conclusion. When reporting PR readiness, inspect the workflow run for the head SHA, note whether jobs were success, failure, or intentionally skipped by changed-files routing, and only then summarize CI state.
+
 ## Issue / Work Item Guidance
 
 Open GitHub Issues are the source of planned feature work.
