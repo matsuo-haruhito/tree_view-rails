@@ -67,6 +67,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/public-api.md
     docs/ja/public-api.md
   ],
+  "README-linked localized names docs" => %w[
+    docs/en/localized-names.md
+    docs/ja/localized-names.md
+  ],
   "README-linked render log level docs" => %w[
     docs/en/render-log-level.md
     docs/ja/render-log-level.md
@@ -95,9 +99,67 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/decision-guide.md
     docs/ja/decision-guide.md
   ],
+  "README-linked API combination and GraphAdapter docs" => %w[
+    docs/en/cookbook.md
+    docs/ja/cookbook.md
+    docs/en/graph-adapter.md
+    docs/ja/graph-adapter.md
+  ],
+  "README-linked error hierarchy docs" => %w[
+    docs/en/errors.md
+    docs/ja/errors.md
+  ],
+  "README-linked path and reverse tree docs" => %w[
+    docs/en/path-tree-builder.md
+    docs/ja/path-tree-builder.md
+    docs/en/reverse-tree.md
+    docs/ja/reverse-tree.md
+  ],
+  "README-linked first-time usage docs" => %w[
+    docs/en/minimal-usage.md
+    docs/ja/minimal-usage.md
+    docs/en/usage.md
+    docs/ja/usage.md
+  ],
+  "README-linked helper-adjacent row docs" => %w[
+    docs/en/breadcrumb.md
+    docs/ja/breadcrumb.md
+    docs/en/depth-labels.md
+    docs/ja/depth-labels.md
+    docs/en/row-status.md
+    docs/ja/row-status.md
+  ],
+  "README-linked selection and toolbar docs" => %w[
+    docs/en/selection.md
+    docs/ja/selection.md
+    docs/en/toolbar.md
+    docs/ja/toolbar.md
+  ],
+  "README-linked migration guide docs" => %w[
+    docs/en/migration.md
+    docs/ja/migration.md
+  ],
+  "README-linked large-tree and rendering boundary docs" => %w[
+    docs/en/render-scale.md
+    docs/ja/render-scale.md
+    docs/en/rendering-boundaries.md
+    docs/ja/rendering-boundaries.md
+  ],
+  "README-linked large-tree async interaction docs" => %w[
+    docs/en/lazy-loading.md
+    docs/ja/lazy-loading.md
+    docs/en/children-pagination.md
+    docs/ja/children-pagination.md
+    docs/en/windowed-rendering.md
+    docs/ja/windowed-rendering.md
+  ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
+  ],
+  "README-linked persisted state docs" => %w[
+    docs/en/persisted-state.md
+    docs/ja/persisted-state.md
   ],
   "Public setup generator files" => %w[
     lib/generators/tree_view/state/install_generator.rb
