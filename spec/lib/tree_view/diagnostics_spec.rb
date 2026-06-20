@@ -119,4 +119,52 @@ RSpec.describe TreeView::Diagnostics do
     expect(result).not_to be_success
     expect(result.errors.first[:message]).to match(/dom_ids diagnostics require render_state/)
   end
+
+  describe "Result#summary_messages" do
+    it "returns an empty array for successful results without warnings" do
+      result = described_class::Result.new(checks: [], errors: [], warnings: [])
+
+      expect(result.summary_messages).to eq([])
+    end
+
+    it "returns warning messages for warnings-only results" do
+      result = described_class::Result.new(
+        checks: [:orphans],
+        errors: [],
+        warnings: [
+          {check: :orphans, message: "orphan nodes detected: 2", details: [{key: 2}]}
+        ]
+      )
+
+      expect(result).to be_success
+      expect(result.summary_messages).to eq(["orphan nodes detected: 2"])
+    end
+
+    it "returns error messages for failing results" do
+      result = described_class::Result.new(
+        checks: [:node_keys],
+        errors: [
+          {check: :node_keys, message: "duplicate node_key: 1", error: TreeView::DuplicateNodeKeyError.new}
+        ],
+        warnings: []
+      )
+
+      expect(result).not_to be_success
+      expect(result.summary_messages).to eq(["duplicate node_key: 1"])
+    end
+
+    it "returns error messages before warning messages" do
+      result = described_class::Result.new(
+        checks: %i[node_keys orphans],
+        errors: [
+          {check: :node_keys, message: "duplicate node_key: 1", error: TreeView::DuplicateNodeKeyError.new}
+        ],
+        warnings: [
+          {check: :orphans, message: "orphan nodes detected: 2", details: [{key: 2}]}
+        ]
+      )
+
+      expect(result.summary_messages).to eq(["duplicate node_key: 1", "orphan nodes detected: 2"])
+    end
+  end
 end

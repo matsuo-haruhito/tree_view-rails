@@ -61,20 +61,16 @@ result = TreeView::Diagnostics.run(
   raise_errors: false
 )
 
-unless result.success?
-  Rails.logger.warn(result.errors.map { |entry| entry[:message] })
-end
-
-result.warnings.each do |warning|
-  Rails.logger.info(warning[:message])
+result.summary_messages.each do |message|
+  Rails.logger.warn(message)
 end
 ```
 
 `checks:` accepts the diagnostics you want to run. Omit it to run the default `node_keys`, `dom_ids`, `orphans`, and `cycles` checks, or pass a smaller list when a host-app test only needs part of the pre-render validation. Keep `raise_errors: false` when you want a `Result` object with `errors` and `warnings`; set `raise_errors: true` when a failing check should raise immediately.
 
-`Result#success?` only reflects collected errors. Orphan reports are warnings, so review `warnings` when filtered, imported, or permission-scoped data can leave records outside the rendered tree.
+`Result#success?` only reflects collected errors. Orphan reports are warnings, so review `warnings` when filtered, imported, or permission-scoped data can leave records outside the rendered tree. Use `Result#summary_messages` when a host app only needs readable log lines: it returns error messages followed by warning messages, and returns `[]` when there are no collected errors or warnings. The helper intentionally leaves severity, logging destination, alerting, and remediation copy with the host app.
 
-The manifest-backed diagnostics contract covers the accepted check names, the `TreeView::Diagnostics.run` option key surface, and the `Result` reader surface. The stable check names are `node_keys`, `dom_ids`, `orphans`, and `cycles`. The run option keys are `checks` and `raise_errors`: `checks:` selects from the accepted check names, while `raise_errors:` selects whether failures are collected into a `Result` or raised immediately. A diagnostics `Result` exposes `checks`, `errors`, `warnings`, and `success?`. The manifest intentionally does not freeze accepted value schemas, boolean coercion, individual error entry internals, warning detail shape, orphan warning semantics, or cycle validation policy; those remain documented behavior and host-app data policy boundaries rather than a broader manifest schema.
+The manifest-backed diagnostics contract covers the accepted check names, the `TreeView::Diagnostics.run` option key surface, and the `Result` reader / helper surface. The stable check names are `node_keys`, `dom_ids`, `orphans`, and `cycles`. The run option keys are `checks` and `raise_errors`: `checks:` selects from the accepted check names, while `raise_errors:` selects whether failures are collected into a `Result` or raised immediately. A diagnostics `Result` exposes `checks`, `errors`, `warnings`, `success?`, and `summary_messages`. The manifest intentionally does not freeze accepted value schemas, boolean coercion, individual error entry internals, warning detail shape, orphan warning semantics, cycle validation policy, or remediation policy; those remain documented behavior and host-app data policy boundaries rather than a broader manifest schema.
 
 ## Pre-render validation review note
 
@@ -197,6 +193,7 @@ Before enabling a new tree in production, verify:
 | Area | TreeView | Host app |
 |---|---|---|
 | diagnostics helper | yes | calls helper |
+| readable summary messages | provides `summary_messages` | chooses logging, alerting, and remediation policy |
 | duplicate key detection | yes | chooses stable keys |
 | DOM ID collision detection | yes | fixes config/prefixes |
 | orphan detection | yes | decides data policy |
