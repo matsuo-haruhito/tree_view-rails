@@ -17,7 +17,7 @@ const guidanceSignals = [
   "GitHub Actions workflow run",
   "status/conclusion",
   "changed-files routing",
-  "skipped jobs"
+  "intentionally skipped"
 ]
 
 guidanceSignals.forEach((signal) => {
