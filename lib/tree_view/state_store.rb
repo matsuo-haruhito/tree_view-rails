@@ -24,17 +24,25 @@ module TreeView
       PersistedState.new(tree_instance_key: tree_instance_key, expanded_keys: [])
     end
 
-    def prune!(older_than:, owner: nil, tree_instance_key: nil)
-      raise ArgumentError, "older_than is required" if older_than.nil?
+    def prune_count(older_than:, owner: nil, tree_instance_key: nil)
+      prune_scope(older_than: older_than, owner: owner, tree_instance_key: tree_instance_key).count
+    end
 
-      scope = model.where("updated_at < ?", older_than)
-      scope = scope.where(owner: owner) unless owner.nil?
-      scope = scope.where(tree_instance_key: tree_instance_key) unless tree_instance_key.nil?
-      scope.delete_all
+    def prune!(older_than:, owner: nil, tree_instance_key: nil)
+      prune_scope(older_than: older_than, owner: owner, tree_instance_key: tree_instance_key).delete_all
     end
 
     private
 
     attr_reader :model
+
+    def prune_scope(older_than:, owner:, tree_instance_key:)
+      raise ArgumentError, "older_than is required" if older_than.nil?
+
+      scope = model.where("updated_at < ?", older_than)
+      scope = scope.where(owner: owner) unless owner.nil?
+      scope = scope.where(tree_instance_key: tree_instance_key) unless tree_instance_key.nil?
+      scope
+    end
   end
 end
