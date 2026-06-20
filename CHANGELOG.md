@@ -146,6 +146,7 @@ Release preparation notes:
 - Added JavaScript public event contract specs for selection, remote state, and transfer events.
 - Added package-root frozen object contract coverage for public JavaScript object exports.
 - Added `TreeViewEventDetailKeys` manifest/export guard coverage in entrypoint smoke and focused Ruby specs.
+- Added entrypoint smoke coverage for `TreeViewTransferDataAttributes` so the package-root export stays aligned with the manifest `transfer_data_attributes` contract.
 - Added entrypoint smoke coverage that rejects package-root exports missing from `config/public_api_manifest.yml`.
 - Added Node version source drift guard coverage for `.nvmrc`, `package.json` `engines.node`, workflow `node-version`, and development docs.
 - Improved entrypoint smoke diagnostics for Ruby manifest loader and JSON parse failures without changing public export assertions.
