@@ -129,6 +129,26 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/row-status.md
     docs/ja/row-status.md
   ],
+  "README-linked integration boundary docs" => %w[
+    docs/en/resource-table-bridge.md
+    docs/ja/resource-table-bridge.md
+    docs/en/form-editing.md
+    docs/ja/form-editing.md
+  ],
+  "README-linked row partial and identifier docs" => %w[
+    docs/en/node-presenter-row-partials.md
+    docs/ja/node-presenter-row-partials.md
+    docs/en/glossary.md
+    docs/ja/glossary.md
+    docs/en/node-keys.md
+    docs/ja/node-keys.md
+  ],
+  "README-linked filter and transfer docs" => %w[
+    docs/en/filtered-trees.md
+    docs/ja/filtered-trees.md
+    docs/en/drag-and-drop.md
+    docs/ja/drag-and-drop.md
+  ],
   "README-linked selection and toolbar docs" => %w[
     docs/en/selection.md
     docs/ja/selection.md
