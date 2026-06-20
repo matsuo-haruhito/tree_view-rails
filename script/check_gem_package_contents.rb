@@ -87,6 +87,18 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/selection-checkbox-hooks.md
     docs/ja/selection-checkbox-hooks.md
   ],
+  "README-linked Turbo Frame docs" => %w[
+    docs/en/turbo-frame.md
+    docs/ja/turbo-frame.md
+  ],
+  "README-linked direction-aware styling docs" => %w[
+    docs/en/direction-aware-styling.md
+    docs/ja/direction-aware-styling.md
+  ],
+  "README-linked public name decision docs" => %w[
+    docs/en/public-name-decisions.md
+    docs/ja/public-name-decisions.md
+  ],
   "README-linked host app extension docs" => %w[
     docs/en/host-app-extension-points.md
     docs/ja/host-app-extension-points.md
