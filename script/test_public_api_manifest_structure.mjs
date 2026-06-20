@@ -157,6 +157,7 @@ function assertTopLevelKeys(manifest) {
     "diagnostics",
     "resource_table_render_state_call",
     "render_state_callback_builder_keys",
+    "css_custom_property_tokens",
     "javascript_package_root"
   ]
 
@@ -267,6 +268,7 @@ assertObjectWithLists(manifest.grouped_option_keys, "grouped_option_keys", requi
 assertObjectWithLists(manifest.resource_table_render_state_call, "resource_table_render_state_call", ["required_keywords", "optional_keywords"])
 assertString(manifest.resource_table_render_state_call.render_options_contract, "resource_table_render_state_call.render_options_contract")
 assertUniqueStringList(manifest.render_state_callback_builder_keys, "render_state_callback_builder_keys")
+assertUniqueStringList(manifest.css_custom_property_tokens, "css_custom_property_tokens")
 
 assertRequiredObjectKeys(
   manifest.localized_name_i18n_keys,
