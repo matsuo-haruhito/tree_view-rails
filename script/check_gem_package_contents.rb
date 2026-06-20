@@ -129,6 +129,12 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/row-status.md
     docs/ja/row-status.md
   ],
+  "README-linked selection and toolbar docs" => %w[
+    docs/en/selection.md
+    docs/ja/selection.md
+    docs/en/toolbar.md
+    docs/ja/toolbar.md
+  ],
   "README-linked migration guide docs" => %w[
     docs/en/migration.md
     docs/ja/migration.md
@@ -139,9 +145,21 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/rendering-boundaries.md
     docs/ja/rendering-boundaries.md
   ],
+  "README-linked large-tree async interaction docs" => %w[
+    docs/en/lazy-loading.md
+    docs/ja/lazy-loading.md
+    docs/en/children-pagination.md
+    docs/ja/children-pagination.md
+    docs/en/windowed-rendering.md
+    docs/ja/windowed-rendering.md
+  ],
   "Public setup surface docs" => %w[
     docs/en/public-setup-surface.md
     docs/ja/public-setup-surface.md
+  ],
+  "README-linked persisted state docs" => %w[
+    docs/en/persisted-state.md
+    docs/ja/persisted-state.md
   ],
   "Public setup generator files" => %w[
     lib/generators/tree_view/state/install_generator.rb
