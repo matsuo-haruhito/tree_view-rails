@@ -29,6 +29,7 @@ Release preparation notes:
 - Added `TreeView::NodePresenter` as a thin adapter for node-level resolver hooks and `RenderState` row class/data/icon/badge builders.
 - Added owner model argument support to the persisted state install generator so `tree_view:state:install User` can include `TreeViewStateOwner` in an existing owner model.
 - Added `TreeView::StateStore#clear!` so host apps can clear saved expansion state for an owner and tree instance key.
+- Added `TreeView::StateStore#clear_owner!` so host apps can clear all saved expansion state records for one owner while keeping per-tree-instance clear behavior separate.
 - Added `RenderState` current node ancestor expansion via `current_item` / `current_key` and `auto_expand_ancestors`.
 - Added `TreeView::PathTreeBuilder` for building generated folder nodes and record nodes from path-like record values.
 - Added `TreeView.configuration.render_log_level`, defaulting to `:warn`, so TreeView helper-rendered partial logs can be silenced without changing the host app's global Rails logger level.
@@ -38,6 +39,7 @@ Release preparation notes:
 - Added `TreeView::Diagnostics.run` as a consolidated diagnostics entrypoint for node keys, DOM IDs, orphans, and cycles.
 - Added `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` so host apps can reuse stable lazy-loading placeholder IDs and data attributes.
 - Added `TreeViewEventDetailKeys` as a package-root JavaScript export for host app tests that need machine-readable documented event detail key names.
+- Added `TreeViewTransferDataAttributes` as a package-root JavaScript export for documented transfer payload and disabled-row data attributes.
 - Added `toggle_icons` to the manifest-backed grouped option compatibility surface while keeping the existing RenderState option behavior unchanged.
 
 ### Changed
