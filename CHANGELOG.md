@@ -79,6 +79,7 @@ Release preparation notes:
 - Clarified `npm ci` install path guidance across README, installation, development, and release checklist docs so local setup, PR CI, Docker setup smoke, and main-push JavaScript checks share lockfile-backed evidence.
 - Clarified Development docs for edited Dependabot branch rebase / recreate handling and keeping broad baseline cleanups out of overlapping dependency PRs.
 - Clarified Development docs for package-lock dependency drift guard guidance so dependency and Node engine metadata updates use `npm install` before returning to the lockfile-backed `npm ci` path.
+- Clarified Release docs for the Ruby support source guard and release checklist relationship across README, gemspec, CI workflow, Dockerfile Ruby base image, Development docs, and package script sources.
 - Clarified that RenderState current-branch examples should prefer `current_item` / `current_key` with `auto_expand_ancestors` when only the current path should start open.
 - Clarified that RenderWindow and windowed rendering limit HTML output only, while Lazy Loading, Children Pagination, and host-app virtual scrolling handle data-loading and DOM-virtualization concerns.
 - Updated lazy-loading docs in Japanese and English to use helper-based children and remote-state placeholder examples.
@@ -190,6 +191,8 @@ Release preparation notes:
 - Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, Ruby version, and Development docs wording stay aligned.
 - Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
 - Added release and CI docs signal coverage for workflow action major versions, Ruby / Rails release evidence, and gem package install / require checks.
+- Added CI observation guidance signal coverage so maintainers verify GitHub Actions workflow runs when combined status is empty.
+- Expanded package contents verification coverage for README-linked Turbo Frame option, Direction-aware styling, and Public Name Decisions docs so packaged gems keep those public guides available.
 
 ## 0.1.0 - 2026-05-07
 
