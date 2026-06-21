@@ -125,6 +125,20 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/decision-guide.md
     docs/ja/decision-guide.md
   ],
+  "README-linked FAQ and troubleshooting docs" => %w[
+    docs/en/faq.md
+    docs/ja/faq.md
+    docs/en/troubleshooting.md
+    docs/ja/troubleshooting.md
+  ],
+  "README-linked API overview and diagnostics docs" => %w[
+    docs/en/api-overview.md
+    docs/ja/api-overview.md
+    docs/en/api.md
+    docs/ja/api.md
+    docs/en/tree-diagnostics.md
+    docs/ja/tree-diagnostics.md
+  ],
   "README-linked API combination and GraphAdapter docs" => %w[
     docs/en/cookbook.md
     docs/ja/cookbook.md
