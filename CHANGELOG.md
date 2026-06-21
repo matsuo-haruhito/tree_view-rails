@@ -111,6 +111,7 @@ Release preparation notes:
 - Corrected Windowed Rendering docs examples and metadata tables to use the implemented `TreeView::RenderWindow#previous?` / `#next?` API names.
 - Clarified mockup copy and language policy exception recording for deliberate review stress cases.
 - Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
+- Added mockup visual evidence handoff guidance so static visual reference PRs distinguish browser smoke success from desktop and narrow viewport readability evidence.
 - Added root docs index entry points for the English and Japanese Rendering Boundaries guides.
 - Added malformed selection params troubleshooting guidance in English and Japanese, including `TreeView.parse_selection_params` error boundaries and host-app-owned request policy.
 - Clarified Public API docs for `TreeViewControllerEntries` as a manifest-backed controller entry list while keeping `registerTreeViewControllers(application)` as the standard registration path.
