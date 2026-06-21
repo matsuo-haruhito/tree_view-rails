@@ -119,6 +119,7 @@ Release preparation notes:
 
 ### Tests
 
+- Expanded package contents verification coverage for README-linked FAQ / Troubleshooting / API Overview / API Reference / Tree diagnostics docs so packaged gems keep those public reader guides available.
 - Added controller registration docs signal coverage to the docs-entrypoint suite so controller registration guides and manifest controller entries stay aligned.
 - Added CI changed-file detection workflow guard coverage for docs-entrypoints package script wiring so controller registration docs signals stay connected to `npm run test:docs-entrypoints`.
 - Added CI changed-file policy coverage for Dependabot configuration changes so dependency automation config updates stay package-sensitive without Docker or docs-entrypoint routing.
