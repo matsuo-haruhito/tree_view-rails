@@ -98,7 +98,7 @@ Pull Request CI の確認項目:
 
 - Ruby lint: `bundle exec standardrb`
 - Ruby specs: `bundle exec rspec`
-- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`
+- representative Rails compatibility checks: `gemfiles/rails_7_0.gemfile`、`gemfiles/rails_7_2.gemfile`、`gemfiles/rails_8_0.gemfile`。これらの representative Rails lane は docs-only ではない PR で実行します。changed-files policy が PR を docs-only と判定した場合、各 lane は `Docs-only PR: skipping representative Rails compatibility lane.` を出し、checkout、Ruby setup、`bundle exec rake` を skip して docs-only 変更では runtime-heavy な Rails compatibility work を避けます。
 - JavaScript checks: changed-files policy に従い、docs-entrypoint-sensitive な docs-only PR では `npm run test:docs-entrypoints`、docs-only ではない PR では `npm run test:js:core`、mockup / browser-smoke sensitive な PR では Playwright Chromium setup と `npm run test:browser` を実行する
 - package-sensitive path を触るPRでの Gem package verification
 
