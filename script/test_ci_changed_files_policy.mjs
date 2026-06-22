@@ -337,14 +337,14 @@ assertSameMembers(
   `${workflowPath} jobs.changes.outputs must match classifyChangedFiles result keys`
 );
 
-assertWorkflowActionVersions(workflowSource, "actions/checkout", ["v6"]);
+assertWorkflowActionVersions(workflowSource, "actions/checkout", ["v7"]);
 assertWorkflowActionVersions(workflowSource, "actions/setup-node", ["v6"]);
 assertWorkflowActionVersions(workflowSource, "ruby/setup-ruby", ["v1"]);
 
 const changesJob = workflowJobBlock(workflowSource, "changes");
 assertJobMatches(
   changesJob,
-  /uses: actions\/checkout@v6[\s\S]*fetch-depth: 0/,
+  /uses: actions\/checkout@v7[\s\S]*fetch-depth: 0/,
   `${workflowPath} jobs.changes must keep a full checkout for changed-file detection`
 );
 
@@ -402,7 +402,7 @@ assertJobMatches(
   /if: github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/,
   `${workflowPath} jobs.ruby_matrix must stay limited to pushes on main`
 );
-assertJobMatches(rubyMatrixJob, /uses: actions\/checkout@v6/, `${workflowPath} jobs.ruby_matrix must keep checkout v6`);
+assertJobMatches(rubyMatrixJob, /uses: actions\/checkout@v7/, `${workflowPath} jobs.ruby_matrix must keep checkout v7`);
 assertJobMatches(rubyMatrixJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.ruby_matrix must keep ruby/setup-ruby v1`);
 assertJobMatches(rubyMatrixJob, /bundler-cache: true/, `${workflowPath} jobs.ruby_matrix must keep bundler-cache enabled`);
 assertJobMatches(rubyMatrixJob, /run: bundle exec rake/, `${workflowPath} jobs.ruby_matrix must run the full rake task on main`);
@@ -420,7 +420,7 @@ assertJobMatches(
   /if: github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/,
   `${workflowPath} jobs.rails_matrix must stay limited to pushes on main`
 );
-assertJobMatches(railsMatrixJob, /uses: actions\/checkout@v6/, `${workflowPath} jobs.rails_matrix must keep checkout v6`);
+assertJobMatches(railsMatrixJob, /uses: actions\/checkout@v7/, `${workflowPath} jobs.rails_matrix must keep checkout v7`);
 assertJobMatches(railsMatrixJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.rails_matrix must keep ruby/setup-ruby v1`);
 assertJobMatches(railsMatrixJob, /bundler-cache: true/, `${workflowPath} jobs.rails_matrix must keep bundler-cache enabled`);
 assertJobMatches(railsMatrixJob, /BUNDLE_GEMFILE: \$\{\{ matrix\.gemfile \}\}/, `${workflowPath} jobs.rails_matrix must keep per-lane Gemfile wiring`);
