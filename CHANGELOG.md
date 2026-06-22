@@ -105,6 +105,7 @@ Release preparation notes:
 - Added a status-heavy row composition mockup section for dense business columns, row status cues, and host-app-owned action availability.
 - Added a current-branch sidebar breadcrumb mockup for reviewing route context and row-local hierarchy cues in narrow panes.
 - Added direction-aware styling boundary docs for host-app-owned RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing overrides.
+- Added CSS custom property token guidance to direction-aware styling docs for selection, current-row, loading, error, focus, and branch-line state cues.
 - Added Decision guide guidance for choosing Static, Turbo, or Client-side toggle mode before tuning render depth or loading strategy.
 - Clarified docs index entry points for PathTreeBuilder, Children Pagination, and large-tree reading paths.
 - Added docs index entry points for Accessibility Semantics so ARIA placement, keyboard boundaries, and automated check allowances are easier to find before review.
@@ -117,6 +118,7 @@ Release preparation notes:
 - Clarified Public API docs for `TreeViewControllerEntries` as a manifest-backed controller entry list while keeping `registerTreeViewControllers(application)` as the standard registration path.
 - Clarified README package-root JavaScript surface examples for controller entries, integration hooks, and documented data hook objects.
 - Clarified Public API docs for the shared `data-tree-children-url` hook boundary between `TreeViewRemoteStateDataHooks` and `TreeViewIntegrationHooks`.
+- Clarified Public API docs and README package-root examples for `TreeViewTransferDataAttributes`, including transfer payload and disabled-row data attribute boundaries.
 
 ### Tests
 
@@ -174,7 +176,7 @@ Release preparation notes:
 - Added Docker development setup workflow wiring coverage to the CI changed-file policy guard.
 - Added `npm ci` CI and Docker setup smoke coverage so workflow routing, JavaScript setup, and docs install guidance stay aligned.
 - Added a standalone Public API manifest structure command and docs entrypoint suite wiring for manifest structure smoke.
-- Added Development docs command signal smoke coverage for maintainer npm command guidance.
+- Added Development docs command smoke coverage for maintainer npm command guidance.
 - Added Development docs package verification coverage to the gem package contents guard.
 - Added release:check package contents verification plus gem metadata URI and public runtime packaging guard coverage.
 - Added Public API manifest runtime surface guard coverage for documented module methods, constants, and helper methods.
