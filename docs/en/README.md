@@ -93,6 +93,7 @@ If you are integrating TreeView into a Rails host app, start with these document
 | [Release checklist](release.md) | Release tests, documentation, and gem package checklist |
 | [Design policy](design-policy.md) | Gem responsibilities, included scope, excluded scope, and design decisions |
 | [Development](development.md) | Tests, CI, documentation updates, current `npm ci` setup, and lockfile-backed install policy |
+| [Dependabot Bundler recovery](dependabot-bundler-recovery.md) | Triage and scoped recovery paths for Dependabot Bundler lockfile metadata drift |
 | [Code quality](code-quality.md) | Lint, tests, error messages, and documentation quality policy |
 
 ## Reading order
