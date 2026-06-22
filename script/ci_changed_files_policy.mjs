@@ -5,7 +5,8 @@ export function classifyChangedFiles(files) {
     browser_smoke_changed: false,
     package_sensitive: false,
     docker_setup_sensitive: false,
-    docs_entrypoint_sensitive: false
+    docs_entrypoint_sensitive: false,
+    ci_policy_sensitive: false
   };
 
   for (const file of files.map((entry) => entry.trim()).filter(Boolean)) {
@@ -31,6 +32,10 @@ export function classifyChangedFiles(files) {
 
     if (isDocsEntrypointSensitivePath(file)) {
       result.docs_entrypoint_sensitive = true;
+    }
+
+    if (isCiPolicySensitivePath(file)) {
+      result.ci_policy_sensitive = true;
     }
   }
 
@@ -80,6 +85,10 @@ function isDocsEntrypointSensitivePath(file) {
     file.startsWith("docs/") ||
     file === "config/public_api_manifest.yml"
   );
+}
+
+function isCiPolicySensitivePath(file) {
+  return file === "AGENTS.md";
 }
 
 function isDockerSetupSensitivePath(file) {
