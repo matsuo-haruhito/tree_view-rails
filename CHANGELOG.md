@@ -118,7 +118,7 @@ Release preparation notes:
 - Clarified Public API docs for `TreeViewControllerEntries` as a manifest-backed controller entry list while keeping `registerTreeViewControllers(application)` as the standard registration path.
 - Clarified README package-root JavaScript surface examples for controller entries, integration hooks, and documented data hook objects.
 - Clarified Public API docs for the shared `data-tree-children-url` hook boundary between `TreeViewRemoteStateDataHooks` and `TreeViewIntegrationHooks`.
-- Clarified Public API docs and README package-root examples for `TreeViewTransferDataAttributes`, including transfer payload and disabled-row data attribute boundaries.
+- Documented CI-policy-sensitive docs-only routing in AGENTS.md and Release docs so maintainers know when `npm run test:ci-policy` runs for repository-maintainer docs.
 
 ### Tests
 
@@ -201,6 +201,7 @@ Release preparation notes:
 - Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
 - Added release and CI docs signal coverage for workflow action major versions, Ruby / Rails release evidence, and gem package install / require checks.
 - Added CI observation guidance signal coverage so maintainers verify GitHub Actions workflow runs when combined status is empty.
+- Added CI policy smoke coverage for AGENTS.md routing and non-PR `ci_policy_sensitive` defaults so CI-policy-sensitive docs changes stay guarded.
 - Expanded package contents verification coverage for README-linked Turbo Frame option, Direction-aware styling, and Public Name Decisions docs so packaged gems keep those public guides available.
 
 ## 0.1.0 - 2026-05-07
