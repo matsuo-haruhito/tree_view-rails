@@ -118,6 +118,7 @@ Release preparation notes:
 - Clarified Public API docs for `TreeViewControllerEntries` as a manifest-backed controller entry list while keeping `registerTreeViewControllers(application)` as the standard registration path.
 - Clarified README package-root JavaScript surface examples for controller entries, integration hooks, and documented data hook objects.
 - Clarified Public API docs for the shared `data-tree-children-url` hook boundary between `TreeViewRemoteStateDataHooks` and `TreeViewIntegrationHooks`.
+- Clarified Public API docs and README package-root examples for `TreeViewTransferDataAttributes`, including transfer payload and disabled-row data attribute boundaries.
 - Documented CI-policy-sensitive docs-only routing in AGENTS.md and Release docs so maintainers know when `npm run test:ci-policy` runs for repository-maintainer docs.
 
 ### Tests
