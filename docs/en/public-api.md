@@ -205,6 +205,7 @@ Stable enough for host apps to use:
 - `TreeViewEventNames`
 - `TreeViewEventDetailKeys`
 - `TreeViewTransferDropPositions`
+- `TreeViewTransferDataAttributes`
 - `TreeViewTransferDataMimeTypes`
 - `TreeViewRemoteStateValues`
 - `TreeViewRemoteStateDataHooks`
@@ -229,6 +230,7 @@ Stable enough for host apps to use:
 `TreeViewEventNames` exposes the documented event names as a machine-readable package-root export. Use it when wiring host-app listeners and you want to avoid hand-copying event-name strings such as `TreeViewEventNames.selection.change` or `TreeViewEventNames.transfer.drop`.
 `TreeViewEventDetailKeys` exposes the documented `event.detail` key lists as a machine-readable package-root export. Use it when host-app tests or listeners need to compare against the documented key names without changing the payload shape; the field meanings still live in [JavaScript event contract](js-events.md).
 `TreeViewTransferDropPositions` exposes the documented coarse drop-position values for transfer events: `before`, `inside`, and `after`. `TreeViewEventNames.transfer.*` names transfer events, `TreeViewEventDetailKeys.transfer.*` lists the documented `event.detail` keys, and `TreeViewTransferDropPositions` carries the position values described in [Drag and Drop](drag-and-drop.md#drop-behavior).
+`TreeViewTransferDataAttributes` exposes the documented transfer payload and disabled-row DOM attribute names. Use `TreeViewTransferDataAttributes.payload` for `data-tree-transfer-payload` and `TreeViewTransferDataAttributes.disabled` for `data-tree-transfer-disabled` when host-app JavaScript, browser tests, or shared helpers need transfer wiring attributes without hand-copying strings. These exports name DOM wiring attributes only; payload shape, authorization, persistence, and final drop behavior still live in [Drag and Drop](drag-and-drop.md#drop-behavior).
 `TreeViewTransferDataMimeTypes` exposes the documented TreeView transfer MIME type values: `application/json` for the primary JSON payload and `text/plain` as the browser compatibility fallback. Use it when host-app JavaScript or tests need to read or assert TreeView transfer data without hand-copying MIME strings; drag/drop behavior, payload shape, and final business handling still live in [Drag and Drop](drag-and-drop.md#drop-behavior).
 `TreeViewRemoteStateValues` exposes the documented remote-state value set for lazy-loading rows: `loading`, `loaded`, and `error`. Use it when host-app JavaScript or tests need to compare `data-tree-remote-state` values without hand-copying strings; `TreeViewEventNames.remoteState.*` still names controller-emitted events, and `TreeViewEventDetailKeys.remoteState.*` still lists their `event.detail` keys.
 `TreeViewRemoteStateDataHooks` exposes the documented lazy-loading and remote-state data attribute names as a machine-readable package-root export. Use it when custom lazy-loading markup, tests, or copied host-app partials need to reference `data-tree-lazy`, `data-tree-children-url`, `data-tree-loaded`, or `data-tree-remote-state` without hand-copying strings; request dispatch, response handling, retry UI, and authorization-safe copy stay with the host app and [Lazy Loading](lazy-loading.md).
@@ -251,6 +253,11 @@ Within `TreeViewEventNames`, lazy-loading request lifecycle names live under `ho
 - `retry`
 
 Use `TreeViewEventNames.hostLifecycle.*` only for the host-app dispatch surface described in [Lazy Loading](lazy-loading.md). TreeView's own controller-emitted remote-state events remain under `TreeViewEventNames.remoteState.*`.
+
+Documented keys on `TreeViewTransferDataAttributes`:
+
+- `payload`
+- `disabled`
 
 Documented keys on `TreeViewTransferDataMimeTypes`:
 
@@ -326,7 +333,7 @@ The `tree-view-selection` controller's documented host-element value attributes 
 
 Use those attributes when configuring the controller on the host element. Use the `selection:` render-state builders for row payload generation, disabled-state decisions, and checkbox visibility. Generated hidden input marker attributes and source-id attributes are managed by TreeView and are not host-authored public hooks. See [Selection](selection.md) and [Host app extension points](host-app-extension-points.md#selection-builders).
 
-The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, controller entry list, transfer drop-position values, transfer data MIME type values, remote-state values, remote-state data hook values, toolbar data hook values, integration hook values, selection data hook values, selection checkbox hook values, and empty-state hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
+The machine-readable source of truth for the package-root JavaScript exports, bundled controller identifiers, controller entry list, transfer drop-position values, transfer data attribute values, transfer data MIME type values, remote-state values, remote-state data hook values, toolbar data hook values, integration hook values, selection data hook values, selection checkbox hook values, and empty-state hook values lives in `config/public_api_manifest.yml`. The compatibility spec and entrypoint smoke check read that contract to detect drift.
 
 Internal by default:
 
