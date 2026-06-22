@@ -91,7 +91,8 @@ const nonPullRequestDefaultOutputs = {
   browser_smoke_changed: false,
   package_sensitive: true,
   docker_setup_sensitive: true,
-  docs_entrypoint_sensitive: true
+  docs_entrypoint_sensitive: true,
+  ci_policy_sensitive: true
 }
 const nonPullRequestDefaultOutputBlock = workflowNonPullRequestDefaultOutputBlock(changesJob)
 Object.entries(nonPullRequestDefaultOutputs).forEach(([key, value]) => {
