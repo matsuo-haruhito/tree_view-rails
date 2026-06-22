@@ -63,6 +63,12 @@ When JavaScript dependencies change, keep these release-facing points aligned:
 
 Do not change dependency versions, the Node major, or package manager policy from this checklist alone; those belong in the dependency or CI change PR that owns the actual switch.
 
+### Bundler lockfile drift guard
+
+When Ruby dependency metadata changes, keep `Gemfile` and `Gemfile.lock` aligned before release verification. The `npm run test:ci-policy` command includes `script/test_gemfile_lock_dependency_drift.mjs`, which compares direct `Gemfile` gem requirements with the `Gemfile.lock` `DEPENDENCIES` metadata and points maintainers to `bundle install` when the committed lockfile is stale.
+
+Use this guard as release/package verification confidence for Bundler metadata only. It does not change dependency versions, Bundler policy, Dependabot grouping, or CI workflow behavior by itself.
+
 ### Ruby support source guard
 
 When Ruby support wording or source files change, keep the release checklist aligned with the same source set used by `npm run test:ruby-version-sources`: `README.md`, `tree_view.gemspec`, the CI workflow, the Dockerfile Ruby base image, Development docs, and the package script. This guard confirms the supported Ruby sources and representative Ruby version matrix stay consistent; it does not change the supported Ruby policy by itself.
@@ -92,7 +98,7 @@ Pull request CI checks:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
-- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
+- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`. These representative Rails lanes run for non-docs PRs. When the changed-files policy marks a PR as docs-only, each lane emits `Docs-only PR: skipping representative Rails compatibility lane.` and skips checkout, Ruby setup, and `bundle exec rake` so docs-only changes avoid runtime-heavy Rails compatibility work.
 - JavaScript checks through the changed-files policy: docs-entrypoint-sensitive docs-only PRs run `npm run test:docs-entrypoints`, non-docs PRs run `npm run test:js:core`, and mockup or browser-smoke-sensitive PRs install Playwright Chromium and run `npm run test:browser`
 - Gem package verification when the PR touches package-sensitive paths
 

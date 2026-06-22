@@ -102,6 +102,13 @@ When a review starts from the gallery or a focused mockup page, confirm this sta
 - `npm run test:browser` opens every HTML mockup listed in the Files table and checks the review gallery, local links, main headings, back-to-gallery links, representative sample regions, and the existing lazy-loading viewport overflow smoke.
 - The smoke coverage is intentionally narrow. It catches broken HTML, blank pages, missing review links, and missing representative regions without adding screenshot baselines or visual diff review.
 
+## Visual evidence handoff
+
+- Treat `npm run test:browser` success as smoke coverage, not as final visual readability approval.
+- For static mockup pull requests that add or change focused visual references, include a short PR note or comment that names the target mockup file, the desktop and narrow viewport used for review, and whether the relevant rows, labels, tables, and state cues remain readable without overlap or clipping.
+- Screenshots are acceptable evidence, but an equivalent browser-capable review note is also fine when it clearly names the checked viewport and surface. Keep this evidence in the pull request discussion instead of committing generated screenshot assets by default.
+- If the authoring environment cannot produce browser-capable evidence, say so in the PR and leave the visual readability check as a reviewer gate rather than treating CI smoke success as a substitute.
+
 ## Copy and language policy
 
 - Mockups use short, product-neutral English copy so reviewers can compare layout and state cues without language changes becoming visual noise.
