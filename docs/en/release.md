@@ -98,7 +98,7 @@ Pull request CI checks:
 
 - Ruby lint through `bundle exec standardrb`
 - Ruby specs through `bundle exec rspec`
-- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`
+- Representative Rails compatibility checks through `gemfiles/rails_7_0.gemfile`, `gemfiles/rails_7_2.gemfile`, and `gemfiles/rails_8_0.gemfile`. These representative Rails lanes run for non-docs PRs. When the changed-files policy marks a PR as docs-only, each lane emits `Docs-only PR: skipping representative Rails compatibility lane.` and skips checkout, Ruby setup, and `bundle exec rake` so docs-only changes avoid runtime-heavy Rails compatibility work.
 - JavaScript checks through the changed-files policy: docs-entrypoint-sensitive docs-only PRs run `npm run test:docs-entrypoints`, non-docs PRs run `npm run test:js:core`, and mockup or browser-smoke-sensitive PRs install Playwright Chromium and run `npm run test:browser`
 - Gem package verification when the PR touches package-sensitive paths
 
