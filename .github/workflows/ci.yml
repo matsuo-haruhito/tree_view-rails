@@ -16,8 +16,9 @@ jobs:
       package_sensitive: ${{ steps.detect.outputs.package_sensitive }}
       docker_setup_sensitive: ${{ steps.detect.outputs.docker_setup_sensitive }}
       docs_entrypoint_sensitive: ${{ steps.detect.outputs.docs_entrypoint_sensitive }}
+      ci_policy_sensitive: ${{ steps.detect.outputs.ci_policy_sensitive }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - id: detect
@@ -30,6 +31,7 @@ jobs:
             echo "package_sensitive=true" >> "$GITHUB_OUTPUT"
             echo "docker_setup_sensitive=true" >> "$GITHUB_OUTPUT"
             echo "docs_entrypoint_sensitive=true" >> "$GITHUB_OUTPUT"
+            echo "ci_policy_sensitive=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -48,7 +50,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
@@ -59,7 +61,7 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
@@ -90,7 +92,7 @@ jobs:
       - if: needs.changes.outputs.docs_only == 'true'
         run: 'echo "Docs-only PR: skipping representative Rails compatibility lane."'
       - if: needs.changes.outputs.docs_only != 'true'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - if: needs.changes.outputs.docs_only != 'true'
         uses: ruby/setup-ruby@v1
         with:
@@ -109,7 +111,7 @@ jobs:
           - "3.2"
           - "3.3"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
@@ -138,7 +140,7 @@ jobs:
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
@@ -149,23 +151,25 @@ jobs:
     needs: changes
     runs-on: ubuntu-latest
     steps:
-      - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.mockups_changed != 'true' && needs.changes.outputs.browser_smoke_changed != 'true' && needs.changes.outputs.docs_entrypoint_sensitive != 'true'
-        run: 'echo "Docs-only PR without package-facing docs, mockup, or browser-smoke changes: skipping JavaScript checks."'
-      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true'
-        uses: actions/checkout@v6
-      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true'
+      - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.mockups_changed != 'true' && needs.changes.outputs.browser_smoke_changed != 'true' && needs.changes.outputs.docs_entrypoint_sensitive != 'true' && needs.changes.outputs.ci_policy_sensitive != 'true'
+        run: 'echo "Docs-only PR without package-facing docs, CI-policy, mockup, or browser-smoke changes: skipping JavaScript checks."'
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true' || needs.changes.outputs.ci_policy_sensitive == 'true'
+        uses: actions/checkout@v7
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true' || needs.changes.outputs.ci_policy_sensitive == 'true'
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
-      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true'
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true' || needs.changes.outputs.ci_policy_sensitive == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: "22"
           cache: npm
-      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true'
+      - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true' || needs.changes.outputs.docs_entrypoint_sensitive == 'true' || needs.changes.outputs.ci_policy_sensitive == 'true'
         run: npm ci
       - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.mockups_changed != 'true' && needs.changes.outputs.browser_smoke_changed != 'true' && needs.changes.outputs.docs_entrypoint_sensitive == 'true'
         run: npm run test:docs-entrypoints
+      - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.ci_policy_sensitive == 'true'
+        run: npm run test:ci-policy
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
         run: npm run test:js:core
       - if: github.event_name != 'pull_request' || needs.changes.outputs.mockups_changed == 'true' || needs.changes.outputs.browser_smoke_changed == 'true'
@@ -178,7 +182,7 @@ jobs:
     needs: changes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: docker compose build app
       - run: docker compose run --rm app sh -lc 'node --version | grep -E "^v22\." && npm --version && npm ci'
 
@@ -187,7 +191,7 @@ jobs:
     needs: changes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"

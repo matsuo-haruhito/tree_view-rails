@@ -69,8 +69,8 @@ const cases = [
     }
   },
   {
-    name: "repository-only docs stay docs-only without package or docs entrypoint guard",
-    files: ["Product Profile.md", "AGENTS.md"],
+    name: "repository profile docs stay docs-only without package, docs entrypoint, or CI policy guard",
+    files: ["Product Profile.md"],
     expected: {
       docs_only: true,
       mockups_changed: false,
@@ -78,6 +78,19 @@ const cases = [
       package_sensitive: false,
       docker_setup_sensitive: false,
       docs_entrypoint_sensitive: false
+    }
+  },
+  {
+    name: "AGENTS guidance stays docs-only but requests CI policy guard",
+    files: ["AGENTS.md"],
+    expected: {
+      docs_only: true,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: false,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false,
+      ci_policy_sensitive: true
     }
   },
   {
@@ -311,8 +324,15 @@ function assertPolicyCliOutput(input, expected, message) {
   assert.deepEqual(parsedOutput, expected, message);
 }
 
+function expectedPolicyFlags(expected) {
+  return {
+    ci_policy_sensitive: false,
+    ...expected
+  };
+}
+
 for (const testCase of cases) {
-  assert.deepEqual(classifyChangedFiles(testCase.files), testCase.expected, testCase.name);
+  assert.deepEqual(classifyChangedFiles(testCase.files), expectedPolicyFlags(testCase.expected), testCase.name);
 }
 
 const policyKeys = Object.keys(classifyChangedFiles([])).sort();
@@ -330,6 +350,11 @@ assertPolicyCliOutput(
   classifyChangedFiles(["Dockerfile", "package-lock.json"]),
   `${policyCliPath} must emit Docker and package-sensitive workflow output values from stdin`
 );
+assertPolicyCliOutput(
+  "AGENTS.md\n",
+  classifyChangedFiles(["AGENTS.md"]),
+  `${policyCliPath} must emit CI policy-sensitive routing for AGENTS.md changes`
+);
 
 assertSameMembers(
   workflowOutputKeys,
@@ -337,14 +362,14 @@ assertSameMembers(
   `${workflowPath} jobs.changes.outputs must match classifyChangedFiles result keys`
 );
 
-assertWorkflowActionVersions(workflowSource, "actions/checkout", ["v6"]);
+assertWorkflowActionVersions(workflowSource, "actions/checkout", ["v7"]);
 assertWorkflowActionVersions(workflowSource, "actions/setup-node", ["v6"]);
 assertWorkflowActionVersions(workflowSource, "ruby/setup-ruby", ["v1"]);
 
 const changesJob = workflowJobBlock(workflowSource, "changes");
 assertJobMatches(
   changesJob,
-  /uses: actions\/checkout@v6[\s\S]*fetch-depth: 0/,
+  /uses: actions\/checkout@v7[\s\S]*fetch-depth: 0/,
   `${workflowPath} jobs.changes must keep a full checkout for changed-file detection`
 );
 
@@ -402,7 +427,7 @@ assertJobMatches(
   /if: github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/,
   `${workflowPath} jobs.ruby_matrix must stay limited to pushes on main`
 );
-assertJobMatches(rubyMatrixJob, /uses: actions\/checkout@v6/, `${workflowPath} jobs.ruby_matrix must keep checkout v6`);
+assertJobMatches(rubyMatrixJob, /uses: actions\/checkout@v7/, `${workflowPath} jobs.ruby_matrix must keep checkout v7`);
 assertJobMatches(rubyMatrixJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.ruby_matrix must keep ruby/setup-ruby v1`);
 assertJobMatches(rubyMatrixJob, /bundler-cache: true/, `${workflowPath} jobs.ruby_matrix must keep bundler-cache enabled`);
 assertJobMatches(rubyMatrixJob, /run: bundle exec rake/, `${workflowPath} jobs.ruby_matrix must run the full rake task on main`);
@@ -420,7 +445,7 @@ assertJobMatches(
   /if: github\.event_name == 'push' && github\.ref == 'refs\/heads\/main'/,
   `${workflowPath} jobs.rails_matrix must stay limited to pushes on main`
 );
-assertJobMatches(railsMatrixJob, /uses: actions\/checkout@v6/, `${workflowPath} jobs.rails_matrix must keep checkout v6`);
+assertJobMatches(railsMatrixJob, /uses: actions\/checkout@v7/, `${workflowPath} jobs.rails_matrix must keep checkout v7`);
 assertJobMatches(railsMatrixJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.rails_matrix must keep ruby/setup-ruby v1`);
 assertJobMatches(railsMatrixJob, /bundler-cache: true/, `${workflowPath} jobs.rails_matrix must keep bundler-cache enabled`);
 assertJobMatches(railsMatrixJob, /BUNDLE_GEMFILE: \$\{\{ matrix\.gemfile \}\}/, `${workflowPath} jobs.rails_matrix must keep per-lane Gemfile wiring`);
@@ -451,8 +476,18 @@ assert.match(
 );
 assert.match(
   javascriptJob,
+  /needs\.changes\.outputs\.ci_policy_sensitive == 'true'/,
+  `${workflowPath} jobs.javascript must keep ci_policy_sensitive in its CI policy guard condition`
+);
+assert.match(
+  javascriptJob,
   /run: npm run test:docs-entrypoints/,
   `${workflowPath} jobs.javascript must still run docs entrypoint checks for docs_entrypoint_sensitive changes`
+);
+assert.match(
+  javascriptJob,
+  /run: npm run test:ci-policy/,
+  `${workflowPath} jobs.javascript must run CI policy checks for ci_policy_sensitive docs-only changes`
 );
 assertJobMatches(javascriptJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.javascript must keep Ruby setup for manifest-loading Node smokes`);
 assertJobMatches(javascriptJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.javascript must keep Ruby 3.3 for manifest-loading Node smokes`);

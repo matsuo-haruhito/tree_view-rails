@@ -105,20 +105,24 @@ Release preparation notes:
 - Added a status-heavy row composition mockup section for dense business columns, row status cues, and host-app-owned action availability.
 - Added a current-branch sidebar breadcrumb mockup for reviewing route context and row-local hierarchy cues in narrow panes.
 - Added direction-aware styling boundary docs for host-app-owned RTL, writing direction, current-row cues, hierarchy connectors, and toggle spacing overrides.
+- Added CSS custom property token guidance to direction-aware styling docs for selection, current-row, loading, error, focus, and branch-line state cues.
 - Added Decision guide guidance for choosing Static, Turbo, or Client-side toggle mode before tuning render depth or loading strategy.
 - Clarified docs index entry points for PathTreeBuilder, Children Pagination, and large-tree reading paths.
 - Added docs index entry points for Accessibility Semantics so ARIA placement, keyboard boundaries, and automated check allowances are easier to find before review.
 - Corrected Windowed Rendering docs examples and metadata tables to use the implemented `TreeView::RenderWindow#previous?` / `#next?` API names.
 - Clarified mockup copy and language policy exception recording for deliberate review stress cases.
 - Clarified that `docs/mockups/README.md` is the source of truth for mockup technical asset inventory.
+- Added mockup visual evidence handoff guidance so static visual reference PRs distinguish browser smoke success from desktop and narrow viewport readability evidence.
 - Added root docs index entry points for the English and Japanese Rendering Boundaries guides.
 - Added malformed selection params troubleshooting guidance in English and Japanese, including `TreeView.parse_selection_params` error boundaries and host-app-owned request policy.
 - Clarified Public API docs for `TreeViewControllerEntries` as a manifest-backed controller entry list while keeping `registerTreeViewControllers(application)` as the standard registration path.
 - Clarified README package-root JavaScript surface examples for controller entries, integration hooks, and documented data hook objects.
 - Clarified Public API docs for the shared `data-tree-children-url` hook boundary between `TreeViewRemoteStateDataHooks` and `TreeViewIntegrationHooks`.
+- Clarified Public API docs and README package-root examples for `TreeViewTransferDataAttributes`, including transfer payload and disabled-row data attribute boundaries.
 
 ### Tests
 
+- Expanded package contents verification coverage for README-linked FAQ / Troubleshooting / API Overview / API Reference / Tree diagnostics docs so packaged gems keep those public reader guides available.
 - Added controller registration docs signal coverage to the docs-entrypoint suite so controller registration guides and manifest controller entries stay aligned.
 - Added CI changed-file detection workflow guard coverage for docs-entrypoints package script wiring so controller registration docs signals stay connected to `npm run test:docs-entrypoints`.
 - Added CI changed-file policy coverage for Dependabot configuration changes so dependency automation config updates stay package-sensitive without Docker or docs-entrypoint routing.
@@ -146,6 +150,8 @@ Release preparation notes:
 - Added JavaScript public event contract specs for selection, remote state, and transfer events.
 - Added package-root frozen object contract coverage for public JavaScript object exports.
 - Added `TreeViewEventDetailKeys` manifest/export guard coverage in entrypoint smoke and focused Ruby specs.
+- Added entrypoint smoke coverage for `TreeViewTransferDataAttributes` so the package-root export stays aligned with the manifest `transfer_data_attributes` contract.
+- Added manifest structure smoke coverage for `transfer_data_attributes` so required `payload` / `disabled` keys stay guarded in `config/public_api_manifest.yml`.
 - Added entrypoint smoke coverage that rejects package-root exports missing from `config/public_api_manifest.yml`.
 - Added Node version source drift guard coverage for `.nvmrc`, `package.json` `engines.node`, workflow `node-version`, and development docs.
 - Improved entrypoint smoke diagnostics for Ruby manifest loader and JSON parse failures without changing public export assertions.
