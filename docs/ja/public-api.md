@@ -205,6 +205,7 @@ host app が使ってよい入口:
 - `TreeViewEventNames`
 - `TreeViewEventDetailKeys`
 - `TreeViewTransferDropPositions`
+- `TreeViewTransferDataAttributes`
 - `TreeViewTransferDataMimeTypes`
 - `TreeViewRemoteStateValues`
 - `TreeViewRemoteStateDataHooks`
@@ -229,6 +230,7 @@ host app が使ってよい入口:
 `TreeViewEventNames` は documented event names を machine-readable に参照するための package-root export です。host app 側で listener を配線するとき、`TreeViewEventNames.selection.change` や `TreeViewEventNames.transfer.drop` のように使うことで event name string の写経を避けられます。
 `TreeViewEventDetailKeys` は documented `event.detail` key list を machine-readable に参照するための package-root export です。host app の test や listener が documented key name と照合したい場合に使えますが、payload shape 自体は変えません。各 field の意味は [JavaScript event contract](js-events.md) を正本にしてください。
 `TreeViewTransferDropPositions` は transfer event の粗い drop-position value として、`before`、`inside`、`after` を公開します。`TreeViewEventNames.transfer.*` は transfer event 名、`TreeViewEventDetailKeys.transfer.*` は documented な `event.detail` key、`TreeViewTransferDropPositions` は [Drag and Drop](drag-and-drop.md#drop処理) で説明している position value を表します。
+`TreeViewTransferDataAttributes` は documented な transfer payload / disabled-row DOM attribute 名を公開します。host app の JavaScript、browser test、shared helper が transfer wiring attribute を raw string で写経したくない場合は、`data-tree-transfer-payload` に `TreeViewTransferDataAttributes.payload`、`data-tree-transfer-disabled` に `TreeViewTransferDataAttributes.disabled` を使ってください。これらの export は DOM wiring attribute 名だけを指します。payload shape、authorization、保存、最終的な drop behavior は引き続き [Drag and Drop](drag-and-drop.md#drop処理) を正本にしてください。
 `TreeViewTransferDataMimeTypes` は documented な TreeView transfer MIME type value として、primary JSON payload 用の `application/json` と browser compatibility fallback 用の `text/plain` を公開します。host app の JavaScript や test が MIME string を写経せずに TreeView transfer data を読み取ったり assert したりしたい場合に使えます。drag/drop behavior、payload shape、最終的な業務処理は引き続き [Drag and Drop](drag-and-drop.md#drop処理) を正本にしてください。
 `TreeViewRemoteStateValues` は lazy-loading row の documented remote-state value set として、`loading`、`loaded`、`error` を公開します。host app の JavaScript や test が `data-tree-remote-state` の値を string の写経なしに照合したい場合に使えます。controller が emit する remote-state event 名は引き続き `TreeViewEventNames.remoteState.*`、その `event.detail` key は `TreeViewEventDetailKeys.remoteState.*` で扱います。
 `TreeViewRemoteStateDataHooks` は、documented された lazy-loading / remote-state data attribute names を machine-readable に参照するための package-root export です。custom lazy-loading markup、test、copied host-app partial が `data-tree-lazy`、`data-tree-children-url`、`data-tree-loaded`、`data-tree-remote-state` を写経せず参照したい場合に使えます。request dispatch、response handling、retry UI、authorization-safe copy は [Lazy Loading](lazy-loading.md) に沿って host app 側に残ります。
@@ -251,6 +253,11 @@ host app が使ってよい入口:
 - `retry`
 
 `TreeViewEventNames.hostLifecycle.*` は [Lazy Loading](lazy-loading.md) で説明している host app 側の request-state dispatch surface 専用です。TreeView controller 自身が emit する remote-state event は引き続き `TreeViewEventNames.remoteState.*` に置きます。
+
+`TreeViewTransferDataAttributes` の documented key:
+
+- `payload`
+- `disabled`
 
 `TreeViewTransferDataMimeTypes` の documented key:
 
@@ -326,7 +333,7 @@ host app が使ってよい入口:
 
 これらの attribute は host element 上で controller を設定するときに使います。row ごとの payload 生成、disabled-state 判定、checkbox visibility は `selection:` render-state builder 側の責務です。generated hidden input marker attribute と source-id attribute は TreeView が生成・管理する内部寄りの属性であり、host app が authoring する public hook ではありません。詳しくは [Selection](selection.md) と [Host app extension points](host-app-extension-points.md#selection-builders) を参照してください。
 
-package-root の JavaScript export、bundled controller identifier、controller entry list、transfer drop-position value、transfer data MIME type value、remote-state value、remote-state data hook value、toolbar data hook value、integration hook value、selection data hook value、selection checkbox hook value、empty-state hook value の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
+package-root の JavaScript export、bundled controller identifier、controller entry list、transfer drop-position value、transfer data attribute value、transfer data MIME type value、remote-state value、remote-state data hook value、toolbar data hook value、integration hook value、selection data hook value、selection checkbox hook value、empty-state hook value の machine-readable な source of truth は `config/public_api_manifest.yml` に置きます。compatibility spec と entrypoint smoke check はその contract を参照して drift を検知します。
 
 内部扱い:
 

@@ -16,12 +16,25 @@ Host apps may rely on the documented helper methods, JavaScript exports, control
 
 For styling, rely on documented feature-level hooks where the relevant guide names them. Mockup-only classes and internal stylesheet selectors are review aids unless they are explicitly documented as public hooks and, when needed, added to the manifest-backed compatibility checks.
 
+The packaged stylesheet also exposes a small manifest-backed CSS custom property surface for reusable state cues. `config/public_api_manifest.yml` tracks the current `css_custom_property_tokens` list so release and docs checks can notice when those documented styling hooks drift from the shipped CSS.
+
+Representative tokens include:
+
+| Purpose | Tokens |
+|---|---|
+| Selection and current-row cues | `--tree-view-selected-row-background`, `--tree-view-current-row-accent-color` |
+| Collapsed, loading, error, and drop-target rows | `--tree-view-collapsed-row-background`, `--tree-view-loading-row-background`, `--tree-view-loading-action-color`, `--tree-view-error-row-background`, `--tree-view-drop-target-row-background` |
+| Focus rings and toggle hover states | `--tree-view-focus-outline-color`, `--tree-view-focus-background`, `--tree-view-focus-ring-contrast-color`, `--tree-view-toggle-hover-background` |
+| Hierarchy connectors and depth markers | `--tree-view-branch-line-color`, `--tree-view-current-branch-line-color`, `--tree-view-level-background`, `--tree-view-level-color`, `--tree-view-hidden-count-background`, `--tree-view-hidden-count-color` |
+
+These tokens are override hooks for TreeView-provided state cues. Host apps still own the final palette, typography, density, dark-mode policy, contrast review, and brand styling.
+
 ## Host-app override guidance
 
 When a host app needs RTL, vertical writing, or design-system-specific cues:
 
 - keep TreeView's row semantics and documented data hooks intact;
-- override current-row, hierarchy connector, and toggle spacing CSS in the host app stylesheet;
+- override current-row, hierarchy connector, toggle spacing, and documented CSS custom property values in the host app stylesheet;
 - prefer CSS logical properties for new host-app overrides;
 - keep business-specific row state, badges, colors, and routing decisions in the host app.
 
@@ -34,4 +47,4 @@ A direction-aware styling hook should be promoted to public API only when all of
 - the English and Japanese docs name the supported hook and its responsibility boundary;
 - manifest-backed compatibility checks are updated when the hook must be machine-readable.
 
-Complete RTL support, theme tokens, a CSS custom property system, and exporting every stylesheet selector remain outside this decision.
+Complete RTL support, a broader theme system, and exporting every stylesheet selector remain outside this decision. New CSS custom properties should be added to the manifest-backed token list only when they are intended as stable host-app override hooks.
