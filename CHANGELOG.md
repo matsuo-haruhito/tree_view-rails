@@ -181,6 +181,7 @@ Release preparation notes:
 - Added Development docs command signal smoke coverage for maintainer npm command guidance.
 - Added Development docs package verification coverage to the gem package contents guard.
 - Added release:check package contents verification plus gem metadata URI and public runtime packaging guard coverage.
+- Added package contents verification coverage for RubyGems `documentation_uri` metadata so packaged gems keep the docs entrypoint URI aligned with the gemspec.
 - Added Public API manifest runtime surface guard coverage for documented module methods, constants, and helper methods.
 - Added CI changed-file policy CLI output guard coverage for workflow `key=value` handoff formatting and stdin trimming.
 - Added dependency spec, non-PR workflow output, public API manifest unknown-key, and duplicate YAML-key guard coverage for package-lock, CI changed-file policy, and manifest structure smoke.
