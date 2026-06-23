@@ -118,7 +118,7 @@ const cases = [
     }
   },
   {
-    name: "workflow changes are package- and Docker-sensitive full CI changes",
+    name: "workflow changes are package-, Docker-, and CI policy-sensitive full CI changes",
     files: [".github/workflows/ci.yml"],
     expected: {
       docs_only: false,
@@ -126,7 +126,21 @@ const cases = [
       browser_smoke_changed: false,
       package_sensitive: true,
       docker_setup_sensitive: true,
-      docs_entrypoint_sensitive: false
+      docs_entrypoint_sensitive: false,
+      ci_policy_sensitive: true
+    }
+  },
+  {
+    name: "CI policy scripts request CI policy guard",
+    files: ["script/ci_changed_files_policy.mjs", "script/test_ci_workflow_changed_file_detection_signals.mjs"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: false,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false,
+      ci_policy_sensitive: true
     }
   },
   {
@@ -355,6 +369,11 @@ assertPolicyCliOutput(
   classifyChangedFiles(["AGENTS.md"]),
   `${policyCliPath} must emit CI policy-sensitive routing for AGENTS.md changes`
 );
+assertPolicyCliOutput(
+  "script/test_ci_workflow_changed_file_detection_signals.mjs\n",
+  classifyChangedFiles(["script/test_ci_workflow_changed_file_detection_signals.mjs"]),
+  `${policyCliPath} must emit CI policy-sensitive routing for CI policy smoke changes`
+);
 
 assertSameMembers(
   workflowOutputKeys,
@@ -486,8 +505,8 @@ assert.match(
 );
 assert.match(
   javascriptJob,
-  /run: npm run test:ci-policy/,
-  `${workflowPath} jobs.javascript must run CI policy checks for ci_policy_sensitive docs-only changes`
+  /if: github\.event_name == 'pull_request' && needs\.changes\.outputs\.ci_policy_sensitive == 'true'\n        run: npm run test:ci-policy/,
+  `${workflowPath} jobs.javascript must run CI policy checks for any ci_policy_sensitive pull request change`
 );
 assertJobMatches(javascriptJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.javascript must keep Ruby setup for manifest-loading Node smokes`);
 assertJobMatches(javascriptJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.javascript must keep Ruby 3.3 for manifest-loading Node smokes`);
