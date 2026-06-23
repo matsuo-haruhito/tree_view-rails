@@ -266,10 +266,13 @@ bundle exec rspec
 bundle exec rake build
 npm ci
 npm run test:js
+npm run test:entrypoints
+npm run test:docs-entrypoints
+npm run test:ci-policy
 ```
 
 Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version.
 
-`npm run test:js` runs the documented JavaScript pull-request checks together: entrypoint smoke (`npm run test:entrypoints`), Vitest (`npm test`), and Playwright browser smoke (`npm run test:browser`). See the [English development guide](docs/en/development.md) and [日本語の開発・保守方針](docs/ja/development.md) for details.
+`npm run test:js` runs the documented JavaScript pull-request checks together: entrypoint smoke (`npm run test:entrypoints`), Vitest (`npm test`), and Playwright browser smoke (`npm run test:browser`). Use the focused guard commands when you are narrowing maintenance failures: `npm run test:entrypoints` covers package-root exports, controller registrations, docs entrypoints, CI policy, and version-source guards; `npm run test:docs-entrypoints` covers README/docs/Public API/i18n signals without the broader JavaScript suite; and `npm run test:ci-policy` covers changed-file routing, workflow detection, CI observation guidance, and lockfile drift. See the [English development guide](docs/en/development.md) and [日本語の開発・保守方針](docs/ja/development.md) for details.
 
 Use `npm ci` for local JavaScript setup. The committed `package-lock.json` is the source of truth for repeatable installs, and CI/Docker setup use the same lockfile-backed install path.
