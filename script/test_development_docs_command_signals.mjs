@@ -1,6 +1,7 @@
 import fs from "node:fs"
 
 const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"))
+const readme = fs.readFileSync("README.md", "utf8")
 const docs = [
   ["docs/en/development.md", fs.readFileSync("docs/en/development.md", "utf8")],
   ["docs/ja/development.md", fs.readFileSync("docs/ja/development.md", "utf8")]
@@ -13,6 +14,13 @@ const requiredMaintenanceScripts = [
   "test:ruby-version-sources",
   "test:public-api-manifest-structure",
   "test:docs-i18n"
+]
+
+const requiredReadmeDevelopmentCommands = [
+  "npm run test:js",
+  "npm run test:entrypoints",
+  "npm run test:docs-entrypoints",
+  "npm run test:ci-policy"
 ]
 
 const requiredDockerSetupSignals = [
@@ -42,6 +50,12 @@ for (const scriptName of requiredMaintenanceScripts) {
   }
 }
 
+for (const command of requiredReadmeDevelopmentCommands) {
+  if (!readme.includes(command)) {
+    missingSignals.push(`README.md Development command: ${command}`)
+  }
+}
+
 for (const signal of requiredDockerSetupSignals) {
   for (const [docPath, doc] of docs) {
     if (!doc.includes(signal)) {
@@ -59,5 +73,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands and ${requiredDockerSetupSignals.length} Docker setup signals are present in package.json and both Development docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, and ${requiredDockerSetupSignals.length} Docker setup signals are present in package.json and docs`
 )
