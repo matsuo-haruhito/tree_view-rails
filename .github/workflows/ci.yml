@@ -168,7 +168,7 @@ jobs:
         run: npm ci
       - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.mockups_changed != 'true' && needs.changes.outputs.browser_smoke_changed != 'true' && needs.changes.outputs.docs_entrypoint_sensitive == 'true'
         run: npm run test:docs-entrypoints
-      - if: github.event_name == 'pull_request' && needs.changes.outputs.docs_only == 'true' && needs.changes.outputs.ci_policy_sensitive == 'true'
+      - if: github.event_name == 'pull_request' && needs.changes.outputs.ci_policy_sensitive == 'true'
         run: npm run test:ci-policy
       - if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
         run: npm run test:js:core

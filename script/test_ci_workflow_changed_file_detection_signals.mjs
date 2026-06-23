@@ -175,6 +175,19 @@ workflowActionMajorSignals.forEach(([jobName, jobSource, action]) => {
   )
 })
 
+const lintJobSignals = [
+  ["representative Ruby version", 'ruby-version: "3.3"'],
+  ["Standard command", "run: bundle exec standardrb"]
+]
+
+lintJobSignals.forEach(([label, signal]) => {
+  assertIncludes(
+    lintJob,
+    signal,
+    `${workflowPath} jobs.lint ${label}`
+  )
+})
+
 assertIncludes(
   javascriptJob,
   'node-version: "22"',
@@ -235,6 +248,7 @@ docsEntrypointsSignals.forEach(([label, source, signal]) => {
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
+console.log(`Checked ${lintJobSignals.length} CI lint job representative signals.`)
 console.log(`Checked ${rubyMatrixVersionSignals.length} representative Ruby workflow version signals.`)
 console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
 console.log(`Checked ${docsEntrypointsSignals.length} docs-entrypoints package and suite command signals.`)
