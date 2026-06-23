@@ -242,6 +242,7 @@ REQUIRED_PACKAGED_PATHS = REQUIRED_PACKAGED_PATH_GROUPS.values.flatten.freeze
 EXPECTED_GEM_METADATA = {
   "homepage_uri" => "https://github.com/matsuo-haruhito/tree_view-rails",
   "source_code_uri" => "https://github.com/matsuo-haruhito/tree_view-rails",
+  "documentation_uri" => "https://github.com/matsuo-haruhito/tree_view-rails/blob/main/docs/README.md",
   "changelog_uri" => "https://github.com/matsuo-haruhito/tree_view-rails/blob/main/CHANGELOG.md",
   "bug_tracker_uri" => "https://github.com/matsuo-haruhito/tree_view-rails/issues"
 }.freeze
