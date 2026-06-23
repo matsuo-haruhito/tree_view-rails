@@ -71,7 +71,7 @@ function assertWorkflowTriggerPolicy(workflowSource) {
   )
   assertIncludes(
     triggerBlock,
-    "      - main\n",
+    "      - main",
     `${workflowPath} CI trigger policy push main branch`
   )
   assertAbsent(
