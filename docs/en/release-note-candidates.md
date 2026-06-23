@@ -9,6 +9,10 @@ It is intentionally a candidate collector only:
 - It does not tag, publish, or create a GitHub Release.
 - It does not replace the release preparation PR described in `docs/en/release.md`.
 
+## Package verification boundary
+
+This document is also part of the gem package verification surface. `script/check_gem_package_contents.rb` keeps the English and Japanese release-note candidate docs in the `Release note candidate docs` representative group so the built gem includes the maintainer review aid alongside the Release checklist. That package guard only checks that the docs are shipped; it does not turn the collector output into final release notes or release automation.
+
 ## Date window
 
 Use a date window when you want GitHub Search to return merged pull requests and closed issues directly:

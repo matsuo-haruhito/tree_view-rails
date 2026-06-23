@@ -9,6 +9,10 @@
 - tag 作成、gem publish、GitHub Release 作成は行いません。
 - `docs/ja/release.md` に書かれている release preparation PR の代わりにはしません。
 
+## Package verification boundary
+
+この文書は gem package verification の確認対象でもあります。`script/check_gem_package_contents.rb` は英日 release-note candidate docs を `Release note candidate docs` の representative group に含め、built gem に release checklist と一緒に maintainer review aid が入っていることを確認します。この package guard が確認するのは docs が同梱されていることだけであり、collector output を最終 release notes や release automation に変えるものではありません。
+
 ## Date window
 
 期間が決まっている場合は、GitHub Search から merged pull request と closed issue を直接集めます。
