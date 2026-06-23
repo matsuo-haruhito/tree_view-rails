@@ -15,6 +15,10 @@ function assertIncludes(source, needle, label) {
   assert(source.includes(needle), `${label}: missing ${needle}`)
 }
 
+function assertAbsent(source, needle, label) {
+  assert(!source.includes(needle), `${label}: unexpected ${needle}`)
+}
+
 function workflowJobBlock(workflowSource, jobName) {
   const marker = `  ${jobName}:\n`
   const start = workflowSource.indexOf(marker)
@@ -34,6 +38,47 @@ function assertOrdered(source, earlier, later, label) {
   assert(earlierIndex !== -1, `${label}: missing ${earlier}`)
   assert(laterIndex !== -1, `${label}: missing ${later}`)
   assert(earlierIndex < laterIndex, `${label}: expected ${earlier} before ${later}`)
+}
+
+function workflowTopLevelTriggerBlock(workflowSource) {
+  const match = workflowSource.match(/^on:\n(?<body>[\s\S]*?)\n\njobs:\n/m)
+
+  assert(
+    match,
+    `${workflowPath} CI trigger policy must define a top-level on block before jobs`
+  )
+
+  return match.groups.body
+}
+
+function assertWorkflowTriggerPolicy(workflowSource) {
+  const triggerBlock = workflowTopLevelTriggerBlock(workflowSource)
+
+  assertIncludes(
+    triggerBlock,
+    "  pull_request:\n",
+    `${workflowPath} CI trigger policy pull_request trigger`
+  )
+  assertIncludes(
+    triggerBlock,
+    "  push:\n",
+    `${workflowPath} CI trigger policy push trigger`
+  )
+  assertIncludes(
+    triggerBlock,
+    "    branches:\n",
+    `${workflowPath} CI trigger policy push branches`
+  )
+  assertIncludes(
+    triggerBlock,
+    "      - main\n",
+    `${workflowPath} CI trigger policy push main branch`
+  )
+  assertAbsent(
+    triggerBlock,
+    "pull_request_target",
+    `${workflowPath} CI trigger policy privilege boundary trigger`
+  )
 }
 
 function workflowNonPullRequestDefaultOutputBlock(changesJob) {
@@ -74,6 +119,8 @@ function packageScript(scriptName) {
 
   return script
 }
+
+assertWorkflowTriggerPolicy(workflowSource)
 
 const changesJob = workflowJobBlock(workflowSource, "changes")
 const lintJob = workflowJobBlock(workflowSource, "lint")
@@ -245,6 +292,7 @@ docsEntrypointsSignals.forEach(([label, source, signal]) => {
   )
 })
 
+console.log("Checked CI workflow trigger policy signals.")
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
