@@ -120,6 +120,7 @@ Release preparation notes:
 - Clarified Public API docs for the shared `data-tree-children-url` hook boundary between `TreeViewRemoteStateDataHooks` and `TreeViewIntegrationHooks`.
 - Clarified Public API docs and README package-root examples for `TreeViewTransferDataAttributes`, including transfer payload and disabled-row data attribute boundaries.
 - Documented CI-policy-sensitive docs-only routing in AGENTS.md and Release docs so maintainers know when `npm run test:ci-policy` runs for repository-maintainer docs.
+- Added RubyGems `documentation_uri` metadata release evidence so package users can find the docs entrypoint from gem metadata.
 
 ### Tests
 
