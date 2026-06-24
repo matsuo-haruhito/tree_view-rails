@@ -202,8 +202,13 @@ Some `event.detail` fields intentionally expose a small documented value set. Ho
 import {
   TreeViewEventNames,
   TreeViewRemoteStateValues,
+  TreeViewStateChangeReasons,
   TreeViewTransferDropPositions
 } from "tree_view"
+
+element.addEventListener(TreeViewEventNames.state.stateChanged, (event) => {
+  if (event.detail.reason === TreeViewStateChangeReasons.expanded) persistExpandedKeys(event.detail.expandedKeys)
+})
 
 element.addEventListener(TreeViewEventNames.remoteState.change, (event) => {
   if (event.detail.state === TreeViewRemoteStateValues.error) showRetryNotice(event.detail.row)
@@ -214,13 +219,13 @@ element.addEventListener(TreeViewEventNames.transfer.drop, (event) => {
 })
 ```
 
-`TreeViewEventNames` names events, `TreeViewEventDetailKeys` lists documented payload field names, and these value exports carry documented enum-like values for those fields. `TreeViewRemoteStateValues` is limited to remote-state row values (`loading`, `loaded`, `error`), and `TreeViewTransferDropPositions` is limited to transfer drop positions (`before`, `inside`, `after`). They do not add listener helpers or change controller dispatch behavior.
+`TreeViewEventNames` names events, `TreeViewEventDetailKeys` lists documented payload field names, and these value exports carry documented enum-like values for those fields. `TreeViewStateChangeReasons` is limited to state snapshot publish reasons (`connect`, `refresh`, `expanded`, `collapsed`), `TreeViewRemoteStateValues` is limited to remote-state row values (`loading`, `loaded`, `error`), and `TreeViewTransferDropPositions` is limited to transfer drop positions (`before`, `inside`, `after`). They do not add listener helpers or change controller dispatch behavior.
 
-`tree-view-state:state-changed` also publishes a documented `reason` value (`connect`, `refresh`, `expanded`, or `collapsed`). Those strings are part of the event detail contract, but they are not a separate package-root value export.
+The raw `tree-view-state:state-changed` `event.detail.reason` strings remain part of the event detail contract. `TreeViewStateChangeReasons` is only the package-root value set for host-app listener branches and tests that should not hand-copy those strings.
 
 ## Compatibility policy
 
-The machine-readable public API manifest mirrors the event names, documented integration hook names, and representative required `event.detail` keys documented on this page so compatibility specs can detect drift; this page remains the primary contract. Host app tests may import `TreeViewEventDetailKeys` from the package root when they need a machine-readable list of documented detail key names without changing the event payload shape.
+The machine-readable public API manifest mirrors the event names, documented integration hook names, representative required `event.detail` keys, and documented event value sets on this page so compatibility specs can detect drift; this page remains the primary contract. Host app tests may import `TreeViewEventDetailKeys` from the package root when they need a machine-readable list of documented detail key names without changing the event payload shape.
 
 Every public event name in the manifest must be classified either under `event_detail_keys` when it has documented detail fields or under `event_names_without_detail` when it intentionally exposes no public detail fields. The entrypoint smoke checks that classification so host lifecycle events do not look like missing `event.detail` coverage.
 

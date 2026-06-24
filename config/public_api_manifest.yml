@@ -326,6 +326,7 @@ javascript_package_root:
     - TreeViewTransferDataAttributes
     - TreeViewTransferDataMimeTypes
     - TreeViewRemoteStateValues
+    - TreeViewStateChangeReasons
     - TreeViewStateController
     - TreeViewClientController
     - TreeViewSelectionController
@@ -347,6 +348,11 @@ javascript_package_root:
     loading: loading
     loaded: loaded
     error: error
+  state_change_reasons:
+    connect: connect
+    refresh: refresh
+    expanded: expanded
+    collapsed: collapsed
   remote_state_data_hooks:
     lazy_attribute: data-tree-lazy
     children_url_attribute: data-tree-children-url
