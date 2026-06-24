@@ -21,6 +21,10 @@ const jsEventDocs = [
   ["docs/en/js-events.md", read("docs/en/js-events.md")],
   ["docs/ja/js-events.md", read("docs/ja/js-events.md")]
 ]
+const dragAndDropDocs = [
+  ["docs/en/drag-and-drop.md", read("docs/en/drag-and-drop.md")],
+  ["docs/ja/drag-and-drop.md", read("docs/ja/drag-and-drop.md")]
+]
 
 const eventNameManifestSignals = [
   ["state event-name manifest group", "event_names:"],
@@ -68,8 +72,41 @@ const packageRootEventNameSignals = [
   "TreeViewEventNames.remoteState.*"
 ]
 
+const publicEventValueManifestSignals = [
+  ["state-change reason export", "TreeViewStateChangeReasons"],
+  ["state-change reason manifest group", "state_change_reasons:"],
+  ["state-change reason value", "connect: connect"],
+  ["state-change reason value", "refresh: refresh"],
+  ["state-change reason value", "expanded: expanded"],
+  ["state-change reason value", "collapsed: collapsed"],
+  ["transfer drop-position export", "TreeViewTransferDropPositions"],
+  ["transfer drop-position manifest group", "transfer_drop_positions:"],
+  ["transfer drop-position value", "before: before"],
+  ["transfer drop-position value", "inside: inside"],
+  ["transfer drop-position value", "after: after"]
+]
+
+const documentedStateChangeReasonSignals = [
+  "TreeViewStateChangeReasons",
+  "connect",
+  "refresh",
+  "expanded",
+  "collapsed"
+]
+
+const documentedTransferDropPositionSignals = [
+  "TreeViewTransferDropPositions",
+  "before",
+  "inside",
+  "after"
+]
+
 eventNameManifestSignals.forEach(([label, signal]) => {
   assertIncludes(manifest, signal, `config/public_api_manifest.yml ${label}`)
+})
+
+publicEventValueManifestSignals.forEach(([label, signal]) => {
+  assertIncludes(manifest, signal, `config/public_api_manifest.yml public event value docs signal (${label})`)
 })
 
 jsEventDocs.forEach(([relativePath, document]) => {
@@ -81,6 +118,14 @@ jsEventDocs.forEach(([relativePath, document]) => {
     assertIncludes(document, signal, `${relativePath} package-root event-name docs`)
   })
 
+  documentedStateChangeReasonSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} package-root state-change reason value docs`)
+  })
+
+  documentedTransferDropPositionSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} package-root transfer drop-position value docs`)
+  })
+
   assert(
     /raw event strings?|raw event string|event string/.test(document),
     `${relativePath}: event-name docs no longer mention the raw event-name contract`
@@ -89,5 +134,21 @@ jsEventDocs.forEach(([relativePath, document]) => {
   assert(
     document.includes("TreeViewEventDetailKeys") && /payload field|公開payload/.test(document),
     `${relativePath}: event-name docs no longer separate event names from detail-key payload fields`
+  )
+
+  assert(
+    /package-root value set|package-root の value export/.test(document),
+    `${relativePath}: event value docs no longer describe the package-root value export boundary`
+  )
+})
+
+dragAndDropDocs.forEach(([relativePath, document]) => {
+  documentedTransferDropPositionSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} transfer drop-position value docs`)
+  })
+
+  assert(
+    /host-app business rules|host appの業務ルール/.test(document),
+    `${relativePath}: transfer drop-position docs no longer preserve the host-app-owned business boundary`
   )
 })
