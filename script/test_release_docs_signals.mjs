@@ -29,6 +29,7 @@ const categories = [
   "Fixed",
   "Deprecated",
   "Removed",
+  "Security",
   "Documentation",
   "Tests"
 ]

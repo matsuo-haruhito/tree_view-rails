@@ -166,10 +166,11 @@ Use these categories:
 - Fixed
 - Deprecated
 - Removed
+- Security
 - Documentation
 - Tests
 
-Record test, CI, docs smoke, and package verification changes under Tests. Record public API manifest changes by their user-visible effect. Use Added or Changed for backward-compatible public surface updates, Deprecated or Removed for compatibility changes that require migration notes, and Documentation only when the manifest or docs guidance changed without a runtime contract change.
+Use Security for vulnerability fixes and security hardening notes. Record test, CI, docs smoke, and package verification changes under Tests. Record public API manifest changes by their user-visible effect. Use Added or Changed for backward-compatible public surface updates, Deprecated or Removed for compatibility changes that require migration notes, and Documentation only when the manifest or docs guidance changed without a runtime contract change.
 
 Include migration notes for breaking changes or deprecations.
 

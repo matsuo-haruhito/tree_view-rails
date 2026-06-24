@@ -7,6 +7,7 @@ This changelog uses the following categories when applicable:
 - `Fixed` for bug fixes.
 - `Deprecated` for features planned for removal.
 - `Removed` for removed features.
+- `Security` for vulnerability fixes and security hardening notes.
 - `Documentation` for docs-only changes.
 - `Tests` for test, CI, and package verification changes.
 
@@ -121,6 +122,7 @@ Release preparation notes:
 - Clarified Public API docs and README package-root examples for `TreeViewTransferDataAttributes`, including transfer payload and disabled-row data attribute boundaries.
 - Documented CI-policy-sensitive docs-only routing in AGENTS.md and Release docs so maintainers know when `npm run test:ci-policy` runs for repository-maintainer docs.
 - Added RubyGems `documentation_uri` metadata release evidence so package users can find the docs entrypoint from gem metadata.
+- Documented `Security` as an allowed CHANGELOG category for vulnerability fixes and security hardening notes.
 
 ### Tests
 
