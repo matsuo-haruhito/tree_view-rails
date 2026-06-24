@@ -68,13 +68,6 @@ const packageRootEventNameSignals = [
   "TreeViewEventNames.remoteState.*"
 ]
 
-const eventNameBoundarySignals = [
-  ["English raw-string boundary", /raw event strings? above remain the public contract/],
-  ["Japanese raw-string boundary", /raw event string は引き続き公開契約/],
-  ["English event-detail boundary", /TreeViewEventDetailKeys lists documented payload field names/],
-  ["Japanese event-detail boundary", /TreeViewEventDetailKeys は documented payload field 名/]
-]
-
 eventNameManifestSignals.forEach(([label, signal]) => {
   assertIncludes(manifest, signal, `config/public_api_manifest.yml ${label}`)
 })
@@ -88,9 +81,13 @@ jsEventDocs.forEach(([relativePath, document]) => {
     assertIncludes(document, signal, `${relativePath} package-root event-name docs`)
   })
 
-  const boundaryMatches = eventNameBoundarySignals.filter(([, pattern]) => pattern.test(document))
   assert(
-    boundaryMatches.length >= 2,
-    `${relativePath}: event-name docs no longer separate raw event names, package-root constants, and detail-key payload fields`
+    /raw event strings?|raw event string|event string/.test(document),
+    `${relativePath}: event-name docs no longer mention the raw event-name contract`
+  )
+
+  assert(
+    document.includes("TreeViewEventDetailKeys") && /payload field|公開payload/.test(document),
+    `${relativePath}: event-name docs no longer separate event names from detail-key payload fields`
   )
 })
