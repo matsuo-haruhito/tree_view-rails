@@ -166,10 +166,11 @@ releaseごとに `CHANGELOG.md` へ日付付きentryを追加します。
 - Fixed
 - Deprecated
 - Removed
+- Security
 - Documentation
 - Tests
 
-test、CI、docs smoke、package verification の変更は Tests に記録します。public API manifest の変更は、user-visible な影響に合わせて記録します。後方互換な public surface 追加や変更は Added / Changed、migration note が必要な互換性変更は Deprecated / Removed、runtime contract を変えない manifest や docs guidance の変更は Documentation に入れてください。
+Security は vulnerability fix や security hardening note に使います。test、CI、docs smoke、package verification の変更は Tests に記録します。public API manifest の変更は、user-visible な影響に合わせて記録します。後方互換な public surface 追加や変更は Added / Changed、migration note が必要な互換性変更は Deprecated / Removed、runtime contract を変えない manifest や docs guidance の変更は Documentation に入れてください。
 
 breaking changeやdeprecationにはmigration noteを書きます。
 
