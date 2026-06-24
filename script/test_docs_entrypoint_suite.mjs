@@ -23,6 +23,11 @@ const checks = [
     args: ["script/test_docs_entrypoint_signals.mjs"]
   },
   {
+    group: "Event names docs signals",
+    command: "node",
+    args: ["script/test_event_names_public_api_signals.mjs"]
+  },
+  {
     group: "Host app extension diagnostics signals",
     command: "node",
     args: ["script/test_host_app_extension_diagnostics_signals.mjs"]
@@ -165,6 +170,7 @@ const docsEntrypointScriptExclusions = new Map([
 
 const docsEntrypointScriptPatterns = [
   /^check_controller_registration_docs_signals\.mjs$/,
+  /^test_event_names_public_api_signals\.mjs$/,
   /^test_.*docs.*\.mjs$/,
   /^test_.*readme.*signals\.mjs$/,
   /^test_.*mockup.*signals\.mjs$/,
@@ -334,6 +340,11 @@ function runSelfTest() {
     "case-insensitive exact --only should resolve a group"
   )
   assert.equal(
+    resolveOnlyGroupResult("Event names").check.group,
+    "Event names docs signals",
+    "unique partial --only should resolve the event names docs signal"
+  )
+  assert.equal(
     resolveOnlyGroupResult("Localized and hook").check.group,
     "Localized and hook docs signals",
     "unique partial --only should resolve a group"
@@ -365,6 +376,10 @@ function runSelfTest() {
     "ambiguous --only should report all matching groups"
   )
 
+  assert.ok(
+    docsEntrypointCandidateScriptPaths().includes("script/test_event_names_public_api_signals.mjs"),
+    "docs script registration candidates should include event names public API signals"
+  )
   assert.ok(
     docsEntrypointCandidateScriptPaths().includes("script/test_public_api_docs_signals.mjs"),
     "docs script registration candidates should include public API docs signals"
