@@ -7,6 +7,14 @@ const workflowPath = ".github/workflows/ci.yml";
 const packagePath = "package.json";
 const policyCliPath = "script/ci_changed_files_policy.mjs";
 
+const ciPolicyGuardScriptPaths = [
+  "script/test_ci_changed_files_policy.mjs",
+  "script/test_ci_workflow_changed_file_detection_signals.mjs",
+  "script/test_ci_observation_guidance_signals.mjs",
+  "script/test_package_lock_dependency_drift.mjs",
+  "script/test_gemfile_lock_dependency_drift.mjs"
+];
+
 const cases = [
   {
     name: "gem-packaged docs stay docs-only and request package and docs entrypoint guards",
@@ -307,6 +315,23 @@ function assertJobMatches(jobBlock, pattern, message) {
   assert.match(jobBlock, pattern, message);
 }
 
+function assertCiPolicyScriptRegistration(packageScripts) {
+  const ciPolicyCommand = packageScripts["test:ci-policy"];
+  assert.equal(
+    typeof ciPolicyCommand,
+    "string",
+    `${packagePath} scripts.test:ci-policy must be a command string`
+  );
+
+  for (const scriptPath of ciPolicyGuardScriptPaths) {
+    assert.match(
+      ciPolicyCommand,
+      new RegExp(`(?:^|&&\\s*)node ${escapeRegExp(scriptPath)}(?:\\s*&&|$)`),
+      `${packagePath} scripts.test:ci-policy must run ${scriptPath} so CI policy guard changes validate their own registration`
+    );
+  }
+}
+
 function policyCliOutput(input) {
   return execFileSync(process.execPath, [policyCliPath], {
     input,
@@ -563,6 +588,8 @@ assertJobMatches(
 assertJobMatches(gemPackageJob, /run: gem install tree_view-\*\.gem/, `${workflowPath} jobs.gem_package must install the built gem`);
 assertJobMatches(gemPackageJob, /run: ruby -e "require 'tree_view'"/, `${workflowPath} jobs.gem_package must keep the installed gem require smoke`);
 
+assertCiPolicyScriptRegistration(packageScripts);
+
 assert.ok(
   packageScripts["test:ci-policy"].includes("script/test_package_lock_dependency_drift.mjs"),
   `${packagePath} scripts.test:ci-policy must keep the package lock dependency drift guard`
@@ -577,4 +604,5 @@ for (const scriptName of npmRunScripts(workflowSource)) {
 
 console.log(`Checked ${cases.length} CI changed-file policy cases.`);
 console.log(`Checked ${workflowOutputKeys.length} workflow output keys and ${npmRunScripts(workflowSource).length} JavaScript npm commands.`);
+console.log(`Checked ${ciPolicyGuardScriptPaths.length} CI policy script registrations.`);
 console.log("Checked representative CI workflow setup surfaces.");
