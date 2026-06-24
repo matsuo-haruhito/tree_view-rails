@@ -8,6 +8,19 @@ They are **not** a complete Rails application and should not grow into host-app 
 
 When a review starts from the gallery or a focused mockup page, confirm this static mockup / real demo app boundary before requesting new routes, persistence, CRUD flows, seeded records, or authorization examples in this directory.
 
+## Review task chooser
+
+Use this short chooser when you know the review question but do not yet know which mockup to open first. The Files table and Recommended review flow below remain the detailed inventory.
+
+| Review question | Start with | Related follow-up |
+|---|---|---|
+| Baseline or first render | [review-gallery.html](review-gallery.html), [default-tree.html](default-tree.html), [minimal-usage-first-render.html](minimal-usage-first-render.html) | [resource-table-bridge.html](resource-table-bridge.html), [table-caption-context.html](table-caption-context.html) |
+| Responsive, narrow, or current-row scanning | [narrow-sidebar-tree.html](narrow-sidebar-tree.html), [current-branch-sidebar.html](current-branch-sidebar.html) | [direction-aware-cues/index.html](direction-aware-cues/index.html), [localized-row-labels.html](localized-row-labels.html) |
+| Interaction, loading, or transfer states | [interaction-states.html](interaction-states.html), [lazy-loading-handoff.html](lazy-loading-handoff.html), [drop-positions.html](drop-positions.html) | [children-pagination.html](children-pagination.html), [persisted-state-boundary.html](persisted-state-boundary.html), [turbo-frame-target.html](turbo-frame-target.html) |
+| Accessibility, focus, or contrast cues | [keyboard-focus-states.html](keyboard-focus-states.html), [accessibility-semantics.html](accessibility-semantics.html), [high-contrast-state-cues/index.html](high-contrast-state-cues/index.html) | [keyboard-current-row/index.html](keyboard-current-row/index.html), [reduced-motion-state-cues.html](reduced-motion-state-cues.html) |
+| Selection or form boundaries | [selection-max-count.html](selection-max-count.html), [selection-multi-tree-form.html](selection-multi-tree-form.html), [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) | [form-editing-rows.html](form-editing-rows.html), [interactive-marker-behaviors.html](interactive-marker-behaviors.html) |
+| Toolbar, empty, or table boundary questions | [toolbar-actions.html](toolbar-actions.html), [empty-state.html](empty-state.html), [resource-table-empty-colspan-boundary.html](resource-table-empty-colspan-boundary.html) | [node-presenter-row-partials.html](node-presenter-row-partials.html), [path-tree-builder-rows.html](path-tree-builder-rows.html), [filtered-tree-modes.html](filtered-tree-modes.html) |
+
 ## Files
 
 | File | Covers |
