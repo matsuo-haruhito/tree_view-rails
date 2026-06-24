@@ -10,6 +10,7 @@ const policyCliPath = "script/ci_changed_files_policy.mjs";
 const ciPolicyGuardScriptPaths = [
   "script/test_ci_changed_files_policy.mjs",
   "script/test_ci_workflow_changed_file_detection_signals.mjs",
+  "script/test_ci_workflow_permissions_signals.mjs",
   "script/test_ci_observation_guidance_signals.mjs",
   "script/test_package_lock_dependency_drift.mjs",
   "script/test_gemfile_lock_dependency_drift.mjs"
@@ -141,6 +142,19 @@ const cases = [
   {
     name: "CI policy scripts request CI policy guard",
     files: ["script/ci_changed_files_policy.mjs", "script/test_ci_workflow_changed_file_detection_signals.mjs"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: false,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false,
+      ci_policy_sensitive: true
+    }
+  },
+  {
+    name: "CI workflow permissions signals request CI policy guard",
+    files: ["script/test_ci_workflow_permissions_signals.mjs"],
     expected: {
       docs_only: false,
       mockups_changed: false,
@@ -398,6 +412,11 @@ assertPolicyCliOutput(
   "script/test_ci_workflow_changed_file_detection_signals.mjs\n",
   classifyChangedFiles(["script/test_ci_workflow_changed_file_detection_signals.mjs"]),
   `${policyCliPath} must emit CI policy-sensitive routing for CI policy smoke changes`
+);
+assertPolicyCliOutput(
+  "script/test_ci_workflow_permissions_signals.mjs\n",
+  classifyChangedFiles(["script/test_ci_workflow_permissions_signals.mjs"]),
+  `${policyCliPath} must emit CI policy-sensitive routing for CI workflow permissions smoke changes`
 );
 
 assertSameMembers(
