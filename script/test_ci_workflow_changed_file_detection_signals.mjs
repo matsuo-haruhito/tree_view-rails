@@ -40,6 +40,14 @@ function assertOrdered(source, earlier, later, label) {
   assert(earlierIndex < laterIndex, `${label}: expected ${earlier} before ${later}`)
 }
 
+function assertMatrixFailFastPolicy(jobName, jobSource) {
+  assertIncludes(
+    jobSource,
+    "strategy:\n      fail-fast: false\n",
+    `${workflowPath} jobs.${jobName} matrix fail-fast policy`
+  )
+}
+
 function workflowTopLevelTriggerBlock(workflowSource) {
   const match = workflowSource.match(/^on:\n(?<body>[\s\S]*?)\n\njobs:\n/m)
 
@@ -235,6 +243,16 @@ lintJobSignals.forEach(([label, signal]) => {
   )
 })
 
+const matrixFailFastPolicyJobs = [
+  ["pr_rails_matrix", prRailsMatrixJob],
+  ["ruby_matrix", rubyMatrixJob],
+  ["rails_matrix", railsMatrixJob]
+]
+
+matrixFailFastPolicyJobs.forEach(([jobName, jobSource]) => {
+  assertMatrixFailFastPolicy(jobName, jobSource)
+})
+
 assertIncludes(
   javascriptJob,
   'node-version: "22"',
@@ -297,6 +315,7 @@ console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
 console.log(`Checked ${lintJobSignals.length} CI lint job representative signals.`)
+console.log(`Checked ${matrixFailFastPolicyJobs.length} CI matrix fail-fast policy signals.`)
 console.log(`Checked ${rubyMatrixVersionSignals.length} representative Ruby workflow version signals.`)
 console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
 console.log(`Checked ${docsEntrypointsSignals.length} docs-entrypoints package and suite command signals.`)
