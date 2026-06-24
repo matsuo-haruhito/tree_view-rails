@@ -68,6 +68,13 @@ const packageRootEventNameSignals = [
   "TreeViewEventNames.remoteState.*"
 ]
 
+const eventNameBoundarySignals = [
+  ["English raw-string boundary", /raw event strings? above remain the public contract/],
+  ["Japanese raw-string boundary", /raw event string は引き続き公開契約/],
+  ["English event-detail boundary", /TreeViewEventDetailKeys lists documented payload field names/],
+  ["Japanese event-detail boundary", /TreeViewEventDetailKeys は documented payload field 名/]
+]
+
 eventNameManifestSignals.forEach(([label, signal]) => {
   assertIncludes(manifest, signal, `config/public_api_manifest.yml ${label}`)
 })
@@ -81,13 +88,9 @@ jsEventDocs.forEach(([relativePath, document]) => {
     assertIncludes(document, signal, `${relativePath} package-root event-name docs`)
   })
 
+  const boundaryMatches = eventNameBoundarySignals.filter(([, pattern]) => pattern.test(document))
   assert(
-    /raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string|raw event string/.test(document) || /raw event string|raw event strings|raw event name|raw event names|event name string|event name strings|event 名/.test(document),
-    `${relativePath}: event-name docs no longer separate raw event names from package-root constants`
-  )
-
-  assert(
-    /TreeViewEventDetailKeys|event.detail|event\.detail|event detail|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field|payload field/.test(document) || /TreeViewEventDetailKeys|event\.detail|event.detail|payload field|payload fields|公開payload/.test(document),
-    `${relativePath}: event-name docs no longer separate event names from detail-key payload fields`
+    boundaryMatches.length >= 2,
+    `${relativePath}: event-name docs no longer separate raw event names, package-root constants, and detail-key payload fields`
   )
 })
