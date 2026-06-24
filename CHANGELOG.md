@@ -190,6 +190,7 @@ Release preparation notes:
 - Added nested Public API manifest key parity coverage so Ruby and Node manifest structure guards stay synchronized for option key and integration hook lists.
 - Added release docs signal coverage for release metadata guards and docs-entrypoint sensitive CI routing.
 - Added docs entrypoint suite self-test coverage for unregistered docs smoke / signal scripts.
+- Added event names public API docs signal smoke coverage so manifest event-name groups and documented JavaScript event names stay aligned.
 - Added CHANGELOG-only CI routing coverage to keep `CHANGELOG.md` changes on the docs-entrypoint and package verification paths.
 - Added release note candidate helper contract specs for formatter output, CLI option validation, and since-tag reference collection without network access.
 - Added mockup demo application boundary docs signal coverage for static mockup / future real Rails demo app responsibility boundaries.
