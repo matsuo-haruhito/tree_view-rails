@@ -62,6 +62,13 @@ export const TreeViewEventDetailKeys = Object.freeze({
   })
 })
 
+export const TreeViewStateChangeReasons = Object.freeze({
+  connect: "connect",
+  refresh: "refresh",
+  expanded: "expanded",
+  collapsed: "collapsed"
+})
+
 export const TreeViewRemoteStateValues = Object.freeze({
   loading: "loading",
   loaded: "loaded",

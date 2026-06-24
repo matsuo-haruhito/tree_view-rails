@@ -88,7 +88,18 @@ function isDocsEntrypointSensitivePath(file) {
 }
 
 function isCiPolicySensitivePath(file) {
-  return file === "AGENTS.md";
+  return (
+    file === "AGENTS.md" ||
+    file === ".github/workflows/ci.yml" ||
+    file === "script/ci_changed_files_policy.mjs" ||
+    file === "script/test_ci_policy_suite.mjs" ||
+    file === "script/test_ci_changed_files_policy.mjs" ||
+    file === "script/test_ci_workflow_changed_file_detection_signals.mjs" ||
+    file === "script/test_ci_workflow_permissions_signals.mjs" ||
+    file === "script/test_ci_observation_guidance_signals.mjs" ||
+    file === "script/test_package_lock_dependency_drift.mjs" ||
+    file === "script/test_gemfile_lock_dependency_drift.mjs"
+  );
 }
 
 function isDockerSetupSensitivePath(file) {

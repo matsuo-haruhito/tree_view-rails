@@ -15,6 +15,10 @@ function assertIncludes(source, needle, label) {
   assert(source.includes(needle), `${label}: missing ${needle}`)
 }
 
+function assertAbsent(source, needle, label) {
+  assert(!source.includes(needle), `${label}: unexpected ${needle}`)
+}
+
 function workflowJobBlock(workflowSource, jobName) {
   const marker = `  ${jobName}:\n`
   const start = workflowSource.indexOf(marker)
@@ -34,6 +38,55 @@ function assertOrdered(source, earlier, later, label) {
   assert(earlierIndex !== -1, `${label}: missing ${earlier}`)
   assert(laterIndex !== -1, `${label}: missing ${later}`)
   assert(earlierIndex < laterIndex, `${label}: expected ${earlier} before ${later}`)
+}
+
+function assertMatrixFailFastPolicy(jobName, jobSource) {
+  assertIncludes(
+    jobSource,
+    "strategy:\n      fail-fast: false\n",
+    `${workflowPath} jobs.${jobName} matrix fail-fast policy`
+  )
+}
+
+function workflowTopLevelTriggerBlock(workflowSource) {
+  const match = workflowSource.match(/^on:\n(?<body>[\s\S]*?)\n\njobs:\n/m)
+
+  assert(
+    match,
+    `${workflowPath} CI trigger policy must define a top-level on block before jobs`
+  )
+
+  return match.groups.body
+}
+
+function assertWorkflowTriggerPolicy(workflowSource) {
+  const triggerBlock = workflowTopLevelTriggerBlock(workflowSource)
+
+  assertIncludes(
+    triggerBlock,
+    "  pull_request:\n",
+    `${workflowPath} CI trigger policy pull_request trigger`
+  )
+  assertIncludes(
+    triggerBlock,
+    "  push:\n",
+    `${workflowPath} CI trigger policy push trigger`
+  )
+  assertIncludes(
+    triggerBlock,
+    "    branches:\n",
+    `${workflowPath} CI trigger policy push branches`
+  )
+  assertIncludes(
+    triggerBlock,
+    "      - main",
+    `${workflowPath} CI trigger policy push main branch`
+  )
+  assertAbsent(
+    triggerBlock,
+    "pull_request_target",
+    `${workflowPath} CI trigger policy privilege boundary trigger`
+  )
 }
 
 function workflowNonPullRequestDefaultOutputBlock(changesJob) {
@@ -75,6 +128,8 @@ function packageScript(scriptName) {
   return script
 }
 
+assertWorkflowTriggerPolicy(workflowSource)
+
 const changesJob = workflowJobBlock(workflowSource, "changes")
 const lintJob = workflowJobBlock(workflowSource, "lint")
 const prSpecsJob = workflowJobBlock(workflowSource, "pr_specs")
@@ -91,7 +146,8 @@ const nonPullRequestDefaultOutputs = {
   browser_smoke_changed: false,
   package_sensitive: true,
   docker_setup_sensitive: true,
-  docs_entrypoint_sensitive: true
+  docs_entrypoint_sensitive: true,
+  ci_policy_sensitive: true
 }
 const nonPullRequestDefaultOutputBlock = workflowNonPullRequestDefaultOutputBlock(changesJob)
 Object.entries(nonPullRequestDefaultOutputs).forEach(([key, value]) => {
@@ -174,6 +230,29 @@ workflowActionMajorSignals.forEach(([jobName, jobSource, action]) => {
   )
 })
 
+const lintJobSignals = [
+  ["representative Ruby version", 'ruby-version: "3.3"'],
+  ["Standard command", "run: bundle exec standardrb"]
+]
+
+lintJobSignals.forEach(([label, signal]) => {
+  assertIncludes(
+    lintJob,
+    signal,
+    `${workflowPath} jobs.lint ${label}`
+  )
+})
+
+const matrixFailFastPolicyJobs = [
+  ["pr_rails_matrix", prRailsMatrixJob],
+  ["ruby_matrix", rubyMatrixJob],
+  ["rails_matrix", railsMatrixJob]
+]
+
+matrixFailFastPolicyJobs.forEach(([jobName, jobSource]) => {
+  assertMatrixFailFastPolicy(jobName, jobSource)
+})
+
 assertIncludes(
   javascriptJob,
   'node-version: "22"',
@@ -231,9 +310,12 @@ docsEntrypointsSignals.forEach(([label, source, signal]) => {
   )
 })
 
+console.log("Checked CI workflow trigger policy signals.")
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
+console.log(`Checked ${lintJobSignals.length} CI lint job representative signals.`)
+console.log(`Checked ${matrixFailFastPolicyJobs.length} CI matrix fail-fast policy signals.`)
 console.log(`Checked ${rubyMatrixVersionSignals.length} representative Ruby workflow version signals.`)
 console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
 console.log(`Checked ${docsEntrypointsSignals.length} docs-entrypoints package and suite command signals.`)

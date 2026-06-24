@@ -7,6 +7,15 @@ const workflowPath = ".github/workflows/ci.yml";
 const packagePath = "package.json";
 const policyCliPath = "script/ci_changed_files_policy.mjs";
 
+const ciPolicyGuardScriptPaths = [
+  "script/test_ci_changed_files_policy.mjs",
+  "script/test_ci_workflow_changed_file_detection_signals.mjs",
+  "script/test_ci_workflow_permissions_signals.mjs",
+  "script/test_ci_observation_guidance_signals.mjs",
+  "script/test_package_lock_dependency_drift.mjs",
+  "script/test_gemfile_lock_dependency_drift.mjs"
+];
+
 const cases = [
   {
     name: "gem-packaged docs stay docs-only and request package and docs entrypoint guards",
@@ -118,7 +127,7 @@ const cases = [
     }
   },
   {
-    name: "workflow changes are package- and Docker-sensitive full CI changes",
+    name: "workflow changes are package-, Docker-, and CI policy-sensitive full CI changes",
     files: [".github/workflows/ci.yml"],
     expected: {
       docs_only: false,
@@ -126,7 +135,34 @@ const cases = [
       browser_smoke_changed: false,
       package_sensitive: true,
       docker_setup_sensitive: true,
-      docs_entrypoint_sensitive: false
+      docs_entrypoint_sensitive: false,
+      ci_policy_sensitive: true
+    }
+  },
+  {
+    name: "CI policy scripts request CI policy guard",
+    files: ["script/ci_changed_files_policy.mjs", "script/test_ci_workflow_changed_file_detection_signals.mjs"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: false,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false,
+      ci_policy_sensitive: true
+    }
+  },
+  {
+    name: "CI workflow permissions signals request CI policy guard",
+    files: ["script/test_ci_workflow_permissions_signals.mjs"],
+    expected: {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: false,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false,
+      ci_policy_sensitive: true
     }
   },
   {
@@ -293,6 +329,23 @@ function assertJobMatches(jobBlock, pattern, message) {
   assert.match(jobBlock, pattern, message);
 }
 
+function assertCiPolicyScriptRegistration(packageScripts) {
+  const ciPolicyCommand = packageScripts["test:ci-policy"];
+  assert.equal(
+    typeof ciPolicyCommand,
+    "string",
+    `${packagePath} scripts.test:ci-policy must be a command string`
+  );
+
+  for (const scriptPath of ciPolicyGuardScriptPaths) {
+    assert.match(
+      ciPolicyCommand,
+      new RegExp(`(?:^|&&\\s*)node ${escapeRegExp(scriptPath)}(?:\\s*&&|$)`),
+      `${packagePath} scripts.test:ci-policy must run ${scriptPath} so CI policy guard changes validate their own registration`
+    );
+  }
+}
+
 function policyCliOutput(input) {
   return execFileSync(process.execPath, [policyCliPath], {
     input,
@@ -354,6 +407,16 @@ assertPolicyCliOutput(
   "AGENTS.md\n",
   classifyChangedFiles(["AGENTS.md"]),
   `${policyCliPath} must emit CI policy-sensitive routing for AGENTS.md changes`
+);
+assertPolicyCliOutput(
+  "script/test_ci_workflow_changed_file_detection_signals.mjs\n",
+  classifyChangedFiles(["script/test_ci_workflow_changed_file_detection_signals.mjs"]),
+  `${policyCliPath} must emit CI policy-sensitive routing for CI policy smoke changes`
+);
+assertPolicyCliOutput(
+  "script/test_ci_workflow_permissions_signals.mjs\n",
+  classifyChangedFiles(["script/test_ci_workflow_permissions_signals.mjs"]),
+  `${policyCliPath} must emit CI policy-sensitive routing for CI workflow permissions smoke changes`
 );
 
 assertSameMembers(
@@ -486,8 +549,8 @@ assert.match(
 );
 assert.match(
   javascriptJob,
-  /run: npm run test:ci-policy/,
-  `${workflowPath} jobs.javascript must run CI policy checks for ci_policy_sensitive docs-only changes`
+  /if: github\.event_name == 'pull_request' && needs\.changes\.outputs\.ci_policy_sensitive == 'true'\n        run: npm run test:ci-policy/,
+  `${workflowPath} jobs.javascript must run CI policy checks for any ci_policy_sensitive pull request change`
 );
 assertJobMatches(javascriptJob, /uses: ruby\/setup-ruby@v1/, `${workflowPath} jobs.javascript must keep Ruby setup for manifest-loading Node smokes`);
 assertJobMatches(javascriptJob, /ruby-version: "3\.3"/, `${workflowPath} jobs.javascript must keep Ruby 3.3 for manifest-loading Node smokes`);
@@ -544,6 +607,8 @@ assertJobMatches(
 assertJobMatches(gemPackageJob, /run: gem install tree_view-\*\.gem/, `${workflowPath} jobs.gem_package must install the built gem`);
 assertJobMatches(gemPackageJob, /run: ruby -e "require 'tree_view'"/, `${workflowPath} jobs.gem_package must keep the installed gem require smoke`);
 
+assertCiPolicyScriptRegistration(packageScripts);
+
 assert.ok(
   packageScripts["test:ci-policy"].includes("script/test_package_lock_dependency_drift.mjs"),
   `${packagePath} scripts.test:ci-policy must keep the package lock dependency drift guard`
@@ -558,4 +623,5 @@ for (const scriptName of npmRunScripts(workflowSource)) {
 
 console.log(`Checked ${cases.length} CI changed-file policy cases.`);
 console.log(`Checked ${workflowOutputKeys.length} workflow output keys and ${npmRunScripts(workflowSource).length} JavaScript npm commands.`);
+console.log(`Checked ${ciPolicyGuardScriptPaths.length} CI policy script registrations.`);
 console.log("Checked representative CI workflow setup surfaces.");

@@ -7,6 +7,7 @@ This changelog uses the following categories when applicable:
 - `Fixed` for bug fixes.
 - `Deprecated` for features planned for removal.
 - `Removed` for removed features.
+- `Security` for vulnerability fixes and security hardening notes.
 - `Documentation` for docs-only changes.
 - `Tests` for test, CI, and package verification changes.
 
@@ -119,9 +120,13 @@ Release preparation notes:
 - Clarified README package-root JavaScript surface examples for controller entries, integration hooks, and documented data hook objects.
 - Clarified Public API docs for the shared `data-tree-children-url` hook boundary between `TreeViewRemoteStateDataHooks` and `TreeViewIntegrationHooks`.
 - Clarified Public API docs and README package-root examples for `TreeViewTransferDataAttributes`, including transfer payload and disabled-row data attribute boundaries.
+- Documented CI-policy-sensitive docs-only routing in AGENTS.md and Release docs so maintainers know when `npm run test:ci-policy` runs for repository-maintainer docs.
+- Added RubyGems `documentation_uri` metadata release evidence so package users can find the docs entrypoint from gem metadata.
+- Documented `Security` as an allowed CHANGELOG category for vulnerability fixes and security hardening notes.
 
 ### Tests
 
+- Added docs-entrypoint guard coverage for `TreeViewTransferDropPositions` and `TreeViewIntegrationHooks` so transfer and integration public API docs signals stay aligned with the manifest.
 - Expanded package contents verification coverage for README-linked FAQ / Troubleshooting / API Overview / API Reference / Tree diagnostics docs so packaged gems keep those public reader guides available.
 - Added controller registration docs signal coverage to the docs-entrypoint suite so controller registration guides and manifest controller entries stay aligned.
 - Added CI changed-file detection workflow guard coverage for docs-entrypoints package script wiring so controller registration docs signals stay connected to `npm run test:docs-entrypoints`.
@@ -179,6 +184,7 @@ Release preparation notes:
 - Added Development docs command signal smoke coverage for maintainer npm command guidance.
 - Added Development docs package verification coverage to the gem package contents guard.
 - Added release:check package contents verification plus gem metadata URI and public runtime packaging guard coverage.
+- Added package contents verification coverage for RubyGems `documentation_uri` metadata so packaged gems keep the docs entrypoint URI aligned with the gemspec.
 - Added Public API manifest runtime surface guard coverage for documented module methods, constants, and helper methods.
 - Added CI changed-file policy CLI output guard coverage for workflow `key=value` handoff formatting and stdin trimming.
 - Added dependency spec, non-PR workflow output, public API manifest unknown-key, and duplicate YAML-key guard coverage for package-lock, CI changed-file policy, and manifest structure smoke.
@@ -187,6 +193,7 @@ Release preparation notes:
 - Added nested Public API manifest key parity coverage so Ruby and Node manifest structure guards stay synchronized for option key and integration hook lists.
 - Added release docs signal coverage for release metadata guards and docs-entrypoint sensitive CI routing.
 - Added docs entrypoint suite self-test coverage for unregistered docs smoke / signal scripts.
+- Added event names public API docs signal smoke coverage so manifest event-name groups and documented JavaScript event names stay aligned.
 - Added CHANGELOG-only CI routing coverage to keep `CHANGELOG.md` changes on the docs-entrypoint and package verification paths.
 - Added release note candidate helper contract specs for formatter output, CLI option validation, and since-tag reference collection without network access.
 - Added mockup demo application boundary docs signal coverage for static mockup / future real Rails demo app responsibility boundaries.
@@ -201,6 +208,7 @@ Release preparation notes:
 - Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
 - Added release and CI docs signal coverage for workflow action major versions, Ruby / Rails release evidence, and gem package install / require checks.
 - Added CI observation guidance signal coverage so maintainers verify GitHub Actions workflow runs when combined status is empty.
+- Added CI policy smoke coverage for AGENTS.md routing and non-PR `ci_policy_sensitive` defaults so CI-policy-sensitive docs changes stay guarded.
 - Expanded package contents verification coverage for README-linked Turbo Frame option, Direction-aware styling, and Public Name Decisions docs so packaged gems keep those public guides available.
 
 ## 0.1.0 - 2026-05-07

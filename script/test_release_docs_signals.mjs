@@ -29,6 +29,7 @@ const categories = [
   "Fixed",
   "Deprecated",
   "Removed",
+  "Security",
   "Documentation",
   "Tests"
 ]
@@ -234,6 +235,39 @@ const packageContentsVerificationSignals = [
 
 packageContentsVerificationSignals.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Gem package release docs category signal", signals)
+})
+
+const releaseNoteCandidatePackageGuardSignals = [
+  [
+    "script/check_gem_package_contents.rb",
+    [
+      "Release note candidate docs",
+      "docs/en/release-note-candidates.md",
+      "docs/ja/release-note-candidates.md"
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "Release note candidate collector",
+      "release-note-candidates.md",
+      "package-sensitive",
+      "docs/**"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "Release note candidate collector",
+      "release-note-candidates.md",
+      "package-sensitive",
+      "docs/**"
+    ]
+  ]
+]
+
+releaseNoteCandidatePackageGuardSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release note candidate package guard signal", signals)
 })
 
 const controllerRegistrationDocsSignals = [
