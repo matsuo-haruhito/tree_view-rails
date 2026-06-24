@@ -17,7 +17,15 @@ function topLevelWorkflowPermissions(source) {
   return match.groups.body
 }
 
+function jobLevelWorkflowPermissions(source) {
+  return source
+    .split(/\r?\n/)
+    .map((line, index) => ({ line, number: index + 1 }))
+    .filter(({ line }) => /^    permissions:\s*$/.test(line))
+}
+
 const permissionsBlock = topLevelWorkflowPermissions(workflowSource)
+const jobLevelPermissions = jobLevelWorkflowPermissions(workflowSource)
 
 assertIncludes(
   permissionsBlock,
@@ -33,6 +41,14 @@ assert(
 assert(
   !/^  pull-requests: write$/m.test(permissionsBlock),
   `${workflowPath} must not request pull request write permission for CI jobs`
+)
+
+assert(
+  jobLevelPermissions.length === 0,
+  [
+    `${workflowPath} must not declare job-level GITHUB_TOKEN permissions overrides; keep CI read-only at the workflow top level.`,
+    ...jobLevelPermissions.map(({ number }) => `  - job-level permissions block starts on line ${number}`)
+  ].join("\n")
 )
 
 console.log("Checked CI workflow read-only GITHUB_TOKEN permissions.")
