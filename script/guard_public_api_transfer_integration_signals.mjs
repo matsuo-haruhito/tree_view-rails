@@ -6,8 +6,16 @@ const publicApiDocs = [
   ["docs/ja/public-api.md", fs.readFileSync("docs/ja/public-api.md", "utf8")]
 ]
 const dragAndDropDocs = [
-  ["docs/en/drag-and-drop.md", fs.readFileSync("docs/en/drag-and-drop.md", "utf8")],
-  ["docs/ja/drag-and-drop.md", fs.readFileSync("docs/ja/drag-and-drop.md", "utf8")]
+  [
+    "docs/en/drag-and-drop.md",
+    fs.readFileSync("docs/en/drag-and-drop.md", "utf8"),
+    ["persistence"]
+  ],
+  [
+    "docs/ja/drag-and-drop.md",
+    fs.readFileSync("docs/ja/drag-and-drop.md", "utf8"),
+    ["保存"]
+  ]
 ]
 
 const requiredManifestSignals = [
@@ -46,7 +54,6 @@ const requiredDragAndDropSignals = [
   "after",
   "position",
   "authorization",
-  "persistence",
   "TreeViewIntegrationHooks.transfer.payload",
   "data-tree-transfer-payload"
 ]
@@ -67,8 +74,8 @@ for (const [docPath, doc] of publicApiDocs) {
   }
 }
 
-for (const [docPath, doc] of dragAndDropDocs) {
-  for (const signal of requiredDragAndDropSignals) {
+for (const [docPath, doc, localizedSignals] of dragAndDropDocs) {
+  for (const signal of [...requiredDragAndDropSignals, ...localizedSignals]) {
     if (!doc.includes(signal)) {
       missingSignals.push(`${docPath}: ${signal}`)
     }
