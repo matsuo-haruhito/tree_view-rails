@@ -64,4 +64,27 @@ RSpec.describe "tree_view stylesheet source" do
       }
     CSS
   end
+
+  it "keeps representative row state cue selectors available for quick-start imports" do
+    aggregate_failures do
+      expect(stylesheet_source).to include(<<~CSS.strip)
+        .tree-row.is-selected,
+        .tree-row[aria-selected="true"]{
+      CSS
+      expect(stylesheet_source).to include(<<~CSS.strip)
+        .tree-row.is-collapsed,
+        .tree-row[aria-expanded="false"]{
+      CSS
+      expect(stylesheet_source).to include(<<~CSS.strip)
+        .tree-row.is-loading{
+      CSS
+      expect(stylesheet_source).to include(<<~CSS.strip)
+        .tree-row.is-error,
+        .tree-row.is-drop-disabled{
+      CSS
+      expect(stylesheet_source).to include(<<~CSS.strip)
+        .tree-row.is-drop-target{
+      CSS
+    end
+  end
 end
