@@ -28,6 +28,20 @@ node script/test_ci_policy_suite.mjs --self-test
 
 CI policy guard script を追加または rename した場合は、CI に頼る前に suite の `checks` array を更新するか、明示的な exclusion を残してください。self-test は candidate script を走査し、登録済み script が suite から見えることを確認します。未登録 candidate がある場合は missing script path を表示して失敗します。
 
+## Pull Request changed-file detection
+
+Pull Request では、`changes` job が base branch を fetch し、`origin/${{ github.base_ref }}` と `HEAD` の merge base を探します。merge base を取得できる場合、workflow は three-dot diff の `origin/${{ github.base_ref }}...HEAD` を使い、Pull Request で変わった file を基準に routing します。merge base を解決できない場合は、fallback として `git diff --name-only origin/${{ github.base_ref }} HEAD` を使います。
+
+得られた file list は `script/ci_changed_files_policy.mjs` に渡されます。この script が `docs_only`、`package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` output の source of truth です。`script/test_ci_workflow_changed_file_detection_signals.mjs` は workflow command signal を守ります。このメモは、その routing の保守者向けの意味を説明するだけで、classification logic は変更しません。
+
+## docs-only check retention
+
+docs-only Pull Request でも、重い処理を意図的に skip する場合に通常の CI job 名は残します。representative Rails compatibility matrix は check surface を残し、`docs_only` が true の場合は Rails command を実行せず docs-only skip message を出します。
+
+JavaScript job は、docs-only Pull Request かつ mockup、browser-smoke file、docs-entrypoint-sensitive file、CI-policy-sensitive file に触れていない場合だけ install と checks を skip します。`README.md`、`CHANGELOG.md`、`docs/**` のような package-facing docs は package / docs-entrypoint confidence path を通ります。`AGENTS.md` は repository-only docs ですが CI-policy-sensitive です。`Product Profile.md` は repository-only docs で、package-sensitive / docs-entrypoint-sensitive ではありません。
+
+これらの保持された check 名は review / merge 判断の文脈として扱い、すべての heavyweight lane が実行された証明として扱わないでください。skipped lane は changed-file routing output と workflow run conclusion と合わせて確認します。
+
 ## GitHub Actions Dependabot lane
 
 `.github/dependabot.yml` は Dependabot update lane の source of truth です。現在は GitHub Actions dependency update 用の `github-actions` lane を持ち、Bundler lane と同じ weekly Monday 09:00 Asia/Tokyo cadence、open pull request limit 5 で運用されています。
