@@ -6,6 +6,22 @@ const docs = [
   ["docs/en/development.md", fs.readFileSync("docs/en/development.md", "utf8")],
   ["docs/ja/development.md", fs.readFileSync("docs/ja/development.md", "utf8")]
 ]
+const releaseDocs = [
+  ["docs/en/release.md", fs.readFileSync("docs/en/release.md", "utf8")],
+  ["docs/ja/release.md", fs.readFileSync("docs/ja/release.md", "utf8")]
+]
+const ciPolicySuiteDocs = [
+  [
+    "docs/en/ci-policy-suite.md",
+    fs.readFileSync("docs/en/ci-policy-suite.md", "utf8"),
+    ["checks", "explicit exclusion"]
+  ],
+  [
+    "docs/ja/ci-policy-suite.md",
+    fs.readFileSync("docs/ja/ci-policy-suite.md", "utf8"),
+    ["checks", "明示的な exclusion"]
+  ]
+]
 
 const requiredMaintenanceScripts = [
   "test:docs-entrypoints",
@@ -31,6 +47,20 @@ const requiredDockerSetupSignals = [
   "Node 22",
   "npm",
   "lockfile-backed install path"
+]
+
+const requiredCiPolicySuiteCommandSignals = [
+  "npm run test:ci-policy",
+  "node script/test_ci_policy_suite.mjs --list",
+  "node script/test_ci_policy_suite.mjs --only <group-or-index>",
+  "node script/test_ci_policy_suite.mjs --self-test"
+]
+
+const requiredReleaseCiPolicySuiteSignals = [
+  "ci-policy-suite.md",
+  "node script/test_ci_policy_suite.mjs --list",
+  "node script/test_ci_policy_suite.mjs --only <group-or-index>",
+  "node script/test_ci_policy_suite.mjs --self-test"
 ]
 
 const missingSignals = []
@@ -64,6 +94,28 @@ for (const signal of requiredDockerSetupSignals) {
   }
 }
 
+for (const [docPath, doc, registrationSignals] of ciPolicySuiteDocs) {
+  for (const signal of requiredCiPolicySuiteCommandSignals) {
+    if (!doc.includes(signal)) {
+      missingSignals.push(`${docPath}: CI policy suite docs command signal ${signal}`)
+    }
+  }
+
+  for (const signal of registrationSignals) {
+    if (!doc.includes(signal)) {
+      missingSignals.push(`${docPath}: CI policy suite registration signal ${signal}`)
+    }
+  }
+}
+
+for (const [docPath, doc] of releaseDocs) {
+  for (const signal of requiredReleaseCiPolicySuiteSignals) {
+    if (!doc.includes(signal)) {
+      missingSignals.push(`${docPath}: CI policy suite release entrypoint signal ${signal}`)
+    }
+  }
+}
+
 if (missingSignals.length > 0) {
   console.error("[development-docs-command-signals] missing maintenance command signals:")
   for (const signal of missingSignals) {
@@ -73,5 +125,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, and ${requiredDockerSetupSignals.length} Docker setup signals are present in package.json and docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, and ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals are present in package.json and docs`
 )
