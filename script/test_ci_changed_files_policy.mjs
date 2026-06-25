@@ -6,6 +6,7 @@ import { classifyChangedFiles } from "./ci_changed_files_policy.mjs";
 const workflowPath = ".github/workflows/ci.yml";
 const packagePath = "package.json";
 const policyCliPath = "script/ci_changed_files_policy.mjs";
+const ciPolicySuitePath = "script/test_ci_policy_suite.mjs";
 
 const ciPolicyGuardScriptPaths = [
   "script/test_ci_changed_files_policy.mjs",
@@ -329,6 +330,35 @@ function assertJobMatches(jobBlock, pattern, message) {
   assert.match(jobBlock, pattern, message);
 }
 
+function assertCiPolicyCommandRunsSuite(ciPolicyCommand, suiteArgs, message) {
+  const escapedArgs = suiteArgs.map(escapeRegExp).join("\\s+");
+  const argsPattern = escapedArgs.length > 0 ? `\\s+${escapedArgs}` : "";
+
+  assert.match(
+    ciPolicyCommand,
+    new RegExp(`(?:^|&&\\s*)node ${escapeRegExp(ciPolicySuitePath)}${argsPattern}(?:\\s*&&|$)`),
+    message
+  );
+}
+
+function assertCiPolicySuiteRegistersGuardScripts() {
+  const suiteSource = readFileSync(ciPolicySuitePath, "utf8");
+
+  for (const scriptPath of ciPolicyGuardScriptPaths) {
+    assert.match(
+      suiteSource,
+      new RegExp(`args: \\["${escapeRegExp(scriptPath)}"\\]`),
+      `${ciPolicySuitePath} checks array must register ${scriptPath} so test:ci-policy covers CI policy guard changes`
+    );
+  }
+
+  assert.match(
+    suiteSource,
+    /assertCiPolicyScriptsRegistered\(\);/,
+    `${ciPolicySuitePath} --self-test must keep its registration coverage check`
+  );
+}
+
 function assertCiPolicyScriptRegistration(packageScripts) {
   const ciPolicyCommand = packageScripts["test:ci-policy"];
   assert.equal(
@@ -337,13 +367,17 @@ function assertCiPolicyScriptRegistration(packageScripts) {
     `${packagePath} scripts.test:ci-policy must be a command string`
   );
 
-  for (const scriptPath of ciPolicyGuardScriptPaths) {
-    assert.match(
-      ciPolicyCommand,
-      new RegExp(`(?:^|&&\\s*)node ${escapeRegExp(scriptPath)}(?:\\s*&&|$)`),
-      `${packagePath} scripts.test:ci-policy must run ${scriptPath} so CI policy guard changes validate their own registration`
-    );
-  }
+  assertCiPolicyCommandRunsSuite(
+    ciPolicyCommand,
+    ["--self-test"],
+    `${packagePath} scripts.test:ci-policy must run ${ciPolicySuitePath} --self-test before CI policy guards`
+  );
+  assertCiPolicyCommandRunsSuite(
+    ciPolicyCommand,
+    [],
+    `${packagePath} scripts.test:ci-policy must run ${ciPolicySuitePath} so CI policy guard changes validate their own registration`
+  );
+  assertCiPolicySuiteRegistersGuardScripts();
 }
 
 function policyCliOutput(input) {
@@ -608,11 +642,6 @@ assertJobMatches(gemPackageJob, /run: gem install tree_view-\*\.gem/, `${workflo
 assertJobMatches(gemPackageJob, /run: ruby -e "require 'tree_view'"/, `${workflowPath} jobs.gem_package must keep the installed gem require smoke`);
 
 assertCiPolicyScriptRegistration(packageScripts);
-
-assert.ok(
-  packageScripts["test:ci-policy"].includes("script/test_package_lock_dependency_drift.mjs"),
-  `${packagePath} scripts.test:ci-policy must keep the package lock dependency drift guard`
-);
 
 for (const scriptName of npmRunScripts(workflowSource)) {
   assert.ok(
