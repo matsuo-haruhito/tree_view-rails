@@ -10,7 +10,7 @@ Run the full CI policy suite when you need to confirm the policy guards without 
 npm run test:ci-policy
 ```
 
-The package script runs the suite self-test first and then runs the configured CI policy guard groups. Treat `script/test_ci_policy_suite.mjs` as the source of truth for the group list, even if `package.json` still includes direct guard commands for compatibility while the suite migration is being reviewed.
+The package script runs the suite self-test first and then runs the configured CI policy guard groups. Treat `script/test_ci_policy_suite.mjs` as the source of truth for the group list.
 
 ## Targeted runs
 
