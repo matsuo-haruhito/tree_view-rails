@@ -28,4 +28,10 @@ node script/test_ci_policy_suite.mjs --self-test
 
 When adding or renaming a CI policy guard script, update the suite `checks` array or document an explicit exclusion before relying on CI. The self-test scans candidate scripts, confirms that registered scripts stay visible through the suite, and fails with the missing script path when a candidate is not registered.
 
+## GitHub Actions Dependabot lane
+
+`.github/dependabot.yml` is the source of truth for the Dependabot update lanes. It currently includes a `github-actions` lane for GitHub Actions dependency updates with the same weekly Monday 09:00 Asia/Tokyo cadence and open pull request limit of 5 as the Bundler lane.
+
+Keep that automation lane separate from the CI policy guard that watches representative action major versions. Dependabot opens version update pull requests; the action-major guard makes unexpected workflow action-major drift visible during review. The separate SHA pinning / allowed action policy decision remains tracked outside this note, so do not treat the Dependabot lane as a pinning-policy decision.
+
 This note is only about maintainer command routing. It does not change CI workflow jobs, required checks, branch protection, workflow permissions, or lockfile policy.
