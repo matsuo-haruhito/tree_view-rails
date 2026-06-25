@@ -79,6 +79,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/development.md
     docs/ja/development.md
   ],
+  "Bilingual CI policy suite docs" => %w[
+    docs/en/ci-policy-suite.md
+    docs/ja/ci-policy-suite.md
+  ],
   "README-linked public JavaScript docs" => %w[
     docs/en/js-events.md
     docs/ja/js-events.md
