@@ -110,6 +110,51 @@ function assertCiPolicyDocsDependabotSignals() {
   }
 }
 
+function assertCiPolicyDocsDockerSetupSignals() {
+  const docsSignals = [
+    [
+      "docs/en/ci-policy-suite.md",
+      [
+        "docker_setup_sensitive",
+        "Dockerfile",
+        "docker-compose.yml",
+        "package.json",
+        "package-lock.json",
+        ".nvmrc",
+        ".github/workflows/ci.yml",
+        "docker_development_setup",
+        "Node 22",
+        "npm ci",
+        "Docker image design"
+      ]
+    ],
+    [
+      "docs/ja/ci-policy-suite.md",
+      [
+        "docker_setup_sensitive",
+        "Dockerfile",
+        "docker-compose.yml",
+        "package.json",
+        "package-lock.json",
+        ".nvmrc",
+        ".github/workflows/ci.yml",
+        "docker_development_setup",
+        "Node 22",
+        "npm ci",
+        "Docker image design"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} Docker development setup lane docs signal`)
+    }
+  }
+}
+
 for (const docsPath of ciPolicyDocsPaths) {
   assert.deepEqual(
     classifyChangedFiles([docsPath]),
@@ -144,7 +189,9 @@ assert.deepEqual(
 
 assertDependabotLaneSignal()
 assertCiPolicyDocsDependabotSignals()
+assertCiPolicyDocsDockerSetupSignals()
 
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
 console.log("Checked CI policy docs routing guard script routing.")
 console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
+console.log("Checked Docker development setup CI docs signals.")
