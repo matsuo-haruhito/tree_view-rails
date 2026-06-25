@@ -208,6 +208,20 @@ const pathTreeBuilderNodeShapeSignals = [
   "record_node?"
 ]
 
+const publicConstantSignals = [
+  "TreeView::Error",
+  "TreeView::ConfigurationError",
+  "TreeView::InvalidTreeError",
+  "TreeView::DuplicateNodeKeyError",
+  "TreeView::CycleDetectedError",
+  "TreeView::InvalidRenderWindowError",
+  "TreeView::RenderState",
+  "TreeView::ResourceTableRenderState",
+  "TreeView::VisibleRows",
+  "TreeView::RenderWindow",
+  "TreeView::Diagnostics"
+]
+
 const developmentManifestTrackingSignals = [
   "config/public_api_manifest.yml",
   "RenderState callback builder keys",
@@ -227,6 +241,7 @@ const developmentEntrypointGuardSignals = [
 
 const manifestBackedDocsSignalSurfaces = [
   ["RenderState callback builder keys", "render_state_callback_builder_keys:"],
+  ["public constants", "public_constants:"],
   ["host lifecycle no-detail events", "event_names_without_detail:"],
   ["host lifecycle event names", "host_lifecycle:"],
   ["remote-state values", "remote_state_values:"],
@@ -288,6 +303,10 @@ pathTreeBuilderNodeShapeSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest PathTreeBuilder node shape surface")
 })
 
+publicConstantSignals.forEach((signal) => {
+  assertIncludes(manifest, signal.replace("TreeView::", "- "), "public API manifest public constants surface")
+})
+
 assertIncludes(manifest, "event_names_without_detail", "public API manifest no-detail event surface")
 assertIncludes(manifest, "host_lifecycle", "public API manifest no-detail event surface")
 hostLifecycleSignals.slice(1, 5).forEach((signal) => {
@@ -295,6 +314,10 @@ hostLifecycleSignals.slice(1, 5).forEach((signal) => {
 })
 
 publicApiDocs.forEach(([relativePath, document]) => {
+  publicConstantSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} public constant docs from config/public_api_manifest.yml public_constants`)
+  })
+
   callbackBuilderSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} RenderState callback builder docs`)
   })
