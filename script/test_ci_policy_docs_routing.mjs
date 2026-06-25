@@ -1,7 +1,9 @@
 import assert from "node:assert/strict"
 import { execFileSync } from "node:child_process"
+import { readFileSync } from "node:fs"
 import { classifyChangedFiles } from "./ci_changed_files_policy.mjs"
 
+const dependabotPath = ".github/dependabot.yml"
 const ciPolicyDocsPaths = [
   "docs/en/ci-policy-suite.md",
   "docs/ja/ci-policy-suite.md"
@@ -35,6 +37,68 @@ function parsePolicyCliOutput(output) {
   )
 }
 
+function dependabotUpdateBlock(source, ecosystem) {
+  const marker = `  - package-ecosystem: "${ecosystem}"\n`
+  const start = source.indexOf(marker)
+
+  assert.notEqual(start, -1, `${dependabotPath} must define a ${ecosystem} update lane`)
+
+  const remaining = source.slice(start + marker.length)
+  const nextUpdateOffset = remaining.search(/\n  - package-ecosystem: /)
+  return nextUpdateOffset === -1 ? remaining : remaining.slice(0, nextUpdateOffset + 1)
+}
+
+function assertIncludes(source, needle, label) {
+  assert.ok(source.includes(needle), `${label}: missing ${needle}`)
+}
+
+function assertDependabotLaneSignal() {
+  const dependabotSource = readFileSync(dependabotPath, "utf8")
+  const githubActionsLane = dependabotUpdateBlock(dependabotSource, "github-actions")
+
+  assertIncludes(githubActionsLane, 'directory: "/"', `${dependabotPath} github-actions lane directory`)
+  assertIncludes(githubActionsLane, 'interval: "weekly"', `${dependabotPath} github-actions lane schedule interval`)
+  assertIncludes(githubActionsLane, 'day: "monday"', `${dependabotPath} github-actions lane schedule day`)
+  assertIncludes(githubActionsLane, 'time: "09:00"', `${dependabotPath} github-actions lane schedule time`)
+  assertIncludes(githubActionsLane, 'timezone: "Asia/Tokyo"', `${dependabotPath} github-actions lane schedule timezone`)
+  assertIncludes(githubActionsLane, "open-pull-requests-limit: 5", `${dependabotPath} github-actions lane open PR limit`)
+}
+
+function assertCiPolicyDocsDependabotSignals() {
+  const docsSignals = [
+    [
+      "docs/en/ci-policy-suite.md",
+      [
+        ".github/dependabot.yml",
+        "github-actions",
+        "weekly Monday 09:00 Asia/Tokyo",
+        "open pull request limit of 5",
+        "action-major guard",
+        "SHA pinning / allowed action policy"
+      ]
+    ],
+    [
+      "docs/ja/ci-policy-suite.md",
+      [
+        ".github/dependabot.yml",
+        "github-actions",
+        "weekly Monday 09:00 Asia/Tokyo",
+        "open pull request limit 5",
+        "action-major guard",
+        "SHA pinning / allowed action policy"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} GitHub Actions Dependabot lane docs signal`)
+    }
+  }
+}
+
 for (const docsPath of ciPolicyDocsPaths) {
   assert.deepEqual(
     classifyChangedFiles([docsPath]),
@@ -55,4 +119,8 @@ assert.deepEqual(
   "changed-file policy CLI must emit CI policy-sensitive routing for bilingual CI policy docs changes"
 )
 
+assertDependabotLaneSignal()
+assertCiPolicyDocsDependabotSignals()
+
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
+console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
