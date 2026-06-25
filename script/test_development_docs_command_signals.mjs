@@ -7,8 +7,16 @@ const docs = [
   ["docs/ja/development.md", fs.readFileSync("docs/ja/development.md", "utf8")]
 ]
 const ciPolicySuiteDocs = [
-  ["docs/en/ci-policy-suite.md", fs.readFileSync("docs/en/ci-policy-suite.md", "utf8")],
-  ["docs/ja/ci-policy-suite.md", fs.readFileSync("docs/ja/ci-policy-suite.md", "utf8")]
+  [
+    "docs/en/ci-policy-suite.md",
+    fs.readFileSync("docs/en/ci-policy-suite.md", "utf8"),
+    ["checks", "explicit exclusion"]
+  ],
+  [
+    "docs/ja/ci-policy-suite.md",
+    fs.readFileSync("docs/ja/ci-policy-suite.md", "utf8"),
+    ["checks", "明示的な exclusion"]
+  ]
 ]
 
 const requiredMaintenanceScripts = [
@@ -37,13 +45,11 @@ const requiredDockerSetupSignals = [
   "lockfile-backed install path"
 ]
 
-const requiredCiPolicySuiteSignals = [
+const requiredCiPolicySuiteCommandSignals = [
   "npm run test:ci-policy",
   "node script/test_ci_policy_suite.mjs --list",
   "node script/test_ci_policy_suite.mjs --only <group-or-index>",
-  "node script/test_ci_policy_suite.mjs --self-test",
-  "checks",
-  "explicit exclusion"
+  "node script/test_ci_policy_suite.mjs --self-test"
 ]
 
 const missingSignals = []
@@ -77,10 +83,16 @@ for (const signal of requiredDockerSetupSignals) {
   }
 }
 
-for (const signal of requiredCiPolicySuiteSignals) {
-  for (const [docPath, doc] of ciPolicySuiteDocs) {
+for (const [docPath, doc, registrationSignals] of ciPolicySuiteDocs) {
+  for (const signal of requiredCiPolicySuiteCommandSignals) {
     if (!doc.includes(signal)) {
-      missingSignals.push(`${docPath}: CI policy suite docs signal ${signal}`)
+      missingSignals.push(`${docPath}: CI policy suite docs command signal ${signal}`)
+    }
+  }
+
+  for (const signal of registrationSignals) {
+    if (!doc.includes(signal)) {
+      missingSignals.push(`${docPath}: CI policy suite registration signal ${signal}`)
     }
   }
 }
@@ -94,5 +106,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, and ${requiredCiPolicySuiteSignals.length} CI policy suite docs signals are present in package.json and docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, and ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals are present in package.json and docs`
 )
