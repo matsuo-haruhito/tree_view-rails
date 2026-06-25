@@ -8,6 +8,7 @@ const ciPolicyDocsPaths = [
   "docs/en/ci-policy-suite.md",
   "docs/ja/ci-policy-suite.md"
 ]
+const ciPolicyDocsRoutingScriptPath = "script/test_ci_policy_docs_routing.mjs"
 
 const expected = {
   docs_only: true,
@@ -16,6 +17,16 @@ const expected = {
   package_sensitive: true,
   docker_setup_sensitive: false,
   docs_entrypoint_sensitive: true,
+  ci_policy_sensitive: true
+}
+
+const expectedCiPolicyScriptChange = {
+  docs_only: false,
+  mockups_changed: false,
+  browser_smoke_changed: false,
+  package_sensitive: false,
+  docker_setup_sensitive: false,
+  docs_entrypoint_sensitive: false,
   ci_policy_sensitive: true
 }
 
@@ -114,13 +125,26 @@ assert.deepEqual(
 )
 
 assert.deepEqual(
+  classifyChangedFiles([ciPolicyDocsRoutingScriptPath]),
+  expectedCiPolicyScriptChange,
+  `${ciPolicyDocsRoutingScriptPath} changes must run the CI policy guard directly`
+)
+
+assert.deepEqual(
   parsePolicyCliOutput(policyCliOutput(`${ciPolicyDocsPaths.join("\n")}\n`)),
   expected,
   "changed-file policy CLI must emit CI policy-sensitive routing for bilingual CI policy docs changes"
+)
+
+assert.deepEqual(
+  parsePolicyCliOutput(policyCliOutput(`${ciPolicyDocsRoutingScriptPath}\n`)),
+  expectedCiPolicyScriptChange,
+  "changed-file policy CLI must emit CI policy-sensitive routing for CI policy docs routing guard changes"
 )
 
 assertDependabotLaneSignal()
 assertCiPolicyDocsDependabotSignals()
 
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
+console.log("Checked CI policy docs routing guard script routing.")
 console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
