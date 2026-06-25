@@ -128,6 +128,9 @@ Release preparation notes:
 
 ### Tests
 
+- Added public constants docs signal guard coverage for representative Public API constants so public constants stay aligned with `config/public_api_manifest.yml`.
+- Added stylesheet state cue selector source-spec coverage for selected, collapsed, loading, error, disabled-drop, and drop-target cues in the packaged stylesheet.
+- Consolidated `test:ci-policy` package-script execution around the CI policy suite source of truth while preserving guard registration self-test coverage.
 - Added docs-entrypoint guard coverage for `TreeViewTransferDropPositions` and `TreeViewIntegrationHooks` so transfer and integration public API docs signals stay aligned with the manifest.
 - Added CI policy suite and permissions smoke coverage so maintainers can verify read-only workflow permissions and guard group registration through `npm run test:ci-policy`.
 - Added manifest-backed public surface docs smoke coverage for state / remote-state event detail keys, setup generator output, localized names, and public constants.
