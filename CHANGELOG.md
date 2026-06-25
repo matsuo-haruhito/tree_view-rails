@@ -125,6 +125,8 @@ Release preparation notes:
 - Documented `Security` as an allowed CHANGELOG category for vulnerability fixes and security hardening notes.
 - Added mockup review task chooser release evidence so reviewers can choose baseline, responsive, interaction, accessibility, selection, and toolbar/table boundary entry points from `docs/mockups/README.md`.
 - Added repository maintainer CI policy suite guidance release evidence for listing, targeting, and self-testing CI policy guard groups from `AGENTS.md`.
+- Added CI policy suite maintainer note and Release checklist entry points for targeted guard runs, suite self-test behavior, and guard registration expectations.
+- Added GitHub Actions Dependabot lane guidance to the CI policy suite docs, separating automation updates from action-major guard and pinning-policy decisions.
 
 ### Tests
 
