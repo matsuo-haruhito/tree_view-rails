@@ -34,4 +34,12 @@ When adding or renaming a CI policy guard script, update the suite `checks` arra
 
 Keep that automation lane separate from the CI policy guard that watches representative action major versions. Dependabot opens version update pull requests; the action-major guard makes unexpected workflow action-major drift visible during review. The separate SHA pinning / allowed action policy decision remains tracked outside this note, so do not treat the Dependabot lane as a pinning-policy decision.
 
+## Docker development setup lane
+
+The pull request workflow exposes a `docker_setup_sensitive` changed-file lane for Docker-based maintainer setup confidence. The current representative paths are `Dockerfile`, `docker-compose.yml`, `package.json`, `package-lock.json`, `.nvmrc`, and `.github/workflows/ci.yml`.
+
+When that lane is true, the `docker_development_setup` job builds the `app` service and runs the container-side JavaScript install smoke with Node 22, npm, and `npm ci`. Treat this as CI routing and environment-alignment evidence for Docker setup changes, not as a general Docker image design review.
+
+This note does not change the Docker base image, compose volume policy, Node or Ruby support policy, package scripts, CI workflow jobs, required checks, or branch protection.
+
 This note is only about maintainer command routing. It does not change CI workflow jobs, required checks, branch protection, workflow permissions, or lockfile policy.
