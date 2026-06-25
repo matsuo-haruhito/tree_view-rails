@@ -10,7 +10,7 @@
 npm run test:ci-policy
 ```
 
-package script は先に suite self-test を実行し、その後に設定済みの CI policy guard group を実行します。suite 移行の review 中に `package.json` 側へ互換用の直接 guard command が残っていても、group list の source of truth は `script/test_ci_policy_suite.mjs` として扱ってください。
+package script は先に suite self-test を実行し、その後に設定済みの CI policy guard group を実行します。group list の source of truth は `script/test_ci_policy_suite.mjs` として扱ってください。
 
 ## 絞り込み実行
 
