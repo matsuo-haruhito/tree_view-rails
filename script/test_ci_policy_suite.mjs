@@ -239,7 +239,7 @@ function runSelfTest() {
     !ciPolicyCandidateScriptPaths().includes("script/test_ci_policy_suite.mjs"),
     "the suite entrypoint should stay out of direct guard registration candidates"
   )
-  assertCiPolicyScriptsRegistered()
+  assertCiPolicyScriptsRegistered();
 
   console.log("[ci-policy] self-test passed")
 }
