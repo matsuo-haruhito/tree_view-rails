@@ -212,6 +212,8 @@ function assertCiPolicyDocsRoutingOutputSignals() {
     "Product Profile.md",
     "CHANGELOG.md",
     "config/public_api_manifest.yml",
+    "docs/en/ci-policy-suite.md",
+    "docs/ja/ci-policy-suite.md",
     ".github/workflows/ci.yml",
     "script/ci_changed_files_policy.mjs",
     "script/test_ci_changed_files_policy.mjs",
