@@ -34,6 +34,22 @@ For pull requests, the `changes` job fetches the base branch, then tries to find
 
 The resulting file list is passed to `script/ci_changed_files_policy.mjs`, which is the source of truth for the `docs_only`, `package_sensitive`, `docker_setup_sensitive`, `docs_entrypoint_sensitive`, and `ci_policy_sensitive` outputs. `script/test_ci_workflow_changed_file_detection_signals.mjs` protects the workflow command signals; this note explains the maintainer-facing meaning of that routing and does not change the classification logic.
 
+## Representative routing outputs
+
+The changed-file policy exposes representative output flags rather than a full repository inventory. Use these examples as review guidance when reading a pull request's `changes` output:
+
+| Output | Representative path signals | Maintainer meaning |
+| --- | --- | --- |
+| `docs_only` | `README.md`, `docs/**`, `AGENTS.md`, `Product Profile.md` | The pull request is documentation-shaped, although other outputs may still request focused confidence checks. |
+| `package_sensitive` | `README.md`, `CHANGELOG.md`, `docs/**`, `config/public_api_manifest.yml` | The packaged gem or package-facing docs confidence path should run. |
+| `docs_entrypoint_sensitive` | `README.md`, `docs/**`, `config/public_api_manifest.yml` | Docs entrypoint signals should run because reader-facing docs or public manifest signals changed. |
+| `ci_policy_sensitive` | `AGENTS.md`, `.github/workflows/ci.yml`, `script/ci_changed_files_policy.mjs`, `script/test_ci_changed_files_policy.mjs` | CI policy guards should run because workflow routing or maintainer policy signals changed. |
+| `docker_setup_sensitive` | `Dockerfile`, `docker-compose.yml`, `package.json`, `package-lock.json`, `.nvmrc` | Docker-based maintainer setup confidence should run. |
+| `mockups_changed` | `docs/mockups/**` | Static mockup routes changed and may need browser-smoke or gallery review. |
+| `browser_smoke_changed` | `test/browser/**` | Browser smoke definitions changed and should be treated as executable test-surface changes. |
+
+Keep this table representative. Do not turn it into a full changed-file classifier mirror; `script/test_ci_changed_files_policy.mjs` remains the executable fixture source of truth.
+
 ## Docs-only check retention
 
 Docs-only pull requests keep the usual CI job names visible even when heavyweight work is intentionally skipped. The representative Rails compatibility matrix keeps its check surface but prints the docs-only skip message instead of running the Rails command when `docs_only` is true.
