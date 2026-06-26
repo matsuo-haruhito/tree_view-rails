@@ -243,6 +243,19 @@ lintJobSignals.forEach(([label, signal]) => {
   )
 })
 
+const prSpecsJobSignals = [
+  ["representative Ruby version", 'ruby-version: "3.3"'],
+  ["RSpec command", "run: bundle exec rspec"]
+]
+
+prSpecsJobSignals.forEach(([label, signal]) => {
+  assertIncludes(
+    prSpecsJob,
+    signal,
+    `${workflowPath} jobs.pr_specs ${label}`
+  )
+})
+
 const matrixFailFastPolicyJobs = [
   ["pr_rails_matrix", prRailsMatrixJob],
   ["ruby_matrix", rubyMatrixJob],
@@ -297,7 +310,13 @@ javascriptJobNpmScripts.forEach((scriptName) => {
 })
 
 const docsEntrypointsScript = packageScript("test:docs-entrypoints")
+const ciPolicyScript = packageScript("test:ci-policy")
+const entrypointsScript = packageScript("test:entrypoints")
+const jsCoreScript = packageScript("test:js:core")
+
 const docsEntrypointsSignals = [
+  ["package script runs public API transfer guard", docsEntrypointsScript, "node script/guard_public_api_transfer_integration_signals.mjs"],
+  ["package script runs manifest-backed public surface guard", docsEntrypointsScript, "node script/test_manifest_backed_public_surface_signals.mjs"],
   ["package script uses docs entrypoint suite", docsEntrypointsScript, "node script/test_docs_entrypoint_suite.mjs"],
   ["suite registers controller registration docs signal", docsEntrypointSuiteSource, "script/check_controller_registration_docs_signals.mjs"]
 ]
@@ -310,12 +329,56 @@ docsEntrypointsSignals.forEach(([label, source, signal]) => {
   )
 })
 
+const packageGuardSuiteCompositionSignals = [
+  ["test:entrypoints runs docs entrypoint guard suite", entrypointsScript, "npm run test:docs-entrypoints"],
+  ["test:entrypoints runs CI policy guard suite", entrypointsScript, "npm run test:ci-policy"],
+  ["test:entrypoints keeps Node source guard", entrypointsScript, "npm run test:node-version-sources"],
+  ["test:entrypoints keeps Ruby source guard", entrypointsScript, "npm run test:ruby-version-sources"],
+  ["test:js:core runs entrypoint guard suite before npm test", jsCoreScript, "npm run test:entrypoints"],
+  ["test:js:core reaches npm test", jsCoreScript, "npm test"]
+]
+
+packageGuardSuiteCompositionSignals.forEach(([label, source, signal]) => {
+  assertIncludes(
+    source,
+    signal,
+    `${packagePath} guard suite script composition ${label}`
+  )
+})
+
+assertOrdered(
+  docsEntrypointsScript,
+  "node script/guard_public_api_transfer_integration_signals.mjs",
+  "node script/test_docs_entrypoint_suite.mjs",
+  `${packagePath} scripts.test:docs-entrypoints must run public API transfer guard before docs entrypoint suite`
+)
+assertOrdered(
+  docsEntrypointsScript,
+  "node script/test_manifest_backed_public_surface_signals.mjs",
+  "node script/test_docs_entrypoint_suite.mjs",
+  `${packagePath} scripts.test:docs-entrypoints must run manifest-backed public surface guard before docs entrypoint suite`
+)
+assertOrdered(
+  ciPolicyScript,
+  "node script/test_ci_policy_suite.mjs --self-test",
+  "node script/test_ci_policy_suite.mjs",
+  `${packagePath} scripts.test:ci-policy must run the suite self-test before the CI policy suite`
+)
+assertOrdered(
+  jsCoreScript,
+  "npm run test:entrypoints",
+  "npm test",
+  `${packagePath} scripts.test:js:core must run entrypoint guards before npm test`
+)
+
 console.log("Checked CI workflow trigger policy signals.")
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
 console.log(`Checked ${lintJobSignals.length} CI lint job representative signals.`)
+console.log(`Checked ${prSpecsJobSignals.length} CI pr_specs job representative signals.`)
 console.log(`Checked ${matrixFailFastPolicyJobs.length} CI matrix fail-fast policy signals.`)
 console.log(`Checked ${rubyMatrixVersionSignals.length} representative Ruby workflow version signals.`)
 console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
 console.log(`Checked ${docsEntrypointsSignals.length} docs-entrypoints package and suite command signals.`)
+console.log(`Checked ${packageGuardSuiteCompositionSignals.length} package guard suite composition signals.`)
