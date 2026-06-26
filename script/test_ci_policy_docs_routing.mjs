@@ -261,6 +261,9 @@ function assertCiPolicyDocsDocsOnlyRetentionSignals() {
         "docs/**",
         "AGENTS.md",
         "Product Profile.md",
+        "repository-only maintainer entrypoint smoke",
+        "not package-, docs-entrypoint-, or CI-policy-sensitive",
+        "manual-review routed",
         "not as proof that every heavyweight lane ran"
       ]
     ],
@@ -281,6 +284,9 @@ function assertCiPolicyDocsDocsOnlyRetentionSignals() {
         "docs/**",
         "AGENTS.md",
         "Product Profile.md",
+        "repository-only maintainer entrypoint smoke",
+        "意図的に package-sensitive / docs-entrypoint-sensitive / CI-policy-sensitive にはしていません",
+        "manual-review routed",
         "すべての heavyweight lane が実行された証明として扱わないでください"
       ]
     ]
