@@ -123,10 +123,32 @@ Release preparation notes:
 - Documented CI-policy-sensitive docs-only routing in AGENTS.md and Release docs so maintainers know when `npm run test:ci-policy` runs for repository-maintainer docs.
 - Added RubyGems `documentation_uri` metadata release evidence so package users can find the docs entrypoint from gem metadata.
 - Documented `Security` as an allowed CHANGELOG category for vulnerability fixes and security hardening notes.
+- Added mockup review task chooser release evidence so reviewers can choose baseline, responsive, interaction, accessibility, selection, and toolbar/table boundary entry points from `docs/mockups/README.md`.
+- Added repository maintainer CI policy suite guidance release evidence for listing, targeting, and self-testing CI policy guard groups from `AGENTS.md`.
+- Added CI policy suite maintainer note and Release checklist entry points for targeted guard runs, suite self-test behavior, and guard registration expectations.
+- Added GitHub Actions Dependabot lane guidance to the CI policy suite docs, separating automation updates from action-major guard and pinning-policy decisions.
+- Added Docker development setup lane guidance to the CI policy suite docs, covering `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` container-side install smoke boundaries.
+- Added pull request changed-file detection and docs-only check retention guidance to CI policy suite docs, covering merge-base / fallback diff routing and package-facing versus repository-only docs boundaries.
+- Added representative routing output guidance to CI policy suite docs so maintainers can map changed-file routing outputs to expected PR checks.
+- Clarified CI policy suite docs self-routing guidance so bilingual CI policy suite notes are represented in `ci_policy_sensitive` checks.
+- Clarified empty-state mockup release evidence for disabled toolbar actions, including the `Current path unavailable` action and host-app-owned reset behavior.
 
 ### Tests
 
+- Added helper method manifest-backed docs signal coverage so Public API helper signatures stay aligned with `config/public_api_manifest.yml`.
+- Added docs-entrypoint suite registration and lazy-loading authorization docs signal coverage so manifest-backed public surface guards stay visible through `npm run test:docs-entrypoints`.
+- Added public constants docs signal guard coverage for representative Public API constants so public constants stay aligned with `config/public_api_manifest.yml`.
+- Added stylesheet state cue selector source-spec coverage for selected, collapsed, loading, error, disabled-drop, and drop-target cues in the packaged stylesheet.
+- Expanded package contents verification coverage for bilingual CI policy suite docs so packaged gems keep maintainer CI policy guidance available.
+- Consolidated `test:ci-policy` package-script execution around the CI policy suite source of truth while preserving guard registration self-test coverage.
+- Added Docker setup CI docs signal coverage so CI policy docs keep `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` guidance aligned.
+- Added CI policy docs signal coverage for pull request changed-file detection and docs-only check retention so CI policy docs stay aligned with workflow routing evidence.
+- Added CI routing output docs signal coverage for representative changed-file routing output guidance.
+- Added CI policy suite docs routing signal coverage so bilingual CI policy suite paths stay represented in `ci_policy_sensitive` docs smoke.
+- Added CI guard suite smoke coverage for the PR specs RSpec command and package guard suite composition signals.
 - Added docs-entrypoint guard coverage for `TreeViewTransferDropPositions` and `TreeViewIntegrationHooks` so transfer and integration public API docs signals stay aligned with the manifest.
+- Added CI policy suite and permissions smoke coverage so maintainers can verify read-only workflow permissions and guard group registration through `npm run test:ci-policy`.
+- Added manifest-backed public surface docs smoke coverage for state / remote-state event detail keys, setup generator output, localized names, and public constants.
 - Expanded package contents verification coverage for README-linked FAQ / Troubleshooting / API Overview / API Reference / Tree diagnostics docs so packaged gems keep those public reader guides available.
 - Added controller registration docs signal coverage to the docs-entrypoint suite so controller registration guides and manifest controller entries stay aligned.
 - Added CI changed-file detection workflow guard coverage for docs-entrypoints package script wiring so controller registration docs signals stay connected to `npm run test:docs-entrypoints`.

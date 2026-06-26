@@ -103,6 +103,11 @@ const checks = [
     args: ["script/test_public_api_docs_signals.mjs"]
   },
   {
+    group: "Manifest-backed public surface signals",
+    command: "node",
+    args: ["script/test_manifest_backed_public_surface_signals.mjs"]
+  },
+  {
     group: "Public API exported controller class docs signals",
     command: "node",
     args: ["script/test_public_api_exported_controller_class_docs_signals.mjs"]
@@ -160,6 +165,7 @@ const checks = [
 ]
 
 const docsEntrypointScriptExclusions = new Map([
+  ["test_ci_policy_docs_routing.mjs", "registered through npm run test:ci-policy"],
   [
     "test_development_docs_command_signals.mjs",
     "registered through npm run test:development-docs-commands"
@@ -338,6 +344,11 @@ function runSelfTest() {
     resolveOnlyGroupResult("public api docs signals").check.group,
     "Public API docs signals",
     "case-insensitive exact --only should resolve a group"
+  )
+  assert.equal(
+    resolveOnlyGroupResult("Manifest-backed public surface").check.group,
+    "Manifest-backed public surface signals",
+    "unique partial --only should resolve the manifest-backed public surface docs signal"
   )
   assert.equal(
     resolveOnlyGroupResult("Event names").check.group,

@@ -47,6 +47,10 @@ const pathTreeBuilderDocs = [
   ["docs/en/path-tree-builder.md", read("docs/en/path-tree-builder.md")],
   ["docs/ja/path-tree-builder.md", read("docs/ja/path-tree-builder.md")]
 ]
+const persistedStateDocs = [
+  ["docs/en/persisted-state.md", read("docs/en/persisted-state.md")],
+  ["docs/ja/persisted-state.md", read("docs/ja/persisted-state.md")]
+]
 const developmentDocs = [
   ["docs/en/development.md", read("docs/en/development.md")],
   ["docs/ja/development.md", read("docs/ja/development.md")]
@@ -208,6 +212,32 @@ const pathTreeBuilderNodeShapeSignals = [
   "record_node?"
 ]
 
+const persistedStateLifecycleSignals = [
+  "TreeView::PersistedState.from",
+  "TreeView::StateStore",
+  "persisted_state = store.find(",
+  "persisted_state = store.save!(",
+  "persisted_state = store.clear!(",
+  "matching_count = store.prune_count(",
+  "deleted_count = store.prune!("
+]
+
+const publicConstantSignals = [
+  "TreeView::Error",
+  "TreeView::ConfigurationError",
+  "TreeView::InvalidTreeError",
+  "TreeView::DuplicateNodeKeyError",
+  "TreeView::CycleDetectedError",
+  "TreeView::InvalidRenderWindowError",
+  "TreeView::RenderState",
+  "TreeView::ResourceTableRenderState",
+  "TreeView::VisibleRows",
+  "TreeView::RenderWindow",
+  "TreeView::PersistedState",
+  "TreeView::StateStore",
+  "TreeView::Diagnostics"
+]
+
 const developmentManifestTrackingSignals = [
   "config/public_api_manifest.yml",
   "RenderState callback builder keys",
@@ -227,6 +257,7 @@ const developmentEntrypointGuardSignals = [
 
 const manifestBackedDocsSignalSurfaces = [
   ["RenderState callback builder keys", "render_state_callback_builder_keys:"],
+  ["public constants", "public_constants:"],
   ["host lifecycle no-detail events", "event_names_without_detail:"],
   ["host lifecycle event names", "host_lifecycle:"],
   ["remote-state values", "remote_state_values:"],
@@ -288,6 +319,10 @@ pathTreeBuilderNodeShapeSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest PathTreeBuilder node shape surface")
 })
 
+publicConstantSignals.forEach((signal) => {
+  assertIncludes(manifest, signal.replace("TreeView::", "- "), "public API manifest public constants surface")
+})
+
 assertIncludes(manifest, "event_names_without_detail", "public API manifest no-detail event surface")
 assertIncludes(manifest, "host_lifecycle", "public API manifest no-detail event surface")
 hostLifecycleSignals.slice(1, 5).forEach((signal) => {
@@ -295,6 +330,10 @@ hostLifecycleSignals.slice(1, 5).forEach((signal) => {
 })
 
 publicApiDocs.forEach(([relativePath, document]) => {
+  publicConstantSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} public constant docs from config/public_api_manifest.yml public_constants`)
+  })
+
   callbackBuilderSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} RenderState callback builder docs`)
   })
@@ -356,6 +395,13 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
   assert(
     /host app remains responsible for fetch behavior|実際のfetch、Turbo request、controller action、認可、query、retry UI、children pagination/.test(document),
     `${relativePath}: Lazy Loading docs no longer preserve the host-app-owned remote loading boundary`
+  )
+
+  assertIncludes(document, "authorize!", `${relativePath} lazy-loading authorization guard docs`)
+  assertIncludes(document, "visible_to(current_user)", `${relativePath} lazy-loading authorization query docs`)
+  assert(
+    /Do not treat lazy loading as authorization|lazy loadingをauthorizationの代わりに使わないでください/.test(document),
+    `${relativePath}: Lazy Loading docs no longer preserve the server-side authorization warning`
   )
 
   assert(
@@ -516,6 +562,27 @@ pathTreeBuilderDocs.forEach(([relativePath, document]) => {
   assert(
     /folder key generation strategy|sort algorithm|file-manager behavior|row action design|folder key generation strategy|sort algorithm|file-manager behavior|row action design/.test(document),
     `${relativePath}: PathTreeBuilder docs no longer keep generated-key, sorting, file-manager, and row-action behavior outside the node shape contract`
+  )
+})
+
+persistedStateDocs.forEach(([relativePath, document]) => {
+  persistedStateLifecycleSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} PersistedState / StateStore lifecycle docs`)
+  })
+
+  assert(
+    /storage ownership, authorization, save timing, cleanup policy|実際の保存先、owner model、認可、保存タイミング、cleanup policy/.test(document),
+    `${relativePath}: persisted-state docs no longer keep storage ownership, authorization, and save timing with the host app`
+  )
+
+  assert(
+    /cleanup scheduling, retention selection, authorization, or audit policy|cleanup schedule、retention の選択、authorization、audit policy/.test(document),
+    `${relativePath}: persisted-state docs no longer keep cleanup, retention, authorization, and audit policy with the host app`
+  )
+
+  assert(
+    /does not provide a cleanup rake task or default TTL|cleanup rake task や default TTL を提供しません/.test(document),
+    `${relativePath}: persisted-state docs no longer say TreeView does not own cleanup tasks or default TTL`
   )
 })
 

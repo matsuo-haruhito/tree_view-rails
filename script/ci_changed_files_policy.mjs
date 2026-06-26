@@ -91,9 +91,12 @@ function isCiPolicySensitivePath(file) {
   return (
     file === "AGENTS.md" ||
     file === ".github/workflows/ci.yml" ||
+    file === "docs/en/ci-policy-suite.md" ||
+    file === "docs/ja/ci-policy-suite.md" ||
     file === "script/ci_changed_files_policy.mjs" ||
     file === "script/test_ci_policy_suite.mjs" ||
     file === "script/test_ci_changed_files_policy.mjs" ||
+    file === "script/test_ci_policy_docs_routing.mjs" ||
     file === "script/test_ci_workflow_changed_file_detection_signals.mjs" ||
     file === "script/test_ci_workflow_permissions_signals.mjs" ||
     file === "script/test_ci_observation_guidance_signals.mjs" ||

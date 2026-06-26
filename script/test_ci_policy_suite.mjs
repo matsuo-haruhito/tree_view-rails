@@ -28,6 +28,11 @@ const checks = [
     args: ["script/test_ci_observation_guidance_signals.mjs"]
   },
   {
+    group: "CI policy docs routing signals",
+    command: "node",
+    args: ["script/test_ci_policy_docs_routing.mjs"]
+  },
+  {
     group: "Package lock dependency drift",
     command: "node",
     args: ["script/test_package_lock_dependency_drift.mjs"]
@@ -239,7 +244,7 @@ function runSelfTest() {
     !ciPolicyCandidateScriptPaths().includes("script/test_ci_policy_suite.mjs"),
     "the suite entrypoint should stay out of direct guard registration candidates"
   )
-  assertCiPolicyScriptsRegistered()
+  assertCiPolicyScriptsRegistered();
 
   console.log("[ci-policy] self-test passed")
 }

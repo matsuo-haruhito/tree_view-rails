@@ -75,6 +75,10 @@ When Ruby support wording or source files change, keep the release checklist ali
 
 Use the release checklist to confirm that Ruby support evidence is visible before tagging, while leaving Ruby major/minor support changes, Rails matrix changes, workflow behavior, and gemspec metadata updates to the PR that owns the actual support-policy change.
 
+### CI policy suite
+
+When release preparation or a CI-sensitive documentation change needs targeted CI policy guard evidence, start from [CI policy suite](ci-policy-suite.md). Use `node script/test_ci_policy_suite.mjs --list` to see available guard groups, `node script/test_ci_policy_suite.mjs --only <group-or-index>` to narrow one guard, and `node script/test_ci_policy_suite.mjs --self-test` to confirm guard registration coverage before relying on release evidence.
+
 Local checks:
 
 ```bash

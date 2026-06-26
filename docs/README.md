@@ -84,6 +84,7 @@ Maintainer entry points には、gem に同梱される `docs/**` と repository
 - [Design policy](en/design-policy.md) / [設計思想と責務範囲](ja/design-policy.md): repository scope, responsibility boundaries, and non-goals.
 - [Demo application boundary](en/demo-application-boundary.md) / [Demo application boundary](ja/demo-application-boundary.md): handoff policy between static gem mockups and a future public Rails demo application.
 - [Development](en/development.md) / [開発・保守方針](ja/development.md): CI, local checks, documentation update workflow, and maintenance habits.
+- [CI policy suite](en/ci-policy-suite.md) / [CI policy suite](ja/ci-policy-suite.md): targeted CI policy guard runs, suite self-test behavior, and guard registration expectations.
 - [Dependabot Bundler recovery](en/dependabot-bundler-recovery.md) / [Dependabot Bundler 復旧手順](ja/dependabot-bundler-recovery.md): lockfile metadata drift triage and scoped recovery paths for Bundler dependency PRs.
 - [Code quality](en/code-quality.md) / [コード品質](ja/code-quality.md): lint, tests, error message quality, and documentation quality policy.
 - [Release checklist](en/release.md) / [リリースチェックリスト](ja/release.md): release workflow, CI and package verification, and changelog expectations.

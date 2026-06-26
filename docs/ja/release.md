@@ -75,6 +75,10 @@ Ruby support wording や source files を変更する場合は、`npm run test:r
 
 release checklist では tag 前に Ruby support evidence が見えることを確認します。一方で、Ruby major/minor support の変更、Rails matrix の変更、workflow behavior、gemspec metadata 更新は、実際の support-policy change を担当する PR に閉じてください。
 
+### CI policy suite
+
+release preparation や CI-sensitive docs 変更で、CI policy guard の絞り込み証跡が必要な場合は [CI policy suite](ci-policy-suite.md) から確認してください。`node script/test_ci_policy_suite.mjs --list` で guard group を確認し、`node script/test_ci_policy_suite.mjs --only <group-or-index>` で 1つの guard に絞り込み、`node script/test_ci_policy_suite.mjs --self-test` で release evidence に頼る前の registration coverage を確認します。
+
 ローカル確認:
 
 ```bash
