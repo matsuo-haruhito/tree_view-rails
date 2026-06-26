@@ -132,11 +132,13 @@ Release preparation notes:
 - Added representative routing output guidance to CI policy suite docs so maintainers can map changed-file routing outputs to expected PR checks.
 - Clarified CI policy suite docs self-routing guidance so bilingual CI policy suite notes are represented in `ci_policy_sensitive` checks.
 - Added read-only workflow permissions guidance to CI policy suite docs so maintainers can review `GITHUB_TOKEN` token-scope evidence alongside the permissions guard.
+- Clarified repository-only maintainer docs routing in CI policy suite docs so AGENTS.md remains CI-policy-sensitive while Product Profile.md stays manual-review routed.
 - Clarified empty-state mockup release evidence for disabled toolbar actions, including the `Current path unavailable` action and host-app-owned reset behavior.
 
 ### Tests
 
 - Added row status builder docs signal coverage so grouped option docs keep row disabled, readonly, and disabled-reason builders aligned with the manifest and host-app responsibility boundary.
+- Added repository-only maintainer docs routing signal coverage so CI policy docs keep AGENTS.md and Product Profile.md changed-file guidance aligned.
 - Added helper method manifest-backed docs signal coverage so Public API helper signatures stay aligned with `config/public_api_manifest.yml`.
 - Added docs-entrypoint suite registration and lazy-loading authorization docs signal coverage so manifest-backed public surface guards stay visible through `npm run test:docs-entrypoints`.
 - Added public constants docs signal guard coverage for representative Public API constants so public constants stay aligned with `config/public_api_manifest.yml`.
