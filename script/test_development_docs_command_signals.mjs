@@ -113,6 +113,10 @@ const requiredWorkflowTriggerSignals = [
 
 const missingSignals = []
 
+function docSource(docList, docPath) {
+  return docList.find(([path]) => path === docPath)?.[1]
+}
+
 for (const scriptName of requiredMaintenanceScripts) {
   if (!packageJson.scripts?.[scriptName]) {
     missingSignals.push(`package.json scripts.${scriptName}`)
@@ -164,17 +168,21 @@ for (const [docPath, doc] of releaseDocs) {
   }
 }
 
-for (const [docPath, doc, signals] of requiredDevelopmentCiPolicySignals) {
+for (const [docPath, signals] of requiredDevelopmentCiPolicySignals) {
+  const doc = docSource(docs, docPath)
+
   for (const signal of signals) {
-    if (!doc.includes(signal)) {
+    if (!doc?.includes(signal)) {
       missingSignals.push(`${docPath}: CI policy trigger/routing signal ${signal}`)
     }
   }
 }
 
-for (const [docPath, doc, signals] of requiredReleaseCiPolicySensitiveSignals) {
+for (const [docPath, signals] of requiredReleaseCiPolicySensitiveSignals) {
+  const doc = docSource(releaseDocs, docPath)
+
   for (const signal of signals) {
-    if (!doc.includes(signal)) {
+    if (!doc?.includes(signal)) {
       missingSignals.push(`${docPath}: CI policy-sensitive release docs signal ${signal}`)
     }
   }
