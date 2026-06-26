@@ -136,6 +136,7 @@ Release preparation notes:
 
 ### Tests
 
+- Added row status builder docs signal coverage so grouped option docs keep row disabled, readonly, and disabled-reason builders aligned with the manifest and host-app responsibility boundary.
 - Added helper method manifest-backed docs signal coverage so Public API helper signatures stay aligned with `config/public_api_manifest.yml`.
 - Added docs-entrypoint suite registration and lazy-loading authorization docs signal coverage so manifest-backed public surface guards stay visible through `npm run test:docs-entrypoints`.
 - Added public constants docs signal guard coverage for representative Public API constants so public constants stay aligned with `config/public_api_manifest.yml`.
