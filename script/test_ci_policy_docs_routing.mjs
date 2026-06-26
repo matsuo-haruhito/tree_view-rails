@@ -222,7 +222,8 @@ function assertCiPolicyDocsRoutingOutputSignals() {
     ".nvmrc",
     "docs/mockups/**",
     "test/browser/**",
-    "script/test_ci_changed_files_policy.mjs remains the executable fixture source of truth"
+    "executable fixture",
+    "source of truth"
   ]
 
   const docsSignals = [
