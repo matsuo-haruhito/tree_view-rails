@@ -236,6 +236,7 @@ Release preparation notes:
 - `TreeView::PathTree` via `Tree#path_tree_for(items)` for rendering matched items with completed parent paths.
 - `TreeView::ReverseTree` via `Tree#reverse_tree_for(items)` for rendering child-to-parent paths.
 - `TreeView::RenderState` for screen-level rendering options.
+- `tree_view_rows(render_state)` helper.
 - `TreeView::RenderWindow` and opt-in windowed rendering through `tree_view_rows(render_state, window: { offset:, limit: })`.
 - `tree_view_window(render_state, offset:, limit:)` for pagination metadata around visible rows.
 - Static tree rendering.
