@@ -2,6 +2,7 @@ import fs from "node:fs"
 
 const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"))
 const readme = fs.readFileSync("README.md", "utf8")
+const workflow = fs.readFileSync(".github/workflows/ci.yml", "utf8")
 const docs = [
   ["docs/en/development.md", fs.readFileSync("docs/en/development.md", "utf8")],
   ["docs/ja/development.md", fs.readFileSync("docs/ja/development.md", "utf8")]
@@ -63,7 +64,58 @@ const requiredReleaseCiPolicySuiteSignals = [
   "node script/test_ci_policy_suite.mjs --self-test"
 ]
 
+const requiredDevelopmentCiPolicySignals = [
+  [
+    "docs/en/development.md",
+    [
+      "Pull requests run the fast Ruby checks and JavaScript checks",
+      "Pushes to `main` also run the broader compatibility and release checks",
+      "changed-files policy",
+      "ci_policy_sensitive",
+      "npm run test:ci-policy"
+    ]
+  ],
+  [
+    "docs/ja/development.md",
+    [
+      "Pull Requestでは、日常的な変更を守る高速なRuby checksとJavaScript checksを実行します",
+      "`main` へのpushでは、より広い互換性確認とrelease向けのchecksも実行します",
+      "changed-files policy",
+      "ci_policy_sensitive",
+      "npm run test:ci-policy"
+    ]
+  ]
+]
+
+const requiredReleaseCiPolicySensitiveSignals = [
+  [
+    "docs/en/release.md",
+    [
+      "CI-policy-sensitive docs-only PRs run `npm run test:ci-policy`",
+      "Docs-only PRs that are not docs-entrypoint-sensitive and do not touch mockups, CI-policy-sensitive, or browser-smoke-sensitive paths can skip JavaScript checks entirely",
+      "changed-files policy"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "CI-policy-sensitive な docs-only PR では `npm run test:ci-policy`",
+      "docs-entrypoint-sensitive でも CI-policy-sensitive でもなく、mockup / browser-smoke path も触らない docs-only PR は JavaScript checks を完全に skip できます",
+      "changed-files policy"
+    ]
+  ]
+]
+
+const requiredWorkflowTriggerSignals = [
+  "on:\n  pull_request:",
+  "push:\n    branches:\n      - main"
+]
+
 const missingSignals = []
+
+function docSource(docList, docPath) {
+  return docList.find(([path]) => path === docPath)?.[1]
+}
 
 for (const scriptName of requiredMaintenanceScripts) {
   if (!packageJson.scripts?.[scriptName]) {
@@ -116,6 +168,36 @@ for (const [docPath, doc] of releaseDocs) {
   }
 }
 
+for (const [docPath, signals] of requiredDevelopmentCiPolicySignals) {
+  const doc = docSource(docs, docPath)
+
+  for (const signal of signals) {
+    if (!doc?.includes(signal)) {
+      missingSignals.push(`${docPath}: CI policy trigger/routing signal ${signal}`)
+    }
+  }
+}
+
+for (const [docPath, signals] of requiredReleaseCiPolicySensitiveSignals) {
+  const doc = docSource(releaseDocs, docPath)
+
+  for (const signal of signals) {
+    if (!doc?.includes(signal)) {
+      missingSignals.push(`${docPath}: CI policy-sensitive release docs signal ${signal}`)
+    }
+  }
+}
+
+for (const signal of requiredWorkflowTriggerSignals) {
+  if (!workflow.includes(signal)) {
+    missingSignals.push(`.github/workflows/ci.yml: CI workflow trigger signal ${signal}`)
+  }
+}
+
+if (workflow.includes("pull_request_target")) {
+  missingSignals.push(".github/workflows/ci.yml: CI workflow must not use pull_request_target for PR checks")
+}
+
 if (missingSignals.length > 0) {
   console.error("[development-docs-command-signals] missing maintenance command signals:")
   for (const signal of missingSignals) {
@@ -125,5 +207,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, and ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals are present in package.json and docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
 )
