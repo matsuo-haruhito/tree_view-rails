@@ -138,6 +138,7 @@ Release preparation notes:
 - Expanded package contents verification coverage for bilingual CI policy suite docs so packaged gems keep maintainer CI policy guidance available.
 - Consolidated `test:ci-policy` package-script execution around the CI policy suite source of truth while preserving guard registration self-test coverage.
 - Added Docker setup CI docs signal coverage so CI policy docs keep `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` guidance aligned.
+- Added CI policy docs signal coverage for pull request changed-file detection and docs-only check retention so CI policy docs stay aligned with workflow routing evidence.
 - Added docs-entrypoint guard coverage for `TreeViewTransferDropPositions` and `TreeViewIntegrationHooks` so transfer and integration public API docs signals stay aligned with the manifest.
 - Added CI policy suite and permissions smoke coverage so maintainers can verify read-only workflow permissions and guard group registration through `npm run test:ci-policy`.
 - Added manifest-backed public surface docs smoke coverage for state / remote-state event detail keys, setup generator output, localized names, and public constants.
@@ -235,7 +236,6 @@ Release preparation notes:
 - `TreeView::PathTree` via `Tree#path_tree_for(items)` for rendering matched items with completed parent paths.
 - `TreeView::ReverseTree` via `Tree#reverse_tree_for(items)` for rendering child-to-parent paths.
 - `TreeView::RenderState` for screen-level rendering options.
-- `tree_view_rows(render_state)` helper.
 - `TreeView::RenderWindow` and opt-in windowed rendering through `tree_view_rows(render_state, window: { offset:, limit: })`.
 - `tree_view_window(render_state, offset:, limit:)` for pagination metadata around visible rows.
 - Static tree rendering.
