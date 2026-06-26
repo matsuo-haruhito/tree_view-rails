@@ -40,7 +40,9 @@ const groupedOptionSignals = [
   "max_leaf_distance",
   "payload_builder",
   "disabled_reason_builder",
-  "row_readonly_builder"
+  "row_disabled_builder",
+  "row_readonly_builder",
+  "row_disabled_reason_builder"
 ]
 
 assertSignals("config/public_api_manifest.yml", feature, groupedOptionSignals)
@@ -65,6 +67,25 @@ const publicApiDocSignals = [
 
 ;["docs/en/public-api.md", "docs/ja/public-api.md"].forEach((sourcePath) => {
   assertSignals(sourcePath, feature, publicApiDocSignals)
+})
+
+const rowStatusDocSignals = [
+  "row_disabled_builder",
+  "row_readonly_builder",
+  "row_disabled_reason_builder",
+  "tree-view-row--disabled",
+  "tree-view-row--readonly",
+  "data-tree-view-row-disabled-reason",
+  "disabled_builder",
+  "TreeView-owned status data keys",
+  "business rule",
+  "authorization",
+  "action disabling",
+  "disabled reason display"
+]
+
+;["docs/en/row-status.md", "docs/ja/row-status.md"].forEach((sourcePath) => {
+  assertSignals(sourcePath, "RenderState row status docs", rowStatusDocSignals)
 })
 
 assert(
