@@ -132,6 +132,8 @@ Docs-only pull requests that touch only `README.md`, `docs/**`, `Product Profile
 
 For CI policy guard triage, use `node script/test_ci_policy_suite.mjs --list` to see the guard groups that back `npm run test:ci-policy`, then run `node script/test_ci_policy_suite.mjs --only <group-or-index>` when you need one group. Use `node script/test_ci_policy_suite.mjs --self-test` when a CI policy guard script is added, renamed, or moved so registration drift is caught before relying on the full package script.
 
+For docs entrypoint guard triage, `npm run test:docs-entrypoints` currently runs the package-level `script/guard_public_api_transfer_integration_signals.mjs` prelude before `script/test_docs_entrypoint_suite.mjs`. Treat that prelude as an intentional package-level guard until #2574 resolves whether `guard_*` docs signal scripts should move into the suite registration or stay outside it with an explicit exclusion.
+
 Pushes to `main` also run the broader compatibility and release checks:
 
 - Ruby version matrix
