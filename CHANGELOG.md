@@ -128,6 +128,7 @@ Release preparation notes:
 - Added CI policy suite maintainer note and Release checklist entry points for targeted guard runs, suite self-test behavior, and guard registration expectations.
 - Added GitHub Actions Dependabot lane guidance to the CI policy suite docs, separating automation updates from action-major guard and pinning-policy decisions.
 - Added Docker development setup lane guidance to the CI policy suite docs, covering `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` container-side install smoke boundaries.
+- Added pull request changed-file detection and docs-only check retention guidance to CI policy suite docs, covering merge-base / fallback diff routing and package-facing versus repository-only docs boundaries.
 - Clarified empty-state mockup release evidence for disabled toolbar actions, including the `Current path unavailable` action and host-app-owned reset behavior.
 
 ### Tests
