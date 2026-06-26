@@ -128,10 +128,43 @@ const lazyLoadingRemoteStateSignals = [
   "host app"
 ]
 
+const helperMethodManifestSignals = [
+  "helper_methods:",
+  "- tree_view_rows",
+  "- tree_view_window",
+  "- tree_node_dom_id",
+  "- tree_children_container_dom_id",
+  "- tree_remote_state_placeholder_dom_id",
+  "- tree_remote_state_placeholder_attributes",
+  "- tree_selection_value",
+  "- tree_view_breadcrumb",
+  "- tree_view_toolbar",
+  "- tree_view_toolbar_supported_actions",
+  "- tree_view_toolbar_actions",
+  "- tree_view_toolbar_action_metadata"
+]
+
+const helperMethodDocsSignals = [
+  "tree_view_rows(render_state)",
+  "tree_view_rows(render_state, window: { offset:, limit: })",
+  "tree_view_window(render_state, offset:, limit:)",
+  "tree_node_dom_id(item_or_id, ui: @tree_ui)",
+  "tree_children_container_dom_id(item, ui: @tree_ui)",
+  "tree_remote_state_placeholder_dom_id(item, ui: @tree_ui)",
+  "tree_remote_state_placeholder_attributes(item, state: nil, ui: @tree_ui)",
+  "tree_selection_value(item, tree, builder = nil)",
+  "tree_view_breadcrumb(tree, item, ...)",
+  "tree_view_toolbar(render_state, ...)",
+  "tree_view_toolbar_supported_actions",
+  "tree_view_toolbar_actions(render_state, ...)",
+  "tree_view_toolbar_action_metadata(render_state, action, ...)"
+]
+
 assertAll(manifest, publicConstantSignals, "public API manifest public constants surface")
 assertAll(manifest, localizedNameManifestSignals, "public API manifest localized-name surface")
 assertAll(manifest, setupGeneratorManifestSignals, "public API manifest setup-generator surface")
 assertAll(manifest, stateEventDetailManifestSignals, "public API manifest state and remote-state event detail surface")
+assertAll(manifest, helperMethodManifestSignals, "public API manifest helper method surface")
 
 assertDocs(
   ["docs/en/errors.md", "docs/ja/errors.md"],
@@ -143,6 +176,12 @@ assertDocs(
   ["docs/en/public-api.md", "docs/ja/public-api.md"],
   [...publicConstantDocsSignals, "TreeView.model_name_for", "TreeView.attribute_name_for", "TreeView.type_name_for"],
   "public API manifest-backed public surface docs"
+)
+
+assertDocs(
+  ["docs/en/public-api.md", "docs/ja/public-api.md"],
+  helperMethodDocsSignals,
+  "manifest-backed public helper method docs"
 )
 
 assertDocs(
