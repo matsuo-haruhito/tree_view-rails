@@ -43,7 +43,7 @@ The changed-file policy exposes representative output flags rather than a full r
 | `docs_only` | `README.md`, `docs/**`, `AGENTS.md`, `Product Profile.md` | The pull request is documentation-shaped, although other outputs may still request focused confidence checks. |
 | `package_sensitive` | `README.md`, `CHANGELOG.md`, `docs/**`, `config/public_api_manifest.yml` | The packaged gem or package-facing docs confidence path should run. |
 | `docs_entrypoint_sensitive` | `README.md`, `docs/**`, `config/public_api_manifest.yml` | Docs entrypoint signals should run because reader-facing docs or public manifest signals changed. |
-| `ci_policy_sensitive` | `AGENTS.md`, `.github/workflows/ci.yml`, `script/ci_changed_files_policy.mjs`, `script/test_ci_changed_files_policy.mjs` | CI policy guards should run because workflow routing or maintainer policy signals changed. |
+| `ci_policy_sensitive` | `AGENTS.md`, `docs/en/ci-policy-suite.md`, `docs/ja/ci-policy-suite.md`, `.github/workflows/ci.yml`, `script/ci_changed_files_policy.mjs`, `script/test_ci_changed_files_policy.mjs` | CI policy guards should run because workflow routing, CI policy suite docs, or maintainer policy signals changed. |
 | `docker_setup_sensitive` | `Dockerfile`, `docker-compose.yml`, `package.json`, `package-lock.json`, `.nvmrc` | Docker-based maintainer setup confidence should run. |
 | `mockups_changed` | `docs/mockups/**` | Static mockup routes changed and may need browser-smoke or gallery review. |
 | `browser_smoke_changed` | `test/browser/**` | Browser smoke definitions changed and should be treated as executable test-surface changes. |
@@ -62,7 +62,7 @@ Treat these retained check names as review and merge-decision context, not as pr
 
 `.github/dependabot.yml` is the source of truth for the Dependabot update lanes. It currently includes a `github-actions` lane for GitHub Actions dependency updates with the same weekly Monday 09:00 Asia/Tokyo cadence and open pull request limit of 5 as the Bundler lane.
 
-Keep that automation lane separate from the CI policy guard that watches representative action major versions. Dependabot opens version update pull requests; the action-major guard makes unexpected workflow action-major drift visible during review. The separate SHA pinning / allowed action policy decision remains tracked outside this note, so do not treat the Dependabot lane as a pinning-policy decision.
+Keep that automation lane separate from the CI policy guard that watches representative action major versions. Dependabot opens version update pull requests; the action-major guard makes unexpected workflow action-major drift visible during review. The separate SHA pinning / allowed action policy remains tracked outside this note, so do not treat the Dependabot lane as a pinning-policy decision.
 
 ## Docker development setup lane
 
