@@ -381,6 +381,13 @@ lazyLoadingDocs.forEach(([relativePath, document]) => {
     `${relativePath}: Lazy Loading docs no longer preserve the host-app-owned remote loading boundary`
   )
 
+  assertIncludes(document, "authorize!", `${relativePath} lazy-loading authorization guard docs`)
+  assertIncludes(document, "visible_to(current_user)", `${relativePath} lazy-loading authorization query docs`)
+  assert(
+    /Do not treat lazy loading as authorization|lazy loadingをauthorizationの代わりに使わないでください/.test(document),
+    `${relativePath}: Lazy Loading docs no longer preserve the server-side authorization warning`
+  )
+
   assert(
     /separate surface|別 surface/.test(document),
     `${relativePath}: Lazy Loading docs no longer separate host lifecycle events from remote-state controller events`

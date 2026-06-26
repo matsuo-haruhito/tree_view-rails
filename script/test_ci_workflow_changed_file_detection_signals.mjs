@@ -316,8 +316,8 @@ const jsCoreScript = packageScript("test:js:core")
 
 const docsEntrypointsSignals = [
   ["package script runs public API transfer guard", docsEntrypointsScript, "node script/guard_public_api_transfer_integration_signals.mjs"],
-  ["package script runs manifest-backed public surface guard", docsEntrypointsScript, "node script/test_manifest_backed_public_surface_signals.mjs"],
   ["package script uses docs entrypoint suite", docsEntrypointsScript, "node script/test_docs_entrypoint_suite.mjs"],
+  ["suite registers manifest-backed public surface guard", docsEntrypointSuiteSource, "script/test_manifest_backed_public_surface_signals.mjs"],
   ["suite registers controller registration docs signal", docsEntrypointSuiteSource, "script/check_controller_registration_docs_signals.mjs"]
 ]
 
@@ -353,10 +353,10 @@ assertOrdered(
   `${packagePath} scripts.test:docs-entrypoints must run public API transfer guard before docs entrypoint suite`
 )
 assertOrdered(
-  docsEntrypointsScript,
-  "node script/test_manifest_backed_public_surface_signals.mjs",
-  "node script/test_docs_entrypoint_suite.mjs",
-  `${packagePath} scripts.test:docs-entrypoints must run manifest-backed public surface guard before docs entrypoint suite`
+  docsEntrypointSuiteSource,
+  "script/test_public_api_docs_signals.mjs",
+  "script/test_manifest_backed_public_surface_signals.mjs",
+  `${docsEntrypointSuitePath} must run public API docs signals before manifest-backed public surface signals`
 )
 assertOrdered(
   ciPolicyScript,
