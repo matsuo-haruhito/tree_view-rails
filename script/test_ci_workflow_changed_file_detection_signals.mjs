@@ -33,10 +33,10 @@ function workflowJobBlock(workflowSource, jobName) {
 
 function assertOrdered(source, earlier, later, label) {
   const earlierIndex = source.indexOf(earlier)
-  const laterIndex = source.indexOf(later)
+  const laterIndex = earlierIndex === -1 ? source.indexOf(later) : source.indexOf(later, earlierIndex + earlier.length)
 
   assert(earlierIndex !== -1, `${label}: missing ${earlier}`)
-  assert(laterIndex !== -1, `${label}: missing ${later}`)
+  assert(laterIndex !== -1, `${label}: missing ${later} after ${earlier}`)
   assert(earlierIndex < laterIndex, `${label}: expected ${earlier} before ${later}`)
 }
 
