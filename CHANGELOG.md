@@ -129,6 +129,7 @@ Release preparation notes:
 - Added GitHub Actions Dependabot lane guidance to the CI policy suite docs, separating automation updates from action-major guard and pinning-policy decisions.
 - Added Docker development setup lane guidance to the CI policy suite docs, covering `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` container-side install smoke boundaries.
 - Added pull request changed-file detection and docs-only check retention guidance to CI policy suite docs, covering merge-base / fallback diff routing and package-facing versus repository-only docs boundaries.
+- Added representative routing output guidance to CI policy suite docs so maintainers can map changed-file routing outputs to expected PR checks.
 - Clarified empty-state mockup release evidence for disabled toolbar actions, including the `Current path unavailable` action and host-app-owned reset behavior.
 
 ### Tests
@@ -139,6 +140,7 @@ Release preparation notes:
 - Consolidated `test:ci-policy` package-script execution around the CI policy suite source of truth while preserving guard registration self-test coverage.
 - Added Docker setup CI docs signal coverage so CI policy docs keep `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` guidance aligned.
 - Added CI policy docs signal coverage for pull request changed-file detection and docs-only check retention so CI policy docs stay aligned with workflow routing evidence.
+- Added CI routing output docs signal coverage for representative changed-file routing output guidance.
 - Added docs-entrypoint guard coverage for `TreeViewTransferDropPositions` and `TreeViewIntegrationHooks` so transfer and integration public API docs signals stay aligned with the manifest.
 - Added CI policy suite and permissions smoke coverage so maintainers can verify read-only workflow permissions and guard group registration through `npm run test:ci-policy`.
 - Added manifest-backed public surface docs smoke coverage for state / remote-state event detail keys, setup generator output, localized names, and public constants.
