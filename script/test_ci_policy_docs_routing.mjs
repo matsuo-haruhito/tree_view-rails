@@ -196,6 +196,50 @@ function assertCiPolicyDocsChangedFileDetectionSignals() {
   }
 }
 
+function assertCiPolicyDocsRoutingOutputSignals() {
+  const sharedSignals = [
+    "## Representative routing outputs",
+    "`docs_only`",
+    "`package_sensitive`",
+    "`docs_entrypoint_sensitive`",
+    "`ci_policy_sensitive`",
+    "`docker_setup_sensitive`",
+    "`mockups_changed`",
+    "`browser_smoke_changed`",
+    "README.md",
+    "docs/**",
+    "AGENTS.md",
+    "Product Profile.md",
+    "CHANGELOG.md",
+    "config/public_api_manifest.yml",
+    ".github/workflows/ci.yml",
+    "script/ci_changed_files_policy.mjs",
+    "script/test_ci_changed_files_policy.mjs",
+    "Dockerfile",
+    "docker-compose.yml",
+    "package.json",
+    "package-lock.json",
+    ".nvmrc",
+    "docs/mockups/**",
+    "test/browser/**",
+    "executable fixture",
+    "source of truth"
+  ]
+
+  const docsSignals = [
+    ["docs/en/ci-policy-suite.md", sharedSignals],
+    ["docs/ja/ci-policy-suite.md", sharedSignals]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} routing output docs signal`)
+    }
+  }
+}
+
 function assertCiPolicyDocsDocsOnlyRetentionSignals() {
   const docsSignals = [
     [
@@ -285,6 +329,7 @@ assertDependabotLaneSignal()
 assertCiPolicyDocsDependabotSignals()
 assertCiPolicyDocsDockerSetupSignals()
 assertCiPolicyDocsChangedFileDetectionSignals()
+assertCiPolicyDocsRoutingOutputSignals()
 assertCiPolicyDocsDocsOnlyRetentionSignals()
 
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
@@ -292,4 +337,5 @@ console.log("Checked CI policy docs routing guard script routing.")
 console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
 console.log("Checked Docker development setup CI docs signals.")
 console.log("Checked pull request changed-file detection docs signals.")
+console.log("Checked representative routing output docs signals.")
 console.log("Checked docs-only check retention docs signals.")
