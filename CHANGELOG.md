@@ -134,6 +134,8 @@ Release preparation notes:
 
 ### Tests
 
+- Added helper method manifest-backed docs signal coverage so Public API helper signatures stay aligned with `config/public_api_manifest.yml`.
+- Added docs-entrypoint suite registration and lazy-loading authorization docs signal coverage so manifest-backed public surface guards stay visible through `npm run test:docs-entrypoints`.
 - Added public constants docs signal guard coverage for representative Public API constants so public constants stay aligned with `config/public_api_manifest.yml`.
 - Added stylesheet state cue selector source-spec coverage for selected, collapsed, loading, error, disabled-drop, and drop-target cues in the packaged stylesheet.
 - Expanded package contents verification coverage for bilingual CI policy suite docs so packaged gems keep maintainer CI policy guidance available.
