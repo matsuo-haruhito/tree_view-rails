@@ -72,4 +72,12 @@ When that lane is true, the `docker_development_setup` job builds the `app` serv
 
 This note does not change the Docker base image, compose volume policy, Node or Ruby support policy, package scripts, CI workflow jobs, required checks, or branch protection.
 
+## Read-only workflow permissions
+
+The pull request and main-push workflow keeps `GITHUB_TOKEN` read-only at the workflow top level with `permissions: contents: read`. This lets CI checkout repository contents and run the policy, docs, JavaScript, Ruby, Docker, and package verification lanes without granting repository write access to jobs by default.
+
+`script/test_ci_workflow_permissions_signals.mjs` is the focused guard for this policy. It confirms the top-level permissions block includes `contents: read`, rejects `contents: write` and `pull-requests: write`, and rejects job-level `permissions:` overrides that would silently widen the token for one job.
+
+Treat this as CI token-scope evidence only. It does not configure branch protection, required checks, repository settings, third-party action policy, or release publishing credentials. If a future workflow change needs write permissions, review that as a CI policy change and update this note and the guard together.
+
 This note is only about maintainer command routing. It does not change CI workflow jobs, required checks, branch protection, workflow permissions, or lockfile policy.
