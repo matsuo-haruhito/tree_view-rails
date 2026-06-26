@@ -155,6 +155,100 @@ function assertCiPolicyDocsDockerSetupSignals() {
   }
 }
 
+function assertCiPolicyDocsChangedFileDetectionSignals() {
+  const docsSignals = [
+    [
+      "docs/en/ci-policy-suite.md",
+      [
+        "## Pull request changed-file detection",
+        "fetches the base branch",
+        "merge base",
+        "three-dot diff",
+        'origin/${{ github.base_ref }}...HEAD',
+        "falls back to `git diff --name-only origin/${{ github.base_ref }} HEAD`",
+        "script/ci_changed_files_policy.mjs",
+        "script/test_ci_workflow_changed_file_detection_signals.mjs",
+        "classification logic"
+      ]
+    ],
+    [
+      "docs/ja/ci-policy-suite.md",
+      [
+        "## Pull Request changed-file detection",
+        "base branch を fetch",
+        "merge base",
+        "three-dot diff",
+        'origin/${{ github.base_ref }}...HEAD',
+        "fallback として `git diff --name-only origin/${{ github.base_ref }} HEAD`",
+        "script/ci_changed_files_policy.mjs",
+        "script/test_ci_workflow_changed_file_detection_signals.mjs",
+        "classification logic"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} changed-file detection docs signal`)
+    }
+  }
+}
+
+function assertCiPolicyDocsDocsOnlyRetentionSignals() {
+  const docsSignals = [
+    [
+      "docs/en/ci-policy-suite.md",
+      [
+        "## Docs-only check retention",
+        "usual CI job names visible",
+        "representative Rails compatibility matrix",
+        "docs-only skip message",
+        "mockups",
+        "browser-smoke files",
+        "docs-entrypoint-sensitive files",
+        "CI-policy-sensitive files",
+        "Package-facing docs",
+        "README.md",
+        "CHANGELOG.md",
+        "docs/**",
+        "AGENTS.md",
+        "Product Profile.md",
+        "not as proof that every heavyweight lane ran"
+      ]
+    ],
+    [
+      "docs/ja/ci-policy-suite.md",
+      [
+        "## docs-only check retention",
+        "通常の CI job 名は残します",
+        "representative Rails compatibility matrix",
+        "docs-only skip message",
+        "mockup",
+        "browser-smoke file",
+        "docs-entrypoint-sensitive file",
+        "CI-policy-sensitive file",
+        "package-facing docs",
+        "README.md",
+        "CHANGELOG.md",
+        "docs/**",
+        "AGENTS.md",
+        "Product Profile.md",
+        "すべての heavyweight lane が実行された証明として扱わないでください"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} docs-only retention docs signal`)
+    }
+  }
+}
+
 for (const docsPath of ciPolicyDocsPaths) {
   assert.deepEqual(
     classifyChangedFiles([docsPath]),
@@ -190,8 +284,12 @@ assert.deepEqual(
 assertDependabotLaneSignal()
 assertCiPolicyDocsDependabotSignals()
 assertCiPolicyDocsDockerSetupSignals()
+assertCiPolicyDocsChangedFileDetectionSignals()
+assertCiPolicyDocsDocsOnlyRetentionSignals()
 
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
 console.log("Checked CI policy docs routing guard script routing.")
 console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
 console.log("Checked Docker development setup CI docs signals.")
+console.log("Checked pull request changed-file detection docs signals.")
+console.log("Checked docs-only check retention docs signals.")
