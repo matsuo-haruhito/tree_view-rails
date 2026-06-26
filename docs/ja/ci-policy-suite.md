@@ -34,6 +34,22 @@ Pull Request では、`changes` job が base branch を fetch し、`origin/${{ 
 
 得られた file list は `script/ci_changed_files_policy.mjs` に渡されます。この script が `docs_only`、`package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` output の source of truth です。`script/test_ci_workflow_changed_file_detection_signals.mjs` は workflow command signal を守ります。このメモは、その routing の保守者向けの意味を説明するだけで、classification logic は変更しません。
 
+## Representative routing outputs
+
+changed-file policy は、repository 全体の file inventory ではなく代表的な output flag を公開します。Pull Request の `changes` output を読む時は、次の例を review guidance として扱ってください。
+
+| Output | Representative path signals | Maintainer meaning |
+| --- | --- | --- |
+| `docs_only` | `README.md`, `docs/**`, `AGENTS.md`, `Product Profile.md` | Pull Request は docs 形状です。ただし、他の output が focused confidence check を要求する場合があります。 |
+| `package_sensitive` | `README.md`, `CHANGELOG.md`, `docs/**`, `config/public_api_manifest.yml` | packaged gem または package-facing docs confidence path を実行します。 |
+| `docs_entrypoint_sensitive` | `README.md`, `docs/**`, `config/public_api_manifest.yml` | reader-facing docs または public manifest signal が変わったため、docs entrypoint signal を実行します。 |
+| `ci_policy_sensitive` | `AGENTS.md`, `.github/workflows/ci.yml`, `script/ci_changed_files_policy.mjs`, `script/test_ci_changed_files_policy.mjs` | workflow routing または maintainer policy signal が変わったため、CI policy guard を実行します。 |
+| `docker_setup_sensitive` | `Dockerfile`, `docker-compose.yml`, `package.json`, `package-lock.json`, `.nvmrc` | Docker-based maintainer setup confidence を実行します。 |
+| `mockups_changed` | `docs/mockups/**` | static mockup route が変わり、browser-smoke または gallery review が必要になる場合があります。 |
+| `browser_smoke_changed` | `test/browser/**` | browser smoke definition が変わったため、executable test-surface change として扱います。 |
+
+この表は代表例に留めます。full changed-file classifier mirror にはしないでください。executable fixture の source of truth は引き続き `script/test_ci_changed_files_policy.mjs` です。
+
 ## docs-only check retention
 
 docs-only Pull Request でも、重い処理を意図的に skip する場合に通常の CI job 名は残します。representative Rails compatibility matrix は check surface を残し、`docs_only` が true の場合は Rails command を実行せず docs-only skip message を出します。
