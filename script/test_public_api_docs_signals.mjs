@@ -47,6 +47,10 @@ const pathTreeBuilderDocs = [
   ["docs/en/path-tree-builder.md", read("docs/en/path-tree-builder.md")],
   ["docs/ja/path-tree-builder.md", read("docs/ja/path-tree-builder.md")]
 ]
+const persistedStateDocs = [
+  ["docs/en/persisted-state.md", read("docs/en/persisted-state.md")],
+  ["docs/ja/persisted-state.md", read("docs/ja/persisted-state.md")]
+]
 const developmentDocs = [
   ["docs/en/development.md", read("docs/en/development.md")],
   ["docs/ja/development.md", read("docs/ja/development.md")]
@@ -208,6 +212,16 @@ const pathTreeBuilderNodeShapeSignals = [
   "record_node?"
 ]
 
+const persistedStateLifecycleSignals = [
+  "TreeView::PersistedState.from",
+  "TreeView::StateStore",
+  "persisted_state = store.find(",
+  "persisted_state = store.save!(",
+  "persisted_state = store.clear!(",
+  "matching_count = store.prune_count(",
+  "deleted_count = store.prune!("
+]
+
 const publicConstantSignals = [
   "TreeView::Error",
   "TreeView::ConfigurationError",
@@ -219,6 +233,8 @@ const publicConstantSignals = [
   "TreeView::ResourceTableRenderState",
   "TreeView::VisibleRows",
   "TreeView::RenderWindow",
+  "TreeView::PersistedState",
+  "TreeView::StateStore",
   "TreeView::Diagnostics"
 ]
 
@@ -546,6 +562,27 @@ pathTreeBuilderDocs.forEach(([relativePath, document]) => {
   assert(
     /folder key generation strategy|sort algorithm|file-manager behavior|row action design|folder key generation strategy|sort algorithm|file-manager behavior|row action design/.test(document),
     `${relativePath}: PathTreeBuilder docs no longer keep generated-key, sorting, file-manager, and row-action behavior outside the node shape contract`
+  )
+})
+
+persistedStateDocs.forEach(([relativePath, document]) => {
+  persistedStateLifecycleSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} PersistedState / StateStore lifecycle docs`)
+  })
+
+  assert(
+    /storage ownership, authorization, save timing, cleanup policy|実際の保存先、owner model、認可、保存タイミング、cleanup policy/.test(document),
+    `${relativePath}: persisted-state docs no longer keep storage ownership, authorization, and save timing with the host app`
+  )
+
+  assert(
+    /cleanup scheduling, retention selection, authorization, or audit policy|cleanup schedule、retention の選択、authorization、audit policy/.test(document),
+    `${relativePath}: persisted-state docs no longer keep cleanup, retention, authorization, and audit policy with the host app`
+  )
+
+  assert(
+    /does not provide a cleanup rake task or default TTL|cleanup rake task や default TTL を提供しません/.test(document),
+    `${relativePath}: persisted-state docs no longer say TreeView does not own cleanup tasks or default TTL`
   )
 })
 
