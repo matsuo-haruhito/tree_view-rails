@@ -54,7 +54,7 @@ changed-file policy は、repository 全体の file inventory ではなく代表
 
 docs-only Pull Request でも、重い処理を意図的に skip する場合に通常の CI job 名は残します。representative Rails compatibility matrix は check surface を残し、`docs_only` が true の場合は Rails command を実行せず docs-only skip message を出します。
 
-JavaScript job は、docs-only Pull Request かつ mockup、browser-smoke file、docs-entrypoint-sensitive file、CI-policy-sensitive file に触れていない場合だけ install と checks を skip します。`README.md`、`CHANGELOG.md`、`docs/**` のような package-facing docs は package / docs-entrypoint confidence path を通ります。`AGENTS.md` は repository-only docs ですが CI-policy-sensitive です。`Product Profile.md` は repository-only docs で、package-sensitive / docs-entrypoint-sensitive ではありません。
+JavaScript job は、docs-only Pull Request かつ mockup、browser-smoke file、docs-entrypoint-sensitive file、CI-policy-sensitive file に触れていない場合だけ install と checks を skip します。`README.md`、`CHANGELOG.md`、`docs/**` のような package-facing docs は package / docs-entrypoint confidence path を通ります。`AGENTS.md` は repository-only docs ですが、agent workflow と CI observation policy を持つため CI-policy-sensitive です。`Product Profile.md` は repository-only docs で、意図的に package-sensitive / docs-entrypoint-sensitive / CI-policy-sensitive にはしていません。repository-only maintainer entrypoint smoke は、package-facing docs または他の docs-entrypoint-sensitive file が `npm run test:docs-entrypoints` を呼ぶ時に実行されます。Product Profile-only edit は、この profile を package-facing entrypoint にしないため manual-review routed のままです。
 
 これらの保持された check 名は review / merge 判断の文脈として扱い、すべての heavyweight lane が実行された証明として扱わないでください。skipped lane は changed-file routing output と workflow run conclusion と合わせて確認します。
 
