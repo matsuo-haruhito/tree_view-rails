@@ -167,7 +167,7 @@ const cases = [
     }
   },
   {
-    name: "Dependabot config changes are package-sensitive full CI changes without Docker setup",
+    name: "Dependabot config changes are package- and CI policy-sensitive full CI changes without Docker setup",
     files: [".github/dependabot.yml"],
     expected: {
       docs_only: false,
@@ -175,7 +175,8 @@ const cases = [
       browser_smoke_changed: false,
       package_sensitive: true,
       docker_setup_sensitive: false,
-      docs_entrypoint_sensitive: false
+      docs_entrypoint_sensitive: false,
+      ci_policy_sensitive: true
     }
   },
   {
@@ -427,6 +428,12 @@ const workflowSource = readFileSync(workflowPath, "utf8");
 const packageScripts = JSON.parse(readFileSync(packagePath, "utf8")).scripts;
 const workflowOutputKeys = workflowChangesOutputs(workflowSource);
 
+assert.match(
+  packageScripts["test:entrypoints"],
+  /npm run test:public-api-manifest-structure/,
+  `${packagePath} scripts.test:entrypoints must include the public API manifest structure smoke so test:js:core reaches the manifest guard`
+);
+
 assertPolicyCliOutput(
   "\n README.md \n docs/en/development.md \n\n",
   classifyChangedFiles(["README.md", "docs/en/development.md"]),
@@ -441,6 +448,11 @@ assertPolicyCliOutput(
   "AGENTS.md\n",
   classifyChangedFiles(["AGENTS.md"]),
   `${policyCliPath} must emit CI policy-sensitive routing for AGENTS.md changes`
+);
+assertPolicyCliOutput(
+  ".github/dependabot.yml\n",
+  classifyChangedFiles([".github/dependabot.yml"]),
+  `${policyCliPath} must emit CI policy-sensitive routing for Dependabot config changes`
 );
 assertPolicyCliOutput(
   "script/test_ci_workflow_changed_file_detection_signals.mjs\n",
