@@ -59,6 +59,17 @@ function workflowTopLevelTriggerBlock(workflowSource) {
   return match.groups.body
 }
 
+function workflowTopLevelPermissionsBlock(workflowSource) {
+  const match = workflowSource.match(/^permissions:\n(?<body>[\s\S]*?)\n\nconcurrency:\n/m)
+
+  assert(
+    match,
+    `${workflowPath} CI permissions policy must define a top-level permissions block before concurrency`
+  )
+
+  return match.groups.body
+}
+
 function workflowTopLevelConcurrencyBlock(workflowSource) {
   const match = workflowSource.match(/^concurrency:\n(?<body>[\s\S]*?)\n\njobs:\n/m)
 
@@ -97,6 +108,31 @@ function assertWorkflowTriggerPolicy(workflowSource) {
     triggerBlock,
     "pull_request_target",
     `${workflowPath} CI trigger policy privilege boundary trigger`
+  )
+}
+
+function assertWorkflowPermissionsPolicy(workflowSource) {
+  const permissionsBlock = workflowTopLevelPermissionsBlock(workflowSource)
+
+  assertIncludes(
+    permissionsBlock,
+    "  contents: read",
+    `${workflowPath} CI permissions policy repository contents token scope`
+  )
+  assertAbsent(
+    permissionsBlock,
+    "contents: write",
+    `${workflowPath} CI permissions policy must not grant repository contents write access`
+  )
+  assertAbsent(
+    permissionsBlock,
+    "write-all",
+    `${workflowPath} CI permissions policy must not use broad write-all access`
+  )
+  assertAbsent(
+    permissionsBlock,
+    "pull-requests: write",
+    `${workflowPath} CI permissions policy must not grant pull request write access`
   )
 }
 
@@ -160,6 +196,7 @@ function packageScript(scriptName) {
 }
 
 assertWorkflowTriggerPolicy(workflowSource)
+assertWorkflowPermissionsPolicy(workflowSource)
 assertWorkflowConcurrencyPolicy(workflowSource)
 
 const changesJob = workflowJobBlock(workflowSource, "changes")
@@ -404,6 +441,7 @@ assertOrdered(
 )
 
 console.log("Checked CI workflow trigger policy signals.")
+console.log("Checked CI workflow permissions policy signals.")
 console.log("Checked CI workflow concurrency policy signals.")
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
