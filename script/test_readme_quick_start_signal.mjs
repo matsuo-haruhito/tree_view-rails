@@ -28,7 +28,36 @@ function assertQuickStartSignal(signal, pattern, message) {
   assert(pattern.test(quickStart), `README.md Quick Start ${signal}: ${message}`)
 }
 
+function assertInstallationSignal(signal, pattern, message) {
+  assert(pattern.test(installation), `README.md Installation ${signal}: ${message}`)
+}
+
+const installation = extractSection(rootReadme, "Installation")
 const quickStart = extractSection(rootReadme, "Quick Start")
+
+assertInstallationSignal(
+  "CSS import",
+  /@import\s+"tree_view";/,
+  "missing the representative stylesheet import"
+)
+
+assertInstallationSignal(
+  "importmap pin",
+  /pin\s+"tree_view",\s+to:\s+"tree_view\/index\.js"/,
+  "missing the package-root importmap pin"
+)
+
+assertInstallationSignal(
+  "package-root JavaScript entrypoint",
+  /tree_view\/index\.js/,
+  "missing the package-root JavaScript entrypoint signal"
+)
+
+assertInstallationSignal(
+  "Public API JavaScript surface link",
+  /Public API JavaScript surface/,
+  "missing the JavaScript surface follow-up link"
+)
 
 assertQuickStartSignal(
   "controller label",
