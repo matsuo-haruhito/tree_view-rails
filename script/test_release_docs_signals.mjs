@@ -380,3 +380,51 @@ const releaseNoteCandidateDocs = [
 releaseNoteCandidateDocs.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release note candidate docs", signals)
 })
+
+const packageVerificationEntrypointSignals = [
+  [
+    "script/check_gem_package_contents.rb",
+    [
+      "JAVASCRIPT_PACKAGE_ROOT_PATH",
+      "TYPESCRIPT_PACKAGE_ROOT_PATH",
+      "javascript_package_root",
+      "named_exports",
+      "Missing manifest-listed JavaScript package-root named exports in packaged",
+      "importmap_pin_missing",
+      "Missing TreeView importmap pin in config/importmap.tree_view.rb:",
+      "pin \\\"tree_view\\\", to: \\\"tree_view/index.js\\\""
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "Package verification signals",
+      "config/public_api_manifest.yml",
+      "javascript_package_root.named_exports",
+      "app/javascript/tree_view/index.js",
+      "app/javascript/tree_view/index.d.ts",
+      "Missing manifest-listed JavaScript package-root named exports in packaged <path>",
+      "do not add or rename public JavaScript exports from this checklist alone",
+      "config/importmap.tree_view.rb",
+      "pin \"tree_view\", to: \"tree_view/index.js\""
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "Package verification signals",
+      "config/public_api_manifest.yml",
+      "javascript_package_root.named_exports",
+      "app/javascript/tree_view/index.js",
+      "app/javascript/tree_view/index.d.ts",
+      "Missing manifest-listed JavaScript package-root named exports in packaged <path>",
+      "public JavaScript export を追加・rename しないでください",
+      "config/importmap.tree_view.rb",
+      "pin \"tree_view\", to: \"tree_view/index.js\""
+    ]
+  ]
+]
+
+packageVerificationEntrypointSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Package verification entrypoint release signal", signals)
+})
