@@ -34,6 +34,14 @@ For pull requests, the `changes` job fetches the base branch, then tries to find
 
 The resulting file list is passed to `script/ci_changed_files_policy.mjs`, which is the source of truth for the `docs_only`, `package_sensitive`, `docker_setup_sensitive`, `docs_entrypoint_sensitive`, and `ci_policy_sensitive` outputs. `script/test_ci_workflow_changed_file_detection_signals.mjs` protects the workflow command signals; this note explains the maintainer-facing meaning of that routing and does not change the classification logic.
 
+## Pull request run concurrency
+
+The CI workflow uses workflow-level `concurrency` so a newer pull request head can cancel older runs for the same pull request. The group is built from the workflow name, event name, and pull request number or ref, which keeps unrelated pull requests and `main` runs separate.
+
+`cancel-in-progress` is intentionally limited to the `pull_request` event. Pushes to `main` still run to completion so release and package verification evidence is not weakened by a later push. Treat a canceled pull request run as stale-head evidence; review readiness should come from the workflow run for the current head SHA.
+
+`script/test_ci_workflow_changed_file_detection_signals.mjs` protects the representative concurrency signals, including the PR-only cancellation condition and the absence of unconditional `cancel-in-progress: true`. This note explains how maintainers should read that policy; it does not change workflow routing, required checks, branch protection, or CI polling behavior.
+
 ## Representative routing outputs
 
 The changed-file policy exposes representative output flags rather than a full repository inventory. Use these examples as review guidance when reading a pull request's `changes` output:

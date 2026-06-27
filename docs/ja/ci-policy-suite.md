@@ -34,6 +34,14 @@ Pull Request では、`changes` job が base branch を fetch し、`origin/${{ 
 
 得られた file list は `script/ci_changed_files_policy.mjs` に渡されます。この script が `docs_only`、`package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` output の source of truth です。`script/test_ci_workflow_changed_file_detection_signals.mjs` は workflow command signal を守ります。このメモは、その routing の保守者向けの意味を説明するだけで、classification logic は変更しません。
 
+## Pull request run concurrency
+
+CI workflow は workflow-level `concurrency` を使い、同じ Pull Request で head が更新された場合に古い run を cancel できるようにしています。group は workflow 名、event 名、Pull Request number または ref から作られるため、別の Pull Request や `main` run とは分離されます。
+
+`cancel-in-progress` は意図的に `pull_request` event だけに限定しています。`main` への push は最後まで走らせるため、release / package verification evidence を後続 push で弱めません。cancel された Pull Request run は stale head の evidence として扱い、review readiness は current head SHA の workflow run で判断してください。
+
+`script/test_ci_workflow_changed_file_detection_signals.mjs` は、PR-only cancellation 条件と無条件の `cancel-in-progress: true` がないことを含む代表 concurrency signal を守ります。このメモは保守者がその policy をどう読むかを説明するだけで、workflow routing、required checks、branch protection、CI polling behavior は変更しません。
+
 ## Representative routing outputs
 
 changed-file policy は、repository 全体の file inventory ではなく代表的な output flag を公開します。Pull Request の `changes` output を読む時は、次の例を review guidance として扱ってください。
