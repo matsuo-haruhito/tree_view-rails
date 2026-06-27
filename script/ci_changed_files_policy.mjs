@@ -83,6 +83,7 @@ function isDocsEntrypointSensitivePath(file) {
     file === "README.md" ||
     file === "CHANGELOG.md" ||
     file.startsWith("docs/") ||
+    file === "config/importmap.tree_view.rb" ||
     file === "config/public_api_manifest.yml"
   );
 }
@@ -100,6 +101,7 @@ function isCiPolicySensitivePath(file) {
     file === "script/test_ci_workflow_changed_file_detection_signals.mjs" ||
     file === "script/test_ci_workflow_permissions_signals.mjs" ||
     file === "script/test_ci_observation_guidance_signals.mjs" ||
+    file === "script/test_importmap_docs_entrypoint_routing.mjs" ||
     file === "script/test_package_lock_dependency_drift.mjs" ||
     file === "script/test_gemfile_lock_dependency_drift.mjs"
   );
