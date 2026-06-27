@@ -112,6 +112,27 @@ const requiredNpmLockfileDriftRecoverySignals = [
   ]
 ]
 
+const requiredManifestStructureDuplicateKeySignals = [
+  [
+    "docs/en/development.md",
+    [
+      "`npm run test:public-api-manifest-structure`",
+      "duplicate-key guardrails",
+      "duplicate YAML keys",
+      "manifest structure smoke"
+    ]
+  ],
+  [
+    "docs/ja/development.md",
+    [
+      "`npm run test:public-api-manifest-structure`",
+      "duplicate-key guardrails",
+      "duplicate YAML keys",
+      "manifest structure"
+    ]
+  ]
+]
+
 const requiredReleaseCiPolicySensitiveSignals = [
   [
     "docs/en/release.md",
@@ -213,6 +234,16 @@ for (const [docPath, signals] of requiredNpmLockfileDriftRecoverySignals) {
   }
 }
 
+for (const [docPath, signals] of requiredManifestStructureDuplicateKeySignals) {
+  const doc = docSource(docs, docPath)
+
+  for (const signal of signals) {
+    if (!doc?.includes(signal)) {
+      missingSignals.push(`${docPath}: manifest duplicate-key docs signal ${signal}`)
+    }
+  }
+}
+
 for (const [docPath, signals] of requiredReleaseCiPolicySensitiveSignals) {
   const doc = docSource(releaseDocs, docPath)
 
@@ -242,5 +273,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredNpmLockfileDriftRecoverySignals.length} npm lockfile drift recovery docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredNpmLockfileDriftRecoverySignals.length} npm lockfile drift recovery docs groups, ${requiredManifestStructureDuplicateKeySignals.length} manifest duplicate-key docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
 )
