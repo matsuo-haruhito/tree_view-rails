@@ -211,6 +211,12 @@ Before release:
 
 Because `docs/**/*` is packaged, keep package-facing docs independent from repository-only maintainer docs. `Product Profile.md` and `AGENTS.md` stay repository-only; do not add encoded parent-directory links from packaged docs back to those root-only files. The package contents guard reports `Forbidden repository-only root doc links in packaged <path>` when that boundary drifts.
 
+## Package verification signals
+
+The package contents guard also verifies package-root JavaScript entrypoint and importmap signals. Keep `config/public_api_manifest.yml` `javascript_package_root.named_exports` aligned with packaged `app/javascript/tree_view/index.js` and `app/javascript/tree_view/index.d.ts`; when a manifest-listed export is absent, the guard reports `Missing manifest-listed JavaScript package-root named exports in packaged <path>`. This is release evidence only, so do not add or rename public JavaScript exports from this checklist alone.
+
+The same package verification checks that `config/importmap.tree_view.rb` keeps `pin "tree_view", to: "tree_view/index.js"` packaged for host apps that install the gem through importmap. This guards packaging evidence only; importmap setup behavior and public API semantics belong to the PR that intentionally changes those surfaces.
+
 ## Repository
 
 - Confirm `main` is green before tagging.
