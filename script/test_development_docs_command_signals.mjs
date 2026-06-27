@@ -87,6 +87,31 @@ const requiredDevelopmentCiPolicySignals = [
   ]
 ]
 
+const requiredNpmLockfileDriftRecoverySignals = [
+  [
+    "docs/en/development.md",
+    [
+      "npm lockfile drift guard",
+      "`package-lock.json`",
+      "`package.json`",
+      "dependency or Node engine metadata",
+      "`npm install`",
+      "`npm ci`"
+    ]
+  ],
+  [
+    "docs/ja/development.md",
+    [
+      "npm lockfile drift guard",
+      "`package-lock.json`",
+      "`package.json`",
+      "dependency や Node engine metadata",
+      "`npm install`",
+      "`npm ci`"
+    ]
+  ]
+]
+
 const requiredReleaseCiPolicySensitiveSignals = [
   [
     "docs/en/release.md",
@@ -178,6 +203,16 @@ for (const [docPath, signals] of requiredDevelopmentCiPolicySignals) {
   }
 }
 
+for (const [docPath, signals] of requiredNpmLockfileDriftRecoverySignals) {
+  const doc = docSource(docs, docPath)
+
+  for (const signal of signals) {
+    if (!doc?.includes(signal)) {
+      missingSignals.push(`${docPath}: npm lockfile drift recovery docs signal ${signal}`)
+    }
+  }
+}
+
 for (const [docPath, signals] of requiredReleaseCiPolicySensitiveSignals) {
   const doc = docSource(releaseDocs, docPath)
 
@@ -207,5 +242,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredNpmLockfileDriftRecoverySignals.length} npm lockfile drift recovery docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
 )
