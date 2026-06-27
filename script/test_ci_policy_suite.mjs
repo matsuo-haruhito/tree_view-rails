@@ -23,6 +23,11 @@ const checks = [
     args: ["script/test_ci_workflow_permissions_signals.mjs"]
   },
   {
+    group: "Workflow permissions docs signals",
+    command: "node",
+    args: ["script/test_ci_policy_permissions_docs_signals.mjs"]
+  },
+  {
     group: "CI observation guidance signals",
     command: "node",
     args: ["script/test_ci_observation_guidance_signals.mjs"]
@@ -224,7 +229,11 @@ function runSelfTest() {
   assert.equal(ambiguous.error, "ambiguous")
   assert.deepEqual(
     ambiguous.matches.map((check) => check.group),
-    ["Workflow changed-file detection signals", "Workflow permissions signals"],
+    [
+      "Workflow changed-file detection signals",
+      "Workflow permissions signals",
+      "Workflow permissions docs signals"
+    ],
     "ambiguous --only should report all matching groups"
   )
 
@@ -235,6 +244,10 @@ function runSelfTest() {
   assert.ok(
     ciPolicyCandidateScriptPaths().includes("script/test_ci_workflow_permissions_signals.mjs"),
     "CI policy candidates should include workflow permissions signals"
+  )
+  assert.ok(
+    ciPolicyCandidateScriptPaths().includes("script/test_ci_policy_permissions_docs_signals.mjs"),
+    "CI policy candidates should include workflow permissions docs signals"
   )
   assert.ok(
     ciPolicyCandidateScriptPaths().includes("script/test_package_lock_dependency_drift.mjs"),

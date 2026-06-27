@@ -172,6 +172,10 @@ const checks = [
 const docsEntrypointScriptExclusions = new Map([
   ["test_ci_policy_docs_routing.mjs", "registered through npm run test:ci-policy"],
   [
+    "test_ci_policy_permissions_docs_signals.mjs",
+    "registered through npm run test:ci-policy"
+  ],
+  [
     "test_development_docs_command_signals.mjs",
     "registered through npm run test:development-docs-commands"
   ],
