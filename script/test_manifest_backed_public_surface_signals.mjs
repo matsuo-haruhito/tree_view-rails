@@ -160,6 +160,12 @@ const helperMethodDocsSignals = [
   "tree_view_toolbar_action_metadata(render_state, action, ...)"
 ]
 
+const javascriptEntrypointDocsSignals = [
+  "tree_view/index.js",
+  "registerTreeViewControllers(application)",
+  "config/public_api_manifest.yml"
+]
+
 assertAll(manifest, publicConstantSignals, "public API manifest public constants surface")
 assertAll(manifest, localizedNameManifestSignals, "public API manifest localized-name surface")
 assertAll(manifest, setupGeneratorManifestSignals, "public API manifest setup-generator surface")
@@ -182,6 +188,12 @@ assertDocs(
   ["docs/en/public-api.md", "docs/ja/public-api.md"],
   helperMethodDocsSignals,
   "manifest-backed public helper method docs"
+)
+
+assertDocs(
+  ["docs/en/public-api.md", "docs/ja/public-api.md"],
+  javascriptEntrypointDocsSignals,
+  "package-root JavaScript entrypoint docs"
 )
 
 assertDocs(
