@@ -178,7 +178,7 @@ Release preparation notes:
 - Added generator specs for persisted state owner concern injection.
 - Added RenderState specs for current node ancestor auto-expansion.
 - Added accessibility semantics integration specs for row ARIA state in static, collapsed, selection, and windowed rendering.
-- Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered trees, sorter call growth, children lookup scope, and max leaf distance behavior.
+- Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered path trees, sorter call growth, children lookup scope, and max leaf distance behavior.
 - Added specs for TreeView-specific error rescue behavior.
 - Added Ruby and JavaScript specs for client-side toggle mode, mode builders, public API exports, and browser-local descendant visibility updates.
 - Added specs for RenderState internal configuration objects and the consolidated diagnostics entrypoint.
