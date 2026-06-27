@@ -134,6 +134,7 @@ Release preparation notes:
 - Added read-only workflow permissions guidance to CI policy suite docs so maintainers can review `GITHUB_TOKEN` token-scope evidence alongside the permissions guard.
 - Clarified repository-only maintainer docs routing in CI policy suite docs so AGENTS.md remains CI-policy-sensitive while Product Profile.md stays manual-review routed.
 - Clarified empty-state mockup release evidence for disabled toolbar actions, including the `Current path unavailable` action and host-app-owned reset behavior.
+- Clarified Development docs for temporary docs i18n parity exceptions, including `parityExceptions` metadata and the boundary against permanent single-language docs.
 
 ### Tests
 
