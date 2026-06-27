@@ -61,7 +61,7 @@ Release preparation notes:
 - Added Turbo Frame option docs in Japanese and English.
 - Added NodePresenter row partial cookbook docs and clarified criteria for promoting app-specific UI patterns into TreeView.
 - Added toolbar helper docs in Japanese and English.
-- Added README adoption guidance to help users decide whether TreeView fits their use case and to clarify the virtual scrolling boundary.
+- Added README adoption guidance to help users decide whether TreeView fits your use case and to clarify the virtual scrolling boundary.
 - Promoted accessibility semantics as a first-class capability in the README and docs indexes, including ARIA placement, keyboard boundaries, and host-app responsibilities.
 - Added accessibility semantics docs for table-first TreeView rows and ARIA placement policy.
 - Added client-side toggle mode docs in Japanese and English, including static / Turbo / client-side mode comparison and CSS customization guidance using `aria-expanded`.
@@ -137,6 +137,8 @@ Release preparation notes:
 
 ### Tests
 
+- Added Development docs signal coverage for npm lockfile drift recovery guidance so `npm install` / `npm ci` recovery boundaries stay aligned with package metadata drift guidance.
+- Added Development docs signal coverage for public API manifest duplicate-key guard guidance so duplicate YAML key handling stays visible in maintainer docs.
 - Added row status builder docs signal coverage so grouped option docs keep row disabled, readonly, and disabled-reason builders aligned with the manifest and host-app responsibility boundary.
 - Added repository-only maintainer docs routing signal coverage so CI policy docs keep AGENTS.md and Product Profile.md changed-file guidance aligned.
 - Added helper method manifest-backed docs signal coverage so Public API helper signatures stay aligned with `config/public_api_manifest.yml`.
