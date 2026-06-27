@@ -137,6 +137,8 @@ Release preparation notes:
 
 ### Tests
 
+- Added Development docs signal coverage for npm lockfile drift recovery guidance so `npm install` / `npm ci` recovery boundaries stay aligned with package metadata drift guidance.
+- Added Development docs signal coverage for public API manifest duplicate-key guard guidance so duplicate YAML key handling stays visible in maintainer docs.
 - Added row status builder docs signal coverage so grouped option docs keep row disabled, readonly, and disabled-reason builders aligned with the manifest and host-app responsibility boundary.
 - Added repository-only maintainer docs routing signal coverage so CI policy docs keep AGENTS.md and Product Profile.md changed-file guidance aligned.
 - Added helper method manifest-backed docs signal coverage so Public API helper signatures stay aligned with `config/public_api_manifest.yml`.
