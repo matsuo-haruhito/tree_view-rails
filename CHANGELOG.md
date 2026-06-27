@@ -138,6 +138,8 @@ Release preparation notes:
 
 ### Tests
 
+- Added Public API docs signal coverage for persisted-state setup surface and `initial_expansion` grouped option keys so manifest-backed docs signals stay aligned.
+- Added README and Public API docs signal coverage for importmap package-root setup guidance so `tree_view/index.js` and `registerTreeViewControllers(application)` stay aligned.
 - Added Development docs signal coverage for npm lockfile drift recovery guidance so `npm install` / `npm ci` recovery boundaries stay aligned with package metadata drift guidance.
 - Added Development docs signal coverage for public API manifest duplicate-key guard guidance so duplicate YAML key handling stays visible in maintainer docs.
 - Expanded package contents verification coverage for Dependabot Bundler recovery docs so packaged gems keep scoped recovery guidance available.
