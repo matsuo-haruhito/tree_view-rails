@@ -38,6 +38,11 @@ const checks = [
     args: ["script/test_ci_policy_docs_routing.mjs"]
   },
   {
+    group: "Importmap docs entrypoint routing signals",
+    command: "node",
+    args: ["script/test_importmap_docs_entrypoint_routing.mjs"]
+  },
+  {
     group: "Package lock dependency drift",
     command: "node",
     args: ["script/test_package_lock_dependency_drift.mjs"]
