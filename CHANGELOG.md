@@ -138,6 +138,9 @@ Release preparation notes:
 
 ### Tests
 
+- Added CI workflow permissions policy smoke coverage so read-only token permissions stay guarded against write-scope drift.
+- Added CI policy guard evidence for public API manifest structure, Dependabot routing, and browser-smoke routing boundaries so entrypoint and CI policy checks stay aligned.
+- Added Development docs command signal coverage for `npm run test:development-docs-commands` so narrow and suite-level maintainer command checks stay discoverable.
 - Added Public API docs signal coverage for persisted-state setup surface and `initial_expansion` grouped option keys so manifest-backed docs signals stay aligned.
 - Added README and Public API docs signal coverage for importmap package-root setup guidance so `tree_view/index.js` and `registerTreeViewControllers(application)` stay aligned.
 - Added Development docs signal coverage for npm lockfile drift recovery guidance so `npm install` / `npm ci` recovery boundaries stay aligned with package metadata drift guidance.
