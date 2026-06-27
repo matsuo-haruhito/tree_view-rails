@@ -176,6 +176,10 @@ const docsEntrypointScriptExclusions = new Map([
     "registered through npm run test:ci-policy"
   ],
   [
+    "test_importmap_docs_entrypoint_routing.mjs",
+    "registered through npm run test:ci-policy"
+  ],
+  [
     "test_development_docs_command_signals.mjs",
     "registered through npm run test:development-docs-commands"
   ],
