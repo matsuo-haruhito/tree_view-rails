@@ -49,11 +49,22 @@ function assertMatrixFailFastPolicy(jobName, jobSource) {
 }
 
 function workflowTopLevelTriggerBlock(workflowSource) {
-  const match = workflowSource.match(/^on:\n(?<body>[\s\S]*?)\n\njobs:\n/m)
+  const match = workflowSource.match(/^on:\n(?<body>[\s\S]*?)\n\npermissions:\n/m)
 
   assert(
     match,
-    `${workflowPath} CI trigger policy must define a top-level on block before jobs`
+    `${workflowPath} CI trigger policy must define a top-level on block before permissions`
+  )
+
+  return match.groups.body
+}
+
+function workflowTopLevelConcurrencyBlock(workflowSource) {
+  const match = workflowSource.match(/^concurrency:\n(?<body>[\s\S]*?)\n\njobs:\n/m)
+
+  assert(
+    match,
+    `${workflowPath} CI concurrency policy must define a top-level concurrency block before jobs`
   )
 
   return match.groups.body
@@ -86,6 +97,26 @@ function assertWorkflowTriggerPolicy(workflowSource) {
     triggerBlock,
     "pull_request_target",
     `${workflowPath} CI trigger policy privilege boundary trigger`
+  )
+}
+
+function assertWorkflowConcurrencyPolicy(workflowSource) {
+  const concurrencyBlock = workflowTopLevelConcurrencyBlock(workflowSource)
+
+  assertIncludes(
+    concurrencyBlock,
+    "  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}",
+    `${workflowPath} CI concurrency policy group`
+  )
+  assertIncludes(
+    concurrencyBlock,
+    "  cancel-in-progress: ${{ github.event_name == 'pull_request' }}",
+    `${workflowPath} CI concurrency policy pull-request-only cancellation`
+  )
+  assertAbsent(
+    concurrencyBlock,
+    "cancel-in-progress: true",
+    `${workflowPath} CI concurrency policy must not cancel main push runs unconditionally`
   )
 }
 
@@ -129,6 +160,7 @@ function packageScript(scriptName) {
 }
 
 assertWorkflowTriggerPolicy(workflowSource)
+assertWorkflowConcurrencyPolicy(workflowSource)
 
 const changesJob = workflowJobBlock(workflowSource, "changes")
 const lintJob = workflowJobBlock(workflowSource, "lint")
@@ -372,6 +404,7 @@ assertOrdered(
 )
 
 console.log("Checked CI workflow trigger policy signals.")
+console.log("Checked CI workflow concurrency policy signals.")
 console.log("Checked CI changed-file detection workflow signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
