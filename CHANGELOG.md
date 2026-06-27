@@ -178,7 +178,7 @@ Release preparation notes:
 - Added generator specs for persisted state owner concern injection.
 - Added RenderState specs for current node ancestor auto-expansion.
 - Added accessibility semantics integration specs for row ARIA state in static, collapsed, selection, and windowed rendering.
-- Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered path trees, sorter call growth, children lookup scope, and max leaf distance behavior.
+- Added render traversal regression specs for deep trees, wide trees, collapsed render scope, filtered trees, sorter call growth, children lookup scope, and max leaf distance behavior.
 - Added specs for TreeView-specific error rescue behavior.
 - Added Ruby and JavaScript specs for client-side toggle mode, mode builders, public API exports, and browser-local descendant visibility updates.
 - Added specs for RenderState internal configuration objects and the consolidated diagnostics entrypoint.
@@ -234,7 +234,7 @@ Release preparation notes:
 - Expanded package contents verification coverage for README-linked public JavaScript docs, including controller registration and selection checkbox hook docs.
 - Added gem package verification coverage for manifest-listed package-root JavaScript named exports in packaged `index.js` and `index.d.ts`.
 - Added gem package verification coverage for README-linked render log level docs so the packaged gem keeps the docs reached from README's render logging guidance.
-- Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, and Development docs wording stay aligned.
+- Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, Ruby version, and Development docs wording stay aligned.
 - Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
 - Added release and CI docs signal coverage for workflow action major versions, Ruby / Rails release evidence, and gem package install / require checks.
 - Added CI observation guidance signal coverage so maintainers verify GitHub Actions workflow runs when combined status is empty.
