@@ -211,6 +211,12 @@ release前に確認すること:
 
 `docs/**/*` は packaged docs としてgemに含まれるため、package-facing docs は repository-only maintainer docs から独立させます。`Product Profile.md` と `AGENTS.md` は repository-only のまま扱い、packaged docs から repository root 専用文書へ戻る encoded parent-directory link を追加しないでください。この境界が崩れると、package contents guard は `Forbidden repository-only root doc links in packaged <path>` として対象 path を報告します。
 
+## Package verification signals
+
+package contents guard は package-root JavaScript entrypoint と importmap の代表 signal も確認します。`config/public_api_manifest.yml` の `javascript_package_root.named_exports` を、packaged `app/javascript/tree_view/index.js` と `app/javascript/tree_view/index.d.ts` にそろえてください。manifest-listed export が欠けた場合、guard は `Missing manifest-listed JavaScript package-root named exports in packaged <path>` を報告します。これは release evidence の確認だけなので、この checklist だけを根拠に public JavaScript export を追加・rename しないでください。
+
+同じ package verification は、importmap で gem を導入する host app 向けに `config/importmap.tree_view.rb` が `pin "tree_view", to: "tree_view/index.js"` を packaged file として維持していることも確認します。これは packaging evidence の guard であり、importmap setup behavior や public API semantics の変更は、その surface を意図的に変更する PR に閉じます。
+
 ## Repository
 
 - `main` がgreenであることを確認する
