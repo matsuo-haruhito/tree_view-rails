@@ -1,8 +1,26 @@
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
+import { classifyChangedFiles } from "./ci_changed_files_policy.mjs"
 
 function assertIncludes(source, needle, label) {
   assert.ok(source.includes(needle), `${label}: missing ${needle}`)
+}
+
+function assertCiPolicyRouting(file, expected, label) {
+  assert.deepEqual(
+    classifyChangedFiles([file]),
+    {
+      docs_only: false,
+      mockups_changed: false,
+      browser_smoke_changed: false,
+      package_sensitive: false,
+      docker_setup_sensitive: false,
+      docs_entrypoint_sensitive: false,
+      ci_policy_sensitive: true,
+      ...expected
+    },
+    label
+  )
 }
 
 const docsSignals = [
@@ -52,4 +70,24 @@ for (const [docsPath, signals] of docsSignals) {
   }
 }
 
+assertCiPolicyRouting(
+  "script/test_ci_policy_permissions_docs_signals.mjs",
+  {},
+  "permissions docs signal guard changes must request the CI policy guard"
+)
+assertCiPolicyRouting(
+  ".github/workflows/release.yaml",
+  {},
+  "workflow YAML changes must request the CI policy guard"
+)
+assertCiPolicyRouting(
+  ".github/workflows/ci.yml",
+  {
+    package_sensitive: true,
+    docker_setup_sensitive: true
+  },
+  "the main CI workflow must keep package, Docker, and CI policy guard routing"
+)
+
 console.log("Checked CI policy read-only workflow permissions docs signals.")
+console.log("Checked CI policy routing for permissions docs signal and workflow changes.")
