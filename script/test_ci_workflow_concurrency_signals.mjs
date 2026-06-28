@@ -1,3 +1,4 @@
+import assert from "node:assert/strict"
 import { execFileSync } from "node:child_process"
 import { readFileSync } from "node:fs"
 import { classifyChangedFiles } from "./ci_changed_files_policy.mjs"
@@ -20,22 +21,18 @@ const expectedCiPolicyScriptChange = {
   ci_policy_sensitive: true
 }
 
-function assert(condition, message) {
-  if (!condition) throw new Error(message)
-}
-
 function assertIncludes(source, needle, label) {
-  assert(source.includes(needle), `${label}: missing ${needle}`)
+  assert.ok(source.includes(needle), `${label}: missing ${needle}`)
 }
 
 function assertAbsent(source, needle, label) {
-  assert(!source.includes(needle), `${label}: unexpected ${needle}`)
+  assert.ok(!source.includes(needle), `${label}: unexpected ${needle}`)
 }
 
 function workflowTopLevelConcurrencyBlock(workflowSource) {
   const match = workflowSource.match(/^concurrency:\n(?<body>[\s\S]*?)\n\njobs:\n/m)
 
-  assert(
+  assert.ok(
     match,
     `${workflowPath} CI concurrency policy must define a top-level concurrency block before jobs`
   )
@@ -53,7 +50,7 @@ function policyCliOutput(input) {
 function parsePolicyCliOutput(output) {
   return Object.fromEntries(
     output.trim().split(/\r?\n/).map((line) => {
-      assert(line.match(/^[a-z_]+=(true|false)$/), `policy CLI output must be key=value boolean, got ${line}`)
+      assert.match(line, /^[a-z_]+=(true|false)$/, `policy CLI output must be key=value boolean, got ${line}`)
       const [key, value] = line.split("=")
 
       return [key, value === "true"]
