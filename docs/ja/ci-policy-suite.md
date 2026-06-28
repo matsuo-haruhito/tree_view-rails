@@ -40,7 +40,7 @@ CI workflow は workflow-level `concurrency` を使い、同じ Pull Request で
 
 `cancel-in-progress` は意図的に `pull_request` event だけに限定しています。`main` への push は最後まで走らせるため、release / package verification evidence を後続 push で弱めません。cancel された Pull Request run は stale head の evidence として扱い、review readiness は current head SHA の workflow run で判断してください。
 
-`script/test_ci_workflow_changed_file_detection_signals.mjs` は、PR-only cancellation 条件と無条件の `cancel-in-progress: true` がないことを含む代表 concurrency signal を守ります。このメモは保守者がその policy をどう読むかを説明するだけで、workflow routing、required checks、branch protection、CI polling behavior は変更しません。
+`script/test_ci_workflow_concurrency_signals.mjs` は、PR-only cancellation 条件と無条件の `cancel-in-progress: true` がないことを含む代表 concurrency signal を守ります。このメモは保守者がその policy をどう読むかを説明するだけで、workflow routing、required checks、branch protection、CI polling behavior は変更しません。
 
 ## Representative routing outputs
 

@@ -40,7 +40,7 @@ The CI workflow uses workflow-level `concurrency` so a newer pull request head c
 
 `cancel-in-progress` is intentionally limited to the `pull_request` event. Pushes to `main` still run to completion so release and package verification evidence is not weakened by a later push. Treat a canceled pull request run as stale-head evidence; review readiness should come from the workflow run for the current head SHA.
 
-`script/test_ci_workflow_changed_file_detection_signals.mjs` protects the representative concurrency signals, including the PR-only cancellation condition and the absence of unconditional `cancel-in-progress: true`. This note explains how maintainers should read that policy; it does not change workflow routing, required checks, branch protection, or CI polling behavior.
+`script/test_ci_workflow_concurrency_signals.mjs` protects the representative concurrency signals, including the PR-only cancellation condition and the absence of unconditional `cancel-in-progress: true`. This note explains how maintainers should read that policy; it does not change workflow routing, required checks, branch protection, or CI polling behavior.
 
 ## Representative routing outputs
 
