@@ -84,6 +84,33 @@ const requiredDevelopmentDocsCommandSignals = [
   ]
 ]
 
+const requiredDocsEntrypointSuiteCommandSignals = [
+  [
+    "docs/en/development.md",
+    [
+      "npm run test:docs-entrypoints -- --list",
+      "npm run test:docs-entrypoints -- --only <group-or-index>",
+      "node script/test_docs_entrypoint_suite.mjs --self-test",
+      "Docs entrypoint suite option contract",
+      "Unknown, ambiguous, or out-of-range values exit non-zero",
+      "available groups plus the `--list` hint",
+      "candidate docs entrypoint scripts against the suite's `checks` array and explicit exclusions"
+    ]
+  ],
+  [
+    "docs/ja/development.md",
+    [
+      "npm run test:docs-entrypoints -- --list",
+      "npm run test:docs-entrypoints -- --only <group-or-index>",
+      "node script/test_docs_entrypoint_suite.mjs --self-test",
+      "Docs entrypoint suite option contract",
+      "unknown、ambiguous、範囲外の値は非 0 終了",
+      "available groups と `--list` の案内",
+      "candidate docs entrypoint script が suite の `checks` array または明示的な exclusion"
+    ]
+  ]
+]
+
 const requiredDevelopmentCiPolicySignals = [
   [
     "docs/en/development.md",
@@ -222,6 +249,16 @@ for (const [docPath, signals] of requiredDevelopmentDocsCommandSignals) {
   }
 }
 
+for (const [docPath, signals] of requiredDocsEntrypointSuiteCommandSignals) {
+  const doc = docSource(docs, docPath)
+
+  for (const signal of signals) {
+    if (!doc?.includes(signal)) {
+      missingSignals.push(`${docPath}: docs entrypoint suite command signal ${signal}`)
+    }
+  }
+}
+
 for (const [docPath, doc, registrationSignals] of ciPolicySuiteDocs) {
   for (const signal of requiredCiPolicySuiteCommandSignals) {
     if (!doc.includes(signal)) {
@@ -303,5 +340,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredDevelopmentDocsCommandSignals.length} Development docs command signal groups, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredNpmLockfileDriftRecoverySignals.length} npm lockfile drift recovery docs groups, ${requiredManifestStructureDuplicateKeySignals.length} manifest duplicate-key docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredDevelopmentDocsCommandSignals.length} Development docs command signal groups, ${requiredDocsEntrypointSuiteCommandSignals.length} docs entrypoint suite command signal groups, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredNpmLockfileDriftRecoverySignals.length} npm lockfile drift recovery docs groups, ${requiredManifestStructureDuplicateKeySignals.length} manifest duplicate-key docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
 )
