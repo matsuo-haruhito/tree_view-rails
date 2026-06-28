@@ -135,10 +135,16 @@ Release preparation notes:
 - Clarified repository-only maintainer docs routing in CI policy suite docs so AGENTS.md remains CI-policy-sensitive while Product Profile.md stays manual-review routed.
 - Clarified empty-state mockup release evidence for disabled toolbar actions, including the `Current path unavailable` action and host-app-owned reset behavior.
 - Clarified Development docs for temporary docs i18n parity exceptions, including `parityExceptions` metadata and the boundary against permanent single-language docs.
+- Clarified review-gallery visual evidence guidance so gallery previews stay a fast orientation path while merge-grade desktop and narrow viewport evidence is recorded from the target mockup page.
+- Clarified empty-state mockup README guidance so hidden-message and permission-hidden row review uses the existing `empty-state.html` entry point without changing authorization policy.
+- Clarified CI policy suite package-sensitive routing guidance for Ruby package and release task paths such as `Gemfile`, `Rakefile`, `tree_view.gemspec`, and package contents verification.
 
 ### Tests
 
 - Added CI workflow permissions policy smoke coverage so read-only token permissions stay guarded against write-scope drift.
+- Split focused diagnostics, workflow concurrency, and release package contents signal smokes into registered suite groups so maintainers can run the narrow docs or CI guard directly.
+- Added CI policy docs command-surface and docs-entrypoint command-surface smoke coverage so `--list`, `--only`, `--self-test`, and registration guidance stay discoverable.
+- Added CI changed-file routing coverage for workflow package/Docker lanes, package-sensitive Ruby release paths, and gem package install / require smoke evidence.
 - Added CI policy guard evidence for public API manifest structure, Dependabot routing, and browser-smoke routing boundaries so entrypoint and CI policy checks stay aligned.
 - Added Development docs command signal coverage for `npm run test:development-docs-commands` so narrow and suite-level maintainer command checks stay discoverable.
 - Added Public API docs signal coverage for persisted-state setup surface and `initial_expansion` grouped option keys so manifest-backed docs signals stay aligned.
