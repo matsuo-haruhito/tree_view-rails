@@ -19,7 +19,7 @@ Use this short chooser when you know the review question but do not yet know whi
 | Interaction, loading, or transfer states | [interaction-states.html](interaction-states.html), [lazy-loading-handoff.html](lazy-loading-handoff.html), [drop-positions.html](drop-positions.html) | [children-pagination.html](children-pagination.html), [persisted-state-boundary.html](persisted-state-boundary.html), [turbo-frame-target.html](turbo-frame-target.html) |
 | Accessibility, focus, or contrast cues | [keyboard-focus-states.html](keyboard-focus-states.html), [accessibility-semantics.html](accessibility-semantics.html), [high-contrast-state-cues/index.html](high-contrast-state-cues/index.html) | [keyboard-current-row/index.html](keyboard-current-row/index.html), [reduced-motion-state-cues.html](reduced-motion-state-cues.html) |
 | Selection or form boundaries | [selection-max-count.html](selection-max-count.html), [selection-multi-tree-form.html](selection-multi-tree-form.html), [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) | [form-editing-rows.html](form-editing-rows.html), [interactive-marker-behaviors.html](interactive-marker-behaviors.html) |
-| Toolbar, empty, or table boundary questions | [toolbar-actions.html](toolbar-actions.html), [empty-state.html](empty-state.html), [resource-table-empty-colspan-boundary.html](resource-table-empty-colspan-boundary.html) | [node-presenter-row-partials.html](node-presenter-row-partials.html), [path-tree-builder-rows.html](path-tree-builder-rows.html), [filtered-tree-modes.html](filtered-tree-modes.html) |
+| Toolbar, empty, hidden-message, or table boundary questions | [toolbar-actions.html](toolbar-actions.html), [empty-state.html](empty-state.html), [resource-table-empty-colspan-boundary.html](resource-table-empty-colspan-boundary.html) | [node-presenter-row-partials.html](node-presenter-row-partials.html), [path-tree-builder-rows.html](path-tree-builder-rows.html), [filtered-tree-modes.html](filtered-tree-modes.html) |
 
 ## Files
 
@@ -61,7 +61,7 @@ Use this short chooser when you know the review question but do not yet know whi
 | [selection-multi-tree-form.html](selection-multi-tree-form.html) | Focused multi-tree selection form reference showing source-specific selected counts, submit summary, empty state, and generated hidden input boundary as a review aid. |
 | [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) | Focused children-pagination selection boundary reference showing loaded-row selection, unloaded descendants, rendered-only cascade/indeterminate cues, and host-app-owned bulk action semantics. |
 | [toolbar-actions.html](toolbar-actions.html) | Expand-all, collapse-all, and collapse-to-current-path toolbar reference showing enabled, disabled fallback, missing-path fallback, current-state, metadata-boundary, and long/localized label variants without host-app routes or authorization copy. |
-| [empty-state.html](empty-state.html) | No-root-items and no-results reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
+| [empty-state.html](empty-state.html) | No-root-items, no-results, and permission-hidden `hidden_message` reference for the empty-row wrapper hook, full-width message slot, and host-app-owned copy. |
 | [default-tree.css](default-tree.css) | Shared CSS for the static mockups. |
 
 ## Recommended review flow
@@ -100,7 +100,7 @@ Use this short chooser when you know the review question but do not yet know whi
 32. Use [selection-multi-tree-form.html](selection-multi-tree-form.html) when review needs to compare multiple TreeView selection groups in one form, source-specific counts, and generated hidden input sync boundaries. Treat its hidden input rows as a review aid; [Selection](../en/selection.md#hidden-input-sync-for-regular-form-submit) is the contract for per-payload hidden input sync.
 33. Use [children-pagination-selection-boundary.html](children-pagination-selection-boundary.html) when selection review intersects with children pagination, rendered-only cascade/indeterminate cues, or unloaded descendant boundaries.
 34. Use [table-caption-context.html](table-caption-context.html) when review needs to compare host-app-owned heading, caption, summary, and adjacent actions around TreeView-owned row hierarchy cues.
-35. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items or no-results rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
+35. Use [empty-state.html](empty-state.html) when review needs a focused pass on no-root-items, no-results, or permission-hidden rows, the reusable empty-row wrapper hook, or the host-app-owned copy boundary.
 36. Use [toolbar-actions.html](toolbar-actions.html) when review needs a focused pass on expand, collapse, collapse-to-current-path, disabled fallback, missing-path fallback, current-state cues, or long/localized label wrapping affordances instead of row-by-row hierarchy layout.
 37. Keep host-app wording, permissions, routes, and business actions out of this directory even when the gallery highlights a gap.
 
@@ -170,6 +170,7 @@ Record deliberate copy or language exceptions in this list. Add a row when a moc
 ## Empty-state guidance
 
 - Use `data-tree-view-empty-state="true"` together with `.tree-view-empty-row__content` and `.tree-view-empty-row__message` as the reusable baseline hook.
+- Use `empty-state.html` when review needs to compare `empty_message` no-root/no-results states with the `hidden_message` permission-hidden slot.
 - Keep final empty copy, CTA, permission messaging, and filter-reset behavior in the host app.
 
 ## PathTreeBuilder guidance
