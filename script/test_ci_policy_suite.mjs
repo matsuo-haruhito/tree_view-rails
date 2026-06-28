@@ -155,7 +155,7 @@ function resolveOnlyGroupResult(groupName) {
   const caseInsensitiveExactMatches = checks.filter(
     (check) => check.group.toLowerCase() === normalizedGroupName
   )
-  if (caseInsensitiveExactMatches.length === 1) return { check: exactMatches[0] }
+  if (caseInsensitiveExactMatches.length === 1) return { check: caseInsensitiveExactMatches[0] }
 
   const partialMatches = checks.filter((check) =>
     check.group.toLowerCase().includes(normalizedGroupName)
