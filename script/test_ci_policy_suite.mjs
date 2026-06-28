@@ -18,6 +18,11 @@ const checks = [
     args: ["script/test_ci_workflow_changed_file_detection_signals.mjs"]
   },
   {
+    group: "Workflow concurrency signals",
+    command: "node",
+    args: ["script/test_ci_workflow_concurrency_signals.mjs"]
+  },
+  {
     group: "Workflow permissions signals",
     command: "node",
     args: ["script/test_ci_workflow_permissions_signals.mjs"]
@@ -236,6 +241,7 @@ function runSelfTest() {
     ambiguous.matches.map((check) => check.group),
     [
       "Workflow changed-file detection signals",
+      "Workflow concurrency signals",
       "Workflow permissions signals",
       "Workflow permissions docs signals"
     ],
@@ -245,6 +251,10 @@ function runSelfTest() {
   assert.ok(
     ciPolicyCandidateScriptPaths().includes("script/test_ci_changed_files_policy.mjs"),
     "CI policy candidates should include changed-file policy signals"
+  )
+  assert.ok(
+    ciPolicyCandidateScriptPaths().includes("script/test_ci_workflow_concurrency_signals.mjs"),
+    "CI policy candidates should include workflow concurrency signals"
   )
   assert.ok(
     ciPolicyCandidateScriptPaths().includes("script/test_ci_workflow_permissions_signals.mjs"),

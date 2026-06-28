@@ -33,6 +33,11 @@ const checks = [
     args: ["script/test_host_app_extension_diagnostics_signals.mjs"]
   },
   {
+    group: "Diagnostics docs signals",
+    command: "node",
+    args: ["script/test_diagnostics_docs_signals.mjs"]
+  },
+  {
     group: "Development docs Node version signals",
     command: "node",
     args: ["script/test_development_docs_node_version_signals.mjs"]
@@ -81,6 +86,11 @@ const checks = [
     group: "Release docs signals",
     command: "node",
     args: ["script/test_release_docs_signals.mjs"]
+  },
+  {
+    group: "Release package contents signals",
+    command: "node",
+    args: ["script/test_release_package_contents_signals.mjs"]
   },
   {
     group: "README quick start signal",
@@ -414,8 +424,16 @@ function runSelfTest() {
     "docs script registration candidates should include event names public API signals"
   )
   assert.ok(
+    candidatePaths.includes("script/test_diagnostics_docs_signals.mjs"),
+    "docs script registration candidates should include diagnostics docs signals"
+  )
+  assert.ok(
     candidatePaths.includes("script/test_public_api_docs_signals.mjs"),
     "docs script registration candidates should include public API docs signals"
+  )
+  assert.ok(
+    candidatePaths.includes("script/test_release_package_contents_signals.mjs"),
+    "docs script registration candidates should include release package contents signals"
   )
   assert.ok(
     candidatePaths.includes("script/guard_public_api_transfer_integration_signals.mjs"),
