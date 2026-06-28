@@ -378,6 +378,40 @@ javascriptJobNpmScripts.forEach((scriptName) => {
   assertPackageScript(scriptName)
 })
 
+const gemPackageJobSignals = [
+  ["gem build command", "run: gem build tree_view.gemspec"],
+  ["package contents checker command", "run: ruby script/check_gem_package_contents.rb tree_view-*.gem"],
+  ["built gem install smoke command", "run: gem install tree_view-*.gem"],
+  ["built gem require smoke command", 'run: ruby -e "require \'tree_view\'"']
+]
+
+gemPackageJobSignals.forEach(([label, signal]) => {
+  assertIncludes(
+    gemPackageJob,
+    signal,
+    `${workflowPath} jobs.gem_package ${label}`
+  )
+})
+
+assertOrdered(
+  gemPackageJob,
+  "run: gem build tree_view.gemspec",
+  "run: ruby script/check_gem_package_contents.rb tree_view-*.gem",
+  `${workflowPath} jobs.gem_package must build the gem before package contents verification`
+)
+assertOrdered(
+  gemPackageJob,
+  "run: ruby script/check_gem_package_contents.rb tree_view-*.gem",
+  "run: gem install tree_view-*.gem",
+  `${workflowPath} jobs.gem_package must verify package contents before installing the built gem`
+)
+assertOrdered(
+  gemPackageJob,
+  "run: gem install tree_view-*.gem",
+  'run: ruby -e "require \'tree_view\'"',
+  `${workflowPath} jobs.gem_package must install the built gem before the require smoke`
+)
+
 const docsEntrypointsScript = packageScript("test:docs-entrypoints")
 const ciPolicyScript = packageScript("test:ci-policy")
 const entrypointsScript = packageScript("test:entrypoints")
@@ -451,5 +485,6 @@ console.log(`Checked ${prSpecsJobSignals.length} CI pr_specs job representative 
 console.log(`Checked ${matrixFailFastPolicyJobs.length} CI matrix fail-fast policy signals.`)
 console.log(`Checked ${rubyMatrixVersionSignals.length} representative Ruby workflow version signals.`)
 console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
+console.log(`Checked ${gemPackageJobSignals.length} gem package build, verification, install, and require smoke signals.`)
 console.log(`Checked ${docsEntrypointsSignals.length} docs-entrypoints package and suite command signals.`)
 console.log(`Checked ${packageGuardSuiteCompositionSignals.length} package guard suite composition signals.`)
