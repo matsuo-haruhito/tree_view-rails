@@ -301,6 +301,41 @@ function assertCiPolicyDocsDocsOnlyRetentionSignals() {
   }
 }
 
+function assertCiPolicyDocsCommandSurfaceSignals() {
+  const docsSignals = [
+    [
+      "docs/en/ci-policy-suite.md",
+      [
+        "npm run test:ci-policy",
+        "node script/test_ci_policy_suite.mjs --list",
+        "node script/test_ci_policy_suite.mjs --only <group-or-index>",
+        "node script/test_ci_policy_suite.mjs --self-test",
+        "Unknown, ambiguous, or out-of-range values fail and print the available groups plus the `--list` hint",
+        "fails with the missing script path"
+      ]
+    ],
+    [
+      "docs/ja/ci-policy-suite.md",
+      [
+        "npm run test:ci-policy",
+        "node script/test_ci_policy_suite.mjs --list",
+        "node script/test_ci_policy_suite.mjs --only <group-or-index>",
+        "node script/test_ci_policy_suite.mjs --self-test",
+        "unknown、ambiguous、範囲外の値は非 0 終了し、available groups と `--list` の案内を表示します",
+        "missing script path を表示して失敗します"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} command surface docs signal`)
+    }
+  }
+}
+
 for (const docsPath of ciPolicyDocsPaths) {
   assert.deepEqual(
     classifyChangedFiles([docsPath]),
@@ -339,6 +374,7 @@ assertCiPolicyDocsDockerSetupSignals()
 assertCiPolicyDocsChangedFileDetectionSignals()
 assertCiPolicyDocsRoutingOutputSignals()
 assertCiPolicyDocsDocsOnlyRetentionSignals()
+assertCiPolicyDocsCommandSurfaceSignals()
 
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
 console.log("Checked CI policy docs routing guard script routing.")
@@ -347,3 +383,4 @@ console.log("Checked Docker development setup CI docs signals.")
 console.log("Checked pull request changed-file detection docs signals.")
 console.log("Checked representative routing output docs signals.")
 console.log("Checked docs-only check retention docs signals.")
+console.log("Checked CI policy docs command surface signals.")
