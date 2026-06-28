@@ -77,8 +77,11 @@ assertCiPolicyRouting(
 )
 assertCiPolicyRouting(
   ".github/workflows/release.yaml",
-  {},
-  "workflow YAML changes must request the CI policy guard"
+  {
+    package_sensitive: true,
+    docker_setup_sensitive: true
+  },
+  "workflow YAML changes must request package, Docker, and CI policy guards"
 )
 assertCiPolicyRouting(
   ".github/workflows/ci.yml",

@@ -8,6 +8,10 @@ const ciPolicyDocsPaths = [
   "docs/en/ci-policy-suite.md",
   "docs/ja/ci-policy-suite.md"
 ]
+const workflowDefinitionPaths = [
+  ".github/workflows/package-verification.yml",
+  ".github/workflows/docker-smoke.yaml"
+]
 const ciPolicyDocsRoutingScriptPath = "script/test_ci_policy_docs_routing.mjs"
 
 const expected = {
@@ -17,6 +21,16 @@ const expected = {
   package_sensitive: true,
   docker_setup_sensitive: false,
   docs_entrypoint_sensitive: true,
+  ci_policy_sensitive: true
+}
+
+const expectedWorkflowDefinitionChange = {
+  docs_only: false,
+  mockups_changed: false,
+  browser_smoke_changed: false,
+  package_sensitive: true,
+  docker_setup_sensitive: true,
+  docs_entrypoint_sensitive: false,
   ci_policy_sensitive: true
 }
 
@@ -344,6 +358,26 @@ for (const docsPath of ciPolicyDocsPaths) {
   )
 }
 
+for (const workflowPath of workflowDefinitionPaths) {
+  assert.deepEqual(
+    classifyChangedFiles([workflowPath]),
+    expectedWorkflowDefinitionChange,
+    `${workflowPath} changes must run package, Docker, and CI policy guards`
+  )
+}
+
+assert.deepEqual(
+  classifyChangedFiles(workflowDefinitionPaths),
+  expectedWorkflowDefinitionChange,
+  "multiple workflow definition changes must keep package, Docker, and CI policy guard routing"
+)
+
+assert.deepEqual(
+  parsePolicyCliOutput(policyCliOutput(`${workflowDefinitionPaths.join("\n")}\n`)),
+  expectedWorkflowDefinitionChange,
+  "changed-file policy CLI must emit package, Docker, and CI policy routing for workflow definition changes"
+)
+
 assert.deepEqual(
   classifyChangedFiles(ciPolicyDocsPaths),
   expected,
@@ -377,6 +411,7 @@ assertCiPolicyDocsDocsOnlyRetentionSignals()
 assertCiPolicyDocsCommandSurfaceSignals()
 
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
+console.log(`Checked ${workflowDefinitionPaths.length} workflow definition package/Docker routing paths.`)
 console.log("Checked CI policy docs routing guard script routing.")
 console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
 console.log("Checked Docker development setup CI docs signals.")

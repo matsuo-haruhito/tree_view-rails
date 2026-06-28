@@ -69,7 +69,7 @@ function isPackageSensitivePath(file) {
     file === "package-lock.json" ||
     file === ".nvmrc" ||
     file === "script/check_gem_package_contents.rb" ||
-    file === ".github/workflows/ci.yml" ||
+    isWorkflowDefinitionPath(file) ||
     file === ".github/dependabot.yml" ||
     file === "config/importmap.tree_view.rb" ||
     file === "config/public_api_manifest.yml" ||
@@ -120,7 +120,7 @@ function isDockerSetupSensitivePath(file) {
     file === "package.json" ||
     file === "package-lock.json" ||
     file === ".nvmrc" ||
-    file === ".github/workflows/ci.yml"
+    isWorkflowDefinitionPath(file)
   );
 }
 
