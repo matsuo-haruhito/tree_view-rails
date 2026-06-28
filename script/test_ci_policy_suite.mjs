@@ -248,6 +248,11 @@ function runSelfTest() {
     "ambiguous --only should report all matching groups"
   )
 
+  assert.equal(
+    ciPolicyScriptExclusions.get("test_ci_policy_suite.mjs"),
+    "this suite's self-test entrypoint",
+    "the suite entrypoint exclusion should document why it is not a direct guard group"
+  )
   assert.ok(
     ciPolicyCandidateScriptPaths().includes("script/test_ci_changed_files_policy.mjs"),
     "CI policy candidates should include changed-file policy signals"

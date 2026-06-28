@@ -28,6 +28,8 @@ node script/test_ci_policy_suite.mjs --self-test
 
 CI policy guard script を追加または rename した場合は、CI に頼る前に suite の `checks` array を更新するか、明示的な exclusion を残してください。self-test は candidate script を走査し、登録済み script が suite から見えることを確認します。未登録 candidate がある場合は missing script path を表示して失敗します。
 
+Candidate CI policy scripts は、`checks` array に登録するか、短い理由つきで `ciPolicyScriptExclusions` に明示する必要があります。exclusion は狭く保ってください。`test_ci_policy_suite.mjs` は direct guard group ではなく、この suite の self-test entrypoint なので除外されています。
+
 ## Pull Request changed-file detection
 
 Pull Request では、`changes` job が base branch を fetch し、`origin/${{ github.base_ref }}` と `HEAD` の merge base を探します。merge base を取得できる場合、workflow は three-dot diff の `origin/${{ github.base_ref }}...HEAD` を使い、Pull Request で変わった file を基準に routing します。merge base を解決できない場合は、fallback として `git diff --name-only origin/${{ github.base_ref }} HEAD` を使います。

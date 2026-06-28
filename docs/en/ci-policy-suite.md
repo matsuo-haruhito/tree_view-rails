@@ -28,6 +28,8 @@ node script/test_ci_policy_suite.mjs --self-test
 
 When adding or renaming a CI policy guard script, update the suite `checks` array or document an explicit exclusion before relying on CI. The self-test scans candidate scripts, confirms that registered scripts stay visible through the suite, and fails with the missing script path when a candidate is not registered.
 
+Candidate CI policy scripts must either be listed in the `checks` array or named in `ciPolicyScriptExclusions` with a short reason. Keep exclusions narrow: `test_ci_policy_suite.mjs` is excluded because it is this suite's self-test entrypoint, not a direct guard group.
+
 ## Pull request changed-file detection
 
 For pull requests, the `changes` job fetches the base branch, then tries to find a merge base between `origin/${{ github.base_ref }}` and `HEAD`. When the merge base is available, the workflow uses the three-dot diff, `origin/${{ github.base_ref }}...HEAD`, so routing is based on the pull request changes. If the merge base cannot be resolved, it falls back to `git diff --name-only origin/${{ github.base_ref }} HEAD`.
