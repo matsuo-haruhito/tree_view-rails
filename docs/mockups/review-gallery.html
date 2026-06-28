@@ -57,7 +57,7 @@
 
     <section class="mock-section" aria-labelledby="gallery-usage-heading">
       <h2 id="gallery-usage-heading">How to use this gallery</h2>
-      <ul><li>Start here when a review needs quick side-by-side comparison across the baseline and focused mockup surfaces.</li><li>Use the family index to jump to the first card in a related review path before scanning the full gallery.</li><li>Treat final business copy, routes, permissions, and actions as host-app responsibilities. This gallery stays product-neutral on purpose.</li></ul>
+      <ul><li>Start here when a review needs quick side-by-side comparison across the baseline and focused mockup surfaces.</li><li>Use the family index to jump to the first card in a related review path before scanning the full gallery.</li><li>Treat embedded previews as fast orientation only. Merge-grade visual evidence still comes from opening the target mockup directly in desktop and narrow viewports and recording readability, overlap, and clipping results in the PR discussion.</li><li>Treat final business copy, routes, permissions, and actions as host-app responsibilities. This gallery stays product-neutral on purpose.</li></ul>
       <nav class="mock-gallery-review-paths" aria-labelledby="gallery-review-paths-heading">
         <h2 id="gallery-review-paths-heading">Review paths</h2>
         <p>Choose the review family that matches the question first, then open the linked full mockup when one surface needs deeper inspection.</p>
@@ -141,6 +141,7 @@
     <section class="mock-section" aria-labelledby="comparison-heading">
       <h2 id="comparison-heading">Comparison cues</h2>
       <table class="mock-comparison-table"><thead><tr><th scope="col">Surface</th><th scope="col">Best for</th><th scope="col">Keep outside scope</th></tr></thead><tbody>
+        <tr><td>Gallery preview</td><td>Fast orientation, family routing, and first-pass side-by-side scanning before opening a focused mockup.</td><td>Final visual evidence; record desktop and narrow viewport readability, overlap, and clipping checks from the target full page in the PR discussion.</td></tr>
         <tr><td>Foundation and layout</td><td>Baseline tree structure, first render, table bridge, page context, icon states, and responsive sidebar scans.</td><td>Host-app page IA, saved table state, final row actions, or production responsive breakpoints.</td></tr>
         <tr><td>Interaction and state</td><td>Loading, retry, children pagination, drag/drop, persisted state, Turbo target, and windowed-rendering boundaries.</td><td>Remote fetch behavior, persistence policy, reorder authorization, Turbo responses, or host-app retry copy.</td></tr>
         <tr><td>Accessibility review cues</td><td>Focus-visible samples, table-first ARIA placement, current-row styling, contrast checks, direction stress, and localized-width review.</td><td>Full keyboard model, treegrid promotion, final locale policy, or public styling hook decisions.</td></tr>
