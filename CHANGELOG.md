@@ -298,6 +298,7 @@ Release preparation notes:
   - custom checkbox name
   - per-node disabled state
   - disabled reason attributes
+  - initial selected state via `selected_keys`
 - Orphan handling strategies.
 - Optional node key uniqueness validation.
 - Optional DOM ID collision diagnostics via `RenderState#validate_unique_dom_ids!`.
