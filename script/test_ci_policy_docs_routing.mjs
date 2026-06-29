@@ -374,6 +374,45 @@ function assertCiPolicyDocsCommandSurfaceSignals() {
   }
 }
 
+function assertCiPolicyDocsSuiteRegistrationPolicySignals() {
+  const docsSignals = [
+    [
+      "docs/en/ci-policy-suite.md",
+      [
+        "The package script runs the suite self-test first",
+        "then runs the configured CI policy guard groups",
+        "update the suite `checks` array or document an explicit exclusion before relying on CI",
+        "self-test scans candidate scripts",
+        "fails with the missing script path",
+        "Candidate CI policy scripts must either be listed in the `checks` array or named in `ciPolicyScriptExclusions` with a short reason",
+        "Keep exclusions narrow",
+        "this suite's self-test entrypoint, not a direct guard group"
+      ]
+    ],
+    [
+      "docs/ja/ci-policy-suite.md",
+      [
+        "package script は先に suite self-test を実行し",
+        "その後に設定済みの CI policy guard group を実行します",
+        "suite の `checks` array を更新するか、明示的な exclusion を残してください",
+        "self-test は candidate script を走査し",
+        "missing script path を表示して失敗します",
+        "Candidate CI policy scripts は、`checks` array に登録するか、短い理由つきで `ciPolicyScriptExclusions` に明示する必要があります",
+        "exclusion は狭く保ってください",
+        "この suite の self-test entrypoint なので除外されています"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} suite registration policy docs signal`)
+    }
+  }
+}
+
 for (const docsPath of ciPolicyDocsPaths) {
   assert.deepEqual(
     classifyChangedFiles([docsPath]),
@@ -433,6 +472,7 @@ assertCiPolicyDocsChangedFileDetectionSignals()
 assertCiPolicyDocsRoutingOutputSignals()
 assertCiPolicyDocsDocsOnlyRetentionSignals()
 assertCiPolicyDocsCommandSurfaceSignals()
+assertCiPolicyDocsSuiteRegistrationPolicySignals()
 
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
 console.log(`Checked ${workflowDefinitionPaths.length} workflow definition package/Docker routing paths.`)
@@ -443,3 +483,4 @@ console.log("Checked pull request changed-file detection docs signals.")
 console.log("Checked representative routing output docs signals.")
 console.log("Checked docs-only check retention docs signals.")
 console.log("Checked CI policy docs command surface signals.")
+console.log("Checked CI policy suite registration policy docs signals.")
