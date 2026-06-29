@@ -138,6 +138,7 @@ Release preparation notes:
 - Clarified review-gallery visual evidence guidance so gallery previews stay a fast orientation path while merge-grade desktop and narrow viewport evidence is recorded from the target mockup page.
 - Clarified empty-state mockup README guidance so hidden-message and permission-hidden row review uses the existing `empty-state.html` entry point without changing authorization policy.
 - Clarified CI policy suite package-sensitive routing guidance for Ruby package and release task paths such as `Gemfile`, `Rakefile`, `tree_view.gemspec`, and package contents verification.
+- Clarified CI policy suite explicit exclusion guidance so candidate guard scripts must be registered in `checks` or carry a reasoned exclusion such as the suite self-test entrypoint.
 
 ### Tests
 
@@ -160,6 +161,7 @@ Release preparation notes:
 - Added stylesheet state cue selector source-spec coverage for selected, collapsed, loading, error, disabled-drop, and drop-target cues in the packaged stylesheet.
 - Expanded package contents verification coverage for bilingual CI policy suite docs so packaged gems keep maintainer CI policy guidance available.
 - Consolidated `test:ci-policy` package-script execution around the CI policy suite source of truth while preserving guard registration self-test coverage.
+- Added CI policy suite explicit exclusion self-test coverage so unregistered guard scripts stay classified as registered checks or documented exclusions.
 - Added Docker setup CI docs signal coverage so CI policy docs keep `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` guidance aligned.
 - Added CI policy docs signal coverage for pull request changed-file detection and docs-only check retention so CI policy docs stay aligned with workflow routing evidence.
 - Added CI routing output docs signal coverage for representative changed-file routing output guidance.
