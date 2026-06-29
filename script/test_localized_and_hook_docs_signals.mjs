@@ -29,6 +29,14 @@ const localizedNameDocs = [
   ["docs/en/localized-names.md", read("docs/en/localized-names.md")],
   ["docs/ja/localized-names.md", read("docs/ja/localized-names.md")]
 ]
+const lazyLoadingDocs = [
+  ["docs/en/lazy-loading.md", read("docs/en/lazy-loading.md")],
+  ["docs/ja/lazy-loading.md", read("docs/ja/lazy-loading.md")]
+]
+const jsEventDocs = [
+  ["docs/en/js-events.md", read("docs/en/js-events.md")],
+  ["docs/ja/js-events.md", read("docs/ja/js-events.md")]
+]
 
 const localizedNameManifestSignals = [
   "localized_name_i18n_keys:",
@@ -111,4 +119,63 @@ publicApiDocs.forEach(([relativePath, document]) => {
 
     assertMatches(document, boundary, `${relativePath}: ${name} docs no longer name the host-app responsibility boundary`)
   })
+})
+
+const remoteStateDataHookManifestSignals = [
+  "remote_state_data_hooks:",
+  "lazy_attribute: data-tree-lazy",
+  "children_url_attribute: data-tree-children-url",
+  "loaded_attribute: data-tree-loaded",
+  "remote_state_attribute: data-tree-remote-state"
+]
+
+remoteStateDataHookManifestSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest remote-state DOM hook source")
+})
+
+lazyLoadingDocs.forEach(([relativePath, document]) => {
+  [
+    "data-tree-lazy",
+    "data-tree-children-url",
+    "data-tree-loaded",
+    "data-tree-remote-state"
+  ].forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} TreeViewRemoteStateDataHooks lazy-loading DOM hook docs`)
+  })
+
+  assertMatches(
+    document,
+    /TreeViewRemoteStateValues\.loading.*\.loaded.*\.error|TreeViewRemoteStateValues\.loading.*\.loaded.*\.error/s,
+    `${relativePath}: Lazy Loading docs no longer name TreeViewRemoteStateValues as common state values`
+  )
+
+  assertMatches(
+    document,
+    /not event names|event 名ではありません/,
+    `${relativePath}: Lazy Loading docs no longer separate remote-state values from event names`
+  )
+
+  assertMatches(
+    document,
+    /TreeViewEventNames\.hostLifecycle\.loading|TreeViewEventNames\.hostLifecycle\.loading/,
+    `${relativePath}: Lazy Loading docs no longer point host apps at hostLifecycle event names`
+  )
+})
+
+jsEventDocs.forEach(([relativePath, document]) => {
+  assertIncludes(document, "TreeViewEventNames.hostLifecycle", `${relativePath} host lifecycle event-name docs`)
+  assertIncludes(document, "TreeViewEventNames.remoteState", `${relativePath} remote-state controller event-name docs`)
+  assertIncludes(document, "TreeViewRemoteStateValues", `${relativePath} remote-state value export docs`)
+
+  assertMatches(
+    document,
+    /host apps dispatching lazy-loading request lifecycle events|lazy-loading request lifecycle event を host app 側で dispatch/,
+    `${relativePath}: JS event docs no longer keep hostLifecycle events host-app-dispatched`
+  )
+
+  assertMatches(
+    document,
+    /TreeView controller-emitted remote-state events|TreeView controller 自身が emit する remote-state event/,
+    `${relativePath}: JS event docs no longer separate controller-emitted remote-state events from host lifecycle events`
+  )
 })
