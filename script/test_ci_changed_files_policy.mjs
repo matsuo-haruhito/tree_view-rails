@@ -7,12 +7,20 @@ const workflowPath = ".github/workflows/ci.yml";
 const packagePath = "package.json";
 const policyCliPath = "script/ci_changed_files_policy.mjs";
 const ciPolicySuitePath = "script/test_ci_policy_suite.mjs";
+const ciPolicySuiteEntrypointExclusion = {
+  path: ciPolicySuitePath,
+  reason: "the suite self-test entrypoint is routed as CI policy-sensitive but is not a direct guard group"
+};
 
 const ciPolicyGuardScriptPaths = [
   "script/test_ci_changed_files_policy.mjs",
   "script/test_ci_workflow_changed_file_detection_signals.mjs",
+  "script/test_ci_workflow_concurrency_signals.mjs",
   "script/test_ci_workflow_permissions_signals.mjs",
+  "script/test_ci_policy_permissions_docs_signals.mjs",
   "script/test_ci_observation_guidance_signals.mjs",
+  "script/test_ci_policy_docs_routing.mjs",
+  "script/test_importmap_docs_entrypoint_routing.mjs",
   "script/test_package_lock_dependency_drift.mjs",
   "script/test_gemfile_lock_dependency_drift.mjs"
 ];
@@ -342,8 +350,48 @@ function assertCiPolicyCommandRunsSuite(ciPolicyCommand, suiteArgs, message) {
   );
 }
 
+function registeredCiPolicySuiteScriptPaths() {
+  const suiteSource = readFileSync(ciPolicySuitePath, "utf8");
+
+  return [
+    ...new Set(
+      [...suiteSource.matchAll(/args: \["(?<scriptPath>script\/[^\"]+\.mjs)"\]/g)]
+        .map((match) => match.groups.scriptPath)
+    )
+  ].sort();
+}
+
+function assertCiPolicySuiteRegisteredScriptsAreRouted() {
+  const missingRoutes = registeredCiPolicySuiteScriptPaths().filter(
+    (scriptPath) => !classifyChangedFiles([scriptPath]).ci_policy_sensitive
+  );
+
+  assert.deepEqual(
+    missingRoutes,
+    [],
+    [
+      "CI policy suite registered guard scripts must be ci_policy_sensitive in script/ci_changed_files_policy.mjs:",
+      ...missingRoutes.map((scriptPath) => `  - ${scriptPath}`),
+      "Add each missing path to isCiPolicySensitivePath(...) so CI policy guard changes run npm run test:ci-policy."
+    ].join("\n")
+  );
+
+  assert.equal(
+    classifyChangedFiles([ciPolicySuiteEntrypointExclusion.path]).ci_policy_sensitive,
+    true,
+    `${ciPolicySuiteEntrypointExclusion.path} must stay ci_policy_sensitive because ${ciPolicySuiteEntrypointExclusion.reason}`
+  );
+}
+
 function assertCiPolicySuiteRegistersGuardScripts() {
   const suiteSource = readFileSync(ciPolicySuitePath, "utf8");
+  const registeredGuardScriptPaths = registeredCiPolicySuiteScriptPaths();
+
+  assertSameMembers(
+    registeredGuardScriptPaths,
+    ciPolicyGuardScriptPaths,
+    `${ciPolicySuitePath} checks array must match this test's CI policy guard script list`
+  );
 
   for (const scriptPath of ciPolicyGuardScriptPaths) {
     assert.match(
@@ -379,6 +427,7 @@ function assertCiPolicyScriptRegistration(packageScripts) {
     `${packagePath} scripts.test:ci-policy must run ${ciPolicySuitePath} so CI policy guard changes validate their own registration`
   );
   assertCiPolicySuiteRegistersGuardScripts();
+  assertCiPolicySuiteRegisteredScriptsAreRouted();
 }
 
 function policyCliOutput(input) {
