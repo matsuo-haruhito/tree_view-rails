@@ -77,6 +77,18 @@ function assertIncludes(source, needle, label) {
   assert.ok(source.includes(needle), `${label}: missing ${needle}`)
 }
 
+function routingOutputRow(source, output, label) {
+  const row = source.split(/\r?\n/).find((line) => line.startsWith(`| \`${output}\``))
+
+  assert.ok(row, `${label}: missing ${output} representative routing row`)
+
+  return row
+}
+
+function assertRoutingOutputRowIncludes(source, output, signal, label) {
+  assertIncludes(routingOutputRow(source, output, label), signal, `${label} ${output} representative routing row`)
+}
+
 function assertDependabotLaneSignal() {
   const dependabotSource = readFileSync(dependabotPath, "utf8")
   const githubActionsLane = dependabotUpdateBlock(dependabotSource, "github-actions")
@@ -258,6 +270,13 @@ function assertCiPolicyDocsRoutingOutputSignals() {
     for (const signal of signals) {
       assertIncludes(docsSource, signal, `${docsPath} routing output docs signal`)
     }
+
+    assertRoutingOutputRowIncludes(
+      docsSource,
+      "docs_entrypoint_sensitive",
+      "CHANGELOG.md",
+      `${docsPath} missing CHANGELOG.md docs-entrypoint routing signal`
+    )
   }
 }
 
