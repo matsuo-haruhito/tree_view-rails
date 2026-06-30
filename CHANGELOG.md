@@ -140,6 +140,7 @@ Release preparation notes:
 - Clarified empty-state mockup README guidance so hidden-message and permission-hidden row review uses the existing `empty-state.html` entry point without changing authorization policy.
 - Clarified CI policy suite package-sensitive routing guidance for Ruby package and release task paths such as `Gemfile`, `Rakefile`, `tree_view.gemspec`, and package contents verification.
 - Clarified CI policy suite explicit exclusion guidance so candidate guard scripts must be registered in `checks` or carry a reasoned exclusion such as the suite self-test entrypoint.
+- Added CI policy docs release evidence for main-push default outputs, covering package, Docker setup, docs entrypoint, and CI policy confidence lanes without changing pull-request classifier behavior.
 
 ### Tests
 
