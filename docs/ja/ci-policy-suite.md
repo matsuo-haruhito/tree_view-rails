@@ -61,12 +61,14 @@ changed-file policy は、repository 全体の file inventory ではなく代表
 | `docs_only` | `README.md`, `docs/**`, `AGENTS.md`, `Product Profile.md` | Pull Request は docs 形状です。ただし、他の output が focused confidence check を要求する場合があります。 |
 | `package_sensitive` | `README.md`, `CHANGELOG.md`, `docs/**`, `Gemfile`, `Gemfile.lock`, `Rakefile`, `tree_view.gemspec`, `script/check_gem_package_contents.rb`, `app/javascript/**`, `config/public_api_manifest.yml`, `.github/dependabot.yml` | packaged gem、Ruby package / release task wiring、runtime source、または package-facing docs confidence path を実行します。 |
 | `docs_entrypoint_sensitive` | `README.md`, `CHANGELOG.md`, `docs/**`, `config/public_api_manifest.yml` | reader-facing docs、release ledger、または public manifest signal が変わったため、docs entrypoint signal を実行します。 |
-| `ci_policy_sensitive` | `AGENTS.md`, `docs/en/ci-policy-suite.md`, `docs/ja/ci-policy-suite.md`, `.github/workflows/ci.yml`, `.github/dependabot.yml`, `script/ci_changed_files_policy.mjs`, `script/test_ci_changed_files_policy.mjs` | workflow routing、Dependabot routing、CI policy suite docs、または maintainer policy signal が変わったため、CI policy guard を実行します。 |
+| `ci_policy_sensitive` | `AGENTS.md`, `docs/en/ci-policy-suite.md`, `docs/ja/ci-policy-suite.md`, `.github/workflows/ci.yml`, `.github/dependabot.yml`, `script/ci_changed_files_policy.mjs`, `script/test_ci_policy_suite.mjs`, `script/test_ci_changed_files_policy.mjs`, focused `script/test_ci_*` guards, lock dependency drift guard scripts | workflow routing、Dependabot routing、CI policy suite docs、maintainer policy signal、または CI policy guard scripts 自体が変わったため、CI policy guard を実行します。 |
 | `docker_setup_sensitive` | `Dockerfile`, `docker-compose.yml`, `package.json`, `package-lock.json`, `.nvmrc` | Docker-based maintainer setup confidence を実行します。 |
 | `mockups_changed` | `docs/mockups/**` | static mockup route が変わり、browser-smoke または gallery review が必要になる場合があります。 |
 | `browser_smoke_changed` | `test/browser/**` | browser smoke definition が変わったため、executable test-surface change として扱います。 |
 
 `app/javascript/**` の変更は package-sensitive な full JavaScript confidence change のままですが、それだけでは `browser_smoke_changed` を立てません。real-browser smoke routing は、browser smoke definition の変更、static mockup route、または interaction change に対して maintainer が明示的に browser evidence を求める Pull Request に限定してください。
+
+CI policy guard scripts も、routing policy を定義または検証するため CI-policy-sensitive です。この表では `script/test_ci_policy_suite.mjs` と focused `script/test_ci_*` guards へ保守者を案内できる程度の代表 signal に留め、実行可能な path list は `script/ci_changed_files_policy.mjs` と `script/test_ci_changed_files_policy.mjs` に残してください。
 
 この表は代表例に留めます。full changed-file classifier mirror にはしないでください。executable fixture の source of truth は引き続き `script/test_ci_changed_files_policy.mjs` です。
 
