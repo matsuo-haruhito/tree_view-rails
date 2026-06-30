@@ -44,6 +44,8 @@ For pull requests, the `changes` job fetches the base branch, then tries to find
 
 The resulting file list is passed to `script/ci_changed_files_policy.mjs`, which is the source of truth for the `docs_only`, `package_sensitive`, `docker_setup_sensitive`, `docs_entrypoint_sensitive`, and `ci_policy_sensitive` outputs. `script/test_ci_workflow_changed_file_detection_signals.mjs` protects the workflow command signals; this note explains the maintainer-facing meaning of that routing and does not change the classification logic.
 
+For non-pull-request events such as `main` pushes, the `changes` job does not derive a changed-file list. Before the pull-request diff logic runs, it emits default outputs with `docs_only=false`, `mockups_changed=false`, `browser_smoke_changed=false`, and `package_sensitive`, `docker_setup_sensitive`, `docs_entrypoint_sensitive`, and `ci_policy_sensitive` set to `true`. Treat those defaults as default-branch evidence routing: main-push runs prefer broad package, Docker setup, docs entrypoint, and CI policy confidence over a docs-only shortcut, without changing pull-request classifier behavior.
+
 ## Pull request run concurrency
 
 The CI workflow uses workflow-level `concurrency` so a newer pull request head can cancel older runs for the same pull request. The group is built from the workflow name, event name, and pull request number or ref, which keeps unrelated pull requests and `main` runs separate.

@@ -222,6 +222,47 @@ function assertCiPolicyDocsChangedFileDetectionSignals() {
   }
 }
 
+function assertCiPolicyDocsNonPullRequestDefaultOutputSignals() {
+  const docsSignals = [
+    [
+      "docs/en/ci-policy-suite.md",
+      [
+        "For non-pull-request events such as `main` pushes",
+        "does not derive a changed-file list",
+        "default outputs with `docs_only=false`",
+        "`mockups_changed=false`",
+        "`browser_smoke_changed=false`",
+        "`package_sensitive`, `docker_setup_sensitive`, `docs_entrypoint_sensitive`, and `ci_policy_sensitive` set to `true`",
+        "default-branch evidence routing",
+        "prefer broad package, Docker setup, docs entrypoint, and CI policy confidence over a docs-only shortcut",
+        "without changing pull-request classifier behavior"
+      ]
+    ],
+    [
+      "docs/ja/ci-policy-suite.md",
+      [
+        "`main` push など Pull Request ではない event",
+        "changed-file list を作りません",
+        "default outputs として `docs_only=false`",
+        "`mockups_changed=false`",
+        "`browser_smoke_changed=false`",
+        "`package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` を `true`",
+        "default branch evidence routing",
+        "docs-only shortcut より、package、Docker setup、docs entrypoint、CI policy の広い confidence lane を優先",
+        "Pull Request classifier の挙動を変えるものではありません"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} non-pull-request default output docs signal`)
+    }
+  }
+}
+
 function assertCiPolicyDocsTriggerPolicySignals() {
   const docsSignals = [
     [
@@ -538,6 +579,7 @@ assertDependabotLaneSignal()
 assertCiPolicyDocsDependabotSignals()
 assertCiPolicyDocsDockerSetupSignals()
 assertCiPolicyDocsChangedFileDetectionSignals()
+assertCiPolicyDocsNonPullRequestDefaultOutputSignals()
 assertCiPolicyDocsTriggerPolicySignals()
 assertCiPolicyDocsRoutingOutputSignals()
 assertCiPolicyDocsDocsOnlyRetentionSignals()
@@ -550,6 +592,7 @@ console.log("Checked CI policy docs routing guard script routing.")
 console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
 console.log("Checked Docker development setup CI docs signals.")
 console.log("Checked pull request changed-file detection docs signals.")
+console.log("Checked non-pull-request default output docs signals.")
 console.log("Checked workflow trigger policy docs signals.")
 console.log("Checked representative routing output docs signals.")
 console.log("Checked docs-only check retention docs signals.")
