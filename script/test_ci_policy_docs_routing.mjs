@@ -292,7 +292,10 @@ function assertCiPolicyDocsRoutingOutputSignals() {
     "docs/ja/ci-policy-suite.md",
     ".github/workflows/ci.yml",
     "script/ci_changed_files_policy.mjs",
+    "script/test_ci_policy_suite.mjs",
     "script/test_ci_changed_files_policy.mjs",
+    "focused `script/test_ci_*` guards",
+    "lock dependency drift guard scripts",
     "Dockerfile",
     "docker-compose.yml",
     "package.json",
@@ -300,6 +303,9 @@ function assertCiPolicyDocsRoutingOutputSignals() {
     ".nvmrc",
     "docs/mockups/**",
     "test/browser/**",
+    "CI policy guard scripts",
+    "routing policy",
+    "full changed-file classifier mirror",
     "executable fixture",
     "source of truth"
   ]
@@ -321,6 +327,24 @@ function assertCiPolicyDocsRoutingOutputSignals() {
       "docs_entrypoint_sensitive",
       "CHANGELOG.md",
       `${docsPath} missing CHANGELOG.md docs-entrypoint routing signal`
+    )
+    assertRoutingOutputRowIncludes(
+      docsSource,
+      "ci_policy_sensitive",
+      "script/test_ci_policy_suite.mjs",
+      `${docsPath} missing CI policy suite routing signal`
+    )
+    assertRoutingOutputRowIncludes(
+      docsSource,
+      "ci_policy_sensitive",
+      "focused `script/test_ci_*` guards",
+      `${docsPath} missing focused CI policy guard routing signal`
+    )
+    assertRoutingOutputRowIncludes(
+      docsSource,
+      "ci_policy_sensitive",
+      "lock dependency drift guard scripts",
+      `${docsPath} missing lock dependency drift guard routing signal`
     )
   }
 }
