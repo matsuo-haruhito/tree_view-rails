@@ -30,6 +30,14 @@ When adding or renaming a CI policy guard script, update the suite `checks` arra
 
 Candidate CI policy scripts must either be listed in the `checks` array or named in `ciPolicyScriptExclusions` with a short reason. Keep exclusions narrow: `test_ci_policy_suite.mjs` is excluded because it is this suite's self-test entrypoint, not a direct guard group.
 
+## Workflow trigger policy
+
+The CI workflow intentionally starts from the `pull_request` event and from `push` events on `main`. Pull request runs are the review-time signal for a proposed head, while main-push runs preserve post-merge release, package, and compatibility evidence for the default branch.
+
+The workflow does not use `pull_request_target`. Treat that absence as part of the CI trust boundary: pull request jobs run with the normal pull request context and the read-only workflow permissions described below, rather than using a privileged target-branch event.
+
+Keep the policy responsibilities separate when reviewing workflow changes. Trigger policy decides when the workflow starts, the permissions guard protects the `GITHUB_TOKEN` token scope, and the concurrency guard limits stale pull request run cancellation without canceling main-push evidence.
+
 ## Pull request changed-file detection
 
 For pull requests, the `changes` job fetches the base branch, then tries to find a merge base between `origin/${{ github.base_ref }}` and `HEAD`. When the merge base is available, the workflow uses the three-dot diff, `origin/${{ github.base_ref }}...HEAD`, so routing is based on the pull request changes. If the merge base cannot be resolved, it falls back to `git diff --name-only origin/${{ github.base_ref }} HEAD`.
