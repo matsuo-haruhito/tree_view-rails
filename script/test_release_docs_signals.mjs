@@ -76,6 +76,41 @@ releaseDocs.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release checklist changelog policy", signals)
 })
 
+const releaseCheckChangelogValidationSignals = [
+  [
+    "lib/tree_view/release_check.rb",
+    [
+      "CHANGELOG_CATEGORY_HEADINGS = %w[Added Changed Fixed Deprecated Removed Security Documentation Tests]",
+      "ensure_changelog_release_section_has_category!",
+      "ensure_changelog_release_section_has_body!",
+      "must include at least one category heading",
+      "must include release notes under a category heading"
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "dated `CHANGELOG.md` section",
+      "allowed category heading",
+      "non-empty release note body under a category heading",
+      "reader-facing notes"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "日付付き `CHANGELOG.md` section",
+      "許可 category heading",
+      "空ではない release note body",
+      "reader-facing note"
+    ]
+  ]
+]
+
+releaseCheckChangelogValidationSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "ReleaseCheck CHANGELOG validation docs signal", signals)
+})
+
 const releaseDocsRubyEvidenceSignals = [
   [
     "docs/en/release.md",
