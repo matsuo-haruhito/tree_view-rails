@@ -222,6 +222,51 @@ function assertCiPolicyDocsChangedFileDetectionSignals() {
   }
 }
 
+function assertCiPolicyDocsTriggerPolicySignals() {
+  const docsSignals = [
+    [
+      "docs/en/ci-policy-suite.md",
+      [
+        "## Workflow trigger policy",
+        "`pull_request` event",
+        "`push` events on `main`",
+        "review-time signal for a proposed head",
+        "post-merge release, package, and compatibility evidence",
+        "does not use `pull_request_target`",
+        "CI trust boundary",
+        "read-only workflow permissions",
+        "Trigger policy decides when the workflow starts",
+        "permissions guard protects the `GITHUB_TOKEN` token scope",
+        "concurrency guard limits stale pull request run cancellation"
+      ]
+    ],
+    [
+      "docs/ja/ci-policy-suite.md",
+      [
+        "## Workflow trigger policy",
+        "`pull_request` event",
+        "`main` への `push` event",
+        "review-time signal",
+        "post-merge release、package、compatibility evidence",
+        "`pull_request_target` を使いません",
+        "CI trust boundary",
+        "read-only workflow permissions",
+        "trigger policy は workflow の起動条件を決め",
+        "permissions guard は `GITHUB_TOKEN` の token scope を守り",
+        "concurrency guard は main-push evidence を cancel せず"
+      ]
+    ]
+  ]
+
+  for (const [docsPath, signals] of docsSignals) {
+    const docsSource = readFileSync(docsPath, "utf8")
+
+    for (const signal of signals) {
+      assertIncludes(docsSource, signal, `${docsPath} workflow trigger policy docs signal`)
+    }
+  }
+}
+
 function assertCiPolicyDocsRoutingOutputSignals() {
   const sharedSignals = [
     "## Representative routing outputs",
@@ -469,6 +514,7 @@ assertDependabotLaneSignal()
 assertCiPolicyDocsDependabotSignals()
 assertCiPolicyDocsDockerSetupSignals()
 assertCiPolicyDocsChangedFileDetectionSignals()
+assertCiPolicyDocsTriggerPolicySignals()
 assertCiPolicyDocsRoutingOutputSignals()
 assertCiPolicyDocsDocsOnlyRetentionSignals()
 assertCiPolicyDocsCommandSurfaceSignals()
@@ -480,6 +526,7 @@ console.log("Checked CI policy docs routing guard script routing.")
 console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
 console.log("Checked Docker development setup CI docs signals.")
 console.log("Checked pull request changed-file detection docs signals.")
+console.log("Checked workflow trigger policy docs signals.")
 console.log("Checked representative routing output docs signals.")
 console.log("Checked docs-only check retention docs signals.")
 console.log("Checked CI policy docs command surface signals.")
