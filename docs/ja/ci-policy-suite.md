@@ -44,6 +44,8 @@ Pull Request では、`changes` job が base branch を fetch し、`origin/${{ 
 
 得られた file list は `script/ci_changed_files_policy.mjs` に渡されます。この script が `docs_only`、`package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` output の source of truth です。`script/test_ci_workflow_changed_file_detection_signals.mjs` は workflow command signal を守ります。このメモは、その routing の保守者向けの意味を説明するだけで、classification logic は変更しません。
 
+`main` push など Pull Request ではない event では、`changes` job は changed-file list を作りません。Pull Request 用 diff logic に進む前に、default outputs として `docs_only=false`、`mockups_changed=false`、`browser_smoke_changed=false`、さらに `package_sensitive`、`docker_setup_sensitive`、`docs_entrypoint_sensitive`、`ci_policy_sensitive` を `true` として出力します。これらは default branch evidence routing として扱います。main-push run では docs-only shortcut より、package、Docker setup、docs entrypoint、CI policy の広い confidence lane を優先するためのもので、Pull Request classifier の挙動を変えるものではありません。
+
 ## Pull request run concurrency
 
 CI workflow は workflow-level `concurrency` を使い、同じ Pull Request で head が更新された場合に古い run を cancel できるようにしています。group は workflow 名、event 名、Pull Request number または ref から作られるため、別の Pull Request や `main` run とは分離されます。
