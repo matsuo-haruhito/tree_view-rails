@@ -61,12 +61,14 @@ The changed-file policy exposes representative output flags rather than a full r
 | `docs_only` | `README.md`, `docs/**`, `AGENTS.md`, `Product Profile.md` | The pull request is documentation-shaped, although other outputs may still request focused confidence checks. |
 | `package_sensitive` | `README.md`, `CHANGELOG.md`, `docs/**`, `Gemfile`, `Gemfile.lock`, `Rakefile`, `tree_view.gemspec`, `script/check_gem_package_contents.rb`, `app/javascript/**`, `config/public_api_manifest.yml`, `.github/dependabot.yml` | The packaged gem, Ruby package/release wiring, runtime source, or package-facing docs confidence path should run. |
 | `docs_entrypoint_sensitive` | `README.md`, `CHANGELOG.md`, `docs/**`, `config/public_api_manifest.yml` | Docs entrypoint signals should run because reader-facing docs, the release ledger, or public manifest signals changed. |
-| `ci_policy_sensitive` | `AGENTS.md`, `docs/en/ci-policy-suite.md`, `docs/ja/ci-policy-suite.md`, `.github/workflows/ci.yml`, `.github/dependabot.yml`, `script/ci_changed_files_policy.mjs`, `script/test_ci_changed_files_policy.mjs` | CI policy guards should run because workflow routing, Dependabot routing, CI policy suite docs, or maintainer policy signals changed. |
+| `ci_policy_sensitive` | `AGENTS.md`, `docs/en/ci-policy-suite.md`, `docs/ja/ci-policy-suite.md`, `.github/workflows/ci.yml`, `.github/dependabot.yml`, `script/ci_changed_files_policy.mjs`, `script/test_ci_policy_suite.mjs`, `script/test_ci_changed_files_policy.mjs`, focused `script/test_ci_*` guards, lock dependency drift guard scripts | CI policy guards should run because workflow routing, Dependabot routing, CI policy suite docs, maintainer policy signals, or the CI policy guard scripts themselves changed. |
 | `docker_setup_sensitive` | `Dockerfile`, `docker-compose.yml`, `package.json`, `package-lock.json`, `.nvmrc` | Docker-based maintainer setup confidence should run. |
 | `mockups_changed` | `docs/mockups/**` | Static mockup routes changed and may need browser-smoke or gallery review. |
 | `browser_smoke_changed` | `test/browser/**` | Browser smoke definitions changed and should be treated as executable test-surface changes. |
 
 `app/javascript/**` changes remain package-sensitive full JavaScript confidence changes, but they do not set `browser_smoke_changed` by themselves. Keep real-browser smoke routing reserved for changed browser smoke definitions, static mockup routes, or pull requests where maintainers explicitly request browser evidence for an interaction change.
+
+CI policy guard scripts are also CI-policy-sensitive because they define or verify the routing policy. Keep their representative signal in this table broad enough to point maintainers toward `script/test_ci_policy_suite.mjs` and focused `script/test_ci_*` guards, while leaving the executable path list in `script/ci_changed_files_policy.mjs` and `script/test_ci_changed_files_policy.mjs`.
 
 Keep this table representative. Do not turn it into a full changed-file classifier mirror; `script/test_ci_changed_files_policy.mjs` remains the executable fixture source of truth.
 
