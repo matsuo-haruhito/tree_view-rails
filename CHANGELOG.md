@@ -132,6 +132,7 @@ Release preparation notes:
 - Added representative routing output guidance to CI policy suite docs so maintainers can map changed-file routing outputs to expected PR checks.
 - Clarified CI policy suite docs self-routing guidance so bilingual CI policy suite notes are represented in `ci_policy_sensitive` checks.
 - Added read-only workflow permissions guidance to CI policy suite docs so maintainers can review `GITHUB_TOKEN` token-scope evidence alongside the permissions guard.
+- Added CI workflow trigger policy guidance to CI policy suite docs so maintainers can review `pull_request`, `push main`, and the `pull_request_target` trust boundary without changing workflow triggers.
 - Clarified repository-only maintainer docs routing in CI policy suite docs so AGENTS.md remains CI-policy-sensitive while Product Profile.md stays manual-review routed.
 - Clarified empty-state mockup release evidence for disabled toolbar actions, including the `Current path unavailable` action and host-app-owned reset behavior.
 - Clarified Development docs for temporary docs i18n parity exceptions, including `parityExceptions` metadata and the boundary against permanent single-language docs.
