@@ -16,6 +16,8 @@
     "test:public-api-manifest-structure": "node script/test_public_api_manifest_structure.mjs",
     "test:docs-i18n": "node script/test_docs_i18n_parity.mjs",
     "test:docs-entrypoints": "node script/test_docs_entrypoint_suite.mjs",
+    "test:release-docs": "npm run test:docs-entrypoints -- --only \"Release docs signals\"",
+    "test:release-package-contents": "npm run test:docs-entrypoints -- --only \"Release package contents signals\"",
     "test:entrypoints": "node script/test_entrypoints.mjs && node script/test_controller_entries_contract.mjs && node script/test_declaration_literal_shapes.mjs && npm run test:public-api-manifest-structure && npm run test:docs-entrypoints && npm run test:ci-policy && npm run test:node-version-sources && npm run test:ruby-version-sources",
     "test:js:core": "npm run test:entrypoints && npm test",
     "test:js": "npm run test:js:core && npm run test:browser"
