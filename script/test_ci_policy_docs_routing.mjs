@@ -42,6 +42,7 @@ const expectedCiPolicyScriptChange = {
   browser_smoke_changed: false,
   package_sensitive: false,
   docker_setup_sensitive: false,
+  docs_entrypoint_sensitive: false,
   ci_policy_sensitive: true
 }
 
