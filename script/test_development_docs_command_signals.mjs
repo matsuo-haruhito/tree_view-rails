@@ -34,6 +34,31 @@ const requiredMaintenanceScripts = [
   "test:docs-i18n"
 ]
 
+const optionalLocalCommands = [
+  {
+    scriptName: "test:vitest-ui",
+    command: "npm run test:vitest-ui",
+    docs: [
+      [
+        "docs/en/development.md",
+        [
+          "local Vitest UI",
+          "maintainer convenience command",
+          "not a replacement for CI-oriented `npm test`, `npm run test:js:core`, or `npm run test:js`"
+        ]
+      ],
+      [
+        "docs/ja/development.md",
+        [
+          "ローカルの Vitest UI",
+          "maintainer 向けの便利コマンド",
+          "CI 向けの `npm test`、`npm run test:js:core`、`npm run test:js` の代替ではありません"
+        ]
+      ]
+    ]
+  }
+]
+
 const requiredReadmeDevelopmentCommands = [
   "npm run test:js",
   "npm run test:entrypoints",
@@ -225,6 +250,32 @@ for (const scriptName of requiredMaintenanceScripts) {
   }
 }
 
+for (const optionalCommand of optionalLocalCommands) {
+  if (!packageJson.scripts?.[optionalCommand.scriptName]) {
+    missingSignals.push(`package.json optional local script ${optionalCommand.scriptName}`)
+  }
+
+  if (requiredMaintenanceScripts.includes(optionalCommand.scriptName)) {
+    missingSignals.push(
+      `script/test_development_docs_command_signals.mjs: optional local command ${optionalCommand.scriptName} must not be listed in requiredMaintenanceScripts because it is not a CI/release maintenance guard`
+    )
+  }
+
+  for (const [docPath, signals] of optionalCommand.docs) {
+    const doc = docSource(docs, docPath)
+
+    if (!doc?.includes(optionalCommand.command)) {
+      missingSignals.push(`${docPath}: optional local command ${optionalCommand.command}`)
+    }
+
+    for (const signal of signals) {
+      if (!doc?.includes(signal)) {
+        missingSignals.push(`${docPath}: optional local command boundary signal ${signal}`)
+      }
+    }
+  }
+}
+
 for (const command of requiredReadmeDevelopmentCommands) {
   if (!readme.includes(command)) {
     missingSignals.push(`README.md Development command: ${command}`)
@@ -340,5 +391,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredDevelopmentDocsCommandSignals.length} Development docs command signal groups, ${requiredDocsEntrypointSuiteCommandSignals.length} docs entrypoint suite command signal groups, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredNpmLockfileDriftRecoverySignals.length} npm lockfile drift recovery docs groups, ${requiredManifestStructureDuplicateKeySignals.length} manifest duplicate-key docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${optionalLocalCommands.length} optional local command boundary signals, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredDevelopmentDocsCommandSignals.length} Development docs command signal groups, ${requiredDocsEntrypointSuiteCommandSignals.length} docs entrypoint suite command signal groups, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredNpmLockfileDriftRecoverySignals.length} npm lockfile drift recovery docs groups, ${requiredManifestStructureDuplicateKeySignals.length} manifest duplicate-key docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
 )
