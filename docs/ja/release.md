@@ -193,6 +193,7 @@ release前に確認すること:
   - `app/helpers/tree_view_helper.rb`
   - `app/views/tree_view/_tree_row.html.erb`
   - `app/javascript/tree_view/index.js`
+  - `app/javascript/tree_view/index.d.ts`（runtime entrypoint と一緒に配布する compile-time declaration）
   - `app/assets/stylesheets/tree_view.scss`
   - `config/importmap.tree_view.rb`
   - `config/public_api_manifest.yml`

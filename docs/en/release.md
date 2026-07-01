@@ -193,6 +193,7 @@ Before release:
   - `app/helpers/tree_view_helper.rb`
   - `app/views/tree_view/_tree_row.html.erb`
   - `app/javascript/tree_view/index.js`
+  - `app/javascript/tree_view/index.d.ts` as the compile-time declaration shipped beside the runtime entrypoint
   - `app/assets/stylesheets/tree_view.scss`
   - `config/importmap.tree_view.rb`
   - `config/public_api_manifest.yml`
