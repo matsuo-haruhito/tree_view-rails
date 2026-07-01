@@ -34,6 +34,8 @@ Candidate CI policy scripts must either be listed in the `checks` array or named
 
 The CI workflow intentionally starts from the `pull_request` event and from `push` events on `main`. Pull request runs are the review-time signal for a proposed head, while main-push runs preserve post-merge release, package, and compatibility evidence for the default branch.
 
+Manual `workflow_dispatch` runs are not part of the current trigger policy. When a maintainer needs fresh CI evidence without a new commit, use the GitHub Actions rerun controls for the current head SHA rather than adding a manual trigger to the workflow.
+
 The workflow does not use `pull_request_target`. Treat that absence as part of the CI trust boundary: pull request jobs run with the normal pull request context and the read-only workflow permissions described below, rather than using a privileged target-branch event.
 
 Keep the policy responsibilities separate when reviewing workflow changes. Trigger policy decides when the workflow starts, the permissions guard protects the `GITHUB_TOKEN` token scope, and the concurrency guard limits stale pull request run cancellation without canceling main-push evidence.
