@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs"
 import { classifyChangedFiles } from "./ci_changed_files_policy.mjs"
 
 const dependabotPath = ".github/dependabot.yml"
+const ciWorkflowPath = ".github/workflows/ci.yml"
 const ciPolicyDocsPaths = [
   "docs/en/ci-policy-suite.md",
   "docs/ja/ci-policy-suite.md"
@@ -13,6 +14,7 @@ const workflowDefinitionPaths = [
   ".github/workflows/docker-smoke.yaml"
 ]
 const ciPolicyDocsRoutingScriptPath = "script/test_ci_policy_docs_routing.mjs"
+const workflowSource = readFileSync(ciWorkflowPath, "utf8")
 
 const expected = {
   docs_only: true,
@@ -40,7 +42,6 @@ const expectedCiPolicyScriptChange = {
   browser_smoke_changed: false,
   package_sensitive: false,
   docker_setup_sensitive: false,
-  docs_entrypoint_sensitive: false,
   ci_policy_sensitive: true
 }
 
@@ -87,6 +88,13 @@ function routingOutputRow(source, output, label) {
 
 function assertRoutingOutputRowIncludes(source, output, signal, label) {
   assertIncludes(routingOutputRow(source, output, label), signal, `${label} ${output} representative routing row`)
+}
+
+function assertWorkflowDispatchNotConfigured() {
+  assert.ok(
+    !workflowSource.includes("workflow_dispatch:"),
+    `${ciWorkflowPath}: unexpected workflow_dispatch trigger; update the trigger policy docs and review this as an intentional CI policy change before adding manual runs`
+  )
 }
 
 function assertDependabotLaneSignal() {
@@ -273,6 +281,10 @@ function assertCiPolicyDocsTriggerPolicySignals() {
         "`push` events on `main`",
         "review-time signal for a proposed head",
         "post-merge release, package, and compatibility evidence",
+        "Manual `workflow_dispatch` runs are not part of the current trigger policy",
+        "current head SHA",
+        "GitHub Actions rerun controls",
+        "rather than adding a manual trigger",
         "does not use `pull_request_target`",
         "CI trust boundary",
         "read-only workflow permissions",
@@ -289,6 +301,10 @@ function assertCiPolicyDocsTriggerPolicySignals() {
         "`main` への `push` event",
         "review-time signal",
         "post-merge release、package、compatibility evidence",
+        "Manual `workflow_dispatch` run は現行 trigger policy に含めません",
+        "current head SHA",
+        "GitHub Actions rerun 操作",
+        "manual trigger を追加するのではなく",
         "`pull_request_target` を使いません",
         "CI trust boundary",
         "read-only workflow permissions",
@@ -575,6 +591,7 @@ assert.deepEqual(
   "changed-file policy CLI must emit CI policy-sensitive routing for CI policy docs routing guard changes"
 )
 
+assertWorkflowDispatchNotConfigured()
 assertDependabotLaneSignal()
 assertCiPolicyDocsDependabotSignals()
 assertCiPolicyDocsDockerSetupSignals()
@@ -589,6 +606,7 @@ assertCiPolicyDocsSuiteRegistrationPolicySignals()
 console.log(`Checked ${ciPolicyDocsPaths.length} CI policy docs routing paths.`)
 console.log(`Checked ${workflowDefinitionPaths.length} workflow definition package/Docker routing paths.`)
 console.log("Checked CI policy docs routing guard script routing.")
+console.log("Checked workflow_dispatch remains outside the current workflow trigger policy.")
 console.log("Checked GitHub Actions Dependabot lane config and docs signals.")
 console.log("Checked Docker development setup CI docs signals.")
 console.log("Checked pull request changed-file detection docs signals.")
