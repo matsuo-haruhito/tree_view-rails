@@ -7,6 +7,7 @@
   },
   "scripts": {
     "test": "vitest run",
+    "test:vitest-ui": "vitest --ui",
     "test:browser": "playwright test",
     "test:ci-policy": "node script/test_ci_policy_suite.mjs --self-test && node script/test_ci_policy_suite.mjs",
     "test:node-version-sources": "node script/test_node_version_sources.mjs",
