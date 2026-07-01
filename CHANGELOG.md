@@ -148,6 +148,7 @@ Release preparation notes:
 - Added CI policy suite registration policy docs signal coverage so self-test ordering and explicit guard-script exclusions stay visible in the bilingual CI policy suite docs.
 - Added CI workflow permissions policy smoke coverage so read-only token permissions stay guarded against write-scope drift.
 - Split focused diagnostics, workflow concurrency, and release package contents signal smokes into registered suite groups so maintainers can run the narrow docs or CI guard directly.
+- Added release narrow npm script evidence for `test:release-docs` and `test:release-package-contents` so maintainers can rerun release docs and package contents signals directly.
 - Added CI policy docs command-surface and docs-entrypoint command-surface smoke coverage so `--list`, `--only`, `--self-test`, and registration guidance stay discoverable.
 - Added CI changed-file routing coverage for workflow package/Docker lanes, package-sensitive Ruby release paths, and gem package install / require smoke evidence.
 - Added CI policy guard evidence for public API manifest structure, Dependabot routing, and browser-smoke routing boundaries so entrypoint and CI policy checks stay aligned.
