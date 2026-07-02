@@ -63,7 +63,16 @@ const requiredReadmeDevelopmentCommands = [
   "npm run test:js",
   "npm run test:entrypoints",
   "npm run test:docs-entrypoints",
+  "npm run test:release-docs",
+  "npm run test:release-package-contents",
   "npm run test:ci-policy"
+]
+
+const requiredReadmeReleaseTriageSignals = [
+  "narrow local release triage aliases",
+  "`Release docs signals`",
+  "`Release package contents signals`",
+  "not replacements for the full `npm run test:docs-entrypoints`, `npm run test:entrypoints`, or CI-required suite"
 ]
 
 const requiredDockerSetupSignals = [
@@ -282,6 +291,12 @@ for (const command of requiredReadmeDevelopmentCommands) {
   }
 }
 
+for (const signal of requiredReadmeReleaseTriageSignals) {
+  if (!readme.includes(signal)) {
+    missingSignals.push(`README.md release narrow command signal ${signal}`)
+  }
+}
+
 for (const signal of requiredDockerSetupSignals) {
   for (const [docPath, doc] of docs) {
     if (!doc.includes(signal)) {
@@ -391,5 +406,5 @@ if (missingSignals.length > 0) {
 }
 
 console.log(
-  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${optionalLocalCommands.length} optional local command boundary signals, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredDevelopmentDocsCommandSignals.length} Development docs command signal groups, ${requiredDocsEntrypointSuiteCommandSignals.length} docs entrypoint suite command signal groups, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredNpmLockfileDriftRecoverySignals.length} npm lockfile drift recovery docs groups, ${requiredManifestStructureDuplicateKeySignals.length} manifest duplicate-key docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
+  `[development-docs-command-signals] ${requiredMaintenanceScripts.length} maintenance commands, ${optionalLocalCommands.length} optional local command boundary signals, ${requiredReadmeDevelopmentCommands.length} README Development commands, ${requiredReadmeReleaseTriageSignals.length} README release triage signals, ${requiredDockerSetupSignals.length} Docker setup signals, ${requiredDevelopmentDocsCommandSignals.length} Development docs command signal groups, ${requiredDocsEntrypointSuiteCommandSignals.length} docs entrypoint suite command signal groups, ${requiredCiPolicySuiteCommandSignals.length} CI policy suite command signals, ${requiredReleaseCiPolicySuiteSignals.length} release entrypoint signals, ${requiredDevelopmentCiPolicySignals.length} CI policy docs groups, ${requiredNpmLockfileDriftRecoverySignals.length} npm lockfile drift recovery docs groups, ${requiredManifestStructureDuplicateKeySignals.length} manifest duplicate-key docs groups, ${requiredReleaseCiPolicySensitiveSignals.length} release CI policy docs groups, and ${requiredWorkflowTriggerSignals.length} workflow trigger signals are present in package.json, workflow, and docs`
 )
