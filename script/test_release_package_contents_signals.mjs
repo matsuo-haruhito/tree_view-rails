@@ -64,7 +64,14 @@ const packageContentsVerificationSignals = [
       "keeps MIT license metadata for RubyGems consumers",
       "expected gemspec license metadata",
       "actual_license = specification.license",
-      "expected_license = \"MIT\""
+      "expected_license = \"MIT\"",
+      "keeps summary and description metadata for RubyGems consumers",
+      "expected gemspec summary metadata",
+      "actual_summary = specification.summary",
+      "Tree rendering primitives for Rails applications",
+      "expected gemspec description metadata",
+      "actual_description = specification.description",
+      "Reusable tree traversal, render state, helpers, partials, and Rails integration points for tree-style UIs."
     ]
   ],
   [

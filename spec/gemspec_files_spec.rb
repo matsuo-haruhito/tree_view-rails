@@ -57,6 +57,20 @@ RSpec.describe "packaged gem files" do
       "expected gemspec license metadata to be #{expected_license.inspect}, got #{actual_license.inspect}"
   end
 
+  it "keeps summary and description metadata for RubyGems consumers" do
+    expected_summary = "Tree rendering primitives for Rails applications"
+    actual_summary = specification.summary
+
+    expect(actual_summary).to eq(expected_summary),
+      "expected gemspec summary metadata to be #{expected_summary.inspect}, got #{actual_summary.inspect}"
+
+    expected_description = "Reusable tree traversal, render state, helpers, partials, and Rails integration points for tree-style UIs."
+    actual_description = specification.description
+
+    expect(actual_description).to eq(expected_description),
+      "expected gemspec description metadata to be #{expected_description.inspect}, got #{actual_description.inspect}"
+  end
+
   it "includes bug tracker metadata for RubyGems consumers" do
     expect(specification.metadata).to include(
       "homepage_uri" => specification.homepage,
