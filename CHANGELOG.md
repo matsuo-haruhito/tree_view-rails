@@ -319,8 +319,7 @@ Release preparation notes:
 ### Documentation
 
 - Added Japanese documentation under `docs/`.
-- Added language-specific documentation trees under `docs/ja/`.
-- Added language-specific documentation trees under `docs/en/`.
+- Added language-specific documentation trees under `docs/ja/` and `docs/en/`.
 - Added documentation language selector and i18n audit.
 - Added installation, minimal usage, usage, API overview, and API reference documentation in Japanese and English.
 - Added language-specific public API and release checklist docs.
