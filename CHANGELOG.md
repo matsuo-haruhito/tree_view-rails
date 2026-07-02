@@ -144,6 +144,8 @@ Release preparation notes:
 
 ### Tests
 
+- Added diagnostics manifest drift guard evidence for accepted checks, `TreeView::Diagnostics.run` public options, and `TreeView::Diagnostics::Result` attributes / helper methods so runtime and manifest surfaces stay synchronized.
+- Added gemspec `summary` / `description` metadata guard evidence and release package contents signal coverage so RubyGems-facing package metadata stays visible during release preparation.
 - Added CI policy suite routing smoke coverage so every registered Node guard script stays classified as `ci_policy_sensitive`.
 - Added CI policy suite registration policy docs signal coverage so self-test ordering and explicit guard-script exclusions stay visible in the bilingual CI policy suite docs.
 - Added CI workflow permissions policy smoke coverage so read-only token permissions stay guarded against write-scope drift.
