@@ -59,6 +59,15 @@ const packageContentsVerificationSignals = [
     ]
   ],
   [
+    "spec/gemspec_files_spec.rb",
+    [
+      "keeps MIT license metadata for RubyGems consumers",
+      "expected gemspec license metadata",
+      "actual_license = specification.license",
+      "expected_license = \"MIT\""
+    ]
+  ],
+  [
     "docs/en/release.md",
     [
       "ruby script/check_gem_package_contents.rb tree_view-*.gem",

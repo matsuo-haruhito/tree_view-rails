@@ -49,6 +49,14 @@ RSpec.describe "packaged gem files" do
     expect(files.grep(%r{\Adocs/})).not_to be_empty
   end
 
+  it "keeps MIT license metadata for RubyGems consumers" do
+    expected_license = "MIT"
+    actual_license = specification.license
+
+    expect(actual_license).to eq(expected_license),
+      "expected gemspec license metadata to be #{expected_license.inspect}, got #{actual_license.inspect}"
+  end
+
   it "includes bug tracker metadata for RubyGems consumers" do
     expect(specification.metadata).to include(
       "homepage_uri" => specification.homepage,
