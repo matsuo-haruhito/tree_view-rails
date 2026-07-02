@@ -44,7 +44,11 @@ If you already know the symptom and want a faster reverse-lookup entry point, se
 - [English Troubleshooting](docs/en/troubleshooting.md)
 - [日本語Troubleshooting](docs/ja/troubleshooting.md)
 
-If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md). Start with [review-gallery.html](docs/mockups/review-gallery.html) for the fastest first look, open [default-tree.html](docs/mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
+If you want static visual references for baseline DOM structure and interaction states before wiring a host app, choose the mockup entry point that matches your first review task:
+
+- Start with [review-gallery.html](docs/mockups/review-gallery.html) when you want the fastest overview across focused static pages.
+- Open [default-tree.html](docs/mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly.
+- Use [TreeView mockups](docs/mockups/README.md) when you want the maintained mockup index and each page's role.
 
 ![Static TreeView mockup showing expanded and collapsed hierarchy rows with selection checkboxes, badges, and row actions.](docs/mockups/assets/readme-default-tree.svg)
 
