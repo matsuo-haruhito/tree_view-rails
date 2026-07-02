@@ -56,11 +56,16 @@ function isWorkflowDefinitionPath(file) {
   return file.startsWith(".github/workflows/") && (file.endsWith(".yml") || file.endsWith(".yaml"));
 }
 
+function isLicenseFilePath(file) {
+  return file === "LICENSE" || file.startsWith("LICENSE.") || file.startsWith("LICENSE-");
+}
+
 function isPackageSensitivePath(file) {
   return (
     file === "README.md" ||
     file === "CHANGELOG.md" ||
     file.startsWith("docs/") ||
+    isLicenseFilePath(file) ||
     file === "Gemfile" ||
     file === "Gemfile.lock" ||
     file === "Rakefile" ||
