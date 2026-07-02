@@ -143,6 +143,12 @@ Pushes to `main` also run the broader compatibility and release checks:
 
 CI observation rule: do not treat an empty GitHub combined status as proof that CI did not run. This repository can have pull request heads where combined status is empty while a GitHub Actions workflow run exists and carries the real status/conclusion. When reporting PR readiness, inspect the workflow run for the head SHA, note whether jobs were success, failure, or intentionally skipped by changed-files routing, and only then summarize CI state.
 
+## Pull Request Template
+
+Use `.github/PULL_REQUEST_TEMPLATE.md` as the lightweight contributor checklist when opening or reviewing pull requests. It is a reminder to check documentation, release trail, package verification, CI observation, and visual evidence when they apply; it does not create new CODEOWNERS, required reviewers, branch protection, required checks, or repository settings.
+
+For small docs-only pull requests, mark unrelated template items as N/A instead of widening the scope just to satisfy the checklist. If the template points to a missing documentation or evidence trail, either keep the PR scoped and leave a follow-up note, or update only the relevant docs within the issue scope.
+
 ## Issue / Work Item Guidance
 
 Open GitHub Issues are the source of planned feature work.
