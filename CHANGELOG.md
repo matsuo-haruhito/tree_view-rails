@@ -154,7 +154,7 @@ Release preparation notes:
 - Added release narrow npm script evidence for `test:release-docs` and `test:release-package-contents` so maintainers can rerun release docs and package contents signals directly.
 - Added Vitest UI local command release evidence for `test:vitest-ui` so maintainers can inspect or rerun unit-style JavaScript tests interactively without treating it as a CI-required command.
 - Added CI policy docs command-surface and docs-entrypoint command-surface smoke coverage so `--list`, `--only`, `--self-test`, and registration guidance stay discoverable.
-- Added CI changed-file routing coverage for workflow package/Docker lanes, package-sensitive Ruby release paths, and gem package install / require evidence.
+- Added CI changed-file routing coverage for workflow package/Docker lanes, package-sensitive Ruby release paths, and gem package install / require smoke evidence.
 - Added CI policy guard evidence for public API manifest structure, Dependabot routing, and browser-smoke routing boundaries so entrypoint and CI policy checks stay aligned.
 - Added Development docs command signal coverage for `npm run test:development-docs-commands` so narrow and suite-level maintainer command checks stay discoverable.
 - Added Public API docs signal coverage for persisted-state setup surface and `initial_expansion` grouped option keys so manifest-backed docs signals stay aligned.
