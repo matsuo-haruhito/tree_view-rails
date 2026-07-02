@@ -3,12 +3,12 @@
 require "spec_helper"
 require "yaml"
 
-RSpec.describe "Diagnostics manifest surface" do
-  MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
-  RUN_INPUT_KEYS = %w[tree render_state].freeze
+DIAGNOSTICS_MANIFEST_SURFACE_MANIFEST_PATH = File.expand_path("../config/public_api_manifest.yml", __dir__)
+DIAGNOSTICS_MANIFEST_SURFACE_RUN_INPUT_KEYS = %w[tree render_state].freeze
 
+RSpec.describe "Diagnostics manifest surface" do
   def diagnostics_manifest
-    YAML.safe_load_file(MANIFEST_PATH).fetch("diagnostics")
+    YAML.safe_load_file(DIAGNOSTICS_MANIFEST_SURFACE_MANIFEST_PATH).fetch("diagnostics")
   end
 
   def runtime_run_options
@@ -16,7 +16,7 @@ RSpec.describe "Diagnostics manifest surface" do
       next unless %i[key keyreq].include?(parameter_type)
 
       parameter_name.to_s
-    end - RUN_INPUT_KEYS
+    end - DIAGNOSTICS_MANIFEST_SURFACE_RUN_INPUT_KEYS
   end
 
   def runtime_result_attributes
@@ -24,7 +24,9 @@ RSpec.describe "Diagnostics manifest surface" do
   end
 
   def runtime_result_methods
-    TreeView::Diagnostics::Result.instance_methods(false).map(&:to_s).sort
+    attribute_methods = runtime_result_attributes + runtime_result_attributes.map { |name| "#{name}=" }
+
+    (TreeView::Diagnostics::Result.instance_methods(false).map(&:to_s) - attribute_methods).sort
   end
 
   it "keeps Diagnostics.run public options aligned with the manifest" do
