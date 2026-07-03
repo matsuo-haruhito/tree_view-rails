@@ -10,7 +10,7 @@ Run the full CI policy suite when you need to confirm the policy guards without 
 npm run test:ci-policy
 ```
 
-The package script runs the standalone LICENSE package-sensitive prelude first (`node script/test_license_package_sensitive_signal.mjs`). It then runs the suite self-test and the configured CI policy guard groups. Treat `script/test_ci_policy_suite.mjs` as the source of truth for the suite group list.
+The package script runs the standalone LICENSE package-sensitive prelude first (`node script/test_license_package_sensitive_signal.mjs`). After that prelude, the package script runs the suite self-test first and then runs the configured CI policy guard groups. Treat `script/test_ci_policy_suite.mjs` as the source of truth for the suite group list.
 
 ## Targeted runs
 
