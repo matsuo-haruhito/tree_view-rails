@@ -114,6 +114,7 @@ function isCiPolicySensitivePath(file) {
     file === "script/test_ci_policy_permissions_docs_signals.mjs" ||
     file === "script/test_ci_observation_guidance_signals.mjs" ||
     file === "script/test_importmap_docs_entrypoint_routing.mjs" ||
+    file === "script/test_license_package_sensitive_signal.mjs" ||
     file === "script/test_package_lock_dependency_drift.mjs" ||
     file === "script/test_gemfile_lock_dependency_drift.mjs"
   );
