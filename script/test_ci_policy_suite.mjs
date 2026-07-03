@@ -314,7 +314,7 @@ function runSelfTest() {
     !ciPolicyCandidateScriptPaths().includes(ciPolicyStandalonePreludePath),
     "the standalone LICENSE package-sensitive guard should stay outside direct suite registration candidates"
   )
-  assertCiPolicyScriptsRegistered()
+  assertCiPolicyScriptsRegistered();
   assertCiPolicyStandalonePreludeRegistered()
 
   console.log("[ci-policy] self-test passed")
