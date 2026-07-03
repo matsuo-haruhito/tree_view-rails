@@ -10,7 +10,7 @@ Run the full CI policy suite when you need to confirm the policy guards without 
 npm run test:ci-policy
 ```
 
-The package script runs the suite self-test first and then runs the configured CI policy guard groups. Treat `script/test_ci_policy_suite.mjs` as the source of truth for the group list.
+The package script runs the standalone LICENSE package-sensitive prelude first (`node script/test_license_package_sensitive_signal.mjs`). The package script runs the suite self-test first and then runs the configured CI policy guard groups after that prelude. Treat `script/test_ci_policy_suite.mjs` as the source of truth for the suite group list.
 
 ## Targeted runs
 
@@ -29,6 +29,8 @@ node script/test_ci_policy_suite.mjs --self-test
 When adding or renaming a CI policy guard script, update the suite `checks` array or document an explicit exclusion before relying on CI. The self-test scans candidate scripts, confirms that registered scripts stay visible through the suite, and fails with the missing script path when a candidate is not registered.
 
 Candidate CI policy scripts must either be listed in the `checks` array or named in `ciPolicyScriptExclusions` with a short reason. Keep exclusions narrow: `test_ci_policy_suite.mjs` is excluded because it is this suite's self-test entrypoint, not a direct guard group.
+
+The standalone LICENSE package-sensitive guard is intentionally outside the `checks` array. The self-test also confirms that `package.json` keeps that standalone prelude before the suite self-test and the suite run, so command-shape drift is caught even though the prelude is not listed as a guard group.
 
 ## Workflow trigger policy
 
