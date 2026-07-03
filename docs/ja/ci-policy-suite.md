@@ -10,7 +10,7 @@
 npm run test:ci-policy
 ```
 
-package script は先に suite self-test を実行し、その後に設定済みの CI policy guard group を実行します。group list の source of truth は `script/test_ci_policy_suite.mjs` として扱ってください。
+package script は最初に standalone LICENSE package-sensitive prelude（`node script/test_license_package_sensitive_signal.mjs`）を実行します。その後に suite self-test と設定済みの CI policy guard group を実行します。suite group list の source of truth は `script/test_ci_policy_suite.mjs` として扱ってください。
 
 ## 絞り込み実行
 
@@ -29,6 +29,8 @@ node script/test_ci_policy_suite.mjs --self-test
 CI policy guard script を追加または rename した場合は、CI に頼る前に suite の `checks` array を更新するか、明示的な exclusion を残してください。self-test は candidate script を走査し、登録済み script が suite から見えることを確認します。未登録 candidate がある場合は missing script path を表示して失敗します。
 
 Candidate CI policy scripts は、`checks` array に登録するか、短い理由つきで `ciPolicyScriptExclusions` に明示する必要があります。exclusion は狭く保ってください。`test_ci_policy_suite.mjs` は direct guard group ではなく、この suite の self-test entrypoint なので除外されています。
+
+standalone LICENSE package-sensitive guard は意図的に `checks` array の外に置かれています。self-test は、この standalone prelude が package script 内で suite self-test と suite run より前に残っていることも確認するため、prelude が guard group として列挙されていなくても command-shape drift を検出できます。
 
 ## Workflow trigger policy
 
