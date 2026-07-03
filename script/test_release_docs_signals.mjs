@@ -142,6 +142,39 @@ releaseDocsRubyEvidenceSignals.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release docs Ruby and Rails evidence signal", signals)
 })
 
+const downstreamHostAppEvidenceSignals = [
+  [
+    "docs/en/release.md",
+    [
+      "Downstream host-app evidence",
+      "TreeView release evidence lives in this repository",
+      "host-app adoption evidence",
+      "not as TreeView's source of truth or a TreeView-only release requirement",
+      "upstream TreeView contract/package issue",
+      "host-app wiring, query, route, authorization, copy, or rollback policy",
+      "downstream pinned SHA",
+      "unmerged downstream pull request"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "downstream host app evidence",
+      "TreeView の release evidence はこの repository 側にあります",
+      "host app 側の採用証跡",
+      "TreeView の source of truth や TreeView 単体 release の必須条件ではありません",
+      "upstream TreeView の contract / package の問題",
+      "host app 側の wiring、query、route、authorization、copy、rollback policy",
+      "downstream の pinned SHA",
+      "未merge の downstream PR"
+    ]
+  ]
+]
+
+downstreamHostAppEvidenceSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs downstream host-app evidence boundary signal", signals)
+})
+
 const releaseDocsPrJavaScriptConditionalLaneSignals = [
   [
     "docs/en/release.md",
