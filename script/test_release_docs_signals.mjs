@@ -142,6 +142,46 @@ releaseDocsRubyEvidenceSignals.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release docs Ruby and Rails evidence signal", signals)
 })
 
+const releaseDocsPrJavaScriptConditionalLaneSignals = [
+  [
+    "docs/en/release.md",
+    [
+      "JavaScript checks through the changed-files policy",
+      "docs-entrypoint-sensitive docs-only PRs run `npm run test:docs-entrypoints`",
+      "CI-policy-sensitive docs-only PRs run `npm run test:ci-policy`",
+      "non-docs PRs run `npm run test:js:core`",
+      "mockup or browser-smoke-sensitive PRs install Playwright Chromium and run `npm run test:browser`",
+      "Docs-only PRs that are not docs-entrypoint-sensitive and do not touch mockups, CI-policy-sensitive, or browser-smoke-sensitive paths can skip JavaScript checks entirely"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "JavaScript checks: changed-files policy",
+      "docs-entrypoint-sensitive な docs-only PR では `npm run test:docs-entrypoints`",
+      "CI-policy-sensitive な docs-only PR では `npm run test:ci-policy`",
+      "docs-only ではない PR では `npm run test:js:core`",
+      "mockup / browser-smoke sensitive な PR では Playwright Chromium setup と `npm run test:browser`",
+      "docs-entrypoint-sensitive でも CI-policy-sensitive でもなく、mockup / browser-smoke path も触らない docs-only PR は JavaScript checks を完全に skip できます"
+    ]
+  ],
+  [
+    ".github/workflows/ci.yml",
+    [
+      "Docs-only PR without package-facing docs, CI-policy, mockup, or browser-smoke changes: skipping JavaScript checks.",
+      "npm run test:docs-entrypoints",
+      "npm run test:ci-policy",
+      "npm run test:js:core",
+      "npm run test:browser",
+      "npx playwright install --with-deps chromium"
+    ]
+  ]
+]
+
+releaseDocsPrJavaScriptConditionalLaneSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs PR JavaScript conditional lane signal", signals)
+})
+
 const gemPackageWorkflowSignals = [
   [
     ".github/workflows/ci.yml",
