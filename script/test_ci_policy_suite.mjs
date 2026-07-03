@@ -1,10 +1,14 @@
 import assert from "node:assert/strict"
 import { spawnSync } from "node:child_process"
-import { readdirSync } from "node:fs"
+import { readFileSync, readdirSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
+const packageJsonPath = path.join(scriptDir, "..", "package.json")
+const ciPolicyPackageScriptName = "test:ci-policy"
+const ciPolicyStandalonePreludePath = "script/test_license_package_sensitive_signal.mjs"
+const ciPolicyStandalonePreludeCommand = `node ${ciPolicyStandalonePreludePath}`
 
 const checks = [
   {
@@ -133,6 +137,35 @@ function assertCiPolicyScriptsRegistered() {
       ...unregisteredScripts.map((scriptPath) => `  - ${scriptPath}`),
       "Add each script to the checks array or document an explicit exclusion."
     ].join("\n")
+  )
+}
+
+function ciPolicyPackageScript() {
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"))
+  return packageJson.scripts?.[ciPolicyPackageScriptName] ?? ""
+}
+
+function assertCiPolicyStandalonePreludeRegistered() {
+  const commandParts = ciPolicyPackageScript()
+    .split("&&")
+    .map((commandPart) => commandPart.trim())
+    .filter(Boolean)
+
+  assert.equal(
+    commandParts[0],
+    ciPolicyStandalonePreludeCommand,
+    [
+      `package.json scripts.${ciPolicyPackageScriptName} must start with ${ciPolicyStandalonePreludeCommand}.`,
+      "The standalone LICENSE package-sensitive guard is intentionally a prelude before the suite self-test, not a checks-array group."
+    ].join("\n")
+  )
+  assert.ok(
+    commandParts.includes("node script/test_ci_policy_suite.mjs --self-test"),
+    `package.json scripts.${ciPolicyPackageScriptName} must still run the CI policy suite self-test`
+  )
+  assert.ok(
+    commandParts.includes("node script/test_ci_policy_suite.mjs"),
+    `package.json scripts.${ciPolicyPackageScriptName} must still run the CI policy suite after the standalone prelude`
   )
 }
 
@@ -277,7 +310,12 @@ function runSelfTest() {
     !ciPolicyCandidateScriptPaths().includes("script/test_ci_policy_suite.mjs"),
     "the suite entrypoint should stay out of direct guard registration candidates"
   )
-  assertCiPolicyScriptsRegistered();
+  assert.ok(
+    !ciPolicyCandidateScriptPaths().includes(ciPolicyStandalonePreludePath),
+    "the standalone LICENSE package-sensitive guard should stay outside direct suite registration candidates"
+  )
+  assertCiPolicyScriptsRegistered()
+  assertCiPolicyStandalonePreludeRegistered()
 
   console.log("[ci-policy] self-test passed")
 }
