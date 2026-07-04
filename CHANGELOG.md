@@ -40,6 +40,7 @@ Release preparation notes:
 - Added `TreeView::Diagnostics.run` as a consolidated diagnostics entrypoint for node keys, DOM IDs, orphans, and cycles.
 - Added `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` so host apps can reuse stable lazy-loading placeholder IDs and data attributes.
 - Added `TreeViewEventDetailKeys` as a package-root JavaScript export for host app tests that need machine-readable documented event detail key names.
+- Added additive public JavaScript event details for `tree-view-state:state-changed` (`reason`) and `tree-view-selection:change` (`sourceCheckbox` / `attemptedChecked`) so host apps can distinguish initialization, refresh, and user-toggle sources without changing existing event snapshots.
 - Added `TreeViewTransferDataAttributes` as a package-root JavaScript export for documented transfer payload and disabled-row data attributes.
 - Added `toggle_icons` to the manifest-backed grouped option compatibility surface while keeping the existing RenderState option behavior unchanged.
 
@@ -174,7 +175,7 @@ Release preparation notes:
 - Added Docker setup CI docs signal coverage so CI policy docs keep `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` guidance aligned.
 - Added CI policy docs signal coverage for pull request changed-file detection and docs-only check retention so CI policy docs stay aligned with workflow routing evidence.
 - Added CI routing output docs signal coverage for representative changed-file routing output guidance.
-- Added CI policy suite docs routing signal coverage so bilingual CI policy suite paths stay represented in `ci_policy_sensitive` docs smoke.
+- Added CI policy suite docs routing signal coverage so bilingual CI policy suite paths stay represented in `ci_policy_sensitive` checks.
 - Added CI guard suite smoke coverage for the PR specs RSpec command and package guard suite composition signals.
 - Added docs-entrypoint guard coverage for `TreeViewTransferDropPositions` and `TreeViewIntegrationHooks` so transfer and integration public API docs signals stay aligned with the manifest.
 - Added CI policy suite and permissions smoke coverage so maintainers can verify read-only workflow permissions and guard group registration through `npm run test:ci-policy`.
