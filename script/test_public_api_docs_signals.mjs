@@ -55,6 +55,10 @@ const developmentDocs = [
   ["docs/en/development.md", read("docs/en/development.md")],
   ["docs/ja/development.md", read("docs/ja/development.md")]
 ]
+const stylingStateCueDocs = [
+  ["docs/en/styling-state-cues.md", read("docs/en/styling-state-cues.md")],
+  ["docs/ja/styling-state-cues.md", read("docs/ja/styling-state-cues.md")]
+]
 
 const callbackBuilderSignals = [
   "render_state_callback_builder_keys",
@@ -280,6 +284,26 @@ const publicConstantSignals = [
   "TreeView::Diagnostics"
 ]
 
+const cssCustomPropertyTokenSignals = [
+  "--tree-view-selected-row-background",
+  "--tree-view-current-row-accent-color",
+  "--tree-view-drop-target-row-background",
+  "--tree-view-focus-outline-color",
+  "--tree-view-focus-background",
+  "--tree-view-branch-line-color",
+  "--tree-view-current-branch-line-color",
+  "--tree-view-hidden-count-background",
+  "--tree-view-hidden-count-color"
+]
+
+const cssCustomPropertyBoundarySignals = [
+  "css_custom_property_tokens",
+  "packaged stylesheet",
+  "token names",
+  "fallback values",
+  "theme API"
+]
+
 const developmentManifestTrackingSignals = [
   "config/public_api_manifest.yml",
   "RenderState callback builder keys",
@@ -318,7 +342,8 @@ const manifestBackedDocsSignalSurfaces = [
   ["persisted-state install generator", "setup_generators:"],
   ["persisted-state install generator", "persisted_state_install:"],
   ["initial_expansion grouped option keys", "grouped_option_keys:"],
-  ["initial_expansion grouped option keys", "initial_expansion:"]
+  ["initial_expansion grouped option keys", "initial_expansion:"],
+  ["CSS custom property tokens", "css_custom_property_tokens:"]
 ]
 
 manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
@@ -375,6 +400,10 @@ initialExpansionGroupedOptionSignals.forEach((signal) => {
 
 publicConstantSignals.forEach((signal) => {
   assertIncludes(manifest, signal.replace("TreeView::", "- "), "public API manifest public constants surface")
+})
+
+cssCustomPropertyTokenSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest CSS custom property token surface")
 })
 
 assertIncludes(manifest, "event_names_without_detail", "public API manifest no-detail event surface")
@@ -553,6 +582,26 @@ assert(
   /helper metadata contract sources|helper metadata contract sources/.test(mockupDocsReadme),
   "docs/mockups/README.md: toolbar guidance no longer separates manifest/docs contract sources from the visual mockup responsibility boundary"
 )
+
+stylingStateCueDocs.forEach(([relativePath, document]) => {
+  cssCustomPropertyTokenSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} CSS custom property token docs`)
+  })
+
+  cssCustomPropertyBoundarySignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} CSS custom property manifest-backed boundary docs`)
+  })
+
+  assert(
+    /fallback values.*host-app configuration or a theme API|fallback 値を host app 向け configuration や theme API にするものではありません/.test(document),
+    `${relativePath}: CSS custom property docs no longer separate token names from fallback values and theme API policy`
+  )
+
+  assert(
+    /complete theme system|dark-mode policy|density scale|complete theme system、dark-mode policy、density scale/.test(document),
+    `${relativePath}: CSS custom property docs no longer keep full theme system policy outside TreeView's state-cue surface`
+  )
+})
 
 graphAdapterDocs.forEach(([relativePath, document]) => {
   assertIncludes(document, "TreeView::GraphAdapter", `${relativePath} GraphAdapter guide entrypoint docs`)
