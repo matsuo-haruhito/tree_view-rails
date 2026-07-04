@@ -40,6 +40,7 @@ Release preparation notes:
 - Added `TreeView::Diagnostics.run` as a consolidated diagnostics entrypoint for node keys, DOM IDs, orphans, and cycles.
 - Added `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` so host apps can reuse stable lazy-loading placeholder IDs and data attributes.
 - Added `TreeViewEventDetailKeys` as a package-root JavaScript export for host app tests that need machine-readable documented event detail key names.
+- Added additive public JavaScript event details for `tree-view-state:state-changed` (`reason`) and `tree-view-selection:change` (`sourceCheckbox` / `attemptedChecked`) so host apps can distinguish initialization, refresh, and user-toggle sources without changing existing event snapshots.
 - Added `TreeViewTransferDataAttributes` as a package-root JavaScript export for documented transfer payload and disabled-row data attributes.
 - Added `toggle_icons` to the manifest-backed grouped option compatibility surface while keeping the existing RenderState option behavior unchanged.
 
