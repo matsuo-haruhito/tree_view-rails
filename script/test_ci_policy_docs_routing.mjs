@@ -345,6 +345,8 @@ function assertCiPolicyDocsRoutingOutputSignals() {
     "Rakefile",
     "tree_view.gemspec",
     "script/check_gem_package_contents.rb",
+    "lib/**",
+    "config/locales/**",
     "config/public_api_manifest.yml",
     "docs/en/ci-policy-suite.md",
     "docs/ja/ci-policy-suite.md",
@@ -380,6 +382,18 @@ function assertCiPolicyDocsRoutingOutputSignals() {
       assertIncludes(docsSource, signal, `${docsPath} routing output docs signal`)
     }
 
+    assertRoutingOutputRowIncludes(
+      docsSource,
+      "package_sensitive",
+      "lib/**",
+      `${docsPath} missing lib/** package-sensitive routing signal`
+    )
+    assertRoutingOutputRowIncludes(
+      docsSource,
+      "package_sensitive",
+      "config/locales/**",
+      `${docsPath} missing config/locales/** package-sensitive routing signal`
+    )
     assertRoutingOutputRowIncludes(
       docsSource,
       "docs_entrypoint_sensitive",
