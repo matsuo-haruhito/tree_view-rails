@@ -101,7 +101,7 @@ TreeView はリスクを報告します。data correction、filtering policy、a
 
 ## persisted state が画面表示直後に保存されるのはなぜですか？
 
-`tree-view-state:state-changed` event は、初回 connect 時にも、`refresh` や expand/collapse update 後にも dispatch されます。snapshot が公開された理由は `event.detail.reason` で確認できます。`connect` は初回表示時の snapshot、`refresh` は明示的な再同期、`expanded` / `collapsed` は開閉更新を表します。
+`tree-view-state:state-changed` event は、初回 connect 時にも、`refresh` や expand/collapse update 後にも dispatch されます。snapshot が公開された理由は `event.detail.reason` で確認できます。`connect` は初回表示時の snapshot、`refresh` は明示的な再同期、`expanded` / `collapsed` は開閉更新を表します。`connect` snapshot は、ユーザーが tree を変更した証拠ではありません。
 
 TreeView は event と現在の expanded-state snapshot を publish するだけです。host app がユーザー操作による変更だけを保存したい場合は、`reason` の値を使って `connect` や host app 側で保存対象外にしたい path を skip する、listener を debounce する、host app 側の dirty-state policy で save を gate する、といった方針を host app 側で持ってください。
 
