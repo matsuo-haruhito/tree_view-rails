@@ -101,9 +101,9 @@ See also:
 
 ## Why does persisted state save as soon as the page loads?
 
-The `tree-view-state:state-changed` event is dispatched on initial connect as well as after `refresh` and expand/collapse updates. The first event is a snapshot of the current expanded state, not proof that the user changed the tree.
+The `tree-view-state:state-changed` event is dispatched on initial connect as well as after `refresh` and expand/collapse updates. Check `event.detail.reason` to see why the snapshot was published: `connect` is the initial page snapshot, `refresh` is an explicit resync, and `expanded` / `collapsed` are expansion updates.
 
-TreeView only publishes the event. If your host app should save only user-initiated changes, debounce the listener, ignore the first event, or gate saves behind a dirty-state policy in the host app.
+TreeView only publishes the event and the current expanded-state snapshot. If your host app should save only user-initiated changes, use the `reason` value to skip `connect` and any other app-owned non-save paths, debounce the listener, or gate saves behind a dirty-state policy in the host app.
 
 See also:
 
