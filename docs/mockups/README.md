@@ -119,6 +119,7 @@ Use this short chooser when you know the review question but do not yet know whi
 ## Visual evidence handoff
 
 - Treat `npm run test:browser` success as smoke coverage, not as final visual readability approval.
+- Some mockups intentionally preserve horizontal scrolling at narrow widths so reviewers can inspect wide reference tables, columns, side-by-side comparisons, long-label stress cases, or form-boundary controls. Treat that deliberate overflow differently from accidental overlap, clipped hierarchy cues, or unreadable labels.
 - For static mockup pull requests that add or change focused visual references, include a short PR note or comment that names the target mockup file, the desktop and narrow viewport used for review, and whether the relevant rows, labels, tables, and state cues remain readable without overlap or clipping.
 - Screenshots are acceptable evidence, but an equivalent browser-capable review note is also fine when it clearly names the checked viewport and surface. Keep this evidence in the pull request discussion instead of committing generated screenshot assets by default.
 - If the authoring environment cannot produce browser-capable evidence, say so in the PR and leave the visual readability check as a reviewer gate rather than treating CI smoke success as a substitute.
@@ -155,6 +156,7 @@ Record deliberate copy or language exceptions in this list. Add a row when a moc
 
 - Keep the toggle control, the primary node label, and the current or selected cue visible in the first scan line.
 - Move owner, status, badges, and less-frequent actions into stacked metadata or a compact action surface before hiding hierarchy cues.
+- When a mockup is a wide reference, inspectable column view, side-by-side comparison, long-label stress case, or form-boundary reference, narrow horizontal scrolling can be intentional. Still flag overlap, clipped controls, hidden primary labels, or state cues that cannot be inspected.
 - Treat exact truncation, action menus, and responsive breakpoints as host-app responsibilities. These mockups are reference layouts, not a shipped responsive design system.
 
 ## Current-branch guidance
