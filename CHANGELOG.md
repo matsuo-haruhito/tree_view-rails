@@ -175,7 +175,7 @@ Release preparation notes:
 - Added Docker setup CI docs signal coverage so CI policy docs keep `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` guidance aligned.
 - Added CI policy docs signal coverage for pull request changed-file detection and docs-only check retention so CI policy docs stay aligned with workflow routing evidence.
 - Added CI routing output docs signal coverage for representative changed-file routing output guidance.
-- Added CI policy suite docs routing signal coverage so bilingual CI policy suite paths stay represented in `ci_policy_sensitive` checks.
+- Added CI policy suite docs routing signal coverage so bilingual CI policy suite paths stay represented in `ci_policy_sensitive` docs smoke.
 - Added CI guard suite smoke coverage for the PR specs RSpec command and package guard suite composition signals.
 - Added docs-entrypoint guard coverage for `TreeViewTransferDropPositions` and `TreeViewIntegrationHooks` so transfer and integration public API docs signals stay aligned with the manifest.
 - Added CI policy suite and permissions smoke coverage so maintainers can verify read-only workflow permissions and guard group registration through `npm run test:ci-policy`.
@@ -341,7 +341,6 @@ Release preparation notes:
 
 - Added coverage for the persisted state install generator outputs.
 - Added unit and integration coverage for windowed rendering.
-- Added JavaScript controller tests for state, selection, transfer, and remote-state behavior.
 
 ### Notes
 
