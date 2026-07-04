@@ -14,7 +14,7 @@
     "test:ruby-version-sources": "node script/test_ruby_version_sources.mjs",
     "test:development-docs-commands": "node script/test_development_docs_command_signals.mjs && node script/test_manifest_surface_doc_roles.mjs && node script/test_entrypoints_package_script_composition.mjs",
     "test:public-api-manifest-structure": "node script/test_public_api_manifest_structure.mjs",
-    "test:toggle-icons-docs": "node script/test_toggle_icons_docs_signals.mjs",
+    "test:toggle-icons-docs": "node script/check_toggle_icons_public_surface.mjs",
     "test:docs-i18n": "node script/test_docs_i18n_parity.mjs",
     "test:docs-entrypoints": "node script/test_docs_entrypoint_suite.mjs",
     "test:release-docs": "npm run test:docs-entrypoints -- --only \"Release docs signals\"",
