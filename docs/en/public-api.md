@@ -199,6 +199,8 @@ Host apps are expected to provide these pieces:
 
 The public JavaScript entrypoint is `tree_view/index.js`. The bundled `app/javascript/tree_view/index.d.ts` declaration mirrors the package-root export names for TypeScript-aware tooling, but it does not change runtime behavior or add a separate public surface. Treat `tree_view/index.js`, `config/public_api_manifest.yml`, and the entrypoint smoke checks as the source of truth; the declaration is a compile-time aid for npm-style tooling, while importmap-only host apps do not need extra runtime setup for it.
 
+Package-root literal exports such as `TreeViewEventNames`, `TreeViewEventDetailKeys`, and the data hook objects are immutable reference constants for host-app JavaScript, browser tests, and shared helpers. Use [Immutable JavaScript package-root exports](public-api-immutable-exports.md) when you need the boundary between runtime `Object.freeze` checks, TypeScript `Readonly` / `readonly` declaration shapes, and reader-facing docs guidance.
+
 Stable enough for host apps to use:
 
 - `registerTreeViewControllers(application)`
