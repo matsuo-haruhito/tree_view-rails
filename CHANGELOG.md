@@ -341,6 +341,7 @@ Release preparation notes:
 
 - Added coverage for the persisted state install generator outputs.
 - Added unit and integration coverage for windowed rendering.
+- Added JavaScript controller tests for state, selection, transfer, and remote-state behavior.
 
 ### Notes
 
