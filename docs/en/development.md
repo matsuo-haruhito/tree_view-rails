@@ -214,13 +214,18 @@ Before opening a docs pull request, do a short maintenance sweep using `docs/i18
 
 ## Before release
 
+Keep this section as the short maintainer checklist. Use [Release checklist](release.md) for the detailed release evidence, including `bundle exec rake release:check`, gem package verification, tag alignment, and the main-push full CI gates.
+
 - `bundle exec standardrb`
 - `bundle exec rspec`
 - `npm test`
 - `npm run test:entrypoints`
 - `npm run test:browser`
 - `bundle exec rake build`
-- gem package contents
+- `bundle exec rake release:check`
+- gem package contents (`gem build tree_view.gemspec` and `ruby script/check_gem_package_contents.rb tree_view-*.gem`)
+- release CI evidence: PR CI, then main-push full CI after merge, including gem package verification
+- docs-entrypoint / CI-policy / browser smoke evidence when the changed files require those lanes
 - confirm `config/public_api_manifest.yml` still matches the documented Ruby, helper, option, JavaScript export, and event surfaces covered by public API docs
 - CHANGELOG
 - docs index / i18n audit
