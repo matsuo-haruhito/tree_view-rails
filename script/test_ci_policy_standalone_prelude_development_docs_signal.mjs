@@ -10,7 +10,7 @@ const docs = [
       "`script/test_license_package_sensitive_signal.mjs`",
       "representative signal for LICENSE package-sensitive routing",
       "package script composition",
-      "not a `script/test_ci_policy_suite.mjs` checks-array group"
+      "not as a `script/test_ci_policy_suite.mjs` checks-array group"
     ]
   ],
   [
