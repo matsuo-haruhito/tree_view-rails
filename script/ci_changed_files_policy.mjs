@@ -109,6 +109,7 @@ function isCiPolicySensitivePath(file) {
     file === "script/test_ci_changed_files_policy.mjs" ||
     file === "script/test_ci_policy_docs_routing.mjs" ||
     file === "script/test_ci_workflow_changed_file_detection_signals.mjs" ||
+    file === "script/test_ci_matrix_boundary_signals.mjs" ||
     file === "script/test_ci_workflow_concurrency_signals.mjs" ||
     file === "script/test_ci_workflow_permissions_signals.mjs" ||
     file === "script/test_ci_policy_permissions_docs_signals.mjs" ||
