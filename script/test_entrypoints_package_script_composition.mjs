@@ -47,20 +47,24 @@ if (missingCommands.length > 0 || outOfOrderCommands.length > 0) {
   console.error("[entrypoints-package-script-composition] package.json scripts.test:entrypoints drift detected")
 
   if (missingCommands.length > 0) {
-    console.error("Missing command(s):")
-    for (const command of missingCommands) {
-      console.error(`- ${command}`)
+    console.error("[entrypoints-package-script-composition] missing commands:")
+    for (const missingCommand of missingCommands) {
+      console.error(`- ${missingCommand}`)
     }
   }
 
   if (outOfOrderCommands.length > 0) {
-    console.error("Out-of-order command(s):")
-    for (const command of outOfOrderCommands) {
-      console.error(`- ${command}`)
+    console.error("[entrypoints-package-script-composition] commands out of expected order:")
+    for (const outOfOrderCommand of outOfOrderCommands) {
+      console.error(`- ${outOfOrderCommand}`)
     }
   }
 
+  console.error("[entrypoints-package-script-composition] package.json scripts.test:entrypoints:")
+  console.error(testEntrypointsCommand ?? "<missing>")
   process.exit(1)
 }
 
-console.log(`[entrypoints-package-script-composition] package.json scripts.test:entrypoints includes ${requiredCommands.length} required maintenance commands in order`)
+console.log(
+  `[entrypoints-package-script-composition] package.json scripts.test:entrypoints includes ${requiredCommands.length} required maintenance commands in order`
+)
