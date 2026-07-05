@@ -65,9 +65,40 @@ const publicApiDocSignals = [
   "row_readonly_builder"
 ]
 
+const selectionGroupedOptionSignals = [
+  "selection:",
+  "- enabled",
+  "- visibility",
+  "- payload_builder",
+  "- checkbox_name",
+  "- disabled_builder",
+  "- disabled_reason_builder",
+  "- selected_keys",
+  "- cascade",
+  "- indeterminate",
+  "- max_count"
+]
+
+const selectionGroupedOptionDocsSignals = [
+  "`selection`",
+  "`enabled`",
+  "`visibility`",
+  "`payload_builder`",
+  "`checkbox_name`",
+  "`disabled_builder`",
+  "`disabled_reason_builder`",
+  "`selected_keys`",
+  "`cascade`",
+  "`indeterminate`",
+  "`max_count`"
+]
+
 ;["docs/en/public-api.md", "docs/ja/public-api.md"].forEach((sourcePath) => {
   assertSignals(sourcePath, feature, publicApiDocSignals)
+  assertSignals(sourcePath, "RenderState selection grouped option docs", selectionGroupedOptionDocsSignals)
 })
+
+assertSignals("config/public_api_manifest.yml", "RenderState selection grouped option manifest", selectionGroupedOptionSignals)
 
 const rowStatusDocSignals = [
   "row_disabled_builder",
