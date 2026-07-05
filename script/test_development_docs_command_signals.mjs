@@ -128,7 +128,10 @@ const requiredDocsEntrypointSuiteCommandSignals = [
       "Docs entrypoint suite option contract",
       "Unknown, ambiguous, or out-of-range values exit non-zero",
       "available groups plus the `--list` hint",
-      "candidate docs entrypoint scripts against the suite's `checks` array and explicit exclusions"
+      "candidate docs entrypoint scripts against the suite's `checks` array and explicit exclusions",
+      "Explicit exclusions are not silent skips",
+      "registered through another npm script or suite",
+      "explicit exclusion with its registration route and reason"
     ]
   ],
   [
@@ -140,7 +143,10 @@ const requiredDocsEntrypointSuiteCommandSignals = [
       "Docs entrypoint suite option contract",
       "unknown、ambiguous、範囲外の値は非 0 終了",
       "available groups と `--list` の案内",
-      "candidate docs entrypoint script が suite の `checks` array または明示的な exclusion"
+      "candidate docs entrypoint script が suite の `checks` array または明示的な exclusion",
+      "明示的な exclusion は silent skip ではありません",
+      "別の npm script または suite 経由で登録",
+      "登録経路と理由を持つ明示的な exclusion"
     ]
   ]
 ]
@@ -153,7 +159,10 @@ const requiredDevelopmentCiPolicySignals = [
       "Pushes to `main` also run the broader compatibility and release checks",
       "changed-files policy",
       "ci_policy_sensitive",
-      "npm run test:ci-policy"
+      "npm run test:ci-policy",
+      "jobs.changes.outputs.*",
+      "missing CLI output",
+      "stale workflow reference"
     ]
   ],
   [
@@ -163,7 +172,10 @@ const requiredDevelopmentCiPolicySignals = [
       "`main` へのpushでは、より広い互換性確認とrelease向けのchecksも実行します",
       "changed-files policy",
       "ci_policy_sensitive",
-      "npm run test:ci-policy"
+      "npm run test:ci-policy",
+      "jobs.changes.outputs.*",
+      "missing CLI output",
+      "stale workflow reference"
     ]
   ]
 ]
@@ -200,7 +212,10 @@ const requiredManifestStructureDuplicateKeySignals = [
       "`npm run test:public-api-manifest-structure`",
       "duplicate-key guardrails",
       "duplicate YAML keys",
-      "manifest structure smoke"
+      "manifest structure smoke",
+      "silently overwrite a manifest section",
+      "source-of-truth drift safety guard",
+      "not as a public API adoption decision"
     ]
   ],
   [
@@ -209,7 +224,10 @@ const requiredManifestStructureDuplicateKeySignals = [
       "`npm run test:public-api-manifest-structure`",
       "duplicate-key guardrails",
       "duplicate YAML keys",
-      "manifest structure"
+      "manifest structure",
+      "manifest section を silent overwrite",
+      "source-of-truth drift safety guard",
+      "public API の採用判断ではありません"
     ]
   ]
 ]
