@@ -261,6 +261,7 @@ Release preparation notes:
 - Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, Ruby version, and Development docs wording stay aligned.
 - Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
 - Added release and CI docs signal coverage for workflow action major versions, Ruby / Rails release evidence, and gem package install / require checks.
+- Added `actions/checkout@v7` action-major guard evidence so representative CI jobs stay aligned with the workflow action-version signal without deciding SHA pinning policy.
 - Added CI observation guidance signal coverage so maintainers verify GitHub Actions workflow runs when combined status is empty.
 - Added CI policy smoke coverage for AGENTS.md routing and non-PR `ci_policy_sensitive` defaults so CI-policy-sensitive docs changes stay guarded.
 - Expanded package contents verification coverage for README-linked Turbo Frame option, Direction-aware styling, and Public Name Decisions docs so packaged gems keep those public guides available.
