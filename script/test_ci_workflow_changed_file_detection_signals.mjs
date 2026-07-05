@@ -1,7 +1,10 @@
+import { execFileSync } from "node:child_process"
 import { readFileSync } from "node:fs"
+import { classifyChangedFiles } from "./ci_changed_files_policy.mjs"
 
 const workflowPath = ".github/workflows/ci.yml"
 const packagePath = "package.json"
+const policyCliPath = "script/ci_changed_files_policy.mjs"
 const docsEntrypointSuitePath = "script/test_docs_entrypoint_suite.mjs"
 const workflowSource = readFileSync(workflowPath, "utf8")
 const packageJson = JSON.parse(readFileSync(packagePath, "utf8"))
@@ -176,6 +179,61 @@ function assertDefaultWorkflowOutput(block, key, value) {
   )
 }
 
+function sortedUnique(values) {
+  return [...new Set(values)].sort()
+}
+
+function workflowChangesOutputKeys(changesJob) {
+  const match = changesJob.match(/^    outputs:\n(?<body>(?:      [a-z_]+: .*\n)+)/m)
+
+  assert(
+    match,
+    `${workflowPath} jobs.changes.outputs must define changed-files policy output keys`
+  )
+
+  return sortedUnique([...match.groups.body.matchAll(/^      (?<key>[a-z_]+): /gm)].map((entry) => entry.groups.key))
+}
+
+function workflowDefaultOutputKeys(defaultOutputBlock) {
+  return sortedUnique(
+    [...defaultOutputBlock.matchAll(/echo "(?<key>[a-z_]+)=(?:true|false)" >> "\$GITHUB_OUTPUT"/g)]
+      .map((entry) => entry.groups.key)
+  )
+}
+
+function policyCliOutputKeys() {
+  const output = execFileSync(process.execPath, [policyCliPath], {
+    input: "\n",
+    encoding: "utf8"
+  })
+
+  return sortedUnique(
+    output.trim().split(/\r?\n/).filter(Boolean).map((line) => {
+      const match = line.match(/^(?<key>[a-z_]+)=(?:true|false)$/)
+      assert(match, `${policyCliPath} output key-set smoke: invalid key=value boolean line ${line}`)
+      return match.groups.key
+    })
+  )
+}
+
+function assertSameOutputKeySet(actualLabel, actualKeys, expectedLabel, expectedKeys) {
+  const actual = sortedUnique(actualKeys)
+  const expected = sortedUnique(expectedKeys)
+  const missing = expected.filter((key) => !actual.includes(key))
+  const extra = actual.filter((key) => !expected.includes(key))
+
+  assert(
+    missing.length === 0 && extra.length === 0,
+    [
+      `${actualLabel} output key set must match ${expectedLabel}`,
+      `missing from ${actualLabel}: ${missing.join(", ") || "(none)"}`,
+      `extra in ${actualLabel}: ${extra.join(", ") || "(none)"}`,
+      `expected ${expectedLabel}: ${expected.join(", ")}`,
+      `actual ${actualLabel}: ${actual.join(", ")}`
+    ].join("\n")
+  )
+}
+
 function assertPackageScript(scriptName) {
   assert(
     Object.hasOwn(packageJson.scripts ?? {}, scriptName),
@@ -222,6 +280,30 @@ const nonPullRequestDefaultOutputBlock = workflowNonPullRequestDefaultOutputBloc
 Object.entries(nonPullRequestDefaultOutputs).forEach(([key, value]) => {
   assertDefaultWorkflowOutput(nonPullRequestDefaultOutputBlock, key, value)
 })
+
+const workflowOutputKeys = workflowChangesOutputKeys(changesJob)
+const nonPullRequestDefaultOutputKeys = workflowDefaultOutputKeys(nonPullRequestDefaultOutputBlock)
+const policyRuntimeOutputKeys = Object.keys(classifyChangedFiles([]))
+const policyCliKeys = policyCliOutputKeys()
+
+assertSameOutputKeySet(
+  `${workflowPath} jobs.changes.outputs`,
+  workflowOutputKeys,
+  "classifyChangedFiles result",
+  policyRuntimeOutputKeys
+)
+assertSameOutputKeySet(
+  `${workflowPath} jobs.changes non-pull-request defaults`,
+  nonPullRequestDefaultOutputKeys,
+  `${workflowPath} jobs.changes.outputs`,
+  workflowOutputKeys
+)
+assertSameOutputKeySet(
+  `${policyCliPath} CLI output`,
+  policyCliKeys,
+  "classifyChangedFiles result",
+  policyRuntimeOutputKeys
+)
 
 assertOrdered(
   changesJob,
@@ -478,6 +560,7 @@ console.log("Checked CI workflow trigger policy signals.")
 console.log("Checked CI workflow permissions policy signals.")
 console.log("Checked CI workflow concurrency policy signals.")
 console.log("Checked CI changed-file detection workflow signals.")
+console.log("Checked CI changed-file output key-set synchronization signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
 console.log(`Checked ${lintJobSignals.length} CI lint job representative signals.`)
