@@ -12,7 +12,7 @@
     "test:ci-policy": "node script/test_license_package_sensitive_signal.mjs && node script/test_ci_policy_suite.mjs --self-test && node script/test_ci_policy_suite.mjs",
     "test:node-version-sources": "node script/test_node_version_sources.mjs",
     "test:ruby-version-sources": "node script/test_ruby_version_sources.mjs",
-    "test:development-docs-commands": "node script/test_development_docs_command_signals.mjs && node script/test_manifest_surface_doc_roles.mjs && node script/test_entrypoints_package_script_composition.mjs",
+    "test:development-docs-commands": "node script/test_development_docs_command_signals.mjs && node script/check_ci_policy_standalone_prelude_development_doc_signal.mjs && node script/test_manifest_surface_doc_roles.mjs && node script/test_entrypoints_package_script_composition.mjs",
     "test:public-api-manifest-structure": "node script/test_public_api_manifest_structure.mjs",
     "test:toggle-icons-docs": "node script/check_toggle_icons_public_surface.mjs",
     "test:docs-i18n": "node script/test_docs_i18n_parity.mjs",
