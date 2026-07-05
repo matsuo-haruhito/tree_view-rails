@@ -22,6 +22,11 @@ const checks = [
     args: ["script/test_ci_workflow_changed_file_detection_signals.mjs"]
   },
   {
+    group: "CI matrix boundary signals",
+    command: "node",
+    args: ["script/test_ci_matrix_boundary_signals.mjs"]
+  },
+  {
     group: "Workflow concurrency signals",
     command: "node",
     args: ["script/test_ci_workflow_concurrency_signals.mjs"]
@@ -301,6 +306,10 @@ function runSelfTest() {
   assert.ok(
     ciPolicyCandidateScriptPaths().includes("script/test_ci_policy_permissions_docs_signals.mjs"),
     "CI policy candidates should include workflow permissions docs signals"
+  )
+  assert.ok(
+    ciPolicyCandidateScriptPaths().includes("script/test_ci_matrix_boundary_signals.mjs"),
+    "CI policy candidates should include CI matrix boundary signals"
   )
   assert.ok(
     ciPolicyCandidateScriptPaths().includes("script/test_package_lock_dependency_drift.mjs"),
