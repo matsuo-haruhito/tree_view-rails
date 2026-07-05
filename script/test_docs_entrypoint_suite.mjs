@@ -143,6 +143,11 @@ const checks = [
     args: ["script/test_grouped_option_docs_signals.mjs"]
   },
   {
+    group: "RenderState callback builder docs signals",
+    command: "node",
+    args: ["script/test_render_state_callback_builder_docs_signals.mjs"]
+  },
+  {
     group: "Public API manifest structure",
     command: "npm",
     args: ["run", "test:public-api-manifest-structure"]
