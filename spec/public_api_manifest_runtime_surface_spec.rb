@@ -129,7 +129,7 @@ RSpec.describe "Public API manifest runtime surface" do
       "config/public_api_manifest.yml setup_generators.persisted_state_install.generated_paths must stay aligned with tree_view_state.rb"
     expect(generator_source).to include("template \"tree_view_state_owner.rb\", \"app/models/concerns/tree_view_state_owner.rb\""),
       "config/public_api_manifest.yml setup_generators.persisted_state_install.generated_paths must stay aligned with tree_view_state_owner.rb"
-    expect(generator_source).to include('"db/migrate/#{migration_number}_create_tree_view_states.rb"'),
+    expect(generator_source).to include("\"db/migrate/\#{migration_number}_create_tree_view_states.rb\""),
       "config/public_api_manifest.yml setup_generators.persisted_state_install.generated_paths must stay aligned with the migration_path runtime pattern"
   end
 end
