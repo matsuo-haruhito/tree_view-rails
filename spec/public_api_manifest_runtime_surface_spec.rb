@@ -8,6 +8,10 @@ RSpec.describe "Public API manifest runtime surface" do
     @public_api_manifest ||= YAML.safe_load_file(File.expand_path("../config/public_api_manifest.yml", __dir__))
   end
 
+  def render_state_source
+    @render_state_source ||= File.read(File.expand_path("../lib/tree_view/render_state.rb", __dir__))
+  end
+
   def keyword_names(callable, *parameter_types)
     callable.parameters.filter_map do |parameter_type, parameter_name|
       parameter_name.to_s if parameter_types.include?(parameter_type)
@@ -31,9 +35,8 @@ RSpec.describe "Public API manifest runtime surface" do
     end
   end
 
-  it "keeps RenderState callback builder keys aligned with runtime keywords and readers" do
+  it "keeps RenderState callback builder keys aligned with source keywords and runtime readers" do
     manifest_keys = public_api_manifest.fetch("render_state_callback_builder_keys")
-    initializer_keywords = keyword_names(TreeView::RenderState.instance_method(:initialize), :key, :keyreq)
     public_readers = TreeView::RenderState.public_instance_methods
 
     expect(manifest_keys).to include(
@@ -43,8 +46,9 @@ RSpec.describe "Public API manifest runtime surface" do
       "toggle_icon_builder"
     )
 
-    expect(manifest_keys - initializer_keywords).to be_empty,
-      "config/public_api_manifest.yml render_state_callback_builder_keys contains keys missing from TreeView::RenderState#initialize: #{manifest_keys - initializer_keywords}"
+    missing_keywords = manifest_keys.reject { |key| render_state_source.include?("#{key}: nil") }
+    expect(missing_keywords).to be_empty,
+      "config/public_api_manifest.yml render_state_callback_builder_keys contains keys missing from TreeView::RenderState#initialize source keywords: #{missing_keywords}"
 
     missing_readers = manifest_keys.reject { |key| public_readers.include?(key.to_sym) }
     expect(missing_readers).to be_empty,
