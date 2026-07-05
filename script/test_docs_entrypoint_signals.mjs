@@ -270,6 +270,55 @@ const signalGroups = [
     ]
   },
   {
+    feature: "Dependabot Bundler recovery maintainer routing",
+    files: [
+      [
+        "docs/en/README.md",
+        ["dependabot-bundler-recovery.md", "Dependabot Bundler recovery"]
+      ],
+      [
+        "docs/ja/README.md",
+        ["dependabot-bundler-recovery.md", "Dependabot Bundler 復旧手順"]
+      ],
+      [
+        "docs/en/development.md",
+        [
+          "Bundler lockfile drift guard",
+          "Dependabot Bundler recovery",
+          "dependabot-bundler-recovery.md",
+          "@dependabot recreate"
+        ]
+      ],
+      [
+        "docs/ja/development.md",
+        [
+          "Bundler lockfile drift guard",
+          "Dependabot Bundler 復旧手順",
+          "dependabot-bundler-recovery.md",
+          "@dependabot recreate"
+        ]
+      ],
+      [
+        "docs/en/dependabot-bundler-recovery.md",
+        [
+          "Gemfile.lock DEPENDENCIES must match direct Gemfile gem requirements",
+          "lockfile metadata drift",
+          "@dependabot recreate",
+          "Style/RedundantStructKeywordInit"
+        ]
+      ],
+      [
+        "docs/ja/dependabot-bundler-recovery.md",
+        [
+          "Gemfile.lock DEPENDENCIES must match direct Gemfile gem requirements",
+          "lockfile metadata drift",
+          "@dependabot recreate",
+          "Style/RedundantStructKeywordInit"
+        ]
+      ]
+    ]
+  },
+  {
     feature: "Row status and depth label docs boundary",
     files: [
       [

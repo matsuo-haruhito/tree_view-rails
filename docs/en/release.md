@@ -88,7 +88,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, builds the gem, confirms release-facing files are packaged, runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The package contents guard checks representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces. For manifest-listed public Ruby constants, package verification compares `config/public_api_manifest.yml` `public_constants` with `PUBLIC_CONSTANT_RUNTIME_FILES`, then fails separately when a runtime file is missing from the built gem or when a manifest constant lacks a guard mapping. The same guard also checks the public setup generator files for `tree_view:state:install` so generator name, optional owner argument, and generated destination path evidence stay aligned with the public setup surface docs. The metadata part of that guard checks the gem metadata URI set (`homepage_uri`, `source_code_uri`, `documentation_uri`, `changelog_uri`, and `bug_tracker_uri`) plus the release metadata boundary for required Ruby version, allowed push host, and runtime dependency metadata (`required_ruby_version`, `allowed_push_host`, and runtime dependency `railties >= 7.0`), so docs entrypoint, source, changelog, issue tracker, Ruby support, RubyGems push scope, and Rails runtime requirement drift are caught by package verification rather than by release prose alone. The main-push `gem_package` CI job repeats the same package contents verification against its built gem. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
+`bundle exec rake release:check` validates the current `TreeView::VERSION`, checks for a dated `CHANGELOG.md` section for that version, builds the gem, confirms release-facing files are packaged, runs `ruby script/check_gem_package_contents.rb tree_view-*.gem` against the built gem, and runs a `bundle exec ruby -Ilib -e 'require "tree_view"'` load check. The dated `CHANGELOG.md` section must include at least one allowed category heading (`Added`, `Changed`, `Fixed`, `Deprecated`, `Removed`, `Security`, `Documentation`, or `Tests`) and non-empty release note body under a category heading, so release preparation cannot leave only a version shell without reader-facing notes. The package contents guard checks representative Rails helper, view partial, locale, docs, JavaScript, CSS, importmap, public API manifest, public runtime files, and gem metadata URI surfaces. For manifest-listed public Ruby constants, package verification compares `config/public_api_manifest.yml` `public_constants` with `PUBLIC_CONSTANT_RUNTIME_FILES`, then fails separately when a runtime file is missing from the built gem or when a manifest constant lacks a guard mapping. The same guard also checks the public setup generator files for `tree_view:state:install` so generator name, optional owner argument, and generated destination path evidence stay aligned with the public setup surface docs. The metadata part of that guard checks the gem metadata URI set (`homepage_uri`, `source_code_uri`, `documentation_uri`, `changelog_uri`, and `bug_tracker_uri`) plus the release metadata boundary for required Ruby version, allowed push host, and runtime dependency metadata (`required_ruby_version`, `allowed_push_host`, and runtime dependency `railties >= 7.0`), so docs entrypoint, source, changelog, issue tracker, Ruby support, RubyGems push scope, and Rails runtime requirement drift are caught by package verification rather than by release prose alone. The main-push `gem_package` CI job repeats the same package contents verification against its built gem. Tag alignment is skipped until `vX.Y.Z` exists, then verifies that the release tag points at the current `HEAD`.
 
 After creating the release tag, rerun the release check with tag alignment required:
 
@@ -193,6 +193,7 @@ Before release:
   - `app/helpers/tree_view_helper.rb`
   - `app/views/tree_view/_tree_row.html.erb`
   - `app/javascript/tree_view/index.js`
+  - `app/javascript/tree_view/index.d.ts` as the compile-time declaration shipped beside the runtime entrypoint
   - `app/assets/stylesheets/tree_view.scss`
   - `config/importmap.tree_view.rb`
   - `config/public_api_manifest.yml`
@@ -210,6 +211,12 @@ Before release:
   - `LICENSE*`
 
 Because `docs/**/*` is packaged, keep package-facing docs independent from repository-only maintainer docs. `Product Profile.md` and `AGENTS.md` stay repository-only; do not add encoded parent-directory links from packaged docs back to those root-only files. The package contents guard reports `Forbidden repository-only root doc links in packaged <path>` when that boundary drifts.
+
+## Package verification signals
+
+The package contents guard also verifies package-root JavaScript entrypoint and importmap signals. Keep `config/public_api_manifest.yml` `javascript_package_root.named_exports` aligned with packaged `app/javascript/tree_view/index.js` and `app/javascript/tree_view/index.d.ts`; when a manifest-listed export is absent, the guard reports `Missing manifest-listed JavaScript package-root named exports in packaged <path>`. This is release evidence only, so do not add or rename public JavaScript exports from this checklist alone.
+
+The same package verification checks that `config/importmap.tree_view.rb` keeps `pin "tree_view", to: "tree_view/index.js"` packaged for host apps that install the gem through importmap. This guards packaging evidence only; importmap setup behavior and public API semantics belong to the PR that intentionally changes those surfaces.
 
 ## Repository
 

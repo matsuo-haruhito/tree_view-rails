@@ -79,6 +79,10 @@ REQUIRED_PACKAGED_PATH_GROUPS = {
     docs/en/development.md
     docs/ja/development.md
   ],
+  "Dependabot Bundler recovery docs" => %w[
+    docs/en/dependabot-bundler-recovery.md
+    docs/ja/dependabot-bundler-recovery.md
+  ],
   "Bilingual CI policy suite docs" => %w[
     docs/en/ci-policy-suite.md
     docs/ja/ci-policy-suite.md

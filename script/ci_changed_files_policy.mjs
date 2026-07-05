@@ -52,11 +52,20 @@ function isDocsOnlyPath(file) {
   );
 }
 
+function isWorkflowDefinitionPath(file) {
+  return file.startsWith(".github/workflows/") && (file.endsWith(".yml") || file.endsWith(".yaml"));
+}
+
+function isLicenseFilePath(file) {
+  return file === "LICENSE" || file.startsWith("LICENSE.") || file.startsWith("LICENSE-");
+}
+
 function isPackageSensitivePath(file) {
   return (
     file === "README.md" ||
     file === "CHANGELOG.md" ||
     file.startsWith("docs/") ||
+    isLicenseFilePath(file) ||
     file === "Gemfile" ||
     file === "Gemfile.lock" ||
     file === "Rakefile" ||
@@ -65,7 +74,7 @@ function isPackageSensitivePath(file) {
     file === "package-lock.json" ||
     file === ".nvmrc" ||
     file === "script/check_gem_package_contents.rb" ||
-    file === ".github/workflows/ci.yml" ||
+    isWorkflowDefinitionPath(file) ||
     file === ".github/dependabot.yml" ||
     file === "config/importmap.tree_view.rb" ||
     file === "config/public_api_manifest.yml" ||
@@ -83,6 +92,7 @@ function isDocsEntrypointSensitivePath(file) {
     file === "README.md" ||
     file === "CHANGELOG.md" ||
     file.startsWith("docs/") ||
+    file === "config/importmap.tree_view.rb" ||
     file === "config/public_api_manifest.yml"
   );
 }
@@ -90,7 +100,8 @@ function isDocsEntrypointSensitivePath(file) {
 function isCiPolicySensitivePath(file) {
   return (
     file === "AGENTS.md" ||
-    file === ".github/workflows/ci.yml" ||
+    isWorkflowDefinitionPath(file) ||
+    file === ".github/dependabot.yml" ||
     file === "docs/en/ci-policy-suite.md" ||
     file === "docs/ja/ci-policy-suite.md" ||
     file === "script/ci_changed_files_policy.mjs" ||
@@ -98,8 +109,12 @@ function isCiPolicySensitivePath(file) {
     file === "script/test_ci_changed_files_policy.mjs" ||
     file === "script/test_ci_policy_docs_routing.mjs" ||
     file === "script/test_ci_workflow_changed_file_detection_signals.mjs" ||
+    file === "script/test_ci_workflow_concurrency_signals.mjs" ||
     file === "script/test_ci_workflow_permissions_signals.mjs" ||
+    file === "script/test_ci_policy_permissions_docs_signals.mjs" ||
     file === "script/test_ci_observation_guidance_signals.mjs" ||
+    file === "script/test_importmap_docs_entrypoint_routing.mjs" ||
+    file === "script/test_license_package_sensitive_signal.mjs" ||
     file === "script/test_package_lock_dependency_drift.mjs" ||
     file === "script/test_gemfile_lock_dependency_drift.mjs"
   );
@@ -112,7 +127,7 @@ function isDockerSetupSensitivePath(file) {
     file === "package.json" ||
     file === "package-lock.json" ||
     file === ".nvmrc" ||
-    file === ".github/workflows/ci.yml"
+    isWorkflowDefinitionPath(file)
   );
 }
 

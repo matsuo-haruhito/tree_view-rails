@@ -44,7 +44,11 @@ If you already know the symptom and want a faster reverse-lookup entry point, se
 - [English Troubleshooting](docs/en/troubleshooting.md)
 - [日本語Troubleshooting](docs/ja/troubleshooting.md)
 
-If you want static visual references for baseline DOM structure and interaction states before wiring a host app, see [TreeView mockups](docs/mockups/README.md). Start with [review-gallery.html](docs/mockups/review-gallery.html) for the fastest first look, open [default-tree.html](docs/mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly, then use the mockup index for the focused pages and each page's role.
+If you want static visual references for baseline DOM structure and interaction states before wiring a host app, choose the mockup entry point that matches your first review task:
+
+- Start with [review-gallery.html](docs/mockups/review-gallery.html) when you want the fastest overview across focused static pages.
+- Open [default-tree.html](docs/mockups/default-tree.html) when you want the baseline DOM structure and shared CSS reference directly.
+- Use [TreeView mockups](docs/mockups/README.md) when you want the maintained mockup index and each page's role.
 
 ![Static TreeView mockup showing expanded and collapsed hierarchy rows with selection checkboxes, badges, and row actions.](docs/mockups/assets/readme-default-tree.svg)
 
@@ -138,7 +142,7 @@ Add the importmap pin when needed:
 pin "tree_view", to: "tree_view/index.js"
 ```
 
-Host apps that write tests or custom renderers against TreeView browser hooks can avoid raw event names, data attributes, and controller identifiers by using the package-root exports from `tree_view/index.js`, such as `TreeViewEventNames`, `TreeViewEventDetailKeys`, `TreeViewControllerEntries`, `TreeViewIntegrationHooks`, and documented data hook objects like `TreeViewRemoteStateDataHooks`, `TreeViewToolbarDataHooks`, `TreeViewTransferDataAttributes`, `TreeViewSelectionCheckboxHooks`, and `TreeViewEmptyStateHooks`. See the [Public API JavaScript surface](docs/en/public-api.md#javascript-surface) / [日本語](docs/ja/public-api.md#javascript-surface) and the [JavaScript event contract](docs/en/js-events.md) / [日本語](docs/ja/js-events.md).
+Host apps that write tests or custom renderers against TreeView browser hooks can avoid raw event names, data attributes, and controller identifiers by using the package-root exports from `tree_view/index.js`, such as `TreeViewEventNames`, `TreeViewEventDetailKeys`, `TreeViewControllerEntries`, `TreeViewIntegrationHooks`, and documented data hook objects like `TreeViewRemoteStateDataHooks`, `TreeViewToolbarDataHooks`, `TreeViewTransferDataAttributes`, `TreeViewSelectionCheckboxHooks`, and `TreeViewEmptyStateHooks`. See the [Public API JavaScript surface](docs/en/public-api.md#javascript-surface) / [日本語](docs/ja/public-api.md#javascript-surface), the [JavaScript event contract](docs/en/js-events.md) / [日本語](docs/ja/js-events.md), and [Immutable JavaScript package-root exports](docs/en/public-api-immutable-exports.md) / [日本語](docs/ja/public-api-immutable-exports.md) for the immutable reference-constant boundary.
 
 See [Installation](docs/en/installation.md) for details.
 
@@ -268,11 +272,13 @@ npm ci
 npm run test:js
 npm run test:entrypoints
 npm run test:docs-entrypoints
+npm run test:release-docs
+npm run test:release-package-contents
 npm run test:ci-policy
 ```
 
 Use Node 22 for local JavaScript work. The repository root `.nvmrc` matches the CI JavaScript lane and is the source of truth for the recommended local Node major version.
 
-`npm run test:js` runs the documented JavaScript pull-request checks together: entrypoint smoke (`npm run test:entrypoints`), Vitest (`npm test`), and Playwright browser smoke (`npm run test:browser`). Use the focused guard commands when you are narrowing maintenance failures: `npm run test:entrypoints` covers package-root exports, controller registrations, docs entrypoints, CI policy, and version-source guards; `npm run test:docs-entrypoints` covers README/docs/Public API/i18n signals without the broader JavaScript suite; and `npm run test:ci-policy` covers changed-file routing, workflow detection, CI observation guidance, and lockfile drift. See the [English development guide](docs/en/development.md) and [日本語の開発・保守方針](docs/ja/development.md) for details.
+`npm run test:js` runs the documented JavaScript pull-request checks together: entrypoint smoke (`npm run test:entrypoints`), Vitest (`npm test`), and Playwright browser smoke (`npm run test:browser`). Use the focused guard commands when you are narrowing maintenance failures: `npm run test:entrypoints` covers package-root exports, controller registrations, docs entrypoints, CI policy, and version-source guards; `npm run test:docs-entrypoints` covers README/docs/Public API/i18n signals without the broader JavaScript suite; `npm run test:release-docs` and `npm run test:release-package-contents` are narrow local release triage aliases for the `Release docs signals` and `Release package contents signals` docs-entrypoint groups, not replacements for the full `npm run test:docs-entrypoints`, `npm run test:entrypoints`, or CI-required suite; and `npm run test:ci-policy` covers changed-file routing, workflow detection, CI observation guidance, and lockfile drift. See the [English development guide](docs/en/development.md) and [日本語の開発・保守方針](docs/ja/development.md) for details.
 
 Use `npm ci` for local JavaScript setup. The committed `package-lock.json` is the source of truth for repeatable installs, and CI/Docker setup use the same lockfile-backed install path.

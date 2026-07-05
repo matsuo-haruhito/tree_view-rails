@@ -1,7 +1,10 @@
+import { execFileSync } from "node:child_process"
 import { readFileSync } from "node:fs"
+import { classifyChangedFiles } from "./ci_changed_files_policy.mjs"
 
 const workflowPath = ".github/workflows/ci.yml"
 const packagePath = "package.json"
+const policyCliPath = "script/ci_changed_files_policy.mjs"
 const docsEntrypointSuitePath = "script/test_docs_entrypoint_suite.mjs"
 const workflowSource = readFileSync(workflowPath, "utf8")
 const packageJson = JSON.parse(readFileSync(packagePath, "utf8"))
@@ -49,11 +52,33 @@ function assertMatrixFailFastPolicy(jobName, jobSource) {
 }
 
 function workflowTopLevelTriggerBlock(workflowSource) {
-  const match = workflowSource.match(/^on:\n(?<body>[\s\S]*?)\n\njobs:\n/m)
+  const match = workflowSource.match(/^on:\n(?<body>[\s\S]*?)\n\npermissions:\n/m)
 
   assert(
     match,
-    `${workflowPath} CI trigger policy must define a top-level on block before jobs`
+    `${workflowPath} CI trigger policy must define a top-level on block before permissions`
+  )
+
+  return match.groups.body
+}
+
+function workflowTopLevelPermissionsBlock(workflowSource) {
+  const match = workflowSource.match(/^permissions:\n(?<body>[\s\S]*?)\n\nconcurrency:\n/m)
+
+  assert(
+    match,
+    `${workflowPath} CI permissions policy must define a top-level permissions block before concurrency`
+  )
+
+  return match.groups.body
+}
+
+function workflowTopLevelConcurrencyBlock(workflowSource) {
+  const match = workflowSource.match(/^concurrency:\n(?<body>[\s\S]*?)\n\njobs:\n/m)
+
+  assert(
+    match,
+    `${workflowPath} CI concurrency policy must define a top-level concurrency block before jobs`
   )
 
   return match.groups.body
@@ -89,6 +114,51 @@ function assertWorkflowTriggerPolicy(workflowSource) {
   )
 }
 
+function assertWorkflowPermissionsPolicy(workflowSource) {
+  const permissionsBlock = workflowTopLevelPermissionsBlock(workflowSource)
+
+  assertIncludes(
+    permissionsBlock,
+    "  contents: read",
+    `${workflowPath} CI permissions policy repository contents token scope`
+  )
+  assertAbsent(
+    permissionsBlock,
+    "contents: write",
+    `${workflowPath} CI permissions policy must not grant repository contents write access`
+  )
+  assertAbsent(
+    permissionsBlock,
+    "write-all",
+    `${workflowPath} CI permissions policy must not use broad write-all access`
+  )
+  assertAbsent(
+    permissionsBlock,
+    "pull-requests: write",
+    `${workflowPath} CI permissions policy must not grant pull request write access`
+  )
+}
+
+function assertWorkflowConcurrencyPolicy(workflowSource) {
+  const concurrencyBlock = workflowTopLevelConcurrencyBlock(workflowSource)
+
+  assertIncludes(
+    concurrencyBlock,
+    "  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}",
+    `${workflowPath} CI concurrency policy group`
+  )
+  assertIncludes(
+    concurrencyBlock,
+    "  cancel-in-progress: ${{ github.event_name == 'pull_request' }}",
+    `${workflowPath} CI concurrency policy pull-request-only cancellation`
+  )
+  assertAbsent(
+    concurrencyBlock,
+    "cancel-in-progress: true",
+    `${workflowPath} CI concurrency policy must not cancel main push runs unconditionally`
+  )
+}
+
 function workflowNonPullRequestDefaultOutputBlock(changesJob) {
   const match = changesJob.match(
     /if \[ "\$\{\{ github\.event_name \}\}" != "pull_request" \]; then\n(?<body>(?:            echo "[a-z_]+=(?:true|false)" >> "\$GITHUB_OUTPUT"\n)+)            exit 0\n          fi/
@@ -106,6 +176,61 @@ function assertDefaultWorkflowOutput(block, key, value) {
     block,
     `echo "${key}=${value}" >> "$GITHUB_OUTPUT"`,
     `${workflowPath} jobs.changes non-pull-request default output ${key}`
+  )
+}
+
+function sortedUnique(values) {
+  return [...new Set(values)].sort()
+}
+
+function workflowChangesOutputKeys(changesJob) {
+  const match = changesJob.match(/^    outputs:\n(?<body>(?:      [a-z_]+: .*\n)+)/m)
+
+  assert(
+    match,
+    `${workflowPath} jobs.changes.outputs must define changed-files policy output keys`
+  )
+
+  return sortedUnique([...match.groups.body.matchAll(/^      (?<key>[a-z_]+): /gm)].map((entry) => entry.groups.key))
+}
+
+function workflowDefaultOutputKeys(defaultOutputBlock) {
+  return sortedUnique(
+    [...defaultOutputBlock.matchAll(/echo "(?<key>[a-z_]+)=(?:true|false)" >> "\$GITHUB_OUTPUT"/g)]
+      .map((entry) => entry.groups.key)
+  )
+}
+
+function policyCliOutputKeys() {
+  const output = execFileSync(process.execPath, [policyCliPath], {
+    input: "\n",
+    encoding: "utf8"
+  })
+
+  return sortedUnique(
+    output.trim().split(/\r?\n/).filter(Boolean).map((line) => {
+      const match = line.match(/^(?<key>[a-z_]+)=(?:true|false)$/)
+      assert(match, `${policyCliPath} output key-set smoke: invalid key=value boolean line ${line}`)
+      return match.groups.key
+    })
+  )
+}
+
+function assertSameOutputKeySet(actualLabel, actualKeys, expectedLabel, expectedKeys) {
+  const actual = sortedUnique(actualKeys)
+  const expected = sortedUnique(expectedKeys)
+  const missing = expected.filter((key) => !actual.includes(key))
+  const extra = actual.filter((key) => !expected.includes(key))
+
+  assert(
+    missing.length === 0 && extra.length === 0,
+    [
+      `${actualLabel} output key set must match ${expectedLabel}`,
+      `missing from ${actualLabel}: ${missing.join(", ") || "(none)"}`,
+      `extra in ${actualLabel}: ${extra.join(", ") || "(none)"}`,
+      `expected ${expectedLabel}: ${expected.join(", ")}`,
+      `actual ${actualLabel}: ${actual.join(", ")}`
+    ].join("\n")
   )
 }
 
@@ -129,6 +254,8 @@ function packageScript(scriptName) {
 }
 
 assertWorkflowTriggerPolicy(workflowSource)
+assertWorkflowPermissionsPolicy(workflowSource)
+assertWorkflowConcurrencyPolicy(workflowSource)
 
 const changesJob = workflowJobBlock(workflowSource, "changes")
 const lintJob = workflowJobBlock(workflowSource, "lint")
@@ -153,6 +280,30 @@ const nonPullRequestDefaultOutputBlock = workflowNonPullRequestDefaultOutputBloc
 Object.entries(nonPullRequestDefaultOutputs).forEach(([key, value]) => {
   assertDefaultWorkflowOutput(nonPullRequestDefaultOutputBlock, key, value)
 })
+
+const workflowOutputKeys = workflowChangesOutputKeys(changesJob)
+const nonPullRequestDefaultOutputKeys = workflowDefaultOutputKeys(nonPullRequestDefaultOutputBlock)
+const policyRuntimeOutputKeys = Object.keys(classifyChangedFiles([]))
+const policyCliKeys = policyCliOutputKeys()
+
+assertSameOutputKeySet(
+  `${workflowPath} jobs.changes.outputs`,
+  workflowOutputKeys,
+  "classifyChangedFiles result",
+  policyRuntimeOutputKeys
+)
+assertSameOutputKeySet(
+  `${workflowPath} jobs.changes non-pull-request defaults`,
+  nonPullRequestDefaultOutputKeys,
+  `${workflowPath} jobs.changes.outputs`,
+  workflowOutputKeys
+)
+assertSameOutputKeySet(
+  `${policyCliPath} CLI output`,
+  policyCliKeys,
+  "classifyChangedFiles result",
+  policyRuntimeOutputKeys
+)
 
 assertOrdered(
   changesJob,
@@ -309,14 +460,48 @@ javascriptJobNpmScripts.forEach((scriptName) => {
   assertPackageScript(scriptName)
 })
 
+const gemPackageJobSignals = [
+  ["gem build command", "run: gem build tree_view.gemspec"],
+  ["package contents checker command", "run: ruby script/check_gem_package_contents.rb tree_view-*.gem"],
+  ["built gem install smoke command", "run: gem install tree_view-*.gem"],
+  ["built gem require smoke command", 'run: ruby -e "require \'tree_view\'"']
+]
+
+gemPackageJobSignals.forEach(([label, signal]) => {
+  assertIncludes(
+    gemPackageJob,
+    signal,
+    `${workflowPath} jobs.gem_package ${label}`
+  )
+})
+
+assertOrdered(
+  gemPackageJob,
+  "run: gem build tree_view.gemspec",
+  "run: ruby script/check_gem_package_contents.rb tree_view-*.gem",
+  `${workflowPath} jobs.gem_package must build the gem before package contents verification`
+)
+assertOrdered(
+  gemPackageJob,
+  "run: ruby script/check_gem_package_contents.rb tree_view-*.gem",
+  "run: gem install tree_view-*.gem",
+  `${workflowPath} jobs.gem_package must verify package contents before installing the built gem`
+)
+assertOrdered(
+  gemPackageJob,
+  "run: gem install tree_view-*.gem",
+  'run: ruby -e "require \'tree_view\'"',
+  `${workflowPath} jobs.gem_package must install the built gem before the require smoke`
+)
+
 const docsEntrypointsScript = packageScript("test:docs-entrypoints")
 const ciPolicyScript = packageScript("test:ci-policy")
 const entrypointsScript = packageScript("test:entrypoints")
 const jsCoreScript = packageScript("test:js:core")
 
 const docsEntrypointsSignals = [
-  ["package script runs public API transfer guard", docsEntrypointsScript, "node script/guard_public_api_transfer_integration_signals.mjs"],
   ["package script uses docs entrypoint suite", docsEntrypointsScript, "node script/test_docs_entrypoint_suite.mjs"],
+  ["suite registers public API transfer guard", docsEntrypointSuiteSource, "script/guard_public_api_transfer_integration_signals.mjs"],
   ["suite registers manifest-backed public surface guard", docsEntrypointSuiteSource, "script/test_manifest_backed_public_surface_signals.mjs"],
   ["suite registers controller registration docs signal", docsEntrypointSuiteSource, "script/check_controller_registration_docs_signals.mjs"]
 ]
@@ -347,16 +532,16 @@ packageGuardSuiteCompositionSignals.forEach(([label, source, signal]) => {
 })
 
 assertOrdered(
-  docsEntrypointsScript,
-  "node script/guard_public_api_transfer_integration_signals.mjs",
-  "node script/test_docs_entrypoint_suite.mjs",
-  `${packagePath} scripts.test:docs-entrypoints must run public API transfer guard before docs entrypoint suite`
+  docsEntrypointSuiteSource,
+  "script/test_public_api_docs_signals.mjs",
+  "script/guard_public_api_transfer_integration_signals.mjs",
+  `${docsEntrypointSuitePath} must run public API docs signals before transfer integration signals`
 )
 assertOrdered(
   docsEntrypointSuiteSource,
-  "script/test_public_api_docs_signals.mjs",
+  "script/guard_public_api_transfer_integration_signals.mjs",
   "script/test_manifest_backed_public_surface_signals.mjs",
-  `${docsEntrypointSuitePath} must run public API docs signals before manifest-backed public surface signals`
+  `${docsEntrypointSuitePath} must run transfer integration signals before manifest-backed public surface signals`
 )
 assertOrdered(
   ciPolicyScript,
@@ -372,7 +557,10 @@ assertOrdered(
 )
 
 console.log("Checked CI workflow trigger policy signals.")
+console.log("Checked CI workflow permissions policy signals.")
+console.log("Checked CI workflow concurrency policy signals.")
 console.log("Checked CI changed-file detection workflow signals.")
+console.log("Checked CI changed-file output key-set synchronization signals.")
 console.log(`Checked ${Object.keys(nonPullRequestDefaultOutputs).length} non-pull-request workflow default outputs.`)
 console.log(`Checked ${workflowActionMajorSignals.length} workflow action major version signals.`)
 console.log(`Checked ${lintJobSignals.length} CI lint job representative signals.`)
@@ -380,5 +568,6 @@ console.log(`Checked ${prSpecsJobSignals.length} CI pr_specs job representative 
 console.log(`Checked ${matrixFailFastPolicyJobs.length} CI matrix fail-fast policy signals.`)
 console.log(`Checked ${rubyMatrixVersionSignals.length} representative Ruby workflow version signals.`)
 console.log(`Checked ${javascriptJobNpmScripts.length} JavaScript job npm script commands and package.json scripts.`)
+console.log(`Checked ${gemPackageJobSignals.length} gem package build, verification, install, and require smoke signals.`)
 console.log(`Checked ${docsEntrypointsSignals.length} docs-entrypoints package and suite command signals.`)
 console.log(`Checked ${packageGuardSuiteCompositionSignals.length} package guard suite composition signals.`)

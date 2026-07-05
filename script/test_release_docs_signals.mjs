@@ -76,6 +76,41 @@ releaseDocs.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release checklist changelog policy", signals)
 })
 
+const releaseCheckChangelogValidationSignals = [
+  [
+    "lib/tree_view/release_check.rb",
+    [
+      "CHANGELOG_CATEGORY_HEADINGS = %w[Added Changed Fixed Deprecated Removed Security Documentation Tests]",
+      "ensure_changelog_release_section_has_category!",
+      "ensure_changelog_release_section_has_body!",
+      "must include at least one category heading",
+      "must include release notes under a category heading"
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "dated `CHANGELOG.md` section",
+      "allowed category heading",
+      "non-empty release note body under a category heading",
+      "reader-facing notes"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "日付付き `CHANGELOG.md` section",
+      "許可 category heading",
+      "空ではない release note body",
+      "reader-facing note"
+    ]
+  ]
+]
+
+releaseCheckChangelogValidationSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "ReleaseCheck CHANGELOG validation docs signal", signals)
+})
+
 const releaseDocsRubyEvidenceSignals = [
   [
     "docs/en/release.md",
@@ -105,6 +140,79 @@ const releaseDocsRubyEvidenceSignals = [
 
 releaseDocsRubyEvidenceSignals.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release docs Ruby and Rails evidence signal", signals)
+})
+
+const downstreamHostAppEvidenceSignals = [
+  [
+    "docs/en/release.md",
+    [
+      "Downstream host-app evidence",
+      "TreeView release evidence lives in this repository",
+      "host-app adoption evidence",
+      "not as TreeView's source of truth or a TreeView-only release requirement",
+      "upstream TreeView contract/package issue",
+      "host-app wiring, query, route, authorization, copy, or rollback policy",
+      "downstream pinned SHA",
+      "unmerged downstream pull request"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "downstream host app evidence",
+      "TreeView の release evidence はこの repository 側にあります",
+      "host app 側の採用証跡",
+      "TreeView の source of truth や TreeView 単体 release の必須条件ではありません",
+      "upstream TreeView の contract / package の問題",
+      "host app 側の wiring、query、route、authorization、copy、rollback policy",
+      "downstream の pinned SHA",
+      "未merge の downstream PR"
+    ]
+  ]
+]
+
+downstreamHostAppEvidenceSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs downstream host-app evidence boundary signal", signals)
+})
+
+const releaseDocsPrJavaScriptConditionalLaneSignals = [
+  [
+    "docs/en/release.md",
+    [
+      "JavaScript checks through the changed-files policy",
+      "docs-entrypoint-sensitive docs-only PRs run `npm run test:docs-entrypoints`",
+      "CI-policy-sensitive docs-only PRs run `npm run test:ci-policy`",
+      "non-docs PRs run `npm run test:js:core`",
+      "mockup or browser-smoke-sensitive PRs install Playwright Chromium and run `npm run test:browser`",
+      "Docs-only PRs that are not docs-entrypoint-sensitive and do not touch mockups, CI-policy-sensitive, or browser-smoke-sensitive paths can skip JavaScript checks entirely"
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "JavaScript checks: changed-files policy",
+      "docs-entrypoint-sensitive な docs-only PR では `npm run test:docs-entrypoints`",
+      "CI-policy-sensitive な docs-only PR では `npm run test:ci-policy`",
+      "docs-only ではない PR では `npm run test:js:core`",
+      "mockup / browser-smoke sensitive な PR では Playwright Chromium setup と `npm run test:browser`",
+      "docs-entrypoint-sensitive でも CI-policy-sensitive でもなく、mockup / browser-smoke path も触らない docs-only PR は JavaScript checks を完全に skip できます"
+    ]
+  ],
+  [
+    ".github/workflows/ci.yml",
+    [
+      "Docs-only PR without package-facing docs, CI-policy, mockup, or browser-smoke changes: skipping JavaScript checks.",
+      "npm run test:docs-entrypoints",
+      "npm run test:ci-policy",
+      "npm run test:js:core",
+      "npm run test:browser",
+      "npx playwright install --with-deps chromium"
+    ]
+  ]
+]
+
+releaseDocsPrJavaScriptConditionalLaneSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Release docs PR JavaScript conditional lane signal", signals)
 })
 
 const gemPackageWorkflowSignals = [
@@ -379,4 +487,52 @@ const releaseNoteCandidateDocs = [
 
 releaseNoteCandidateDocs.forEach(([sourcePath, signals]) => {
   assertSignals(sourcePath, "Release note candidate docs", signals)
+})
+
+const packageVerificationEntrypointSignals = [
+  [
+    "script/check_gem_package_contents.rb",
+    [
+      "JAVASCRIPT_PACKAGE_ROOT_PATH",
+      "TYPESCRIPT_PACKAGE_ROOT_PATH",
+      "javascript_package_root",
+      "named_exports",
+      "Missing manifest-listed JavaScript package-root named exports in packaged",
+      "importmap_pin_missing",
+      "Missing TreeView importmap pin in config/importmap.tree_view.rb:",
+      "pin \\\"tree_view\\\", to: \\\"tree_view/index.js\\\""
+    ]
+  ],
+  [
+    "docs/en/release.md",
+    [
+      "Package verification signals",
+      "config/public_api_manifest.yml",
+      "javascript_package_root.named_exports",
+      "app/javascript/tree_view/index.js",
+      "app/javascript/tree_view/index.d.ts",
+      "Missing manifest-listed JavaScript package-root named exports in packaged <path>",
+      "do not add or rename public JavaScript exports from this checklist alone",
+      "config/importmap.tree_view.rb",
+      "pin \"tree_view\", to: \"tree_view/index.js\""
+    ]
+  ],
+  [
+    "docs/ja/release.md",
+    [
+      "Package verification signals",
+      "config/public_api_manifest.yml",
+      "javascript_package_root.named_exports",
+      "app/javascript/tree_view/index.js",
+      "app/javascript/tree_view/index.d.ts",
+      "Missing manifest-listed JavaScript package-root named exports in packaged <path>",
+      "public JavaScript export を追加・rename しないでください",
+      "config/importmap.tree_view.rb",
+      "pin \"tree_view\", to: \"tree_view/index.js\""
+    ]
+  ]
+]
+
+packageVerificationEntrypointSignals.forEach(([sourcePath, signals]) => {
+  assertSignals(sourcePath, "Package verification entrypoint release signal", signals)
 })

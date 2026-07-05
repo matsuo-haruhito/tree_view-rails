@@ -88,7 +88,7 @@ bundle exec rake
 npm run test:js
 ```
 
-`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、built gem に対する `ruby script/check_gem_package_contents.rb tree_view-*.gem`、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。package contents guard は Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI の代表surfaceを確認します。manifest-listed public Ruby constants については、package verification が `config/public_api_manifest.yml` の `public_constants` と `PUBLIC_CONSTANT_RUNTIME_FILES` を照合し、built gem から runtime file が欠けている場合と、manifest 上の constant に guard mapping がない場合を分けて失敗させます。同じ guard は `tree_view:state:install` public setup generator files も確認し、generator 名、任意 owner 引数、生成先 path の証跡が public setup surface docs とそろっていることを守ります。metadata 部分では gem metadata URI set（`homepage_uri`、`source_code_uri`、`documentation_uri`、`changelog_uri`、`bug_tracker_uri`）と release metadata boundary（required Ruby version、allowed push host、runtime dependency metadata: `required_ruby_version`、`allowed_push_host`、runtime dependency `railties >= 7.0`）も確認し、docs entrypoint、source、changelog、issue tracker、Ruby support、RubyGems push scope、Rails runtime requirements の drift を release prose だけでなく package verification で検出します。main-push の `gem_package` CI job でも、同じ package contents verification を CI で build した gem に対して再実行します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
+`bundle exec rake release:check` は current `TreeView::VERSION` と日付付き `CHANGELOG.md` section の整合を確認し、gem build、release-facing files の packaging、built gem に対する `ruby script/check_gem_package_contents.rb tree_view-*.gem`、`bundle exec ruby -Ilib -e 'require "tree_view"'` による load check までまとめて実行します。日付付き `CHANGELOG.md` section には、少なくとも1つの許可 category heading（`Added`、`Changed`、`Fixed`、`Deprecated`、`Removed`、`Security`、`Documentation`、`Tests`）と、その category heading 配下の空ではない release note body が必要です。これにより、release preparation が reader-facing note のない version section だけで通らないようにしています。package contents guard は Rails helper / view partial / locale / docs / JavaScript / CSS / importmap / public API manifest / public runtime files / gem metadata URI の代表surfaceを確認します。manifest-listed public Ruby constants については、package verification が `config/public_api_manifest.yml` の `public_constants` と `PUBLIC_CONSTANT_RUNTIME_FILES` を照合し、built gem から runtime file が欠けている場合と、manifest 上の constant に guard mapping がない場合を分けて失敗させます。同じ guard は `tree_view:state:install` public setup generator files も確認し、generator 名、任意 owner 引数、生成先 path の証跡が public setup surface docs とそろっていることを守ります。metadata 部分では gem metadata URI set（`homepage_uri`、`source_code_uri`、`documentation_uri`、`changelog_uri`、`bug_tracker_uri`）と release metadata boundary（required Ruby version、allowed push host、runtime dependency metadata: `required_ruby_version`、`allowed_push_host`、runtime dependency `railties >= 7.0`）も確認し、docs entrypoint、source、changelog、issue tracker、Ruby support、RubyGems push scope、Rails runtime requirements の drift を release prose だけでなく package verification で検出します。main-push の `gem_package` CI job でも、同じ package contents verification を CI で build した gem に対して再実行します。`vX.Y.Z` tag がまだ無い段階では tag alignment は skip し、tag 作成後はその release tag が current `HEAD` を指していることを確認します。
 
 tag 作成後は、tag alignment を必須にして release check を再実行します。
 
@@ -193,6 +193,7 @@ release前に確認すること:
   - `app/helpers/tree_view_helper.rb`
   - `app/views/tree_view/_tree_row.html.erb`
   - `app/javascript/tree_view/index.js`
+  - `app/javascript/tree_view/index.d.ts`（runtime entrypoint と一緒に配布する compile-time declaration）
   - `app/assets/stylesheets/tree_view.scss`
   - `config/importmap.tree_view.rb`
   - `config/public_api_manifest.yml`
@@ -210,6 +211,12 @@ release前に確認すること:
   - `LICENSE*`
 
 `docs/**/*` は packaged docs としてgemに含まれるため、package-facing docs は repository-only maintainer docs から独立させます。`Product Profile.md` と `AGENTS.md` は repository-only のまま扱い、packaged docs から repository root 専用文書へ戻る encoded parent-directory link を追加しないでください。この境界が崩れると、package contents guard は `Forbidden repository-only root doc links in packaged <path>` として対象 path を報告します。
+
+## Package verification signals
+
+package contents guard は package-root JavaScript entrypoint と importmap の代表 signal も確認します。`config/public_api_manifest.yml` の `javascript_package_root.named_exports` を、packaged `app/javascript/tree_view/index.js` と `app/javascript/tree_view/index.d.ts` にそろえてください。manifest-listed export が欠けた場合、guard は `Missing manifest-listed JavaScript package-root named exports in packaged <path>` を報告します。これは release evidence の確認だけなので、この checklist だけを根拠に public JavaScript export を追加・rename しないでください。
+
+同じ package verification は、importmap で gem を導入する host app 向けに `config/importmap.tree_view.rb` が `pin "tree_view", to: "tree_view/index.js"` を packaged file として維持していることも確認します。これは packaging evidence の guard であり、importmap setup behavior や public API semantics の変更は、その surface を意図的に変更する PR に閉じます。
 
 ## Repository
 

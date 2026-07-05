@@ -141,6 +141,8 @@ The gem package should include the files needed by Rails host apps:
 
 When installation behavior changes, keep this list aligned with the packaged file list in `tree_view.gemspec` and the required paths in `script/check_gem_package_contents.rb`.
 
+Package verification also treats the bilingual installation docs as package-facing setup signals. `script/check_gem_package_contents.rb` checks these files for representative packaged paths, the CSS import example, and `pin "tree_view", to: "tree_view/index.js"` so release/package evidence catches drift between the shipped setup guide and the files a host app actually receives. Keep that guard focused on setup-surface evidence; do not use it to change packaged file globs or runtime install behavior from this page alone.
+
 ## Propshaft
 
 TreeView can be used with Rails 8 + Propshaft.

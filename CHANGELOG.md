@@ -40,6 +40,7 @@ Release preparation notes:
 - Added `TreeView::Diagnostics.run` as a consolidated diagnostics entrypoint for node keys, DOM IDs, orphans, and cycles.
 - Added `tree_children_container_dom_id`, `tree_remote_state_placeholder_dom_id`, and `tree_remote_state_placeholder_attributes` so host apps can reuse stable lazy-loading placeholder IDs and data attributes.
 - Added `TreeViewEventDetailKeys` as a package-root JavaScript export for host app tests that need machine-readable documented event detail key names.
+- Added additive public JavaScript event details for `tree-view-state:state-changed` (`reason`) and `tree-view-selection:change` (`sourceCheckbox` / `attemptedChecked`) so host apps can distinguish initialization, refresh, and user-toggle sources without changing existing event snapshots.
 - Added `TreeViewTransferDataAttributes` as a package-root JavaScript export for documented transfer payload and disabled-row data attributes.
 - Added `toggle_icons` to the manifest-backed grouped option compatibility surface while keeping the existing RenderState option behavior unchanged.
 
@@ -131,16 +132,46 @@ Release preparation notes:
 - Added pull request changed-file detection and docs-only check retention guidance to CI policy suite docs, covering merge-base / fallback diff routing and package-facing versus repository-only docs boundaries.
 - Added representative routing output guidance to CI policy suite docs so maintainers can map changed-file routing outputs to expected PR checks.
 - Clarified CI policy suite docs self-routing guidance so bilingual CI policy suite notes are represented in `ci_policy_sensitive` checks.
+- Added read-only workflow permissions guidance to CI policy suite docs so maintainers can review `GITHUB_TOKEN` token-scope evidence alongside the permissions guard.
+- Added CI workflow trigger policy guidance to CI policy suite docs so maintainers can review `pull_request`, `push main`, and the `pull_request_target` trust boundary without changing workflow triggers.
+- Clarified repository-only maintainer docs routing in CI policy suite docs so AGENTS.md remains CI-policy-sensitive while Product Profile.md stays manual-review routed.
 - Clarified empty-state mockup release evidence for disabled toolbar actions, including the `Current path unavailable` action and host-app-owned reset behavior.
+- Clarified Development docs for temporary docs i18n parity exceptions, including `parityExceptions` metadata and the boundary against permanent single-language docs.
+- Clarified review-gallery visual evidence guidance so gallery previews stay a fast orientation path while merge-grade desktop and narrow viewport evidence is recorded from the target mockup page.
+- Clarified empty-state mockup README guidance so hidden-message and permission-hidden row review uses the existing `empty-state.html` entry point without changing authorization policy.
+- Clarified CI policy suite package-sensitive routing guidance for Ruby package and release task paths such as `Gemfile`, `Rakefile`, `tree_view.gemspec`, and package contents verification.
+- Clarified CI policy suite explicit exclusion guidance so candidate guard scripts must be registered in `checks` or carry a reasoned exclusion such as the suite self-test entrypoint.
+- Added CI policy docs release evidence for main-push default outputs, covering package, Docker setup, docs entrypoint, and CI policy confidence lanes without changing pull-request classifier behavior.
 
 ### Tests
 
+- Added diagnostics manifest drift guard evidence for accepted checks, `TreeView::Diagnostics.run` public options, and `TreeView::Diagnostics::Result` attributes / helper methods so runtime and manifest surfaces stay synchronized.
+- Added gemspec `summary` / `description` metadata guard evidence and release package contents signal coverage so RubyGems-facing package metadata stays visible during release preparation.
+- Added LICENSE file package-sensitive routing guard evidence so license-only release evidence changes still reach gem package verification without changing license text or package policy.
+- Added CI policy suite routing smoke coverage so every registered Node guard script stays classified as `ci_policy_sensitive`.
+- Added CI policy suite registration policy docs signal coverage so self-test ordering and explicit guard-script exclusions stay visible in the bilingual CI policy suite docs.
+- Added CI workflow permissions policy smoke coverage so read-only token permissions stay guarded against write-scope drift.
+- Split focused diagnostics, workflow concurrency, and release package contents signal smokes into registered suite groups so maintainers can run the narrow docs or CI guard directly.
+- Added release narrow npm script evidence for `test:release-docs` and `test:release-package-contents` so maintainers can rerun release docs and package contents signals directly.
+- Added Vitest UI local command release evidence for `test:vitest-ui` so maintainers can inspect or rerun unit-style JavaScript tests interactively without treating it as a CI-required command.
+- Added CI policy docs command-surface and docs-entrypoint command-surface smoke coverage so `--list`, `--only`, `--self-test`, and registration guidance stay discoverable.
+- Added CI changed-file routing coverage for workflow package/Docker lanes, package-sensitive Ruby release paths, and gem package install / require smoke evidence.
+- Added CI policy guard evidence for public API manifest structure, Dependabot routing, and browser-smoke routing boundaries so entrypoint and CI policy checks stay aligned.
+- Added Development docs command signal coverage for `npm run test:development-docs-commands` so narrow and suite-level maintainer command checks stay discoverable.
+- Added Public API docs signal coverage for persisted-state setup surface and `initial_expansion` grouped option keys so manifest-backed docs signals stay aligned.
+- Added README and Public API docs signal coverage for importmap package-root setup guidance so `tree_view/index.js` and `registerTreeViewControllers(application)` stay aligned.
+- Added Development docs signal coverage for npm lockfile drift recovery guidance so `npm install` / `npm ci` recovery boundaries stay aligned with package metadata drift guidance.
+- Added Development docs signal coverage for public API manifest duplicate-key guard guidance so duplicate YAML key handling stays visible in maintainer docs.
+- Expanded package contents verification coverage for Dependabot Bundler recovery docs so packaged gems keep scoped recovery guidance available.
+- Added row status builder docs signal coverage so grouped option docs keep row disabled, readonly, and disabled-reason builders aligned with the manifest and host-app responsibility boundary.
+- Added repository-only maintainer docs routing signal coverage so CI policy docs keep AGENTS.md and Product Profile.md changed-file guidance aligned.
 - Added helper method manifest-backed docs signal coverage so Public API helper signatures stay aligned with `config/public_api_manifest.yml`.
 - Added docs-entrypoint suite registration and lazy-loading authorization docs signal coverage so manifest-backed public surface guards stay visible through `npm run test:docs-entrypoints`.
 - Added public constants docs signal guard coverage for representative Public API constants so public constants stay aligned with `config/public_api_manifest.yml`.
 - Added stylesheet state cue selector source-spec coverage for selected, collapsed, loading, error, disabled-drop, and drop-target cues in the packaged stylesheet.
 - Expanded package contents verification coverage for bilingual CI policy suite docs so packaged gems keep maintainer CI policy guidance available.
 - Consolidated `test:ci-policy` package-script execution around the CI policy suite source of truth while preserving guard registration self-test coverage.
+- Added CI policy suite explicit exclusion self-test coverage so unregistered guard scripts stay classified as registered checks or documented exclusions.
 - Added Docker setup CI docs signal coverage so CI policy docs keep `docker_setup_sensitive`, `docker_development_setup`, Node 22, and `npm ci` guidance aligned.
 - Added CI policy docs signal coverage for pull request changed-file detection and docs-only check retention so CI policy docs stay aligned with workflow routing evidence.
 - Added CI routing output docs signal coverage for representative changed-file routing output guidance.

@@ -55,6 +55,10 @@ const developmentDocs = [
   ["docs/en/development.md", read("docs/en/development.md")],
   ["docs/ja/development.md", read("docs/ja/development.md")]
 ]
+const stylingStateCueDocs = [
+  ["docs/en/styling-state-cues.md", read("docs/en/styling-state-cues.md")],
+  ["docs/ja/styling-state-cues.md", read("docs/ja/styling-state-cues.md")]
+]
 
 const callbackBuilderSignals = [
   "render_state_callback_builder_keys",
@@ -212,6 +216,48 @@ const pathTreeBuilderNodeShapeSignals = [
   "record_node?"
 ]
 
+const persistedStateInstallGeneratorSignals = [
+  "setup_generators:",
+  "persisted_state_install:",
+  "tree_view:state:install",
+  "OWNER_MODEL",
+  "db/migrate/*_create_tree_view_states.rb",
+  "app/models/tree_view_state.rb",
+  "app/models/concerns/tree_view_state_owner.rb"
+]
+
+const persistedStateInstallDocsSignals = [
+  "tree_view:state:install",
+  "public-setup-surface.md",
+  "bin/rails generate tree_view:state:install User",
+  "db/migrate/*_create_tree_view_states.rb",
+  "app/models/tree_view_state.rb",
+  "app/models/concerns/tree_view_state_owner.rb"
+]
+
+const initialExpansionGroupedOptionSignals = [
+  "grouped_option_keys:",
+  "initial_expansion:",
+  "- default",
+  "- max_depth",
+  "- expanded_keys",
+  "- collapsed_keys",
+  "- current_item",
+  "- current_key",
+  "- auto_expand_ancestors"
+]
+
+const initialExpansionDocsSignals = [
+  "`initial_expansion`",
+  "`default`",
+  "`max_depth`",
+  "`expanded_keys`",
+  "`collapsed_keys`",
+  "`current_item`",
+  "`current_key`",
+  "`auto_expand_ancestors`"
+]
+
 const persistedStateLifecycleSignals = [
   "TreeView::PersistedState.from",
   "TreeView::StateStore",
@@ -236,6 +282,26 @@ const publicConstantSignals = [
   "TreeView::PersistedState",
   "TreeView::StateStore",
   "TreeView::Diagnostics"
+]
+
+const cssCustomPropertyTokenSignals = [
+  "--tree-view-selected-row-background",
+  "--tree-view-current-row-accent-color",
+  "--tree-view-drop-target-row-background",
+  "--tree-view-focus-outline-color",
+  "--tree-view-focus-background",
+  "--tree-view-branch-line-color",
+  "--tree-view-current-branch-line-color",
+  "--tree-view-hidden-count-background",
+  "--tree-view-hidden-count-color"
+]
+
+const cssCustomPropertyBoundarySignals = [
+  "css_custom_property_tokens",
+  "packaged stylesheet",
+  "token names",
+  "fallback values",
+  "theme API"
 ]
 
 const developmentManifestTrackingSignals = [
@@ -272,7 +338,12 @@ const manifestBackedDocsSignalSurfaces = [
   ["diagnostics accepted checks", "accepted_checks:"],
   ["diagnostics run options", "run_options:"],
   ["diagnostics Result surface", "result_surface:"],
-  ["PathTreeBuilder node shapes", "path_tree_builder_node_shapes:"]
+  ["PathTreeBuilder node shapes", "path_tree_builder_node_shapes:"],
+  ["persisted-state install generator", "setup_generators:"],
+  ["persisted-state install generator", "persisted_state_install:"],
+  ["initial_expansion grouped option keys", "grouped_option_keys:"],
+  ["initial_expansion grouped option keys", "initial_expansion:"],
+  ["CSS custom property tokens", "css_custom_property_tokens:"]
 ]
 
 manifestBackedDocsSignalSurfaces.forEach(([label, manifestNeedle]) => {
@@ -319,8 +390,20 @@ pathTreeBuilderNodeShapeSignals.forEach((signal) => {
   assertIncludes(manifest, signal, "public API manifest PathTreeBuilder node shape surface")
 })
 
+persistedStateInstallGeneratorSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest persisted-state install generator setup surface")
+})
+
+initialExpansionGroupedOptionSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest initial_expansion grouped option key surface")
+})
+
 publicConstantSignals.forEach((signal) => {
   assertIncludes(manifest, signal.replace("TreeView::", "- "), "public API manifest public constants surface")
+})
+
+cssCustomPropertyTokenSignals.forEach((signal) => {
+  assertIncludes(manifest, signal, "public API manifest CSS custom property token surface")
 })
 
 assertIncludes(manifest, "event_names_without_detail", "public API manifest no-detail event surface")
@@ -341,6 +424,15 @@ publicApiDocs.forEach(([relativePath, document]) => {
   assert(
     /callback arity|return[- ]value|return value|callback arity|戻り値/.test(document),
     `${relativePath}: RenderState callback builder docs no longer mention callback arity or return-value boundary`
+  )
+
+  initialExpansionDocsSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} RenderState initial_expansion grouped option docs`)
+  })
+
+  assert(
+    /flat keyword options.*`initial_expansion:`.*flat keyword options still win|個別 keyword option.*`initial_expansion:`.*優先されるのは個別 keyword option/.test(document),
+    `${relativePath}: initial_expansion docs no longer preserve flat keyword option priority over grouped options`
   )
 
   hostLifecycleSignals.forEach((signal) => {
@@ -491,6 +583,26 @@ assert(
   "docs/mockups/README.md: toolbar guidance no longer separates manifest/docs contract sources from the visual mockup responsibility boundary"
 )
 
+stylingStateCueDocs.forEach(([relativePath, document]) => {
+  cssCustomPropertyTokenSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} CSS custom property token docs`)
+  })
+
+  cssCustomPropertyBoundarySignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} CSS custom property manifest-backed boundary docs`)
+  })
+
+  assert(
+    /fallback values.*host-app configuration or a theme API|fallback 値を host app 向け configuration や theme API にするものではありません/.test(document),
+    `${relativePath}: CSS custom property docs no longer separate token names from fallback values and theme API policy`
+  )
+
+  assert(
+    /complete theme system|dark-mode policy|density scale|complete theme system、dark-mode policy、density scale/.test(document),
+    `${relativePath}: CSS custom property docs no longer keep full theme system policy outside TreeView's state-cue surface`
+  )
+})
+
 graphAdapterDocs.forEach(([relativePath, document]) => {
   assertIncludes(document, "TreeView::GraphAdapter", `${relativePath} GraphAdapter guide entrypoint docs`)
 
@@ -566,6 +678,20 @@ pathTreeBuilderDocs.forEach(([relativePath, document]) => {
 })
 
 persistedStateDocs.forEach(([relativePath, document]) => {
+  persistedStateInstallDocsSignals.forEach((signal) => {
+    assertIncludes(document, signal, `${relativePath} persisted-state install generator setup surface docs`)
+  })
+
+  assert(
+    /generator name, optional owner argument, and generated destination paths|generator 名、任意の owner 引数、生成先 path/.test(document),
+    `${relativePath}: persisted-state docs no longer connect generator docs to the public setup surface contract`
+  )
+
+  assert(
+    /migration schema or generated template contents|migration schema や生成 template 内容/.test(document),
+    `${relativePath}: persisted-state docs no longer keep generated schema and templates outside the path-level setup contract`
+  )
+
   persistedStateLifecycleSignals.forEach((signal) => {
     assertIncludes(document, signal, `${relativePath} PersistedState / StateStore lifecycle docs`)
   })

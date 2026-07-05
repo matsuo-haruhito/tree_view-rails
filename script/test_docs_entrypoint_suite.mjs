@@ -33,6 +33,11 @@ const checks = [
     args: ["script/test_host_app_extension_diagnostics_signals.mjs"]
   },
   {
+    group: "Diagnostics docs signals",
+    command: "node",
+    args: ["script/test_diagnostics_docs_signals.mjs"]
+  },
+  {
     group: "Development docs Node version signals",
     command: "node",
     args: ["script/test_development_docs_node_version_signals.mjs"]
@@ -83,6 +88,11 @@ const checks = [
     args: ["script/test_release_docs_signals.mjs"]
   },
   {
+    group: "Release package contents signals",
+    command: "node",
+    args: ["script/test_release_package_contents_signals.mjs"]
+  },
+  {
     group: "README quick start signal",
     command: "node",
     args: ["script/test_readme_quick_start_signal.mjs"]
@@ -101,6 +111,11 @@ const checks = [
     group: "Public API docs signals",
     command: "node",
     args: ["script/test_public_api_docs_signals.mjs"]
+  },
+  {
+    group: "Public API transfer integration signals",
+    command: "node",
+    args: ["script/guard_public_api_transfer_integration_signals.mjs"]
   },
   {
     group: "Manifest-backed public surface signals",
@@ -167,6 +182,14 @@ const checks = [
 const docsEntrypointScriptExclusions = new Map([
   ["test_ci_policy_docs_routing.mjs", "registered through npm run test:ci-policy"],
   [
+    "test_ci_policy_permissions_docs_signals.mjs",
+    "registered through npm run test:ci-policy"
+  ],
+  [
+    "test_importmap_docs_entrypoint_routing.mjs",
+    "registered through npm run test:ci-policy"
+  ],
+  [
     "test_development_docs_command_signals.mjs",
     "registered through npm run test:development-docs-commands"
   ],
@@ -176,6 +199,7 @@ const docsEntrypointScriptExclusions = new Map([
 
 const docsEntrypointScriptPatterns = [
   /^check_controller_registration_docs_signals\.mjs$/,
+  /^guard_.*signals\.mjs$/,
   /^test_event_names_public_api_signals\.mjs$/,
   /^test_.*docs.*\.mjs$/,
   /^test_.*readme.*signals\.mjs$/,
@@ -324,6 +348,8 @@ function resolveOnlyGroup(groupName) {
 
 function runSelfTest() {
   const availableGroups = formatAvailableGroups()
+  const registeredPaths = registeredNodeScriptPaths()
+  const candidatePaths = docsEntrypointCandidateScriptPaths()
 
   assert.match(
     availableGroups,
@@ -349,6 +375,11 @@ function runSelfTest() {
     resolveOnlyGroupResult("Manifest-backed public surface").check.group,
     "Manifest-backed public surface signals",
     "unique partial --only should resolve the manifest-backed public surface docs signal"
+  )
+  assert.equal(
+    resolveOnlyGroupResult("Public API transfer").check.group,
+    "Public API transfer integration signals",
+    "unique partial --only should resolve the transfer integration guard"
   )
   assert.equal(
     resolveOnlyGroupResult("Event names").check.group,
@@ -380,6 +411,7 @@ function runSelfTest() {
     ambiguous.matches.map((check) => check.group),
     [
       "Public API docs signals",
+      "Public API transfer integration signals",
       "Public API exported controller class docs signals",
       "Public API manifest structure",
       "Public API entrypoint guard signals"
@@ -388,19 +420,35 @@ function runSelfTest() {
   )
 
   assert.ok(
-    docsEntrypointCandidateScriptPaths().includes("script/test_event_names_public_api_signals.mjs"),
+    candidatePaths.includes("script/test_event_names_public_api_signals.mjs"),
     "docs script registration candidates should include event names public API signals"
   )
   assert.ok(
-    docsEntrypointCandidateScriptPaths().includes("script/test_public_api_docs_signals.mjs"),
+    candidatePaths.includes("script/test_diagnostics_docs_signals.mjs"),
+    "docs script registration candidates should include diagnostics docs signals"
+  )
+  assert.ok(
+    candidatePaths.includes("script/test_public_api_docs_signals.mjs"),
     "docs script registration candidates should include public API docs signals"
   )
   assert.ok(
-    docsEntrypointCandidateScriptPaths().includes("script/check_controller_registration_docs_signals.mjs"),
+    candidatePaths.includes("script/test_release_package_contents_signals.mjs"),
+    "docs script registration candidates should include release package contents signals"
+  )
+  assert.ok(
+    candidatePaths.includes("script/guard_public_api_transfer_integration_signals.mjs"),
+    "docs script registration candidates should include guard-based public API docs signals"
+  )
+  assert.ok(
+    registeredPaths.has("script/guard_public_api_transfer_integration_signals.mjs"),
+    "guard-based public API docs signals should be registered in the suite"
+  )
+  assert.ok(
+    candidatePaths.includes("script/check_controller_registration_docs_signals.mjs"),
     "docs script registration candidates should include controller registration docs signals"
   )
   assert.ok(
-    !docsEntrypointCandidateScriptPaths().includes("script/test_docs_i18n_parity.mjs"),
+    !candidatePaths.includes("script/test_docs_i18n_parity.mjs"),
     "npm-registered docs checks should stay out of direct node script registration candidates"
   )
   assertDocsEntrypointScriptsRegistered()

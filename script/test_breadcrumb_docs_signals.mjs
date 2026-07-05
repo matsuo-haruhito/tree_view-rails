@@ -36,6 +36,34 @@ function assertSignals(sourcePath, feature, signals) {
 }
 
 const feature = "Breadcrumb docs and visual reference"
+const manifestFeature = "Breadcrumb helper option manifest surface"
+const manifest = read("config/public_api_manifest.yml")
+const breadcrumbOptionSignals = [
+  "tree_view_breadcrumb:",
+  "- label_builder",
+  "- path_builder",
+  "- separator",
+  "- nav_class",
+  "- list_class",
+  "- item_class",
+  "- link_class",
+  "- current_class",
+  "- separator_class",
+  "- aria_label",
+  "- html",
+  "- list_html",
+  "- item_html",
+  "- link_html",
+  "- current_html",
+  "- separator_html"
+]
+
+breadcrumbOptionSignals.forEach((signal) => {
+  assert(
+    manifest.includes(signal),
+    `${manifestFeature}: config/public_api_manifest.yml is missing representative signal ${JSON.stringify(signal)}`
+  )
+})
 
 ;[
   ["README.md", "docs/en/breadcrumb.md"],
@@ -60,6 +88,20 @@ assertSignals("docs/en/breadcrumb.md", feature, [
   "breadcrumb-paths.html"
 ])
 
+assertSignals("docs/en/breadcrumb.md", `${feature} option contract`, [
+  "html:",
+  "list_html:",
+  "item_html:",
+  "link_html:",
+  "current_html:",
+  "separator_html:",
+  "nav_class:",
+  "aria_label:",
+  "path_builder:` returns `nil`",
+  "aria-current=\"page\"",
+  "does not add markup, route, authorization, mode inference, or exact HTML structure behavior"
+])
+
 assertSignals("docs/ja/breadcrumb.md", feature, [
   "tree_view_breadcrumb(tree, item, ...)",
   "label_builder:",
@@ -69,6 +111,20 @@ assertSignals("docs/ja/breadcrumb.md", feature, [
   "route、認可、現在nodeの決定",
   "layout",
   "breadcrumb-paths.html"
+])
+
+assertSignals("docs/ja/breadcrumb.md", `${feature} option contract`, [
+  "html:",
+  "list_html:",
+  "item_html:",
+  "link_html:",
+  "current_html:",
+  "separator_html:",
+  "nav_class:",
+  "aria_label:",
+  "`path_builder:` が non-current item に対して `nil` を返す",
+  "aria-current=\"page\"",
+  "markup、route、authorization、mode 推測、exact HTML structure の挙動を追加するものではありません"
 ])
 
 assertSignals("docs/mockups/README.md", feature, [
