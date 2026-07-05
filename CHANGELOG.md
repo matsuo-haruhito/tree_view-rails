@@ -169,6 +169,7 @@ Release preparation notes:
 - Added docs-entrypoint suite registration and lazy-loading authorization docs signal coverage so manifest-backed public surface guards stay visible through `npm run test:docs-entrypoints`.
 - Added public constants docs signal guard coverage for representative Public API constants so public constants stay aligned with `config/public_api_manifest.yml`.
 - Added stylesheet state cue selector source-spec coverage for selected, collapsed, loading, error, disabled-drop, and drop-target cues in the packaged stylesheet.
+- Added CSS custom property manifest-to-stylesheet sync guard evidence so manifest-listed `--tree-view-*` tokens and packaged stylesheet variable usage stay synchronized.
 - Expanded package contents verification coverage for bilingual CI policy suite docs so packaged gems keep maintainer CI policy guidance available.
 - Consolidated `test:ci-policy` package-script execution around the CI policy suite source of truth while preserving guard registration self-test coverage.
 - Added CI policy suite explicit exclusion self-test coverage so unregistered guard scripts stay classified as registered checks or documented exclusions.
@@ -260,6 +261,7 @@ Release preparation notes:
 - Added Ruby version source guard coverage for the Rails 7.1 main-push matrix signal so workflow, Gemfile, Ruby version, and Development docs wording stay aligned.
 - Added release docs signal coverage for controller registration troubleshooting and public setup generator packaging guidance.
 - Added release and CI docs signal coverage for workflow action major versions, Ruby / Rails release evidence, and gem package install / require checks.
+- Added `actions/checkout@v7` action-major guard evidence so representative CI jobs stay aligned with the workflow action-version signal without deciding SHA pinning policy.
 - Added CI observation guidance signal coverage so maintainers verify GitHub Actions workflow runs when combined status is empty.
 - Added CI policy smoke coverage for AGENTS.md routing and non-PR `ci_policy_sensitive` defaults so CI-policy-sensitive docs changes stay guarded.
 - Expanded package contents verification coverage for README-linked Turbo Frame option, Direction-aware styling, and Public Name Decisions docs so packaged gems keep those public guides available.
