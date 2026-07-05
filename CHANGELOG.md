@@ -169,6 +169,7 @@ Release preparation notes:
 - Added docs-entrypoint suite registration and lazy-loading authorization docs signal coverage so manifest-backed public surface guards stay visible through `npm run test:docs-entrypoints`.
 - Added public constants docs signal guard coverage for representative Public API constants so public constants stay aligned with `config/public_api_manifest.yml`.
 - Added stylesheet state cue selector source-spec coverage for selected, collapsed, loading, error, disabled-drop, and drop-target cues in the packaged stylesheet.
+- Added CSS custom property manifest-to-stylesheet sync guard evidence so manifest-listed `--tree-view-*` tokens and packaged stylesheet variable usage stay synchronized.
 - Expanded package contents verification coverage for bilingual CI policy suite docs so packaged gems keep maintainer CI policy guidance available.
 - Consolidated `test:ci-policy` package-script execution around the CI policy suite source of truth while preserving guard registration self-test coverage.
 - Added CI policy suite explicit exclusion self-test coverage so unregistered guard scripts stay classified as registered checks or documented exclusions.
