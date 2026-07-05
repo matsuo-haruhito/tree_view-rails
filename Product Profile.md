@@ -59,6 +59,7 @@ Use these durable entry points together when you are checking scope, docs sync, 
 - `docs/README.md` for the cross-language docs map and maintainer entry points
 - `docs/en/README.md` or `docs/ja/README.md` for language-specific docs navigation
 - `docs/i18n-audit.md` for cross-language maintenance rules and docs update coverage
+- `docs/en/ci-policy.md` or `docs/ja/ci-policy.md` for the pull-request representative Rails matrix and main-push full Rails matrix boundary
 - `docs/en/release.md` or `docs/ja/release.md` for release checklist, release consistency checks, and changelog expectations
 - `config/public_api_manifest.yml` for machine-readable public API contracts that specs and entrypoint smoke checks compare against current code
 - `CHANGELOG.md` for shipped public changes, compatibility notes, and notable docs additions
@@ -73,6 +74,7 @@ For maintainers making changes, start in this order:
 4. `docs/en/README.md` or `docs/ja/README.md` for language-specific docs navigation
 5. `docs/en/design-policy.md` or `docs/ja/design-policy.md` for responsibility boundaries
 6. `docs/i18n-audit.md` when the task changes public docs or language coverage
-7. `config/public_api_manifest.yml` when the task changes documented helper methods, grouped options, JavaScript entrypoints, controller identifiers, or event contracts
-8. `docs/en/release.md` or `docs/ja/release.md` when the task affects release-facing docs, compatibility notes, or package verification workflow
-9. `CHANGELOG.md` when the task affects release-facing public behavior or compatibility notes
+7. `docs/en/ci-policy.md` or `docs/ja/ci-policy.md` when the task affects CI matrix topology or the PR/main CI boundary
+8. `config/public_api_manifest.yml` when the task changes documented helper methods, grouped options, JavaScript entrypoints, controller identifiers, or event contracts
+9. `docs/en/release.md` or `docs/ja/release.md` when the task affects release-facing docs, compatibility notes, or package verification workflow
+10. `CHANGELOG.md` when the task affects release-facing public behavior or compatibility notes
