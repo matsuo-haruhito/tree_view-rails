@@ -26,6 +26,8 @@ const publicApiDocs = [
   ["docs/ja/public-api.md", read("docs/ja/public-api.md")]
 ]
 
+const readme = read("README.md")
+
 const representativeExports = [
   "TreeViewEventNames",
   "TreeViewEventDetailKeys",
@@ -39,6 +41,20 @@ const representativeHookObjects = [
   "TreeViewToolbarDataHooks",
   "TreeViewSelectionDataHooks",
   "TreeViewSelectionCheckboxHooks",
+  "TreeViewEmptyStateHooks"
+]
+
+const readmeRepresentativeExports = [
+  "TreeViewEventNames",
+  "TreeViewControllerEntries",
+  "TreeViewTransferDataAttributes",
+  "TreeViewSelectionCheckboxHooks"
+]
+
+const readmeRepresentativeHookObjects = [
+  "TreeViewIntegrationHooks",
+  "TreeViewRemoteStateDataHooks",
+  "TreeViewToolbarDataHooks",
   "TreeViewEmptyStateHooks"
 ]
 
@@ -74,3 +90,26 @@ publicApiDocs.forEach(([relativePath, document]) => {
   assertIncludes(document, "TreeViewEventDetailKeys", `${relativePath} package-root detail-key constants route`)
   assertIncludes(document, "data hook", `${relativePath} package-root data-hook object route`)
 })
+
+readmeRepresentativeExports.forEach((signal) => {
+  assertIncludes(readme, signal, `README.md package-root export overview`)
+})
+
+readmeRepresentativeHookObjects.forEach((signal) => {
+  assertIncludes(readme, signal, `README.md package-root data-hook overview`)
+})
+
+assertIncludes(readme, "docs/en/public-api.md#javascript-surface", "README.md Public API JavaScript surface route")
+assertIncludes(readme, "docs/ja/public-api.md#javascript-surface", "README.md Japanese Public API JavaScript surface route")
+assertIncludes(readme, "docs/en/public-api-immutable-exports.md", "README.md immutable package-root exports route")
+assertIncludes(readme, "docs/ja/public-api-immutable-exports.md", "README.md Japanese immutable package-root exports route")
+
+assert(
+  /package-root exports from `tree_view\/index\.js`, such as/.test(readme),
+  "README.md: package-root export guidance should stay an entry point with representative examples, not a complete inventory"
+)
+
+assert(
+  /documented data hook objects/.test(readme),
+  "README.md: package-root export guidance no longer points readers at documented data hook objects"
+)
