@@ -55,12 +55,15 @@ const repositoryOnlyEntrypoints = [
     links: [
       ["docs/en/README.md", "../README.md"],
       ["docs/en/README.md", "../../CHANGELOG.md"],
-      ["docs/en/README.md", "../i18n-audit.md"]
+      ["docs/en/README.md", "../i18n-audit.md"],
+      ["docs/en/README.md", "ci-policy-suite.md"],
+      ["docs/en/README.md", "dependabot-policy.md"],
+      ["docs/en/README.md", "javascript-ci-cache-boundary.md"]
     ],
     signals: [
       [
         "docs/en/README.md",
-        /For maintainers[\s\S]*Product Profile[\s\S]*repository-only[\s\S]*AGENTS\.md[\s\S]*repository-only[\s\S]*Root docs index[\s\S]*CHANGELOG\.md[\s\S]*Documentation i18n audit/,
+        /For maintainers[\s\S]*Product Profile[\s\S]*repository-only[\s\S]*AGENTS\.md[\s\S]*repository-only[\s\S]*Root docs index[\s\S]*CHANGELOG\.md[\s\S]*Documentation i18n audit[\s\S]*Development[\s\S]*CI policy suite[\s\S]*Dependabot maintainer policy[\s\S]*JavaScript CI cache boundary/,
         "English docs README no longer exposes the repository-only maintainer table"
       ]
     ]
@@ -70,12 +73,15 @@ const repositoryOnlyEntrypoints = [
     links: [
       ["docs/ja/README.md", "../README.md"],
       ["docs/ja/README.md", "../../CHANGELOG.md"],
-      ["docs/ja/README.md", "../i18n-audit.md"]
+      ["docs/ja/README.md", "../i18n-audit.md"],
+      ["docs/ja/README.md", "ci-policy-suite.md"],
+      ["docs/ja/README.md", "dependabot-policy.md"],
+      ["docs/ja/README.md", "javascript-ci-cache-boundary.md"]
     ],
     signals: [
       [
         "docs/ja/README.md",
-        /保守者向け[\s\S]*Product Profile[\s\S]*repository-only[\s\S]*AGENTS\.md[\s\S]*repository-only[\s\S]*root docs index[\s\S]*CHANGELOG\.md[\s\S]*Documentation i18n audit/,
+        /保守者向け[\s\S]*Product Profile[\s\S]*repository-only[\s\S]*AGENTS\.md[\s\S]*repository-only[\s\S]*root docs index[\s\S]*CHANGELOG\.md[\s\S]*Documentation i18n audit[\s\S]*開発・保守方針[\s\S]*CI policy suite[\s\S]*Dependabot maintainer policy[\s\S]*JavaScript CI cache boundary/,
         "Japanese docs README no longer exposes the repository-only maintainer table"
       ]
     ]
