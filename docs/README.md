@@ -85,6 +85,7 @@ Maintainer entry points には、gem に同梱される `docs/**` と repository
 - [Demo application boundary](en/demo-application-boundary.md) / [Demo application boundary](ja/demo-application-boundary.md): handoff policy between static gem mockups and a future public Rails demo application.
 - [Development](en/development.md) / [開発・保守方針](ja/development.md): CI, local checks, documentation update workflow, and maintenance habits.
 - [Dependabot maintainer policy](en/dependabot-policy.md) / [Dependabot maintainer policy](ja/dependabot-policy.md): current Bundler and GitHub Actions Dependabot lanes, queue-size boundary, and triage scope without changing dependency policy.
+- [JavaScript CI cache boundary](en/javascript-ci-cache-boundary.md) / [JavaScript CI cache boundary](ja/javascript-ci-cache-boundary.md): `actions/setup-node` npm cache scope, `npm ci`, and package-lock source-of-truth guidance.
 - [CI policy suite](en/ci-policy-suite.md) / [CI policy suite](ja/ci-policy-suite.md): targeted CI policy guard runs, suite self-test behavior, and guard registration expectations.
 - [Dependabot Bundler recovery](en/dependabot-bundler-recovery.md) / [Dependabot Bundler 復旧手順](ja/dependabot-bundler-recovery.md): lockfile metadata drift triage and scoped recovery paths for Bundler dependency PRs.
 - [Code quality](en/code-quality.md) / [コード品質](ja/code-quality.md): lint, tests, error message quality, and documentation quality policy.
