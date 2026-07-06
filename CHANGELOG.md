@@ -142,6 +142,7 @@ Release preparation notes:
 - Clarified CI policy suite package-sensitive routing guidance for Ruby package and release task paths such as `Gemfile`, `Rakefile`, `tree_view.gemspec`, and package contents verification.
 - Clarified CI policy suite explicit exclusion guidance so candidate guard scripts must be registered in `checks` or carry a reasoned exclusion such as the suite self-test entrypoint.
 - Added CI policy docs release evidence for main-push default outputs, covering package, Docker setup, docs entrypoint, and CI policy confidence lanes without changing pull-request classifier behavior.
+- Added release evidence for Dependabot maintainer policy docs and JavaScript CI cache boundary docs, clarifying they are maintainer-facing documentation additions without changing dependency policy, package manager policy, or CI workflow behavior.
 
 ### Tests
 
