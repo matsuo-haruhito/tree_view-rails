@@ -216,6 +216,8 @@ Because `docs/**/*` is packaged, keep package-facing docs independent from repos
 
 The package contents guard also verifies package-root JavaScript entrypoint and importmap signals. Keep `config/public_api_manifest.yml` `javascript_package_root.named_exports` aligned with packaged `app/javascript/tree_view/index.js` and `app/javascript/tree_view/index.d.ts`; when a manifest-listed export is absent, the guard reports `Missing manifest-listed JavaScript package-root named exports in packaged <path>`. This is release evidence only, so do not add or rename public JavaScript exports from this checklist alone.
 
+RubyGems consumer-facing descriptive metadata is guarded separately from URI and release metadata. `spec/gemspec_files_spec.rb` keeps the packaged gemspec license at `MIT`, the summary as `Tree rendering primitives for Rails applications`, and the description as the short Rails integration overview, so registry-facing identity drift is reviewed without changing dependency, release, or package contents policy from this checklist alone.
+
 The same package verification checks that `config/importmap.tree_view.rb` keeps `pin "tree_view", to: "tree_view/index.js"` packaged for host apps that install the gem through importmap. This guards packaging evidence only; importmap setup behavior and public API semantics belong to the PR that intentionally changes those surfaces.
 
 ## Repository
