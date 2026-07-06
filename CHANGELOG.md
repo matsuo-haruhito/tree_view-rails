@@ -145,6 +145,7 @@ Release preparation notes:
 
 ### Tests
 
+- Added package script composition guard release evidence for `test:entrypoints`, `test:js:core`, and `test:js` so maintainers can verify JavaScript command hierarchy drift during release preparation.
 - Added RenderState callback builder docs signal coverage so manifest-backed callback builder keys stay aligned with Public API docs and host-app responsibility boundaries.
 - Added diagnostics manifest drift guard evidence for accepted checks, `TreeView::Diagnostics.run` public options, and `TreeView::Diagnostics::Result` attributes / helper methods so runtime and manifest surfaces stay synchronized.
 - Added gemspec `summary` / `description` metadata guard evidence and release package contents signal coverage so RubyGems-facing package metadata stays visible during release preparation.
