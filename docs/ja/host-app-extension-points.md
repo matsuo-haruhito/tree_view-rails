@@ -193,7 +193,7 @@ load_children_path_builder: ->(item, depth, scope) {
 
 | Area | TreeView | Host app |
 |---|---|---|
-| extension hook definitions | yes | provides builders |
+| extension hook definitions | yes | no |
 | builder invocation | yes | provides builders |
 | business UI | no | yes |
 | interactive-control guards | yes | marks custom widgets when needed |
