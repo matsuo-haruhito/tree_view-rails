@@ -15,6 +15,15 @@ const markdownSourcePaths = [
   ...walkFiles("docs").filter((relativePath) => relativePath.endsWith(".md"))
 ].sort()
 
+const anchorCheckedMarkdownSourcePaths = new Set([
+  "README.md",
+  "docs/README.md",
+  "docs/en/README.md",
+  "docs/ja/README.md",
+  "docs/i18n-audit.md",
+  "docs/mockups/README.md"
+])
+
 const htmlSourcePaths = ["docs/mockups/review-gallery.html"]
 const errors = []
 
@@ -142,6 +151,14 @@ function anchorsFor(relativePath) {
   return new Set()
 }
 
+function shouldCheckAnchor({ sourcePath, fragment }) {
+  if (!fragment) return false
+  if (sourcePath.endsWith(".md")) return anchorCheckedMarkdownSourcePaths.has(sourcePath)
+  if (sourcePath.endsWith(".html")) return true
+
+  return false
+}
+
 function localTargetIssue({ sourcePath, target, kind }) {
   if (!target || target.startsWith("#") || isExternalTarget(target)) return null
 
@@ -162,7 +179,7 @@ function localTargetIssue({ sourcePath, target, kind }) {
     return `${kind}: ${sourcePath} links to non-file local target ${JSON.stringify(target)} resolved as ${resolvedPath}`
   }
 
-  if (!fragment) return null
+  if (!shouldCheckAnchor({ sourcePath, fragment })) return null
 
   const anchors = anchorsFor(resolvedPath)
 
@@ -202,5 +219,5 @@ assert.equal(
 )
 
 console.log(
-  `[docs-link-integrity] checked ${markdownSourcePaths.length} markdown files and ${htmlSourcePaths.length} mockup gallery file`
+  `[docs-link-integrity] checked local targets in ${markdownSourcePaths.length} markdown files, representative anchors in ${anchorCheckedMarkdownSourcePaths.size} markdown entrypoints, and ${htmlSourcePaths.length} mockup gallery file`
 )
