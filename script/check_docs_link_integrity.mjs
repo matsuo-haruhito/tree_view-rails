@@ -101,10 +101,10 @@ function headingTextToSlug(text) {
   return text
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .replace(/<[^>]+>/g, "")
-    .replace(/[`*_~[\]]/g, "")
+    .replace(/[`*~[\]]/g, "")
     .trim()
     .toLowerCase()
-    .replace(/[^\p{Letter}\p{Number}\p{Mark}\s-]/gu, "")
+    .replace(/[^\p{Letter}\p{Number}\p{Mark}_\s-]/gu, "")
     .replace(/\s+/g, "-")
 }
 
