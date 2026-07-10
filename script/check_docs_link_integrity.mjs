@@ -105,8 +105,8 @@ function headingTextToSlug(text) {
     .replace(/[`*~[\]]/g, "")
     .trim()
     .toLowerCase()
-    .replace(/[^\p{Letter}\p{Number}\p{Mark}_\s-]/gu, "")
     .replace(/\s+/g, "-")
+    .replace(/[^\p{Letter}\p{Number}\p{Mark}_-]/gu, "")
 }
 
 function markdownAnchors(relativePath) {
