@@ -16,6 +16,7 @@ const markdownSourcePaths = [
 ].sort()
 
 const htmlSourcePaths = ["docs/mockups/review-gallery.html"]
+const errors = []
 
 function walkFiles(relativeDirectory) {
   const directory = path.join(repoRoot, relativeDirectory)
@@ -141,58 +142,64 @@ function anchorsFor(relativePath) {
   return new Set()
 }
 
-function assertLocalTargetExists({ sourcePath, target, kind }) {
-  if (!target || target.startsWith("#") || isExternalTarget(target)) return
+function localTargetIssue({ sourcePath, target, kind }) {
+  if (!target || target.startsWith("#") || isExternalTarget(target)) return null
 
   const { fileTarget, fragment } = splitTarget(target)
   const resolvedPath = resolveTargetPath(sourcePath, fileTarget)
 
-  assert.ok(
-    resolvedPath,
-    `${kind}: ${sourcePath} has repository-escaping local link target ${JSON.stringify(target)}`
-  )
+  if (!resolvedPath) {
+    return `${kind}: ${sourcePath} has repository-escaping local link target ${JSON.stringify(target)}`
+  }
 
   const absolutePath = path.join(repoRoot, resolvedPath)
 
-  assert.ok(
-    existsSync(absolutePath),
-    `${kind}: ${sourcePath} links to missing local target ${JSON.stringify(target)} resolved as ${resolvedPath}`
-  )
+  if (!existsSync(absolutePath)) {
+    return `${kind}: ${sourcePath} links to missing local target ${JSON.stringify(target)} resolved as ${resolvedPath}`
+  }
 
-  assert.ok(
-    statSync(absolutePath).isFile(),
-    `${kind}: ${sourcePath} links to non-file local target ${JSON.stringify(target)} resolved as ${resolvedPath}`
-  )
+  if (!statSync(absolutePath).isFile()) {
+    return `${kind}: ${sourcePath} links to non-file local target ${JSON.stringify(target)} resolved as ${resolvedPath}`
+  }
 
-  if (!fragment) return
+  if (!fragment) return null
 
   const anchors = anchorsFor(resolvedPath)
 
-  assert.ok(
-    anchors.has(fragment),
-    `${kind}: ${sourcePath} links to missing local anchor ${JSON.stringify(fragment)} in ${resolvedPath} via ${JSON.stringify(target)}`
-  )
+  if (!anchors.has(fragment)) {
+    return `${kind}: ${sourcePath} links to missing local anchor ${JSON.stringify(fragment)} in ${resolvedPath} via ${JSON.stringify(target)}`
+  }
+
+  return null
 }
 
 for (const sourcePath of markdownSourcePaths) {
   for (const target of markdownLinks(read(sourcePath))) {
-    assertLocalTargetExists({
+    const issue = localTargetIssue({
       sourcePath,
       target,
       kind: "markdown local link"
     })
+    if (issue) errors.push(issue)
   }
 }
 
 for (const sourcePath of htmlSourcePaths) {
   for (const target of htmlLinks(read(sourcePath))) {
-    assertLocalTargetExists({
+    const issue = localTargetIssue({
       sourcePath,
       target,
       kind: "mockup gallery local link"
     })
+    if (issue) errors.push(issue)
   }
 }
+
+assert.equal(
+  errors.length,
+  0,
+  `docs link integrity failures:\n${errors.map((error) => `- ${error}`).join("\n")}`
+)
 
 console.log(
   `[docs-link-integrity] checked ${markdownSourcePaths.length} markdown files and ${htmlSourcePaths.length} mockup gallery file`
