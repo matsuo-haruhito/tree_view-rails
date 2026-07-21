@@ -49,42 +49,50 @@ if (!entrypointsScript.includes("node script/test_immutable_package_root_export_
   )
 }
 
-for (const [docPath, doc] of docs) {
-  if (!doc.includes("npm run test:development-docs-commands")) {
-    missingSignals.push(`${docPath}: missing Development docs command signal entrypoint`)
-  }
-
-  if (!doc.includes("npm run test:ci-policy")) {
-    missingSignals.push(`${docPath}: missing CI policy command entrypoint`)
-  }
-}
-
-const standalonePreludeSignals = [
+const developmentDocSignals = [
   [
     "docs/en/development.md",
     [
+      "npm run test:development-docs-commands",
+      "Development docs command-signal guard",
+      "`Development docs command signals` group",
+      "npm run test:entrypoints-composition",
+      "`test:entrypoints`, `test:js:core`, and `test:js` package script composition / ordering drift",
+      "individual guard contents stay owned by their scripts",
+      "npm run test:ci-policy-license-prelude",
       "standalone LICENSE package-sensitive prelude",
-      "`script/test_license_package_sensitive_signal.mjs`",
-      "representative signal for LICENSE package-sensitive routing",
-      "not as a `script/test_ci_policy_suite.mjs` checks-array group"
+      "not a `script/test_ci_policy_suite.mjs` checks-array group",
+      "npm run test:immutable-package-root-export-signals",
+      "README / Public API / immutable export guide reader-facing docs signal",
+      "Runtime export existence remains covered by `script/test_entrypoints.mjs`",
+      "literal declaration shape remains covered by `script/test_declaration_literal_shapes.mjs`"
     ]
   ],
   [
     "docs/ja/development.md",
     [
+      "npm run test:development-docs-commands",
+      "Development docs command signal",
+      "`Development docs command signals` group",
+      "npm run test:entrypoints-composition",
+      "`test:entrypoints`、`test:js:core`、`test:js` の package script composition / ordering drift",
+      "個別 guard の内容はそれぞれの script が所有します",
+      "npm run test:ci-policy-license-prelude",
       "standalone の LICENSE package-sensitive prelude",
-      "`script/test_license_package_sensitive_signal.mjs`",
-      "LICENSE package-sensitive routing の代表 signal",
-      "`script/test_ci_policy_suite.mjs` の checks array group ではなく"
+      "`script/test_ci_policy_suite.mjs` の checks array group ではありません",
+      "npm run test:immutable-package-root-export-signals",
+      "README / Public API / immutable export guide の reader-facing docs signal",
+      "Runtime export existence は引き続き `script/test_entrypoints.mjs` が確認",
+      "literal declaration shape は `script/test_declaration_literal_shapes.mjs` が確認"
     ]
   ]
 ]
 
-for (const [docPath, signals] of standalonePreludeSignals) {
+for (const [docPath, signals] of developmentDocSignals) {
   const doc = docs.find(([path]) => path === docPath)?.[1] || ""
   for (const signal of signals) {
     if (!doc.includes(signal)) {
-      missingSignals.push(`${docPath}: missing standalone prelude signal ${signal}`)
+      missingSignals.push(`${docPath}: missing narrow maintenance command doc signal ${signal}`)
     }
   }
 }
